@@ -218,13 +218,14 @@ export default async function KitLogosPage() {
       </Section>
 
       {/* ── 06 ──────────────────────────────────────────────────────────────────────────── */}
-      <Label title="06 · Names, when a mark is missing">
-        {`A client with no approved SVG is still in the set, as its name (the asset policy: never invent a logo). The set is all marks or all names, so one missing mark turns every cell into its name and the weights stay equal. Six: ${shape(6)}.`}
+      <Label title="06 · Typeset wordmarks, when a mark is missing">
+        {`A client with no approved SVG is still in the set, its name typeset as a wordmark (the asset policy: never invent a logo). Home round 1 (10 Oct 2026): a set may mix them — the drawn marks keep their art and each missing one takes the wordmark role in the marks' own ink — so one missing file no longer hides every real mark as a list of names. Led by the rating, as the home band is. Six: ${shape(6)}.`}
       </Label>
       <Section aria-labelledby="logos-names">
         <LogoGrid
+          badge={badge}
           marks={[
-            { name: 'Doodle' },
+            DOODLE,
             { name: 'Dealpath' },
             { name: 'Benchmark Gensuite' },
             { name: 'Eden AI' },

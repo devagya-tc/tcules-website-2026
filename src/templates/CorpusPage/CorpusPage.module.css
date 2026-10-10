@@ -68,3 +68,47 @@
   font: var(--text-body-sm);
   color: var(--cpg-ink-muted);
 }
+
+/* ── Home ──────────────────────────────────────────────────────────────────────────── */
+
+/* The rating sentence under the logo wall: the authored line in the body voice, quiet, centred under
+   the grid it closes. */
+.ratingLine {
+  font: var(--text-body);
+  color: var(--cpg-ink-muted);
+  text-align: center;
+  text-wrap: var(--text-title-wrap);
+}
+
+/* A reason banner (home's "Why teams choose Tcules"): each opens on a hairline across the full row, so
+   four banners read as four moments down the band rather than one block of copy. The inset under the
+   rule is the banner's own, the Stat's opening move (a rule, then a `stack` of air). */
+.banner {
+  padding-block-start: var(--gap-stack);
+  border-block-start: var(--border-width-hairline) solid var(--cpg-panel-rule);
+}
+
+/* The banner's index numeral: the mono index voice, blue (visual-direction § 4.2: index numerals carry
+   the accent). Mono is always uppercase in presentation. */
+.index {
+  font: var(--text-index);
+  letter-spacing: var(--text-index-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cpg-mark);
+}
+
+/* The reason's title: an h3 element at the h3 role — a banner is the band's large unit, so its title
+   takes the step under the band's display head (a set's heading outranks its items, 7 Oct ruling 3). */
+.reasonTitle {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The reason's sentences: the section lead's voice, so the banner's copy side holds its weight against
+   the client's words on the other side. */
+.reasonBody {
+  max-inline-size: var(--measure-body);
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+}

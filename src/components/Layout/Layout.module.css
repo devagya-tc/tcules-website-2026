@@ -126,6 +126,30 @@
   align-items: stretch;
 }
 
+/* From the first breakpoint with more than one track (Layout.tsx `firstMultiTrack`): below it the
+   items are a stack, and equal rows there only stretched every short item to the tallest one's
+   height. Layout's breakpoints: md 768, lg 1024, xl 1440. */
+@media (min-width: 768px) {
+  .equal-rows-md {
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 1024px) {
+  .equal-rows-lg {
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 1440px) {
+  .equal-rows-xl {
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+  }
+}
+
 /* lead — the first child spans every track in a row of its own (a featured item above its peers).
    `grid-template-rows: auto` makes that first row EXPLICIT and content-sized; every later row is
    implicit and takes grid-auto-rows — `1fr` under equalRows, `auto` otherwise. A flexible row is

@@ -154,6 +154,24 @@ export type BlockCardSetProps = {
    * behind a gesture.
    */
   scroll?: 'auto' | 'never';
+  /**
+   * The covers' crop, when the set's own count rule picks the wrong one (home round 1, 10 Oct 2026).
+   * Absent, the set decides (`cover` for one or two, `wide` for three or more across, `pair` for a
+   * linked covered pair). A caller states it for a set whose covers ARE the band: the home gateway's
+   * six situations, each a service-line drawing contained in its box, where the linked pair's flat
+   * 16:5 drew a 960-wide drawing 230 wide. A set's decision, never one card's: every cover in the set
+   * takes it. Covered cards only; ignored by the featured lead, the spotlight and the wide lead,
+   * whose crops are their arrangement.
+   */
+  ratio?: Extract<BlockCardRatio, 'cover' | 'wide' | 'pair'>;
+  /**
+   * The phone arrangement (home round 1, 10 Oct 2026). `auto` (default): `scroll` decides — a scroll
+   * row, or one card per row. `pair`: two across below 768, never a scroll row, for a set of SHORT
+   * covered cards whose titles are their whole content — the home page's eight sectors, where eight
+   * stacked cards ran ~2900 tall at 390 and a scroll row hid seven of them behind a gesture. Two
+   * across from md as well when the set would otherwise be one track there.
+   */
+  phone?: 'auto' | 'pair';
 };
 
 /** From how many items the first one is featured (ruling C3, 28 Sep 2026), under `lead="auto"`. */
@@ -181,8 +199,15 @@ type Columns = ComponentProps<typeof Layout>['columns'];
 function peerGrid(
   count: number,
   across: BlockCardSetAcross | undefined,
+  pair = false,
 ): { columns: Columns; tracks: BlockCardTracks; widest: BlockCardSetAcross } {
   const widest = across ?? (count <= 2 ? 2 : count === 4 ? 4 : 3);
+  /* The phone pair: two across from the base up, the set's widest from lg (or md for three). */
+  if (pair) {
+    if (widest === 2) return { columns: { base: 2 }, tracks: 2, widest };
+    if (widest === 4) return { columns: { base: 2, lg: 4 }, tracks: 2, widest };
+    return { columns: { base: 2, lg: 3 }, tracks: 3, widest };
+  }
   if (widest === 2) return { columns: { base: 1, md: 2 }, tracks: 2, widest };
   /* Four across from lg, not xl (cmp-feature fix round 2): at 1024 the 2×2 put 460-wide 16:9
      photographs in a band 1140 to 1300 tall — an image wall larger than anything at 1440. Four at
@@ -308,6 +333,8 @@ export function BlockCardSet({
   stagger = false,
   label,
   scroll = 'auto',
+  ratio: ratioOverride,
+  phone = 'auto',
 }: BlockCardSetProps) {
   if (given.length === 0) return null;
 
@@ -391,7 +418,8 @@ export function BlockCardSet({
   const featured = lead === 'auto' && items.length >= FEATURED_FROM;
   const peers = featured ? items.slice(1) : items;
   const covered = items.some(hasCover);
-  const { columns, tracks, widest } = peerGrid(peers.length, across);
+  const pair = phone === 'pair';
+  const { columns, tracks, widest } = peerGrid(peers.length, across, pair);
   const iconSet = !covered && items.every((item) => item.icon !== undefined);
   /* Icon cards are h5 and body-sm, always (§ 1.4; the glyph is the h5's em, on its own row above it, 9 Oct 2026). `size` is not an
      option for them: an override set one grid's titles a step above the next one's on one page. */
@@ -404,7 +432,8 @@ export function BlockCardSet({
      16:5 from 1024 and 16:9 below. An unlinked pair can still sit in a beside body (763 → 365
      per card), where 3:2 stays right. */
   const ratio: BlockCardRatio =
-    widest >= 3 ? 'wide' : linked && covered && widest === 2 ? 'pair' : 'cover';
+    ratioOverride ??
+    (widest >= 3 ? 'wide' : linked && covered && widest === 2 ? 'pair' : 'cover');
   /* The phone row (§ 3.7 item 2, revised in cmp-feature fix round 1, 6 Oct 2026). Stacked at 390,
      a set of short covered cards read as a loose list — 80 to 90 between cards, and six linked icon
      cards ran to 1805. So below 768:
@@ -422,6 +451,7 @@ export function BlockCardSet({
      its featured row at every width. The case-study index is a page-long list, read stacked. */
   const scrolls =
     scroll === 'auto' &&
+    !pair &&
     !featured &&
     ((covered && items.length >= 3) || (linked && items.length > 3));
   /* Icon cards are smaller objects than covered or text tiles — an h5 led by its glyph and two lines —

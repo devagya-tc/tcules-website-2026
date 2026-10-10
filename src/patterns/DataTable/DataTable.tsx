@@ -80,6 +80,20 @@ export type DataTableProps = {
   columns: readonly DataTableColumn[];
   /** Three to twelve is the designed range (eight until 1 Oct 2026). Never sorted, filtered or paginated. */
   rows: readonly DataTableRow[];
+  /**
+   * Two halves side by side from 1024, ONE table below it (owner, 10 Oct 2026). A long record — six
+   * or more facts — keeps its band inside the fold as two boxed halves from 1024 (7 Oct ruling 1),
+   * each with the head row; the first half takes the extra row of an odd count. Where the layout
+   * drops to one column the halves JOIN: the second half's head row is set out of sight (still read
+   * by a screen reader) and the seam between the two frames closes, so a phone reads one continuous
+   * table instead of the same head printed twice down the column. Until this prop the About record
+   * was split by hand in the template, and at 390 it read as two tables stacked.
+   *
+   * For a record (one value column, or `head={false}`), whose key share is a percentage, so the two
+   * halves' columns line up when they join. A comparison table of several columns sizes each half
+   * by its own content and would not; it should not be split. Default false.
+   */
+  split?: boolean;
 };
 
 const BEHAVIOUR_CLASS: Record<DataTableColumnBehaviour, string | undefined> = {
@@ -140,6 +154,7 @@ export function DataTable({
   keyColumn,
   columns,
   rows,
+  split = false,
 }: DataTableProps) {
   const captionId = useId();
 
@@ -156,8 +171,16 @@ export function DataTable({
     warn(`received ${columns.length} data columns; the designed maximum is five.`);
   }
 
-  if (rows.length < 3 || rows.length > 12) {
-    warn(`received ${rows.length} rows; the designed range is three to twelve.`);
+  /* A split table's range is per half: sixteen facts are two halves of eight. */
+  const perFrame = split ? Math.ceil(rows.length / 2) : rows.length;
+  if (perFrame < 3 || perFrame > 12) {
+    warn(`received ${perFrame} rows per frame; the designed range is three to twelve.`);
+  }
+
+  if (split && columns.length > 1) {
+    warn(
+      '`split` is for a record (one value column); a comparison table would not line up when its halves join.',
+    );
   }
 
   if (!head && columns.length > 1) {
@@ -165,6 +188,107 @@ export function DataTable({
   }
 
   const keyBehaviour = keyColumn.behaviour ?? 'hold';
+
+  /* One boxed frame over `part` of the rows; `inSplit` marks both halves of a split and `joins` the
+     second. The shell holds the frame and draws the scroll fades over its clipped edges. It does
+     not scroll itself, which is what keeps the fades pinned while the table moves beneath them. */
+  const renderFrame = (part: readonly DataTableRow[], joins: boolean, inSplit: boolean) => (
+    <div className={cx(styles.shell, inSplit && styles.split, joins && styles.joins)}>
+      <div
+        className={styles.frame}
+        role="region"
+        tabIndex={0}
+        // Without a caption the region still needs a name to be announced by; the key column's
+        // head is the nearest thing the table has to one.
+        {...(caption
+          ? { 'aria-labelledby': captionId }
+          : labelledBy
+            ? { 'aria-labelledby': labelledBy }
+            : { 'aria-label': `${keyColumn.heading} table` })}
+      >
+        <table
+          /* A record is read down its rows, a key and ONE value: head-less, or with a head row
+           over a single value column ("Fact · Current public record", About `company-record`,
+           critic C3.4). Either way there is no second column to scroll to, so it sizes the
+           pair to the track instead of scrolling. Two or more value columns are compared
+           across a row and keep the floors that make them scroll (7 Oct ruling 6). */
+          className={cx(styles.table, (!head || columns.length === 1) && styles.record)}
+          {...(caption
+            ? { 'aria-labelledby': captionId }
+            : labelledBy
+              ? { 'aria-labelledby': labelledBy }
+              : {})}
+        >
+          {head ? (
+            <thead className={joins ? styles.joinHead : undefined}>
+              <tr>
+                <th scope="col" className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}>
+                  {keyColumn.heading}
+                </th>
+                {columns.map((column, index) => (
+                  <th
+                    key={index}
+                    scope="col"
+                    className={cx(styles.colHead, BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'])}
+                  >
+                    {column.heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          ) : null}
+          <tbody>
+            {part.map((row, rowIndex) => {
+              if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
+              if (row.cellsHtml.length !== columns.length) {
+                warn(
+                  `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
+                    row.cellsHtml.length < columns.length
+                      ? 'padding with empty cells'
+                      : 'truncating'
+                  }.`,
+                );
+              }
+
+              return (
+                <tr key={rowIndex} className={styles.row}>
+                  <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
+                    <span className={styles.keyText}>{row.header}</span>
+                  </th>
+                  {columns.map((column, index) => {
+                    const cell = row.cellsHtml[index] ?? '';
+                    const html = typeof cell === 'string' ? cell : '';
+                    return (
+                      <td
+                        key={index}
+                        className={cx(
+                          styles.cell,
+                          typeof cell !== 'string' && styles.nodeCell,
+                          BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
+                        )}
+                      >
+                        {typeof cell !== 'string' ? (
+                          cell.node
+                        ) : html.trim() ? (
+                          <Prose html={html} className={styles.value} />
+                        ) : (
+                          // An empty cell is still a cell: the screen reader announces it blank on
+                          // its own, and the dash is for the eye, so a gap never reads as a bug.
+                          <span className={styles.empty} aria-hidden="true">
+                            —
+                          </span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
   return (
     <Layout rowGap="block" className={styles.root}>
@@ -183,109 +307,16 @@ export function DataTable({
             {caption}
           </p>
         ) : null}
-        {/* The shell holds the frame and draws the scroll fades over its clipped edges. It does not
-            scroll itself, which is what keeps the fades pinned while the table moves beneath them. */}
-        <div className={styles.shell}>
-          <div
-            className={styles.frame}
-            role="region"
-            tabIndex={0}
-            // Without a caption the region still needs a name to be announced by; the key column's
-            // head is the nearest thing the table has to one.
-            {...(caption
-              ? { 'aria-labelledby': captionId }
-              : labelledBy
-                ? { 'aria-labelledby': labelledBy }
-                : { 'aria-label': `${keyColumn.heading} table` })}
-          >
-            <table
-              /* A record is read down its rows, a key and ONE value: head-less, or with a head row
-                 over a single value column ("Fact · Current public record", About `company-record`,
-                 critic C3.4). Either way there is no second column to scroll to, so it sizes the
-                 pair to the track instead of scrolling. Two or more value columns are compared
-                 across a row and keep the floors that make them scroll (7 Oct ruling 6). */
-              className={cx(styles.table, (!head || columns.length === 1) && styles.record)}
-              {...(caption
-                ? { 'aria-labelledby': captionId }
-                : labelledBy
-                  ? { 'aria-labelledby': labelledBy }
-                  : {})}
-            >
-              {head ? (
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className={cx(styles.colHead, BEHAVIOUR_CLASS[keyBehaviour])}
-                    >
-                      {keyColumn.heading}
-                    </th>
-                    {columns.map((column, index) => (
-                      <th
-                        key={index}
-                        scope="col"
-                        className={cx(
-                          styles.colHead,
-                          BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
-                        )}
-                      >
-                        {column.heading}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-              ) : null}
-              <tbody>
-                {rows.map((row, rowIndex) => {
-                  if (!row.header.trim()) warn(`row ${rowIndex + 1} has a blank row header.`);
-                  if (row.cellsHtml.length !== columns.length) {
-                    warn(
-                      `row ${rowIndex + 1} has ${row.cellsHtml.length} cells for ${columns.length} data columns; ${
-                        row.cellsHtml.length < columns.length
-                          ? 'padding with empty cells'
-                          : 'truncating'
-                      }.`,
-                    );
-                  }
-
-                  return (
-                    <tr key={rowIndex} className={styles.row}>
-                      <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
-                        <span className={styles.keyText}>{row.header}</span>
-                      </th>
-                      {columns.map((column, index) => {
-                        const cell = row.cellsHtml[index] ?? '';
-                        const html = typeof cell === 'string' ? cell : '';
-                        return (
-                          <td
-                            key={index}
-                            className={cx(
-                              styles.cell,
-                              typeof cell !== 'string' && styles.nodeCell,
-                              BEHAVIOUR_CLASS[column.behaviour ?? 'fluid'],
-                            )}
-                          >
-                            {typeof cell !== 'string' ? (
-                              cell.node
-                            ) : html.trim() ? (
-                              <Prose html={html} className={styles.value} />
-                            ) : (
-                              // An empty cell is still a cell: the screen reader announces it blank on
-                              // its own, and the dash is for the eye, so a gap never reads as a bug.
-                              <span className={styles.empty} aria-hidden="true">
-                                —
-                              </span>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        {split && rows.length > 1 ? (
+          /* The halves: side by side from 1024, a `gutter` apart, and ONE table below it — no row
+             gap, and the second frame's top edge and head row give way (DataTable.module.css). */
+          <Layout columns={{ lg: 2 }} colGap="gutter" rowGap="none" align="start">
+            {renderFrame(rows.slice(0, Math.ceil(rows.length / 2)), false, true)}
+            {renderFrame(rows.slice(Math.ceil(rows.length / 2)), true, true)}
+          </Layout>
+        ) : (
+          renderFrame(rows, false, false)
+        )}
       </Layout>
     </Layout>
   );

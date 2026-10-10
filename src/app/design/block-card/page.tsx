@@ -2048,6 +2048,78 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
         </Layout>
       </Section>
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="23 · The set states the crop, and the phone pair (home round 1, 10 Oct)">
+            Two set-level options the home page needed. <code>ratio</code>: the covers&rsquo;
+            crop when the count rule picks the wrong one — a linked pair is 16:5 by default,
+            which drew a service drawing 230 wide; the gateway states <code>cover</code> (3:2).{' '}
+            <code>phone=&quot;pair&quot;</code>: two across below 768, never a scroll row, for a
+            set of short covered cards whose title is their whole content — eight sectors
+            stacked ran ~2900 tall at 390 and a scroll row hid seven of them.
+          </BandHead>
+          <Specimen
+            title={'Linked covered pair · ratio="cover" · size="lg"'}
+            note="Six drawn situations two up, 3:2 contained drawings, the service named on each cta. The home gateway."
+          >
+            <BlockCardSet
+              lead="none"
+              across={2}
+              ratio="cover"
+              size="lg"
+              cue="cta"
+              scroll="never"
+              items={SITUATIONS.slice(0, 2).map((card, index) => ({
+                ...card,
+                href: ROUTES.services,
+                ctaLabel: index === 0 ? 'Product Design' : 'Design Systems',
+                media: {
+                  type: 'image',
+                  image: {
+                    src: `/illustrations/services/${index === 0 ? 'product-design' : 'design-systems'}.paper.svg`,
+                    width: index === 0 ? 962 : 681,
+                    height: index === 0 ? 714 : 569,
+                    alt: '',
+                    kind: 'illustration',
+                  },
+                },
+              }))}
+            />
+          </Specimen>
+          <Specimen
+            title={'Eight covered cards · across={4} · phone="pair"'}
+            note="Four across from 1024, two across at every width below it; titles only, title-cued."
+          >
+            <BlockCardSet
+              lead="none"
+              across={4}
+              cue="title"
+              phone="pair"
+              items={Array.from({ length: 8 }, (_, index) => ({
+                id: `sector-${index}`,
+                title:
+                  [
+                    'B2B SaaS',
+                    'AI products',
+                    'Data products',
+                    'Commerce',
+                    'Marketplaces',
+                    'FinTech',
+                    'HealthTech',
+                    'MarTech',
+                  ][index] ?? '',
+                href: ROUTES.services,
+                media: {
+                  type: 'image',
+                  image:
+                    [COVER_FLOW, COVER_REVIEWS, COVER_NODE, COVER_SEAM][index % 4] ??
+                    COVER_FLOW,
+                },
+              }))}
+            />
+          </Specimen>
+        </Layout>
+      </Section>
     </>
   );
 }

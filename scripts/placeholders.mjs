@@ -17,7 +17,8 @@
  *   `<route>#<band>`                  a band's own slot ("/services/product-design#starting-points")
  *   `<route>#<band>:<qualifier>`      a band with two slots ("/expertise/healthtech#proof:curamcare")
  *   `case-cover:<slug>`               a case's cover, ONE asset for every page that cites the case
- * Icon rows (client logo marks) are not drawn: a logo set that lacks marks renders names (G1).
+ * Icon rows (client logo marks) are not drawn: a client without its SVG renders as a typeset
+ * wordmark in the logo grid (LogoGrid, G1).
  */
 import {
   existsSync,

@@ -7,6 +7,7 @@ import { inlineToHtml, type InlineRun } from '@/lib/inline';
 
 import { CorpusHero, head, headingIdOf } from './blocks';
 import { hasSlot, slotImage } from './images';
+import { formBeforeFaq } from './order';
 import styles from './CorpusPage.module.css';
 import { blocksOf, html, plain } from './text';
 
@@ -29,18 +30,19 @@ type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
  *   - a band with a table is its heading, lead and scope note, then the table in its own band;
  *   - the last band is the close, on tint.
  *
- * Paper carries the page; tint is the close alone. Nothing is reordered, and every word is the
- * corpus's.
+ * Paper carries the page; tint is the close alone. Nothing is reordered but the one shared rule
+ * (a form above a FAQ, order.ts), and every word is the corpus's.
  */
 export function ToolPage({ page }: ToolPageProps) {
   const [action] = page.hero.actions;
   const workspaceId = action?.href.startsWith('#') ? action.href.slice(1) : undefined;
-  const last = page.bands.length - 1;
+  const bands = formBeforeFaq(page.bands);
+  const last = bands.length - 1;
 
   return (
     <>
       <CorpusHero page={page} texture />
-      {page.bands.map((band, index) => (
+      {bands.map((band, index) => (
         <Fragment key={band.id}>
           <ToolBand
             page={page}

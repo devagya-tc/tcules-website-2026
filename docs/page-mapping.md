@@ -20,6 +20,14 @@ today.
 
 ## 0 · The rules this document never bends
 
+> **Corrected by the owner, 10 Oct 2026 (§ 17, Home round 1).** Rules 1–3 were read too literally.
+> The information is never paraphrased, but its presentation is DESIGNED: a stats line becomes
+> figures, a list of client names becomes the logo wall, quotes authored inside a case leave it for a
+> testimonial component, and the IA inside a band is free. Band order holds with ONE sanctioned
+> exception on every page: the enquiry form sits immediately before the FAQ (`order.ts`). Beauty
+> first; content length is negotiated through `docs/content-proposals.md`. Where a rule below
+> disagrees, § 17 wins.
+
 1. **Copy.** Every word in a source file renders, in its order. No rewording, no trimming, no
    paraphrase. Punctuation that a component draws itself (a quote's marks, a list's bullets) may
    replace the authored glyph, never both. `comment` blocks never render. Labels follow one rule
@@ -241,6 +249,9 @@ healthtech) need nothing more.
 ## 4 · Pages
 
 ### 4.1 `/` — HomePage
+
+> **Superseded by § 17 (Home round 1, 10 Oct 2026).** The table below is pass 1's plan, kept as the
+> record of what the owner reviewed.
 
 **Hero (M1):** `beside`, with an **illustration placeholder** (register: the product-decision
 survival model, the content team's `visual_plan`). The eyebrow is "Digital product design studio".
@@ -835,4 +846,88 @@ Looked at and kept, with the reason:
   written, now without a sideways scroll.
 - **Dev warnings** left as logged: the About eyebrow repeats the crumb (P1), nine FAQ items (P17),
   TOC labels over 40 characters (P24).
+
+---
+
+## 17 · Home round 1 (owner review, 10 Oct 2026)
+
+**The review.** The owner reviewed `/` and said pass 1 "completely lost the beauty aspect": the
+content rules had been read as layout instructions. Corrected rules (§ 0 note, memory
+`content-narrative-is-fixed`): don't paraphrase information, design its presentation; band order
+holds except that the form always sits right before the FAQ; approved kit compositions win; beauty
+first, then negotiate length. The kit's approved home (`/design/kit/home`) had already solved three
+of the bands pass 1 re-solved worse: the logo grid led by the Clutch badge, the record as Stats, and
+six linked icon cards for the services.
+
+### 17.1 Home, band by band: before → after, and why
+
+| # | Band | Before (pass 1) | After (round 1) | Why |
+|---|---|---|---|---|
+| 0 | hero record line | Four mono tags under the ask | **Its own band on tint** under the hero: four `Stat`s, 4 across from 1024, 2 × 2 on a phone — 2017 / Founded · 90+ / Projects · 19 / Countries with clients · India / Based in Ahmedabad | Note 1: these are the page's first credibility, and figures are scanned where tags are skipped. The record is one proof type, so it never shares the logo band (§ 5.8). The figure forms are P33. |
+| 1 | `client-recognition` | A grid of six name cells (h5 serif), then the score alone in a tinted band | **One band**, the kit home's: `LogoGrid` led by the Clutch `RatingBadge`, the context line as h2, Doodle's SVG and **five typeset wordmarks**, then the authored sentence and "Read the reviews ↗" under the grid | Notes 2–3: a wall of logos, not a list of names; and the score belongs with the clients (the approved composition). LogoGrid now mixes drawn marks with typeset wordmarks (`--text-wordmark`, the marks' ink) instead of turning every cell into a name when one SVG is missing. Five SVGs are registered as needed. P35 notes the score is said twice. |
+| 2 | `product-situations` | Six boxed icon cards, 3 × 2, h5 titles | **Six large cards two up**, each led by its service's ch05 drawing (3:2, contained), h3-scale title, the paragraph, and the service named on the card's one action; display-size heading | Note 4: the gateway to the services; each situation gets real presence and a picture. Head above, no decorative image (9 Oct ruling 3–4): each drawing IS the card's cover. "Launch a new product" uses Software Development's drawing as an interim (§ 17.3). `BlockCardSet` gained `ratio` (the linked pair's 16:5 drew a 960-wide drawing 230 wide). |
+| 3 | `selected-work` | A one-at-a-time slider; covers at their own ratios; quotes inside the slides | **Four case rows**, one consistent shape — the artefact at 3:2 on the start (BlockCard `horizontal`), copy and "Read the … case" beside it — then the **two quotes as a pair** (Proof `group`) after the rows; "See all case studies" at the head's end | Note 5: no slider (people rarely reach slide 2, whatever search engines index); every cover one ratio, each crop anchored on its subject (`COVER_FOCUS`); never a quote inside a case. The case binding is matched on the client's name before the colon (the title's "workflow" had matched Dealpath's artefact to Eden AI). |
+| 4 | `capabilities` | Six ruled text rows, no glyph | The kit home's band 5: **six linked icon cards** in borderless boxes, 3 across, a glyph each, stacked on a phone (a router shows every route) | Note 6: icons and a structure visibly different from band 2 (small boxed glyph cards vs large drawn cards). The label's closing full stop is dropped from the card title (the run-in's punctuation, not the service's name). |
+| 5 | `why-tcules` | Two media splits, all four reasons and three quotes packed beside two photos | **One display heading, then four banners**: each opens on a hairline, an index numeral, the reason (h3 + lead-size body) on one side and the client's words (Proof display) on the other, alternating sides, a `section` beat apart; reason 3 takes The Wandering Raven placeholder (3:2) | Note 7: one heading plus four banners, not one screen. Reason 3 has no quote, so its other side is the work it names (no bound asset exists anywhere in the corpus). |
+| 6 | `client-voices` | Auto-advancing quote slider | **A composed wall** on tint: three columns, two quotes each, read down each column in authored order; compact quotes at the narrow-measure size | Point 8 and "no sliders": every voice visible; the columns absorb moderate length differences (no ragged row of holes). P34 sets the length band. Shared: `QuoteGroupBand` (M5) replaces `QuoteSliderBand`, so About's three voices are now a Proof group too. |
+| 7 | `ai-native-practice` | Banner, photo at the end | Banner, photo at the **start** | The hero's picture is at the end and the case rows run image-start; the banner takes the start to answer the reason banner above it. |
+| 8 | `expertise` | Eight boxed icon cells, titles only | **Eight image cards**, 4 across from 1024 and **2 across on a phone** (`BlockCardSet phone="pair"`), title-cued; a placeholder per sector | Note 9: a picture each; on a phone neither eight tall cards nor a scroll row. No catalogue or studio photograph depicts a sector, and the three sector pages that bind an asset bind screens already on this page (Dealpath, Eden AI) or only one (GT Tools), so the set is registered whole as a drawn family. |
+| 9 | `enquiry` | Last band | **Before the FAQ** | Note 10, and a template rule for every page (`formBeforeFaq`, `order.ts`). |
+| 10 | `faq` | Before the form | Last band | — |
+
+**Squint, top to bottom:** split hero · four blue figures on tint · centred boxed logo wall · six large
+drawn cards, two up · four image-start case rows and a quote pair · six small icon boxes · four
+alternating reason banners · a three-column quote wall on tint · photo-start banner · eight sector
+cards · the form on tint · the questions. Tints: record, voices, form — none adjacent. Blue solid:
+the hero only.
+
+**Fold (measured, `npm run fold:check -- /`, 1470 × 830):** situations 2276, selected work 2336,
+why-tcules 1984, client voices 890, expertise 834, FAQ 844 (P22). The first three run long **by
+design**: the owner asked for each situation, case and reason to have room ("do not cram all four into
+one screen"), which the 5 Oct one-viewport rule cannot hold for six large cards or four rows. This is
+an owner decision (§ 17.4).
+
+### 17.2 Global fixes made at the component, so every page gets them
+
+| Note | Cause | Fix | Where it lives |
+|---|---|---|---|
+| A split table read as two tables on a phone | About split its record by hand in the template | `DataTable split`: two boxed halves from 1024; below it the halves join — no gap, the second frame's top edge and head row give way (head still read), and a shared key floor (`--dtab-split-key-size`) keeps the column rule straight through the join | DataTable; About uses it |
+| A one-value table fits the column | (already right) | Kept: a record sizes to the track and never scrolls | DataTable `.record` |
+| A quote stuffed into a case | Story bands kept the client's words in the story column | OfferPage pulls a story's quotes into their own typographic band after the stories (`storyQuotes`); home pulls the case quotes into a pair after the rows | `plan.ts`, `OfferBands.tsx`, HomePage |
+| Quote sliders | M5 was a slider | `QuoteGroupBand`: one quote centred, two or three as Proof `group`, four to six as a wall | `blocks.tsx`; Home, About |
+| Form after the FAQ | Templates followed document order | `formBeforeFaq` in every corpus template (Home, Offer, Longform, Tool); a no-op on pages without both | `order.ts` |
+| Equal rows on a stack | `Layout equalRows` equalised a single-track stack too, so on a phone every short card was stretched to the tallest | Equal rows start at the first breakpoint with more than one track (`firstMultiTrack`) | Layout |
+| Client names as text | LogoGrid turned every cell into a name when one mark was missing | Mixed sets; a missing mark is a typeset wordmark | LogoGrid, `--text-wordmark` |
+
+**Pages affected:** `/services/product-design`, `/audits/design-to-code-audit` and `/expertise/healthtech`
+now close form → FAQ; `/expertise/healthtech` sets the CuramCare quote as its own band after the two
+stories; `/about` takes the joined record and the voices as a group of three. The other five pages
+have no FAQ, no quote slider and no split table, and were shot at 1440 and 390 with no change.
+
+`--text-quote-sm` stays: the voices wall sets compact quotes in ~392 columns, which is exactly the
+narrow measure it exists for.
+
+### 17.3 Register and proposals added
+
+- Register: `/` `client-recognition` reworded as **client logo SVG needed** (Dealpath, Benchmark
+  Gensuite, Eden AI, JoVE, Ringier Media Switzerland); `/` `why-tcules (The Wandering Raven)` 3:2;
+  `/` `expertise (…)` × 8, 16:9, one drawn sector illustration each. Removed: `/` `why-tcules` and
+  `why-tcules-2` studio photos (the media splits are gone).
+- Interim, not registered as a panel: "Launch a new product" (New Product Design & First Release) has
+  no service drawing of its own; it shows Software Development's end-to-end drawing
+  (`serviceDrawing`, `src/lib/service-illustrations.ts`). A dedicated drawing replaces it.
+- Proposals: P33 (the record as figures), P34 (quote lengths within a band, with per-placement
+  ranges), P35 (the score said twice). P21's overflow cause is fixed at the template.
+
+### 17.4 For the owner
+
+1. **The fold.** Situations, selected work and why-tcules each run 2000–2300 at 1470. Keep the room,
+   or ask for a denser form of one of them.
+2. **The record's fourth figure.** "India" as a figure with "Based in Ahmedabad" under it — or three
+   figures and the location elsewhere.
+3. **Phone scroll rows elsewhere.** The case-study index still sets its New products and AI products
+   sets as a swipe row on a phone, and About's services are a desktop slider. Neither is a case or quote
+   slider on the home page, so round 1 left them; the same "hides content" argument applies.
+4. **Case-study index story.** The one-case "Designed and built" band keeps its client quote under the
+   case in the same column. It is a story band rather than a card, so round 1 left it.
 

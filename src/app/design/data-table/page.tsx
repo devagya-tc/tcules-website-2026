@@ -372,6 +372,25 @@ const MISMATCH: DataTableProps = {
   ],
 };
 
+/* A long record — twelve facts, one value column — for `split`. */
+const LONG_RECORD: DataTableProps = {
+  keyColumn: { heading: 'Fact' },
+  columns: [{ heading: 'Current public record' }],
+  rows: [
+    ['Company', 'Northwind Studio Private Limited'],
+    ['Category', 'Digital product design studio'],
+    ['Founded', '2017'],
+    ['Headquarters and studio', 'Ahmedabad, India'],
+    ['Core practice', 'Product Design'],
+    ['Projects', 'More than 90'],
+    ['Client reach', '19 countries'],
+    ['Typical clients', 'Growth-stage SaaS teams and established software companies'],
+    ['Engagement models', 'Fixed-price audits, fixed-scope projects and monthly partnerships'],
+    ['Collaboration', 'A lead designer guides the work and is your main point of contact'],
+    ['Languages', 'English, Hindi and Gujarati'],
+  ].map(([header, value]) => ({ header: header ?? '', cellsHtml: [p(value ?? '')] })),
+};
+
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
@@ -758,7 +777,29 @@ export default function DataTableSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>10 · Two adjacent</h2>
+            <h2>10 · Split — two halves wide, one table narrow</h2>
+            <p>
+              `split` (owner, 10 Oct 2026): a long record sets as two boxed halves side by side
+              from 1024, each with its head row, the first taking the odd row. Below 1024 the
+              halves JOIN into one continuous table: no gap, the second frame’s top edge gone,
+              its head row collapsed out of sight (still read), and a shared key floor so the
+              column rule runs straight through the join. Resize past 1024 to see both; the 390
+              shot shows the join.
+            </p>
+          </Layout>
+          <Specimen
+            title="Eleven facts, split"
+            note="Six beside five from 1024; one table of eleven below it. For a record (one value column) only — a comparison table warns."
+          >
+            <DataTable {...LONG_RECORD} split caption="At a glance" />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>11 · Two adjacent</h2>
             <p>
               The caller’s Layout owns the seam between them (--gap-stack here, as
               ContentSection does between blocks). DataTable sets no outer spacing.

@@ -19,6 +19,70 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Tcules designers and engineers using AI in their own work (exploring options, prototyping in code, checking a build against the design), with a person making the call.',
   },
+  '/#expertise:ai-products-and-developer-tools': {
+    src: '/placeholders/home--expertise--ai-products-and-developer-tools.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      "AI products and developer tools: a model's suggestion beside the controls a person uses to inspect, edit and accept it, with an API call and its response alongside: AI output a developer and an end user can both check. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.",
+  },
+  '/#expertise:b2b-saas-and-workflow-software': {
+    src: '/placeholders/home--expertise--b2b-saas-and-workflow-software.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'B2B SaaS and workflow software: a multi-step approval workflow across several roles — a request moving from submitted to reviewed to approved, each role seeing its own queue — drawn as one product model. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
+  '/#expertise:commerce-and-transactional-products': {
+    src: '/placeholders/home--expertise--commerce-and-transactional-products.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'Commerce and transactional products: a product finder narrowing a large catalogue to one comparable shortlist, then a confident checkout: specification, comparison and order in one flow. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
+  '/#expertise:data-and-analytics-products': {
+    src: '/placeholders/home--expertise--data-and-analytics-products.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'Data and analytics products: a dashboard turned into a decision: one chart, the filter that changed it and the action it led to, rather than a wall of widgets. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
+  '/#expertise:fintech-and-insurtech': {
+    src: '/placeholders/home--expertise--fintech-and-insurtech.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'FinTech and InsurTech: a regulated flow made legible: an application or claim with its required checks, the status the customer sees and the audit trail the operator keeps. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
+  '/#expertise:healthtech': {
+    src: '/placeholders/home--expertise--healthtech.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'HealthTech: patient, clinician and carer each seeing their own view of one shared case, with what each may see framed by the care rules. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
+  '/#expertise:marketplaces-and-multi-sided-platforms': {
+    src: '/placeholders/home--expertise--marketplaces-and-multi-sided-platforms.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      "Marketplaces and multi-sided platforms: two sides of one platform — a buyer's and a seller's view of the same listing, booking or order — joined by the shared record between them. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.",
+  },
+  '/#expertise:martech-and-salestech': {
+    src: '/placeholders/home--expertise--martech-and-salestech.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      'MarTech and SalesTech: a campaign or pipeline built step by step — audience, message, timing and the result coming back — with the person deciding at each step. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed.',
+  },
   '/#hero': {
     src: '/placeholders/home--hero.svg',
     width: 1600,
@@ -27,21 +91,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The product-decision survival model (`visual_plan`): how one consequential product decision survives from research, through design and coded prototype, into shipped software, with one Tcules practice carrying it across every step.',
   },
-  '/#why-tcules': {
-    src: '/placeholders/home--why-tcules.svg',
-    width: 1280,
-    height: 1600,
-    kind: 'studio photo',
+  '/#why-tcules:the-wandering-raven': {
+    src: '/placeholders/home--why-tcules--the-wandering-raven.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'product shot',
     shows:
-      'A Tcules team working through a product with a lot going on: roles, permissions and exceptions mapped on a wall during a working session.',
-  },
-  '/#why-tcules-2': {
-    src: '/placeholders/home--why-tcules-2.svg',
-    width: 1280,
-    height: 1600,
-    kind: 'studio photo',
-    shows:
-      'A Tcules designer working inside a client\'s own tools and meetings, beside the client\'s product team, in one working session ("We work as part of your team"). Added in build: `about_studio_review` is 960 × 720 and fails the 1.9× resolution rule (§ 5.4) at this 4:5 slot, so the reuse the mapping named cannot be used here.',
+      "The Wandering Raven's creative-writing world for young learners, built inside Moodle: a learner's screen mid-story, the reason \"We can build what we design\" shown as working software. Home round 1: the one reason with no client quote takes the case's artefact on its other side. The case page binds no cover yet (`ASSET_REQUIRED`); its first approved screen replaces this panel and the index's 4:5 one.",
   },
   '/about#careers': {
     src: '/placeholders/about--careers.svg',

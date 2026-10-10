@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 28 roles, consumed as composites
+### Type — 29 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -74,6 +74,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` | verbatim |
 | `--text-h5` | 22px | 1.28 | display | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 18px | 1.35 | display | medium | `--text-h6-tracking` | verbatim |
+| `--text-wordmark` | 22px | 1.15 | sans | semibold | `--text-wordmark-tracking` | verbatim |
 | `--text-quote` | 28px | 1.35 | display | regular | **none** | verbatim |
 | `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
 | `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
@@ -96,7 +97,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**19 roles have a tracking companion. 9 have none** — pairing one with a role in that
+**20 roles have a tracking companion. 9 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-quote-sm`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -187,7 +188,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **contrast.css** — `--cntr-heading-tracking` -0.005em · `--cntr-item-tracking-primary` 0em · `--cntr-rule-width` 1px · `--cntr-rule-strong-width` 1px
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
 - **cta-section.css** — `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-close-heading-tracking` -0.018em · `--cta-open-heading-tracking` -0.02em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-open-heading-measure` 26ch · `--cta-body-measure` 75ch · `--cta-lede-measure` 44ch
-- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-record-key-share` 38% · `--dtab-fade-size` 48px
+- **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-record-key-share` 38% · `--dtab-split-key-size` 152px · `--dtab-fade-size` 48px
 - **engagement-model.css** — `--eng-eyebrow-tracking` 0.12em · `--eng-heading-tracking` -0.015em · `--eng-heading-measure` 32ch · `--eng-lead-measure` 56ch · `--eng-title-tracking` -0.005em · `--eng-body-measure` 56ch · `--eng-axis-tracking` 0.1em · `--eng-line-width` 3px · `--eng-level-width` 1px · `--eng-rule-width` 1px · `--eng-idle-width` 1px · `--eng-node-width` 2px · `--eng-swatch-width` 48px · `--eng-swatch-height` 24px
 - **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-hidden-size` 1px
 - **figure.css** — `--fig-min-xs` 192px

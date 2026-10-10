@@ -408,6 +408,24 @@ function columnsToVars(
   return vars as CSSProperties;
 }
 
+/**
+ * The first breakpoint at which the arrangement has more than one track: where `equalRows` starts to
+ * mean anything. On a single track "equal rows" makes every stacked item as tall as the tallest, so
+ * a stack of cards with one long body opened a hole under every short one (home round 1, 10 Oct
+ * 2026: the six situations at 390). Content-driven modes are judged at base. Undefined when the
+ * arrangement never leaves one track.
+ */
+function firstMultiTrack(columns: Columns | undefined): Breakpoint | undefined {
+  if (columns == null) return undefined;
+  if (columns === 'fit' || columns === 'tile') return 'base';
+  const specs: Partial<Record<Breakpoint, ColumnSpec>> =
+    typeof columns === 'number' || Array.isArray(columns) ? { md: columns } : columns;
+  return (['base', 'md', 'lg', 'xl'] as const).find((bp) => {
+    const spec = specs[bp];
+    return spec != null && viewCount(spec) > 1;
+  });
+}
+
 /** A per-view count from a column shape: a ratio's length, as a safe reading of a misuse. */
 const viewCount = (spec: ColumnSpec) => (typeof spec === 'number' ? spec : spec.length);
 
@@ -498,6 +516,9 @@ export function Layout({
     scroll == null || (scroll === 'until-md' && bp !== 'base');
   const reversed = leads ? [] : perBreakpoint(reverse).filter(placeable);
   const offsets = leads || reverse != null ? [] : perBreakpoint(offset).filter(placeable);
+  /* Equal rows apply only where the grid has more than one track (see `firstMultiTrack`); a scroll
+     row is one row, so its base is never stacked. */
+  const equalFrom = scroll ? 'base' : firstMultiTrack(columns);
   const vars =
     scroll === 'always'
       ? { ...columnsToVars(undefined), ...viewVars(columns, scroll) }
@@ -519,7 +540,9 @@ export function Layout({
         styles[`align-${align}`],
         styles[`justifyitems-${justifyItems}`],
         justify && styles[`justify-${justify}`],
-        equalRows && styles['equal-rows'],
+        equalRows &&
+          equalFrom &&
+          styles[equalFrom === 'base' ? 'equal-rows' : `equal-rows-${equalFrom}`],
         leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),

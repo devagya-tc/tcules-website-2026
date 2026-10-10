@@ -275,6 +275,9 @@ Append one entry per problem, newest last.
   plan"), which carry the claim, and keep the full quote for the case page.
 - **Why:** the sentence about the handover ("so nothing got lost") is the case study's, and the
   band stays inside the fold with it left to the case.
+- **Home round 1 (10 Oct 2026):** the overflow's cause is gone at the template — a story's quote now
+  leaves the story for a quote band of its own after the stories (OfferPage `storyQuotes`), so the
+  split carries the story alone. The length point stands and is now part of P34.
 
 ### P22 · `/` and `/services/product-design` · faq · six and seven questions run past the fold
 
@@ -421,3 +424,72 @@ Append one entry per problem, newest last.
   `cpq-ux-checklist` names its first column "Question".
 - **Why:** every row header gets a column to belong to, and the same fix keeps both tables on the page one
   shape.
+
+---
+
+## Home round 1 (owner review, 10 Oct 2026)
+
+The owner's corrected reading of the rules: information is never paraphrased, but its presentation is
+designed (a record line as figures, names as logos, quotes pulled out of the cases). The three
+proposals below are where that design asks something of the copy.
+
+### P33 · `/` · hero · the record line, as figures
+
+- **Page and band:** the hero's proof line, "Founded 2017 · More than 90 projects · Clients in 19
+  countries · Based in Ahmedabad, India", now set as four figures in a band of its own under the hero
+  (owner note 1: "those are important figures to show credibility").
+- **Problem:** a figure needs a short value and a line that says what it counts, and two facts are
+  not written that way. "More than 90 projects" is set as **90+** / "Projects"; "Based in Ahmedabad,
+  India" is not a number, so it is set as **India** / "Based in Ahmedabad". "Clients in 19 countries"
+  is set as **19** / "Countries with clients". No information is added or dropped, but the content
+  team has not seen these forms.
+- **Proposal:** confirm the three forms, or author the record as value-and-label pairs in the
+  frontmatter (`record: [{ value: '2017', label: 'Founded' }, …]`) so the page never has to split a
+  sentence. If "90+" overstates "more than 90" for legal review, give the exact count ("94") or
+  keep "90+" with the label "More than 90 projects".
+- **Why:** figures are scanned, not read; a value of one to five characters and a label of one to
+  three words is what lets four of them sit in one row at 390 (two by two) and 1440 (four across).
+  Rendered in the confirmed-pending forms meanwhile; `RECORD_FORMS` in `HomePage.tsx` holds them.
+
+### P34 · every page · quotes shown together · keep their lengths within a band
+
+- **Page and band:** every place two or more quotes are shown at once. On `/` today:
+  `why-tcules` 18, 15 and 34 words (Auxentios 15, Primelis 34: 2.3×); `client-voices` 30, 24, 21,
+  43, 22 and 48 words (Knovos 21, Eden AI 48: 2.3×); `selected-work` 31 and 35 (fine). `/about`
+  `testimonials` 22, 30, 24 (fine).
+- **Problem:** the design sets quotes as peers — a pair, a banner side, a wall of three columns —
+  and peers are read as one shape. A 15-word quote beside a 34-word one leaves one banner half
+  empty; in the wall, the 43- and 48-word quotes run twice the height of their neighbours, so the
+  columns end raggedly. The group absorbs moderate differences on purpose (quotes run down columns,
+  attributions share a baseline in pairs), but not a factor of two.
+- **Proposal:** quotes chosen for one band fall within **±25% of the set's median length**, and
+  within the range for their placement:
+
+  | Placement | Words per quote |
+  | --- | --- |
+  | One quote alone (centred typographic band, or beside a portrait) | 20–35 |
+  | A banner side (beside a reason, a case, a figure) | 18–30 |
+  | Peers: a pair or a group of three | 18–30, each within ±25% of the others |
+  | A wall of four to six | 18–30; the longest no more than 1.5× the shortest |
+  | Inside a reading flow (an article, a case story) | ≤ 30 |
+
+  For `/`: a shorter approved excerpt for CuramCare (43) and Eden AI's platform quote (48) in
+  `client-voices` (both await sign-off, so ask for the excerpt at sign-off — P21 suggests one for
+  CuramCare); a longer Auxentios line (the case study has one) or a trimmed Primelis quote (also
+  awaiting sign-off) in `why-tcules`.
+- **Why:** a quote is evidence in the client's words and is never cut by the design; the length has
+  to be chosen with the client. The quotes render in full meanwhile.
+
+### P35 · `/` · client-recognition · the score is said twice
+
+- **Page and band:** the logo band is led by the Clutch badge ("★ 4.8 on Clutch", the kit's
+  approved lead) and closes on the authored sentence "4.8 out of 5 on Clutch across 13 independent
+  client reviews. Read the reviews".
+- **Problem:** the score appears twice in one band, 300px apart.
+- **Proposal:** let the badge carry the score (it links to the profile) and close the band on
+  "Across 13 independent client reviews." plus the link; or keep the sentence and drop the badge.
+  The frontmatter already holds `external_review` (rating, count, checked date), so the badge can be
+  driven by it on launch-day re-verification.
+- **Why:** one statement of the number reads as confidence; two read as insistence. Both render
+  meanwhile, because the sentence is authored copy and the badge is the approved composition.
+

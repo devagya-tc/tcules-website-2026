@@ -22,7 +22,7 @@ import {
   CorpusHero,
   FaqItems,
   ListTiles,
-  QuoteSliderBand,
+  QuoteGroupBand,
   bodyOf,
   faqItems,
   head,
@@ -95,7 +95,7 @@ export function AboutPage({ page, caseRefs = {} }: AboutPageProps) {
       <HowWeWork page={page} />
       <Leadership page={page} />
       <WorkYouCanInspect page={page} caseRefs={caseRefs} />
-      <QuoteSliderBand band={band(page, 'testimonials')} />
+      <QuoteGroupBand band={band(page, 'testimonials')} />
       <CompanyRecord page={page} />
       <Faq page={page} />
       <Constant page={page} />
@@ -196,7 +196,13 @@ function WhoWeWorkWith({ page }: { page: CorpusPage }) {
       ? list.items.flatMap((runs) => {
           const lead = boldLead(runs);
           return lead
-            ? [{ id: labelTitle(lead.label), title: labelTitle(lead.label), ...bodyOf(lead.body) }]
+            ? [
+                {
+                  id: labelTitle(lead.label),
+                  title: labelTitle(lead.label),
+                  ...bodyOf(lead.body),
+                },
+              ]
             : [];
         })
       : [];
@@ -243,9 +249,7 @@ function Difference({ page }: { page: CorpusPage }) {
         id={`${b.id}-2`}
         data-band="C-text"
         footer={
-          link ? (
-            <CtaRow actions={[{ label: link.labelText, href: link.href }]} />
-          ) : undefined
+          link ? <CtaRow actions={[{ label: link.labelText, href: link.href }]} /> : undefined
         }
       >
         <ListTiles rows={all.slice(2).map(row)} columns={3} />
@@ -356,9 +360,7 @@ function WorkYouCanInspect({
   const cases = b.blocks.flatMap((block) => {
     if (block.type !== 'paragraph') return [];
     const [first, ...tail] = block.runs;
-    return first?.type === 'link'
-      ? [{ link: first, body: trimStart(tail) }]
-      : [];
+    return first?.type === 'link' ? [{ link: first, body: trimStart(tail) }] : [];
   });
   const cards: BlockCardSetItem[] = cases.map(({ link, body }) => {
     const name = plain(link.children);
@@ -397,32 +399,27 @@ function WorkYouCanInspect({
 /* ── 10 · the company record, two halves ─────────────────────────────────────── */
 
 /**
- * Sixteen facts as a record that holds the fold: two boxed tables of eight, side by side from 1024,
- * each with the authored header row. The band's heading names both.
+ * Sixteen facts as a record that holds the fold: DataTable's `split`, two boxed halves of eight side
+ * by side from 1024, each with the authored header row, and one continuous table where the layout is
+ * one column (owner, 10 Oct 2026). The band's heading names it.
  */
 function CompanyRecord({ page }: { page: CorpusPage }) {
   const b = band(page, 'company-record');
   const table = blocksOf(b, 'table')[0];
   if (!table) return null;
   const [key = [], ...columns] = table.header;
-  const half = Math.ceil(table.rows.length / 2);
-  const halves = [table.rows.slice(0, half), table.rows.slice(half)];
   return (
     <ContentSection {...head(b)} data-band="E">
-      <Layout columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="gutter" align="start">
-        {halves.map((rows, index) => (
-          <DataTable
-            key={index}
-            labelledBy={headingIdOf(b)}
-            keyColumn={{ heading: plain(key) }}
-            columns={columns.map((cell) => ({ heading: plain(cell) }))}
-            rows={rows.map((row) => ({
-              header: plain(row[0] ?? []),
-              cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
-            }))}
-          />
-        ))}
-      </Layout>
+      <DataTable
+        split
+        labelledBy={headingIdOf(b)}
+        keyColumn={{ heading: plain(key) }}
+        columns={columns.map((cell) => ({ heading: plain(cell) }))}
+        rows={table.rows.map((row) => ({
+          header: plain(row[0] ?? []),
+          cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
+        }))}
+      />
     </ContentSection>
   );
 }

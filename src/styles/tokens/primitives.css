@@ -175,6 +175,11 @@
      <h6> a role at last; reset.css has always counted it as a heading while globals.css styled
      five. */
   --font-size-h6: 18px;
+  /* A client's name typeset in place of its logo (LogoGrid, home round 1, 10 Oct 2026): the h5 size
+     in the sans, so a typeset wordmark sits near a drawn mark's cap height (ClientMark caps at 40
+     tall, a wordmark's x-height runs ~16 of it). Stated on its own, not as h5's: a logo stand-in and
+     a card title are free to move independently. */
+  --font-size-wordmark: 22px;
   --font-size-quote: 28px;
   /* The quote that has a band's full column to itself — a display Proof standing alone. h3 scale,
      not h2 (1 Oct 2026): it was 43, the same size as the section heading above it, and a 20-word
@@ -237,6 +242,7 @@
   --font-size-h4-t: 25px;
   --font-size-h4-m: 22px;
   --font-size-h5-m: 20px;
+  --font-size-wordmark-m: 18px;
   --font-size-quote-m: 22px;
   --font-size-quote-lg-t: 28px;
   --font-size-quote-lg-m: 22px;
@@ -294,6 +300,7 @@
   --line-height-body-sm: 1.55;
   --line-height-caption: 1.45;
   --line-height-ui: 1.2;
+  --line-height-wordmark: 1.15; /* a logo's line: tight, two lines at most in a phone cell */
   --line-height-eyebrow: 1.2;
   --line-height-micro: 1.2;
   --line-height-index: 1.2; /* the chrome ratio, not stat's 1 — an index can wrap in a narrow track */
@@ -407,13 +414,18 @@
   --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
     var(--font-family-display);
   --text-h6-tracking: var(--letter-spacing-none);
+  /* A typeset wordmark (LogoGrid): the sans at semibold, tracked tight as a logotype is. It is a mark,
+     not a label, so it takes no mono case and no opened tracking. */
+  --text-wordmark: var(--font-weight-semibold)
+    var(--font-size-wordmark)/var(--line-height-wordmark) var(--font-family-sans);
+  --text-wordmark-tracking: var(--letter-spacing-title);
   /* Italic is part of the ROLE (ch03's table: Newsreader 400 italic), so it lives in the composite
      rather than in every consumer — a `font: var(--text-quote)` that then had to remember
      `font-style: italic` is the restated-value mistake the composites exist to prevent. The
      italic 400 cut is loaded in app/layout.tsx (`1,6..72,400`). The -m step below restates it,
      because `font:` resets font-style and a breakpoint composite without it would go roman. */
-  --text-quote: italic var(--font-weight-regular) var(--font-size-quote)/var(--line-height-quote)
-    var(--font-family-display);
+  --text-quote: italic var(--font-weight-regular)
+    var(--font-size-quote)/var(--line-height-quote) var(--font-family-display);
   /* ITALIC IS IN THE COMPOSITE: reported speech is italic by role (ch03 lists quote as "400 italic",
      ch10 B2.07), so the consumer writes no font-style — `font:` would reset one written before it.
      Tracking is title-fine, h4's light correction: italic sets tighter than roman already, so h3's
@@ -530,10 +542,12 @@
       var(--font-family-display);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
       var(--font-family-display);
-    --text-quote: italic var(--font-weight-regular) var(--font-size-quote-m)/var(--line-height-quote-m)
-      var(--font-family-display);
-    --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg-m)/var(--line-height-lead-lg-m)
-      var(--font-family-sans);
+    --text-wordmark: var(--font-weight-semibold)
+      var(--font-size-wordmark-m)/var(--line-height-wordmark) var(--font-family-sans);
+    --text-quote: italic var(--font-weight-regular)
+      var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
+    --text-lead-lg: var(--font-weight-regular)
+      var(--font-size-lead-lg-m)/var(--line-height-lead-lg-m) var(--font-family-sans);
     --text-stat: var(--font-weight-medium) var(--font-size-stat-m)/var(--line-height-stat)
       var(--font-family-mono);
     --text-quote-lg: italic var(--font-weight-regular)

@@ -424,7 +424,32 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* Two cases told in turn: the work first, then what the client said. */
+    /* What the clients in the stories said, after the stories: the G typographic band on tint, the
+       cases' own quote band. One quote centred; two or three as peers. */
+    case 'storyQuotes': {
+      const quotes = band.blocks.flatMap((b) =>
+        b.type === 'item'
+          ? b.blocks.flatMap((inner) => (inner.type === 'quote' ? [proofQuote(inner)] : []))
+          : [],
+      );
+      const [first, second, third] = quotes;
+      if (!first) return null;
+      return (
+        <ContentSection id={unit.id} surface="tint" align="center" data-band="G">
+          {second ? (
+            <Proof
+              arrangement="group"
+              quotes={third ? [first, second, third] : [first, second]}
+            />
+          ) : (
+            <Proof quote={first} align="center" />
+          )}
+        </ContentSection>
+      );
+    }
+
+    /* Two cases told in turn: the work, each beside its artefact. What the clients said follows the
+       stories as its own band (`storyQuotes`), never inside a story. */
     case 'caseStories': {
       const items = band.blocks.filter(
         (b): b is Extract<CorpusBlock, { type: 'item' }> => b.type === 'item',
@@ -443,9 +468,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               block.type === 'paragraph' ? <p key={index}>{renderInline(block.runs)}</p> : null,
             )}
           </Layout>
-          {item.blocks.map((block, index) =>
-            block.type === 'quote' ? <QuoteCompact key={index} block={block} /> : null,
-          )}
         </Layout>
       );
       const first = unit.part === 'a';

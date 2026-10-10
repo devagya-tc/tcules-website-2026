@@ -12,7 +12,6 @@ import {
   ListCard,
   PageHero,
   Proof,
-  Slider,
   type AccordionItem,
   type HeroActions,
   type HeroMedia,
@@ -85,12 +84,10 @@ export function CorpusHero({
   const { hero } = page;
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
-  const actions = hero.actions
-    .slice(0, 2)
-    .map((action) => ({
-      label: action.labelText,
-      href: action.href,
-    })) as unknown as HeroActions;
+  const actions = hero.actions.slice(0, 2).map((action) => ({
+    label: action.labelText,
+    href: action.href,
+  })) as unknown as HeroActions;
   const eyebrow = hero.eyebrow ? plain(hero.eyebrow) : undefined;
   const [firstProof] = hero.proofLines;
   return (
@@ -145,13 +142,26 @@ export function QuoteCompact({ block }: { block: QuoteBlock }) {
 /* ── Quotes only (M5) ─────────────────────────────────────────────────────────── */
 
 /**
- * M5 — a band that is only client quotes: the G slider, one quote at a time, on the page's tint, under
- * a centred head. A lead is set when the band authors one. The attribution lines are parsed (G13), so
- * the one- and two-line forms both arrive as name, role and company.
+ * M5 — a band that is only client quotes, shown as ONE composed group, never a slider (owner, 10 Oct
+ * 2026: a slider hides every quote but the first from most readers). On the page's tint under a
+ * centred head, with the band's lead when it authors one. The shape follows the count:
+ *
+ *   one          the display quote, alone;
+ *   two, three   Proof `group` — the kit's approved peers, the attributions on one baseline;
+ *   four to six  a wall: three columns (two for four), the quotes running DOWN each column in the
+ *                order they were written, so a long quote and a short one share a column rather
+ *                than leaving a ragged row of holes. The quotes are the compact reading role, which
+ *                steps to its narrow size in a column this width (Proof's own measure rule).
+ *
+ * A quote awaiting client sign-off renders as written; the flag is a comment in the source. Moderate
+ * differences in length read as intended in the wall; P34 asks for quotes shown together to stay
+ * within a band of one another so the group never has to absorb a 2-line quote beside a 6-line one.
  */
-export function QuoteSliderBand({ band }: { band: CorpusBand }) {
+export function QuoteGroupBand({ band }: { band: CorpusBand }) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
-  const quotes = band.blocks.flatMap((block) => (block.type === 'quote' ? [block] : []));
+  const quotes = band.blocks.flatMap((block) =>
+    block.type === 'quote' ? [proofQuote(block)] : [],
+  );
   return (
     <ContentSection
       {...head(band)}
@@ -160,14 +170,39 @@ export function QuoteSliderBand({ band }: { band: CorpusBand }) {
       align="center"
       lead={lead?.type === 'paragraph' ? plain(lead.runs) : undefined}
     >
-      <Slider label="Client quotes" slideName="testimonial" perView={1} align="center" autoplay>
-        {quotes.map((quote, index) => (
-          <li key={index}>
-            <Proof quote={proofQuote(quote)} align="center" />
-          </li>
-        ))}
-      </Slider>
+      <QuoteGroup quotes={quotes} />
     </ContentSection>
+  );
+}
+
+function QuoteGroup({ quotes }: { quotes: readonly ProofQuote[] }) {
+  const [first, second, third] = quotes;
+  if (!first) return null;
+  if (!second) return <Proof quote={first} align="center" />;
+  if (quotes.length <= 3) {
+    return (
+      <Proof arrangement="group" quotes={third ? [first, second, third] : [first, second]} />
+    );
+  }
+  const columns = quotes.length === 4 ? 2 : 3;
+  const per = Math.ceil(quotes.length / columns);
+  const stacks = Array.from({ length: columns }, (_, index) =>
+    quotes.slice(index * per, index * per + per),
+  ).filter((stack) => stack.length > 0);
+  return (
+    <Layout as="ul" columns={{ lg: columns }} colGap="gutter" rowGap="column">
+      {stacks.map((stack, index) => (
+        <li key={index}>
+          <Layout as="ul" rowGap="column">
+            {stack.map((quote) => (
+              <li key={`${quote.name}-${quote.quoteHtml.length}`}>
+                <Proof arrangement="compact" quote={quote} />
+              </li>
+            ))}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
   );
 }
 

@@ -175,7 +175,7 @@ const SPECIMENS = [
       {
         href: '/design/block-card',
         name: 'BlockCard',
-        note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
+        note: 'the borderless card — cover media via Media, text-only sets, the featured set, the set-stated crop and the phone pair, 4 surfaces',
       },
       {
         href: '/design/contrast',
@@ -205,7 +205,7 @@ const SPECIMENS = [
       {
         href: '/design/data-table',
         name: 'DataTable',
-        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
+        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, a split record that joins below 1024, 4 surfaces',
       },
       {
         href: '/design/page-hero',
@@ -280,7 +280,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'LogoGrid',
-        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks',
       },
       {
         href: '/design/kit/facts',

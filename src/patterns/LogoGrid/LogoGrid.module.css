@@ -75,12 +75,14 @@
   text-wrap: var(--text-title-wrap);
 }
 
-/* A client with no approved mark (G1): its name, set as the card title role in the ground's own ink
-   (inherited, as every heading's is), centred in the cell. The set renders every cell this way when
-   any mark is missing, so the weights stay equal. */
-.name {
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
+/* A client with no approved mark yet (G1): its name typeset as a wordmark — the wordmark role (sans,
+   semibold, tight) in the marks' own ink, centred in the cell. A set may mix drawn and typeset marks
+   (home round 1, 10 Oct 2026), so the typeset one takes the drawn ones' voice rather than the card
+   title's: at the h5 serif in the ground's ink it read as a list of names, not a wall of logos. */
+.wordmark {
+  font: var(--text-wordmark);
+  letter-spacing: var(--text-wordmark-tracking);
+  color: var(--lgrid-wordmark-ink);
   text-wrap: var(--text-title-wrap);
   text-align: center;
 }

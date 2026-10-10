@@ -1,5 +1,6 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
+import { formBeforeFaq } from './order';
 import { boldLead, linkLead, plain } from './text';
 
 /**
@@ -22,7 +23,8 @@ import { boldLead, linkLead, plain } from './text';
  *      the band above is, and two tints never touch; the paper band above a tint quote carries the
  *      horizon texture.
  *
- * Nothing here is reordered: units are emitted in document order.
+ * Units are emitted in document order, with the one sanctioned exception every corpus template
+ * shares (`formBeforeFaq`, order.ts): the enquiry form sits immediately before the FAQ.
  */
 
 export type OfferKind =
@@ -39,6 +41,7 @@ export type OfferKind =
   | 'personas'
   | 'principles'
   | 'caseStories'
+  | 'storyQuotes'
   | 'faq'
   | 'enquiry'
   | 'generic';
@@ -228,7 +231,7 @@ function drafts(page: CorpusPage): Draft[] {
     });
   };
 
-  for (const band of page.bands) {
+  for (const band of formBeforeFaq(page.bands)) {
     const kind = kindOf(band);
     switch (kind) {
       case 'cases':
@@ -255,6 +258,16 @@ function drafts(page: CorpusPage): Draft[] {
             id: index === 0 ? band.id : `${band.id}-${index + 1}`,
           }),
         );
+        /* What the clients said leaves the stories (owner, 10 Oct 2026: a quote is never stuffed into
+           a case): every quote the items authored follows the last story as its own typographic
+           band, each still naming its client. */
+        if (
+          items.some(
+            (item) => item.type === 'item' && item.blocks.some((b) => b.type === 'quote'),
+          )
+        ) {
+          unit(band, 'storyQuotes', 'b', { id: `${band.id}-quotes`, visual: false });
+        }
         break;
       }
       default:
@@ -277,7 +290,8 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
   let bRun = 0;
 
   for (const draft of raw) {
-    const isQuoteBand = draft.kind === 'cases' && draft.part === 'b';
+    const isQuoteBand =
+      (draft.kind === 'cases' && draft.part === 'b') || draft.kind === 'storyQuotes';
     const prevTint = planned.at(-1)?.surface === 'tint';
     const surface: OfferUnit['surface'] =
       isQuoteBand || (draft.kind === 'enquiry' && !prevTint) ? 'tint' : 'paper';
@@ -295,7 +309,9 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
       unitSide = side;
       side = side === 'start' ? 'end' : 'start';
     }
-    bRun = isB ? bRun + 1 : 0;
+    /* A story's quote band is an interlude between the stories and what follows, not a break in
+       their run: split, split, quote, split still reads as three splits in a row. */
+    if (draft.kind !== 'storyQuotes') bRun = isB ? bRun + 1 : 0;
 
     planned.push({ ...draft, surface, side: unitSide, variant, horizon: false });
   }

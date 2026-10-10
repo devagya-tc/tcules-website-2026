@@ -16,6 +16,7 @@ import { renderInline } from '@/lib/inline-render';
 import { CorpusHero, EnquiryBand, TableLegend, bodyOf, head, headingIdOf } from './blocks';
 import { ArticleShell } from './LongformShell';
 import { coverFor } from './images';
+import { formBeforeFaq } from './order';
 import { blocksOf, hasLink, loneLink, plain } from './text';
 
 export type LongformFamily = 'case' | 'article' | 'term';
@@ -69,7 +70,7 @@ function CasePage({
 }) {
   const { hero } = page;
   const anchor = page.conversion?.anchor ?? 'enquiry';
-  const bands = page.bands;
+  const bands = formBeforeFaq(page.bands);
 
   /* The structure, read from the bands' blocks: a leading record, the shell, then a table of peers,
      a set of links to other cases, and the form. */
@@ -125,7 +126,7 @@ function CasePage({
  * ContentSection with the ask as a link button (M3, the form with inline links), never a CtaSection.
  */
 function ArticlePage({ page }: { page: CorpusPage }) {
-  const { shell, close } = splitClose(page.bands);
+  const { shell, close } = splitClose(formBeforeFaq(page.bands));
   return (
     <>
       <CorpusHero page={page} texture />
@@ -145,7 +146,7 @@ function ArticlePage({ page }: { page: CorpusPage }) {
 function TermPage({ page }: { page: CorpusPage }) {
   const { hero } = page;
   const [definition, sharpest, ...rest] = hero.lede;
-  const { shell, close } = splitClose(page.bands);
+  const { shell, close } = splitClose(formBeforeFaq(page.bands));
   const continued: CorpusBand | undefined =
     rest.length > 0
       ? {
@@ -177,7 +178,9 @@ function closingLink(band: CorpusBand) {
   if (last?.type === 'links' && last.links.length === 1) return last.links[0];
   if (last?.type === 'paragraph') {
     const link = loneLink(last.runs);
-    return link ? { href: link.href, label: link.children, labelText: plain(link.children) } : null;
+    return link
+      ? { href: link.href, label: link.children, labelText: plain(link.children) }
+      : null;
   }
   return null;
 }
