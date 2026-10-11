@@ -130,7 +130,7 @@
 
 @media (min-width: 768px) {
   .down .stage:not(:last-child) .plate::after {
-    block-size: calc(100% - var(--trp-frame-bottom) + var(--gap-stack));
+    block-size: calc(100% - var(--trp-frame-bottom) + var(--gap-block));
   }
 }
 

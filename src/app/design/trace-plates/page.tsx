@@ -46,7 +46,7 @@ export default function TracePlatesSpecimen() {
       <Variation
         id="down"
         title="1b · Down — the audit's &ldquo;What we trace&rdquo;"
-        note="One row per stage, the plate beside its words (2 : 3 from 768), the trace running down through each action from plate to plate across the row seams, the end nodes on the first plate's top edge and the last plate's bottom edge. Below 768 the words go under each plate and the seams carry no trace."
+        note="One row per stage, compact so five fit a fold: the plate in the leading 1 of [1, 3] from 768, rows a block apart, the trace running down through each action from plate to plate across the row seams, the end nodes on the first plate's top edge and the last plate's bottom edge. Below 768 the words go under each plate and the seams carry no trace."
       />
       <Section>
         <TracePlates stages={FIVE} orientation="down" />

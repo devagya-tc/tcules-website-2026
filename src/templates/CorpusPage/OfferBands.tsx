@@ -337,13 +337,28 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
          per stage, the screen drawn at that stage beside what we look at there, the trace running
          down through it (TracePlates `down`; owner, 11 Oct 2026). */
       if (trace) {
-        return (
+        /* The closing stance sits in the head track under the lead, so the five rows fit a fold. */
+        const plates = leadLinked ? (
+          <Layout rowGap="stack">
+            {leadLinked}
+            <TracePlates orientation="down" stages={trace} />
+          </Layout>
+        ) : (
+          <TracePlates orientation="down" stages={trace} />
+        );
+        return after.length > 0 ? (
+          <ContentSection
+            {...head(band)}
+            data-band="E"
+            arrangement="beside"
+            lead={leadText}
+            aside={<Layout rowGap="text">{after}</Layout>}
+          >
+            {plates}
+          </ContentSection>
+        ) : (
           <ContentSection {...head(band)} data-band="E" arrangement="beside" lead={leadText}>
-            <Layout rowGap="stack">
-              {leadLinked}
-              <TracePlates orientation="down" stages={trace} />
-              {after}
-            </Layout>
+            {plates}
           </ContentSection>
         );
       }

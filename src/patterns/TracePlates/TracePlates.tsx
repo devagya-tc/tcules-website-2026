@@ -30,7 +30,8 @@ export type TracePlatesProps = {
    * `across` (default): the plates in a row, the trace running left to right through each action.
    * `down`: one row per stage, the plate beside its words, the trace running down through each
    * action from plate to plate (owner, 11 Oct 2026: "lets try putting the trace in a vertical
-   * layout").
+   * layout"). Compact so five stages fit a fold: the plate takes the leading 1 of [1, 3] and rows
+   * are a `block` apart.
    */
   orientation?: 'across' | 'down';
 };
@@ -160,10 +161,10 @@ export function TracePlates({ stages, orientation = 'across' }: TracePlatesProps
   const across = Math.min(Math.max(shown.length, 2), 6);
   if (orientation === 'down') {
     return (
-      <Layout as="ol" rowGap="stack" className={styles.down}>
+      <Layout as="ol" rowGap="block" className={styles.down}>
         {shown.map((stage, index) => (
           <li key={stage.title} className={styles.stage}>
-            <Layout columns={{ base: 1, md: [2, 3] }} colGap="gutter" rowGap="block" align="center">
+            <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="block" align="center">
               <div className={styles.plate}>
                 <Scene scene={stage.scene} uid={`${uid}-${index}`} />
                 <End index={index} last={shown.length - 1} />
