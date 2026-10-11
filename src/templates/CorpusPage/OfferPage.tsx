@@ -58,7 +58,15 @@ export function OfferPage({ page, caseRefs, shared, ratings }: OfferPageProps) {
 
   return (
     <>
-      <CorpusHero page={page} arrangement="beside" media={media} />
+      {/* The hero's "Selected … work:" line names the cases the page lists further down; where it
+          does list them (a case band), the line only repeats that list and read as unfinished
+          (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
+      <CorpusHero
+        page={page}
+        arrangement="beside"
+        media={media}
+        proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
+      />
       {units.map((unit) => (
         <UnitView key={unit.id} unit={unit} ctx={ctx} />
       ))}

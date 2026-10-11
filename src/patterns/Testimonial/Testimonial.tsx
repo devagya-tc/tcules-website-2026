@@ -334,7 +334,7 @@ export function TestimonialWall({ items, columns, stagger = false }: Testimonial
 /**
  * How the quote is set beside its work.
  *
- *   card     the rated card in the 5 of [7, 5], centred on the work's height. The service, audit,
+ *   card     the rated card in the 5 of [7, 5], top-aligned with the work (owner, 11 Oct 2026). The service, audit,
  *            expertise and case-index pages' featured case (home round 2).
  *   diptych  the quote as the work's TWIN (owner, home round 3, 11 Oct 2026: the card beside the case
  *            "feels randomly floaty"). Two equal tracks a `gutter` apart, top-aligned: the case card
@@ -374,8 +374,8 @@ export type TestimonialBesideProps = {
 /**
  * TestimonialBeside — a featured case and its client's rated quote, side by side (owner, 10 Oct
  * 2026: "the quote somewhere close to the case study but not embedded in it"). The work takes the 7
- * of [7, 5] and the card the 5, a `column` apart, the card centred on the work's height so the two
- * read as one row and neither hangs from the other's top. Stacked below 1024, the work first.
+ * of [7, 5] and the card the 5, a `column` apart, the card top-aligned with the work so the two
+ * share a top edge (a centred card read as floating). Stacked below 1024, the work first.
  */
 export function TestimonialBeside({
   work,
@@ -438,7 +438,7 @@ export function TestimonialBeside({
       reverse={reverse ? { lg: true } : undefined}
       colGap="column"
       rowGap="block"
-      align="center"
+      align="start"
       className={styles.beside}
     >
       {work}

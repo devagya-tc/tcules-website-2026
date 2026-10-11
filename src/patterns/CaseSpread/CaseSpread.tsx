@@ -66,7 +66,8 @@ export function CaseSpread({
         <Layout columns={{ base: 1, lg: [5, 7] }} colGap="column" rowGap="stack" align="start">
           {/* The story, in the order it happened, as one connected line: a rail runs down the
               problem and what we did and turns blue at the result, the payoff, so the three read as
-              one argument rather than a claim with notes under it. The action closes the line. */}
+              one argument rather than a claim with notes under it. The action follows on the section's
+              edge, not the rail's inset (owner, 11 Oct 2026). */}
           <Layout rowGap="stack">
             <Layout as="ol" rowGap="none">
               {parts.map((part) => (
@@ -84,7 +85,7 @@ export function CaseSpread({
                 </Layout>
               </li>
             </Layout>
-            {action ? <div className={styles.action}>{action}</div> : null}
+            {action}
           </Layout>
           {/* The evidence holds beside the story while it is read (sticky from 1024). */}
           <div className={styles.evidence}>

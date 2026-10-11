@@ -641,3 +641,9 @@ proposals below are where that design asks something of the copy.
   match the design."). VoiceLedger typesets them (curly marks); the words are unchanged.
 - **Proposal:** author curly marks in the source so every renderer agrees (as P27 and P31 ask
   elsewhere).
+
+### P46 · offer pages with a case band · hero · the "Selected … work:" line repeats the case list
+
+- **Problem:** the hero carries "Selected Product Design work: Doodle · Dealpath · Eden AI · Auxentios · Scissors". The page lists those cases in full further down ("More complex products we have made easier to use"), so the line only repeats that list. Set as a line of links under the hero it also read as unfinished (owner, 11 Oct 2026).
+- **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
+- **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
