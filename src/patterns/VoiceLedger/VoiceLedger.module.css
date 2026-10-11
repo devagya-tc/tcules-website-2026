@@ -51,11 +51,4 @@
   max-inline-size: var(--vlg-reply-measure);
 }
 
-/* The complaint's quote marks, the row's one blue mark. The opening mark hangs into the margin by
-   its own width (optical: the words keep the column's edge), so five rows make one column of marks
-   down the band's edge. */
-.open,
-.close {
-  color: var(--vlg-mark-ink);
-}
 

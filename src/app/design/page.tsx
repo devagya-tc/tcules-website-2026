@@ -215,7 +215,7 @@ const SPECIMENS = [
       {
         href: '/design/case-spread',
         name: 'CaseSpread',
-        note: 'one worked example — the outcome as the claim beside its 16:9 evidence, the story under; three parts, no action, paper and tint',
+        note: 'one worked example — problem, what we did and the result on one rail (blue at the result) beside its sticky 16:9 evidence; three steps, no action, paper and tint',
       },
       {
         href: '/design/engagement-options',

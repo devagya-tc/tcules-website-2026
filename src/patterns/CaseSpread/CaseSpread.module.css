@@ -12,10 +12,24 @@
   max-inline-size: var(--csp-heading-measure);
 }
 
-/* The outcome: a blue rule down its start edge, the text a gutter inside it. */
-.claim {
+/* The story's rail: each step hangs a gutter inside a hairline down its start edge, and the steps
+   meet with no gap so the rail is one line; a step's air is its own end inset (a `block`). The
+   result's segment is the blue rule, heavier: the line arrives at the payoff. */
+.step,
+.result {
   padding-inline-start: var(--gap-gutter);
+  padding-block-end: var(--gap-block);
+  border-inline-start: var(--csp-rule-width) solid var(--csp-rule-ink);
+}
+
+.result {
+  padding-block-end: 0;
   border-inline-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
+}
+
+/* The action sits on the rail's inset, under the result it leads on from. */
+.action {
+  padding-inline-start: var(--gap-gutter);
 }
 
 .claimTitle {
@@ -32,11 +46,6 @@
   max-inline-size: var(--csp-claim-body-measure);
 }
 
-.story {
-  padding-block-start: var(--gap-block);
-  border-block-start: var(--csp-rule-width) solid var(--csp-rule-ink);
-}
-
 .storyTitle {
   font: var(--csp-story-title-text);
   letter-spacing: var(--csp-story-title-tracking);
@@ -49,6 +58,14 @@
   text-wrap: var(--text-running-wrap);
   color: var(--csp-story-body-ink);
   max-inline-size: var(--csp-story-body-measure);
+}
+
+/* From 1024 the evidence holds in view beside the story while it is read. */
+@media (min-width: 1024px) {
+  .evidence {
+    position: sticky;
+    inset-block-start: var(--csp-media-sticky-top);
+  }
 }
 
 /* The evidence: one 16:9 frame, ruled and rounded as a card cover is; Media fills it. */

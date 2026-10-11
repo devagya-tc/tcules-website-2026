@@ -40,7 +40,7 @@ function typeset(text: string): string {
 }
 
 /**
- * The complaint with its own quote marks drawn as the row's blue mark: the opening mark hangs into
+ * The complaint with its own quote marks, in the words' ink: the opening mark hangs into
  * the margin so the words keep the column's edge, the closing mark sits after the last word. Text
  * without marks renders as authored.
  */
@@ -50,14 +50,8 @@ function Voice({ text }: { text: string }) {
   if (!match) return <>{set}</>;
   return (
     <>
-      <span className={styles.open} aria-hidden="true">
-        “
-      </span>
-      {match[1]}
-      <span className={styles.close} aria-hidden="true">
-        ”
-      </span>
-      {match[2]}
+      <span className={styles.open}>“</span>
+      {match[1]}”{match[2]}
     </>
   );
 }
@@ -70,13 +64,12 @@ function Voice({ text }: { text: string }) {
  * what is going wrong, and they say it in these words. So the complaint is the band's large thing,
  * set in the upright serif at h4 (two steps under the band's h2) in the leading 7 of [7, 5] from
  * 1024, one row each on a hairline; the answer is the reply beside it, its first line on the
- * complaint's first baseline. The complaint's own quote marks are its blue mark, the opening one
- * hung into the margin, so the eye runs down a column of marks. Below 1024 each reply sits under
- * its complaint.
+ * complaint's first baseline. The opening quote mark hangs into the margin so the words keep the
+ * column's edge. Below 1024 each reply sits under its complaint.
  *
  * Owner, 11 Oct 2026: the italic speech voice was hard to read and a blue arrow before each reply
- * made the rows look clickable. Upright type, and the quote marks — which say "speech", not "go" —
- * replace both.
+ * made the rows look clickable; then that the quote marks in blue did not work. Upright type in
+ * one ink, no marks.
  *
  * It is a ledger, not a card set: the items are lines of speech, read in one pass down one edge,
  * not objects to compare. No photograph: the words are the picture.

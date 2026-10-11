@@ -33,6 +33,9 @@
   --csp-media-ratio: var(--ratio-standard);
   --csp-media-rule-width: var(--border-width-hairline);
   --csp-media-radius: var(--radius-8);
+  /* Where the sticky evidence stops under the viewport's top: clear of the site nav, a section's
+     air. A distance, so a gap step. */
+  --csp-media-sticky-top: var(--gap-section);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

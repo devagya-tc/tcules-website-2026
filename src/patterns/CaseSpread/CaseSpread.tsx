@@ -19,13 +19,13 @@ export type CaseSpreadProps = {
   /** "Example: Dealpath": the h2, the band's accessible name. */
   heading: string;
   headingId: string;
-  /** The outcome ("The result."): the band's claim, set large beside the evidence. */
+  /** The outcome ("The result."): the story's last step, its payoff, marked on the rail. */
   claim: CaseSpreadPart;
   /** The way to the whole case: in practice a `CtaRow` with `rule={false}`. A slot. */
   action?: ReactNode;
   /** The evidence: one image, framed at 16:9 (the site's one card ratio), cover-cropped at `focus`. */
   image: MediaImage;
-  /** The backstory, in order: in practice the problem, then what we did. One to three parts. */
+  /** The steps before the result, in order: in practice the problem, then what we did. */
   story: readonly CaseSpreadPart[];
   /** Default `paper`. */
   surface?: SectionSurface;
@@ -36,17 +36,15 @@ export type CaseSpreadProps = {
  * 11 Oct 2026; page-mapping § 23).
  *
  * A worked example on a service page argues one thing: we changed a real product, and this is what
- * it got. So the OUTCOME is the claim and the evidence image is its proof; the problem and what we
- * did are the backstory a reader takes after deciding the example is worth it. From 1024:
+ * it got. Round 6 led with the outcome and left the problem and what we did as a ruled row under
+ * the image; the owner found them "quite disconnected from the content above" (11 Oct 2026). Now:
  *
- *   row 1, [5, 7]  the h2, then the outcome as the claim — its title, its sentence at lead-lg in the
- *                  full ink, behind a blue start rule — and the action a `stack` under it · the
- *                  evidence at 16:9, beside, its top on the heading's.
- *   row 2, [5, 7]  the story parts on hairlines, on the same tracks, so the short problem sits under
- *                  the claim and the longer account under the image (three parts: three equal).
+ *   the h2 across the band, then [5, 7] from 1024: the story in the order it happened — the
+ *   problem, what we did, the result — as one connected line down a rail that turns blue and full
+ *   ink at the result (the payoff), the action closing the line · the evidence at 16:9 beside it,
+ *   its top on the problem's, sticky while the story is read.
  *
- * Below 1024 one column in that order: heading, claim, action, image, story. The reading order is
- * claim-first (claim leads, proof supports); every word stays, only the IA is designed.
+ * Below 1024 one column: heading, story, action, image. Every word stays, in its authored order.
  */
 export function CaseSpread({
   id,
@@ -59,46 +57,42 @@ export function CaseSpread({
   surface = 'paper',
 }: CaseSpreadProps) {
   const parts = story.filter((part) => part.title.trim().length > 0);
-  const storyColumns = parts.length === 2 ? [5, 7] : Math.max(1, parts.length);
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="case-spread">
       <Layout rowGap="stack">
+        <h2 id={headingId} className={styles.heading}>
+          {heading}
+        </h2>
         <Layout columns={{ base: 1, lg: [5, 7] }} colGap="column" rowGap="stack" align="start">
+          {/* The story, in the order it happened, as one connected line: a rail runs down the
+              problem and what we did and turns blue at the result, the payoff, so the three read as
+              one argument rather than a claim with notes under it. The action closes the line. */}
           <Layout rowGap="stack">
-            <Layout rowGap="block">
-              <h2 id={headingId} className={styles.heading}>
-                {heading}
-              </h2>
-              <div className={styles.claim}>
+            <Layout as="ol" rowGap="none">
+              {parts.map((part) => (
+                <li key={part.title} className={styles.step}>
+                  <Layout rowGap="text">
+                    <h3 className={styles.storyTitle}>{part.title}</h3>
+                    <p className={styles.storyBody}>{part.body}</p>
+                  </Layout>
+                </li>
+              ))}
+              <li className={styles.result}>
                 <Layout rowGap="text">
                   <h3 className={styles.claimTitle}>{claim.title}</h3>
                   <p className={styles.claimBody}>{claim.body}</p>
                 </Layout>
-              </div>
+              </li>
             </Layout>
-            {action}
+            {action ? <div className={styles.action}>{action}</div> : null}
           </Layout>
-          <div className={styles.frame}>
-            <Media image={image} sizes={CASE_SPREAD_MEDIA} fit="fill" edge="placement" />
+          {/* The evidence holds beside the story while it is read (sticky from 1024). */}
+          <div className={styles.evidence}>
+            <div className={styles.frame}>
+              <Media image={image} sizes={CASE_SPREAD_MEDIA} fit="fill" edge="placement" />
+            </div>
           </div>
         </Layout>
-        {parts.length > 0 ? (
-          <Layout
-            as="ul"
-            columns={{ base: 1, lg: storyColumns }}
-            colGap="column"
-            rowGap="stack"
-          >
-            {parts.map((part) => (
-              <li key={part.title} className={styles.story}>
-                <Layout rowGap="text">
-                  <h3 className={styles.storyTitle}>{part.title}</h3>
-                  <p className={styles.storyBody}>{part.body}</p>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        ) : null}
       </Layout>
     </Section>
   );

@@ -3,15 +3,15 @@
    their own words, each answered by where we start (product-design round 6, 11 Oct 2026;
    page-mapping § 23). The reader does not know which SERVICE they need; they know what is going
    wrong. So the complaint is the band's large thing — upright serif at h4, on one line where it
-   fits — and the answer is the quieter reply beside it. The complaint's own quote marks are the
-   row's blue mark (owner, 11 Oct: italic was hard to read; arrows made rows look clickable).
+   fits — and the answer is the quieter reply beside it. Its quote marks are set in the words' own
+   ink, the opening one hung (owner, 11 Oct: italic hard to read; arrows looked clickable; blue
+   quote marks disliked).
 
    Naming: --vlg-{part}-{role}
-     parts  heading · lead · voice · reply · mark · rule
+     parts  heading · lead · voice · reply · rule
      roles  text · tracking · measure · ink · width
 
-   No boxes, no icons in discs, no arrows: rows on hairlines, the one blue mark the quote marks
-   that say "speech". No state tokens: nothing responds to a pointer. Every surface block
+   No boxes, no icons in discs, no arrows, no accent: rows on hairlines and type alone. No state tokens: nothing responds to a pointer. Every surface block
    declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -42,7 +42,6 @@
   --vlg-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --vlg-voice-ink: var(--color-neutral-900); /* 14.62:1 */
   --vlg-reply-ink: var(--color-neutral-700); /* 8.14:1 */
-  --vlg-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
   --vlg-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
@@ -52,7 +51,6 @@
   --vlg-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --vlg-voice-ink: var(--color-neutral-900); /* 13.05:1 */
   --vlg-reply-ink: var(--color-neutral-800); /* 10.54:1 */
-  --vlg-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --vlg-rule-ink: var(--color-neutral-400); /* decoration */
 }
 
@@ -62,7 +60,6 @@
   --vlg-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --vlg-voice-ink: var(--color-white); /* 17.26:1 */
   --vlg-reply-ink: var(--color-neutral-300); /* 11.07:1 */
-  --vlg-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --vlg-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
@@ -72,6 +69,5 @@
   --vlg-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --vlg-voice-ink: var(--color-white); /* 6.23:1 */
   --vlg-reply-ink: var(--color-brandeis-50); /* 5.57:1 */
-  --vlg-mark-ink: var(--color-white); /* 6.23:1 */
   --vlg-rule-ink: var(--color-brandeis-300); /* decoration */
 }

@@ -42,17 +42,17 @@ export default function CaseSpreadSpecimen() {
           <h1>CaseSpread</h1>
           <p className={t.lead}>
             A worked example argues one thing: we changed a real product and this is what it got. The
-            outcome is the claim — its sentence at lead-lg behind a blue start rule (Callout&rsquo;s
-            example mark) with the action under it — beside the evidence at 16:9; the problem and what
-            we did are the backstory on hairlines underneath, on the same [5, 7] tracks.
+            story runs in the order it happened — the problem, what we did, the result — as one line
+            down a rail that turns blue at the result, the payoff, with the action closing it; the
+            evidence sits beside it at 16:9 and holds in view while the story is read.
           </p>
         </Layout>
       </Section>
 
       <Variation
         id="shape"
-        title="1 · Claim, evidence, two story parts — the shape"
-        note="From 1024 row 1 is [5, 7]: heading, claim, action | image (top on the heading's top). Row 2 is the story on the same tracks, so the short part sits under the claim and the long one under the image. Below 1024: heading, claim, action, image, story."
+        title="1 · Problem, what we did, the result — the shape"
+        note="The heading across the band, then [5, 7] from 1024: the story on one rail (hairline, then the blue rule at the result), the action on the rail's inset | the image at 16:9, its top on the problem's, sticky. Below 1024: heading, story, action, image."
       />
       <CaseSpread
         heading="Example: a staffing product"
@@ -66,7 +66,7 @@ export default function CaseSpreadSpecimen() {
       <Variation
         id="three"
         title="2 · Three story parts, no action"
-        note="Three parts take three equal tracks. Without an action the claim ends the column."
+        note="Three steps before the result run down the same rail. Without an action the result ends the column."
       />
       <CaseSpread
         heading="Example: a staffing product"
