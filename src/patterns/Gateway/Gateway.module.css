@@ -1,47 +1,23 @@
-/* Gateway — the situation router (home round 4, 11 Oct 2026). Layout and Cluster arrange
-   everything; this module supplies the rules, type, inks, the anchor's inset and its states. No
+/* Gateway — the situation selector (home round 6, 11 Oct 2026). Layout arranges everything; this
+   module supplies type, inks, the lit state, the answer's position and the one width switch. No
    margins, no hand-rolled grid or flex, no surface selector: every colour is a --gwy-* token. */
 
-.root {
-  min-inline-size: 0;
-}
-
+.root,
+.list,
 .item {
   min-inline-size: 0;
 }
 
-/* The ruled list (rows): a hairline opens the set and closes every row. Rules, not boxes: one edge
-   each, never four. */
-.ruled {
-  border-block-start: var(--gwy-rule-width) solid var(--gwy-rule-ink);
-}
-
-.row {
-  min-inline-size: 0;
-  border-block-end: var(--gwy-rule-width) solid var(--gwy-rule-ink);
-}
-
-/* The grid cell opens on its rule, so a row of three aligns on one line under the head. */
-.cell {
-  min-inline-size: 0;
-  border-block-start: var(--gwy-rule-width) solid var(--gwy-rule-ink);
-}
-
-/* The whole row is the anchor. `display: block` de-inlines it so the hit area is the row; it
-   arranges nothing (its one child is a Layout). In a ruled arrangement the block inset is the hit
-   area's own air inside the row, a `text` above and below (a dense table's cell inset), so a rule
-   sits between targets rather than on one. */
-.root .link {
+/* The whole situation is the anchor. `display: block` de-inlines it so the hit area is the row; it
+   arranges nothing (its one child is a Layout). */
+.link {
   display: block;
-  block-size: 100%;
-  padding-block: var(--gap-text);
   color: inherit;
   text-decoration: none;
-  transition: background-color var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
-.root .link:hover,
-.root .link:focus-visible {
+.link:hover,
+.link:focus-visible {
   text-decoration: none;
 }
 
@@ -49,180 +25,109 @@
   outline: none;
 }
 
-.root .link:focus-visible {
+.link:focus-visible {
   outline: none;
+  border-radius: var(--gwy-ring-radius);
   box-shadow:
     0 0 0 var(--gwy-ring-offset) var(--gwy-ring-gap-color),
     0 0 0 calc(var(--gwy-ring-offset) + var(--gwy-ring-width)) var(--gwy-ring-color);
 }
 
-/* The index row (the router). No rule between rows: six one-line titles down one edge ARE the
-   structure, and a hairline under each would cut the column the eye runs down (and its inset would
-   cost the band its fold). The rows sit a `block` apart, the Layout's seam, and the anchor takes no
-   inset, so its copy stays flush with the band's heading.
-
-   Under the pointer the row raises a ground across BOTH tracks — the title, the cue and the
-   sentence — so the reader sees one target, not three. The ground is the anchor's ::before, inset
-   by --gwy-ground-reach past the copy on every side: paint only, so the copy does not move off the
-   heading's edge and nothing is laid out. It was a spread box-shadow round a background, which left
-   an anti-aliased seam where the box's rounded corners met the shadow (round 4 critic); one painted
-   box has no seam. Keyboard focus raises the same ground and rings IT, outside the reach — a ring on
-   the anchor's own box ran through the title's first glyph, because the anchor has no inset. The
-   ground is the ring's gap, so no gap colour is needed. `isolation` keeps the ground behind the copy
-   and inside the row. */
-.root .groundLink {
-  position: relative;
-  isolation: isolate;
-}
-
-.root .indexLink {
-  padding-block: 0;
-}
-
-.root .groundLink::before {
-  position: absolute;
-  z-index: -1;
-  inset: calc(-1 * var(--gwy-ground-reach));
-  border-radius: var(--gwy-ground-radius);
-  content: '';
-  transition:
-    background-color var(--gwy-ink-duration) var(--gwy-ink-easing),
-    box-shadow var(--gwy-ink-duration) var(--gwy-ink-easing);
-}
-
-.root .groundLink:hover,
-.root .groundLink:active,
-.root .groundLink:focus-visible {
-  background-color: transparent;
-  box-shadow: none;
-}
-
-.root .groundLink:hover::before {
-  background-color: var(--gwy-ground-hover);
-}
-
-.root .groundLink:active::before {
-  background-color: var(--gwy-ground-pressed);
-}
-
-/* Last, so a focused row keeps its ring while it is also hovered or pressed. */
-.root .groundLink:focus-visible::before {
-  background-color: var(--gwy-ground-hover);
-  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
-}
-
-/* The grid cell with a ground (cue `link`, round 5). The cell keeps its hairline; the anchor's block
-   inset (`text`, above) is the air between the rule and the copy, and under the pointer the ground
-   fills the cell BELOW the rule — reaching past the copy on the inline axis only — so the rule stays
-   drawn and the raised cell reads as a panel hanging from it: square where it meets the rule,
-   rounded at its foot. */
-.root .groundCell::before {
-  inset-block: 0;
-  border-start-start-radius: 0;
-  border-start-end-radius: 0;
-}
-
-/* The grid cell's stack fills the stretched anchor so the arrow (Layout pinLast) sits on one line
-   across a row of three. Sizing only. */
-.fill {
-  block-size: 100%;
-}
-
+/* The situation: the band's largest repeated thing. Below 1024 every title is lit (all are read);
+   from 1024 the unlit five rest in the quieter ink and the lit one carries ink and its arrow. */
 .title {
-  overflow-wrap: anywhere;
+  font: var(--gwy-title-text);
+  letter-spacing: var(--gwy-title-tracking);
   color: var(--gwy-title-ink);
-  text-wrap: var(--text-title-wrap);
   transition: color var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
-.titleLg {
-  font: var(--gwy-title-text-lg);
-  letter-spacing: var(--gwy-title-tracking-lg);
-}
-
-.titleMd {
-  font: var(--gwy-title-text-md);
-  letter-spacing: var(--gwy-title-tracking-md);
+/* The arrow rides the title's last line, after its last word. A glyph's side-bearing gap, not a
+   layout distance (gap rule 1): --gwy-arrow-inset is optical. */
+.arrow {
+  display: inline-block;
+  padding-inline-start: var(--gwy-arrow-inset);
+  vertical-align: middle;
+  color: var(--gwy-arrow-ink);
+  opacity: 0;
+  transform: translateX(calc(var(--gwy-arrow-inset) * -1));
+  transition:
+    opacity var(--gwy-ink-duration) var(--gwy-ink-easing),
+    transform var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
 .body {
-  max-inline-size: var(--measure-body);
-  overflow-wrap: anywhere;
-  color: var(--gwy-body-ink);
+  display: block;
   font: var(--gwy-body-text);
-  text-wrap: var(--text-running-wrap);
-  transition: color var(--gwy-ink-duration) var(--gwy-ink-easing);
+  color: var(--gwy-body-ink);
 }
 
-.service {
-  color: var(--gwy-service-ink);
-  font: var(--gwy-service-text);
-  letter-spacing: var(--gwy-service-tracking);
-  text-transform: var(--text-mono-case);
+/* The answer: the lit situation's sentence at reading size, then its service. */
+.answerTrack {
+  display: none;
+  position: relative;
+  min-inline-size: 0;
 }
 
-/* A grid title holds two lines from 768, where cells share a row: one-line and two-line titles then
-   start their sentences on one line across the row, instead of the bodies stepping down and up
-   (round 5: the zigzag). Sizing, not spacing — the reserved line is the title's own box. Below 768
-   the cells stack and a title takes its own height. */
-@media (min-width: 768px) {
-  .titleReserve {
-    min-block-size: calc(var(--gwy-title-lines) * 1lh);
+.answer {
+  /* The answer's edge: a blue rule down its leading side, the mark the lit title's arrow points at,
+     so question and answer read as one pair across the column gap. Inset by a block, the head-to-
+     body step inside one object. */
+  border-inline-start: var(--gwy-answer-rule-width) solid var(--gwy-answer-rule-ink);
+  padding-inline-start: var(--gap-block);
+  transform: translateY(var(--gwy-answer-shift));
+  transition: transform var(--gwy-move-duration) var(--gwy-ink-easing);
+}
+
+.answerBody {
+  animation: gwy-enter var(--gwy-move-duration) var(--gwy-ink-easing);
+}
+
+.answerText {
+  font: var(--gwy-answer-text);
+  color: var(--gwy-answer-ink);
+  text-wrap: pretty;
+}
+
+@keyframes gwy-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-/* The destination's glyph in a tinted disc (grid `mark`): the cell's entry point, so the eye lands
-   on a shape before it reads. The disc is the glyph's own box — an inset round the 24 glyph and a
-   full radius — so it arranges nothing. */
-/* The hung disc's track: a plain block, so the stretched track does not stretch the disc. */
-.discTrack {
-  display: block;
-}
+/* From 1024 the band becomes the selector: each situation's own sentence and service leave the
+   list (they stay in the HTML) and the answer column shows the lit one. A width switch of what is
+   SHOWN, not of a distance. */
+@media (min-width: 1024px) {
+  .detail {
+    display: none;
+  }
 
-.disc {
-  display: block;
-  inline-size: max-content;
-  padding: var(--gwy-disc-inset);
-  border-radius: var(--gwy-disc-radius);
-  background-color: var(--gwy-disc-ground);
-  color: var(--gwy-mark-ink);
-  transition: background-color var(--gwy-ink-duration) var(--gwy-ink-easing);
-}
+  .answerTrack {
+    display: block;
+  }
 
-.root .link:hover .disc,
-.root .link:focus-visible .disc {
-  background-color: var(--gwy-disc-ground-hover);
-}
+  .item:not([data-lit]) .title {
+    color: var(--gwy-title-ink-rest);
+  }
 
-/* The grid cell's cue: the arrow alone, in the mark ink (the foreground accent). */
-.arrow {
-  display: block;
-  color: var(--gwy-mark-ink);
-}
-
-/* The sentence on a raised ground keeps AA: a ground arrangement only, since only it raises one. */
-.root .groundLink:hover .body,
-.root .groundLink:active .body,
-.root .groundLink:focus-visible .body {
-  color: var(--gwy-body-ink-hover);
-}
-
-.root .link:hover .title,
-.root .link:focus-visible .title {
-  color: var(--gwy-title-ink-hover);
-}
-
-/* Pressed after hover at equal specificity, so it wins while both match. */
-.root .link:active .title {
-  color: var(--gwy-title-ink-pressed);
+  .item[data-lit] .arrow {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .root .link,
-  .root .groundLink::before,
-  .disc,
-  .body,
-  .title {
+  .title,
+  .arrow,
+  .answer {
     transition: none;
+  }
+
+  .answerBody {
+    animation: none;
   }
 }

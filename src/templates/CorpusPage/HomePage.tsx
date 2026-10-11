@@ -279,7 +279,6 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
     const para = item.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph');
     const target = linkLines(item)[0];
     if (!target) return [];
-    const glyph = glyphForRoute(target.href);
     return [
       {
         id: slugOf(item.headingText),
@@ -287,35 +286,23 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
         body: para ? plain(para.runs) : '',
         href: target.href,
         service: target.labelText,
-        ...(glyph ? { icon: <Icon name={glyph} size="xl" /> } : {}),
       },
     ];
   });
 }
 
 /**
- * The page's gateway, built for a quick decision (owner, home round 2, 10 Oct 2026: "the title of
- * each item is why they would want to explore the service further"). Round 1 led each situation
- * with a service drawing and the pictures did the talking (2,276 at 1440); rounds 2–3 set six text
- * cards two across (1,072), which the owner found still plain ("could again be so much better",
- * round 4).
- *
- * Round 4: a ROUTER, not a card set (Gateway `index`): six h3 titles down one edge, the sentence
- * beside them. Round 5 (owner, 11 Oct 2026): the owner preferred the round-4 GRID ("i like this the
- * best") but found it "too dense and boring … nothing is guiding my eye", and ruled display type for
- * heroes only. So the heading is the section h2 (the band's six choices are its large thing, not its
- * heading), and the grid was refined on /design/kit/gateway: the mono service line and the lone arrow
- * became one blue link at each cell's foot (two text layers and a call, not three layers of one
- * grey), the sentence steps to a quieter ink, rows sit a `stack` apart, and each cell hangs the
- * destination's glyph in a tinted disc beside its title (Gateway `mark="hang"`) — an entry point the
- * eye lands on, in a different skeleton from What we do's bare glyph over a title two bands later.
- * Every cell is one link; under the pointer or on focus a ground hangs from its rule. One fold: 822
- * at 1440.
+ * The page's gateway: "which of these is me?" (owner, round 6, 11 Oct 2026: "i may not know if i
+ * need product design service or design system service, but i'll probably know if i want to launch
+ * a new product"). Rounds 1–5 restyled one shape — illustrated cards, text cards, a list, ruled
+ * grids, glyph discs — and the owner rejected each. Round 6 designs for the band's job instead:
+ * Gateway's selector, six situations down one column with one lit and its answer beside it
+ * (page-mapping § 22).
  */
 function Situations({ b }: BandProps) {
   return (
     <ContentSection {...head(b)} data-band="C-router">
-      <Gateway items={gatewayItems(b)} arrangement="grid" mark="hang" />
+      <Gateway items={gatewayItems(b)} />
     </ContentSection>
   );
 }

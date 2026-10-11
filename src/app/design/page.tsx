@@ -295,7 +295,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/gateway',
         name: 'Gateway',
-        note: 'the situation router on home’s six situations: A index (chosen, ruled full-width rows, title · sentence · service on one baseline), B split rows beside the head and C a decision grid kept as explored alternatives',
+        note: 'the situation selector on home’s six situations: titles down one column, one lit, its sentence and service beside it and level with it; every situation in full below 1024; paper and tint',
       },
       {
         href: '/design/kit/facts',

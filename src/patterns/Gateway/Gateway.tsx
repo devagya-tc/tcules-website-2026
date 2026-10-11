@@ -1,6 +1,8 @@
-import type { ReactNode } from 'react';
+'use client';
 
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+
+import { Button, Icon, Layout } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './Gateway.module.css';
@@ -18,225 +20,170 @@ export type GatewayItem = {
   href: string;
   /** The destination's name — "Product Design". Pass authored case; mono uppercases it. */
   service: string;
-  /**
-   * The destination's glyph, an `Icon` the caller composes (a pattern takes a primitive as a node
-   * rather than choosing it). Read by the grid's `mark` only; a set where any item lacks one renders
-   * unmarked, never one cell bare.
-   */
-  icon?: ReactNode;
 };
-
-/**
- * How the set is arranged (rounds 4 and 5, 11 Oct 2026; all on /design/kit/gateway).
- *
- *   grid   THE ROUTER (home, round 5). A ruled cell per situation, 3 across from 1024 (2 from 768,
- *          1 below): with `mark="hang"` the destination's glyph in a tinted disc hangs at the title's
- *          start, and the title, the quiet sentence and the service's link (`cue="link"`, pinned to
- *          the cell's foot) share one edge beside it. Rows a `stack` apart; under the pointer or on
- *          focus a ground hangs from the cell's rule. The owner preferred the grid to the index in
- *          round 5, then found its round-4 cell "too dense and boring": see `GatewayMark` and
- *          `GatewayCue` for what changed.
- *   index  one column of situations: each title at h3 on one line, the service named under it on
- *          Button's link cue, and the sentence beside them in the trailing 5 of [7, 5], quiet. Home
- *          in round 4; kept as an alternative (a long list in a full-width band).
- *   rows   ruled rows for a narrow track (ContentSection `beside`): the title and the service on
- *          one line, the sentence under them. Explored alternative.
- *
- * A presentation choice, never a CMS field.
- */
-export type GatewayArrangement = 'index' | 'rows' | 'grid';
-
-/**
- * The grid cell's entry point (home round 5, explored on /design/kit/gateway). `none` leads with the
- * title; `disc` sets the destination's glyph in a tinted disc above it; `hang` hangs the glyph in a
- * disc beside the title, in its own track, so the copy keeps one edge. Grid only.
- */
-export type GatewayMark = 'none' | 'disc' | 'hang';
-/* Round 5 verdicts (page-mapping § 21): `none` was calm but left six grey blocks with no entry;
-   `disc` gave the entry but repeated What we do's glyph-over-title skeleton and ran past the fold
-   (922); `hang` gives each cell a shape at no height (822) in a skeleton of its own — home's. */
-
-/**
- * How the grid cell names its destination. `link` (round 5): the service as Button's link cue at
- * the cell's foot, its arrow after it — the call the reader can act on. `arrow` (round 4): the
- * service as a quiet mono line over the title and a lone arrow at the foot. Grid only.
- */
-export type GatewayCue = 'link' | 'arrow';
 
 export type GatewayProps = {
   items: readonly GatewayItem[];
-  arrangement?: GatewayArrangement;
-  /** Grid only. Default `none`. See `GatewayMark`. */
-  mark?: GatewayMark;
-  /** Grid only. Default `link`. See `GatewayCue`. */
-  cue?: GatewayCue;
   /** The element each situation's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
 };
 
-/**
- * TIER 2 — Gateway, the situation router: "which of these is me?" answered in one scan, each
- * situation a whole link to its service (home "What do you need next?", rounds 4 and 5).
- *
- * Why its own pattern rather than BlockCardSet: a card set is a set of OBJECTS whose cover or title
- * stands alone. A router entry is a sentence in three parts — the situation, where it leads, why —
- * and it reads only when those parts hold one relationship across the set, which no card
- * arrangement draws. The whole row is the anchor (one tab stop per destination; a heading inside an
- * anchor is valid flow content), the service is Button's link cue rendered as a span, and the
- * anchor's `data-btn-link-group` hands the row's hover, focus and press to that cue.
- *
- * Layout and Cluster do every arrangement; the module supplies type, ink, rules, the anchor's
- * inset and its states.
- */
-export function Gateway({
-  items,
-  arrangement = 'grid',
-  mark = 'none',
-  cue = 'link',
-  titleAs = 'h3',
-  className,
-}: GatewayProps) {
-  const Title = titleAs;
-  const linkCue = (label: string) => (
-    <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-      {label}
-    </Button>
-  );
+/* How long the pointer must rest on a situation before the answer follows it. Long enough that a
+   diagonal move from a lower title to the answer does not re-select every title it crosses; short
+   enough to read as immediate. Behaviour, not a token: nothing in CSS reads it. */
+const HOVER_INTENT_MS = 90;
 
-  if (arrangement === 'grid') {
-    const marked = mark !== 'none' && items.every((item) => Boolean(item.icon));
-    const disc = (item: GatewayItem) => (
-      <span className={styles.disc} aria-hidden="true">
-        {item.icon}
-      </span>
-    );
-    return (
-      <Layout
-        as="ul"
-        columns={{ md: 2, lg: 3 }}
-        colGap="gutter"
-        rowGap={cue === 'link' ? 'stack' : 'gutter'}
-        className={cx(styles.root, className)}
-      >
-        {items.map((item) => {
-          const title = (
-            <Title
-              className={cx(styles.title, styles.titleMd, cue === 'link' && !(marked && mark === 'hang') && styles.titleReserve)}
-            >
-              {item.title}
-            </Title>
-          );
-          const body = <p className={styles.body}>{item.body}</p>;
-          if (cue === 'arrow') {
-            return (
-              <li key={item.id} className={styles.cell}>
-                <a href={item.href} className={styles.link} data-btn-link-group="">
-                  <Layout rowGap="block" pinLast className={styles.fill}>
-                    <Layout rowGap="text">
-                      <span className={styles.service}>{item.service}</span>
-                      <Title className={cx(styles.title, styles.titleMd)}>{item.title}</Title>
-                      {body}
-                    </Layout>
-                    <span className={styles.arrow} aria-hidden="true">
-                      <Icon name="arrow-right" />
-                    </span>
-                  </Layout>
-                </a>
-              </li>
-            );
-          }
-          const text = (
-            <Layout rowGap="text">
-              {title}
-              {body}
-            </Layout>
-          );
-          /* The copy and its call: the title and sentence, the link pinned to the cell's foot so the
-             calls of a row share one line whatever the sentences' lengths. */
-          const copy = (
-            <Layout rowGap="block" pinLast className={styles.fill}>
-              {marked && mark === 'disc' ? (
-                <Layout rowGap="block">
-                  {disc(item)}
-                  {text}
-                </Layout>
-              ) : (
-                text
-              )}
-              <Cluster>{linkCue(item.service)}</Cluster>
-            </Layout>
-          );
+/**
+ * TIER 2 — Gateway, the situation selector (home "What do you need next?", round 6, 11 Oct 2026).
+ *
+ * What the band is for (owner): "as a visitor, i may not know if i need product design service or
+ * design system service, but i'll probably know if i want to launch a new product or get teams
+ * building from one system." So the reader's first act is RECOGNITION across six situations, and
+ * only then reading one sentence and going. The IA follows that order:
+ *
+ *   1. The six situations are the band's largest, and only, repeated thing: h3 titles down one
+ *      column, all visible at once, nothing between them but air. Scanning them is the job.
+ *   2. One situation is lit — ink and a blue arrow — and the other five rest in a quieter ink. The
+ *      lit one is the eye's entry; pointing at, or tabbing to, another lights it instead.
+ *   3. The lit situation's answer — its sentence and the service that delivers it — stands beside
+ *      it, level with the chosen title: the answer is anchored to its question, and it moves with
+ *      the choice. One sentence on screen at a time, not six, so the band is never dense.
+ *
+ * Below 1024 there is no pointer to point with and no column to answer in, so every situation shows
+ * its sentence and its service under its title, all at once.
+ *
+ * Every word is in the server-rendered HTML at every width: each situation's sentence and service
+ * live inside its own anchor (shown below 1024, `display: none` from 1024, where the answer column
+ * shows the lit one). Nothing is hidden behind a click, so nothing is lost to search.
+ *
+ * Accessibility: each situation is one anchor, one tab stop, to its service. Its sentence is its
+ * description (`aria-describedby`, which reads hidden content). The answer column is a visual mirror
+ * of the lit situation: `aria-hidden`, its link out of the tab order, because the title the reader
+ * is on already goes to the same place.
+ *
+ * Rounds 1–5 set this band as cards and ruled grids in five styles; the owner rejected each as a
+ * restyle of the same shape rather than a design for the band's job (page-mapping § 22).
+ */
+export function Gateway({ items, titleAs = 'h3', className }: GatewayProps) {
+  const Title = titleAs;
+  const uid = useId();
+  const [active, setActive] = useState(0);
+  const [shift, setShift] = useState(0);
+  const listRef = useRef<HTMLElement>(null);
+  const paneRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearIntent = () => {
+    if (intent.current) clearTimeout(intent.current);
+    intent.current = null;
+  };
+  const pointTo = (i: number) => {
+    clearIntent();
+    intent.current = setTimeout(() => setActive(i), HOVER_INTENT_MS);
+  };
+  useEffect(() => clearIntent, []);
+
+  /* The answer stands level with the lit title, clamped so it never runs below the list's end. */
+  const measure = useCallback(() => {
+    const list = listRef.current;
+    const pane = paneRef.current;
+    const item = itemRefs.current[active];
+    if (!list || !pane || !item) return;
+    const max = Math.max(0, list.offsetHeight - pane.offsetHeight);
+    setShift(Math.min(item.offsetTop - list.offsetTop, max));
+  }, [active]);
+
+  useLayoutEffect(() => {
+    measure();
+  }, [measure]);
+
+  useEffect(() => {
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [measure]);
+
+  const lit = items[active] ?? items[0];
+  if (!lit) return null;
+
+  return (
+    <Layout columns={{ lg: [8, 4] }} colGap="column" rowGap="none" className={cx(styles.root, className)}>
+      <Layout as="ul" rowGap="gutter" ref={listRef} className={styles.list}>
+        {items.map((item, i) => {
+          const descId = `${uid}-${item.id}-desc`;
           return (
-            <li key={item.id} className={styles.cell}>
+            <li
+              key={item.id}
+              ref={(el) => {
+                itemRefs.current[i] = el;
+              }}
+              className={styles.item}
+              data-lit={i === active ? '' : undefined}
+            >
               <a
                 href={item.href}
-                className={cx(styles.link, styles.groundLink, styles.groundCell)}
+                className={styles.link}
+                aria-describedby={descId}
+                onPointerEnter={() => pointTo(i)}
+                onPointerLeave={clearIntent}
+                onFocus={() => {
+                  clearIntent();
+                  setActive(i);
+                }}
                 data-btn-link-group=""
               >
-                {marked && mark === 'hang' ? (
-                  /* The disc hangs in its own track at the copy's start; the title, the sentence
-                     and the link share the second track's edge. The disc's track stretches with
-                     the cell and the disc keeps its own size at the track's head. */
-                  <Layout
-                    columns={{ base: ['auto', 1] }}
-                    colGap="text"
-                    equalRows
-                    className={styles.fill}
-                  >
-                    <span className={styles.discTrack}>{disc(item)}</span>
-                    {copy}
-                  </Layout>
-                ) : (
-                  copy
-                )}
+                <Layout rowGap="text">
+                  <Title className={styles.title}>
+                    {item.title}
+                    <span className={styles.arrow} aria-hidden="true">
+                      <Icon name="arrow-right" size="xl" />
+                    </span>
+                  </Title>
+                  <span className={styles.detail}>
+                    <Layout rowGap="text">
+                      <span id={descId} className={styles.body}>
+                        {item.body}
+                      </span>
+                      <span>
+                        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+                          {item.service}
+                        </Button>
+                      </span>
+                    </Layout>
+                  </span>
+                </Layout>
               </a>
             </li>
           );
         })}
       </Layout>
-    );
-  }
 
-  if (arrangement === 'rows') {
-    return (
-      <Layout as="ul" rowGap="none" className={cx(styles.root, styles.ruled, className)}>
-        {items.map((item) => (
-          <li key={item.id} className={styles.row}>
-            <a href={item.href} className={styles.link} data-btn-link-group="">
-              <Layout rowGap="tight">
-                <Layout columns={[1, 'auto']} colGap="block" rowGap="tight" align="baseline">
-                  <Title className={cx(styles.title, styles.titleMd)}>{item.title}</Title>
-                  <Cluster>{linkCue(item.service)}</Cluster>
-                </Layout>
-                <p className={styles.body}>{item.body}</p>
-              </Layout>
-            </a>
-          </li>
-        ))}
-      </Layout>
-    );
-  }
-
-  return (
-    <Layout as="ul" rowGap="block" className={cx(styles.root, className)}>
-      {items.map((item) => (
-        <li key={item.id} className={styles.item}>
-          <a
-            href={item.href}
-            className={cx(styles.link, styles.groundLink, styles.indexLink)}
-            data-btn-link-group=""
-          >
-            <Layout columns={{ lg: [7, 5] }} colGap="gutter" rowGap="text" align="start">
-              <Layout rowGap="tight">
-                <Title className={cx(styles.title, styles.titleLg)}>{item.title}</Title>
-                <Cluster>{linkCue(item.service)}</Cluster>
-              </Layout>
-              <p className={styles.body}>{item.body}</p>
-            </Layout>
-          </a>
-        </li>
-      ))}
+      <div className={styles.answerTrack} aria-hidden="true">
+        <div
+          ref={paneRef}
+          className={styles.answer}
+          style={{ '--gwy-answer-shift': `${shift}px` } as CSSProperties}
+        >
+          {/* Keyed on the lit situation so the answer re-enters (a short fade) when it changes. */}
+          <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
+            <p className={styles.answerText}>{lit.body}</p>
+            <span>
+              <Button
+                as="a"
+                href={lit.href}
+                tabIndex={-1}
+                emphasis="link"
+                tone="primary"
+                size="lg"
+                icon={<Icon name="arrow-right" />}
+              >
+                {lit.service}
+              </Button>
+            </span>
+          </Layout>
+        </div>
+      </div>
     </Layout>
   );
 }

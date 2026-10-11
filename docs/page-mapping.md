@@ -1318,3 +1318,26 @@ One defect, fixed at the token: on the raised ground the quieter paper sentence 
 New `--gwy-body-ink-hover` on every surface (paper steps to 700, 7.27:1; tint, ink and blue keep
 their rest ink, each checked on its own raised and pressed ground), read under hover, focus and
 press by every ground arrangement.
+
+## §22 · Home round 6 — the gateway designed for its job (11 Oct 2026)
+
+**Owner:** "THIS ISN'T EVEN IN THE KIT. It looks bad. R5 and R6 are illegal designs … why are you focusing on keeping the same layout and just changing the visual styling of the section little by little … don't put icons in a circle … identify the content, its IA, the prominence and understand the value of that section and then design for it … as a visitor, i may not know if i need product design service or design system service, but i'll probably know if i want to launch a new product."
+
+**Cause:** rounds 1–5 restyled one shape (cards, a list, ruled grids, glyph discs) instead of designing for the band's job. Round 5's cell and round 6's filled tile mixed BlockCard's borderless tile with its hairline card, a look no one approved. Round 6's in-progress gateway work was discarded uncommitted.
+
+**The band's job:** recognition first. The reader scans six situations in their own words, finds theirs, and only then reads one sentence and goes. The service name matters least to the reader; it is the destination.
+
+**IA → design (Gateway, now one arrangement: the selector):**
+1. **Six situations are the only repeated thing.** h3 titles down an 8-of-12 column, each on one line at 1440, a `gutter` apart, with no rules, boxes or icons.
+2. **One is lit.** It is set in ink with a blue arrow after its last word; the other five rest in neutral-500 (3.1:1, large text). The lit title is the eye's entry. Pointing at a title (90ms intent) or tabbing to it lights it.
+3. **Its answer stands beside it.** The sentence at `--text-lead-lg` and the service as Button's link cue, in the trailing 4 of 12 behind a blue 2px rule (the mark the arrow points at). It moves to sit level with the lit title, clamped to the list's end. Only one sentence is on screen, so the band is never dense.
+4. **Below 1024:** every title shows its sentence and service under it.
+
+**SEO and accessibility:**
+- Every sentence and service is in each situation's own anchor in the HTML at every width. From 1024 it is `display: none` there, and the answer column mirrors the lit one.
+- One tab stop per situation; the sentence is its `aria-describedby`.
+- The answer column is `aria-hidden` and its link is `tabIndex=-1`.
+
+**Removed:** Gateway's `grid`, `index` and `rows` arrangements, `mark`, `cue`, and the item `icon`; the disc and ground tokens. The specimen /design/kit/gateway now shows the selector on paper and tint.
+
+**Measures:** 723 tall at 1440 (one fold), 1,557 at 390. `verify`, `build`, `aria:check` (94 pages) and shots of `/` and the specimen all pass.
