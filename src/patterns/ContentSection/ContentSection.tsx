@@ -845,14 +845,13 @@ function MediaSplit({
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinned || toCopy ? 'stretch' : 'center'}
+      align={pinned ? 'stretch' : 'start'}
     >
       <div className={styles.photoTrack}>
         <div
           className={cx(
             styles.photo,
             photoLeads && styles.photoLeads,
-            toCopy && !photoLeads && styles.photoToCopy,
           )}
         >
           <Media

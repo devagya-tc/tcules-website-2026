@@ -1,18 +1,22 @@
-import { Button, Cluster, Icon, Layout, Prose } from '@/components';
+import { Button, Cluster, Icon, Layout, Media, Prose } from '@/components';
 import {
-  Accordion,
   Banner,
+  BlockCard,
   BlockCardSet,
   ContentSection,
   ContentSectionText,
   CtaRow,
   CtaSection,
   DataTable,
+  OfferSheet,
+  VoiceLedger,
   type BlockCardSetItem,
+  type HeroStat,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { HEAD_TRACK } from '@/lib/image-sizes';
 import { placeholderImage } from '@/lib/placeholders';
 
 import {
@@ -22,12 +26,11 @@ import {
   ListTiles,
   QuoteGroupBand,
   bodyOf,
-  faqItems,
   head,
   headingIdOf,
   type RatingsById,
 } from './blocks';
-import { coverFor, slotImage } from './images';
+import { coverFor, slotImage, slugOf } from './images';
 import styles from './CorpusPage.module.css';
 import { bandLinks, blocksOf, boldLead, html, labelTitle, plain, trimStart } from './text';
 
@@ -86,7 +89,7 @@ export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>
-      <CorpusHero page={page} ledes={lede1 ? [lede1] : []} texture />
+      <CorpusHero page={page} ledes={lede1 ? [lede1] : []} stats={recordStats(page)} texture />
       <Studio page={page} opening={opening} />
       <Ahmedabad page={page} />
       <Practice page={page} />
@@ -104,6 +107,30 @@ export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
       <Careers page={page} />
     </>
   );
+}
+
+/* ── the record as the hero's figures ─────────────────────────────────────────── */
+
+/**
+ * The studio's three figures from its own record table ("Tcules at a glance"), in the hero's stats
+ * row as on home (home round 3): founded, projects, countries. The table still prints every fact.
+ */
+const RECORD_FIGURES: Readonly<Record<string, (value: string) => HeroStat>> = {
+  Founded: (value) => ({ value, label: 'Founded' }),
+  Projects: (value) => ({ value: value.replace(/^More than (\d+)$/u, '$1+'), label: 'Projects' }),
+  'Client reach': (value) => ({
+    value: /\d+/u.exec(value)?.[0] ?? value,
+    label: 'Countries with clients',
+  }),
+};
+
+function recordStats(page: CorpusPage): HeroStat[] {
+  const table = blocksOf(band(page, 'company-record'), 'table')[0];
+  if (!table) return [];
+  return Object.entries(RECORD_FIGURES).flatMap(([fact, form]) => {
+    const row = table.rows.find((cells) => plain(cells[0] ?? []) === fact);
+    return row ? [form(plain(row[1] ?? []))] : [];
+  });
 }
 
 /* ── S · the opening, split from the hero ────────────────────────────────────── */
@@ -147,7 +174,7 @@ function Ahmedabad({ page }: { page: CorpusPage }) {
 function Practice({ page }: { page: CorpusPage }) {
   const b = band(page, 'the-practice-keeps-moving');
   return (
-    <ContentSection {...head(b)} data-band="C-text">
+    <ContentSection {...head(b)} data-band="C-text" arrangement="beside">
       <Text paragraphs={paragraphRuns(b.blocks)} />
     </ContentSection>
   );
@@ -195,70 +222,58 @@ function WhatWeDo({ page }: { page: CorpusPage }) {
 function WhoWeWorkWith({ page }: { page: CorpusPage }) {
   const b = band(page, 'who-we-work-with');
   const [leadBlock, list, ...closing] = b.blocks;
-  const cards: BlockCardSetItem[] =
+  const rows =
     list?.type === 'list'
       ? list.items.flatMap((runs) => {
           const lead = boldLead(runs);
-          return lead
-            ? [
-                {
-                  id: labelTitle(lead.label),
-                  title: labelTitle(lead.label),
-                  ...bodyOf(lead.body),
-                },
-              ]
-            : [];
+          return lead ? [{ voice: labelTitle(lead.label), reply: plain(lead.body) }] : [];
         })
       : [];
+  /* The three situations as the questions layout (pattern 32: the reader recognises their own
+     situation in the large line, what it involves beside it); the closing two lines under the rows,
+     in the same band. */
   return (
-    <ContentSection
-      {...head(b)}
-      data-band="C-text"
-      align="center"
+    <VoiceLedger
+      id={b.id}
+      heading={b.headingText}
+      headingId={headingIdOf(b)}
       lead={leadBlock?.type === 'paragraph' ? plain(leadBlock.runs) : undefined}
-    >
-      <BlockCardSet items={cards} lead="none" across={3} scroll="never" />
-      <Text paragraphs={paragraphRuns(closing)} align="center" />
-    </ContentSection>
+      items={rows}
+      note={<Text paragraphs={paragraphRuns(closing)} />}
+    />
   );
 }
 
-/* ── 5a · 5b · what makes the practice different, in two halves ──────────────── */
+/* ── 5 · what makes the practice different: five principles, one set ───────────── */
 
 /**
- * Five differences. The first two sit beside a photograph as tiles; the last three are the same
- * tiles three across under them, the set's continuation, with the band's closing link as the foot
- * (the split keeps the reading order: part b follows part a). One tile type for both halves: drawn
- * as text cards, the last three set a type step above the first two (critic C3.2, as C1.2).
+ * Five principles as ONE OfferSheet, three across (3 + 2), the band's link under the set. It was two
+ * tiles beside a photograph and three more under it, the set running on past the image into a second
+ * row (owner, 11 Oct 2026: an image beside a set whose items extend into the next row is illegal).
+ * Each principle's two paragraphs read as one body.
  */
 function Difference({ page }: { page: CorpusPage }) {
   const b = band(page, 'difference');
   const all = items(b);
-  const row = (item: ItemBlock) => ({
-    title: item.headingText,
-    bodyHtml: paragraphRuns(item.blocks).map((runs) => inlineToHtml(runs)),
-  });
   const link = bandLinks({ ...b, blocks: all.at(-1)?.blocks ?? [] })[0];
   return (
-    <>
-      <ContentSection
-        {...head(b)}
-        data-band="B"
-        arrangement="media"
-        media={{ image: slotImage(page, b.id), side: 'end', head: 'lg' }}
-      >
-        <ListTiles rows={all.slice(0, 2).map(row)} columns={2} />
-      </ContentSection>
-      <ContentSection
-        id={`${b.id}-2`}
-        data-band="C-text"
-        footer={
-          link ? <CtaRow actions={[{ label: link.labelText, href: link.href }]} /> : undefined
-        }
-      >
-        <ListTiles rows={all.slice(2).map(row)} columns={3} />
-      </ContentSection>
-    </>
+    <OfferSheet
+      id={b.id}
+      heading={b.headingText}
+      headingId={headingIdOf(b)}
+      across={3}
+      items={all.map((item) => ({
+        title: item.headingText,
+        bodyHtml: paragraphRuns(item.blocks)
+          .map((runs) => inlineToHtml(runs))
+          .join(' '),
+      }))}
+      note={
+        link ? (
+          <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+        ) : undefined
+      }
+    />
   );
 }
 
@@ -266,6 +281,13 @@ function Difference({ page }: { page: CorpusPage }) {
 
 function HowWeWork({ page }: { page: CorpusPage }) {
   const b = band(page, 'how-we-work');
+  const rows = items(b).map((item) => ({
+    title: item.headingText,
+    bodyHtml: paragraphRuns(item.blocks).map((runs) => inlineToHtml(runs)),
+  }));
+  /* Five working principles, all in view: an About page states how the studio works rather than
+     hiding it behind five closed rows (it was an accordion). The photograph stands in the head track
+     at a fixed 4:5. */
   return (
     <ContentSection
       {...head(b)}
@@ -274,7 +296,7 @@ function HowWeWork({ page }: { page: CorpusPage }) {
       asideFill
       aside={<AsidePhoto image={slotImage(page, b.id)} />}
     >
-      <Accordion items={faqItems(b)} />
+      <ListTiles rows={rows} columns={2} />
     </ContentSection>
   );
 }
@@ -282,67 +304,78 @@ function HowWeWork({ page }: { page: CorpusPage }) {
 /* ── 7 · the people behind the studio ────────────────────────────────────────── */
 
 /**
- * Two people and the team behind them, beside the team photograph. Each leader is a name, a bio and a
- * link; what follows the second leader's own link (the studio paragraph and its link) belongs to the
- * band, not to her, so it is set after both.
+ * PROFILE CARDS, then the studio's LinkedIn item (owner, 11 Oct 2026). Each leader is a card: a 16:9
+ * photograph (every card image is 16:9), the role as the quiet line above the name, the bio, and the
+ * LinkedIn link as the card's one action. The heading "Jatin Leuva, Founder & CEO" is split at its
+ * first comma into the name and the role. Then the wider studio: the team photograph beside the
+ * studio sentence and the link to follow Tcules.
  */
 function Leadership({ page }: { page: CorpusPage }) {
   const b = band(page, 'leadership');
   const leaders = items(b).map((item) => {
     const at = item.blocks.findIndex((block) => block.type === 'links');
-    return { item, own: item.blocks.slice(0, at + 1), after: item.blocks.slice(at + 1) };
+    const [name = item.headingText, ...role] = item.headingText.split(', ');
+    const own = item.blocks.slice(0, at + 1);
+    const link = blocksOf({ ...b, blocks: own }, 'links')[0]?.links[0];
+    return {
+      name,
+      role: role.join(', '),
+      bio: paragraphRuns(own),
+      link,
+      after: item.blocks.slice(at + 1),
+    };
   });
+  const cards: BlockCardSetItem[] = leaders.map((leader) => ({
+    id: leader.name,
+    eyebrow: leader.role || undefined,
+    title: leader.name,
+    ...(leader.bio.length > 0
+      ? { bodyHtml: leader.bio.map((runs) => inlineToHtml(runs)) }
+      : {}),
+    media: {
+      type: 'image',
+      image: { ...placeholderImage(page.route, b.id, slugOf(leader.name)), kind: 'photograph' },
+    },
+    href: leader.link?.href,
+    ctaLabel: leader.link?.labelText,
+  }));
   const after = leaders.flatMap((leader) => leader.after);
+  const studioLink = blocksOf({ ...b, blocks: after }, 'links')[0]?.links[0];
+  const studioText = paragraphRuns(after);
+  /* One row from 1024: the two profile cards, then the studio item in the third track with the same
+     anatomy (16:9 photograph, then the words, then the link), so the LinkedIn item reads as the set's
+     close rather than a second section under it. */
   return (
-    <ContentSection
-      {...head(b)}
-      data-band="B"
-      arrangement="media"
-      media={{ image: slotImage(page, b.id), side: 'end', pin: false, head: 'lg' }}
-    >
-      <Layout rowGap="stack">
-        {leaders.map(({ item, own }) => (
-          <Layout key={item.headingText} rowGap="block">
-            <h3 className={styles.itemTitle}>{item.headingText}</h3>
-            <Blocks blocks={own} />
-          </Layout>
+    <ContentSection {...head(b)} data-band="P">
+      <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
+        {/* BlockCard is its own <li>. */}
+        {cards.map(({ id, ...card }) => (
+          <BlockCard key={id} {...card} tracks={3} cue="cta" linkScope="cta" />
         ))}
-        {after.length > 0 ? (
-          <Layout rowGap="block">
-            <Blocks blocks={after} />
-          </Layout>
+        {studioText.length > 0 || studioLink ? (
+          <li>
+            <Layout rowGap="block">
+              <Media image={slotImage(page, b.id)} ratio="16/9" sizes={HEAD_TRACK} />
+              <Text paragraphs={studioText} />
+              {studioLink ? (
+                <Cluster>
+                  <Button
+                    as="a"
+                    href={studioLink.href}
+                    {...NEW_TAB}
+                    emphasis="link"
+                    tone="primary"
+                    icon={<Icon name="arrow-right-up" />}
+                  >
+                    {studioLink.labelText}
+                  </Button>
+                </Cluster>
+              ) : null}
+            </Layout>
+          </li>
         ) : null}
       </Layout>
     </ContentSection>
-  );
-}
-
-/** Paragraphs and lone-link lines in order: running text, and each link as a link button. */
-function Blocks({ blocks }: { blocks: readonly CorpusBlock[] }) {
-  return (
-    <>
-      {blocks.map((block, index) => {
-        if (block.type === 'paragraph') return <Prose key={index} html={html(block.runs)} />;
-        if (block.type !== 'links') return null;
-        return (
-          <Cluster key={index} colGap="block" rowGap="tight">
-            {block.links.map((link) => (
-              <Button
-                key={link.href}
-                as="a"
-                href={link.href}
-                {...NEW_TAB}
-                emphasis="link"
-                tone="primary"
-                icon={<Icon name="arrow-right-up" />}
-              >
-                {link.labelText}
-              </Button>
-            ))}
-          </Cluster>
-        );
-      })}
-    </>
   );
 }
 
@@ -385,21 +418,54 @@ function WorkYouCanInspect({
   );
   return (
     <>
-      <ContentSection {...head(b)} data-band="M">
-        <BlockCardSet items={cards} lead="auto" cue="title" scroll="never" />
-      </ContentSection>
       <ContentSection
-        id={`${b.id}-2`}
-        data-band="B"
-        arrangement="media"
-        media={{ image: slotImage(page, b.id), side: 'start', pin: false }}
+        {...head(b)}
+        data-band="M"
         footer={
           wall ? <CtaRow actions={[{ label: wall.labelText, href: wall.href }]} /> : undefined
         }
       >
-        {labParagraph?.type === 'paragraph' ? <Text paragraphs={[labParagraph.runs]} /> : null}
+        <BlockCardSet items={cards} lead="auto" cue="title" scroll="never" />
       </ContentSection>
+      {labParagraph?.type === 'paragraph' ? (
+        <Lab page={page} band={b} runs={labParagraph.runs} />
+      ) : null}
     </>
+  );
+}
+
+/**
+ * The Future Interfaces Lab, as a band of its own after the cases (owner, 11 Oct 2026: "the FIL section
+ * is just text and image. i think that can be designed really well"). The cases' link to every case
+ * moves to the cases band's foot, where it belongs; the Lab is a Banner beside its working-wall
+ * photograph, on the tint ground, its name (the sentence's own link words) as the banner's heading and
+ * the sentence as the lead, and the Lab's link as the banner's one action (its own link words).
+ */
+function Lab({
+  page,
+  band: b,
+  runs,
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  runs: readonly InlineRun[];
+}) {
+  const link = runs.find((run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link');
+  const name = link ? plain(link.children) : 'Future Interfaces Lab';
+  return (
+    <Banner
+      form="beside"
+      mediaSide="end"
+      id={`${b.id}-lab`}
+      headingId={`${b.id}-lab-heading`}
+      heading={name}
+      lead={plain(runs)}
+      actions={
+        link ? <CtaRow rule={false} actions={[{ label: name, href: link.href }]} /> : undefined
+      }
+      image={{ ...slotImage(page, b.id), kind: 'photograph' }}
+      surface="tint"
+    />
   );
 }
 
@@ -446,23 +512,23 @@ function Faq({ page }: { page: CorpusPage }) {
 
 /* ── 12 · what remains constant: the coda beside a photograph ────────────────── */
 
-/** A head and four short lines: short copy, so the photograph takes the 7 track (as `studio`). */
+/**
+ * The coda: four short lines that close the argument, set as type rather than beside a stand-in
+ * photograph. The short declarative lines ("Software is our material.") are large, the one sentence
+ * that explains them reads at the lead step between them.
+ */
 function Constant({ page }: { page: CorpusPage }) {
   const b = band(page, 'what-remains-constant');
+  const lines = paragraphRuns(b.blocks).map(plain);
   return (
-    <ContentSection
-      {...head(b)}
-      data-band="B"
-      arrangement="media"
-      media={{
-        image: slotImage(page, b.id),
-        side: 'end',
-        pin: false,
-        head: 'lg',
-        weight: 'photo',
-      }}
-    >
-      <Text paragraphs={paragraphRuns(b.blocks)} />
+    <ContentSection {...head(b)} data-band="B" arrangement="beside">
+      <Layout rowGap="stack">
+        {lines.map((line, index) => (
+          <p key={index} className={line.length > 60 ? styles.codaBody : styles.codaLine}>
+            {line}
+          </p>
+        ))}
+      </Layout>
     </ContentSection>
   );
 }

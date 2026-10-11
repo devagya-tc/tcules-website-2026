@@ -54,9 +54,5 @@
   border-radius: var(--ofs-aside-radius);
 }
 
-@media (min-width: 1024px) {
-  .asideFrame {
-    aspect-ratio: auto;
-    block-size: 100%;
-  }
-}
+/* The ratio holds at every width: the frame never stretches to the set's height (owner, 11 Oct
+   2026 — a stretched image is a crop nobody chose). */

@@ -154,58 +154,43 @@
 
 /* The media split's photograph: a track and a box (see MediaSplit in the TSX).
 
-   .photoTrack is the grid item. It stretches to the row (`align-self`, argued in MediaSplit: the
-   photo fills the row while the copy is centred in it, two placements one `align` cannot state) and
-   it is an inline-size container, so the box inside can be capped against its own width.
-
-   .photo is the box. Its ratio is the FLOOR — `aspect-ratio` sets its height, and its contribution
-   to the row, whenever the copy is shorter. A taller copy column stretches the track and the box
-   follows it (`block-size: 100%`) up to a CEILING, `max-block-size` in the track's own width, so a
-   narrow photo track at 1024 never becomes a 1 : 2 strip. The image fills the box (Media
-   `fit="fill"`). Sizing, not arrangement: nothing here places anything or states a distance. Ratio
-   and ceiling follow the ARRANGEMENT, which changes at 1024 — 4:3 above the copy, then 4:5 in the
-   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. */
+   The photograph keeps its ratio at every copy length (owner, 11 Oct 2026: "the image dynamically
+   reshapes based on the section height … we lose control over the image"). It used to stretch with
+   a taller copy column up to a ceiling; now the ratio IS the box: 4:3 above the copy, then 4:5 in the
+   copy-led 5 or 6:5 in the photo-led 7 (.photoLeads) beside it. The track holds the photo at the top
+   of the row, on the head's line, whatever the copy beside it does. Sizing, not arrangement. */
 .photoTrack {
-  align-self: stretch;
+  align-self: start;
   container-type: inline-size;
 }
 
-/* Both sizes are stated: with only a block size, `aspect-ratio` derives the box's WIDTH from the
-   stretched height and the photo overflows its track (500 in a 477 track at 1440). With both, the
-   ratio applies only while the height is still auto — the row's sizing pass, where it is the floor. */
 .photo {
   inline-size: 100%;
-  block-size: 100%;
   aspect-ratio: var(--csec-photo-ratio);
 }
 
 @media (min-width: 1024px) {
   .photo {
     aspect-ratio: var(--csec-photo-ratio-beside);
-    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-beside));
   }
 
   .photoLeads {
     aspect-ratio: var(--csec-photo-ratio-lead);
-    max-block-size: calc(100cqi * var(--csec-photo-stretch-max-lead));
-  }
-
-  /* `media.height: 'copy'` (cmp-process-stats): the copy-led photo runs the copy column's height
-     and stops at 2:3 — past it the photo keeps the eyebrow's line with air beneath. */
-  .photoToCopy {
-    max-block-size: calc(100cqi * var(--csec-media-ceiling-lg));
   }
 }
 
-/* asideFill: the aside's box. It fills its grid area (the head group's 1fr row, which the stretched
-   track gives the height the body leaves), so a `fit="fill"` photograph inside it ends on the body's
-   last line. The floor keeps it a photograph when the body is short. `contain: size` takes the
-   photograph's own height out of the track's sizing — without it the image's intrinsic height set
-   the head track and the aside ran past the body again. Sizing only. */
+/* asideFill: the aside's photograph, at a fixed ratio rather than filling whatever height the body
+   leaves (owner, 11 Oct 2026 — same rule as the media split). The name stays for the call sites;
+   `contain: size` keeps the image's intrinsic height out of the track's sizing. */
 .asideFill {
   contain: size;
-  block-size: 100%;
-  min-block-size: var(--csec-aside-min-size);
+  aspect-ratio: var(--csec-aside-ratio);
+}
+
+@media (min-width: 1024px) {
+  .asideFill {
+    aspect-ratio: var(--csec-aside-ratio-beside);
+  }
 }
 
 /* Below 1024 the band is stacked and the aside has no body beside it to end on: it takes a ratio of
@@ -214,14 +199,6 @@
    the box from its width. From 768 to 1023 the panorama (a 704 × 469 3:2 outweighed the six cards
    under it); below 768 the phone's 4:3, B's and K's (page-product-design fix round 1: at 326 the
    panorama was a 326 × 140 strip that showed a slice of the scene). An art-direction swap. */
-@media (max-width: 1023.98px) {
-  .asideFill {
-    block-size: auto;
-    min-block-size: 0;
-    aspect-ratio: var(--csec-aside-ratio);
-  }
-}
-
 @media (max-width: 767.98px) {
   .asideFill {
     aspect-ratio: var(--csec-aside-ratio-phone);

@@ -131,14 +131,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Designers and engineers at work together in the Ahmedabad studio, critiquing one piece of work, framed wide enough to read as the whole studio. Banner `below`, added in the critic pass.',
   },
-  '/about#difference': {
-    src: '/placeholders/about--difference.svg',
-    width: 1280,
-    height: 1600,
-    kind: 'studio photo',
-    shows:
-      "A senior Tcules designer and an engineer working through a complex product's roles, rules and states together at one screen.",
-  },
   '/about#how-we-work': {
     src: '/placeholders/about--how-we-work.svg',
     width: 1280,
@@ -147,6 +139,22 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "A Tcules lead designer working directly with a client team, in the client's own tools and review rhythm. 4:5 since the home round 2 critic: the slot is an `asideFill` aside beside a five-item accordion, about 0.9:1 at 1440, and the 3:2 panel cropped to it cut the label's right-hand edge.",
   },
+  '/about#leadership:jatin-leuva': {
+    src: '/placeholders/about--leadership--jatin-leuva.svg',
+    width: 1600,
+    height: 900,
+    kind: 'studio photo',
+    shows:
+      'Jatin Leuva in the Ahmedabad studio, at work with the team rather than posed against a backdrop. About redesign (11 Oct 2026): the people band is profile cards, one 16:9 photograph each (every card image is 16:9).',
+  },
+  '/about#leadership:rakesh-chitroda': {
+    src: '/placeholders/about--leadership--rakesh-chitroda.svg',
+    width: 1600,
+    height: 900,
+    kind: 'studio photo',
+    shows:
+      "Rakesh Chitroda in the Ahmedabad studio, in conversation with a client or the team. Profile card, as Jatin's.",
+  },
   '/about#studio': {
     src: '/placeholders/about--studio.svg',
     width: 1600,
@@ -154,14 +162,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'studio photo',
     shows:
       'Product Design at the centre of the studio: Tcules designers and engineers modelling a product together at a wall in the Ahmedabad studio. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: three short paragraphs beside it).',
-  },
-  '/about#what-remains-constant': {
-    src: '/placeholders/about--what-remains-constant.svg',
-    width: 1600,
-    height: 1333,
-    kind: 'studio photo',
-    shows:
-      'The Ahmedabad studio in its city: the place the practice took shape, with work for clients elsewhere visible inside. Added in the critic pass; 6:5 since the B3 critic pass (photo-weighted split: a head and four short lines beside it).',
   },
   '/audits/design-to-code-audit#deliverables': {
     src: '/placeholders/audits-design-to-code-audit--deliverables.svg',

@@ -82,3 +82,19 @@
   color: var(--cpg-mark);
   text-decoration: underline;
 }
+
+/* About's coda (11 Oct 2026): the short declarative lines large, the explaining sentence at the lead
+   step between them. Type composites only; the ink is the band's own. */
+.codaLine {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.codaBody {
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cpg-ink-label);
+  max-inline-size: var(--measure-lead);
+}
+
