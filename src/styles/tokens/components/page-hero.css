@@ -136,7 +136,13 @@
 --hero-body-text:var(--text-body);
 --hero-key-text:var(--text-micro);
 --hero-key-tracking:var(--text-micro-tracking);
---hero-value-text:var(--text-body-sm);
+/* The byline (owner, 11 Oct 2026: "design this better"). A value reads at body size, a step up from
+   its mono key, and a credited name carries a weight step so the person leads the strip; what they
+   do sits under the name a size down. A hairline above the strip parts the record from the lede. */
+--hero-value-text:var(--text-body);
+--hero-name-weight:var(--font-weight-medium);
+--hero-detail-text:var(--text-body-sm);
+--hero-byline-rule-width:var(--border-width-hairline);
 
 /* The three measures, one per question. The title takes --measure-display, 26ch, since 29 Sep
    2026: ~1040px at --text-display in Newsreader, so the title takes 84% of the 1240 column and
@@ -247,6 +253,10 @@
    the blue link and the solid's fill. Blue is still never a ground: no part of the hero is a blue
    box, and the title, lead, body, labels and byline stay on the neutral ramp. */
 :root,[data-surface="paper"]{
+--hero-name-ink:var(--color-neutral-900);     /* 14.62:1 */
+--hero-detail-ink:var(--color-neutral-700);   /*  8.14:1 */
+--hero-byline-rule-ink:var(--color-neutral-300); /* decoration */
+
 --hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
 --hero-lead-ink:var(--color-neutral-800);     /* 11.81:1 */
 --hero-body-ink:var(--color-neutral-700);     /*  8.14:1 — §6 of the spec rounds this to 8.15 */
@@ -280,6 +290,10 @@
    failure a deltas-only table produces. This is the one cell in the file a future reviewer
    will want to lighten; the number is here so that decision has to argue with it. */
 [data-surface="tint"]{
+--hero-name-ink:var(--color-neutral-900);     /* 13.06:1 */
+--hero-detail-ink:var(--color-neutral-700);   /*  7.27:1 */
+--hero-byline-rule-ink:var(--color-neutral-400); /* decoration */
+
 --hero-title-ink:var(--color-neutral-900);    /* 13.06:1 — §6 of the spec rounds this to 13.05 */
 --hero-lead-ink:var(--color-neutral-800);     /* 10.54:1 */
 --hero-body-ink:var(--color-neutral-700);     /*  7.27:1 */
@@ -311,6 +325,10 @@
    is most at risk of looking thin. The ink is not the reason it reads; it is the reason it
    does not shimmer. */
 [data-surface="ink"]{
+--hero-name-ink:var(--color-white);           /* 17.26:1 */
+--hero-detail-ink:var(--color-neutral-300);   /* 11.07:1 */
+--hero-byline-rule-ink:var(--color-neutral-700); /* decoration */
+
 --hero-title-ink:var(--color-white);          /* 17.26:1 */
 --hero-lead-ink:var(--color-neutral-100);     /* 14.47:1 */
 --hero-body-ink:var(--color-neutral-300);     /* 11.07:1 */
@@ -346,6 +364,10 @@
    and keep its typographic one. A blue hero has fewer steps available than a paper one and
    this is what that costs. */
 [data-surface="blue"]{
+--hero-name-ink:var(--color-white);
+--hero-detail-ink:var(--color-brandeis-50);
+--hero-byline-rule-ink:var(--color-brandeis-300); /* decoration */
+
 --hero-title-ink:var(--color-white);          /*  6.23:1 */
 --hero-lead-ink:var(--color-brandeis-50);     /*  5.57:1 */
 --hero-body-ink:var(--color-brandeis-100);    /*  4.91:1 — the tightest cell here, do not lighten */

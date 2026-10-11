@@ -1474,7 +1474,10 @@ export type BlogPage = {
   description: string;
   createdAt?: string;
   publishedAt?: string;
+  /** The authored publish date (ISO), from the body's date-and-reading-time line, where it has one. */
   publishedContent?: string;
+  /** How long the piece takes to read, as authored ("11 min"). */
+  readingTime?: string;
   updatedAt?: string;
   heroVideo?: { id: string; title: string };
   featureImage?: BlogImage;

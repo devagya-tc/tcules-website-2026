@@ -525,6 +525,12 @@ const CREDIT_SHAPES: readonly {
     ],
   },
   {
+    key: 'author-detail',
+    title: 'Author with who they are, and a reading time',
+    note: 'The full article byline (owner, 11 Oct 2026): the name leads at a weight step, `detail` sits under it a size down, then the dates and `readingTime`, under one hairline that parts the record from the lede.',
+    credits: [{ role: 'author', people: ['Rakesh Chitroda'], detail: 'COO, Tcules' }],
+  },
+  {
     key: 'author-reviewer',
     title: 'Author and reviewer — the shape that exists in the type and on no page',
     note: 'Shown so that its absence on all 15 long-read routes is visibly a choice rather than an oversight. `reviewer` is a role inside credits, so an absent reviewer is an absent group: no label, no value, no space. A separate reviewer prop would be a "Reviewed by" hole waiting for somebody to pass an empty array.',
@@ -542,6 +548,12 @@ const DATE_SHAPES: readonly { key: string; title: string; note: string; dates: H
     title: 'Published only',
     note: 'One pair. Rendered as <time datetime="2026-03-03">3 March 2026</time>, formatted in UTC so the server and every browser agree.',
     dates: { published: '2026-03-03' },
+  },
+  {
+    key: 'updated-only',
+    title: 'Updated only',
+    note: 'A page that states only when it was last updated: one "Updated" pair and no invented publish date.',
+    dates: { modified: '2026-10-07' },
   },
   {
     key: 'both',
@@ -705,6 +717,7 @@ export default async function PageHeroSpecimenPage() {
             body={paragraphs(1)}
             credits={shape.credits}
             dates={{ published: '2026-03-03' }}
+            readingTime={shape.key === 'author-detail' ? '10 min' : undefined}
           />
           <Note title={`4 · ${shape.title}`} note={shape.note} />
         </div>

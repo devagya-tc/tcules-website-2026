@@ -322,6 +322,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         title={blog.title}
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}
+        readingTime={blog.readingTime}
         dates={
           published
             ? { published, ...(updated !== published && updated ? { modified: updated } : {}) }

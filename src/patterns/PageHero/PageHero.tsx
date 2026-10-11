@@ -51,14 +51,23 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
  * One group per role rather than one per person is what keeps the label from being repeated
  * three times for a podcast with three guests — the names are joined into a single value.
  */
-export type HeroCredit = { role: HeroCreditRole; people: readonly [string, ...string[]] };
+export type HeroCredit = {
+  role: HeroCreditRole;
+  people: readonly [string, ...string[]];
+  /** Who they are, as authored ("COO, Tcules"), set under the names a size down. */
+  detail?: string;
+};
 
 /**
  * The dates, as ISO strings. `published` is required, so a modified-only date cannot be
  * expressed; `modified` renders only when it is present AND differs from `published`, because
  * two identical dates under two different labels is a fact about the CMS, not about the page.
  */
-export type HeroDates = { published: string; modified?: string };
+export type HeroDates =
+  | { published: string; modified?: string }
+  /* A page that states only when it was last updated ("Last updated on 7 Oct ’26") — the corpus's
+     new articles carry no published date, and inventing one would be a false fact. */
+  | { published?: undefined; modified: string };
 
 /** One action. `href` comes from `@/lib/routes` at the call site, never written out there. */
 export type HeroAction = { label: string; href: string };
@@ -337,6 +346,8 @@ type PageHeroBaseProps = {
   credits?: readonly HeroCredit[];
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
+  /** How long the page takes to read, as the page states it ("11 min"), after the dates. */
+  readingTime?: string;
   /**
    * The ground this band paints, and therefore the trail's too. Defaults to `paper`.
    *
@@ -485,6 +496,7 @@ const CREDIT_LABELS: Record<HeroCreditRole, string> = {
    what a person calls it. Both labels live here for the same reason the credit labels do. */
 const PUBLISHED_LABEL = 'Published';
 const MODIFIED_LABEL = 'Updated';
+const READING_LABEL = 'Reading time';
 
 /* One long date, formatted once at module scope rather than per render.
    `timeZone: 'UTC'` is load-bearing rather than tidy: a bare "2026-03-03" parses as UTC
@@ -575,6 +587,7 @@ export function PageHero({
   trail,
   credits = [],
   dates,
+  readingTime,
   actions = [],
   media,
   arrangement = 'stacked',
@@ -599,26 +612,33 @@ export function PageHero({
        the key. These rows never reorder: they are frontmatter in array order. */
     id: `${credit.role}-${index}`,
     label: CREDIT_LABELS[credit.role],
-    value: joinPeople(credit.people),
+    value: (
+      <>
+        <span className={styles.name}>{joinPeople(credit.people)}</span>
+        {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
+      </>
+    ),
   }));
 
-  if (dates) {
+  if (dates?.published) {
     pairs.push({
       id: 'published',
       label: PUBLISHED_LABEL,
       value: <time dateTime={dates.published}>{formatDate(dates.published)}</time>,
     });
-    /* A modified date equal to the published one is not a second fact. Rendering both would put
-       "Published 3 March 2026" and "Updated 3 March 2026" side by side, which reads as a mistake
-       because it is one — the CMS stamping a modified date on save. */
-    if (dates.modified && dates.modified !== dates.published) {
-      pairs.push({
-        id: 'modified',
-        label: MODIFIED_LABEL,
-        value: <time dateTime={dates.modified}>{formatDate(dates.modified)}</time>,
-      });
-    }
   }
+  /* A modified date equal to the published one is not a second fact. Rendering both would put
+     "Published 3 March 2026" and "Updated 3 March 2026" side by side, which reads as a mistake
+     because it is one — the CMS stamping a modified date on save. */
+  if (dates?.modified && dates.modified !== dates.published) {
+    pairs.push({
+      id: 'modified',
+      label: MODIFIED_LABEL,
+      value: <time dateTime={dates.modified}>{formatDate(dates.modified)}</time>,
+    });
+  }
+
+  if (readingTime) pairs.push({ id: 'reading', label: READING_LABEL, value: readingTime });
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
@@ -769,7 +789,7 @@ export function PageHero({
      six-fold difference, so each pair reads as one unit — no rule, no dot, no separator. */
   const bylineNode =
     pairs.length > 0 ? (
-      <Cluster as="dl" colGap="block" rowGap="block" align="start">
+      <Cluster as="dl" colGap="stack" rowGap="block" align="start" className={styles.byline}>
         {pairs.map((pair) => (
           <Layout key={pair.id} rowGap="inline">
             <dt className={styles.key}>{pair.label}</dt>

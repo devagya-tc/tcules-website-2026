@@ -14,6 +14,8 @@ import {
   Proof,
   type AccordionItem,
   type HeroActions,
+  type HeroCredit,
+  type HeroDates,
   type HeroMedia,
   type HeroStat,
   type ProofQuote,
@@ -102,7 +104,12 @@ export function CorpusHero({
     href: action.href,
   })) as unknown as HeroActions;
   const eyebrow = hero.eyebrow ? plain(hero.eyebrow) : undefined;
-  const [firstProof] = hero.proofLines;
+  const byline = editorialByline(page);
+  /* The authored byline line is the same record the byline strip now presents, so it is not shown
+     twice; any other proof line still is. */
+  const [firstProof] = byline
+    ? hero.proofLines.filter((line) => !plain(line).includes(byline.author))
+    : hero.proofLines;
   return (
     <PageHero
       data-band="A"
@@ -120,12 +127,46 @@ export function CorpusHero({
       tags={tags}
       stats={stats}
       texture={texture}
+      credits={byline?.credits}
+      dates={byline?.dates}
+      readingTime={byline?.readingTime}
     >
       {proofLine && firstProof ? (
         <p className={styles.proofLine}>{renderInline(linkProofLine(firstProof))}</p>
       ) : null}
     </PageHero>
   );
+}
+
+/**
+ * The page's byline from its frontmatter's `editorial` record — author, who they are, reviewer, the
+ * dates and the reading time — for PageHero's byline strip (owner, 11 Oct 2026: the article template
+ * "had a provision for this metadata to be nicely presented"). The reading time is the one the page
+ * states ("11 min read" → "11 min"). Null when the page credits no author.
+ */
+function editorialByline(page: CorpusPage) {
+  const editorial = page.frontmatter.editorial as Record<string, unknown> | undefined;
+  const str = (key: string) => {
+    const value = editorial?.[key];
+    return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+  };
+  const author = str('author');
+  if (!author) return null;
+  const role = str('author_role');
+  const reviewer = str('reviewer');
+  const published = str('published_at');
+  const modified = str('modified_at');
+  const minutes = /(\d+)\s*min/i.exec(str('reading_time_as_displayed') ?? '')?.[1];
+  const credits: HeroCredit[] = [
+    { role: 'author', people: [author], ...(role ? { detail: role } : {}) },
+    ...(reviewer ? [{ role: 'reviewer' as const, people: [reviewer] as const }] : []),
+  ];
+  const dates: HeroDates | undefined = published
+    ? { published, ...(modified ? { modified } : {}) }
+    : modified
+      ? { modified }
+      : undefined;
+  return { author, credits, dates, readingTime: minutes ? `${minutes} min` : undefined };
 }
 
 /* ── Quotes ───────────────────────────────────────────────────────────────────── */
