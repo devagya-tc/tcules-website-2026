@@ -197,27 +197,29 @@ export function caseStudyPath(slug: string): string {
  * case study appears, it should be linked to the case study page"). Named here, once, so a card, a
  * proof line or a sentence that names a client finds its case without a literal path at the call
  * site; `caseStudyLink` (@/lib/case-links) is the lookup. Each slug is a `_pages/case-studies__<slug>.md`
- * page, served at `caseStudyPath(slug)` (from the CMS source where it has the case, else the corpus).
+ * page's case as Strapi publishes it today: case pages keep the CMS content and its live slugs, not the
+ * corpus rewrite (owner, 11 Oct 2026: "keep what's on strapi right now"). CASE_SLUG_REDIRECTS sends
+ * the corpus's planned slugs, which its own pages link to, on to the live ones.
  * Aliases are the other ways the corpus names the same client ("Benchmark", "Auxentios Technology").
  */
 export const CASE_STUDY_SLUGS = {
   Doodle: 'doodle-case-study-automating-enterprise-meeting-scheduling',
   Dealpath: 'enterprise-workflow-redesign-dealpath-real-estate',
-  'Benchmark Gensuite': 'benchmark-gensuite-enterprise-suite-modernisation',
-  Benchmark: 'benchmark-gensuite-enterprise-suite-modernisation',
-  'Eden AI': 'eden-ai-workflow-builder-search-redesign',
-  Auxentios: 'auxentios-cpq-product-mvp-design',
-  'Auxentios Technology': 'auxentios-cpq-product-mvp-design',
-  Scissors: 'scissors-staffing-software-object-oriented-ux',
-  'GT Tools': 'gt-tools-shopify-product-discovery',
+  'Benchmark Gensuite': 'legacy-saas-modernisation-information-architecture',
+  Benchmark: 'legacy-saas-modernisation-information-architecture',
+  'Eden AI': 'unifying-workflow-creation-through-intelligent-search',
+  Auxentios: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  'Auxentios Technology': 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  Scissors: 'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'GT Tools': 'redesigning-for-a-shopify-website-ux-design',
   ConnectX: 'ai-native-building-energy-product-connectx',
   BuildTwin: 'ai-quality-control-expert-review-buildtwin',
-  'Novus Insights': 'novus-insights-ai-survey-product-design',
-  'Omny AI': 'omny-ai-suggestion-trust-redesign',
-  OctiFi: 'octifi-mobile-lending-product-design',
-  Ryzeo: 'ryzeo-marketing-automation-ux-revamp',
-  'Gold Image Printing': 'gold-image-printing-web-to-print-erp-modernisation',
-  'The Wandering Raven': 'wandering-raven-edtech-moodle-experience',
+  'Novus Insights': 'saas-ux-ui-case-study-ai-for-market-research-automation',
+  'Omny AI': 'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
+  OctiFi: 'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
+  Ryzeo: 'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
+  'Gold Image Printing': 'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'The Wandering Raven': 'transforming-an-edtech-platform-into-an-engaging-learning-experience',
   'The Chain Hut': 'ux-ui-design-and-development-for-magento-of-a-silver-chain-store',
   'Kirana store payments': 'ux-research-for-kirana-store-payment-app',
 } as const;
@@ -232,6 +234,36 @@ export const CASE_STUDY_PLACEHOLDERS = {
   CuramCare: 'curamcare',
   Vovisto: 'vovisto-healthcare-event-travel-platform',
 } as const;
+
+/**
+ * The corpus's planned case slug → the slug the case lives at on Strapi today, for the 11 cases whose
+ * corpus page renamed it. next.config.ts serves these as temporary redirects so every corpus link
+ * opens the live case; when a case moves to its planned slug, its entry goes.
+ */
+export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
+  'auxentios-cpq-product-mvp-design':
+    'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  'benchmark-gensuite-enterprise-suite-modernisation':
+    'legacy-saas-modernisation-information-architecture',
+  'eden-ai-workflow-builder-search-redesign':
+    'unifying-workflow-creation-through-intelligent-search',
+  'gold-image-printing-web-to-print-erp-modernisation':
+    'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'gt-tools-shopify-product-discovery':
+    'redesigning-for-a-shopify-website-ux-design',
+  'novus-insights-ai-survey-product-design':
+    'saas-ux-ui-case-study-ai-for-market-research-automation',
+  'octifi-mobile-lending-product-design':
+    'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
+  'omny-ai-suggestion-trust-redesign':
+    'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
+  'ryzeo-marketing-automation-ux-revamp':
+    'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
+  'scissors-staffing-software-object-oriented-ux':
+    'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'wandering-raven-edtech-moodle-experience':
+    'transforming-an-edtech-platform-into-an-engaging-learning-experience',
+};
 
 /** A placeholder case link: the case index, marked so every one can be found and replaced. */
 export function caseStudyPlaceholderPath(slug: string): string {

@@ -3,14 +3,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
-import {
-  CaseRoute,
-  caseMetadata,
-  caseSlugs,
-  corpusCaseMetadata,
-  hasCorpusCase,
-  isCorpusCase,
-} from '@/app/_corpus/case';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -156,21 +148,13 @@ function dateOnly(date: string | undefined): string | undefined {
   return date?.slice(0, 10);
 }
 
-export function generateStaticParams() {
-  return caseSlugs().map((slug) => ({ slug }));
-}
-
 export async function generateMetadata({
   params,
 }: PageProps<'/case-studies/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
-  const corpus = await caseMetadata(`/case-studies/${slug}`);
-  if (corpus) return corpus;
   const caseStudy = await getCaseStudyPage(slug);
 
   if (!caseStudy) {
-    const fallback = await corpusCaseMetadata(`/case-studies/${slug}`);
-    if (fallback) return fallback;
     return {
       title: 'Case study not found | Tcules',
       robots: { index: false, follow: false },
@@ -216,19 +200,9 @@ export async function generateMetadata({
 
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
-  if (isCorpusCase(`/case-studies/${slug}`))
-    return <CaseRoute route={`/case-studies/${slug}`} />;
   const caseStudy = await getCaseStudyPage(slug);
 
-  /* A case the CMS source does not carry but the corpus does is served from the corpus, so every
-     case a page links to opens (owner, 11 Oct 2026: "everytime a case study appears, it should be
-     linked to the case study page"). The pass-1 list above still decides which cases the corpus
-     REPLACES; this only fills the gaps, and a slug neither source knows is still a 404. */
-  if (!caseStudy) {
-    if (await hasCorpusCase(`/case-studies/${slug}`))
-      return <CaseRoute route={`/case-studies/${slug}`} />;
-    notFound();
-  }
+  if (!caseStudy) notFound();
 
   /* The outline the seam derived from this body's level-2 headings, mapped to what the component
      takes. A case study is a long-form document, which is what earns it a rail —
