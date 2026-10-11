@@ -192,6 +192,52 @@ export function caseStudyPath(slug: string): string {
   return `${ROUTES.caseStudies}/${encodeURIComponent(slug)}`;
 }
 
+/**
+ * The case studies, by the client name the copy uses for them (owner, 11 Oct 2026: "everytime a
+ * case study appears, it should be linked to the case study page"). Named here, once, so a card, a
+ * proof line or a sentence that names a client finds its case without a literal path at the call
+ * site; `caseStudyLink` (@/lib/case-links) is the lookup. Each slug is a `_pages/case-studies__<slug>.md`
+ * page, served at `caseStudyPath(slug)` (from the CMS source where it has the case, else the corpus).
+ * Aliases are the other ways the corpus names the same client ("Benchmark", "Auxentios Technology").
+ */
+export const CASE_STUDY_SLUGS = {
+  Doodle: 'doodle-case-study-automating-enterprise-meeting-scheduling',
+  Dealpath: 'enterprise-workflow-redesign-dealpath-real-estate',
+  'Benchmark Gensuite': 'benchmark-gensuite-enterprise-suite-modernisation',
+  Benchmark: 'benchmark-gensuite-enterprise-suite-modernisation',
+  'Eden AI': 'eden-ai-workflow-builder-search-redesign',
+  Auxentios: 'auxentios-cpq-product-mvp-design',
+  'Auxentios Technology': 'auxentios-cpq-product-mvp-design',
+  Scissors: 'scissors-staffing-software-object-oriented-ux',
+  'GT Tools': 'gt-tools-shopify-product-discovery',
+  ConnectX: 'ai-native-building-energy-product-connectx',
+  BuildTwin: 'ai-quality-control-expert-review-buildtwin',
+  'Novus Insights': 'novus-insights-ai-survey-product-design',
+  'Omny AI': 'omny-ai-suggestion-trust-redesign',
+  OctiFi: 'octifi-mobile-lending-product-design',
+  Ryzeo: 'ryzeo-marketing-automation-ux-revamp',
+  'Gold Image Printing': 'gold-image-printing-web-to-print-erp-modernisation',
+  'The Wandering Raven': 'wandering-raven-edtech-moodle-experience',
+  'The Chain Hut': 'ux-ui-design-and-development-for-magento-of-a-silver-chain-store',
+  'Kirana store payments': 'ux-research-for-kirana-store-payment-app',
+} as const;
+
+/**
+ * PLACEHOLDER case links: clients the copy presents as case work whose case page does not exist
+ * yet. Each points at the case index with a greppable fragment (so the link opens a real page, 200)
+ * until its case publishes; then it moves to CASE_STUDY_SLUGS. Listed in content proposal P43.
+ * The value is the slug the case is expected to publish under, where the corpus names one.
+ */
+export const CASE_STUDY_PLACEHOLDERS = {
+  CuramCare: 'curamcare',
+  Vovisto: 'vovisto-healthcare-event-travel-platform',
+} as const;
+
+/** A placeholder case link: the case index, marked so every one can be found and replaced. */
+export function caseStudyPlaceholderPath(slug: string): string {
+  return `${ROUTES.caseStudies}#placeholder-case-${encodeURIComponent(slug)}`;
+}
+
 /** Build one canonical podcast-detail path from the named insights family. */
 export function podcastPath(slug: string): string {
   return `${ROUTES.podcasts}/${encodeURIComponent(slug)}`;

@@ -1,28 +1,33 @@
-import { Fragment, type ReactNode } from 'react';
+import { Fragment } from 'react';
 
 import { Layout } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
   Callout,
+  CaseSpread,
   ContentSection,
   ContentSectionText,
   CtaRow,
   DataTable,
+  EngagementOptions,
   ListCard,
+  OfferSheet,
   ReadDown,
   Statement,
   TestimonialBeside,
   TestimonialCard,
   Thread,
+  VoiceLedger,
   type BlockCardSetItem,
+  type EngagementScope,
 } from '@/patterns';
+import { caseStudyLink } from '@/lib/case-links';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
   CorpusBlock,
   CorpusCaseRef,
-  CorpusLink,
   CorpusMediaBinding,
   CorpusPage,
 } from '@/lib/corpus-types';
@@ -107,17 +112,6 @@ function trailingParagraphs(band: CorpusBand): InlineRun[][] {
 
 const quoteOf = (band: CorpusBand) => blocksOf(band, 'quote')[0];
 
-/**
- * A band's closing link as its foot. `rule` is off where the body above ends on its own rule (ruled
- * ListCard rows, an accordion): a second hairline a stack under the first reads as a double rule.
- */
-function ctaRow(links: readonly CorpusLink[], rule = true): ReactNode {
-  const [link] = links;
-  return link ? (
-    <CtaRow rule={rule} actions={[{ label: link.labelText, href: link.href }]} />
-  ) : undefined;
-}
-
 const tiles = (rows: readonly Lead[], columns: 1 | 2 | 3 = 2) => (
   <ListTiles
     columns={columns}
@@ -130,6 +124,19 @@ function liftTrailingLink(runs: readonly InlineRun[]) {
   const last = runs.at(-1);
   if (last?.type !== 'link') return { runs: [...runs], link: undefined };
   return { runs: trimEnd(runs.slice(0, -1)), link: last };
+}
+
+/**
+ * Which scope an engagement option's drawing shows, read from the option's own name (EngagementOptions
+ * draws only what the name says). A name none of these fit shows no drawing rather than a wrong one.
+ */
+function scopeOf(title: string): EngagementScope | undefined {
+  const name = title.toLowerCase();
+  if (/\bbuild\b/.test(name)) return 'build';
+  if (/\b(team|designer|embedded)\b/.test(name)) return 'embedded';
+  if (/\b(area|whole|new product)\b/.test(name)) return 'area';
+  if (/\b(workflow|feature)\b/.test(name)) return 'feature';
+  return undefined;
 }
 
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
@@ -151,79 +158,78 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'enquiry':
       return <EnquiryBand page={page} band={band} surface={unit.surface} />;
 
-    /* M12 — labelled claims of equal weight: text cards under a centred head, the quote that ends
-       the band a stack under them as the SUPPORTING testimonial (TestimonialCard `sm`, unboxed): the
-       claims lead, the client's words back them (home round 2, 10 Oct 2026). Round 1 set it as a 28
-       quote behind a blue rule, larger than the claims it was supporting. */
+    /* What you get — the outcomes as ONE offer, the client's words anchored beside it (OfferSheet;
+       product-design round 6, 11 Oct 2026, page-mapping § 23). The promises are the primary object:
+       the h2 and two rows of two in the leading 2 of [2, 1]; the rated testimonial card fills the
+       trailing 1 from the heading's top to the last promise's foot, so the voice shares the offer's
+       edges and reads as its proof. Round 2 set four text cards under a centred head with the quote
+       unboxed beneath them: four equal rectangles, nothing to guide the eye. */
     case 'outcomes': {
       const quote = quoteOf(band);
       return (
-        <ContentSection {...head(band)} data-band="C-text" align="center">
-          <BlockCardSet
-            lead="none"
-            across={4}
-            size="sm"
-            scroll="never"
-            items={leads(band).map((row) => ({
-              id: row.title,
-              title: row.title,
-              ...bodyOf(row.body),
-            }))}
-          />
-          {quote ? (
-            <TestimonialCard
-              item={testimonialItem(quote, ctx.ratings)}
-              size="sm"
-              frame="none"
-            />
-          ) : null}
-        </ContentSection>
+        <OfferSheet
+          {...head(band)}
+          items={leads(band).map((row) => ({
+            title: row.title,
+            ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
+              ? { bodyHtml: inlineToHtml(row.body) }
+              : { body: plain(row.body) }),
+          }))}
+          aside={
+            quote ? <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill /> : undefined
+          }
+        />
       );
     }
 
-    /* M10 — symptoms in the customer's voice: the head beside a photograph, the rows read down. */
+    /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
+       product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
+       know which service they need, so the complaint is the band's large thing, set in the speech
+       voice down one edge, and the answer is the reply beside it. Round 1–5 set them as a two-column
+       read-down beside a placeholder photograph: the eye zigzagged and the voices read as titles. */
     case 'symptoms':
       return (
-        <ContentSection
+        <VoiceLedger
           {...head(band)}
-          data-band="D"
-          arrangement="beside"
-          asideFill
-          headSide={unit.side === 'end' ? 'end' : 'start'}
-          aside={<AsidePhoto image={slotImage(page, band.id)} />}
-        >
-          <ReadDown
-            columns={2}
-            rows={leads(band).map((row) => ({ title: row.title, ...bodyOf(row.body) }))}
-          />
-        </ContentSection>
+          lead={leadText(band)}
+          items={leads(band).map((row) => ({
+            voice: row.title,
+            reply: renderInline(row.body),
+          }))}
+        />
       );
 
-    /* A story as a record: problem, what we did, result, with its proof beside it. */
+    /* A worked example, with the emphasis where the argument is (CaseSpread; product-design round 6,
+       page-mapping § 23): the OUTCOME ("The result.") is the claim, beside the evidence at 16:9; the
+       problem and what we did are the backstory under both; the case link is the claim's action.
+       Round 1 set three equal ruled rows beside the shot, so the result read as the third of three. */
     case 'record': {
       const binding = bindingNamed(page, band.headingText);
-      const image = binding ? corpusImage(binding) : slotImage(page, band.id);
+      /* A product capture is read from its top: the 16:9 frame keeps the screen's header and loses
+         the foot (the master is 3:2). */
+      const image = binding
+        ? { ...corpusImage(binding), focus: { x: 0, y: 0 } }
+        : slotImage(page, band.id);
+      const rows = leads(band);
+      const at = rows.findIndex((row) => /^the result/i.test(row.title));
+      const claimAt = at >= 0 ? at : rows.length - 1;
+      const claim = rows[claimAt];
+      if (!claim) return null;
+      const [link] = bandLinks(band);
       return (
-        <ContentSection
+        <CaseSpread
           {...head(band)}
-          data-band="B"
-          arrangement="media"
-          media={{ image, side: unit.side ?? 'end', head: 'lg' }}
-          footer={ctaRow(bandLinks(band), false)}
-        >
-          <Layout as="ul" rowGap="none">
-            {leads(band).map((row) => (
-              <ListCard
-                key={row.title}
-                arrangement="stacked"
-                size="md"
-                titleAs="h3"
-                title={row.title}
-                {...bodyOf(row.body)}
-              />
-            ))}
-          </Layout>
-        </ContentSection>
+          claim={{ title: claim.title, body: renderInline(claim.body) }}
+          action={
+            link ? (
+              <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+            ) : undefined
+          }
+          image={image}
+          story={rows
+            .filter((_, index) => index !== claimAt)
+            .map((row) => ({ title: row.title, body: renderInline(row.body) }))}
+        />
       );
     }
 
@@ -235,21 +241,30 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         </ContentSection>
       );
 
-    /* Ways in: four peers beside a photograph, and the limit on the claim as a note. */
+    /* Ways to work with us — four peers, comparable at a glance (EngagementOptions; product-design
+       round 6, page-mapping § 23): each option's scope drawn on one dot field, its name, what it is;
+       the limit on the claim closes the band as a note. Round 1 set four hairline tiles beside a
+       placeholder photograph: "boring and plain", and nothing showed how the four differ. */
     case 'tiles': {
       const note = trailingParagraphs(band);
       return (
-        <ContentSection
+        <EngagementOptions
           {...head(band)}
-          data-band="B"
-          arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'lg' }}
-        >
-          {tiles(leads(band))}
-          {note.map((runs, index) => (
-            <Callout key={index} html={`<p>${inlineToHtml(runs)}</p>`} />
-          ))}
-        </ContentSection>
+          options={leads(band).map((row) => ({
+            title: row.title,
+            body: renderInline(row.body),
+            scope: scopeOf(row.title),
+          }))}
+          note={
+            note.length > 0 ? (
+              <Layout rowGap="text">
+                {note.map((runs, index) => (
+                  <Callout key={index} html={`<p>${inlineToHtml(runs)}</p>`} />
+                ))}
+              </Layout>
+            ) : undefined
+          }
+        />
       );
     }
 
@@ -445,12 +460,23 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const item = items[unit.itemIndex ?? 0];
       if (!item) return null;
       const qualifier = slugOf(item.headingText.split(':')[0] ?? item.headingText);
+      /* The story's client links to its case (owner, 11 Oct 2026), found by the name before the
+         colon; a client whose case is unpublished gets a flagged PLACEHOLDER link (P43). */
+      const caseLink = caseStudyLink(item.headingText.split(':')[0] ?? '');
       const image = hasSlot(page, band.id, qualifier)
         ? slotImage(page, band.id, qualifier)
         : undefined;
       const story = (
         <Layout rowGap="block">
-          <h3 className={styles.itemTitle}>{item.headingText}</h3>
+          <h3 className={styles.itemTitle}>
+            {caseLink ? (
+              <a href={caseLink.href} className={styles.itemLink}>
+                {item.headingText}
+              </a>
+            ) : (
+              item.headingText
+            )}
+          </h3>
           <Layout rowGap="text">
             {item.blocks.map((block, index) =>
               block.type === 'paragraph' ? <p key={index}>{renderInline(block.runs)}</p> : null,
@@ -477,6 +503,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                     bodyHtml={paragraphs}
                     size="lg"
                     {...(image ? { media: { type: 'image' as const, image } } : {})}
+                    {...(caseLink ? { href: caseLink.href, cue: 'title' as const } : {})}
                   />
                 </ul>
               }
@@ -666,8 +693,18 @@ function quotedGroup(groups: readonly CaseGroup[], company: string): number {
  */
 function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
   const groups = caseGroups(band);
+  /* Every case links to its case page (owner, 11 Oct 2026). An authored "Read the case" line keeps
+     its words as the card's cta; a case named without one finds its page by its name (routes.ts
+     CASE_STUDY_SLUGS, or a flagged PLACEHOLDER). Where a set mixes the two, the found cards take the
+     band's own authored label when every authored label agrees, so no card invents a wording. */
+  const authoredLabels = new Set(
+    groups.flatMap((group) => (group.link ? [plain(group.link.children)] : [])),
+  );
+  const sharedLabel = authoredLabels.size === 1 ? [...authoredLabels][0] : undefined;
   const items: BlockCardSetItem[] = groups.map((group) => {
-    const href = group.link?.href;
+    const found = group.link ? undefined : caseStudyLink(group.title);
+    const href = group.link?.href ?? found?.href;
+    const ctaLabel = group.link ? plain(group.link.children) : sharedLabel;
     const ref = href ? ctx.caseRefs[href] : undefined;
     const paragraphs = group.paragraphs.filter((runs) => runs.length > 0);
     const body =
@@ -680,7 +717,7 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
       title: group.title,
       ...body,
       media: { type: 'image' as const, image: coverFor(ctx.page, group.title, ref) },
-      ...(href ? { href, ctaLabel: plain(group.link?.children ?? []) } : {}),
+      ...(href ? { href, ...(ctaLabel ? { ctaLabel } : {}) } : {}),
     };
   });
   const quote = quoteOf(band);
@@ -689,13 +726,16 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
   const featured = featuredAt >= 0 ? items[featuredAt] : undefined;
   const rest = items.filter((_, index) => index !== featuredAt);
   const linked = rest.every((item) => item.href);
+  /* A set whose cards all carry a cta wording reads its cta; one whose links were all found by name
+     has no authored wording, so its titles are the cue. */
+  const labelled = rest.every((item) => item.ctaLabel);
   const set =
     rest.length > 0 ? (
       <BlockCardSet
         lead="none"
         across={rest.length === 4 ? 4 : undefined}
         scroll="never"
-        cue={linked ? 'cta' : undefined}
+        cue={linked ? (labelled ? 'cta' : 'title') : undefined}
         label={linked ? undefined : band.headingText}
         items={rest}
       />
@@ -716,7 +756,7 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
               href={card.href}
               ctaLabel={card.ctaLabel}
               size="lg"
-              cue={card.href ? 'cta' : undefined}
+              cue={card.href ? (card.ctaLabel ? 'cta' : 'title') : undefined}
             />
           </ul>
         }

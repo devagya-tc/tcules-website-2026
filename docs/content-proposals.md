@@ -41,6 +41,15 @@ Append one entry per problem, newest last.
   the trail already names the page.
 - **Why:** the eyebrow is a free content slot (owner, 5 Oct). Used for new information, it earns
   its 38px. Echoing the crumb, it costs that height on every one of these pages.
+- **Updated 11 Oct 2026 (owner, product-design round 6): "lets not put anything in the eyebrow
+  since the breadcrumb already tells the page location."** Decided for every page with a breadcrumb,
+  not only these six: PageHero renders NO text eyebrow when the hero carries a trail, so the
+  breadcrumb is the only line above the title. Applied at the component, so the Benchmark case
+  ("Case study · Benchmark Gensuite"), the tool, the CPQ article and every future page take it
+  without an edit. Home has no trail and keeps its eyebrow. **Proposal now:** delete the `*…*`
+  eyebrow line from every corpus hero that has a `navigation.breadcrumb` of two or more crumbs; until
+  then the line stays in the files and is not rendered (an authored line that is dropped, recorded
+  here so nobody looks for it).
 
 ### P2 · seven heroes · hero · titles longer than three lines at display size
 
@@ -590,3 +599,45 @@ proposals below are where that design asks something of the copy.
 - **Proposal:** none needed unless a page should promise something else; author it in that page's
   "After sending" line.
 - **Why:** one promise, in the content team's words.
+
+## Product design round 6 (owner review, 11 Oct 2026)
+
+### P43 · every built page · case mentions · placeholder links and unpublished cases
+
+- **Problem:** the owner wants every case mention linked. Two clients the pages present as case work
+  have no case page: **CuramCare** (healthtech proof, hero proof line; no draft) and **Vovisto**
+  (healthtech proof, hero proof line; the corpus comment names
+  `/case-studies/vovisto-healthcare-event-travel-platform`). And 11 of the 17 corpus case files had no
+  live route until this round.
+- **What the page does now:** CuramCare and Vovisto link to `/case-studies#placeholder-case-curamcare`
+  and `#placeholder-case-vovisto-healthcare-event-travel-platform` — flagged PLACEHOLDER in
+  `CASE_STUDY_PLACEHOLDERS` (`src/lib/routes.ts`), so each opens a real page and can be found with
+  one grep. Every corpus case now has a route: `/case-studies/[slug]` serves the corpus file where the
+  CMS source has no record (Auxentios, Eden AI, Scissors, GT Tools, Novus, OctiFi, Omny AI, Ryzeo,
+  Gold Image Printing, The Wandering Raven were 404). Those pages render through the long-form case
+  template and have not had a design pass of their own.
+- **Proposal:** publish the CuramCare and Vovisto cases (or confirm they never will, and the stories
+  stay unlinked); when one publishes, move its name from `CASE_STUDY_PLACEHOLDERS` to
+  `CASE_STUDY_SLUGS`. Schedule a mapping pass for the ten corpus cases now served unreviewed.
+- **Also:** where a case card has no authored link the card's title is the link (no words invented).
+  In a set that mixes authored and found links (the audit's proof: Benchmark and Eden AI authored
+  "Read the case", GT Tools did not), the found card takes the band's own authored wording. Authoring
+  a "Read the GT Tools case" line in the audit's proof band would make it the content team's words.
+
+### P44 · `/services/product-design` · worked-example · the result has no figure
+
+- **Problem:** the band now leads with its outcome (CaseSpread: "The result." as the claim beside the
+  evidence). The result is a sentence ("A redesigned flow that catches a duplicate deal before it is
+  created…"), so the band's largest element is 28 words at lead-lg. A measured outcome would carry it
+  in a glance.
+- **Proposal:** if the Dealpath case can support one, add a single measured outcome (duplicates caught
+  per month, time to add a deal, a support-ticket drop) as a short figure line in this band; the
+  design sets it as the claim's figure.
+- **Why:** claim leads, proof supports: a figure is the fastest proof a worked example can show.
+
+### P45 · `/services/product-design` and `/audits/design-to-code-audit` · symptoms · straight quote marks
+
+- **Problem:** the complaints are authored with straight marks and apostrophes ("What ships doesn't
+  match the design."). VoiceLedger typesets them (curly marks); the words are unchanged.
+- **Proposal:** author curly marks in the source so every renderer agrees (as P27 and P31 ask
+  elsewhere).

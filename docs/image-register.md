@@ -37,10 +37,7 @@ Started 10 Oct 2026. Briefs and generation happen later.
 | `/` | expertise (HealthTech) | illustration | HealthTech: patient, clinician and carer each seeing their own view of one shared case, with what each may see framed by the care rules. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed. | 16:9 |
 | `/` | expertise (MarTech and SalesTech) | illustration | MarTech and SalesTech: a campaign or pipeline built step by step — audience, message, timing and the result coming back — with the person deciding at each step. A spot drawing in the service-line illustration family (ch05 isometric, blue on paper, one peridot accent, no type), one per sector so the eight cards read as one set. Home round 1: the sector router became image cards; no studio or catalogue photograph depicts a sector, and the three sector pages that bind an asset bind case screens already on this page (Dealpath, Eden AI) or one only (GT Tools), so the set is drawn whole rather than mixed. | 16:9 |
 | `/services/product-design` | hero | illustration | Uncertainty mapped to the design medium that resolves it (research, workflow, interface, prototype, code), with Doodle, Dealpath, Eden AI, Auxentios and Scissors pinned where their work sat (`visual_plan`). Replaces the interim service-line illustration. | 5:4 |
-| `/services/product-design` | starting-points | studio photo | A designer watching a customer use the product and noting the step where the workflow trips them up. | 3:2 |
-| `/services/product-design` | engagement | studio photo | An experienced Tcules designer working inside a client's own tools and meetings, beside the client's product team. | 4:5 |
 | `/audits/design-to-code-audit` | hero | illustration | One component followed from intent through the design system, implementation and runtime to acceptance (`visual_plan`), with the point where a gap enters marked and traced back to its cause. | 5:4 |
-| `/audits/design-to-code-audit` | recognition | studio photo | A designer and a developer comparing the approved design with the shipped screen side by side, pointing at the same mismatch. | 3:2 |
 | `/audits/design-to-code-audit` | deliverables | product shot | The audit's difference record: a shipped screen beside the approved design, each gap tagged by type (defect, missing state, adaptation, system gap, sign-off gap) and cause. | 4:5 |
 | `/audits/design-to-code-audit` | why-tcules | studio photo | A Tcules design engineer with the Figma file and the repository open together, following a gap back to where it started. | 6:5 |
 | `/expertise/healthtech` | hero | illustration | Patient, clinician, carer, healthcare professional and operations team each seeing their own view of one shared case, with records and bookings arriving from connected systems and specialist rules framing what each may see (`signature_model`). | 5:4 |
@@ -59,6 +56,8 @@ Started 10 Oct 2026. Briefs and generation happen later.
 | `/case-studies` (new-products) | case cover: Novus Insights | product shot | Novus Insights' survey tool: an AI-suggested starting questionnaire with the researcher editing and deciding. | 16:9 master |
 | `/case-studies` (new-products) | case cover: Kirana store payments | product shot | The small-shop payment app shaped by twenty merchant interviews (client name withheld: no client marks). | 16:9 master |
 | `/case-studies` (new-products) | case cover: OctiFi | product shot | OctiFi's mobile lending flow: onboarding and loans across two markets. | 16:9 master |
+| `/case-studies/octifi-…` (related, served from the corpus since 11 Oct 2026) | case cover: merchant payments research | product shot | The same asset as "Kirana store payments" above (the OctiFi page's related link names that case "merchant payments research", so its cover is keyed by that name): the small-shop payment app shaped by twenty merchant interviews. One file serves both keys. | 16:9 master |
+| `/case-studies/octifi-…` (related) | case cover: The Wandering Raven | product shot | The Wandering Raven's creative-writing world for young learners inside Moodle, as the case's cover wherever another page cites it. The case binds no cover yet (`ASSET_REQUIRED`); the same first approved screen serves home's why-tcules panel and the case index slot. | 16:9 master |
 | `/case-studies` (established-products); `/case-studies/benchmark-gensuite-…` (related) | case cover: Gold Image Printing | product shot | Gold Image Printing's online ordering site and internal production system shown as one product. | 16:9 master |
 | `/case-studies` (established-products) | case cover: Ryzeo | product shot | Ryzeo's marketing automation platform, at the part research decided to fix first. | 16:9 master |
 | `/case-studies` (established-products); `/services/product-design` (complex-products) | case cover: Scissors | product shot | Scissors' staffing software: clients, candidates and jobs connected in one model, so details entered once carry through. | 16:9 master |
@@ -81,3 +80,18 @@ them (home `selected-work`, `COVER_FOCUS` in HomePage.tsx):
 | Benchmark Gensuite | `home_benchmark_scope_selector` | 3.3:1 | keeps its first panel only (anchored on its start) |
 | Eden AI | `home_eden_unified_search` | 1.97:1 | loses a sliver at each side |
 
+## Retired slots (product-design round 6, 11 Oct 2026)
+
+Bands redesigned for their job no longer reserve these photographs (page-mapping § 23). Removed from
+the register above so no asset is briefed for a slot that is not on the page:
+
+| Page | Band | What it was | Why it went |
+| ---- | ---- | ----------- | ----------- |
+| `/services/product-design` | starting-points | studio photo, 3:2: a designer watching a customer use the product | The band is a VoiceLedger: the customers' own words are its picture, set large. A generic studio photo beside them competed with the complaints for the eye. |
+| `/audits/design-to-code-audit` | recognition | studio photo, 3:2: a designer and a developer comparing design and shipped screen | The same band type as product-design's starting-points, so it takes the same VoiceLedger (page-mapping § 23): the four complaints are the picture. |
+| `/services/product-design` | engagement | studio photo, 4:5: a Tcules designer inside a client's tools and meetings | The band is EngagementOptions: each way of working carries a scope drawing, which shows how the four differ; a photo could only show one of them. |
+
+The Dealpath evidence (`product_design_dealpath`, bound, 3200 × 2121) now renders in a 16:9 frame
+(CaseSpread), read from its top: the screen's header and the listing cards with "Add to pipeline"
+stay, the foot of the second card is cropped. A 2560 × 1440 master of the same screen would show it
+whole.

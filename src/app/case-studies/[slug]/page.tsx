@@ -3,7 +3,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
-import { CaseRoute, caseMetadata, caseSlugs, isCorpusCase } from '@/app/_corpus/case';
+import {
+  CaseRoute,
+  caseMetadata,
+  caseSlugs,
+  corpusCaseMetadata,
+  hasCorpusCase,
+  isCorpusCase,
+} from '@/app/_corpus/case';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -162,6 +169,8 @@ export async function generateMetadata({
   const caseStudy = await getCaseStudyPage(slug);
 
   if (!caseStudy) {
+    const fallback = await corpusCaseMetadata(`/case-studies/${slug}`);
+    if (fallback) return fallback;
     return {
       title: 'Case study not found | Tcules',
       robots: { index: false, follow: false },
@@ -211,7 +220,15 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
     return <CaseRoute route={`/case-studies/${slug}`} />;
   const caseStudy = await getCaseStudyPage(slug);
 
-  if (!caseStudy) notFound();
+  /* A case the CMS source does not carry but the corpus does is served from the corpus, so every
+     case a page links to opens (owner, 11 Oct 2026: "everytime a case study appears, it should be
+     linked to the case study page"). The pass-1 list above still decides which cases the corpus
+     REPLACES; this only fills the gaps, and a slug neither source knows is still a 404. */
+  if (!caseStudy) {
+    if (await hasCorpusCase(`/case-studies/${slug}`))
+      return <CaseRoute route={`/case-studies/${slug}`} />;
+    notFound();
+  }
 
   /* The outline the seam derived from this body's level-2 headings, mapped to what the component
      takes. A case study is a long-form document, which is what earns it a rail —

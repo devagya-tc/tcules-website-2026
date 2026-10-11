@@ -29,6 +29,7 @@ import type {
   TestimonialRating,
 } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { linkProofLine } from '@/lib/case-links';
 import { renderInline } from '@/lib/inline-render';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 import { ENDPOINTS } from '@/lib/routes';
@@ -121,7 +122,7 @@ export function CorpusHero({
       texture={texture}
     >
       {proofLine && firstProof ? (
-        <p className={styles.proofLine}>{renderInline(firstProof)}</p>
+        <p className={styles.proofLine}>{renderInline(linkProofLine(firstProof))}</p>
       ) : null}
     </PageHero>
   );

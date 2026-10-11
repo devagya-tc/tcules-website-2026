@@ -203,6 +203,26 @@ const SPECIMENS = [
         note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',
       },
       {
+        href: '/design/offer-sheet',
+        name: 'OfferSheet',
+        note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
+      },
+      {
+        href: '/design/voice-ledger',
+        name: 'VoiceLedger',
+        note: 'complaints in the customer\'s words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint',
+      },
+      {
+        href: '/design/case-spread',
+        name: 'CaseSpread',
+        note: 'one worked example — the outcome as the claim beside its 16:9 evidence, the story under; three parts, no action, paper and tint',
+      },
+      {
+        href: '/design/engagement-options',
+        name: 'EngagementOptions',
+        note: 'ways to work with us, comparable at a glance — four scope drawings and a note, three options, one with no drawing, paper and tint',
+      },
+      {
         href: '/design/callout',
         name: 'Callout',
         note: 'the quiet scope note — semantic routing, placement equivalence, narrow tracks, 4 surfaces',

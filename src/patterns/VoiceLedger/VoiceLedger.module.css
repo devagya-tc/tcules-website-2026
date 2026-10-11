@@ -1,0 +1,61 @@
+/* VoiceLedger — type, ink and the row rules.
+
+   Section paints the band; Layout and Cluster own every seam. Every value is a --vlg-* token in
+   tokens/components/voice-ledger.css. A row's padding is the inside of its own ruled top, the gap
+   scale's `block`; the list closes on a rule of its own so the last answer is not left open. */
+
+.heading {
+  font: var(--vlg-heading-text);
+  letter-spacing: var(--vlg-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--vlg-heading-ink);
+  max-inline-size: var(--vlg-heading-measure);
+}
+
+.lead {
+  font: var(--vlg-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--vlg-lead-ink);
+  max-inline-size: var(--vlg-lead-measure);
+}
+
+.list {
+  border-block-end: var(--vlg-rule-width) solid var(--vlg-rule-ink);
+}
+
+.row {
+  padding-block: var(--gap-block);
+  border-block-start: var(--vlg-rule-width) solid var(--vlg-rule-ink);
+}
+
+/* The complaint, in the customer's own words: the speech voice, the band's large thing. */
+.voice {
+  font: var(--vlg-voice-text);
+  letter-spacing: var(--vlg-voice-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--vlg-voice-ink);
+  max-inline-size: var(--vlg-voice-measure);
+}
+
+/* The reply holds its arrow inside its own start edge, so the complaint and the reply's text share
+   a first baseline (the row's Layout aligns them) and the arrow sits centred on that first line. */
+.reply {
+  position: relative;
+  padding-inline-start: calc(var(--vlg-mark-size) + var(--gap-tight));
+  font: var(--vlg-reply-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--vlg-reply-ink);
+  max-inline-size: var(--vlg-reply-measure);
+}
+
+/* The arrow that says "this is what we do about it": the reply's one blue mark, centred on its first
+   line (a box one line tall at the start edge). A mark inside the reply, not a sibling it places. */
+.mark {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  align-items: center;
+  block-size: 1lh;
+  color: var(--vlg-mark-ink);
+}

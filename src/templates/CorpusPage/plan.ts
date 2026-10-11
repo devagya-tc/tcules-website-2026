@@ -177,10 +177,10 @@ export function kindOf(band: CorpusBand): OfferKind {
 
 /* ── Planning ───────────────────────────────────────────────────────────────────── */
 
+/* Product-design round 6 (11 Oct 2026, page-mapping § 23): `symptoms` (VoiceLedger), `record`
+   (CaseSpread) and `tiles` (EngagementOptions) no longer carry a photograph beside their copy, so they
+   take no side in the alternation. `record` keeps its evidence image, always at the end of its claim. */
 const MEDIA_KINDS: ReadonlySet<OfferKind> = new Set([
-  'symptoms',
-  'record',
-  'tiles',
   'deliverables',
   'reasons',
   'principles',

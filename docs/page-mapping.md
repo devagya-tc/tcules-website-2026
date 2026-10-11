@@ -1356,3 +1356,75 @@ press by every ground arrangement.
 **Explored alternative (specimen G.3, `arrangement="expand"`):** ruled rows where the current one opens in place. It is in-flow, so rows move as one opens; it needs 140ms of hover intent and cannot feel as fluid as the selector.
 
 The title track is 8 of 12, so every title sits on one line at 1440. The band is about 755 tall at 1440.
+
+## §23 · Product design round 6 — four bands designed for their job (11 Oct 2026)
+
+**Owner, on `/services/product-design`:** "What you get … could be designed way better. it feels
+boring and nothing guides me eye. maybe the testimonial is on side and the 4 what you get cards are
+designed on one side"; "Where we start … same issue as above"; the Dealpath example "doesn't focus on
+the right areas … can be designed much much better"; "ways to work with us is also quite boring and
+plain". With round 6's standing correction: identify the content, its IA, its prominence and its
+value, then design for it; cards only where the items are comparable objects; no hybrid looks, no
+icons in discs.
+
+**Cause, shared by all four:** each band was a shape chosen from the kit by the structure of its words
+(labelled claims → text cards; quoted labels → a read-down beside a photo; three labelled paragraphs →
+ruled rows beside a shot; four labelled peers → tiles beside a photo), never from what the band must
+do for the reader. So every band put its items at one weight in one box shape, and nothing told the
+eye where to land.
+
+### 23.1 Job and IA first, then the form
+
+| Band | Its job for the reader | The reader's acts | Primary / secondary | Form chosen, and why |
+|---|---|---|---|---|
+| 1 `outcomes` "What you get" | Say what the buyer walks away with when they buy Product Design. | Read the heading → read the four promises as one list, title first → read a gloss where it matters → see a founder vouch for the thinking. | **Primary:** the four promises as ONE offer. **Secondary:** the VideoPlasty voice. | **OfferSheet.** The h2, then the promises two up in 2 of [2, 1], each opening on a hairline with a 32px blue mark (Stat's device) and its title at the h3 role; the rated testimonial card fills the trailing 1 from the first promise's rule to the last body's line (shares both edges). Not cards: the promises are clauses of one offer, not objects to compare or click; only the voice, a different kind of thing, takes a panel. The four blue marks are the eye's entry; the panel is where it ends. |
+| 2 `starting-points` "Where we start depends on what's going wrong" | Let the visitor recognise their own complaint, in their own words, and see we know where to begin. A visitor may not know which service they need; they know what is going wrong. | Scan the complaints down one edge → stop at theirs → read across to where we start. | **Primary:** the five complaints (the customers' voice). **Secondary:** our first move. | **VoiceLedger.** Complaints in the speech voice (quote-lg italic serif, the site's display-quote voice) on hairlines in 7 of [7, 5]; the reply beside each, led by a blue arrow, its first line on the complaint's first baseline. A ledger, not a card set: lines of speech read in one pass. No photograph: the words are the picture (the placeholder studio photo is retired). Different from band 1 in every axis: full-width rows of large italic type against a grid and a panel. |
+| 3 `worked-example` "Example: Dealpath" | Prove, with one real product, that the work resolves a decision and ships. | See the outcome and the product → understand the problem → skim what we did → open the case. | **Primary:** the result and the evidence image. **Secondary:** the problem, what we did. **Action:** the Dealpath case. | **CaseSpread.** Row 1 [5, 7]: the h2, then "The result." as the claim — h4 title and its sentence at lead-lg in full ink behind a blue start rule (Callout's example mark) — and "Read the Dealpath case" under it · the bound Dealpath capture at 16:9, read from its top (the listing cards and "Add to pipeline", the story's own button). Row 2 on the same tracks: "The problem." under the claim, "What we did." under the image, on hairlines. The corpus has no outcome figures, so the result sentence is the large thing. Claim leads, proof supports; every word kept. The richest band on the page: the only one with a product image, a claim, an action and a two-part story. |
+| 4 `engagement` "Ways to work with us" | Help the buyer pick the shape of engagement that fits, and be honest about when we are not the team. | Scan four names → see how they differ → pick one → read the limit. | **Primary:** the four options, as peers. **Secondary:** what each is. **Tertiary:** the limit (Callout note). | **EngagementOptions.** These ARE comparable objects, so four across — but each carries a scope drawing on one shared dot field, in the EngagementModel chart's drawing language: one workflow is a line through three nodes; a product area is a region holding several; a designer in your team is one blue node among yours; design and build is a dashed (drawn) region becoming a solid (built) one. Each drawing shows only what its option's name says. The drawings make the comparison before a word is read; no option is featured. Below 768 each drawing sits beside its words (2 : 3). The existing EngagementModel was checked first: it is the approved "How we work" USP chart (one team absorbing idle time), a different argument, so it was not repurposed; its drawing vocabulary was. Not icon cards: the specialist-capabilities band right under it is icon boxes. The placeholder photo is retired. |
+
+**Squint, top to bottom (1440):** split hero with drawing · a grid with four blue marks beside a tint
+panel · five lines of large italic speech on rules · a claim beside a product capture, two columns
+under · a featured case with its quote, then three covers · four drawings in a row · 3 + 2 icon boxes ·
+form split · centred accordion. No two adjacent bands share a skeleton.
+
+### 23.2 Global changes this round
+
+| Note | Cause | Fix | Scope |
+|---|---|---|---|
+| "lets not put anything in the eyebrow since the breadcrumb already tells the page location" | The eyebrow was a free slot each corpus hero filled; six of them echoed a crumb (P1) | PageHero renders NO text eyebrow when the hero has a trail; the rule is in the component, so a CMS eyebrow cannot bring it back. Home (no trail) keeps its eyebrow. A rating still takes the slot | Global (PageHero). Measured: no hero eyebrow on /about, product-design, the audit, healthtech, /case-studies, the Benchmark case, the tool, the CPQ article, the glossary term |
+| "none of the case studies are linked … everytime a case study appears, it should be linked" | Links rendered only where the corpus authored one; cases named without one stayed text, and 11 of 17 corpus case routes were 404 | (1) `CASE_STUDY_SLUGS` + `CASE_STUDY_PLACEHOLDERS` + `caseStudyPlaceholderPath` in `routes.ts` (names → slugs, once); `@/lib/case-links` looks them up (`caseStudyLink`, `linkProofLine`, `linkCaseMentions`). (2) `/case-studies/[slug]` serves a case from the corpus when the CMS source lacks it, so all 17 corpus cases return 200. (3) Linked: hero proof lines ("Selected … work: A · B"), every case card in a case set (title-cued where nothing is authored; a mixed set takes the band's own authored "Read the case"), case-story titles (healthtech CuramCare and Vovisto → flagged PLACEHOLDER links to `/case-studies#placeholder-case-…`), home's why-tcules sentences (Auxentios, The Wandering Raven; Banner `lead` is now a node), and the first prose mention per long-form page (CPQ article: Auxentios), never the page's own case | Global (routes, lib, templates, Banner). Every case href on the ten routes returns 200 or is a flagged placeholder (P43) |
+| — | Layout's `baseline` aligns LAST baselines | `align="first-baseline"` added (VoiceLedger's complaint and reply), with a /design/layout specimen | Global (Layout) |
+
+**Applied elsewhere (same band type, and it clearly improves them):** `/audits/design-to-code-audit`
+`recognition` is the same symptom shape, so it is a VoiceLedger too — four complaints in the speech
+voice, replies beside them, the placeholder photo retired; it reads as the page's recognition moment
+instead of a grey photo box beside two columns. Its deliverables and why-tcules photographs flip sides
+(the alternation no longer counts the ledger). `/expertise/healthtech` has no outcomes, symptoms,
+worked example or engagement band, so none of the four patterns applies; it takes the two global fixes
+only.
+
+**Held, and why:**
+- Home "What we do": GT Tools is named inside the Software Development card, which is a whole-card
+  link to the service; a link inside it would be an anchor in an anchor. The card stays as is.
+- Client-name lists (home logo wall, About's "Selected clients and products" row) and testimonial
+  attributions name clients, not case studies; not linked.
+- Band 2 measures 840 at 1440, 10 past the 830 fold; only its bottom padding crosses (the last rule is
+  at 743). No gap or type step was shrunk.
+- The stretched testimonial panel in band 1 leaves an open field between the quote and the speaker
+  (pinned to the foot) — anchored at both edges, as § 20.2 accepted for the diptych.
+
+### 23.3 Measures
+
+| Band | 1440 before | 1440 after | 390 before | 390 after |
+|---|---|---|---|---|
+| outcomes | 645 | 729 | — | 1,400 |
+| starting-points | 697 | 840 | — | 1,086 |
+| worked-example | 900 | 797 | 1,301 | 1,203 |
+| engagement | 788 | 698 | — | 1,104 |
+| audit recognition | — | 768 | — | 893 |
+
+**New patterns (tier 2), each with a token layer and a specimen:** OfferSheet (`--ofs-*`,
+/design/offer-sheet), VoiceLedger (`--vlg-*`, /design/voice-ledger), CaseSpread (`--csp-*`,
+/design/case-spread), EngagementOptions (`--eop-*`, /design/engagement-options). OfferBands maps
+`outcomes`, `symptoms`, `record` and `tiles` to them, so every offer page with those band types takes
+them without an edit.

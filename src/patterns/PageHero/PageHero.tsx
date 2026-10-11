@@ -308,6 +308,10 @@ type PageHeroBaseProps = {
    * ("Services"), by the same comparison `eyebrowBesideTrail` uses (`repeatsTrail`, `@/lib/trail`).
    * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
+   * NOT RENDERED when `trail` is set (owner, 11 Oct 2026): the breadcrumb already says where the
+   * page is, so a hero with a trail has nothing above its title but the trail. The prop stays for
+   * the trail-less hero (home) and for data that carries one; PageHero drops it, not the caller.
+   *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
    * `variant="caseStudy"` selecting it. It sits 24px above the title rather than 8, because 8
    * under a 12px label reads as a caption stuck to the title and 24 reads as a label above one.
@@ -685,8 +689,8 @@ export function PageHero({
   if (process.env.NODE_ENV !== 'production' && trail !== undefined) {
     if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels, trail.structural)) {
       console.warn(
-        `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. Drop it, or replace it ` +
-          `with a category or format the trail cannot say (for example "Fintech · Platform rebuild").`,
+        `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. It is not rendered: a hero ` +
+          `with a breadcrumb carries no eyebrow (owner, 11 Oct 2026).`,
       );
     }
     const last = trail.labels.at(-1);
@@ -723,9 +727,15 @@ export function PageHero({
       />
     </div>
   ) : null;
+  /* A hero with a breadcrumb carries NO text eyebrow (owner, 11 Oct 2026: "lets not put anything
+     in the eyebrow since the breadcrumb already tells the page location"). The trail is the line
+     above the title on every page that has one; the eyebrow survives only on a hero without a trail
+     (home). Enforced here rather than at each caller, so a CMS eyebrow cannot bring it back. A
+     score is not a location, so `rating` keeps the slot either way. */
+  const shownEyebrow = trail === undefined ? eyebrow : undefined;
   const eyebrowNode = rating ? (
     ratingNode
-  ) : eyebrow ? (
+  ) : shownEyebrow ? (
     <Cluster
       as="p"
       colGap="tight"
@@ -734,7 +744,7 @@ export function PageHero({
       nowrap
       className={styles.eyebrow}
     >
-      <span>{eyebrow}</span>
+      <span>{shownEyebrow}</span>
     </Cluster>
   ) : null;
   const titleNode = <h1 className={styles.title}>{title}</h1>;

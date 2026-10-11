@@ -1,0 +1,45 @@
+/* OfferSheet — type, ink and each promise's opening rule.
+
+   Section paints the band; Layout owns every seam. Every value is an --ofs-* token in
+   tokens/components/offer-sheet.css. No margins: a promise's padding is the inside of its own
+   ruled top, the gap scale's `block` (head to body inside a block). */
+
+.heading {
+  font: var(--ofs-heading-text);
+  letter-spacing: var(--ofs-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--ofs-heading-ink);
+  max-inline-size: var(--ofs-heading-measure);
+}
+
+/* The promise: a hairline across its own width, the blue mark drawn over its start. */
+.item {
+  position: relative;
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--ofs-rule-width) solid var(--ofs-rule-ink);
+}
+
+.item::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc((var(--ofs-mark-width) + var(--ofs-rule-width)) / -2);
+  inset-inline-start: 0;
+  inline-size: var(--ofs-mark-length);
+  block-size: var(--ofs-mark-width);
+  background: var(--ofs-mark-ink);
+}
+
+.title {
+  font: var(--ofs-title-text);
+  letter-spacing: var(--ofs-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--ofs-title-ink);
+  max-inline-size: var(--ofs-title-measure);
+}
+
+.body {
+  font: var(--ofs-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ofs-body-ink);
+  max-inline-size: var(--ofs-body-measure);
+}

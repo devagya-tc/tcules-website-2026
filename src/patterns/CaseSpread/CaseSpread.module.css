@@ -1,0 +1,62 @@
+/* CaseSpread — type, ink, the claim's mark, the story rules and the evidence frame.
+
+   Section paints the band; Layout owns every seam. Every value is a --csp-* token in
+   tokens/components/case-spread.css. Paddings are the inside of an element's own edge (the claim's
+   rule, a story item's ruled top), always a gap-scale step. No margins. */
+
+.heading {
+  font: var(--csp-heading-text);
+  letter-spacing: var(--csp-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-heading-ink);
+  max-inline-size: var(--csp-heading-measure);
+}
+
+/* The outcome: a blue rule down its start edge, the text a gutter inside it. */
+.claim {
+  padding-inline-start: var(--gap-gutter);
+  border-inline-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
+}
+
+.claimTitle {
+  font: var(--csp-claim-title-text);
+  letter-spacing: var(--csp-claim-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-claim-title-ink);
+}
+
+.claimBody {
+  font: var(--csp-claim-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--csp-claim-body-ink);
+  max-inline-size: var(--csp-claim-body-measure);
+}
+
+.story {
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--csp-rule-width) solid var(--csp-rule-ink);
+}
+
+.storyTitle {
+  font: var(--csp-story-title-text);
+  letter-spacing: var(--csp-story-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-story-title-ink);
+}
+
+.storyBody {
+  font: var(--csp-story-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--csp-story-body-ink);
+  max-inline-size: var(--csp-story-body-measure);
+}
+
+/* The evidence: one 16:9 frame, ruled and rounded as a card cover is; Media fills it. */
+.frame {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: var(--csp-media-ratio);
+  overflow: hidden;
+  border: var(--csp-media-rule-width) solid var(--csp-media-rule-ink);
+  border-radius: var(--csp-media-radius);
+}

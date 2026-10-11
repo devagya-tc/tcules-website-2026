@@ -1,0 +1,74 @@
+/* ══ Component layer — VoiceLedger ════════════════════════════════════════════════
+   Tier 2. "Where we start depends on what's going wrong": the complaints a team says out loud, in
+   their own words, each answered by where we start (product-design round 6, 11 Oct 2026;
+   page-mapping § 23). The reader does not know which SERVICE they need; they know what is going
+   wrong. So the complaint is the band's large thing — set in the speech voice (quote-lg) on one
+   line where it fits — and the answer is the quieter reply beside it, led by a blue arrow.
+
+   Naming: --vlg-{part}-{role}
+     parts  heading · lead · voice · reply · mark · rule
+     roles  text · tracking · measure · ink · width
+
+   No boxes, no icons in discs: rows on hairlines, the one blue mark the arrow that says "this is
+   what we do about it". No state tokens: nothing responds to a pointer. Every surface block
+   declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --vlg-heading-text: var(--text-h2);
+  --vlg-heading-tracking: var(--text-h2-tracking);
+  --vlg-heading-measure: var(--measure-title);
+  --vlg-lead-text: var(--text-lead);
+  --vlg-lead-measure: var(--measure-lead);
+  /* The customer's words: the speech voice the site's display quotes use (Proof), one step under
+     the h2 so the band's heading still outranks its items (7 Oct ruling 3). */
+  --vlg-voice-text: var(--text-quote-lg);
+  --vlg-voice-tracking: var(--text-quote-lg-tracking);
+  --vlg-voice-measure: var(--measure-title);
+  --vlg-reply-text: var(--text-body-lg);
+  --vlg-reply-measure: var(--measure-lead);
+  --vlg-rule-width: var(--border-width-hairline);
+  /* The arrow's box: the md glyph's own size (16), a component size, so it reads the ramp. */
+  --vlg-mark-size: var(--space-16);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --vlg-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --vlg-lead-ink: var(--color-neutral-700); /* 8.14:1 */
+  --vlg-voice-ink: var(--color-neutral-900); /* 14.62:1 */
+  --vlg-reply-ink: var(--color-neutral-700); /* 8.14:1 */
+  --vlg-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
+  --vlg-rule-ink: var(--color-neutral-300); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --vlg-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --vlg-lead-ink: var(--color-neutral-800); /* 10.54:1 */
+  --vlg-voice-ink: var(--color-neutral-900); /* 13.05:1 */
+  --vlg-reply-ink: var(--color-neutral-800); /* 10.54:1 */
+  --vlg-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --vlg-rule-ink: var(--color-neutral-400); /* decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --vlg-heading-ink: var(--color-white); /* 17.26:1 */
+  --vlg-lead-ink: var(--color-neutral-300); /* 11.07:1 */
+  --vlg-voice-ink: var(--color-white); /* 17.26:1 */
+  --vlg-reply-ink: var(--color-neutral-300); /* 11.07:1 */
+  --vlg-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+  --vlg-rule-ink: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --vlg-heading-ink: var(--color-white); /* 6.23:1 */
+  --vlg-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --vlg-voice-ink: var(--color-white); /* 6.23:1 */
+  --vlg-reply-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --vlg-mark-ink: var(--color-white); /* 6.23:1 */
+  --vlg-rule-ink: var(--color-brandeis-300); /* decoration */
+}

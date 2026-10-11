@@ -1,0 +1,177 @@
+import { useId, type ReactNode } from 'react';
+
+import { Layout, Section, type SectionSurface } from '@/components';
+
+import styles from './EngagementOptions.module.css';
+
+/**
+ * What an option's scope drawing shows. Each draws only what the option's name says:
+ *   feature   one workflow: a single line through three screens
+ *   area      a product area or a whole product: a region holding several workflows
+ *   embedded  a designer in your team: one blue node among your team's
+ *   build     design and build: a drawn region becoming a built one
+ */
+export type EngagementScope = 'feature' | 'area' | 'embedded' | 'build';
+
+export type EngagementOption = {
+  /** The option's name as authored, its full stop kept ("A designer in your team."). */
+  title: string;
+  /** What it is: plain text, or inline content the caller renders (a link to the team that builds). */
+  body: ReactNode;
+  /** The scope drawing. Absent, the option shows its words alone. */
+  scope?: EngagementScope;
+};
+
+export type EngagementOptionsProps = {
+  /** The band's anchor. */
+  id?: string;
+  /** The h2, the band's accessible name. */
+  heading: string;
+  headingId: string;
+  lead?: string;
+  /** Two to four options, peers: none is featured (a featured option reads as a recommendation). */
+  options: readonly EngagementOption[];
+  /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
+  note?: ReactNode;
+  /** Default `paper`. */
+  surface?: SectionSurface;
+};
+
+const W = 320;
+const H = 180;
+
+function Drawing({ scope, uid }: { scope: EngagementScope; uid: string }) {
+  const grid = `${uid}-field`;
+  return (
+    <svg className={styles.drawing} viewBox={`0 0 ${W} ${H}`} focusable="false" aria-hidden="true">
+      <defs>
+        <pattern id={grid} width="20" height="20" patternUnits="userSpaceOnUse">
+          <circle className={styles.field} cx="10" cy="10" r="1.1" />
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width={W} height={H} fill={`url(#${grid})`} />
+
+      {scope === 'feature' ? (
+        <>
+          <path className={styles.line} d="M90,90 L230,90" />
+          <circle className={styles.nodeOpen} cx="90" cy="90" r="7" />
+          <circle className={styles.nodeShut} cx="160" cy="90" r="5" />
+          <circle className={styles.halo} cx="230" cy="90" r="14" />
+          <circle className={styles.nodeShut} cx="230" cy="90" r="7" />
+        </>
+      ) : null}
+
+      {scope === 'area' ? (
+        <>
+          <rect className={styles.region} x="50" y="30" width="220" height="120" rx="8" />
+          <path className={styles.line} d="M80,60 L210,60" />
+          <path className={styles.line} d="M80,90 L240,90" />
+          <path className={styles.line} d="M80,120 L170,120" />
+          {[
+            [80, 60, 210],
+            [80, 90, 240],
+            [80, 120, 170],
+          ].map(([x1, y, x2]) => (
+            <g key={y}>
+              <circle className={styles.nodeOpen} cx={x1} cy={y} r="5" />
+              <circle className={styles.nodeShut} cx={x2} cy={y} r="5" />
+            </g>
+          ))}
+        </>
+      ) : null}
+
+      {scope === 'embedded' ? (
+        <>
+          {[
+            [100, 70],
+            [140, 70],
+            [180, 70],
+            [220, 70],
+            [120, 110],
+            [200, 110],
+          ].map(([cx, cy]) => (
+            <circle key={`${cx}-${cy}`} className={styles.member} cx={cx} cy={cy} r="8" />
+          ))}
+          <circle className={styles.halo} cx="160" cy="110" r="16" />
+          <circle className={styles.nodeShut} cx="160" cy="110" r="8" />
+        </>
+      ) : null}
+
+      {scope === 'build' ? (
+        <>
+          <rect className={styles.drawn} x="40" y="50" width="100" height="80" rx="8" />
+          <path className={styles.line} d="M152,90 L170,90" />
+          <path className={styles.line} d="M163,83 L170,90 L163,97" />
+          <rect className={styles.built} x="180" y="50" width="100" height="80" rx="8" />
+        </>
+      ) : null}
+    </svg>
+  );
+}
+
+/**
+ * EngagementOptions — the ways an engagement can be shaped, comparable at a glance (product-design
+ * round 6, 11 Oct 2026; page-mapping § 23).
+ *
+ * The reader is choosing a shape for their own project, so the options are genuinely comparable
+ * objects: four peers, four across from 1024 (two from 768, one below), each a scope drawing on the
+ * same dot field, its name at the h4 role, and what it is. Below 768 each drawing sits beside its
+ * words (2 : 3), so the comparison survives as a short list. The drawings are what make them
+ * comparable before reading: the same field, a different blue shape for each scope. The limit on the
+ * claim (when we are not the right team) closes the band as a note, a `stack` under the row.
+ *
+ * Not a Thread: the options are not stages in order. Not icon cards: the specialist services band
+ * on the same page already is one, and a glyph cannot show scope. No boxes, no discs.
+ */
+export function EngagementOptions({
+  id,
+  heading,
+  headingId,
+  lead,
+  options,
+  note,
+  surface = 'paper',
+}: EngagementOptionsProps) {
+  const uid = useId().replace(/:/g, '');
+  const shown = options.filter((option) => option.title.trim().length > 0);
+  const across = shown.length >= 4 ? 4 : Math.max(1, shown.length);
+  return (
+    <Section id={id} surface={surface} aria-labelledby={headingId} data-band="engagement-options">
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
+          <h2 id={headingId} className={styles.heading}>
+            {heading}
+          </h2>
+          {lead ? <p className={styles.lead}>{lead}</p> : null}
+        </Layout>
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: Math.min(2, across), lg: across }}
+          colGap="gutter"
+          rowGap="stack"
+        >
+          {shown.map((option, index) => (
+            <li key={option.title}>
+              {/* Below 768 the drawing sits beside its words (2 : 3), so four options stay a short
+                  comparable list on a phone instead of four full-width drawings; from 768 it heads
+                  its column. */}
+              <Layout
+                columns={option.scope ? { base: [2, 3], md: 1 } : { base: 1 }}
+                colGap="block"
+                rowGap="block"
+                align="start"
+              >
+                {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} /> : null}
+                <Layout rowGap="text">
+                  <h3 className={styles.title}>{option.title}</h3>
+                  <p className={styles.body}>{option.body}</p>
+                </Layout>
+              </Layout>
+            </li>
+          ))}
+        </Layout>
+        {note}
+      </Layout>
+    </Section>
+  );
+}

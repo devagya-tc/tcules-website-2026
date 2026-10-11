@@ -5,6 +5,7 @@ import { DataTable, Steps, TableOfContents, type TocItem } from '@/patterns';
 import { corpusImage } from '@/lib/corpus-images';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { FULL_COLUMN } from '@/lib/image-sizes';
+import { linkCaseMentions } from '@/lib/case-links';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { hasPlaceholder, placeholderImage } from '@/lib/placeholders';
 
@@ -121,7 +122,20 @@ const listHtml = (block: Extract<CorpusBlock, { type: 'list' }>) => {
  * boxed DataTable; a bound artefact is a Media placed after the section's last list, or else its last
  * paragraph (the block that names it); a diagram slot is the Media its register row reserves.
  */
-export function ArticleSection({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+export function ArticleSection({
+  page,
+  band,
+  seen = new Set([page.route]),
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  /**
+   * The case pages already linked earlier in the argument (and the page's own route), so a case the
+   * prose names links at its FIRST mention only (owner, 11 Oct 2026: every case mention links to its
+   * case page; a link on every repeat would turn the paragraph blue).
+   */
+  seen?: Set<string>;
+}) {
   const binding = page.composition.mediaBindings.find(
     (b) => b.bound && b.supportsSection === band.id,
   );
@@ -150,7 +164,7 @@ export function ArticleSection({ page, band }: { page: CorpusPage; band: CorpusB
   items.forEach((item, index) => {
     switch (item.type) {
       case 'paragraph':
-        flow += html(item.runs);
+        flow += html(linkCaseMentions(item.runs, seen));
         break;
       case 'labelled':
         flow += `<p><strong>${inlineToHtml(item.label)}</strong> ${inlineToHtml(item.body)}</p>`;
@@ -249,6 +263,8 @@ export function ArticleShell({
   page: CorpusPage;
   sections: readonly CorpusBand[];
 }) {
+  /* One set for the whole argument: a case links at its first mention, never on the page's own. */
+  const seen = new Set<string>([page.route]);
   const outline: TocItem[] = sections
     .filter((band) => band.headingText !== '')
     .map((band) => ({ label: band.headingText, href: `#${headingIdOf(band)}` as const }));
@@ -264,7 +280,7 @@ export function ArticleShell({
           {outline.length >= 2 ? <TableOfContents items={outline} /> : null}
           <Layout as="article" rowGap="stack">
             {sections.map((band) => (
-              <ArticleSection key={band.id} page={page} band={band} />
+              <ArticleSection key={band.id} page={page} band={band} seen={seen} />
             ))}
           </Layout>
         </Layout>

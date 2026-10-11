@@ -269,3 +269,10 @@
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);
 }
+
+/* Layout `align="first-baseline"`: a line at the quote-lg role beside body text, so the specimen
+   shows two different opening sizes sharing one first baseline. */
+.specFirstBaselineLarge {
+  font: var(--text-quote-lg);
+  letter-spacing: var(--text-quote-lg-tracking);
+}

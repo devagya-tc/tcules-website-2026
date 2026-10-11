@@ -236,8 +236,11 @@ export type LayoutProps = {
    * Block-axis placement — how items sit vertically in their row (e.g. centre copy against a
    * taller image). Default "stretch". `baseline` aligns the items' LAST baselines: a split head's
    * ask set on its lead's last line (PageHero `display`, the Quantum split header).
+   * `first-baseline` aligns their FIRST lines: a row whose two sides open at different type sizes
+   * and either may wrap — a large line and the smaller reply beside it (VoiceLedger, 11 Oct 2026),
+   * where `start` set the reply's first line high and `baseline` sank it to the large line's last.
    */
-  align?: Place | 'baseline';
+  align?: Place | 'baseline' | 'first-baseline';
   /**
    * Inline-axis placement of each item WITHIN its own track. Default "stretch" (fill the
    * track); "center" shrinks each item to its content and centres it — how a centred copy

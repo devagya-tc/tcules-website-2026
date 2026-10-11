@@ -17,6 +17,7 @@ import {
   type HeroStat,
   type LogoGridMark,
 } from '@/patterns';
+import { linkCaseMentions } from '@/lib/case-links';
 import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -28,6 +29,7 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { renderInline } from '@/lib/inline-render';
 import { placeholderImage } from '@/lib/placeholders';
 
 import {
@@ -512,7 +514,13 @@ function WhyTcules({ page, b, ratings, avatars, borrowed }: BandProps) {
             heading={item.headingText}
             headingAs="h3"
             headingId={`${b.id}-${slug}`}
-            lead={paragraphRuns(item.blocks).map(plain).join(' ')}
+            lead={renderInline(
+              linkCaseMentions(
+                paragraphRuns(item.blocks).flatMap((runs, at) =>
+                  at === 0 ? [...runs] : [{ type: 'text' as const, text: ' ' }, ...runs],
+                ),
+              ),
+            )}
             support={
               quote ? (
                 <TestimonialCard

@@ -179,14 +179,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'One component followed from intent through the design system, implementation and runtime to acceptance (`visual_plan`), with the point where a gap enters marked and traced back to its cause.',
   },
-  '/audits/design-to-code-audit#recognition': {
-    src: '/placeholders/audits-design-to-code-audit--recognition.svg',
-    width: 1600,
-    height: 1067,
-    kind: 'studio photo',
-    shows:
-      'A designer and a developer comparing the approved design with the shipped screen side by side, pointing at the same mismatch.',
-  },
   '/audits/design-to-code-audit#why-tcules': {
     src: '/placeholders/audits-design-to-code-audit--why-tcules.svg',
     width: 1600,
@@ -251,14 +243,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The responsibility map: six roles (sales representative, sales manager, product, pricing, solution and maintenance experts) contributing to one quotation, with where information changes and where a hand-off or exit sits.',
   },
-  '/services/product-design#engagement': {
-    src: '/placeholders/services-product-design--engagement.svg',
-    width: 1280,
-    height: 1600,
-    kind: 'studio photo',
-    shows:
-      "An experienced Tcules designer working inside a client's own tools and meetings, beside the client's product team.",
-  },
   '/services/product-design#hero': {
     src: '/placeholders/services-product-design--hero.svg',
     width: 1600,
@@ -266,14 +250,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'Uncertainty mapped to the design medium that resolves it (research, workflow, interface, prototype, code), with Doodle, Dealpath, Eden AI, Auxentios and Scissors pinned where their work sat (`visual_plan`). Replaces the interim service-line illustration.',
-  },
-  '/services/product-design#starting-points': {
-    src: '/placeholders/services-product-design--starting-points.svg',
-    width: 1600,
-    height: 1067,
-    kind: 'studio photo',
-    shows:
-      'A designer watching a customer use the product and noting the step where the workflow trips them up.',
   },
   '/tools/design-system-drift-checker#how-to-use-it': {
     src: '/placeholders/tools-design-system-drift-checker--how-to-use-it.svg',
@@ -306,6 +282,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       'The small-shop payment app shaped by twenty merchant interviews (client name withheld: no client marks).',
+  },
+  'case-cover:merchant-payments-research': {
+    src: '/placeholders/case-cover--merchant-payments-research.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      'The same asset as "Kirana store payments" above (the OctiFi page\'s related link names that case "merchant payments research", so its cover is keyed by that name): the small-shop payment app shaped by twenty merchant interviews. One file serves both keys.',
   },
   'case-cover:novus-insights': {
     src: '/placeholders/case-cover--novus-insights.svg',
@@ -346,5 +330,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "Scissors' staffing software: clients, candidates and jobs connected in one model, so details entered once carry through.",
+  },
+  'case-cover:the-wandering-raven': {
+    src: '/placeholders/case-cover--the-wandering-raven.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "The Wandering Raven's creative-writing world for young learners inside Moodle, as the case's cover wherever another page cites it. The case binds no cover yet (`ASSET_REQUIRED`); the same first approved screen serves home's why-tcules panel and the case index slot.",
   },
 };

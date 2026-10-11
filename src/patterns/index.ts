@@ -364,3 +364,21 @@ export {
 /* Gateway — the situation selector: six reader situations, one lit, its answer beside it (home
    "What do you need next?", round 6, 11 Oct 2026). */
 export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';
+
+/* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
+/* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
+export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
+
+/* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
+export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
+
+/* CaseSpread — one worked example: the outcome as the claim beside its evidence, the story under. */
+export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpread';
+
+/* EngagementOptions — ways to work with us, comparable at a glance through one scope drawing each. */
+export {
+  EngagementOptions,
+  type EngagementOption,
+  type EngagementOptionsProps,
+  type EngagementScope,
+} from './EngagementOptions';

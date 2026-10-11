@@ -85,8 +85,12 @@ type BannerHeadProps = {
   headingId?: string;
   /** The label above the heading. Never repeats the heading or the crumb (§ 7.3). */
   eyebrow?: string;
-  /** One sentence under the heading, ≤ 18 words (below) or ≤ 3 lines in 477 (beside). */
-  lead?: string;
+  /**
+   * One sentence under the heading, ≤ 18 words (below) or ≤ 3 lines in 477 (beside). A node so a
+   * sentence that names a case can carry the case's link (owner, 11 Oct 2026); inline content only,
+   * since it renders inside the lead's `<p>`.
+   */
+  lead?: ReactNode;
   /**
    * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
    * one blue link is the caller's composition and a pattern never imports a pattern.

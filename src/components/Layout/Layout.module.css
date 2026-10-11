@@ -101,6 +101,7 @@
 .align-center  { --layout-align: center; }
 .align-end     { --layout-align: end; }
 .align-baseline { --layout-align: last baseline; } /* items share their last line */
+.align-first-baseline { --layout-align: first baseline; } /* items share their first line */
 
 .justifyitems-stretch { --layout-justify-items: stretch; }
 .justifyitems-start   { --layout-justify-items: start; }

@@ -322,7 +322,7 @@ function ImpactBand({ band }: { band: CorpusBand }) {
 
 /** "Read the Gold Image Printing case" → "Gold Image Printing": the name a cover is filed under. */
 const caseNameOf = (linkText: string) =>
-  /^Read the (.+?) case\.?$/.exec(linkText)?.[1] ?? linkText;
+  /^Read (?:the )?(.+?) case\.?$/.exec(linkText)?.[1] ?? linkText;
 
 /**
  * M8 — cases to read next, as cards: each case page's own title and cover (a pre-existing image the

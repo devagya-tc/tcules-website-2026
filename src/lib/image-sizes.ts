@@ -235,3 +235,14 @@ export function coverSizes(sizes: string, source: number, frames: readonly numbe
 export const READ_DOWN_PHOTO =
   `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 2) / 3)}px, ` +
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 2 / 3), ${FLUID_COLUMN}`;
+
+/** The `column` seam (64) between two halves that must read as separate (CLAUDE.md § gap scale). */
+const COLUMN_GAP = 64;
+
+/**
+ * CaseSpread's evidence image: 7 of [5, 7] from 1024 with the `column` seam (product-design round 6,
+ * 11 Oct 2026). (1240 − 64) × 7 / 12 = 686 at the cap; below 1024 the full column.
+ */
+export const CASE_SPREAD_MEDIA =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - COLUMN_GAP) * 7) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + COLUMN_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;
