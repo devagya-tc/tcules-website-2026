@@ -1,5 +1,6 @@
 import { fixtureSource } from './sources/fixtures';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
+import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { BORROWED_QUOTES } from './sources/fixtures/borrowed-quotes';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
@@ -25,6 +26,7 @@ import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import type {
+  CaseStory,
   AboutContentSource,
   CorpusContentSource,
   AuditContentSource,
@@ -98,6 +100,18 @@ export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesS
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
+
+/* The cases that have an ideal local copy, structured as a story (fixtures/ideal/case-studies). */
+const CASE_STORIES: ReadonlyMap<string, CaseStory> = new Map([
+  [benchmarkGensuite.slug, benchmarkGensuite],
+]);
+/**
+ * A case's IDEAL rendering where one exists: the CMS's words copied locally and split into the parts
+ * the design needs (owner, 11 Oct 2026). Null for every other case, which renders from Strapi.
+ */
+export async function getCaseStory(slug: string): Promise<CaseStory | null> {
+  return CASE_STORIES.get(slug) ?? null;
+}
 /**
  * The case-study listing with its IDEAL copy laid over the live entries — for the template's
  * specimen only, never a live route. Real entries, covers and links; the copy the content rules

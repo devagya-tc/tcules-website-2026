@@ -3,7 +3,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
-import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
+import {
+  getCaseStory,
+  getCaseStudyPage,
+  type CaseStudyBlock,
+  type CaseStudyImage,
+} from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -16,6 +21,7 @@ import {
   TableOfContents,
   type TocItem,
 } from '@/patterns';
+import { CaseStory } from '@/templates';
 
 function figureImage(image: CaseStudyImage) {
   return {
@@ -200,8 +206,30 @@ export async function generateMetadata({
 
 export default async function CaseStudyPage({ params }: PageProps<'/case-studies/[slug]'>) {
   const { slug } = await params;
-  const caseStudy = await getCaseStudyPage(slug);
 
+  /* A case with an ideal local copy renders as a designed story (fixtures/ideal/case-studies); every
+     other case renders the CMS body as it stands. */
+  const story = await getCaseStory(slug);
+  if (story) {
+    return (
+      <CaseStory
+        story={story}
+        trail={heroTrail(
+          [
+            { label: 'Home', href: ROUTES.home },
+            { label: 'Case studies', href: ROUTES.caseStudies },
+            { label: story.title, href: caseStudyPath(story.slug) },
+          ],
+          story.title,
+          (t) => (
+            <Breadcrumbs {...t} />
+          ),
+        )}
+      />
+    );
+  }
+
+  const caseStudy = await getCaseStudyPage(slug);
   if (!caseStudy) notFound();
 
   /* The outline the seam derived from this body's level-2 headings, mapped to what the component

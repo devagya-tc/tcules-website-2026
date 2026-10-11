@@ -1,0 +1,145 @@
+/* CaseStory — the marks the story template draws itself. Layout owns every seam; every value is a
+   --cst-* token in tokens/components/case-story.css. */
+
+.key {
+  font: var(--cst-key-text);
+  letter-spacing: var(--cst-key-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cst-key-ink);
+}
+
+/* ── Problem and solution ── each on its own hairline, the sentence large. */
+.statement {
+  border-block-start: var(--cst-rule-width) solid var(--cst-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+.statementBody {
+  font: var(--cst-statement-text);
+  letter-spacing: var(--cst-statement-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--cst-statement-ink);
+}
+
+/* ── The chapter ── the marker holds still beside its chapter from 1024. */
+.marker {
+  border-block-start: var(--cst-rule-width) solid var(--cst-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+@media (min-width: 1024px) {
+  .marker {
+    position: sticky;
+    inset-block-start: var(--cst-marker-sticky-top);
+  }
+}
+
+.number {
+  font: var(--cst-number-text);
+  letter-spacing: var(--cst-number-tracking);
+  color: var(--cst-number-ink);
+}
+
+.heading {
+  font: var(--cst-heading-text);
+  letter-spacing: var(--cst-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--cst-heading-ink);
+  max-inline-size: var(--measure-title);
+}
+
+.paragraph {
+  font: var(--cst-paragraph-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cst-paragraph-ink);
+  max-inline-size: var(--measure-lead);
+}
+
+/* The pull quote: the blue rule is the quote's edge; padding, not a margin. */
+.quote {
+  border-inline-start: var(--cst-quote-rule-width) solid var(--cst-quote-rule-ink);
+  padding-inline-start: var(--gap-block);
+}
+
+.quoteText {
+  font: var(--cst-quote-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cst-quote-ink);
+  max-inline-size: var(--measure-lead);
+}
+
+/* ── Steps and peers ── */
+.step {
+  border-block-start: var(--cst-rule-width) solid var(--cst-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+.index {
+  font: var(--cst-index-text);
+  letter-spacing: var(--cst-index-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cst-index-ink);
+}
+
+.stepTitle {
+  font: var(--cst-step-title-text);
+  letter-spacing: var(--cst-step-title-tracking);
+  color: var(--cst-step-title-ink);
+}
+
+.stepBody {
+  font: var(--cst-step-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cst-step-body-ink);
+}
+
+/* Authored as the tail of "Label: text", so it starts lower-case; the capital is presentation. */
+.stepBody::first-letter {
+  text-transform: uppercase;
+}
+
+/* ── The annotated figure ── */
+.figure {
+  min-inline-size: 0;
+}
+
+.caption {
+  font: var(--cst-caption-text);
+  text-wrap: var(--text-title-wrap);
+  color: var(--cst-caption-ink);
+}
+
+/* A note: its numeral in a blue disc, then the observation. The two are a pair on one line. */
+.note {
+  font: var(--cst-note-text);
+  color: var(--cst-note-ink);
+}
+
+.noteIndex {
+  display: block;
+  inline-size: var(--cst-note-mark-size);
+  text-align: center;
+  block-size: var(--cst-note-mark-size);
+  border-radius: var(--radius-full);
+  background-color: var(--cst-note-mark-ground);
+  color: var(--cst-note-mark-ink);
+  font: var(--cst-index-text);
+  /* After the shorthand, which resets line-height: the numeral centres in the disc. */
+  line-height: var(--cst-note-mark-size);
+  letter-spacing: var(--cst-index-tracking);
+}
+
+/* ── The close ── on the chapters' columns: its label in the marker column, its claim beside. */
+.closingHeading {
+  font: var(--cst-closing-text);
+  letter-spacing: var(--cst-closing-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--cst-closing-ink);
+}
+
+.closingBody {
+  font: var(--cst-closing-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cst-closing-body-ink);
+  max-inline-size: var(--measure-lead);
+}

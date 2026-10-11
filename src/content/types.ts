@@ -1152,6 +1152,55 @@ export type CaseStudyPage = {
   seo?: ContentSeo;
 };
 
+/**
+ * A case study as a STORY: the same words as `CaseStudyPage`, with the body split into the parts its
+ * rich text only implied, so each can be designed rather than poured into one prose column (owner,
+ * 11 Oct 2026). Today only an ideal local copy fills it (fixtures/ideal/case-studies); it is also
+ * the recommended Strapi model for a case body.
+ */
+export type CaseStoryFigure = {
+  id: string;
+  image: CaseStudyImage;
+  /** "Figure 1". */
+  label: string;
+  caption: string;
+  /** The numbered observations on the figure, in order. */
+  notes: string[];
+};
+
+export type CaseStoryPart =
+  | { type: 'paragraphs'; paragraphs: string[] }
+  | { type: 'quote'; quote: string; attribution: string }
+  /** A "Label: text" list: steps in order, or peers (the three user needs). */
+  | { type: 'steps'; ordered?: boolean; items: Array<{ label: string; body: string }> }
+  | { type: 'principle'; label: string; text: string }
+  | { type: 'figures'; figures: CaseStoryFigure[] };
+
+export type CaseStoryChapter = {
+  id: string;
+  /** "01". */
+  number: string;
+  /** "The opportunity". */
+  label: string;
+  heading: string;
+  parts: CaseStoryPart[];
+};
+
+export type CaseStory = {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt?: string;
+  heroImage?: CaseStudyImage;
+  profile: Array<{ id: string; label: string; value: string }>;
+  categories: string[];
+  tags: string[];
+  statements: Array<{ id: string; title: string; body: string }>;
+  chapters: CaseStoryChapter[];
+  closing?: { label: string; heading: string; paragraphs: string[] };
+  seo?: ContentSeo;
+};
+
 export type CaseStudyContentSource = {
   getCaseStudyPage(slug: string): Promise<CaseStudyPage | null>;
   getCaseStudyListingPage(slug: string): Promise<CaseStudyListingPage | null>;

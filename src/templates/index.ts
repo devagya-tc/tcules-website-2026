@@ -16,6 +16,13 @@ export type {
   CaseStudyIndexProps,
   CaseStudyIndexSection,
 } from './CaseStudyIndex';
+export { CaseStory } from './CaseStory';
+export type {
+  CaseStoryChapterProps,
+  CaseStoryFigureProps,
+  CaseStoryPartProps,
+  CaseStoryProps,
+} from './CaseStory';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {

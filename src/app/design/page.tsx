@@ -283,6 +283,11 @@ const SPECIMENS = [
         note: 'the case-study index page type, with the live entries and their ideal copy; the grouped form (featured set, covers, thumbnail rows, a story, a form close) is shown at /design/corpus-page/case-studies',
       },
       {
+        href: '/design/case-story',
+        name: 'CaseStory',
+        note: 'a case study as a story — chapters with a still marker column, steps, pull quotes, a principle band and annotated figures — at the Benchmark Gensuite case copied locally from Strapi',
+      },
+      {
         href: '/design/service-page',
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
