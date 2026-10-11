@@ -352,6 +352,8 @@ export function EnquiryBand({
       id={band.id}
       data-band="L"
       surface={surface}
+      /* A conversation glyph as the eye's entry into the close (owner, 11 Oct 2026). */
+      mark={<Icon name="chat-round-dots" size="xl" />}
       heading={band.headingText}
       body={lead && lead.type === 'paragraph' ? [plain(lead.runs)] : undefined}
       form={corpusEnquiryForm(page, band)}

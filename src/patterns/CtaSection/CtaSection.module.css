@@ -82,6 +82,18 @@
    tracked mono label reads as letter-spaced body text rather than as a label, which is why the case
    belongs to the role. Applied in CSS rather than in the data, so the frontmatter keeps its
    authored casing and reversing the decision is one declaration in the token layer. */
+/* The lede's mark: a bare glyph, blue, sized up from Icon's 24 to --cta-mark-size (the container
+   sizes the glyph it is handed, as Button does). */
+.mark {
+  display: block;
+  color: var(--cta-mark-ink);
+}
+
+.mark svg {
+  inline-size: var(--cta-mark-size);
+  block-size: var(--cta-mark-size);
+}
+
 .eyebrow {
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-eyebrow-ink);

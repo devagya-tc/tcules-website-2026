@@ -113,6 +113,12 @@ type CtaSectionBaseProps = {
   /** The category label above the heading. Absent renders no element and no seam. */
   eyebrow?: string;
   /**
+   * A glyph above everything in the lede, the eye's entry into the band (owner, 11 Oct 2026: the
+   * enquiry close had nothing guiding the eye in). An `Icon` the caller composes, drawn blue at
+   * --cta-mark-size, bare: no disc. Absent renders no element and no seam.
+   */
+  mark?: ReactNode;
+  /**
    * Which ground `Section` paints under this band. Passed straight through and read nowhere else.
    *
    * A prop here rather than an inherited attribute, and it is the same conclusion `SiteNav` and
@@ -287,6 +293,7 @@ const HEADING_CLASS: Record<CtaHeadingScale, string | undefined> = {
 
 function CtaLede({
   headingId,
+  mark,
   eyebrow,
   heading,
   body,
@@ -295,6 +302,7 @@ function CtaLede({
   centred = false,
 }: {
   headingId: string;
+  mark?: ReactNode;
   eyebrow?: string;
   heading: string;
   body?: readonly [string] | readonly [string, string];
@@ -310,6 +318,11 @@ function CtaLede({
 
   return (
     <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
+      {mark ? (
+        <span className={styles.mark} aria-hidden="true">
+          {mark}
+        </span>
+      ) : null}
       {/* The eyebrow carries the kit's blue mark, as every band eyebrow does (fix round 1, 7 Oct
           2026): one rule for the label's accent, so no band reads as the unmarked one. */}
       {eyebrow !== undefined ? (
@@ -707,6 +720,7 @@ export function CtaSection(props: CtaSectionProps) {
   ) => (
     <CtaLede
       headingId={headingId}
+      mark={props.mark}
       eyebrow={props.eyebrow}
       heading={props.heading}
       body={props.body}

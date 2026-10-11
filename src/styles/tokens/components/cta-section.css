@@ -16,6 +16,9 @@
    decision in one place. */
 
 :root {
+  /* The lede's mark (`mark`): a bare glyph at 40, the eye's entry into the close. A component size,
+     read from the space ramp because no gap step names a glyph's box. */
+  --cta-mark-size: var(--space-40);
   --cta-eyebrow-text: var(--text-eyebrow);
   --cta-eyebrow-tracking: var(--text-eyebrow-tracking);
   /* The OFFER's heading — the K band only (`.heading`). h2, because the offer interrupts a page
@@ -100,6 +103,7 @@
   --cta-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
   /* 6.17:1 — the points' numerals and glyphs carry the accent */
   --cta-marker-ink: var(--color-brandeis-500);
+  --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
   --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
@@ -110,7 +114,8 @@
   --cta-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --cta-point-ink: var(--color-neutral-900); /* 13.05:1 */
   --cta-eyebrow-ink: var(--color-neutral-700); /* 7.27:1; neutral-600 fails */
-  --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --cta-marker-ink: var(--color-brandeis-500);
+  --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */ /* 5.51:1 */
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
   --cta-panel-ground: var(--color-paper-deep); /* the form panel as a tint surface */
@@ -121,7 +126,8 @@
   --cta-body-ink: var(--color-neutral-100); /* 14.47:1 */
   --cta-point-ink: var(--color-white); /* 17.26:1 */
   --cta-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --cta-marker-ink: var(--color-brandeis-300);
+  --cta-mark-ink: var(--color-brandeis-300); /* the lede's mark */ /* 7.32:1 */
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
   --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
@@ -132,7 +138,8 @@
   --cta-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --cta-point-ink: var(--color-white); /* 6.23:1 */
   --cta-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
-  --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --cta-marker-ink: var(--color-brandeis-100);
+  --cta-mark-ink: var(--color-brandeis-100); /* the lede's mark */ /* 4.91:1 — AA floor */
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
   --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
