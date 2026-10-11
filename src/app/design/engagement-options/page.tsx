@@ -48,7 +48,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="four"
         title="1 · Four scopes and a note — the shape"
-        note="Four across from 1024, two from 768; below 768 each drawing sits beside its words (2 : 3). The note (the caller's Callout) a stack under the row."
+        note="One row per option from 768, the 2:1 drawing in 5 of [5, 7] beside its words, swapping sides row by row; rows a column apart. Below 768 each drawing heads its words at full width. The note (the caller's Callout) a stack under the rows."
       />
       <EngagementOptions
         heading="Ways to work with us"

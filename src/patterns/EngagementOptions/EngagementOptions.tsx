@@ -39,11 +39,14 @@ export type EngagementOptionsProps = {
 
 const W = 320;
 const H = 180;
+/* From 768 the drawing shares a row with its words, so its field is cropped to 2:1 (top and bottom
+   strips of dots only; every shape sits between y 30 and 150) to keep four rows from towering. */
+const CROP = 10;
 
 function Drawing({ scope, uid }: { scope: EngagementScope; uid: string }) {
   const grid = `${uid}-field`;
   return (
-    <svg className={styles.drawing} viewBox={`0 0 ${W} ${H}`} focusable="false" aria-hidden="true">
+    <svg className={styles.drawing} viewBox={`0 ${CROP} ${W} ${H - 2 * CROP}`} focusable="false" aria-hidden="true">
       <defs>
         <pattern id={grid} width="20" height="20" patternUnits="userSpaceOnUse">
           <circle className={styles.field} cx="10" cy="10" r="1.1" />
@@ -114,9 +117,10 @@ function Drawing({ scope, uid }: { scope: EngagementScope; uid: string }) {
  * round 6, 11 Oct 2026; page-mapping § 23).
  *
  * The reader is choosing a shape for their own project, so the options are genuinely comparable
- * objects: four peers, four across from 1024 (two from 768, one below), each a scope drawing on the
- * same dot field, its name at the h4 role, and what it is. Below 768 each drawing sits beside its
- * words (2 : 3), so the comparison survives as a short list. The drawings are what make them
+ * objects: peers, one row each from 768, the scope drawing and the words side by side and swapping
+ * sides row by row (owner, 11 Oct: four across was too tight — "more space for each item … the same
+ * alternating pattern"). Rows are a `column` apart. Below 768 each drawing heads its words, full
+ * width at 2:1. The drawings are what make them
  * comparable before reading: the same field, a different blue shape for each scope. The limit on the
  * claim (when we are not the right team) closes the band as a note, a `stack` under the row.
  *
@@ -134,7 +138,6 @@ export function EngagementOptions({
 }: EngagementOptionsProps) {
   const uid = useId().replace(/:/g, '');
   const shown = options.filter((option) => option.title.trim().length > 0);
-  const across = shown.length >= 4 ? 4 : Math.max(1, shown.length);
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="engagement-options">
       <Layout rowGap="stack">
@@ -144,25 +147,22 @@ export function EngagementOptions({
           </h2>
           {lead ? <p className={styles.lead}>{lead}</p> : null}
         </Layout>
-        <Layout
-          as="ul"
-          columns={{ base: 1, md: Math.min(2, across), lg: across }}
-          colGap="gutter"
-          rowGap="stack"
-        >
+        <Layout as="ul" rowGap="column">
           {shown.map((option, index) => (
             <li key={option.title}>
-              {/* Below 768 the drawing sits beside its words (2 : 3), so four options stay a short
-                  comparable list on a phone instead of four full-width drawings; from 768 it heads
-                  its column. */}
+              {/* One row per option, the drawing and the words side by side, swapping sides row by
+                  row from 768 so the eye zigzags down the set (owner, 11 Oct: "more space for each
+                  item … the same alternating pattern"). Below 768 the drawing heads its words, full
+                  width at 2:1: beside them, the column gap left both too narrow. */}
               <Layout
-                columns={option.scope ? { base: [2, 3], md: 1 } : { base: 1 }}
-                colGap="block"
+                columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+                reverse={{ md: index % 2 === 1 }}
+                colGap="column"
                 rowGap="block"
-                align="start"
+                align="center"
               >
                 {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} /> : null}
-                <Layout rowGap="text">
+                <Layout rowGap="block">
                   <h3 className={styles.title}>{option.title}</h3>
                   <p className={styles.body}>{option.body}</p>
                 </Layout>

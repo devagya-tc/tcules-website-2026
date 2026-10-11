@@ -23,7 +23,8 @@
   --eop-lead-measure: var(--measure-lead);
   --eop-title-text: var(--text-h4);
   --eop-title-tracking: var(--text-h4-tracking);
-  --eop-body-text: var(--text-body);
+  /* With a half-width row to itself, what an option is reads at the lead size. */
+  --eop-body-text: var(--text-lead-lg);
   --eop-body-measure: var(--measure-lead);
   /* Strokes stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
   --eop-line-width: var(--border-width-3); /* a workflow: the drawing's heavy stroke */
