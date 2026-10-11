@@ -5,9 +5,13 @@ import { CORPUS_ASSET_SIZES } from './corpus-assets.generated';
  * An image record for an asset the corpus frontmatter binds (`media_bindings`, status
  * BOUND_EXISTING_PUBLIC_ASSET), with its measured size and the site's delivery ladder.
  *
- * Structurally a `MediaImage` (lib is a leaf). The kind is `capture`: every bound asset in the
- * corpus is a product screen or a studio photograph the content team placed, and Media renders a
- * capture whole, with its hairline, so nothing is graded or re-cropped by the kit's photograph rules.
+ * Structurally a `MediaImage` (lib is a leaf). The kind follows the binding's `role`, the content
+ * team's own word for what the asset is for: `humanise` is a studio PHOTOGRAPH (people, the room),
+ * which takes the photograph radius and no frame; every other role (`demonstrate`, `proof`,
+ * `identify`, `supporting_proof`) is a product screen, a CAPTURE, rendered whole with its hairline.
+ * Every bound asset was a capture until 11 Oct 2026, which drew studio photos square-cornered in a
+ * hairline frame beside the kit's rounded photographs (owner: "regression -> image rounded
+ * corners?").
  *
  * `sources` are Cloudinary width transforms (the same 1240, 652 and 320 rungs Strapi derives for
  * every CMS image, Media.md ruling M2), so a 392px card is not handed a 5760px master. They are
@@ -21,7 +25,7 @@ export type CorpusImage = {
   alt: string;
   width: number;
   height: number;
-  kind: 'capture';
+  kind: 'capture' | 'photograph';
   sources?: readonly { src: string; width: number }[];
 };
 
@@ -51,7 +55,7 @@ export function corpusImage(binding: CorpusMediaBinding): CorpusImage {
     alt: binding.altIntent ?? '',
     width: size.width,
     height: size.height,
-    kind: 'capture',
+    kind: binding.role === 'humanise' ? 'photograph' : 'capture',
     ...(sources && sources.length > 0 ? { sources } : {}),
   };
 }
