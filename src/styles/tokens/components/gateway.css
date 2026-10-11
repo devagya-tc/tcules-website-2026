@@ -34,10 +34,11 @@
   --gwy-service-text: var(--text-eyebrow);
   --gwy-service-tracking: var(--text-eyebrow-tracking);
   --gwy-rule-width: var(--border-width-hairline);
-  /* The index row's hover ground: how far it reaches past the copy on every side, as a spread
-     shadow. Optical, not a layout distance (gap rule 1): it paints a target round copy that stays
-     flush with the band's heading, and moves nothing. 16, so a row's ground stops 8 short of its
-     neighbour's across the `block` seam. The radius is the photograph radius, as BlockCard's box. */
+  /* The index row's hover and focus ground: how far it reaches past the copy on every side (a
+     painted ::before, inset by minus this). Optical, not a layout distance (gap rule 1): it paints a
+     target round copy that stays flush with the band's heading, and moves nothing. 16, so a row's
+     ground stops 8 short of its neighbour's across the `block` seam. The focus ring sits on the
+     ground's edge. The radius is the photograph radius, as BlockCard's box. */
   --gwy-ground-reach: var(--space-16);
   --gwy-ground-radius: var(--radius-8);
   --gwy-ink-duration: var(--duration-fast);

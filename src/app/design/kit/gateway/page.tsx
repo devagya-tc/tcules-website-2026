@@ -65,7 +65,7 @@ export default async function KitGatewayPage() {
       <Variation
         id="index"
         title="A · Index — chosen, on home"
-        note="One column under the display heading: each situation at h3 on one line, the service named under it on its cue, the sentence quiet beside them in 5 of [7, 5]. The six titles run down one edge, so they scan in one pass, and each says where it leads without a sentence being read. No rule between rows; the whole row is one link, and under the pointer it raises a ground across both tracks (hover a row). Scored 23 / 25. 814 at 1440, 1,347 at 390."
+        note="One column under the display heading: each situation at h3 on one line, the service named under it on its cue, the sentence quiet beside them in 5 of [7, 5]. The six titles run down one edge, so they scan in one pass, and each says where it leads without a sentence being read. No rule between rows; the whole row is one link, and under the pointer it raises a ground across both tracks (hover a row); Tab to a row and the same ground takes the focus ring on its edge, clear of the copy. Scored 23 / 25. 814 at 1440, 1,347 at 390."
       />
       <ContentSection heading={heading} headingId="gw-index" headingSize="display">
         <Gateway items={items} arrangement="index" />

@@ -62,31 +62,50 @@
    inset, so its copy stays flush with the band's heading.
 
    Under the pointer the row raises a ground across BOTH tracks — the title, the cue and the
-   sentence — so the reader sees one target, not three. The ground reaches past the copy by
-   --gwy-ground-reach on every side as a spread shadow: paint only, so the copy does not move off
-   the heading's edge and nothing is laid out. Keyboard focus keeps the ring, which overrides the
-   shadow, and adds the ground behind it. */
+   sentence — so the reader sees one target, not three. The ground is the anchor's ::before, inset
+   by --gwy-ground-reach past the copy on every side: paint only, so the copy does not move off the
+   heading's edge and nothing is laid out. It was a spread box-shadow round a background, which left
+   an anti-aliased seam where the box's rounded corners met the shadow (round 4 critic); one painted
+   box has no seam. Keyboard focus raises the same ground and rings IT, outside the reach — a ring on
+   the anchor's own box ran through the title's first glyph, because the anchor has no inset. The
+   ground is the ring's gap, so no gap colour is needed. `isolation` keeps the ground behind the copy
+   and inside the row. */
 .root .indexLink {
+  position: relative;
+  isolation: isolate;
   padding-block: 0;
+}
+
+.root .indexLink::before {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--gwy-ground-reach));
   border-radius: var(--gwy-ground-radius);
+  content: '';
+  transition:
+    background-color var(--gwy-ink-duration) var(--gwy-ink-easing),
+    box-shadow var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
-.root .indexLink:hover {
+.root .indexLink:hover,
+.root .indexLink:active,
+.root .indexLink:focus-visible {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.root .indexLink:hover::before {
   background-color: var(--gwy-ground-hover);
-  box-shadow: 0 0 0 var(--gwy-ground-reach) var(--gwy-ground-hover);
 }
 
-.root .indexLink:active {
+.root .indexLink:active::before {
   background-color: var(--gwy-ground-pressed);
-  box-shadow: 0 0 0 var(--gwy-ground-reach) var(--gwy-ground-pressed);
 }
 
 /* Last, so a focused row keeps its ring while it is also hovered or pressed. */
-.root .indexLink:focus-visible {
+.root .indexLink:focus-visible::before {
   background-color: var(--gwy-ground-hover);
-  box-shadow:
-    0 0 0 var(--gwy-ring-offset) var(--gwy-ring-gap-color),
-    0 0 0 calc(var(--gwy-ring-offset) + var(--gwy-ring-width)) var(--gwy-ring-color);
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
 }
 
 /* The grid cell's stack fills the stretched anchor so the arrow (Layout pinLast) sits on one line
@@ -145,6 +164,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root .link,
+  .root .indexLink::before,
   .title {
     transition: none;
   }

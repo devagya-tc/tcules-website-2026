@@ -98,10 +98,10 @@ const linkLines = (item: ItemBlock | undefined) =>
  * every corpus page: the form sits directly above the questions (order.ts).
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
- * boxed logo wall · six situation cards, two up, type only · two case-and-quote diptychs, then a
- * lighter pair · six icon boxes · a run of four alternating photo banners, one reason each · a wall
- * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
- * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
+ * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
+ * diptychs, then a lighter pair · six icon boxes · a run of four alternating photo banners, one
+ * reason each · a wall of rated cards on tint · a photo banner · eight sector cards · the form panel
+ * on tint · the questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
 export function HomePage({ page, ratings, avatars, borrowedQuotes = [] }: HomePageProps) {
   return (
@@ -516,9 +516,7 @@ function WhyTcules({ page, b, ratings, avatars, borrowed }: BandProps) {
             form="beside"
             mediaSide={index % 2 === 0 ? 'end' : 'start'}
             id={first ? b.id : undefined}
-            bandHead={
-              first ? { heading: b.headingText, headingId: headingIdOf(b) } : undefined
-            }
+            bandHead={first ? { heading: b.headingText, headingId: headingIdOf(b) } : undefined}
             heading={item.headingText}
             headingAs="h3"
             headingId={`${b.id}-${slug}`}

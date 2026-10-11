@@ -1215,3 +1215,29 @@ specimen proves the pattern on the real words). The band is `data-band="C-router
 
 **Measured:** 814 at 1440 / 1470 / 1280; 934 at 1024 (h3 steps to 28 and the long titles wrap);
 1,099 at 768; 1,347 at 390. Down from 1,072 / 1,919. `fold:check /` no longer lists the band.
+
+### 20.2 Critic pass on round 4 (11 Oct 2026)
+
+Shot `/`, `/design/kit/gateway`, `/design/testimonial`, `/design/page-hero` and every pass-1 route
+(`/about`, `/services/product-design`, `/audits/design-to-code-audit`, `/expertise/healthtech`,
+`/case-studies`, the Benchmark case, the drift-checker tool, the CPQ article, the design-system term)
+at 1440 and 390: no overflow, no page errors. Home also read at 1024 and 1280.
+
+| Note | Cause | Fix | Scope |
+|---|---|---|---|
+| Keyboard focus on a router row: the ring ran through the title's first glyph and over the cue's underline | The index anchor has no inset (its copy stays flush with the heading), and the focus ring was drawn on the anchor's own box, while the hover ground reached 16 past it | The focus state raises the same ground as hover and rings the ground's edge, outside the reach, so the ring clears the copy by 16 on every side | Global (Gateway `index`) |
+| A faint seam inside the hover ground, at the row's corners | The ground was a background plus a spread box-shadow round a rounded box; the two anti-aliased edges met inside the painted area | The ground is one painted `::before`, inset by minus `--gwy-ground-reach`, behind the copy (`isolation`); hover, press and focus paint it, and the ring is its shadow | Global (Gateway `index`) |
+| Home's squint comment still listed "six situation cards, two up" | Stale after the router landed | Comment updated | Doc |
+
+**Held, and why.**
+- **The router's structure.** The four iterations in § 20.1 are the honest limit at the fold: a
+  three-part row (situation, where it leads, why) for six items costs about 65 a row, and the 638
+  inside the band's padding leaves no room for rules with a `text` inset (893) or a `gutter` seam
+  (854). Every other arrangement with the sentence visible runs taller. The title-led index is the
+  fold-fit answer. It is not a card set and does not repeat "What we do"'s 3 × 2 boxes.
+- **The hero's 29 past the fold** (§ 20, accepted there): only the bottom padding crosses; the
+  figures end at 763.
+- **The diptych at 1024–1439.** The quote panel runs to the case's last line, so the shorter quote
+  leaves an open field between the words and the speaker (the speaker is pinned to the foot). It is
+  anchored at both edges, which is the rule; a panel that stopped at the image's foot would cut the
+  speaker off from the quote. From 1440 the panel is 16:9 and matches the image exactly.
