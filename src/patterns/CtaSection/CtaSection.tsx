@@ -906,7 +906,7 @@ export function CtaSection(props: CtaSectionProps) {
        · the form takes the LARGER track, 7 of [5, 7] from 1024 (667 at 1470, the width the full set
          reads best at with lg fields), on a raised panel: a small surface of its own, one step off
          the band's ground (paper on the tint close, PANEL_SURFACE), at the 8 radius with a
-         `gutter` inset — the one bright, bounded object in the band;
+         `block` inset (the module says why not `gutter`) — the one bright, bounded object in the band;
        · the copy beside it steps down to the offer's h2 and is centred on the panel, the quieter
          supporting voice: what to send and why, never louder than the place to send it;
        · the submit is the band's one solid primary, in the panel (the caller's form).

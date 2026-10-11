@@ -221,11 +221,11 @@ export const PLACEHOLDER_SLOTS: Readonly<
   },
   '/expertise/healthtech#proof:curamcare': {
     src: '/placeholders/expertise-healthtech--proof--curamcare.svg',
-    width: 1280,
-    height: 1600,
+    width: 1600,
+    height: 900,
     kind: 'product shot',
     shows:
-      'CuramCare: a family member and a carer each seeing their own part of the same care arrangement, across the web platform and the two apps (frontmatter `healthtech_asset`; approved screen required). The frontmatter asks for one screen (`healthtech_asset`, CuramCare or Vovisto); if only one is approved it goes in the CuramCare slot and the Vovisto band drops its media.',
+      'CuramCare: a family member and a carer each seeing their own part of the same care arrangement, across the web platform and the two apps (frontmatter `healthtech_asset`; approved screen required). The frontmatter asks for one screen (`healthtech_asset`, CuramCare or Vovisto); if only one is approved it goes in the CuramCare slot and the Vovisto band drops its media. Home round 3 critic (11 Oct 2026): 16:9, not 4:5 — the slot renders in the featured-case BlockCard, whose one crop is 16:9, and a 4:5 panel cut to 16:9 lost its label mid-sentence.',
   },
   '/expertise/healthtech#proof:vovisto': {
     src: '/placeholders/expertise-healthtech--proof--vovisto.svg',

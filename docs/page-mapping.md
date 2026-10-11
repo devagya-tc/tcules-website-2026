@@ -1071,7 +1071,7 @@ matches the 16:9 banner and the 2560 × 1440 Clutch portfolio export, so one mas
 | 3 | Why section taller than a fold; one fold per part; all four with a quote; banners; no numbering | One band stacked four claim rows (1,595 at 1440) behind index numerals | A RUN of four Banner `beside` bands (kit I.3/I.4), photo end / start alternating, one reason each: Banner gained `bandHead` (the band's display h2 over the first split), `headingAs="h3"`, `support` (the quiet unboxed TestimonialCard under the lead) and `footer` (the closing link under the last). Numerals removed. "We can build what we design" takes Trishanya Raju's real quote from `/case-studies` through the content seam (`getBorrowedQuotes`, PLACEHOLDER, P39). Four 3:2 photo placeholders registered | Banner props **global**; the run **local to home** |
 | 4 | FAQ question/answer contrast | The question rested at neutral-800 and the answer, through Prose, at neutral-900: the answer was darker than the question | Question at full ink, fixed (`--acc-question-ink` 950 / white; `-hover` deleted); answer `--acc-answer-ink` one step quieter (neutral-700 on paper and tint); only the chevron moves on hover | **Global** (Accordion tokens) |
 | 5 | Testimonial card: sans, circular avatars, no initials | The card set the italic serif reading quote at 22 and an initials monogram | Quote in the sans (`--tsm-quote-text` → `--text-lead`; `-sm` → `--text-body`; `-panel` → `--text-lead-lg`); `TestimonialItem.avatar` renders a circular 48 (40 on `sm`) Media avatar; none renders nothing; monogram and its two inks deleted. Home: six of twelve testimonials carry a PLACEHOLDER kit portrait (`fixtures/testimonial-avatars.ts`, `getTestimonialAvatars`, P40) | **Global** (pattern); avatars data **local to home** |
-| 6 | Facts row into the hero | The record was its own tint band (~330) | PageHero `stats` (2–4 Stats at md, one row at every width, a `block` under the actions, grouped with the ask); home passes its three figures; the facts band is gone | Prop **global**; used on home |
+| 6 | Facts row into the hero | The record was its own tint band (~330) | PageHero `stats` (2–4 Stats at md, one row at every width, a `text` under the actions (critic: was `block`), grouped with the ask); home passes its three figures; the facts band is gone | Prop **global**; used on home |
 | 7 | Real logos | The wall typeset five names as wordmarks beside one file | The wall shows files only: Doodle, Eden AI (the one named PNG copied from the old repo to `public/clients/eden-ai.png`, density 0.23, drawn as a mask), then the in-house set — ten marks, 4 + 4 + a closing pair at 1440 (LogoGrid now closes a four-track row ending on two with two half-row cells), 2 × 5 at 390. Dealpath, Benchmark Gensuite, JoVE, Ringier registered as needed; P41 | LogoGrid closing pair **global**; the wall **local to home** |
 | 8 | The form feels secondary | The split close put the copy at h1 in the larger track and the form on the bare ground in the narrower one | CtaSection `split`: [5, 7] from 1024, the form in the 7 on a raised panel (nested surface one step off the band's ground — paper on tint — `--cta-panel-ground`, 8 radius, `block` inset), the copy at the offer's h2 centred beside it; corpus forms use `fieldScale="lg"` (Input `scale="lg"`, 48, lead-role value; body below 768) and the full-width submit; `caption` now prints the page's own "After sending" line instead of the form's own wording (P42) | **Global**: every split close on the site, all ten corpus pages |
 
@@ -1137,3 +1137,19 @@ home, so (a) or the drawings are the better first step. Say which, and (a) is a 
    table); 16:9 masters end that.
 5. **The diptych elsewhere?** It is home-only by your note. If service pages should share it, it is
    one prop per call site.
+
+### 19.6 Critic pass on round 3 (11 Oct 2026)
+
+Shots of all ten routes at 1440 and 390, a crop audit of every rendered image (natural ratio against
+its box), `fold:check /`. Note → cause → fix:
+
+| Note | Cause | Fix | Scope |
+|---|---|---|---|
+| Healthtech's CuramCare card cut its placeholder label mid-sentence | The register still drew the slot at 4:5 (its media-split days); it now renders in the featured-case BlockCard, whose one crop is 16:9 | Register row → 16:9, placeholder regenerated. The crop audit finds every card image at 1.78 on all ten pages; the only remaining card crops are the real case covers the register already lists | Register (global rule: a slot that renders in a card is 16:9) |
+| Home hero 5 past the fold at 1470 (762 + 73) | The ask-to-stats seam was `block` on top of each Stat's own hairline and `block` | `text` under the actions: the hairline is the divider. Hero 754 (+73 = 827) | **Global** (PageHero `stats`) |
+| Banner's own doc forbade two beside banners in sight; the run is exactly that | The placement rule predates the run | Rule amended: a run (one band in parts, `bandHead` first, `footer` last) is the exception | Doc |
+| CtaSection's comment said the panel inset is `gutter`; the module sets `block` | Stale comment | Comment corrected (the module's phone reason stands; no media query swaps the step) | Doc |
+
+Final home bands at 1440: hero 754 · logos 696 · what do you need next 1,072 · selected work 2,194 ·
+what we do 811 · why 755 / 637 / 666 / 730 · what clients say 1,088 · AI 637 · products 834 ·
+enquiry 635 · FAQ 844.

@@ -130,6 +130,12 @@ type BelowProps = BannerHeadProps & {
  * of them are still the same copy-beside-photo rectangle flipped, and the page reads as one shape
  * repeated (CLAUDE.md § Design quality). Separate them by a band of a different arrangement, or make
  * one of them `below`. The family specimen shows three in a row as a specimen set only.
+ *
+ * The one exception is a RUN (home round 3, 11 Oct 2026, owner: "each section should be one fold"):
+ * a band too long for a fold split into one beside banner per part, alternating `mediaSide`, under
+ * one `bandHead` on the first and one `footer` on the last. The run is one band in parts, not two
+ * bands that happen to match, so it is the band's arrangement rather than a repeated shape — and
+ * the bands either side of it still follow the rule.
  */
 type BesideProps = BannerHeadProps & {
   form: 'beside';

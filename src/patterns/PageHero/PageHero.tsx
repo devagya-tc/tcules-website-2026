@@ -384,7 +384,7 @@ type PageHeroBaseProps = {
   /**
    * The studio's record as figures, INSIDE the hero (owner, home round 3, 11 Oct 2026: "could the
    * facts/figures section be integrated into the hero so it doesn't take one entire section?").
-   * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `stack`
+   * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `text`
    * under the actions: as many tracks as figures, at every width, so three figures never orphan.
    * Two to four; more belong in a facts band. Records rather than nodes, so the hero owns the size,
    * the row and the seam. Absent renders no row and no seam.
@@ -878,13 +878,15 @@ export function PageHero({
       </Layout>
     );
 
-  /* The ask and the record are one group: the stats sit a `block` under the actions, because each
-     Stat opens on its own hairline with a `block` of air inside it, so the rule falls midway
-     between the button and the figures and the two read as the ask and the proof of it, not as
-     two blocks a `stack` apart (which also put the home hero 29 past the 830 fold). */
+  /* The ask and the record are one group: the stats sit a `text` under the actions, because each
+     Stat opens on its own hairline with a `block` of air inside it, so the hairline is the divider
+     and the two read as the ask and the proof of it, not as two blocks a `stack` apart (which put
+     the home hero 29 past the 830 fold). `text`, not `block` (home round 3 critic, 11 Oct 2026): at
+     `block` the home hero was still 5 past the fold at 1470 (762 + 73 nav); the hairline already
+     separates the figures from the button, so the extra 8 bought nothing the rule does not. */
   const askNode =
     statsNode && actionsNode ? (
-      <Layout rowGap="block" justifyItems={justify}>
+      <Layout rowGap="text" justifyItems={justify}>
         {actionsNode}
         {statsNode}
       </Layout>
