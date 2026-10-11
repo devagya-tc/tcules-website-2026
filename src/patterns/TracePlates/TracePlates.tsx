@@ -26,6 +26,13 @@ export type TraceStage = {
 export type TracePlatesProps = {
   /** Two to six stages, in order. */
   stages: readonly TraceStage[];
+  /**
+   * `across` (default): the plates in a row, the trace running left to right through each action.
+   * `down`: one row per stage, the plate beside its words, the trace running down through each
+   * action from plate to plate (owner, 11 Oct 2026: "lets try putting the trace in a vertical
+   * layout").
+   */
+  orientation?: 'across' | 'down';
 };
 
 const W = 320;
@@ -33,8 +40,8 @@ const H = 180;
 /* The plate shows the middle of the drawing, zoomed so the screen fills it: a 240 × 135 window
    (still 16:9) from (40, 22.5). The dot field runs under all of it. */
 const VB = { x: 40, y: 22.5, w: 240, h: 135 };
-/* The action's centre line: the trace runs through it on every plate, and the connector between
-   plates sits at the same height (TracePlates.module.css reads it as a share of the plate). */
+/* The action sits at x 96–160, y 106–126. The trace (TracePlates.module.css) runs through its centre
+   (128, 116): across at y 116, down at x 128, read there as shares of the plate. */
 const TRACE_Y = 116;
 
 /** The screen's frame and its two lines of copy, shared by the scenes that show the screen. */
@@ -58,7 +65,7 @@ function Frame({ chrome = false }: { chrome?: boolean }) {
   );
 }
 
-function Scene({ scene, uid, first, last }: { scene: TraceScene; uid: string; first: boolean; last: boolean }) {
+function Scene({ scene, uid }: { scene: TraceScene; uid: string }) {
   const field = `${uid}-field`;
   return (
     <svg
@@ -73,13 +80,6 @@ function Scene({ scene, uid, first, last }: { scene: TraceScene; uid: string; fi
         </pattern>
       </defs>
       <rect x="0" y="0" width={W} height={H} fill={`url(#${field})`} />
-
-      {/* The trace: in from the plate's start edge to the screen, out from the screen to its end.
-          It starts on an open node on the first plate and lands on a filled one on the last. */}
-      <path className={styles.trace} d={`M${first ? 58 : VB.x},${TRACE_Y} L80,${TRACE_Y}`} />
-      <path className={styles.trace} d={`M240,${TRACE_Y} L${last ? 262 : VB.x + VB.w},${TRACE_Y}`} />
-      {first ? <circle className={styles.nodeOpen} cx="52" cy={TRACE_Y} r="5" /> : null}
-      {last ? <circle className={styles.nodeShut} cx="268" cy={TRACE_Y} r="5" /> : null}
 
       {scene === 'design' ? (
         <>
@@ -131,6 +131,12 @@ function Scene({ scene, uid, first, last }: { scene: TraceScene; uid: string; fi
   );
 }
 
+/** The trace's end node on the first and last plates: open where it starts, filled where it lands. */
+function End({ index, last }: { index: number; last: number }) {
+  if (index !== 0 && index !== last) return null;
+  return <span className={styles.node} data-end={index === 0 ? 'first' : 'last'} aria-hidden="true" />;
+}
+
 /**
  * TracePlates — one screen followed from the approved design to what users actually see (the
  * design-to-code audit's "What we trace", owner 11 Oct 2026).
@@ -141,24 +147,51 @@ function Scene({ scene, uid, first, last }: { scene: TraceScene; uid: string; fi
  * every hand-over, so each stage's plate draws that same screen as it is at that stage — clean, then
  * specified with a gap, then as code, then running and loading, then accepted — and one blue trace
  * runs through its action on every plate and across the gutters between them, starting on an open
- * node and landing on a filled one. The drawings are what make the stages legible before a word is
+ * node and landing on a filled one. The trace is drawn in CSS, not in the drawing, so every segment
+ * — inside a plate and across a gutter — has the same dash at every plate width. The drawings are what make the stages legible before a word is
  * read; the words under each say what we look at there.
  *
  * Five across from 1024 (the connector drawn across each gutter at the action's height), three from
  * 768, two below. Plates are 16:9 on the dot field, in EngagementOptions' drawing language.
  */
-export function TracePlates({ stages }: TracePlatesProps) {
+export function TracePlates({ stages, orientation = 'across' }: TracePlatesProps) {
   const uid = useId().replace(/:/g, '');
   const shown = stages.filter((stage) => stage.title.trim().length > 0);
   const across = Math.min(Math.max(shown.length, 2), 6);
-  const last = shown.length - 1;
+  if (orientation === 'down') {
+    return (
+      <Layout as="ol" rowGap="stack" className={styles.down}>
+        {shown.map((stage, index) => (
+          <li key={stage.title} className={styles.stage}>
+            <Layout columns={{ base: 1, md: [2, 3] }} colGap="gutter" rowGap="block" align="center">
+              <div className={styles.plate}>
+                <Scene scene={stage.scene} uid={`${uid}-${index}`} />
+                <End index={index} last={shown.length - 1} />
+              </div>
+              <Layout rowGap="tight">
+                <h3 className={styles.title}>{stage.title}</h3>
+                {stage.body ? <p className={styles.body}>{stage.body}</p> : null}
+              </Layout>
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+    );
+  }
   return (
-    <Layout as="ol" columns={{ base: 2, md: Math.min(3, across), lg: across }} colGap="gutter" rowGap="stack">
+    <Layout
+      as="ol"
+      columns={{ base: 2, md: Math.min(3, across), lg: across }}
+      colGap="gutter"
+      rowGap="stack"
+      className={styles.across}
+    >
       {shown.map((stage, index) => (
         <li key={stage.title} className={styles.stage}>
           <Layout rowGap="block">
             <div className={styles.plate}>
-              <Scene scene={stage.scene} uid={`${uid}-${index}`} first={index === 0} last={index === last} />
+              <Scene scene={stage.scene} uid={`${uid}-${index}`} />
+              <End index={index} last={shown.length - 1} />
             </div>
             <Layout rowGap="tight">
               <h3 className={styles.title}>{stage.title}</h3>

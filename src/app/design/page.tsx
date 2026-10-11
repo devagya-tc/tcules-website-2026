@@ -225,7 +225,7 @@ const SPECIMENS = [
       {
         href: '/design/trace-plates',
         name: 'TracePlates',
-        note: 'one screen followed through every hand-over — a drawn plate per stage (design, handoff, code, running product, sign-off) and one dashed trace through them; three stages, paper and tint',
+        note: 'one screen followed through every hand-over — a drawn plate per stage (design, handoff, code, running product, sign-off) and one dashed trace through them; across and down, three stages, paper and tint',
       },
       {
         href: '/design/callout',

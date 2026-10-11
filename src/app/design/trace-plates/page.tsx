@@ -37,10 +37,19 @@ export default function TracePlatesSpecimen() {
       <Variation
         id="five"
         title="1 · Five scenes — the shape"
-        note="Five across from 1024, the connector crossing each gutter at the action's height; three from 768; two below. Plates 16:9 on the dot field."
+        note="Across: five from 1024, the trace crossing each gutter at the action's height in the same dash it has inside the plates; three from 768; two below. Plates 16:9 on the dot field."
       />
       <Section>
         <TracePlates stages={FIVE} />
+      </Section>
+
+      <Variation
+        id="down"
+        title="1b · Down — the audit's &ldquo;What we trace&rdquo;"
+        note="One row per stage, the plate beside its words (2 : 3 from 768), the trace running down through each action from plate to plate across the row seams, the end nodes on the first plate's top edge and the last plate's bottom edge. Below 768 the words go under each plate and the seams carry no trace."
+      />
+      <Section>
+        <TracePlates stages={FIVE} orientation="down" />
       </Section>
 
       <Variation id="three" title="2 · Three stages" note="Any order of scenes; three take three tracks." />

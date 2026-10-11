@@ -23,6 +23,7 @@ import {
   type BlockCardSetItem,
   type EngagementScope,
   type TraceScene,
+  type TraceStage,
 } from '@/patterns';
 import { caseStudyLink } from '@/lib/case-links';
 import { corpusImage } from '@/lib/corpus-images';
@@ -155,27 +156,26 @@ function sceneOf(title: string): TraceScene | undefined {
   return undefined;
 }
 
-/**
- * A path of stages. Where every stage names a point in one screen's life (design, handoff, code,
- * the running product, sign-off) the stages are drawn as TracePlates — the screen itself at each
- * point, one trace through it (owner, 11 Oct 2026: the beads "said nothing"); otherwise Thread.
- */
-function ThreadOrTrace({ items }: { items: readonly InlineRun[][] }) {
-  const stages = items.map((item) => {
+/** A list item as a stage: its bold lead as the title, the rest as the body. */
+function stagesOf(items: readonly InlineRun[][]) {
+  return items.map((item) => {
     const split = leadOf({ type: 'paragraph', runs: item });
     return split
       ? { title: labelTitle(split.label), body: plain(split.body) }
       : { title: plain(item) };
   });
+}
+
+/**
+ * The stages as a trace, when every stage names a point in one screen's life (design, handoff,
+ * code, the running product, sign-off); otherwise undefined and the path keeps Thread's beads.
+ */
+function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
+  const stages = stagesOf(items);
   const scenes = stages.map((stage) => sceneOf(stage.title));
-  if (scenes.every(Boolean)) {
-    return (
-      <TracePlates
-        stages={stages.map((stage, index) => ({ ...stage, scene: scenes[index] as TraceScene }))}
-      />
-    );
-  }
-  return <Thread align="center" stages={stages} />;
+  return scenes.every(Boolean)
+    ? stages.map((stage, index) => ({ ...stage, scene: scenes[index] as TraceScene }))
+    : undefined;
 }
 
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
@@ -321,24 +321,37 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const lead = band.blocks.find((b) => b.type === 'paragraph');
       const leadRuns = lead?.type === 'paragraph' ? lead.runs : [];
       const closing = trailingAfterList(band);
+      const trace = list ? traceOf(list.items) : undefined;
+      const leadText = hasLink(leadRuns) ? undefined : plain(leadRuns);
+      const leadLinked = hasLink(leadRuns) ? (
+        <ContentSectionText>
+          <p>{renderInline(leadRuns)}</p>
+        </ContentSectionText>
+      ) : null;
+      const after = closing.map((runs, index) => (
+        <ContentSectionText key={index}>
+          <p>{renderInline(runs)}</p>
+        </ContentSectionText>
+      ));
+      /* A trace — one screen followed through every hand-over — runs DOWN beside the head: one row
+         per stage, the screen drawn at that stage beside what we look at there, the trace running
+         down through it (TracePlates `down`; owner, 11 Oct 2026). */
+      if (trace) {
+        return (
+          <ContentSection {...head(band)} data-band="E" arrangement="beside" lead={leadText}>
+            <Layout rowGap="stack">
+              {leadLinked}
+              <TracePlates orientation="down" stages={trace} />
+              {after}
+            </Layout>
+          </ContentSection>
+        );
+      }
       return (
-        <ContentSection
-          {...head(band)}
-          data-band="E"
-          align="center"
-          lead={hasLink(leadRuns) ? undefined : plain(leadRuns)}
-        >
-          {hasLink(leadRuns) ? (
-            <ContentSectionText>
-              <p>{renderInline(leadRuns)}</p>
-            </ContentSectionText>
-          ) : null}
-          {list ? <ThreadOrTrace items={list.items} /> : null}
-          {closing.map((runs, index) => (
-            <ContentSectionText key={index}>
-              <p>{renderInline(runs)}</p>
-            </ContentSectionText>
-          ))}
+        <ContentSection {...head(band)} data-band="E" align="center" lead={leadText}>
+          {leadLinked}
+          {list ? <Thread align="center" stages={stagesOf(list.items)} /> : null}
+          {after}
         </ContentSection>
       );
     }

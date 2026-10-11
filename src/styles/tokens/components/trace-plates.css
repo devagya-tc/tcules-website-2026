@@ -13,21 +13,36 @@
 
 :root {
   --trp-plate-radius: var(--radius-8);
-  /* The action's centre as a share of the plate's height: (116 − 22.5) of the 135-high window the
-     plate shows. Where the connector crosses each gutter. A ratio of the drawing's own
-     coordinates, not a distance. */
-  --trp-trace-share: 69.259%;
+  /* Where the screen sits in the plate, as shares of the plate's box (the drawing's 240 × 135
+     window from (40, 22.5)): ratios of the drawing's own coordinates, not distances. */
+  --trp-frame-start: 16.667%; /* frame x 80 */
+  --trp-frame-end: 83.333%; /* frame x 240 */
+  --trp-frame-top: 8.519%; /* frame y 34 */
+  --trp-frame-bottom: 91.481%; /* frame y 146 */
+  --trp-trace-x: 36.667%; /* the action's centre, x 128 */
+  --trp-trace-y: 69.259%; /* the action's centre, y 116 */
+  /* The trace's dash: 6 on, 4 off, in px at every width, inside the plates and across the seams. */
+  --trp-dash-on: var(--space-6);
+  --trp-dash-period: var(--space-10);
+  /* The end nodes: a 12 ring, set a node's reach in from the plate's edge. Optical sizes. */
+  --trp-node-size: var(--space-12);
+  --trp-node-reach: var(--space-8);
   --trp-trace-width: var(--border-width-2);
   --trp-frame-width: var(--border-width-hairline);
   --trp-mark-width: var(--border-width-hairline-deck);
   /* A line of copy in the drawing: a thick rounded stroke, read as text at a glance. */
   --trp-copy-width: var(--border-width-3);
-  /* The dash, in the drawing's own units (SVG user space). The gutter connector is a CSS dashed border. */
+  /* The unspecified state's dashed box, in the drawing's own units (SVG user space). */
   --trp-dash: 5 4;
   /* Each stage has a fifth of the column from 1024: the card-title step and the small body. */
   --trp-title-text: var(--text-h5);
   --trp-title-tracking: var(--text-h5-tracking);
   --trp-body-text: var(--text-body-sm);
+  /* `down`: each stage has a row's width for its words — h4 (two steps under the band's h2) and the
+     body role. */
+  --trp-title-text-down: var(--text-h4);
+  --trp-title-tracking-down: var(--text-h4-tracking);
+  --trp-body-text-down: var(--text-body);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
