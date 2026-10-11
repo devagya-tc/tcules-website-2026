@@ -167,10 +167,11 @@ export function EngagementOptions({
           {lead ? <p className={styles.lead}>{lead}</p> : null}
         </Layout>
         {arrangement === 'grid' ? (
-          /* Image cards, two by two: a borderless tile each (the drawing's plate is the image, the
+          /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
+             column below: a borderless tile each (the drawing's plate is the image, the
              name and its words under it), 32 across and a `column` down the set — the row seam of
              every borderless card set. */
-          <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+          <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
             {shown.map((option, index) => (
               <li key={option.title}>
                 <Layout rowGap="block">
