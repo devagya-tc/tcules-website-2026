@@ -54,15 +54,27 @@
   color: var(--tsm-quote-ink-quiet);
 }
 
-/* The diptych's panel (TestimonialBeside `diptych`): the card's quiet ground at the card ratio, so
-   its edges are the case cover's edges. The ratio is a floor — a grid item with an aspect ratio
-   grows past it when its content is taller, so a long quote never clips. The `gutter` inset and the
-   8 radius are the boxed card's. */
-.panel {
-  aspect-ratio: var(--tsm-panel-ratio);
-  padding: var(--gap-gutter);
-  background: var(--tsm-ground);
-  border-radius: var(--tsm-radius);
+/* The diptych's panel (TestimonialBeside `diptych`): a boxed card (`.box` gives the ground, the
+   `gutter` inset and the 8 radius) whose edges are set by the case beside it. The pair's row is
+   top-aligned, so the panel's top is always the cover's top; its foot depends on the width.
+     1024–1439  the panel stretches to the row, its foot the case's last line: stars, words and the
+                speaker do not fit a 16:9 of these tracks (a 464 track is a 261 panel against ~350
+                of content), and a panel past the cover's foot met nothing.
+     from 1440  the card ratio, so its foot is the cover's foot. The ratio is a floor: a grid item
+                with an aspect ratio grows past it when its content is taller, so a long quote
+                never clips.
+   Below 1024 the pair stacks and the panel takes its content's height. Each query swaps a sizing
+   rule, never a distance. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .panel {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 1440px) {
+  .panel {
+    aspect-ratio: var(--tsm-panel-ratio);
+  }
 }
 
 /* The panel's words at the lead-lg role (20): the panel is as large as the cover beside it, so the
@@ -126,14 +138,11 @@
   color: var(--tsm-role-ink);
 }
 
-/* Unboxed (a supporting quote on the surface itself, or the diptych's speaker under its panel):
-   the -quiet inks, set for the surface. */
-.card:not(.box) .name,
-.nameOpen {
+/* Unboxed (a supporting quote on the surface itself): the -quiet inks, set for the surface. */
+.card:not(.box) .name {
   color: var(--tsm-name-ink-quiet);
 }
 
-.card:not(.box) .role,
-.roleOpen {
+.card:not(.box) .role {
   color: var(--tsm-role-ink-quiet);
 }

@@ -743,7 +743,7 @@ export default async function PageHeroSpecimenPage() {
       />
       <Note
         title="5b · stats — the record as figures, inside the hero"
-        note="Owner, home round 3 (11 Oct 2026): the facts band under the home hero moved INTO the hero. Two to four Stats at the md step, one row at every width (three ~87 tracks at 390), a block under the actions: each Stat's own hairline and blue mark divides the record from the ask. It replaced a tint band of its own (~330 at 1440)."
+        note="Owner, home round 3 (11 Oct 2026): the facts band under the home hero moved INTO the hero. Two to four Stats at the md step, one row at every width (three ~87 tracks at 390), their own block a stack (48) under the actions (round 4: at 16 they read as part of the button's group), each opening on its hairline and blue mark. It replaced a tint band of its own (~330 at 1440)."
       />
       <PageHero
         title={SHORT_TITLE}

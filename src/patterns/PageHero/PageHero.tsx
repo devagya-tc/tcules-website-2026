@@ -877,22 +877,11 @@ export function PageHero({
         ))}
       </Layout>
     );
-
-  /* The ask and the record are one group: the stats sit a `text` under the actions, because each
-     Stat opens on its own hairline with a `block` of air inside it, so the hairline is the divider
-     and the two read as the ask and the proof of it, not as two blocks a `stack` apart (which put
-     the home hero 29 past the 830 fold). `text`, not `block` (home round 3 critic, 11 Oct 2026): at
-     `block` the home hero was still 5 past the fold at 1470 (762 + 73 nav); the hairline already
-     separates the figures from the button, so the extra 8 bought nothing the rule does not. */
-  const askNode =
-    statsNode && actionsNode ? (
-      <Layout rowGap="text" justifyItems={justify}>
-        {actionsNode}
-        {statsNode}
-      </Layout>
-    ) : (
-      (actionsNode ?? statsNode)
-    );
+  /* The ask and the record are two blocks, a `stack` apart in the stack below (owner, home round 4,
+     11 Oct 2026: the figures sat "too close" to the button). Round 3 grouped them a `text` apart on
+     the argument that each Stat's own hairline divides them; at 16 the row of figures read as part of
+     the button's group. The step is chosen by what it separates, a block from a block, not by the
+     fold: the home hero now ends past the 1470 fold (page-mapping § 20). */
 
   /* ── media · below the copy, beside it, or under a centred or display head ─────────────────
      An image renders through Media, which owns the edge (by kind), the srcset and the loading;
@@ -997,7 +986,8 @@ export function PageHero({
       </Layout>
       {bylineNode}
       {extrasNode}
-      {askNode}
+      {actionsNode}
+      {statsNode}
       {tagsNode}
     </Layout>
   );
@@ -1036,10 +1026,17 @@ export function PageHero({
             {titleNode}
             {copyNode}
           </Layout>
-          <Layout rowGap="block">
-            {bylineNode}
-            {extrasNode}
-            {askNode}
+          {/* The figures are their own block, a `stack` under the ask (home round 4), as in the
+              split stack below; the byline, extras, actions and tags keep this column's `block`. */}
+          <Layout rowGap="stack">
+            {bylineNode || extrasNode || actionsNode ? (
+              <Layout rowGap="block">
+                {bylineNode}
+                {extrasNode}
+                {actionsNode}
+              </Layout>
+            ) : null}
+            {statsNode}
             {tagsNode}
           </Layout>
         </Layout>

@@ -194,7 +194,7 @@ export default function TestimonialSpecimen() {
           <h2>5 · Beside its case</h2>
           <Specimen
             title={'TestimonialBeside · arrangement="diptych"'}
-            note="home's selected work (round 3): the case and a quiet panel at the cover's own 16:9, two equal tracks, top-aligned, so the panel shares the cover's top and foot; the speaker sits under the panel where the case title sits under its cover. Attached by its edges, never inside the case."
+            note="home's selected work (rounds 3–4): the case and a quiet panel, two equal tracks, top-aligned. Stars at the panel's head, the words under them, the speaker and avatar pinned to its foot on the boxed card's hairline (round 4: the avatar inside the card). From 1440 the panel is the cover's 16:9, sharing its top and foot; at 1024–1439 the content does not fit that 16:9, so the panel stretches to the row and its foot is the case's last line. Attached by its edges, never inside the case."
           >
             <TestimonialBeside work={<Work />} item={A} arrangement="diptych" />
           </Specimen>
@@ -203,6 +203,12 @@ export default function TestimonialSpecimen() {
             note="the panel on the start from 1024, the second row of a run; a speaker with no photograph has none"
           >
             <TestimonialBeside work={<Work />} item={D} arrangement="diptych" reverse />
+          </Specimen>
+          <Specimen
+            title={'TestimonialBeside · diptych · long quote'}
+            note="stress: from 1440 a quote too long for the 16:9 grows the panel past the cover's foot rather than clipping; at 1024–1439 it still ends on the row's foot"
+          >
+            <TestimonialBeside work={<Work />} item={B} arrangement="diptych" />
           </Specimen>
           <Specimen
             title="TestimonialBeside · card"

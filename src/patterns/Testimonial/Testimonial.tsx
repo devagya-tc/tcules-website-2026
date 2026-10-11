@@ -338,13 +338,19 @@ export function TestimonialWall({ items, columns, stagger = false }: Testimonial
  *            expertise and case-index pages' featured case (home round 2).
  *   diptych  the quote as the work's TWIN (owner, home round 3, 11 Oct 2026: the card beside the case
  *            "feels randomly floaty"). Two equal tracks a `gutter` apart, top-aligned: the case card
- *            in one, and in the other a quiet panel at the card's own 16:9 — so its top and foot
- *            are the cover's top and foot at every width the two sit side by side — holding the
- *            stars and the words, with the speaker under the panel where the case's title sits under
- *            its cover. The two read as one object in two panels, the quote attached to its case by
- *            shared edges, never placed inside it. A long quote grows the panel past the cover's foot
- *            rather than clipping. Home's selected work: the case + quote pair is a HOME shape, not
- *            the default (page-mapping § 19).
+ *            in one, and in the other a quiet panel holding the stars, the words and, pinned to its
+ *            foot, the speaker with their avatar (owner, home round 4: "avatar inside the card
+ *            please"). The two read as one object in two panels, the quote attached to its case by
+ *            shared edges, never placed inside it. The panel's edges, by width:
+ *              from 1440  the cover's own 16:9, so its top and foot are the cover's top and foot. A
+ *                         quote too long for that grows the panel rather than clipping it.
+ *              1024–1439  the tracks are too narrow for stars, words and speaker inside a 16:9
+ *                         (a 464 track is a 261 panel; the content is ~350), so the panel stretches
+ *                         to the ROW: its top is the cover's top and its foot the case's last line.
+ *                         Aligned to the row rather than overflowing the cover.
+ *              below 1024 stacked under the case at its content's height.
+ *            Home's selected work: the case + quote pair is a HOME shape, not the default
+ *            (page-mapping § 19).
  */
 export type TestimonialBesideArrangement = 'card' | 'diptych';
 
@@ -390,32 +396,36 @@ export function TestimonialBeside({
         className={styles.beside}
       >
         {work}
-        {/* The figure: the panel (stars, then the words pinned to its foot), the speaker a `block`
-            under it — the case's cover-to-title seam, so the speaker and the case title share a
-            line. */}
-        <Layout as="figure" rowGap="block" className={styles.card}>
-          <Layout rowGap="block" pinLast className={styles.panel}>
-            {typeof item.rating === 'number' ? (
-              <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
-            ) : null}
-            <blockquote className={cx(styles.quote, styles.quotePanel)}>
-              <Prose
-                html={bindShortWords(curlQuotes(item.quoteHtml))}
-                className={styles.quoteProse}
-              />
-            </blockquote>
-          </Layout>
+        {/* The figure IS the panel (owner, home round 4, 11 Oct 2026: "avatar inside the card
+            please"): the stars at its head, the words under them, and the speaker pinned to its
+            foot on the boxed card's hairline, so the person closes the panel as on every other
+            boxed card. */}
+        <Layout
+          as="figure"
+          rowGap="block"
+          pinLast
+          className={cx(styles.card, styles.box, styles.panel)}
+        >
+          {typeof item.rating === 'number' ? (
+            <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
+          ) : null}
+          <blockquote className={cx(styles.quote, styles.quotePanel)}>
+            <Prose
+              html={bindShortWords(curlQuotes(item.quoteHtml))}
+              className={styles.quoteProse}
+            />
+          </blockquote>
           <Cluster
             as="figcaption"
             nowrap
             colGap="text"
             align="center"
-            className={styles.attribution}
+            className={cx(styles.attribution, styles.attributionRuled)}
           >
             {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
             <Layout rowGap="inline" className={styles.who}>
-              <span className={cx(styles.name, styles.nameOpen)}>{item.name}</span>
-              <span className={cx(styles.role, styles.roleOpen)}>{role}</span>
+              <span className={styles.name}>{item.name}</span>
+              <span className={styles.role}>{role}</span>
             </Layout>
           </Cluster>
         </Layout>

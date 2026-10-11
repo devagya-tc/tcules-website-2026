@@ -42,7 +42,7 @@
   --tsm-avatar-size-md: 48px;
   --tsm-avatar-size-sm: 40px;
   --tsm-avatar-radius: var(--radius-full);
-  /* The diptych's panel: the card ratio, so its edges are the case cover's. */
+  /* The diptych's panel from 1440: the card ratio, so its edges are the case cover's. */
   --tsm-panel-ratio: var(--ratio-standard);
 }
 

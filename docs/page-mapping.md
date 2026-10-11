@@ -1153,3 +1153,16 @@ its box), `fold:check /`. Note → cause → fix:
 Final home bands at 1440: hero 754 · logos 696 · what do you need next 1,072 · selected work 2,194 ·
 what we do 811 · why 755 / 637 / 666 / 730 · what clients say 1,088 · AI 637 · products 834 ·
 enquiry 635 · FAQ 844.
+
+## 20 · Home round 4 (owner review, 11 Oct 2026)
+
+| Note | Cause | Fix | Scope |
+|---|---|---|---|
+| The figures are "too close" to "Start a conversation" | Round 3's critic grouped the actions and the stats a `text` (16) apart to save fold, so the record read as part of the button's group | The stats are their own block in PageHero's stack, a `stack` (48) under the actions; in the display arrangement the ask group nests so the figures still sit a `stack` under it | Global (PageHero `stats`) |
+| "Avatar inside the card please" (selected work) | The diptych set its speaker under the panel, mirroring the case title under its cover | The panel is now the figure: stars at its head, the words, and the speaker with avatar pinned to its foot on the boxed card's hairline. From 1440 it keeps the cover's 16:9 (content fits: 340 panel); at 1024–1439 the content (~350) cannot fit a 16:9 of those tracks (261–333), so the panel stretches to the row's foot instead of growing past the cover | Global (TestimonialBeside `diptych`; the boxed TestimonialCard already held its speaker inside) |
+
+Fold: the home hero is 786 at 1440 and 1470, so 859 with the 73 nav, 29 past the 830 fold. Only the
+band's bottom padding crosses it: the figures' labels end at 763. Every other way to recover 29
+inside the hero was either a global change to approved heroes (the lede-to-action `stack`) or a
+demotion of the claim (a smaller lede or figures), so the overshoot is accepted and reported, not
+hidden by an exemption.

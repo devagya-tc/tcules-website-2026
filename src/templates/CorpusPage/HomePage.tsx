@@ -324,9 +324,10 @@ const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
  *   1. The two cases whose clients spoke (Doodle, Eden AI) each take a featured row, now a DIPTYCH
  *      (owner, home round 3, 11 Oct 2026: the quote card beside the case "feels randomly floaty"):
  *      the case card in one half — its 16:9 cover, the title, its paragraph and its link — and in
- *      the other half the client's rated words on a quiet panel cut to the same 16:9, top-aligned,
- *      so the panel's top and foot are the cover's top and foot; the speaker sits under the panel
- *      where the case title sits under the cover. Attached by shared edges, never embedded ("if a
+ *      the other half the client's rated words on a quiet panel, top-aligned, the speaker and their
+ *      avatar pinned inside its foot (round 4: "avatar inside the card please"). From 1440 the panel
+ *      is the cover's 16:9, so its top and foot are the cover's; at 1024–1439 it stretches to the
+ *      row (TestimonialBeside states why). Attached by shared edges, never embedded ("if a
  *      quote is embedded in the case it might as well be in the testimonial section"). The second
  *      row mirrors the first.
  *   2. The cases without a quote (Dealpath, Benchmark Gensuite) follow as a lighter pair, two across,
