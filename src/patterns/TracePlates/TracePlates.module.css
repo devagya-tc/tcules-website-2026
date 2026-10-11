@@ -1,0 +1,141 @@
+/* TracePlates — the plates, their drawings, the trace and its connectors.
+
+   Layout owns every seam. Every value is a --trp-* token in tokens/components/trace-plates.css.
+   Strokes are non-scaling, so a line keeps one weight at every plate width. */
+
+.stage {
+  min-inline-size: 0;
+}
+
+/* The plate: the drawing's ground, 16:9 (the drawing's own viewBox), the photograph radius. It is
+   the positioning context for the connector into the next plate. */
+.plate {
+  position: relative;
+  background-color: var(--trp-plate-ground);
+  border-radius: var(--trp-plate-radius);
+}
+
+/* From 1024 the stages sit in one row and the trace crosses each gutter at the action's height: a
+   dashed segment from this plate's end edge to the next plate's start edge. --trp-trace-share is
+   the action's centre as a share of the plate's height (116 of 180), so it lands on the drawn line
+   at every width. */
+@media (min-width: 1024px) {
+  .stage:not(:last-child) .plate::after {
+    content: '';
+    position: absolute;
+    inset-block-start: calc(var(--trp-trace-share) - var(--trp-trace-width) / 2);
+    inset-inline-start: 100%;
+    inline-size: var(--gap-gutter);
+    border-block-start: var(--trp-trace-width) dashed var(--trp-accent);
+  }
+}
+
+.drawing {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.field {
+  fill: var(--trp-field-ink);
+}
+
+.frame {
+  fill: var(--trp-frame-fill);
+  stroke: var(--trp-frame-ink);
+  stroke-width: var(--trp-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.rule {
+  fill: none;
+  stroke: var(--trp-frame-ink);
+  stroke-width: var(--trp-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.dot {
+  fill: var(--trp-copy-ink);
+}
+
+.copy {
+  fill: none;
+  stroke: var(--trp-copy-ink);
+  stroke-width: var(--trp-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.action {
+  fill: var(--trp-accent);
+}
+
+.actionOpen {
+  fill: var(--trp-frame-fill);
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-mark-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.token {
+  fill: none;
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.mark,
+.tick {
+  fill: none;
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-mark-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.tick {
+  stroke-width: var(--trp-trace-width);
+}
+
+/* A state nobody specified: dashed, in the frame's neutral, empty. */
+.gap {
+  fill: none;
+  stroke: var(--trp-gap-ink);
+  stroke-width: var(--trp-mark-width);
+  stroke-dasharray: var(--trp-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.trace {
+  fill: none;
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-trace-width);
+  stroke-dasharray: var(--trp-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.nodeOpen {
+  fill: var(--trp-plate-ground);
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-trace-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.nodeShut {
+  fill: var(--trp-accent);
+}
+
+.title {
+  font: var(--trp-title-text);
+  letter-spacing: var(--trp-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--trp-title-ink);
+}
+
+.body {
+  font: var(--trp-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--trp-body-ink);
+}

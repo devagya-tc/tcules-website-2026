@@ -383,3 +383,7 @@ export {
   type EngagementOptionsProps,
   type EngagementScope,
 } from './EngagementOptions';
+
+/* TracePlates — one screen followed from the approved design to what users see, a drawn plate per
+   stage and one trace through them (the design-to-code audit's "What we trace", 11 Oct 2026). */
+export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } from './TracePlates';

@@ -18,9 +18,11 @@ import {
   TestimonialBeside,
   TestimonialCard,
   Thread,
+  TracePlates,
   VoiceLedger,
   type BlockCardSetItem,
   type EngagementScope,
+  type TraceScene,
 } from '@/patterns';
 import { caseStudyLink } from '@/lib/case-links';
 import { corpusImage } from '@/lib/corpus-images';
@@ -137,6 +139,43 @@ function scopeOf(title: string): EngagementScope | undefined {
   if (/\b(area|whole|new product)\b/.test(name)) return 'area';
   if (/\b(workflow|feature)\b/.test(name)) return 'feature';
   return undefined;
+}
+
+/**
+ * Which plate a traced stage draws, read from the stage's own name (TracePlates draws only what the
+ * name says). A thread with any stage none of these fit keeps Thread's beads.
+ */
+function sceneOf(title: string): TraceScene | undefined {
+  const name = title.toLowerCase();
+  if (/\bsign-?off\b|\baccept/.test(name)) return 'signoff';
+  if (/\bhand-?off\b|\bspec/.test(name)) return 'handoff';
+  if (/\brunning\b|\blive\b|\bproduct\b/.test(name)) return 'product';
+  if (/\bcode\b|\bbuild\b/.test(name)) return 'code';
+  if (/\bdesign\b/.test(name)) return 'design';
+  return undefined;
+}
+
+/**
+ * A path of stages. Where every stage names a point in one screen's life (design, handoff, code,
+ * the running product, sign-off) the stages are drawn as TracePlates — the screen itself at each
+ * point, one trace through it (owner, 11 Oct 2026: the beads "said nothing"); otherwise Thread.
+ */
+function ThreadOrTrace({ items }: { items: readonly InlineRun[][] }) {
+  const stages = items.map((item) => {
+    const split = leadOf({ type: 'paragraph', runs: item });
+    return split
+      ? { title: labelTitle(split.label), body: plain(split.body) }
+      : { title: plain(item) };
+  });
+  const scenes = stages.map((stage) => sceneOf(stage.title));
+  if (scenes.every(Boolean)) {
+    return (
+      <TracePlates
+        stages={stages.map((stage, index) => ({ ...stage, scene: scenes[index] as TraceScene }))}
+      />
+    );
+  }
+  return <Thread align="center" stages={stages} />;
 }
 
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
@@ -294,17 +333,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               <p>{renderInline(leadRuns)}</p>
             </ContentSectionText>
           ) : null}
-          {list ? (
-            <Thread
-              align="center"
-              stages={list.items.map((item) => {
-                const split = leadOf({ type: 'paragraph', runs: item });
-                return split
-                  ? { title: labelTitle(split.label), body: plain(split.body) }
-                  : { title: plain(item) };
-              })}
-            />
-          ) : null}
+          {list ? <ThreadOrTrace items={list.items} /> : null}
           {closing.map((runs, index) => (
             <ContentSectionText key={index}>
               <p>{renderInline(runs)}</p>

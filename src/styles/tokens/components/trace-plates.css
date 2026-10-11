@@ -1,0 +1,84 @@
+/* ══ Component layer — TracePlates ═══════════════════════════════════════════════
+   Tier 2. One screen followed from the approved design to what users see (the design-to-code
+   audit's "What we trace", 11 Oct 2026): a 16:9 plate per stage drawing that screen at that stage,
+   one blue dashed trace through its action on every plate and across the gutters.
+
+   Naming: --trp-{part}-{role}
+     parts  plate · field · frame · copy · accent · gap · trace · mark · title · body
+     roles  ground · ink · fill · width · text · tracking
+
+   No state tokens: nothing responds to a pointer. Every surface block declares every
+   surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --trp-plate-radius: var(--radius-8);
+  /* The action's centre as a share of the plate's height: (116 − 22.5) of the 135-high window the
+     plate shows. Where the connector crosses each gutter. A ratio of the drawing's own
+     coordinates, not a distance. */
+  --trp-trace-share: 69.259%;
+  --trp-trace-width: var(--border-width-2);
+  --trp-frame-width: var(--border-width-hairline);
+  --trp-mark-width: var(--border-width-hairline-deck);
+  /* A line of copy in the drawing: a thick rounded stroke, read as text at a glance. */
+  --trp-copy-width: var(--border-width-3);
+  /* The dash, in the drawing's own units (SVG user space). The gutter connector is a CSS dashed border. */
+  --trp-dash: 5 4;
+  /* Each stage has a fifth of the column from 1024: the card-title step and the small body. */
+  --trp-title-text: var(--text-h5);
+  --trp-title-tracking: var(--text-h5-tracking);
+  --trp-body-text: var(--text-body-sm);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --trp-plate-ground: var(--color-paper-deep);
+  --trp-field-ink: var(--color-neutral-300); /* decoration */
+  --trp-frame-fill: var(--color-paper);
+  --trp-frame-ink: var(--color-neutral-400); /* decoration */
+  --trp-copy-ink: var(--color-neutral-300); /* decoration */
+  --trp-gap-ink: var(--color-neutral-500); /* 3.1:1, a graphic object */
+  --trp-accent: var(--color-brandeis-500); /* 6.17:1 */
+  --trp-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --trp-body-ink: var(--color-neutral-700); /* 8.14:1 */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --trp-plate-ground: var(--color-paper);
+  --trp-field-ink: var(--color-neutral-300);
+  --trp-frame-fill: var(--color-paper-deep);
+  --trp-frame-ink: var(--color-neutral-400);
+  --trp-copy-ink: var(--color-neutral-400);
+  --trp-gap-ink: var(--color-neutral-600);
+  --trp-accent: var(--color-brandeis-500);
+  --trp-title-ink: var(--color-neutral-900);
+  --trp-body-ink: var(--color-neutral-800);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --trp-plate-ground: var(--color-neutral-900);
+  --trp-field-ink: var(--color-neutral-700);
+  --trp-frame-fill: var(--color-neutral-950);
+  --trp-frame-ink: var(--color-neutral-600);
+  --trp-copy-ink: var(--color-neutral-700);
+  --trp-gap-ink: var(--color-neutral-400);
+  --trp-accent: var(--color-brandeis-300); /* blue lifts on ink */
+  --trp-title-ink: var(--color-white);
+  --trp-body-ink: var(--color-neutral-300);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --trp-plate-ground: var(--color-brandeis-600);
+  --trp-field-ink: var(--color-brandeis-400);
+  --trp-frame-fill: var(--color-brandeis-500);
+  --trp-frame-ink: var(--color-brandeis-300);
+  --trp-copy-ink: var(--color-brandeis-300);
+  --trp-gap-ink: var(--color-brandeis-100);
+  --trp-accent: var(--color-white);
+  --trp-title-ink: var(--color-white);
+  --trp-body-ink: var(--color-brandeis-50);
+}

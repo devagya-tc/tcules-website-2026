@@ -223,6 +223,11 @@ const SPECIMENS = [
         note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, paper and tint',
       },
       {
+        href: '/design/trace-plates',
+        name: 'TracePlates',
+        note: 'one screen followed through every hand-over — a drawn plate per stage (design, handoff, code, running product, sign-off) and one dashed trace through them; three stages, paper and tint',
+      },
+      {
         href: '/design/callout',
         name: 'Callout',
         note: 'the quiet scope note — semantic routing, placement equivalence, narrow tracks, 4 surfaces',

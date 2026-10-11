@@ -144,6 +144,7 @@
 @import 'components/voice-ledger.css';
 @import 'components/case-spread.css';
 @import 'components/engagement-options.css';
+@import 'components/trace-plates.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */
