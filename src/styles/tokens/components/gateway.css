@@ -1,0 +1,108 @@
+/* ══ Component layer — Gateway ═══════════════════════════════════════════════════
+   Tier 2. A situation router (home round 4, 11 Oct 2026): a set of reader situations, each a whole
+   link to the one service that answers it — the situation as the title, its sentence, and the
+   service named on the cue. Three arrangements were explored on /design/kit/gateway (index, rows,
+   grid); every one reads these tokens.
+
+   Naming: --gwy-{part}-{role}-{state}
+     parts   title · body · service · mark · rule · ring · ground
+     roles   text · tracking · ink · width
+     states  rest (no suffix) · hover · pressed
+
+   The words stay ink (§ 4.3). Blue is the foreground accent and lands twice per row at most: the
+   cue's arrow at rest, and the title under the pointer. The rule is neutral on every surface: a
+   blue rule is a mark, never a divider.
+
+   State-token absences are assertions: the body, the service label and the rule never move; the
+   cue's own three steps are Button's, handed down through `data-btn-link-group`.
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry and type · identical on every surface ──────────────────────────── */
+:root {
+  /* The situation is the reason to click (owner, home round 2), so it is the row's largest thing:
+     h3 in the index, where it owns a 5-of-12 track and the band's display heading is the one size
+     above it; h4 in the narrower arrangements (rows beside a head, a third-width grid cell). */
+  --gwy-title-text-lg: var(--text-h3);
+  --gwy-title-tracking-lg: var(--text-h3-tracking);
+  --gwy-title-text-md: var(--text-h4);
+  --gwy-title-tracking-md: var(--text-h4-tracking);
+  /* The sentence is support, read after the title has been chosen: the body role, quiet ink. */
+  --gwy-body-text: var(--text-body-sm);
+  /* The grid's service line above its title: the eyebrow voice (mono, uppercase in presentation). */
+  --gwy-service-text: var(--text-eyebrow);
+  --gwy-service-tracking: var(--text-eyebrow-tracking);
+  --gwy-rule-width: var(--border-width-hairline);
+  /* The index row's hover ground: how far it reaches past the copy on every side, as a spread
+     shadow. Optical, not a layout distance (gap rule 1): it paints a target round copy that stays
+     flush with the band's heading, and moves nothing. 16, so a row's ground stops 8 short of its
+     neighbour's across the `block` seam. The radius is the photograph radius, as BlockCard's box. */
+  --gwy-ground-reach: var(--space-16);
+  --gwy-ground-radius: var(--radius-8);
+  --gwy-ink-duration: var(--duration-fast);
+  --gwy-ink-easing: var(--easing-standard);
+  --gwy-ring-width: var(--focus-ring-width);
+  --gwy-ring-offset: var(--focus-ring-offset);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --gwy-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --gwy-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
+  --gwy-title-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+  --gwy-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the grid's arrow */
+  --gwy-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --gwy-service-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
+  --gwy-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
+  --gwy-ground-hover: var(--color-paper-deep); /* the index row under the pointer */
+  --gwy-ground-pressed: var(--color-neutral-100);
+  --gwy-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --gwy-ring-gap-color: var(--color-paper);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --gwy-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --gwy-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
+  --gwy-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+  --gwy-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --gwy-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --gwy-service-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
+  --gwy-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
+  --gwy-ground-hover: var(--color-neutral-100);
+  --gwy-ground-pressed: var(--color-neutral-200);
+  --gwy-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --gwy-ring-gap-color: var(--color-paper-deep);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --gwy-title-ink: var(--color-white); /* 17.26:1 */
+  --gwy-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
+  --gwy-title-ink-pressed: var(--color-brandeis-100); /* 13.61:1 — lifts, the ink direction */
+  --gwy-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --gwy-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --gwy-service-ink: var(--color-neutral-400); /* 8.05:1 */
+  --gwy-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
+  --gwy-ground-hover: var(--color-neutral-900);
+  --gwy-ground-pressed: var(--color-neutral-800);
+  --gwy-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --gwy-ring-gap-color: var(--color-neutral-950);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --gwy-title-ink: var(--color-white); /* 6.23:1 */
+  --gwy-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
+  --gwy-title-ink-pressed: var(--color-brandeis-100); /* 4.91:1 */
+  --gwy-mark-ink: var(--color-white); /* 6.23:1 */
+  --gwy-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --gwy-service-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --gwy-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
+  --gwy-ground-hover: var(--color-brandeis-600);
+  --gwy-ground-pressed: var(--color-brandeis-700);
+  --gwy-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --gwy-ring-gap-color: var(--color-brandeis-500);
+}

@@ -293,6 +293,11 @@ const SPECIMENS = [
         note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks',
       },
       {
+        href: '/design/kit/gateway',
+        name: 'Gateway',
+        note: 'the situation router on home’s six situations: A index (chosen, ruled full-width rows, title · sentence · service on one baseline), B split rows beside the head and C a decision grid kept as explored alternatives',
+      },
+      {
         href: '/design/kit/facts',
         name: 'Kit · Facts and figures',
         note: 'never combine proof types: the rating on its own (score size, badge as source) and the studio record on its own (three figures on tint, two beside the head), plain stats',

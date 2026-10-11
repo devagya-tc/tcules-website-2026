@@ -1,0 +1,151 @@
+/* Gateway — the situation router (home round 4, 11 Oct 2026). Layout and Cluster arrange
+   everything; this module supplies the rules, type, inks, the anchor's inset and its states. No
+   margins, no hand-rolled grid or flex, no surface selector: every colour is a --gwy-* token. */
+
+.root {
+  min-inline-size: 0;
+}
+
+.item {
+  min-inline-size: 0;
+}
+
+/* The ruled list (rows): a hairline opens the set and closes every row. Rules, not boxes: one edge
+   each, never four. */
+.ruled {
+  border-block-start: var(--gwy-rule-width) solid var(--gwy-rule-ink);
+}
+
+.row {
+  min-inline-size: 0;
+  border-block-end: var(--gwy-rule-width) solid var(--gwy-rule-ink);
+}
+
+/* The grid cell opens on its rule, so a row of three aligns on one line under the head. */
+.cell {
+  min-inline-size: 0;
+  border-block-start: var(--gwy-rule-width) solid var(--gwy-rule-ink);
+}
+
+/* The whole row is the anchor. `display: block` de-inlines it so the hit area is the row; it
+   arranges nothing (its one child is a Layout). In a ruled arrangement the block inset is the hit
+   area's own air inside the row, a `text` above and below (a dense table's cell inset), so a rule
+   sits between targets rather than on one. */
+.root .link {
+  display: block;
+  block-size: 100%;
+  padding-block: var(--gap-text);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--gwy-ink-duration) var(--gwy-ink-easing);
+}
+
+.root .link:hover,
+.root .link:focus-visible {
+  text-decoration: none;
+}
+
+.link:focus {
+  outline: none;
+}
+
+.root .link:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--gwy-ring-offset) var(--gwy-ring-gap-color),
+    0 0 0 calc(var(--gwy-ring-offset) + var(--gwy-ring-width)) var(--gwy-ring-color);
+}
+
+/* The index row (the router). No rule between rows: six one-line titles down one edge ARE the
+   structure, and a hairline under each would cut the column the eye runs down (and its inset would
+   cost the band its fold). The rows sit a `block` apart, the Layout's seam, and the anchor takes no
+   inset, so its copy stays flush with the band's heading.
+
+   Under the pointer the row raises a ground across BOTH tracks — the title, the cue and the
+   sentence — so the reader sees one target, not three. The ground reaches past the copy by
+   --gwy-ground-reach on every side as a spread shadow: paint only, so the copy does not move off
+   the heading's edge and nothing is laid out. Keyboard focus keeps the ring, which overrides the
+   shadow, and adds the ground behind it. */
+.root .indexLink {
+  padding-block: 0;
+  border-radius: var(--gwy-ground-radius);
+}
+
+.root .indexLink:hover {
+  background-color: var(--gwy-ground-hover);
+  box-shadow: 0 0 0 var(--gwy-ground-reach) var(--gwy-ground-hover);
+}
+
+.root .indexLink:active {
+  background-color: var(--gwy-ground-pressed);
+  box-shadow: 0 0 0 var(--gwy-ground-reach) var(--gwy-ground-pressed);
+}
+
+/* Last, so a focused row keeps its ring while it is also hovered or pressed. */
+.root .indexLink:focus-visible {
+  background-color: var(--gwy-ground-hover);
+  box-shadow:
+    0 0 0 var(--gwy-ring-offset) var(--gwy-ring-gap-color),
+    0 0 0 calc(var(--gwy-ring-offset) + var(--gwy-ring-width)) var(--gwy-ring-color);
+}
+
+/* The grid cell's stack fills the stretched anchor so the arrow (Layout pinLast) sits on one line
+   across a row of three. Sizing only. */
+.fill {
+  block-size: 100%;
+}
+
+.title {
+  overflow-wrap: anywhere;
+  color: var(--gwy-title-ink);
+  text-wrap: var(--text-title-wrap);
+  transition: color var(--gwy-ink-duration) var(--gwy-ink-easing);
+}
+
+.titleLg {
+  font: var(--gwy-title-text-lg);
+  letter-spacing: var(--gwy-title-tracking-lg);
+}
+
+.titleMd {
+  font: var(--gwy-title-text-md);
+  letter-spacing: var(--gwy-title-tracking-md);
+}
+
+.body {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--gwy-body-ink);
+  font: var(--gwy-body-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+.service {
+  color: var(--gwy-service-ink);
+  font: var(--gwy-service-text);
+  letter-spacing: var(--gwy-service-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* The grid cell's cue: the arrow alone, in the mark ink (the foreground accent). */
+.arrow {
+  display: block;
+  color: var(--gwy-mark-ink);
+}
+
+.root .link:hover .title,
+.root .link:focus-visible .title {
+  color: var(--gwy-title-ink-hover);
+}
+
+/* Pressed after hover at equal specificity, so it wins while both match. */
+.root .link:active .title {
+  color: var(--gwy-title-ink-pressed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root .link,
+  .title {
+    transition: none;
+  }
+}

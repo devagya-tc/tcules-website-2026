@@ -1166,3 +1166,52 @@ band's bottom padding crosses it: the figures' labels end at 763. Every other wa
 inside the hero was either a global change to approved heroes (the lede-to-action `stack`) or a
 demotion of the claim (a smaller lede or figures), so the overshoot is accepted and reported, not
 hidden by an exemption.
+
+### 20.1 "What do you need next?" — the gateway as a router (round 4)
+
+**The note.** "'What you need next' section could again be so much better. Please spend some time
+on that specifically." Round 1 led each situation with a drawing (the pictures out-shouted the
+services, 2,276 at 1440); rounds 2–3 set six text cards two across (critic: "clean but plain";
+1,072, past the fold).
+
+**Cause.** The band was drawn as a card set (six equal objects, two up) when its job is a router:
+a founder or product lead looks for their own situation, so the six titles have to scan in one pass,
+each one has to say where it leads, and the sentence only confirms. Two columns of cards made the
+eye zigzag, the 16px sentences weighed as much as the titles, and the service sat at each card's
+foot after the paragraph.
+
+**Explored on `/design/kit/gateway`** (home's own corpus words, read from the content seam):
+
+| Direction | What it is | Scan | Distinct | Leads | Fold (1440) | 390 | Score |
+|---|---|---|---|---|---|---|---|
+| **A · Index (chosen)** | One column: h3 title on one line, the service on its cue under it, the sentence quiet beside them in 5 of [7, 5]; no row rules; a hover ground across both tracks | 5 | 4 | 5 | 5 (814) | 4 (1,347) | **23** |
+| B · Split rows | ContentSection `beside`: the display heading in the leading track, ruled rows in the trailing one (h4 title and cue on one line, sentence under) | 4 | 4 | 5 | 2 (879) | 4 (1,350) | 19 |
+| C · Decision grid | A ruled cell per situation, 3 × 2: mono service line, h4 title, sentence, arrow | 3 | 2 | 4 | 3 (845) | 2 (1,834) | 14 |
+
+A won because it is the only one that serves the quick decision in a single downward pass. The six
+titles share one edge at one size on one line each, and the destination is named directly under each
+title, before the sentence. It is also the only arrangement on the page that is a single-column
+typographic index. B was the calmest, but it left the heading's track empty under two lines of type,
+its h4 titles fought the cue at the end of each row, and it ran 49 past the fold. C repeated the 3 × 2
+shape of the "What we do" boxes two bands later (owner, round 1 note 6: the two ways in must look
+different) and ran 1,834 on a phone.
+
+**Iterations on A** (each measured at 1440, then shot):
+1. Three tracks, title · sentence · cue [5, 4, 3] on one baseline: 1,143. The cue column wrapped,
+   and the baseline alignment dropped short titles to the foot of their row.
+2. [5, 5, 2], h4, sentence at body-sm: 838, but it read as a pricing table and two titles wrapped.
+3. [7, 5], h3 on one line with the cue under it, rows ruled: the best-looking version at 893, 63
+   past the fold. With a `tight` row inset it fitted at 797, but the cue touched the next rule.
+4. Rules removed, rows a `block` apart, and the whole row raises a ground under the pointer
+   (spread 16 past the copy, so the copy stays flush with the heading): **814**. The ground does
+   the separating job the rule did, but only on the row being chosen.
+
+**Built as a pattern, global.** The new `Gateway` (tier 2: `src/patterns/Gateway`, tokens
+`--gwy-*` in `tokens/components/gateway.css`) has `index` (home) plus `rows` and `grid` (kept as
+explored alternatives; `rows` suits a narrow track on a services index or About). Each row is one
+anchor, and its cue is Button's link span driven by `data-btn-link-group`. The sentence uses the
+body-sm role in the quiet ink. `HomePage` maps the band with `gatewayItems` (exported, so the
+specimen proves the pattern on the real words). The band is `data-band="C-router"`.
+
+**Measured:** 814 at 1440 / 1470 / 1280; 934 at 1024 (h3 steps to 28 and the long titles wrap);
+1,099 at 768; 1,347 at 390. Down from 1,072 / 1,919. `fold:check /` no longer lists the band.

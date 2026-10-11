@@ -1,4 +1,4 @@
-export { HomePage } from './HomePage';
+export { HomePage, gatewayItems } from './HomePage';
 export type { HomePageProps } from './HomePage';
 export { OfferPage } from './OfferPage';
 export type { OfferPageProps } from './OfferPage';

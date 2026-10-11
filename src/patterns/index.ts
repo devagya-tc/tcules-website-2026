@@ -360,3 +360,7 @@ export {
   type TestimonialSize,
   type TestimonialWallProps,
 } from './Testimonial';
+
+/* Gateway — the situation router: each reader situation a whole link to the service that answers
+   it (home "What do you need next?", round 4, 11 Oct 2026). */
+export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';

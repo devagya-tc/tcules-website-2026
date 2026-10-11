@@ -26,6 +26,7 @@ export {
   ToolPage,
   corpusEnquiryForm,
   coverFor,
+  gatewayItems,
   kindOf,
   planOffer,
   proofQuote,

@@ -8,10 +8,12 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
+  Gateway,
   LogoGrid,
   TestimonialBeside,
   TestimonialCard,
   type BlockCardSetItem,
+  type GatewayItem,
   type HeroStat,
   type LogoGridMark,
 } from '@/patterns';
@@ -268,33 +270,47 @@ function ratingOf(block: ParagraphBlock) {
 /* ── 2 · six situations, the gateway to the services ──────────────────────────────── */
 
 /**
- * The page's gateway, built for a quick decision (owner, home round 2, 10 Oct 2026: the band "is now
- * focusing more on the images than on the actual services … the title of each item is why they
- * would want to explore the service further"). Round 1 led each situation with a 3:2 service drawing
- * two up, and the band ran 2,280 with the pictures doing the talking.
+ * The situation band's items as Gateway rows: each `###` situation, its one paragraph (plain: the
+ * band authors no inline link in a situation), and its lone link line, whose label names the
+ * service. Exported so /design/kit/gateway proves every arrangement on the real corpus words.
+ */
+export function gatewayItems(b: CorpusBand): GatewayItem[] {
+  return items(b).flatMap((item) => {
+    const para = item.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph');
+    const target = linkLines(item)[0];
+    if (!target) return [];
+    return [
+      {
+        id: slugOf(item.headingText),
+        title: item.headingText,
+        body: para ? plain(para.runs) : '',
+        href: target.href,
+        service: target.labelText,
+      },
+    ];
+  });
+}
+
+/**
+ * The page's gateway, built for a quick decision (owner, home round 2, 10 Oct 2026: "the title of
+ * each item is why they would want to explore the service further"). Round 1 led each situation
+ * with a service drawing and the pictures did the talking (2,276 at 1440); rounds 2–3 set six text
+ * cards two across (1,072), which the owner found still plain ("could again be so much better",
+ * round 4).
  *
- * Now the situation IS the card: six text cards, two across, each opening on a hairline, the
- * situation as an h3-scale title (the reader's own reason, in their words), its paragraph, and the
- * service named on the card's one action. No imagery at all: an icon per card would repeat the glyphs
- * the "What we do" boxes carry for the same services two bands later, and a drawing out-shouts the
- * title. The titles scan down two columns in one screen and a half.
+ * Round 4: a ROUTER, not a card set (Gateway `index`, chosen over a split and a grid on
+ * /design/kit/gateway). The six situations run down one edge as h3 titles on one line each, the
+ * service named under each on its cue, and the sentence beside them, quiet, in the trailing five
+ * of [7, 5]. A founder reads the six titles in one pass, stops at their own, and sees where it leads
+ * without reading a sentence; the sentence is there to confirm. Every row is one link, and under the
+ * pointer it raises a ground across both tracks. No imagery and no glyphs: the "What we do" boxes
+ * two bands later carry the service glyphs in a 3 × 2 grid, and this is the page's only
+ * single-column typographic index. One fold: 814 at 1440.
  */
 function Situations({ b }: BandProps) {
-  const cards: BlockCardSetItem[] = items(b).map((item) => {
-    const link = item.blocks.find((x) => x.type === 'links');
-    const para = item.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph');
-    const target = link?.type === 'links' ? link.links[0] : undefined;
-    return {
-      id: item.headingText,
-      title: item.headingText,
-      ...(para ? bodyOf(para.runs) : {}),
-      href: target?.href,
-      ctaLabel: target?.labelText,
-    };
-  });
   return (
-    <ContentSection {...head(b)} data-band="C-text" headingSize="display">
-      <BlockCardSet items={cards} lead="none" across={2} size="lg" cue="cta" scroll="never" />
+    <ContentSection {...head(b)} data-band="C-router" headingSize="display">
+      <Gateway items={gatewayItems(b)} arrangement="index" />
     </ContentSection>
   );
 }
