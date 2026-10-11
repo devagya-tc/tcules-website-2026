@@ -201,6 +201,24 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry outcome="success" urlLabel="Where can we see it?" />}
       />
 
+      {/* Home round 3: the form as the band's primary object — lg fields, the submit across the
+          panel, and the caller's own resting line ("After sending: …" in the corpus). */}
+      <CtaSection
+        eyebrow="Primary · lg fields · caller's caption"
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it.']}
+        form={
+          <EnquiryForm
+            variant="enquiry"
+            urlLabel="Product or company URL"
+            fieldScale="lg"
+            submit="full"
+            caption="We'll reply within one business day."
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={CONTEXT}
+          />
+        }
+      />
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <CtaSection
           key={surface}

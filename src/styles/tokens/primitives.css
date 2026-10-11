@@ -656,29 +656,26 @@
 }
 
 /* ── Media · ratio ────────────────────────────────────────────────────────────
-   One ratio, and it is here only because two components must agree on it. Only a
-   CROPPING placement owns a ratio at all: full-column media (Figure, PageHero stills)
-   renders at the asset's intrinsic ratio and never crops (ch05 §9), so there is no
-   hero or banner ratio and there should not be one.
+   Only a CROPPING placement owns a ratio at all: full-column media (Figure, PageHero stills)
+   renders at the asset's intrinsic ratio and never crops (ch05 §9), so there is no hero or banner
+   ratio here and there should not be one.
 
-   The cover crop is shared because one cover asset serves both BlockCard's vertical
-   media and ListCard's thumbnail (ch05 §9a). Two local 3/2s would let one card be
-   re-cut without the other and the shared asset would then be wrong in one of them.
-   Both alias this rather than reading each other (token rule 6). A crop with one
-   reader — BlockCard's horizontal 4/3, the nav card's 16/7 — stays in its own layer.
+   ONE STANDARD IMAGE RATIO, 16:9 (owner, home round 3, 11 Oct 2026: "one standard size across the
+   website and screens would make it easier for us to produce those assets … i wouldn't want random
+   image ratios on the cards ever"). Every card cover (BlockCard, at every width and in every
+   arrangement), every list thumbnail (ListCard) and every video poster is authored and cropped at
+   16:9, so one 2560 × 1440 master — the 16:9 banner's and the Clutch portfolio export's size —
+   serves every card placement without a second crop. It replaced seven card crops (3:2 cover, 16:9
+   wide, 21:9 panorama, 2:1 double, 1:1 square, 16:5 pair, 4:3 rows), which made every case cover
+   a different shape on every band (docs/kit/brand-amendments.md, home round 3).
 
-   The portrait square is here for the other reason a ratio can be shared: it is a
-   BRAND fact, not one placement's crop. "Portraits are 1:1 everywhere" (ch05 §3,
-   §12 11) — a quote's portrait today, a profile or a team grid later — and a
-   portrait is shot square once and reused, so two placements that disagreed would
-   be cropping the same face twice. Proof is its first reader. */
+   The panorama stays for the one non-card reader that crops a head-track aside to a strip
+   (ContentSection's aside). The cinema crop is the wide video poster's, and the portrait square is
+   a BRAND fact rather than a placement's crop: "portraits are 1:1 everywhere" (ch05 §3), shot square
+   once and reused. */
 :root {
-  --ratio-cover: 3 / 2;
-  /* A card cover in a set of three or more across (visual-direction § 1.4 rule 1, 6 Oct 2026):
-     at 392 a 3:2 cover is 261 tall and a C-image-3 band runs past the 830 fold; 16:9 is 221. */
-  --ratio-wide: 16 / 9;
-  /* The tall lead of a spotlight set (BlockCardSet lead="beside", cmp-feature): a 2:1 track beside
-     a stacked pair. At 802 a 16:9 cover is 451 and the band runs past the fold; 21:9 is 344. */
+  --ratio-standard: 16 / 9;
+  /* A head-track aside, cropped to a strip (ContentSection `aside`). Never a card. */
   --ratio-panorama: 21 / 9;
   /* The wide video poster (VideoTestimonial wide, 9 Oct 2026): a film across the 1240 column. At
      16:9 it is 697 tall and the band runs past the 830 fold; at 3:1, a scope-style crop, 413. */

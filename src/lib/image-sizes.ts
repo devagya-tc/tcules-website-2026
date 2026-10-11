@@ -183,6 +183,12 @@ export const LIST_CARD_THUMBNAIL = '160px';
 export const PROOF_PORTRAIT = '64px';
 
 /**
+ * The testimonial card's circular avatar (home round 3, 11 Oct 2026): a fixed 48 box (40 on the
+ * supporting card), so the ask is its own width; the ladder's smallest rung serves it at 2× and 3×.
+ */
+export const TESTIMONIAL_AVATAR = '48px';
+
+/**
  * The SiteNav rail card: about 300 beside the rail from 1024, the sheet's column below it.
  * PROVISIONAL — the rail card's width is the rail's, and SiteNav confirms this when it moves onto
  * Media. The fluid term is the full column, so the sheet can over-fetch and never under-fetch.

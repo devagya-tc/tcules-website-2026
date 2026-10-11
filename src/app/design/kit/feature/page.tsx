@@ -952,7 +952,6 @@ export default function FeatureKitSpecimen() {
               media={photo(card.image)}
               href={ROUTES.caseStudies}
               tracks={3}
-              ratio="wide"
               size="md"
             />
           ))}

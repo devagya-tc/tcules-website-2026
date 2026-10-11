@@ -9,6 +9,7 @@ import {
   Media,
   RatingBadge,
   Section,
+  Stat,
   Texture,
   TextureShape,
   type MediaImage,
@@ -381,6 +382,15 @@ type PageHeroBaseProps = {
    */
   tags?: readonly string[];
   /**
+   * The studio's record as figures, INSIDE the hero (owner, home round 3, 11 Oct 2026: "could the
+   * facts/figures section be integrated into the hero so it doesn't take one entire section?").
+   * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `stack`
+   * under the actions: as many tracks as figures, at every width, so three figures never orphan.
+   * Two to four; more belong in a facts band. Records rather than nodes, so the hero owns the size,
+   * the row and the seam. Absent renders no row and no seam.
+   */
+  stats?: readonly HeroStat[];
+  /**
    * The Tcules pixel-grid texture, for a paper hero with NO media only: the end-fade, the field
    * Statement's `end-fade` draws (end −120, 30% wide, blur 160, the band's full height), so it runs
    * hard along the end edge and fades toward the copy. From 1024; not drawn below.
@@ -410,6 +420,12 @@ type PageHeroBaseProps = {
    */
   children?: ReactNode;
 };
+
+/** One figure in the hero's record row. Structurally `Stat`'s value, unit and label. */
+export type HeroStat = { value: string; unit?: string; label: string };
+
+/** The record row's limits: two to four figures read as one row in the copy column. */
+const MAX_STATS = 4;
 
 /**
  * Nought, one or two actions. Position decides emphasis: the first renders the blue SOLID with no
@@ -560,6 +576,7 @@ export function PageHero({
   arrangement = 'stacked',
   surface = 'paper',
   tags = [],
+  stats = [],
   texture = false,
   announcement,
   children,
@@ -828,6 +845,53 @@ export function PageHero({
       </Layout>
     );
 
+  /* ── stats · the record as figures, one row under the actions (home round 3) ──────────
+     As many tracks as figures at EVERY width (a 326 phone column holds three ~87 tracks: the md
+     figure steps to 32 there and the label wraps to two lines), so three figures are one row rather
+     than 2 + 1. Each Stat opens on its own hairline with the blue mark, which is what divides the
+     record from the ask above it; the gutter breaks the rule between them. A list, so a reader is
+     told how many. More than four would crowd the copy column: the first four render, and a
+     development warning names the rest. */
+  const shownStats = stats.slice(0, MAX_STATS);
+  if (process.env.NODE_ENV !== 'production' && stats.length > MAX_STATS) {
+    console.warn(`PageHero: ${stats.length} stats; the hero sets the first ${MAX_STATS}.`);
+  }
+  const statsNode =
+    shownStats.length === 0 ? null : (
+      <Layout
+        as="ul"
+        columns={{ base: shownStats.length }}
+        colGap="gutter"
+        rowGap="block"
+      >
+        {shownStats.map((stat) => (
+          <Stat
+            key={`${stat.value}-${stat.label}`}
+            as="li"
+            size="md"
+            value={stat.value}
+            unit={stat.unit}
+            label={stat.label}
+            align={centredHead ? 'center' : 'start'}
+          />
+        ))}
+      </Layout>
+    );
+
+  /* The ask and the record are one group: the stats sit a `block` under the actions, because each
+     Stat opens on its own hairline with a `block` of air inside it, so the rule falls midway
+     between the button and the figures and the two read as the ask and the proof of it, not as
+     two blocks a `stack` apart (which also put the home hero 29 past the 830 fold). */
+  const askNode =
+    statsNode && actionsNode ? (
+      <Layout rowGap="block" justifyItems={justify}>
+        {actionsNode}
+        {statsNode}
+      </Layout>
+    ) : (
+      (actionsNode ?? statsNode)
+    );
+
   /* ── media · below the copy, beside it, or under a centred or display head ─────────────────
      An image renders through Media, which owns the edge (by kind), the srcset and the loading;
      PageHero owns `sizes` (the arrangement's width, from src/lib/image-sizes.ts) and `priority`
@@ -931,7 +995,7 @@ export function PageHero({
       </Layout>
       {bylineNode}
       {extrasNode}
-      {actionsNode}
+      {askNode}
       {tagsNode}
     </Layout>
   );
@@ -973,7 +1037,7 @@ export function PageHero({
           <Layout rowGap="block">
             {bylineNode}
             {extrasNode}
-            {actionsNode}
+            {askNode}
             {tagsNode}
           </Layout>
         </Layout>

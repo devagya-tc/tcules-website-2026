@@ -1050,3 +1050,90 @@ run-in labels). Four defects, each fixed at its cause:
 | About's three voices set in straight quotes beside home's curly ones | The corpus authors some quotes with straight marks and the card printed what it was handed | `curlQuotes` in TestimonialCard: typesetting of the marks, never the words |
 | `/case-studies` Designed and built: placeholder brief cut to one line (1440 and 390) | Round 2 moved the story into a 2:1 case card; the slot was still drawn 4:5 | Register ratio 2:1, panel regenerated |
 | `/about` How Tcules works: placeholder label cut at its right edge | A 3:2 panel in an `asideFill` aside of about 0.9:1 | Register ratio 4:5, panel regenerated |
+
+## 19 · Home round 3 (owner review, 11 Oct 2026)
+
+**The review.** Feedback, not instructions: one standard image ratio for cards (16:9 or 4:3 —
+"never random image ratios on the cards ever"); the quote beside each featured case "feels randomly
+floaty"; "Why teams choose Tcules" is still taller than a fold — each part should be one fold,
+assume all four reasons have a quote, try kit banners I.3/I.4, drop the numbering; FAQ question and
+answer lack contrast; the testimonial card should use the sans (small text) and circular avatars on
+some cards, none on others (the initials box is banned); fold the facts row into the hero; use real
+logo files in the wall; the enquiry form feels secondary to the copy beside it. 16:9 was chosen: it
+matches the 16:9 banner and the 2560 × 1440 Clutch portfolio export, so one master serves every card.
+
+### 19.1 Point by point: feedback → cause → fix (global or local)
+
+| # | Feedback | Cause | Fix | Scope |
+|---|---|---|---|---|
+| 1 | One card image ratio, everywhere | BlockCard carried seven crops chosen per set to hold one band's fold (3:2 cover, 16:9 wide, 21:9 panorama, 2:1 double, 1:1 square, 16:5 pair, 1:1 headshot); the same cover rendered at four shapes on four bands | `--ratio-standard: 16 / 9` replaces `--ratio-cover` and `--ratio-wide`; BlockCard has ONE ratio at every width and arrangement (no `ratio`, no `grow`, no breakpoint); BlockCardSet's `ratio` and per-lead crops are gone; ListCard's thumbnail and the video poster alias the same token; `CARD_RATIO` is 16/9. Callers on Home, Offer (product-design, audit, healthtech), the case index and the kit specimens drop their `ratio`. Placeholders: the case index's Wandering Raven card slot 2:1 → 16:9; home's 2:1 why-tcules slot retired (§ 19.1 #3). Covers are authored at a 2560 × 1440 master (brand amendment) | **Global** (token + component) |
+| 2 | The quote beside the case is floaty | `TestimonialBeside` centred a 5-track card on a 7-track case's whole height, so the card's edges met nothing | `TestimonialBeside arrangement="diptych"`: two equal tracks a `gutter` apart, top-aligned; the quote on a quiet panel at the card's own 16:9 (a floor; a long quote grows it), so its top and foot ARE the cover's; stars at the panel's top, the words pinned to its foot at `--text-lead-lg`; the speaker under the panel where the case title sits under its cover. The second row mirrors. Never inside the case | **Local to home** (a new arrangement; service, audit, expertise and case-index pages keep `card`) |
+| 3 | Why section taller than a fold; one fold per part; all four with a quote; banners; no numbering | One band stacked four claim rows (1,595 at 1440) behind index numerals | A RUN of four Banner `beside` bands (kit I.3/I.4), photo end / start alternating, one reason each: Banner gained `bandHead` (the band's display h2 over the first split), `headingAs="h3"`, `support` (the quiet unboxed TestimonialCard under the lead) and `footer` (the closing link under the last). Numerals removed. "We can build what we design" takes Trishanya Raju's real quote from `/case-studies` through the content seam (`getBorrowedQuotes`, PLACEHOLDER, P39). Four 3:2 photo placeholders registered | Banner props **global**; the run **local to home** |
+| 4 | FAQ question/answer contrast | The question rested at neutral-800 and the answer, through Prose, at neutral-900: the answer was darker than the question | Question at full ink, fixed (`--acc-question-ink` 950 / white; `-hover` deleted); answer `--acc-answer-ink` one step quieter (neutral-700 on paper and tint); only the chevron moves on hover | **Global** (Accordion tokens) |
+| 5 | Testimonial card: sans, circular avatars, no initials | The card set the italic serif reading quote at 22 and an initials monogram | Quote in the sans (`--tsm-quote-text` → `--text-lead`; `-sm` → `--text-body`; `-panel` → `--text-lead-lg`); `TestimonialItem.avatar` renders a circular 48 (40 on `sm`) Media avatar; none renders nothing; monogram and its two inks deleted. Home: six of twelve testimonials carry a PLACEHOLDER kit portrait (`fixtures/testimonial-avatars.ts`, `getTestimonialAvatars`, P40) | **Global** (pattern); avatars data **local to home** |
+| 6 | Facts row into the hero | The record was its own tint band (~330) | PageHero `stats` (2–4 Stats at md, one row at every width, a `block` under the actions, grouped with the ask); home passes its three figures; the facts band is gone | Prop **global**; used on home |
+| 7 | Real logos | The wall typeset five names as wordmarks beside one file | The wall shows files only: Doodle, Eden AI (the one named PNG copied from the old repo to `public/clients/eden-ai.png`, density 0.23, drawn as a mask), then the in-house set — ten marks, 4 + 4 + a closing pair at 1440 (LogoGrid now closes a four-track row ending on two with two half-row cells), 2 × 5 at 390. Dealpath, Benchmark Gensuite, JoVE, Ringier registered as needed; P41 | LogoGrid closing pair **global**; the wall **local to home** |
+| 8 | The form feels secondary | The split close put the copy at h1 in the larger track and the form on the bare ground in the narrower one | CtaSection `split`: [5, 7] from 1024, the form in the 7 on a raised panel (nested surface one step off the band's ground — paper on tint — `--cta-panel-ground`, 8 radius, `block` inset), the copy at the offer's h2 centred beside it; corpus forms use `fieldScale="lg"` (Input `scale="lg"`, 48, lead-role value; body below 768) and the full-width submit; `caption` now prints the page's own "After sending" line instead of the form's own wording (P42) | **Global**: every split close on the site, all ten corpus pages |
+
+### 19.2 Measured at 1440 (home, `measure` over `main > *`)
+
+| Band | Round 2 | Round 3 |
+|---|---|---|
+| Hero (A) | hero + a facts band of its own | **762** with the figures inside (content ends at 739; with the 73 nav the band box passes the 830 fold by 5 — padding only) |
+| Logo wall (H) | — (six cells, five of them wordmarks) | 696 (ten marks, three rows) |
+| What do you need next? | 1,072 | 1,072 |
+| Selected work | 1,946 | 2,194 (two diptychs at 16:9 + the pair at 16:9, which was 16:5) |
+| What we do | — | 811 |
+| Why teams choose Tcules | 1,595 (one band) | **755 · 637 · 666 · 730** — four banners, each inside one 830 fold |
+| What clients say | 1,120 | 1,088 (sans quotes are shorter) |
+| How we use AI | — | 637 |
+| Products we know well | 834 | 834 |
+| Enquiry (L) | — | 635 |
+| FAQ | 844 | 844 |
+| Page | 12,407 | 12,361 |
+
+Round 2 figures are § 18's (— where § 18 did not measure). At 390: the why banners run 922 / 832 / 909 / 963 (each under the 1,700 phone band ceiling); the hero
+is 1,003 with its three figures one row across.
+
+### 19.3 Patterns this round adds (home review patterns, continued)
+
+1. **One image ratio for cards.** Every card cover is 16:9; a band that runs long changes its
+   arrangement, never the crop. Assets are briefed at one master size.
+2. **When a section passes a fold, each part gets its own fold.** A run of banners (one per reason),
+   not a taller band. The run carries one band heading and one closing action.
+3. **A quote beside a case shares its edges** (home): equal tracks, the panel cut to the cover's own
+   ratio, the speaker where the case title sits. On service and expertise pages the case serves
+   the offer, so the [7, 5] card stays (the owner's note: the home case + quote is not the services
+   page's shape).
+4. **Proof sits with the ask it proves.** The record lives in the hero, not a band after it.
+5. **The form is the object, the copy is the caption.** The larger track, a raised panel, generous
+   fields, the one solid on the band; the heading steps down beside it.
+6. **Small text is sans.** Card-size quotes read in the sans; the serif speech voice is for display.
+7. **People are shown as people or not at all.** A real portrait, in a circle — never initials.
+8. **Logos are files.** A client without a file is not typeset into a wall of logos.
+9. **Questions lead answers by ink as well as size.**
+
+### 19.4 Products we know well: images or graphics (owner's question)
+
+The eight sector cards already reserve a 16:9 slot each (register: one drawn sector illustration per
+sector, the service-line family — ch05 isometric, blue on paper, one peridot accent, no type), so
+the band needs **eight 16:9 spot drawings**, one per sector, briefed in docs/image-register.md (`/`
+expertise rows). Two cheaper routes, if the drawings wait: (a) **graphics the kit can draw today** —
+BlockCard's `texture` cover (the pixel-grid field, three recipes) with each sector's glyph set large
+in its corner; no assets, on-brand, and replaceable cell by cell; (b) **a product-shot crop per
+sector** from a case the sector page already binds (Dealpath for B2B SaaS, Eden AI for AI products,
+GT Tools for commerce, CuramCare for HealthTech) — but three of those screens already appear higher on
+home, so (a) or the drawings are the better first step. Say which, and (a) is a one-line change.
+
+### 19.5 For the owner
+
+1. **Placeholders that cannot launch:** the six stock avatars (P40) and the borrowed Wandering Raven
+   quote in why-tcules (P39), as well as the round 2 ratings (P36).
+2. **The hero fold:** with the figures inside, the home hero's band box is 5 past the 830 fold at
+   1470 (its content is inside). Accept, or set the figures beside the button on one row (tight at
+   572).
+3. **Logo wall membership** (P41): ten files today, four named clients missing.
+4. **Case covers at 16:9:** the four bound home artefacts are 1.5:1 to 3.3:1 and crop (register
+   table); 16:9 masters end that.
+5. **The diptych elsewhere?** It is home-only by your note. If service pages should share it, it is
+   one prop per call site.

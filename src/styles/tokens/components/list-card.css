@@ -153,8 +153,8 @@
 
   /* The accepted native-image contract. 160px was measured as a recognisable landscape sample in
      the 1240px row while still leaving the 192px content core room before Cluster wraps it.
-     The ratio is the shared cover crop — BlockCard's vertical media serves the same cover asset,
-     so both alias --ratio-cover (primitives.css § Media · ratio). */
+     The ratio is the site's one standard image ratio, 16:9 (owner, home round 3): BlockCard's cover
+     serves the same asset, so both alias --ratio-standard (primitives.css § Media · ratio). */
   --lcrd-thumbnail-inline-md: 160px;
   /* A row's thumbnail below md (cmp-services fix round 1): small enough that the copy core keeps its
      192 minimum beside it in a 326 phone column (326 - 24 - 96 = 206), so the row stays a row. */
@@ -165,7 +165,7 @@
      in the title's role for the size step, so 1em is 22 beside an h5 and 28 beside an h4, and it
      follows the roles' breakpoint steps by itself. Read by `.tile .marker > svg`. */
   --lcrd-marker-icon-size-tile: 1em;
-  --lcrd-thumbnail-ratio: var(--ratio-cover);
+  --lcrd-thumbnail-ratio: var(--ratio-standard);
   /* The thumbnail's corner: 8, no frame, for every kind (visual-direction § 5.3, fdn-media, 6 Oct
      2026) — the photograph radius every image box now takes, so a row's 160px thumbnail and the
      card photos above it on one page have one corner. On the box, not the image: the box clips. */

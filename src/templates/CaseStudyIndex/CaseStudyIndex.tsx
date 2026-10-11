@@ -271,7 +271,6 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
                 ctaLabel={item.ctaLabel}
                 cue={item.ctaLabel ? 'cta' : 'title'}
                 size="lg"
-                ratio="double"
               />
             </ul>
           }

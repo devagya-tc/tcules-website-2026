@@ -2,8 +2,18 @@
    Tier 2. One continuous native disclosure set with independent, multi-open items.
 
    Naming: --acc-{part}-{role}-{state}
-     parts: question | mark | rule | ring
+     parts: question | answer | mark | rule | ring
      states: rest (no suffix) | hover
+
+   ── Question against answer (owner, home round 3, 11 Oct 2026) ────────────────
+   "The contrast between the question and the answer is not great." It was inverted: the question
+   rested at neutral-800 and the answer, through Prose, at neutral-900 — the answer was the DARKER
+   of the two, and the 22/16 size step alone could not make the question lead. Now the question
+   rests at full ink (the darkest step on the surface) and stays there; the answer takes
+   --acc-answer-ink, one clear step quieter, so the question reads as the question and the answer as
+   the body under it. The question's ink no longer moves on hover: it is already at the top of the
+   ladder, so the chevron alone answers the pointer (and the ring the keyboard), and
+   --acc-question-ink-hover is deleted (token rule 3: a state token exists only if the value moves).
 
    Accordion paints no ground — not at rest, not on hover, not on press, not when open, on any
    surface. State is carried entirely by the INK of the question and its mark, which is where the
@@ -11,19 +21,12 @@
    68ch trigger: the largest thing that happened on the page in response to a pointer moving, and
    it read as a selected table row rather than a control. Both grounds are gone.
 
-   The answer delegates its entire palette to Prose. Accordion never recolours it: a strong, a
-   link or a code span inside an answer has to match Prose everywhere else on the site, and the
-   22/16 size step plus the serif-to-sans shift already carries the hierarchy. There is therefore
-   no --acc-answer-ink, deliberately.
+   The answer's running ink is the accordion's (--acc-answer-ink); a link, a strong or a code span
+   inside it keeps Prose's own ink, so it still matches every other Prose block on the site.
 
-   ── Three states, two values ────────────────────────────────────────────────────
-   Hover, pressed and expanded all resolve to --acc-question-ink-hover, so the set holds ONE
-   raised ink rather than three names for it. Token rule 3: a state token exists only if the value
-   moves on at least one surface, which is why there is no --btn-solid-*-fg-pressed either. The
-   redesign brief listed --acc-question-ink-pressed and --acc-question-ink-expanded separately and
-   gave both the same four values as -hover; declaring them would have been three names for one
-   decision, which is the --sec-gap mistake. Pressed is not distinguished from hover: the hairline
-   underline it used to add was removed (owner, 7 Oct 2026).
+   ── States ───────────────────────────────────────────────────────────────────────
+   Only the chevron moves: hover, focus and open take --acc-mark-ink-hover. Pressed is not
+   distinguished from hover: the hairline underline it used to add was removed (owner, 7 Oct 2026).
 
    There is no layer token. The spec asked for one resolving to --z-base, but --z-base is 0 and
    nothing in this component stacks — a token whose only reader is one component and whose only
@@ -42,16 +45,19 @@
      often 150–300px, and at 140ms that distance reads as a snap — the jump this replaces. Slow
      (360) made a seven-item FAQ feel heavy to scan. */
   --acc-reveal-duration: var(--duration-medium);
+  /* The question's role (home round 3): the serif h5 (22, medium) over the 16 sans answer — a 1.38
+     size step, a family change and, now, a full ink step. */
+  --acc-question-text: var(--text-h5);
+  --acc-question-tracking: var(--text-h5-tracking);
 }
 
-/* Paper: the question rests one step below full ink and rises to it. The mark rests quieter still
-   — it is the affordance cue, not the content — and converges on the question's raised ink when
-   the row is live, so hover reads as one gesture rather than two things moving separately.
+/* Paper: the question at full ink, the answer a clear step under it. The mark rests at the accent
+   and deepens when the row is live — the one thing that answers the pointer.
    Blue appears in exactly one place on this surface and every other: the keyboard ring. */
 :root,
 [data-surface='paper'] {
-  --acc-question-ink: var(--color-neutral-800); /* 11.81:1 */
-  --acc-question-ink-hover: var(--color-neutral-950); /* 17.10:1 */
+  --acc-question-ink: var(--color-neutral-950); /* 17.10:1 — full ink, the top of the ladder */
+  --acc-answer-ink: var(--color-neutral-700); /* 7.27:1 — one clear step under the question */
   --acc-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the chevron carries the accent */
   --acc-mark-ink-hover: var(--color-brandeis-700); /* 10.07:1 */
   --acc-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
@@ -59,11 +65,10 @@
   --acc-ring-gap-color: var(--color-paper);
 }
 
-/* Tint: the question ink holds at the paper values against paper-deep, and the mark steps one
-   further down the ramp — neutral-500 on this ground is 2.82:1 and misses the non-text floor. */
+/* Tint: the paper values against paper-deep; the answer's neutral-700 still clears AA. */
 [data-surface='tint'] {
-  --acc-question-ink: var(--color-neutral-800); /* 10.54:1 */
-  --acc-question-ink-hover: var(--color-neutral-950); /* 15.27:1 */
+  --acc-question-ink: var(--color-neutral-950); /* 15.27:1 */
+  --acc-answer-ink: var(--color-neutral-700); /* 6.49:1 on paper-deep */
   --acc-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --acc-mark-ink-hover: var(--color-brandeis-700); /* 8.99:1 */
   --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
@@ -71,11 +76,10 @@
   --acc-ring-gap-color: var(--color-paper-deep);
 }
 
-/* Ink: the ladder inverts. The resting question is neutral-300 and white is the raised step, so
-   the open question is the brightest thing in the set and needs no rule to say so. */
+/* Ink: the ladder inverts. The question is white, the answer neutral-400. */
 [data-surface='ink'] {
-  --acc-question-ink: var(--color-neutral-300); /* 11.07:1 */
-  --acc-question-ink-hover: var(--color-white); /* 17.26:1 */
+  --acc-question-ink: var(--color-white); /* 17.26:1 */
+  --acc-answer-ink: var(--color-neutral-400); /* 8.05:1 */
   --acc-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
   --acc-mark-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --acc-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
@@ -83,11 +87,10 @@
   --acc-ring-gap-color: var(--color-neutral-950);
 }
 
-/* Blue: the two steps come out of the Brandeis tints rather than a second colour family, and the
-   raised step is white — the same top of the ladder the ink surface uses. */
+/* Blue: the question white, the answer the quiet Brandeis tint — the ink surface's ladder. */
 [data-surface='blue'] {
-  --acc-question-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --acc-question-ink-hover: var(--color-white); /* 6.23:1 */
+  --acc-question-ink: var(--color-white); /* 6.23:1 */
+  --acc-answer-ink: var(--color-brandeis-100); /* 4.91:1 */
   --acc-mark-ink: var(--color-brandeis-200); /* decoration; 3.78:1 */
   --acc-mark-ink-hover: var(--color-white); /* 6.23:1 */
   --acc-rule-ink: var(--color-brandeis-400); /* decoration; 1.62:1 */

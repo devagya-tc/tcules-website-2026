@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCorpusPage, getTestimonialRatings } from '@/content';
+import {
+  getBorrowedQuotes,
+  getCorpusPage,
+  getTestimonialAvatars,
+  getTestimonialRatings,
+} from '@/content';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { HomePage } from '@/templates';
@@ -18,6 +23,20 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const page = await getCorpusPage(ROUTES.home);
   if (!page) notFound();
-  const ratings = await getTestimonialRatings(page.composition.testimonialIds);
-  return <HomePage page={page} ratings={ratings} />;
+  /* A band item whose source authors no quote takes a real one from another corpus page
+     (PLACEHOLDER, home round 3); its testimonial id joins the page's for ratings and avatars. */
+  const borrowedQuotes = await getBorrowedQuotes(page.route);
+  const ids = [
+    ...page.composition.testimonialIds,
+    ...borrowedQuotes.flatMap((entry) =>
+      entry.quote.testimonialId ? [entry.quote.testimonialId] : [],
+    ),
+  ];
+  const [ratings, avatars] = await Promise.all([
+    getTestimonialRatings(ids),
+    getTestimonialAvatars(ids),
+  ]);
+  return (
+    <HomePage page={page} ratings={ratings} avatars={avatars} borrowedQuotes={borrowedQuotes} />
+  );
 }

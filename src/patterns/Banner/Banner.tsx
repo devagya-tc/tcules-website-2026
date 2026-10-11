@@ -40,9 +40,44 @@ export type BannerMediaSide = 'start' | 'end';
 /** The strip's one link. A record, not a node: the strip owns its size, emphasis and glyph. */
 export type BannerLink = { label: string; href: string };
 
+/**
+ * The heading of a RUN of banners that together make one band (home round 3, 11 Oct 2026: "Why
+ * teams choose Tcules", one beside banner per reason, alternating sides). Set at the display role
+ * on the band's h2, a `stack` above the first banner's split, inside that banner's own Section, so
+ * the run's heading and its first argument share one band's air rather than a head band and a
+ * banner each spending a full padding. Its id names the band.
+ */
+export type BannerBandHead = { heading: string; headingId: string };
+
 type BannerHeadProps = {
-  /** The band's h2, verbatim. Required: a banner is an argument with a name. */
+  /** The banner's heading, verbatim. Required: a banner is an argument with a name. */
   heading: string;
+  /**
+   * The heading's element. `h2` (default) for a banner that is a band of its own; `h3` for one
+   * banner in a run under a band heading (`bandHead` on the run's first). The ROLE does not change:
+   * the claim is still the banner's one large voice, set at the h2 role — the element is the
+   * outline, the role is the design.
+   */
+  headingAs?: 'h2' | 'h3';
+  /**
+   * The run's band heading, on the run's FIRST banner only. See `BannerBandHead`. With it, the
+   * Section is labelled by the band heading.
+   */
+  bandHead?: BannerBandHead;
+  /** The band's in-page anchor, on the Section. */
+  id?: string;
+  /**
+   * Something that SUPPORTS the heading, composed by the caller, a `stack` under the lead (and the
+   * action) in the copy column — in practice a quiet testimonial (TestimonialCard `sm`, unboxed):
+   * the claim leads, the client's words support it (home review patterns, 10 Oct 2026). A pattern
+   * does not import a pattern, so the caller composes it.
+   */
+  support?: ReactNode;
+  /**
+   * The run's closing action, a `stack` under the split, on the run's LAST banner — in practice a
+   * CtaRow with its rule. Composed at the call site.
+   */
+  footer?: ReactNode;
   /**
    * The heading's id, and therefore the band's accessible name and its in-page anchor. Supplied by
    * the caller, because it belongs to the content (ContentSection's reasoning).
@@ -164,9 +199,23 @@ function illustrationShift(image: MediaImage): CSSProperties | undefined {
 export function Banner(props: BannerProps) {
   if (props.form === 'strip') return <Strip {...props} />;
 
-  const { heading, headingId, eyebrow, lead, actions, image, surface } = props;
+  const {
+    heading,
+    headingId,
+    headingAs: Heading = 'h2',
+    bandHead,
+    id,
+    support,
+    footer,
+    eyebrow,
+    lead,
+    actions,
+    image,
+    surface,
+  } = props;
   const form = props.form ?? 'below';
-  const labelled = Boolean(headingId);
+  const labelledBy = bandHead?.headingId ?? headingId;
+  const labelled = Boolean(labelledBy);
   const illustration = image.kind === 'illustration';
 
   if (
@@ -185,10 +234,11 @@ export function Banner(props: BannerProps) {
     </p>
   ) : null;
   const headingEl = (
-    <h2 id={headingId} className={styles.heading} data-copy="h2">
+    <Heading id={headingId} className={styles.heading} data-copy="h2">
       {heading}
-    </h2>
+    </Heading>
   );
+  const supportEl = support ?? null;
   const leadEl = lead ? (
     <p className={styles.lead} data-copy="lead">
       {lead}
@@ -232,6 +282,7 @@ export function Banner(props: BannerProps) {
           {leadEl}
         </Layout>
         {actions}
+        {supportEl}
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
       </Layout>
     );
@@ -256,6 +307,7 @@ export function Banner(props: BannerProps) {
             {leadEl}
           </Layout>
           {actions}
+          {supportEl}
         </Layout>
         {/* A plain wrapper so the image keeps its crop in a row that centres it. A photograph crops
             3:2 at every width. An illustration renders whole and unboxed from 768; on a phone it
@@ -279,15 +331,34 @@ export function Banner(props: BannerProps) {
     );
   }
 
+  /* A run's band heading over the first banner's split, and its closing action under the last
+     one's, each a `stack` from the split: one band's head-to-body and body-to-footer seams. */
+  const bandHeadEl = bandHead ? (
+    <h2 id={bandHead.headingId} className={styles.bandHeading}>
+      {bandHead.heading}
+    </h2>
+  ) : null;
+  const content =
+    bandHeadEl || footer ? (
+      <Layout rowGap="stack">
+        {bandHeadEl}
+        {arranged}
+        {footer ?? null}
+      </Layout>
+    ) : (
+      arranged
+    );
+
   return (
     <Section
       as={labelled ? 'section' : 'div'}
+      id={id}
       surface={surface}
-      aria-labelledby={labelled ? headingId : undefined}
+      aria-labelledby={labelled ? labelledBy : undefined}
       data-arrangement={form}
       data-band="I"
     >
-      {arranged}
+      {content}
     </Section>
   );
 }

@@ -65,6 +65,19 @@ type SharedProps = {
    * says "Thanks. We have your enquiry." and its one line, as it always has.
    */
   success?: { heading: string; body: string };
+  /**
+   * The resting line beside or under the submit — what happens after a send — in the page's own
+   * words (home round 3, 11 Oct 2026): the corpus authors "We'll reply within one business day." on
+   * every enquiry, and the form printed its own "We reply within a business day." beside it. The
+   * CALLER's copy, as `success` is. Absent, the form's own line. The status of a send replaces it in
+   * the same live region.
+   */
+  caption?: string;
+  /**
+   * The fields' size step, passed to every Input (`scale`). `md` (default); `lg` (48, the value at
+   * the lead role) where the form is the band's primary object — the enquiry close (home round 3).
+   */
+  fieldScale?: 'md' | 'lg';
 };
 
 /** One step in the success view's "what happens next". */
@@ -431,6 +444,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       required: true,
       disabled: submitting,
       appearance,
+      scale: props.fieldScale ?? 'md',
       invalid: Boolean(messages[spec.key]),
       'aria-describedby': messageId,
     } as const;
@@ -469,6 +483,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             autoComplete="url"
             placeholder={`${urlLabel} (optional)`}
             appearance={appearance}
+            scale={props.fieldScale ?? 'md'}
             disabled={submitting}
             onBlur={(event) => {
               event.currentTarget.value = normaliseUrl(event.currentTarget.value);
@@ -621,7 +636,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         role="status"
         aria-live="polite"
       >
-        {status || CAPTION}
+        {status || (props.caption?.trim() ? props.caption : CAPTION)}
       </p>
     </Cluster>
   );

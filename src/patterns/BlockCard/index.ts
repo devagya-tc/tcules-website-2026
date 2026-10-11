@@ -8,7 +8,6 @@ export type {
   BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
-  BlockCardRatio,
   BlockCardCue,
   BlockCardFrame,
   BlockCardLinkScope,

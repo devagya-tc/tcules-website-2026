@@ -9,7 +9,6 @@ import {
   type BlockCardImage,
   type BlockCardLinkScope,
   type BlockCardProps,
-  type BlockCardRatio,
   type BlockCardSize,
   type BlockCardTextureRecipe,
   type BlockCardTitleElement,
@@ -29,7 +28,6 @@ export type BlockCardSetItem = Omit<
   | 'imageSide'
   | 'tracks'
   | 'size'
-  | 'ratio'
   | 'index'
   | 'cue'
   | 'titleAs'
@@ -47,19 +45,19 @@ export type BlockCardSetItem = Omit<
  *   none  never. Every feature band of PEERS passes it (visual-direction § 1.4 rule 4): a
  *         featured row would make one option look recommended.
  *   beside  the spotlight (cmp-feature fix round 1, 6 Oct 2026): from 1024 the first card takes a
- *         2:1 track at 21:9 and the `lg` step, and the rest stack beside it as TEXT cards — hairline,
+ *         2:1 track at the one 16:9 crop and the `lg` step, and the rest stack beside it as TEXT cards — hairline,
  *         index or eyebrow, title, body. For a band that has one thing to show and two to note (an
  *         insight with its two follow-ups, a case study with two notes from it), where a row of
  *         equal tiles would read as one rectangle three times. Their covers are dropped, never
  *         stood in: the companions are notes by design, so the lead is the one image in the band.
  *         Three items is the shape; up to six works. Below 1024 it is the stack, lead first.
- *         From 1024 the lead's cover takes whatever height its companions leave (BlockCard `grow`):
- *         at 1024 the notes wrap to more lines than the lead and left a dead strip under it.
+ *         The lead's cover is 16:9 like every cover (home round 3); it no longer grows to meet
+ *         taller notes, because a grown cover is a crop nobody authored.
  *   wide  the wide lead in a row (cmp-feature fix round 2, 6 Oct 2026): from 1024 three covered
- *         cards in [2, 1, 1] tracks, the first at 2:1 and the others square, so every cover is
- *         ONE height — a 2fr track is exactly two 1fr tracks and a gutter wide, and 2:1 of it is
- *         1:1 of a 1fr track, at every width. Size contrast in one row, where three equal tiles
- *         read as one rectangle three times. The lead takes `lg`, the squares `sm` (a 294 track).
+ *         cards in [2, 1, 1] tracks, every cover 16:9 (home round 3), so the lead's cover is twice
+ *         the others' — size contrast in one row, where three equal tiles read as one rectangle
+ *         three times. It was 2:1 beside two squares, one height across; the standard ratio gave
+ *         that up. The lead takes `lg`, the others `sm` (a 294 track).
  *         Exactly three items with covers; any other count, or a set without covers, renders as
  *         `none`. Below 1024 it is the ordinary three-card set at 16:9.
  */
@@ -154,16 +152,6 @@ export type BlockCardSetProps = {
    * behind a gesture.
    */
   scroll?: 'auto' | 'never';
-  /**
-   * The covers' crop, when the set's own count rule picks the wrong one (home round 1, 10 Oct 2026).
-   * Absent, the set decides (`cover` for one or two, `wide` for three or more across, `pair` for a
-   * linked covered pair). A caller states it for a set whose covers ARE the band: the home gateway's
-   * six situations, each a service-line drawing contained in its box, where the linked pair's flat
-   * 16:5 drew a 960-wide drawing 230 wide. A set's decision, never one card's: every cover in the set
-   * takes it. Covered cards only; ignored by the featured lead, the spotlight and the wide lead,
-   * whose crops are their arrangement.
-   */
-  ratio?: Extract<BlockCardRatio, 'cover' | 'wide' | 'pair'>;
   /**
    * The phone arrangement (home round 1, 10 Oct 2026). `auto` (default): `scroll` decides — a scroll
    * row, or one card per row. `pair`: two across below 768, never a scroll row, for a set of SHORT
@@ -297,8 +285,7 @@ function warnUnnamed() {
  * BlockCardSet — a set of BlockCards, and the one place that knows how many there are.
  *
  * A card does not know its siblings (spec § 10), so the rules that depend on the set live here:
- * the grid shape, the image `sizes` and crop (3:2 for one or two, 16:9 for three or more across,
- * § 1.4 rule 1), the type step, mixed-set handling, numbering, the phone scroll row, and — under
+ * the grid shape, the image `sizes`, the type step (every cover is 16:9, home round 3), mixed-set handling, numbering, the phone scroll row, and — under
  * `lead="auto"` from four items (ruling C3) — the featured first card: horizontal, spanning the
  * row above its peers, media beside copy when it has a cover and head beside body when it does not.
  *
@@ -333,7 +320,6 @@ export function BlockCardSet({
   stagger = false,
   label,
   scroll = 'auto',
-  ratio: ratioOverride,
   phone = 'auto',
 }: BlockCardSetProps) {
   if (given.length === 0) return null;
@@ -362,8 +348,6 @@ export function BlockCardSet({
               titleAs={titleAs}
               index={numbered ? 1 : undefined}
               size="lg"
-              ratio="panorama"
-              grow
             />
           ) : (
             <BlockCard
@@ -409,7 +393,6 @@ export function BlockCardSet({
             index={numbered ? index + 1 : undefined}
             tracks={index === 0 ? 2 : 3}
             size={index === 0 ? 'lg' : 'sm'}
-            ratio={index === 0 ? 'double' : 'square'}
           />
         ))}
       </Layout>
@@ -425,15 +408,6 @@ export function BlockCardSet({
      option for them: an override set one grid's titles a step above the next one's on one page. */
   const size = iconSet ? 'sm' : (sizeOverride ?? peerSize(peers, widest, covered));
   const linked = items.every((item) => Boolean(item.href?.trim()));
-  /* A linked pair runs the full column (owner, 9 Oct 2026: clickable cards sit under their head,
-     never in a track beside it), so each card is ~604 wide at the cap and a 3:2 cover alone is 403
-     tall — the C-pair band ran ~1030 against the 830 fold. It took the spotlight lead's 21:9 until
-     9 Oct 2026, when the band still ran 888; it now takes `pair`,
-     16:5 from 1024 and 16:9 below. An unlinked pair can still sit in a beside body (763 → 365
-     per card), where 3:2 stays right. */
-  const ratio: BlockCardRatio =
-    ratioOverride ??
-    (widest >= 3 ? 'wide' : linked && covered && widest === 2 ? 'pair' : 'cover');
   /* The phone row (§ 3.7 item 2, revised in cmp-feature fix round 1, 6 Oct 2026). Stacked at 390,
      a set of short covered cards read as a loose list — 80 to 90 between cards, and six linked icon
      cards ran to 1805. So below 768:
@@ -505,7 +479,7 @@ export function BlockCardSet({
             size="lg"
           />
         ) : (
-          <BlockCard key={id} {...card} {...shared} tracks={tracks} size={size} ratio={ratio} />
+          <BlockCard key={id} {...card} {...shared} tracks={tracks} size={size} />
         );
       })}
     </Layout>

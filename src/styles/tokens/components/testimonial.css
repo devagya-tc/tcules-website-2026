@@ -4,7 +4,12 @@
    words, the stars that client gave, and who they are.
 
    Naming: --tsm-{part}-{role}
-     parts: ground | quote | name | role | rule | monogram
+     parts: ground | quote | name | role | rule | avatar | panel
+
+   Home round 3 (11 Oct 2026): the quote is SANS (the lead role on the card, body on the supporting
+   card, lead-lg in the diptych's panel), the initials monogram is gone (banned: "the current
+   initials in a box is illegal"), and a speaker with a photograph gets a circular avatar; one
+   without gets none. The two monogram inks left every surface block with it.
 
    A CARD WITH A GROUND, deliberately, and the one exception to "cards have no boxes" (5 Oct 2026)
    besides the boxed logo grid: every reference the owner chose sets each review in its own panel,
@@ -19,7 +24,7 @@
    differ only on blue, where the boxed card is paper and the unboxed quote is on blue.
 
    The surface register (ground and ink) because the card is a small surface its words sit on; the
-   monogram's initials are a mark, blue like an index numeral. No state tokens: a testimonial is not
+   avatar is a photograph and carries no colour. No state tokens: a testimonial is not
    a control and nothing in it responds to a pointer.
 
    Every surface restates every token (index.css, rule 2). */
@@ -27,11 +32,18 @@
 :root {
   --tsm-radius: var(--radius-8);
   --tsm-rule-width: var(--border-width-hairline);
-  /* The monogram's square: a component size, the speaker's mark beside the name. 40 so the initials
-     sit at the h6 name's two-line height (name over role). Square at the 4 radius, never a circle:
-     the portrait rule (ch05 §6) applies to the mark that stands in for a portrait. */
-  --tsm-monogram-size: 40px;
-  --tsm-monogram-radius: var(--radius-4);
+  /* The quote's sans roles (home round 3): the card that is the thing, the supporting card, and the
+     diptych's panel, one step each. */
+  --tsm-quote-text: var(--text-lead);
+  --tsm-quote-text-sm: var(--text-body);
+  --tsm-quote-text-panel: var(--text-lead-lg);
+  /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),
+     40 on the supporting card. A circle (owner, home round 3), the one round portrait in the kit. */
+  --tsm-avatar-size-md: 48px;
+  --tsm-avatar-size-sm: 40px;
+  --tsm-avatar-radius: var(--radius-full);
+  /* The diptych's panel: the card ratio, so its edges are the case cover's. */
+  --tsm-panel-ratio: var(--ratio-standard);
 }
 
 :root,
@@ -42,10 +54,8 @@
   --tsm-name-ink: var(--color-neutral-900);
   --tsm-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
   --tsm-rule: var(--color-neutral-300);
-  --tsm-monogram-ink: var(--color-brandeis-500);
   --tsm-name-ink-quiet: var(--color-neutral-900);
   --tsm-role-ink-quiet: var(--color-neutral-600);
-  --tsm-monogram-rule: var(--color-neutral-300);
 }
 
 [data-surface='tint'] {
@@ -55,10 +65,8 @@
   --tsm-name-ink: var(--color-neutral-900);
   --tsm-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
   --tsm-rule: var(--color-neutral-200);
-  --tsm-monogram-ink: var(--color-brandeis-500);
   --tsm-name-ink-quiet: var(--color-neutral-900);
   --tsm-role-ink-quiet: var(--color-neutral-700);
-  --tsm-monogram-rule: var(--color-neutral-200);
 }
 
 [data-surface='ink'] {
@@ -68,10 +76,8 @@
   --tsm-name-ink: var(--color-white);
   --tsm-role-ink: var(--color-neutral-400);
   --tsm-rule: var(--color-neutral-700);
-  --tsm-monogram-ink: var(--color-brandeis-300);
   --tsm-name-ink-quiet: var(--color-white);
   --tsm-role-ink-quiet: var(--color-neutral-400);
-  --tsm-monogram-rule: var(--color-neutral-700);
 }
 
 [data-surface='blue'] {
@@ -81,8 +87,6 @@
   --tsm-name-ink: var(--color-neutral-900);
   --tsm-role-ink: var(--color-neutral-600);
   --tsm-rule: var(--color-neutral-200);
-  --tsm-monogram-ink: var(--color-brandeis-500);
   --tsm-name-ink-quiet: var(--color-white);
   --tsm-role-ink-quiet: var(--color-brandeis-100);
-  --tsm-monogram-rule: var(--color-neutral-200);
 }

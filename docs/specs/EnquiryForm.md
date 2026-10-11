@@ -1,5 +1,7 @@
 # EnquiryForm
 
+> **Amended, home round 3 (11 Oct 2026).** `caption` takes the page's own resting line (the corpus's "After sending"), and `fieldScale="lg"` sets every field at Input's lg step (48, the value at the lead role). See docs/page-mapping.md § 19.
+
 ## 0. Front matter
 
 |                     |                                                                                                                                                                                                                                                   |

@@ -77,25 +77,15 @@
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
 
-  /* One ratio for both orientations: the shared cover ratio, 3:2 (owner, 29 Sep). The row had its
-     own 4:3 so the media column matched the copy's height; with one-line descriptions the copy is
-     short and centred against the image, and one crop means a cover is authored once and reads the
-     same in the featured row as in the tile below it. ListCard's thumbnail crops the same asset,
-     so all three alias --ratio-cover (primitives.css § Media · ratio). */
-  --bcrd-media-ratio: var(--ratio-cover);
-  /* Three or more across, 16:9 (§ 1.4 rule 1, 6 Oct 2026). The set chooses it; the card has no
-     count. The row (horizontal) stays on the cover ratio. */
-  --bcrd-media-ratio-wide: var(--ratio-wide);
-  /* The spotlight's tall lead, 21:9 (BlockCardSet lead="beside", cmp-feature). */
-  --bcrd-media-ratio-panorama: var(--ratio-panorama);
-  /* The wide lead's row (BlockCardSet lead="wide", fix round 2): 2:1 in the 2fr of [2, 1, 1] and
-     1:1 in each 1fr, which are one height at every width. One reader each, so they stay in this
-     layer (token rule 6) rather than joining the shared ratios. */
-  --bcrd-media-ratio-double: 2 / 1;
-  --bcrd-media-ratio-square: 1 / 1;
-  /* The linked pair from 1024 (BlockCardSet): 16:5 of ~604 is 189, where 21:9 was 259 and put the
-     C-pair band 58 past the 830 fold (9 Oct 2026). One reader, so it stays in this layer. */
-  --bcrd-media-ratio-pair: 16 / 5;
+  /* ONE ratio, at every width and in every arrangement: the site's standard image ratio, 16:9
+     (owner, home round 3, 11 Oct 2026: "i wouldn't want random image ratios on the cards ever").
+     It replaced six card crops (3:2 cover, 16:9 wide, 21:9 panorama, 2:1 double, 1:1 square and
+     16:5 pair), each chosen per set to hold one band's fold, which put the same case cover on the
+     site at four shapes and made every asset a guess. A cover is now authored once, at a 2560 ×
+     1440 master, and reads the same in a row of four, a featured row and beside a quote. ListCard's
+     thumbnail crops the same asset, so both alias --ratio-standard (primitives.css § Media · ratio).
+     A band that runs long at 16:9 changes its arrangement, never the crop. */
+  --bcrd-media-ratio: var(--ratio-standard);
   /* The air inside the ruled box round an illustration or a cut-out shown whole (fit="contain").
      The tight step (8, fix round 2): at a 286 card 16 a side still left the drawing a thumbnail in
      a white well. The asset is cut for the placement (a region, not a whole canvas) and the inset

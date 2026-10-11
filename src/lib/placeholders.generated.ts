@@ -91,13 +91,37 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The product-decision survival model (`visual_plan`): how one consequential product decision survives from research, through design and coded prototype, into shipped software, with one Tcules practice carrying it across every step.',
   },
-  '/#why-tcules:the-wandering-raven': {
-    src: '/placeholders/home--why-tcules--the-wandering-raven.svg',
+  '/#why-tcules:we-can-build-what-we-design': {
+    src: '/placeholders/home--why-tcules--we-can-build-what-we-design.svg',
     width: 1600,
-    height: 800,
+    height: 1067,
     kind: 'product shot',
     shows:
-      "The Wandering Raven's creative-writing world for young learners, built inside Moodle: a learner's screen mid-story, the reason \"We can build what we design\" shown as working software. Home round 1: the one reason with no client quote takes the case's artefact on its other side. The case page binds no cover yet (`ASSET_REQUIRED`); its first approved screen replaces this panel and the index's 4:5 one. 2:1 (critic, home round 1): at 3:2 this row stood ~150 taller than the three quote rows around it and broke the band's beat.",
+      "The Wandering Raven's creative-writing world for young learners, built inside Moodle: a learner's screen mid-story, the reason shown as working software. The case page binds no cover yet (`ASSET_REQUIRED`); its first approved screen replaces this panel. Home round 3, beside banner; 3:2 (it was 2:1 in the round 2 claim row).",
+  },
+  '/#why-tcules:we-get-to-the-real-problem-first': {
+    src: '/placeholders/home--why-tcules--we-get-to-the-real-problem-first.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'studio photo',
+    shows:
+      "A Tcules designer with a client team at a wall of the client's own requests for new screens, tracing several of them back to the one problem underneath. Home round 3: one beside banner per reason (kit I.3/I.4), the photograph in 7 of [5, 7] at 3:2 (667 × 445 at 1440).",
+  },
+  '/#why-tcules:we-like-software-with-a-lot-going-on': {
+    src: '/placeholders/home--why-tcules--we-like-software-with-a-lot-going-on.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'studio photo',
+    shows:
+      'Designers mapping a product with many roles, permissions, approvals and exceptions onto one shared workflow at a wall: the busy model made legible. Home round 3, beside banner (photo at the start).',
+  },
+  '/#why-tcules:we-work-as-part-of-your-team': {
+    src: '/placeholders/home--why-tcules--we-work-as-part-of-your-team.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'studio photo',
+    shows:
+      "A Tcules designer inside a client's own tools and meeting rhythm, beside the client's product team, talking directly with them. Home round 3, beside banner (photo at the start).",
   },
   '/about#careers': {
     src: '/placeholders/about--careers.svg',
@@ -174,10 +198,10 @@ export const PLACEHOLDER_SLOTS: Readonly<
   '/case-studies#designed-and-built:the-wandering-raven': {
     src: '/placeholders/case-studies--designed-and-built--the-wandering-raven.svg',
     width: 1600,
-    height: 800,
+    height: 900,
     kind: 'product shot',
     shows:
-      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own slot (critic, B2: the 16:9 cover master cropped to the story split lost its label). 2:1 since the home round 2 critic: the story is now a case card (BlockCard `double`, 16:9 stacked) beside its client's quote, and the 4:5 panel cropped to 2:1 cut its brief to one line at 1440 and 390. If the case page later binds a cover, that cover replaces this panel.",
+      "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own slot (critic, B2: the 16:9 cover master cropped to the story split lost its label). The story is a case card beside its client's quote; 16:9 since home round 3 (every card cover is 16:9, it was 2:1). If the case page later binds a cover, that cover replaces this panel.",
   },
   '/expertise/healthtech#approach': {
     src: '/placeholders/expertise-healthtech--approach.svg',

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Layout, Section, type SectionSurface } from '@/components';
-import { Banner, CtaRow } from '@/patterns';
+import { Banner, CtaRow, TestimonialCard } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 
@@ -211,6 +211,69 @@ export default function BannerSpecimen() {
         label="Event"
         message="Join our design systems clinic in Ahmedabad on 14 November."
         link={{ label: 'Save a seat', href: ROUTES.events }}
+      />
+
+      {/* ── A run of beside banners: one band, one reason each (home round 3) ───────── */}
+      <Section>
+        <Layout rowGap="tight">
+          <p className={s.specTitle}>A run · bandHead, h3 claims, a supporting quote, footer</p>
+          <p className={s.specNote}>
+            Home round 3 (11 Oct 2026): a band whose reasons each need a screen is a RUN of beside
+            banners, alternating sides, one Section each. The run&rsquo;s display heading opens the
+            first banner (<code>bandHead</code>) and its closing action ends the last (
+            <code>footer</code>); each claim is an h3 at the h2 role (<code>headingAs</code>),
+            and the client&rsquo;s words support it as the quiet unboxed card (
+            <code>support</code>). The owner&rsquo;s ruling overrides &ldquo;never two beside
+            banners in sight&rdquo; for a run.
+          </p>
+        </Layout>
+      </Section>
+      <Banner
+        form="beside"
+        bandHead={{ heading: 'Why teams pick a studio', headingId: 'spec-run-heading' }}
+        heading="We find the real problem first"
+        headingAs="h3"
+        headingId="spec-run-one"
+        lead="A request for new screens often hides a bigger question. We find it before anyone designs the wrong thing."
+        support={
+          <TestimonialCard
+            size="sm"
+            frame="none"
+            item={{
+              quoteHtml: '<p>“They found the real problem in the first week.”</p>',
+              name: 'Alex Morgan',
+              role: 'Head of Product',
+              company: 'Northwind',
+              rating: 5,
+            }}
+          />
+        }
+        image={getKitPhoto('whiteboard-pair-laptop')}
+      />
+      <Banner
+        form="beside"
+        mediaSide="start"
+        heading="We like software with a lot going on"
+        headingAs="h3"
+        headingId="spec-run-two"
+        lead="Many roles, permissions, approvals and exceptions, designed as one model."
+        support={
+          <TestimonialCard
+            size="sm"
+            frame="none"
+            item={{
+              quoteHtml: '<p>“They understood our complex concepts.”</p>',
+              name: 'Priya Raman',
+              role: 'VP Engineering',
+              company: 'Contoso Health',
+              rating: 4.5,
+            }}
+          />
+        }
+        footer={
+          <CtaRow actions={[{ label: 'How to choose a studio', href: ROUTES.howWeWork }]} />
+        }
+        image={getKitPhoto('hand-sketch-wireframe')}
       />
     </>
   );

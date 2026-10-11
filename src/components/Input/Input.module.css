@@ -192,6 +192,21 @@
   }
 }
 
+/* The lg step (`scale="lg"`, home round 3): 48 at every width — above the 44 touch floor, so it
+   needs no phone step — and the value at the lead role. Two classes, so it outranks the phone's
+   touch-floor rule above at equal source order. The textarea keeps its own floor, taller. */
+.control.lg:not(.textarea) {
+  block-size: var(--inp-height-lg);
+}
+
+.control.lg {
+  font: var(--inp-text-lg);
+}
+
+.control.lg.textarea {
+  min-block-size: var(--inp-textarea-min-block-lg);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .control {
     transition-duration: var(--duration-instant);

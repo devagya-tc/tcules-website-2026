@@ -723,6 +723,42 @@ export default async function PageHeroSpecimenPage() {
         </div>
       ))}
 
+      {/* ── 5b · The record as figures, inside the hero (home round 3) ──────────── */}
+      <PageHero
+        title={TITLE}
+        body={paragraphs(1)}
+        eyebrow={EYEBROW}
+        actions={ONE_ACTION}
+        arrangement="beside"
+        media={{
+          type: 'image',
+          image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+          ratio: '5/4',
+        }}
+        stats={[
+          { value: '2017', label: 'Founded' },
+          { value: '90+', label: 'Projects' },
+          { value: '19', label: 'Countries with clients' },
+        ]}
+      />
+      <Note
+        title="5b · stats — the record as figures, inside the hero"
+        note="Owner, home round 3 (11 Oct 2026): the facts band under the home hero moved INTO the hero. Two to four Stats at the md step, one row at every width (three ~87 tracks at 390), a block under the actions: each Stat's own hairline and blue mark divides the record from the ask. It replaced a tint band of its own (~330 at 1440)."
+      />
+      <PageHero
+        title={SHORT_TITLE}
+        body={paragraphs(1)}
+        actions={TWO_ACTIONS}
+        stats={[
+          { value: '12', unit: 'weeks', label: 'From the first workshop to a release' },
+          { value: '4.8', label: 'Average client rating across 13 reviews' },
+        ]}
+      />
+      <Note
+        title="5b · stats on a text hero — two figures, one with a unit"
+        note="The same row under a hero with no media; a unit sits on the figure's baseline in the mono label voice."
+      />
+
       {/* ── 6 · States: none to force ──────────────────────────────────────────── */}
       <PageHero title={TITLE} body={paragraphs(2)} eyebrow={EYEBROW} actions={TWO_ACTIONS} />
       <Section>

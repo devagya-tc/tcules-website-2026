@@ -1,9 +1,17 @@
 import type { ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Prose, StarRating } from '@/components';
+import { Cluster, Icon, Layout, Media, Prose, StarRating, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
+import { TESTIMONIAL_AVATAR } from '@/lib/image-sizes';
 
 import styles from './Testimonial.module.css';
+
+/**
+ * The speaker's portrait for a circular avatar: the asset record without the fields the card
+ * decides (its alt, which is empty because the name sits beside it, and its kind). Shot square
+ * (ch05 §3); a non-square record is centre-cropped.
+ */
+export type TestimonialAvatar = Pick<MediaImage, 'src' | 'width' | 'height' | 'sources'>;
 
 /**
  * One client's testimonial, as a card renders it. Presentation-agnostic: the page maps its content
@@ -26,16 +34,28 @@ export type TestimonialItem = {
    * (home round 2: the ratings are placeholders at the content seam until real ones replace them).
    */
   rating?: number;
+  /**
+   * The speaker's photograph, set as a CIRCULAR avatar beside the name (owner, home round 3, 11 Oct
+   * 2026). Optional, and with none the card shows NO avatar at all: the initials-in-a-box monogram
+   * that stood in for a photograph is banned ("the current initials in a box is illegal for our
+   * designs"). Always the page's data, never a pattern's.
+   */
+  avatar?: TestimonialAvatar;
 };
 
 /**
  * The card's weight.
  *
- *   md  the testimonial is the thing: a quote wall, a quote beside its case. The reading quote at its
- *       narrow measure (--text-quote-sm, 22), 18 stars, the monogram beside the name.
+ *   md  the testimonial is the thing: a quote wall, a quote beside its case. The quote in the sans
+ *       lead role (18), 18 stars, a 48 avatar beside the name when there is a photograph.
  *   sm  the testimonial SUPPORTS something beside it (owner, 10 Oct 2026: "the main highlight is the
- *       thing we claim to be doing and the testimonial supports it"). The same quote role in the
- *       quieter ink, 14 stars, no monogram: one step down everywhere, so the claim beside it leads.
+ *       thing we claim to be doing and the testimonial supports it"). The sans body role (16) in the
+ *       quieter ink, 14 stars, a 40 avatar: one step down everywhere, so the claim beside it leads.
+ *
+ * THE QUOTE IS SANS (owner, home round 3, 11 Oct 2026: "the text is small here. readability is
+ * preferred"). It was the italic serif reading quote at 22; a card's quote runs at a narrow measure
+ * and small size, where the serif italic was the harder read. The large display quotes elsewhere
+ * (Proof) keep the serif speech voice.
  */
 export type TestimonialSize = 'md' | 'sm';
 
@@ -60,14 +80,6 @@ function valid(item: TestimonialItem): boolean {
     return false;
   }
   return true;
-}
-
-/** "Samy Melaine" → "SM"; "Jody O'Neill" → "JO"; one word → its first letter. */
-export function initialsOf(name: string): string {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  const first = words[0]?.[0] ?? '';
-  const last = words.length > 1 ? (words.at(-1)?.[0] ?? '') : '';
-  return `${first}${last}`.toUpperCase();
 }
 
 /**
@@ -172,11 +184,7 @@ export function TestimonialCard({
           align="center"
           className={cx(styles.attribution, frame === 'box' && styles.attributionRuled)}
         >
-          {quiet ? null : (
-            <span className={styles.monogram} aria-hidden="true">
-              {initialsOf(item.name)}
-            </span>
-          )}
+          {item.avatar ? <Avatar avatar={item.avatar} size={quiet ? 'sm' : 'md'} /> : null}
           <Layout rowGap="inline" className={styles.who}>
             <span className={styles.name}>{item.name}</span>
             <span className={styles.role}>{role}</span>
@@ -184,6 +192,34 @@ export function TestimonialCard({
         </Cluster>
       </Layout>
     </Root>
+  );
+}
+
+/* Centre: a ProofPortrait-style record carries no focal point, and a face is centred in a square
+   portrait. Without it a fill crop anchors at Media's product-UI position (start, 20% down). */
+const AVATAR_FOCUS = { x: 0.5, y: 0.5 };
+
+/**
+ * The circular avatar (owner, home round 3: "show circular avatar images for some and no images
+ * for some"). A fixed square box clipped to a circle, Media filling it with a centre crop as a
+ * photograph; the box rules the edge (`edge="placement"`), so Media adds no radius of its own.
+ * `alt=""`: the name beside it is the text, and a portrait's alt could only say the name again.
+ */
+function Avatar({ avatar, size }: { avatar: TestimonialAvatar; size: 'md' | 'sm' }) {
+  if (!avatar.src.trim() || !(avatar.width > 0) || !(avatar.height > 0)) {
+    warn('avatar needs a src, width and height; omitting it.');
+    return null;
+  }
+  return (
+    <span className={cx(styles.avatar, size === 'sm' && styles.avatarSm)}>
+      <Media
+        image={{ ...avatar, alt: '', kind: 'photograph' }}
+        sizes={TESTIMONIAL_AVATAR}
+        fit="fill"
+        edge="placement"
+        focus={AVATAR_FOCUS}
+      />
+    </span>
   );
 }
 
@@ -295,6 +331,23 @@ export function TestimonialWall({ items, columns, stagger = false }: Testimonial
 
 /* ── Beside the work ──────────────────────────────────────────────────────────────── */
 
+/**
+ * How the quote is set beside its work.
+ *
+ *   card     the rated card in the 5 of [7, 5], centred on the work's height. The service, audit,
+ *            expertise and case-index pages' featured case (home round 2).
+ *   diptych  the quote as the work's TWIN (owner, home round 3, 11 Oct 2026: the card beside the case
+ *            "feels randomly floaty"). Two equal tracks a `gutter` apart, top-aligned: the case card
+ *            in one, and in the other a quiet panel at the card's own 16:9 — so its top and foot
+ *            are the cover's top and foot at every width the two sit side by side — holding the
+ *            stars and the words, with the speaker under the panel where the case's title sits under
+ *            its cover. The two read as one object in two panels, the quote attached to its case by
+ *            shared edges, never placed inside it. A long quote grows the panel past the cover's foot
+ *            rather than clipping. Home's selected work: the case + quote pair is a HOME shape, not
+ *            the default (page-mapping § 19).
+ */
+export type TestimonialBesideArrangement = 'card' | 'diptych';
+
 export type TestimonialBesideProps = {
   /**
    * The work the client is talking about, composed by the caller — in practice one linked BlockCard
@@ -308,6 +361,8 @@ export type TestimonialBesideProps = {
    * keeps the work first, so a phone and a screen reader meet the case, then what the client said.
    */
   reverse?: boolean;
+  /** Default `card`. See `TestimonialBesideArrangement`. */
+  arrangement?: TestimonialBesideArrangement;
 };
 
 /**
@@ -316,8 +371,57 @@ export type TestimonialBesideProps = {
  * of [7, 5] and the card the 5, a `column` apart, the card centred on the work's height so the two
  * read as one row and neither hangs from the other's top. Stacked below 1024, the work first.
  */
-export function TestimonialBeside({ work, item, reverse = false }: TestimonialBesideProps) {
+export function TestimonialBeside({
+  work,
+  item,
+  reverse = false,
+  arrangement = 'card',
+}: TestimonialBesideProps) {
   if (!valid(item)) return <>{work}</>;
+  if (arrangement === 'diptych') {
+    const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
+    return (
+      <Layout
+        columns={{ base: 1, lg: [1, 1] }}
+        reverse={reverse ? { lg: true } : undefined}
+        colGap="gutter"
+        rowGap="stack"
+        align="start"
+        className={styles.beside}
+      >
+        {work}
+        {/* The figure: the panel (stars, then the words pinned to its foot), the speaker a `block`
+            under it — the case's cover-to-title seam, so the speaker and the case title share a
+            line. */}
+        <Layout as="figure" rowGap="block" className={styles.card}>
+          <Layout rowGap="block" pinLast className={styles.panel}>
+            {typeof item.rating === 'number' ? (
+              <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
+            ) : null}
+            <blockquote className={cx(styles.quote, styles.quotePanel)}>
+              <Prose
+                html={bindShortWords(curlQuotes(item.quoteHtml))}
+                className={styles.quoteProse}
+              />
+            </blockquote>
+          </Layout>
+          <Cluster
+            as="figcaption"
+            nowrap
+            colGap="text"
+            align="center"
+            className={styles.attribution}
+          >
+            {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
+            <Layout rowGap="inline" className={styles.who}>
+              <span className={cx(styles.name, styles.nameOpen)}>{item.name}</span>
+              <span className={cx(styles.role, styles.roleOpen)}>{role}</span>
+            </Layout>
+          </Cluster>
+        </Layout>
+      </Layout>
+    );
+  }
   return (
     <Layout
       columns={{ base: 1, lg: [7, 5] }}

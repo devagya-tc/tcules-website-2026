@@ -70,6 +70,9 @@
      has no step between lead (56ch, ~620 here) and title (32ch, ~350), so it is named here for the
      one component that needs it rather than added to the ramp on one use. */
   --cta-lede-measure: 44ch;
+  /* The split close's form panel (home round 3): the photograph radius every image box and the
+     testimonial card take. */
+  --cta-panel-radius: var(--radius-8);
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
@@ -95,6 +98,7 @@
   --cta-marker-ink: var(--color-brandeis-500);
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
+  --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
 }
 
 [data-surface='tint'] {
@@ -105,6 +109,7 @@
   --cta-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --cta-panel-ground: var(--color-paper-deep); /* the form panel as a tint surface */
 }
 
 [data-surface='ink'] {
@@ -115,6 +120,7 @@
   --cta-marker-ink: var(--color-brandeis-300); /* 7.32:1 */
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
+  --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
 }
 
 [data-surface='blue'] {
@@ -125,4 +131,5 @@
   --cta-marker-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
+  --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
 }

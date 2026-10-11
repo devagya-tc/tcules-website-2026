@@ -196,3 +196,36 @@ export type CorpusCaseRef = {
  * a launch list can find every one that must be replaced.
  */
 export type TestimonialRating = { value: number; placeholder: boolean };
+
+/**
+ * A speaker's portrait for a testimonial's circular avatar, keyed by testimonial id at the content
+ * seam (`getTestimonialAvatars`, home round 3, 11 Oct 2026). Structurally the image record a card
+ * renders (src, intrinsic size, derived widths). `placeholder` is true for a stand-in portrait that
+ * is NOT the speaker (the owner asked to see avatars on about half the cards to judge the look); a
+ * real photograph of the person, supplied with their consent, replaces it.
+ */
+export type TestimonialAvatarRecord = {
+  src: string;
+  width: number;
+  height: number;
+  sources?: readonly { src: string; width: number }[];
+  placeholder: boolean;
+};
+
+/**
+ * A REAL testimonial from another corpus page, shown in a band whose own source authors none
+ * (`getBorrowedQuotes`, home round 3: "assume all 4 have a quote"). The quote block is the other
+ * page's, verbatim, parsed by the same loader — nothing is retyped. `placeholder` is always true:
+ * it stands in until the content team authors this band's own quote (docs/content-proposals.md).
+ */
+export type BorrowedQuote = {
+  /** The band the quote is shown in, by its id. */
+  band: string;
+  /** The item (h3) in that band the quote supports, by its heading text. */
+  item: string;
+  /** The route the quote is taken from. */
+  from: string;
+  quote: Extract<CorpusBlock, { type: 'quote' }>;
+  placeholder: true;
+};
+

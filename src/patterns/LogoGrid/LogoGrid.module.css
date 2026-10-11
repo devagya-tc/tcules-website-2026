@@ -49,6 +49,33 @@
   }
 }
 
+/* The closing pair: when a four-track row ends on two marks, each spans two tracks, so the last row
+   is two half-row cells and the grid stays a whole rectangle (ten marks: 4 + 4 + 2). LogoGrid.tsx
+   decides where, from the count. Placement of this unit's own cells, as .fill* above. */
+@media (max-width: 767.98px) {
+  .pairBase {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .pairMd {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .pairLg {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1440px) {
+  .pairXl {
+    grid-column: span 2;
+  }
+}
+
 .open {
   clip-path: inset(var(--lgrid-rule-width) 0 0 var(--lgrid-rule-width));
 }

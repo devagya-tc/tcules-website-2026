@@ -533,3 +533,60 @@ proposals below are where that design asks something of the copy.
 - **Proposal:** drop "Based in Ahmedabad, India" from the hero's record line in the source, or move it
   to the hero lede or the FAQ answer about working outside India, which already names India.
 - **Why:** the source should say what the page shows. P33's figure forms stand for the other three.
+
+## Home round 3 (owner review, 11 Oct 2026)
+
+### P39 · `/` · why-tcules · "We can build what we design" has no client quote
+
+- **Page and band:** "Why teams choose Tcules" is now one banner per reason, each with the client's
+  words supporting the claim (owner: "assume all 4 have a quote").
+- **Problem:** the third reason authors no quote; the other three do.
+- **What the page does now (PLACEHOLDER):** it shows a REAL testimonial from another corpus page,
+  read verbatim by the content seam (`src/content/sources/fixtures/borrowed-quotes.ts`): Trishanya
+  Raju, Founder, The Wandering Raven, from `/case-studies` ("Their commitment to the project and their
+  turnaround time was incredible … We would definitely recommend working with Tcules for your design
+  and development projects!"). It is about the work the reason names and is not shown elsewhere on
+  home.
+- **Proposal:** author the reason's own quote in `_pages/home.md` (the borrowed one is a good
+  candidate, or the case page's own "Their team takes the full picture into account when coming up
+  with designs."), and add its testimonial id to the frontmatter. Then delete the borrowed entry.
+- **Why:** every reason reads claim, then proof; one without proof reads as the weakest claim.
+
+### P40 · `/` · every testimonial card · the avatars are stock portraits, not the speakers
+
+- **Page and band:** selected work, why-tcules and what clients say.
+- **Problem:** the owner asked for circular avatars on some cards and none on others "so we can test
+  how that looks". Six cards show a stock studio portrait from the kit registry
+  (`src/content/sources/fixtures/testimonial-avatars.ts`, every entry `placeholder: true`); none shows
+  the named person.
+- **Proposal:** before launch, replace each with the speaker's own photograph, supplied with their
+  consent and shot square, or remove it (the card then shows no avatar). Add `portrait` to the
+  testimonial record (docs/strapi-changes.md § 19).
+- **Why:** a face beside a named client's words is a claim about who said them. Stock faces cannot
+  ship.
+
+### P41 · `/` · client-recognition · the logo wall shows more clients than the corpus names
+
+- **Page and band:** "Some of the teams we've worked with".
+- **Problem:** the corpus names six clients (Doodle, Dealpath, Benchmark Gensuite, Eden AI, JoVE,
+  Ringier Media Switzerland). The studio holds logo files for two of them (Doodle, Eden AI), so the
+  wall shows those two and then the approved in-house set — Omny, LatitudePay, Quoter, Knovos,
+  SafeXpay, Pledge, GT Tools, Incluude (owner: "we probably have logos for most if not all the
+  clients. please use them"). Four named clients are missing from the wall, and eight unnamed ones
+  are on it.
+- **Proposal:** either (a) list the wall's clients in `page_composition.client_recognition.clients`
+  so the source says what the page shows, or (b) supply the four missing logos (Dealpath, Benchmark
+  Gensuite, JoVE, Ringier; docs/image-register.md) and choose which twelve the wall shows (a 4 × 3
+  rectangle). Supply Eden AI's SVG to replace the PNG.
+- **Why:** the wall is a proof claim; its members should be the content team's decision.
+
+### P42 · every page with a form · the resting line under the submit
+
+- **Page and band:** every enquiry band.
+- **Problem:** the form printed its own "We reply within a business day." beside the band's authored
+  "After sending: We'll reply within one business day." — two wordings of one promise.
+- **What the page does now:** the form's resting line IS the authored "After sending" line
+  (`EnquiryForm caption`), so each page shows its own words once.
+- **Proposal:** none needed unless a page should promise something else; author it in that page's
+  "After sending" line.
+- **Why:** one promise, in the content team's words.

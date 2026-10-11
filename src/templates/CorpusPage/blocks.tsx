@@ -15,6 +15,7 @@ import {
   type AccordionItem,
   type HeroActions,
   type HeroMedia,
+  type HeroStat,
   type ProofQuote,
   TestimonialWall,
   type TestimonialItem,
@@ -24,6 +25,7 @@ import type {
   CorpusBand,
   CorpusBlock,
   CorpusPage,
+  TestimonialAvatarRecord,
   TestimonialRating,
 } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
@@ -70,6 +72,8 @@ export type CorpusHeroProps = {
   ledes?: readonly InlineRun[][];
   /** The labelled proof line goes above the actions as the extras row. */
   proofLine?: boolean;
+  /** The record as figures, a row under the actions (PageHero `stats`, home round 3). */
+  stats?: readonly HeroStat[];
   texture?: boolean;
 };
 
@@ -86,6 +90,7 @@ export function CorpusHero({
   tags,
   ledes,
   proofLine = true,
+  stats,
   texture,
 }: CorpusHeroProps) {
   const { hero } = page;
@@ -112,6 +117,7 @@ export function CorpusHero({
       arrangement={media ? arrangement : 'stacked'}
       media={media}
       tags={tags}
+      stats={stats}
       texture={texture}
     >
       {proofLine && firstProof ? (
@@ -144,6 +150,9 @@ export function proofQuote(block: QuoteBlock): ProofQuote {
 /** Per-testimonial ratings by testimonial id, as the route read them from the content seam. */
 export type RatingsById = Readonly<Record<string, TestimonialRating>>;
 
+/** Per-testimonial avatar portraits by testimonial id, as the route read them (home round 3). */
+export type AvatarsById = Readonly<Record<string, TestimonialAvatarRecord>>;
+
 /**
  * A corpus quote as a rated testimonial card's item: the words and the speaker as `proofQuote`
  * splits them, and the rating the page was handed for this quote's testimonial id (none when the
@@ -151,9 +160,16 @@ export type RatingsById = Readonly<Record<string, TestimonialRating>>;
  * passed down (home round 2: placeholders at the content seam until real ones replace them), never a
  * value written here.
  */
-export function testimonialItem(block: QuoteBlock, ratings?: RatingsById): TestimonialItem {
+export function testimonialItem(
+  block: QuoteBlock,
+  ratings?: RatingsById,
+  avatars?: AvatarsById,
+): TestimonialItem {
   const quote = proofQuote(block);
   const rating = block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined;
+  /* The speaker's portrait, when the route passed one for this id (PLACEHOLDER stock portraits
+     today, home round 3); without one the card shows no avatar at all. */
+  const portrait = block.testimonialId ? avatars?.[block.testimonialId] : undefined;
   return {
     id: block.testimonialId ?? undefined,
     quoteHtml: quote.quoteHtml,
@@ -161,6 +177,16 @@ export function testimonialItem(block: QuoteBlock, ratings?: RatingsById): Testi
     role: quote.role,
     company: quote.company,
     ...(rating !== undefined ? { rating } : {}),
+    ...(portrait
+      ? {
+          avatar: {
+            src: portrait.src,
+            width: portrait.width,
+            height: portrait.height,
+            sources: portrait.sources,
+          },
+        }
+      : {}),
   };
 }
 
@@ -181,10 +207,18 @@ export function QuoteCompact({ block }: { block: QuoteBlock }) {
  *
  * A quote awaiting client sign-off renders as written; the flag is a comment in the source.
  */
-export function QuoteGroupBand({ band, ratings }: { band: CorpusBand; ratings?: RatingsById }) {
+export function QuoteGroupBand({
+  band,
+  ratings,
+  avatars,
+}: {
+  band: CorpusBand;
+  ratings?: RatingsById;
+  avatars?: AvatarsById;
+}) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
   const items = band.blocks.flatMap((block) =>
-    block.type === 'quote' ? [testimonialItem(block, ratings)] : [],
+    block.type === 'quote' ? [testimonialItem(block, ratings, avatars)] : [],
   );
   return (
     <ContentSection
@@ -319,7 +353,7 @@ export function EnquiryBand({
       surface={surface}
       heading={band.headingText}
       body={lead && lead.type === 'paragraph' ? [plain(lead.runs)] : undefined}
-      form={corpusEnquiryForm(page)}
+      form={corpusEnquiryForm(page, band)}
     />
   );
 }
@@ -329,13 +363,24 @@ export function EnquiryBand({
  * authored, hidden context naming the page and its family. Shared by the template's close and by a
  * route that hands the form to a template which takes it as a slot (CaseStudyIndex).
  */
-export function corpusEnquiryForm(page: CorpusPage) {
+export function corpusEnquiryForm(page: CorpusPage, band?: CorpusBand) {
   const conversion = page.conversion;
+  /* The band's own "After sending:" line ("We'll reply within one business day.") is the caption
+     under the submit, in the page's words (home round 3), where the form used to print its own. */
+  const formBlock = (band ?? page.bands.find((b) => b.id === conversion?.anchor))?.blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'form' }> => block.type === 'form',
+  );
+  const after = formBlock?.after ? plain(formBlock.after) : undefined;
   return (
     <EnquiryForm
       variant="enquiry"
       urlLabel="Product or company URL"
       action={ENDPOINTS.enquiry}
+      /* The form is the band's primary object (home round 3): lg fields, the submit across the
+         panel, so the one solid on the band is the widest thing in it. */
+      fieldScale="lg"
+      submit="full"
+      caption={after}
       success={
         conversion?.onSuccess
           ? { heading: conversion.onSuccess.heading, body: conversion.onSuccess.body }

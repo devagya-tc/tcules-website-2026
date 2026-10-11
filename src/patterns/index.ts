@@ -209,7 +209,6 @@ export type {
   BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
-  BlockCardRatio,
   BlockCardCue,
   BlockCardFrame,
   BlockCardLinkScope,
@@ -287,6 +286,7 @@ export type {
   HeroCutItem,
   HeroRating,
   HeroLeadSize,
+  HeroStat,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';
@@ -300,7 +300,7 @@ export type {
   SiteFooterSocial,
 } from './SiteFooter';
 export { Banner } from './Banner';
-export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
+export type { BannerProps, BannerForm, BannerMediaSide, BannerLink, BannerBandHead } from './Banner';
 export { Statement } from './Statement';
 export type {
   StatementProps,
@@ -351,7 +351,8 @@ export {
   TestimonialBeside,
   TestimonialCard,
   TestimonialWall,
-  initialsOf,
+  type TestimonialAvatar,
+  type TestimonialBesideArrangement,
   type TestimonialBesideProps,
   type TestimonialCardProps,
   type TestimonialFrame,

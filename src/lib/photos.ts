@@ -126,22 +126,18 @@ export function cropScale(id: PhotoId, ratio: PhotoRatio, boxWidth: number): num
 
 /**
  * Every card's crop box: BlockCard's --bcrd-media-ratio and ListCard's --lcrd-thumbnail-ratio, both
- * --ratio-cover, 3/2 (owner, 29 Sep), restated by hand because TypeScript cannot read a custom
- * property. A change there is a change here. One ratio for every card placement — set, pair,
- * horizontal and thumbnail — because that is the box the cards actually render.
- *
- * DRIFT, recorded 6 Oct 2026 (fdn-media fix round): visual-direction § 5.4's table gives card sets
- * of three or more 16:9 and the horizontal card 4:3. No card renders either; BlockCard has one ratio
- * for both orientations. Measuring against those would pass or fail a photo against a box nobody
- * draws, so the code follows the real box. If § 5.4's ratios are wanted, they are a BlockCard
- * change (a ratio per set size), and this constant follows it.
+ * --ratio-standard, 16/9 (owner, home round 3, 11 Oct 2026: one standard image ratio for every card
+ * on every screen), restated by hand because TypeScript cannot read a custom property. A change
+ * there is a change here. One ratio for every card placement — set, pair, horizontal and thumbnail —
+ * because that is the box the cards actually render. It was 3/2 (owner, 29 Sep) with per-set
+ * exceptions BlockCard has now retired.
  */
-export const CARD_RATIO: PhotoRatio = '3/2';
+export const CARD_RATIO: PhotoRatio = '16/9';
 
 /**
  * The photo placements, as they render at 1470 (§ 5.4). The inline size is the content column's
  * arithmetic (1240, 32 gutters, 96 split seams), restated by hand like src/lib/image-sizes.ts. The
- * card placements take CARD_RATIO, the box they render, not § 5.4's 16:9 and 4:3 (see above).
+ * card placements take CARD_RATIO, the box they render (16:9, see above).
  */
 export const PHOTO_PLACEMENTS = {
   /** B, K and L-photo: the 4:5 media split's image track. */

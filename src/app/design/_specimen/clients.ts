@@ -37,6 +37,8 @@ export const DOODLE = client('Doodle');
 export const PLEDGE = client('Pledge');
 export const GT_TOOLS = client('GT Tools');
 export const INCLUUDE = client('Incluude');
+/* Eden AI's mark is a trimmed transparent PNG (home round 3): only its alpha is used, as a mask. */
+export const EDEN_AI = client('Eden AI');
 
 /** The set, in the order a strip reads. Which mark leads is a content decision. */
 export const CLIENTS: readonly ClientRecord[] = [

@@ -476,7 +476,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                     title={item.headingText}
                     bodyHtml={paragraphs}
                     size="lg"
-                    ratio="cover"
                     {...(image ? { media: { type: 'image' as const, image } } : {})}
                   />
                 </ul>
@@ -717,7 +716,6 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
               href={card.href}
               ctaLabel={card.ctaLabel}
               size="lg"
-              ratio="double"
               cue={card.href ? 'cta' : undefined}
             />
           </ul>

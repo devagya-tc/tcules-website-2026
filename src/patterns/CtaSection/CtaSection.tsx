@@ -681,6 +681,18 @@ const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
 /** The closes' ground (owner, 7 Oct 2026): see `surface`. */
 const CLOSE_SURFACE: SectionSurface = 'tint';
 
+/**
+ * The split close's form panel: the surface one step off the band's ground, so the panel is the
+ * band's raised, bright object (home round 3). Paper on the tint close, tint on a paper band, and
+ * paper on ink or blue (never a blue panel: blue is never a fill for a card-like box).
+ */
+const PANEL_SURFACE: Record<SectionSurface, SectionSurface> = {
+  paper: 'tint',
+  tint: 'paper',
+  ink: 'paper',
+  blue: 'paper',
+};
+
 export function CtaSection(props: CtaSectionProps) {
   /* The heading owns the region's name. `useId` rather than a caller-supplied id, because two
      instances on one route would otherwise have to be told apart by hand — and the id is only ever
@@ -885,22 +897,24 @@ export function CtaSection(props: CtaSectionProps) {
   /* `split` is the default and the fall-through, which is why it needs no discriminator check: the
      union's first member has `arrangement?: 'split'`, so an omitted arrangement lands here.
 
-     [10, 7] at `section` from 1280: the copy, its points and its contact strip in 10 (673 at 1470),
-     the full EnquiryForm in 7 (471). The 7 is sized TO THE FORM: a one-field row of the full set
-     (email, the question, the link) reads as stretched any wider than ~470. EnquiryForm has no
-     measure of its own since the cmp-form fix round (6 Oct 2026: one width policy, every variant
-     fills its track; the old 470 `--enq-form-max-inline` is deleted), so the form meets the band's
-     end edge by filling this track, not by a cap. § 3.4 L draws the close
-     as [5, 7] with the form in 667 — that is the COMPACT form, and cmp-form's L-photo; the full-form
-     close's [10, 7] is recorded as an amendment to § 3.4 L (docs/kit/brand-amendments.md).
-     [1, 1] from 1024 to 1279 (final fix round): at 1024 the 7 is 356, too narrow for the form's
-     "Send enquiry" and "See available times" on one row, and the link wrapped under the submit.
-     Halves give it 432.
+     THE FORM IS THE BAND'S PRIMARY OBJECT (owner, home round 3, 11 Oct 2026, from the stakeholder:
+     "the form isn't the main item in those sections. the form feels secondary … design it in a way
+     that the user fills out more"). It was [10, 7] with the copy in the larger track at h1 and the
+     form in the narrower one on the bare ground, so the eye landed on the heading and the form
+     read as an attachment to it. Now:
 
-     TOP-ALIGNED (final fix round). The copy no longer stretches to pin its last part to the form's
-     foot: pinned, the points left ~110 of bare paper between the lede and point 01, and the contact
-     strip ~250 — unfilled, not composed. The copy reads down from the form's first label, and the
-     air falls at the foot of the band, where the `closing` texture rises into it.
+       · the form takes the LARGER track, 7 of [5, 7] from 1024 (667 at 1470, the width the full set
+         reads best at with lg fields), on a raised panel: a small surface of its own, one step off
+         the band's ground (paper on the tint close, PANEL_SURFACE), at the 8 radius with a
+         `gutter` inset — the one bright, bounded object in the band;
+       · the copy beside it steps down to the offer's h2 and is centred on the panel, the quieter
+         supporting voice: what to send and why, never louder than the place to send it;
+       · the submit is the band's one solid primary, in the panel (the caller's form).
+
+     The panel declares its own surface (`data-surface`) so the fields, the submit and the caption
+     inside it take that surface's tokens — every surface block is self-contained exactly so a
+     surface can nest (CLAUDE.md § Tokens rule 2). Below 1024 the copy comes first and the panel
+     a `stack` under it, full column.
 
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
@@ -916,17 +930,24 @@ export function CtaSection(props: CtaSectionProps) {
       data-arrangement="split"
     >
       <Layout
-        columns={hasForm ? { base: 1, lg: [1, 1], xl: [10, 7] } : undefined}
-        colGap={hasForm ? 'section' : undefined}
+        columns={hasForm ? { base: 1, lg: [5, 7] } : undefined}
+        colGap={hasForm ? 'column' : undefined}
         rowGap="stack"
-        align="start"
+        align={hasForm ? 'center' : 'start'}
       >
         <Layout rowGap="stack">
-          {lede({ scale: 'close' })}
+          {lede({ scale: hasForm ? 'offer' : 'close' })}
           <CtaPoints shape="stack" markers={markers} points={points} />
           {hasContact ? <CtaContactStrip contact={contact} besideForm={hasForm} /> : null}
         </Layout>
-        {hasForm ? <div>{props.form}</div> : null}
+        {hasForm ? (
+          <div
+            className={styles.formPanel}
+            data-surface={PANEL_SURFACE[props.surface ?? CLOSE_SURFACE]}
+          >
+            {props.form}
+          </div>
+        ) : null}
       </Layout>
     </Section>
   );

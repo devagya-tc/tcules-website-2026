@@ -34,21 +34,41 @@
   block-size: 100%;
 }
 
-/* The client's words: the reading quote at its narrow measure (22), italic in the composite — the
-   brand's speech voice — wrapped pretty so the last line alone shortens. */
+/* The client's words in the SANS (owner, home round 3, 11 Oct 2026: small text, readability
+   first): the lead role (18) on the card that is the thing, wrapped pretty so the last line alone
+   shortens. The italic serif reading quote it replaced was the harder read at a card's measure. */
 .quote {
   min-inline-size: 0;
   /* A measure in the quote's own type: no effect inside a card's track, and a cap when an unboxed
      quote is handed a full column (a supporting quote under a row of claims). */
   max-inline-size: var(--measure-body);
-  font: var(--text-quote-sm);
+  font: var(--tsm-quote-text);
   color: var(--tsm-quote-ink);
   text-wrap: var(--text-running-wrap);
   overflow-wrap: anywhere;
 }
 
+/* The supporting card: one role down, the body (16), in the quieter ink. */
 .sm .quote {
+  font: var(--tsm-quote-text-sm);
   color: var(--tsm-quote-ink-quiet);
+}
+
+/* The diptych's panel (TestimonialBeside `diptych`): the card's quiet ground at the card ratio, so
+   its edges are the case cover's edges. The ratio is a floor — a grid item with an aspect ratio
+   grows past it when its content is taller, so a long quote never clips. The `gutter` inset and the
+   8 radius are the boxed card's. */
+.panel {
+  aspect-ratio: var(--tsm-panel-ratio);
+  padding: var(--gap-gutter);
+  background: var(--tsm-ground);
+  border-radius: var(--tsm-radius);
+}
+
+/* The panel's words at the lead-lg role (20): the panel is as large as the cover beside it, so the
+   quote takes one step up from the card's 18, still sans. */
+.quotePanel {
+  font: var(--tsm-quote-text-panel);
 }
 
 /* Prose stays the trusted-HTML seam; the two-class selector outranks its root so the quote's own
@@ -69,22 +89,20 @@
   border-block-start: var(--tsm-rule-width) solid var(--tsm-rule);
 }
 
-/* The monogram: the speaker's initials in a hairline square, the mono label voice, blue as an index
-   numeral is. It centres its two letters inside its own box (inline-flex on one text node arranges
-   nothing). Square, never a circle. */
-.monogram {
-  display: inline-flex;
+/* The circular avatar (home round 3): a fixed square clipped to a circle, Media filling it. flex:
+   none so the nowrap row can never squeeze it. The CIRCLE is the owner's ruling for a person beside
+   a testimonial (docs/kit/brand-amendments.md, home round 3), against ch05 §6's "never a circle". */
+.avatar {
+  display: block;
   flex: none;
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--tsm-monogram-size);
-  block-size: var(--tsm-monogram-size);
-  border: var(--tsm-rule-width) solid var(--tsm-monogram-rule);
-  border-radius: var(--tsm-monogram-radius);
-  font: var(--text-ui);
-  letter-spacing: var(--text-ui-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--tsm-monogram-ink);
+  inline-size: var(--tsm-avatar-size-md);
+  aspect-ratio: var(--ratio-portrait);
+  border-radius: var(--tsm-avatar-radius);
+  overflow: hidden;
+}
+
+.avatarSm {
+  inline-size: var(--tsm-avatar-size-sm);
 }
 
 .who {
@@ -108,11 +126,14 @@
   color: var(--tsm-role-ink);
 }
 
-/* Unboxed (a supporting quote on the surface itself): the -quiet inks, set for the surface. */
-.card:not(.box) .name {
+/* Unboxed (a supporting quote on the surface itself, or the diptych's speaker under its panel):
+   the -quiet inks, set for the surface. */
+.card:not(.box) .name,
+.nameOpen {
   color: var(--tsm-name-ink-quiet);
 }
 
-.card:not(.box) .role {
+.card:not(.box) .role,
+.roleOpen {
   color: var(--tsm-role-ink-quiet);
 }

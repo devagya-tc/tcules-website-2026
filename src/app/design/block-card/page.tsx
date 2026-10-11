@@ -599,7 +599,7 @@ function SurfaceSetAndRow({ covers }: { covers: boolean }) {
           title={covers ? 'The row, with its cover' : 'The row, head beside body'}
           body={
             covers
-              ? 'Media beside copy at 3:2, the title the cue.'
+              ? 'Media beside copy at 16:9, the title the cue.'
               : 'No cover on this surface, so the hairline stands in for its top edge.'
           }
           media={covers ? cover(COVER_FLOW) : undefined}
@@ -806,13 +806,14 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="2 · Cover-image sets (ruling C1)">
             Case studies carry their cover, and so does every insight or resource that has one —
             articles, videos, podcasts. The image goes through <code>Media</code> with{' '}
-            <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 3:2 (
-            <code>--ratio-cover</code>) in the tile and the featured row alike. The box draws
+            <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 16:9 (
+            <code>--ratio-standard</code>), the one card ratio, in every set and arrangement
+            (home round 3). The box draws
             one hairline round every kind; Media draws none of its own inside a card.
           </BandHead>
           <Specimen
             title="3 case studies · three from lg"
-            note="A shadowed cut-out, an illustration (empty alt: the title names it) and a light cut-out on its paper-deep contrast panel. The illustration is a hero export cropped to 3:2, which is why its labels clip: a card illustration is recomposed at the card ratio at supply (B4), and Media leaves it unboxed either way."
+            note="A shadowed cut-out, an illustration (empty alt: the title names it) and a light cut-out on its paper-deep contrast panel. The illustration is a hero export shown whole in the 16:9 box: a card illustration is recomposed at the card ratio at supply (B4), and Media leaves it unboxed either way."
           >
             <BlockCardSet items={CASE_STUDIES.slice(0, 3)} />
           </Specimen>
@@ -824,7 +825,7 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title="4 case studies · the first featured"
-            note="The featured card is media beside copy, the cover at 3:2 in half the row, at the lg size (h3 over body-lg). Its image reads the two-track sizes value; the three peers read the three-track one and keep md: three peers is the two-to-three shape."
+            note="The featured card is media beside copy, the cover at 16:9 in half the row, at the lg size (h3 over body-lg). Its image reads the two-track sizes value; the three peers read the three-track one and keep md: three peers is the two-to-three shape."
           >
             <BlockCardSet items={CASE_STUDIES.slice(0, 4)} />
           </Specimen>
@@ -846,60 +847,15 @@ export default function BlockCardSpecimenPage() {
           </BandHead>
           <Specimen
             title='lead="beside" · the spotlight'
-            note="From 1024 the lead takes a 2:1 track at 21:9 and lg; the rest stack beside it as text notes, their covers dropped. Where the notes run taller than the lead, its cover grows to meet them (BlockCard grow, Layout fillFirst)."
+            note="From 1024 the lead takes a 2:1 track at the one 16:9 crop and lg; the rest stack beside it as text notes, their covers dropped. The cover never grows past 16:9 (home round 3)."
           >
             <BlockCardSet items={SHAPE_SPOTLIGHT} lead="beside" />
           </Specimen>
           <Specimen
-            title='lead="wide" · a 2:1 lead and two squares'
-            note="From 1024, [2, 1, 1] with the lead at 2:1 and its companions 1:1: one cover height across the row at every width. lg over sm. Below 1024 the ordinary three-card set at 16:9, and on a phone a scroll row."
+            title='lead="wide" · a wide lead and two companions, all 16:9'
+            note="From 1024, [2, 1, 1]: every cover 16:9, so the lead's is twice its companions' — size contrast in one row. lg over sm. Below 1024 the ordinary three-card set, and on a phone a scroll row."
           >
             <BlockCardSet items={SHAPE_WIDE} lead="wide" />
-          </Specimen>
-          <Specimen
-            title='ratio="headshot" · people, 1:1 at every width'
-            note="A person's face keeps the square portrait's own frame at every width, so no crop cuts the head at the hat or the chin. Composed in the caller's Layout (two up on a phone, four from 1024); the eyebrow is the role, the title the name."
-          >
-            <Layout as="ul" columns={{ base: 2, lg: 4 }} colGap="gutter" rowGap="stack">
-              {(
-                [
-                  [
-                    'portrait-woman-black-top',
-                    'Principal designer',
-                    'Meera Joshi',
-                    'Leads the product model.',
-                  ],
-                  [
-                    'portrait-man-hat',
-                    'Design engineer',
-                    'Tom Becker',
-                    'Builds the component library.',
-                  ],
-                  [
-                    'portrait-woman-glasses-plaid',
-                    'Research lead',
-                    'Lena Park',
-                    'Runs the interviews.',
-                  ],
-                  [
-                    'portrait-man-glasses-stripes',
-                    'Design systems lead',
-                    'Marco Reyes',
-                    'Owns the tokens.',
-                  ],
-                ] as const
-              ).map(([id, role, name, body]) => (
-                <BlockCard
-                  key={id}
-                  eyebrow={role}
-                  title={name}
-                  body={body}
-                  media={kit(id)}
-                  ratio="headshot"
-                  tracks={3}
-                />
-              ))}
-            </Layout>
           </Specimen>
           <Specimen
             title="stagger · a pair, the second dropped a section step"
@@ -1098,7 +1054,7 @@ export default function BlockCardSpecimenPage() {
             <Cards>
               <BlockCard
                 title="No width, no height"
-                body="Rendered at the box's 3:2; the file is fetched as-is, with no srcset."
+                body="Rendered at the box's 16:9; the file is fetched as-is, with no srcset."
                 media={cover(NO_DIMENSIONS)}
               />
               <BlockCard
@@ -1434,7 +1390,7 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="9 · Orientation">
             One anatomy, two arrangements, and a presentation prop rather than a CMS field.
             Vertical fills a grid track. Horizontal takes two equal tracks from md and defaults
-            to the <code>lg</code> size (band 22): media beside copy at 3:2 when there is a
+            to the <code>lg</code> size (band 22): media beside copy at 16:9 when there is a
             cover, head beside body when there is not. <code>imageSide</code> is set per card —
             there is no alternation logic inside the component, because a card that alternated
             would have to know its index.
@@ -1450,26 +1406,6 @@ export default function BlockCardSpecimenPage() {
                 {...item(CASE_STUDIES, 1)}
                 orientation="horizontal"
                 imageSide="right"
-              />
-            </Rows>
-          </Specimen>
-
-          <Specimen
-            title='orientation="horizontal" · ratio="double" · a run of wide boards'
-            note="The horizontal card honours ratio. double is 2:1 beside the copy from 1024 and 16:9 stacked below it, for case artefacts wider than 3:2 (the home page's selected work). Every row in a run states the same ratio."
-          >
-            <Rows>
-              <BlockCard
-                {...item(CASE_STUDIES, 0)}
-                orientation="horizontal"
-                imageSide="left"
-                ratio="double"
-              />
-              <BlockCard
-                {...item(CASE_STUDIES, 1)}
-                orientation="horizontal"
-                imageSide="left"
-                ratio="double"
               />
             </Rows>
           </Specimen>
@@ -1501,20 +1437,20 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
 
           <Specimen
-            title="Media ratio · 3:2 in both orientations"
-            note="Inspect the wrappers' computed aspect-ratio: one token, --bcrd-media-ratio, aliasing --ratio-cover, for the tile and the row (29 Sep)."
+            title="Media ratio · 16:9 in every orientation and set"
+            note="Inspect the wrappers' computed aspect-ratio: one token, --bcrd-media-ratio, aliasing --ratio-standard (16:9), for every tile and row at every width (home round 3, 11 Oct 2026). There is no ratio prop."
           >
             <Layout rowGap="stack">
               <Cards columns={{ base: 1, md: 2 }}>
                 <BlockCard
-                  eyebrow="Vertical · 3:2"
+                  eyebrow="Vertical · 16:9"
                   title="The grid tile crop"
                   body="Wide enough that the image does not dominate the copy beneath it."
                   media={cover(COVER_FLOW)}
                   href={ROUTES.caseStudies}
                 />
                 <BlockCard
-                  eyebrow="Vertical · 3:2"
+                  eyebrow="Vertical · 16:9"
                   title="Its grid peer"
                   body="Both tracks resolve the same vertical ratio."
                   media={cover(COVER_FLOW)}
@@ -1524,7 +1460,7 @@ export default function BlockCardSpecimenPage() {
               <Rows>
                 <BlockCard
                   orientation="horizontal"
-                  eyebrow="Horizontal · 3:2"
+                  eyebrow="Horizontal · 16:9"
                   title="The row crop"
                   body="The same crop as the tile, so one cover reads alike in both."
                   media={cover(COVER_FLOW)}
@@ -2070,22 +2006,20 @@ export default function BlockCardSpecimenPage() {
       </Section>
       <Section>
         <Layout rowGap="stack">
-          <BandHead title="23 · The set states the crop, and the phone pair (home round 1, 10 Oct)">
-            Two set-level options the home page needed. <code>ratio</code>: the covers&rsquo;
-            crop when the count rule picks the wrong one — a linked pair is 16:5 by default,
-            which drew a service drawing 230 wide; the gateway states <code>cover</code> (3:2).{' '}
+          <BandHead title="23 · One crop, and the phone pair (home rounds 1 and 3)">
+            The set no longer states a crop: every cover is 16:9 (home round 3, 11 Oct 2026), so a
+            linked pair of contained drawings is 16:9 too.{' '}
             <code>phone=&quot;pair&quot;</code>: two across below 768, never a scroll row, for a
             set of short covered cards whose title is their whole content — eight sectors
             stacked ran ~2900 tall at 390 and a scroll row hid seven of them.
           </BandHead>
           <Specimen
-            title={'Linked covered pair · ratio="cover" · size="lg"'}
-            note="Six drawn situations two up, 3:2 contained drawings, the service named on each cta. The home gateway."
+            title={'Linked covered pair · size="lg"'}
+            note="Two drawn situations two up, contained drawings in the 16:9 box, the service named on each cta."
           >
             <BlockCardSet
               lead="none"
               across={2}
-              ratio="cover"
               size="lg"
               cue="cta"
               scroll="never"

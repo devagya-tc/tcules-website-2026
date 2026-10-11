@@ -14,6 +14,7 @@ import { CtaRow, ListCard, LogoGrid, logoGridColumns } from '@/patterns';
 import { Specimen, specimenStyles as s } from '../../_specimen/Specimen';
 import {
   CLIENTS,
+  EDEN_AI,
   DOODLE,
   GT_TOOLS,
   INCLUUDE,
@@ -189,6 +190,19 @@ export default async function KitLogosPage() {
               rule={false}
             />
           }
+        />
+      </Section>
+
+      {/* ── 03b ─────────────────────────────────────────────────────────────────────────── */}
+      <Label title="03b · Ten cells · the closing pair">
+        {`The nine with Eden AI's PNG, ten (home round 3). Where four across leaves two, each spans two tracks, so the last row is a closing pair and the grid stays a whole rectangle. ${shape(10)}.`}
+      </Label>
+      <Section aria-labelledby="logos-ten">
+        <LogoGrid
+          marks={[EDEN_AI, ...CLIENTS]}
+          context="Some of the teams we've worked with"
+          headingId="logos-ten"
+          align="center"
         />
       </Section>
 

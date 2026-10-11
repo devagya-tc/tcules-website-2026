@@ -510,7 +510,6 @@ export default function ServiceListKitSpecimen() {
               media={photo(card.image)}
               href={card.href}
               tracks={3}
-              ratio="wide"
               size="md"
             />
           ))}

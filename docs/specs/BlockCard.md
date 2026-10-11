@@ -1,5 +1,7 @@
 # BlockCard
 
+> **Amended, home round 3 (11 Oct 2026).** Every cover is 16:9 (`--ratio-standard`) at every width and in every arrangement. The `ratio` prop and its seven crops (cover, wide, panorama, double, square, pair, headshot) and the `grow` prop are retired; BlockCardSet no longer takes `ratio`. Where this spec names a per-set crop, read 16:9. See docs/page-mapping.md § 19 and docs/kit/brand-amendments.md (home round 3).
+
 ## 0 · Front matter
 
 |                     |                                                                                                                        |

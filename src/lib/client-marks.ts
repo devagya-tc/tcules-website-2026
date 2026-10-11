@@ -24,7 +24,8 @@ const mark = (
   width: number,
   height: number,
   density: number,
-): ClientMarkRecord => ({ name, src: `/clients/${file}.svg`, width, height, density });
+  extension: 'svg' | 'png' = 'svg',
+): ClientMarkRecord => ({ name, src: `/clients/${file}.${extension}`, width, height, density });
 
 export const CLIENT_MARKS: readonly ClientMarkRecord[] = [
   mark('Omny', 'omny', 93.982, 24.792, 0.28),
@@ -36,6 +37,12 @@ export const CLIENT_MARKS: readonly ClientMarkRecord[] = [
   mark('Pledge', 'pledge', 92.032, 19.6, 0.35),
   mark('GT Tools', 'gttools', 67.384, 19.6, 0.36),
   mark('Incluude', 'incluude', 88.906, 16.851, 0.39),
+  /* Eden AI has no SVG in the studio's files: its mark is the trimmed transparent PNG the previous
+     site used (copied as the one named file, home round 3, 11 Oct 2026). ClientMark uses only the
+     alpha, as a mask, so the PNG draws in the marks' one ink like every SVG; its pixel size stands
+     in for a viewBox and its density was measured over the same alpha (0.23). Replace it with the
+     client's published SVG when it arrives (docs/image-register.md). */
+  mark('Eden AI', 'eden-ai', 1262, 400, 0.23, 'png'),
 ];
 
 const BY_NAME = new Map(CLIENT_MARKS.map((record) => [record.name.toLowerCase(), record]));

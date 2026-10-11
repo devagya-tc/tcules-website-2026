@@ -268,3 +268,18 @@ request, and each must be replaced with the review's own rating before launch
 it. A record with no rating renders no stars.
 
 **Found in.** Home round 2, 10 Oct 2026 (`feat/pages-pass-1`).
+
+## 19. Testimonials carry an optional portrait; card covers carry a 16:9 master
+
+**What.** (a) A testimonial record gains `portrait` (media, square, optional) with a consent flag,
+mapped onto the view model's `TestimonialAvatarRecord` (`src/lib/corpus-types.ts`); a record with no
+portrait renders no avatar, never initials. (b) Every case, insight and resource `cover` is validated
+as a 16:9 master (2560 × 1440 recommended) and may carry a `focalPoint` (x, y in 0–1) the card crop
+anchors on — the role `COVER_FOCUS` plays in `HomePage.tsx` today.
+
+**Why.** Home round 3 (11 Oct 2026): the testimonial card shows a circular avatar when there is a
+photograph (PLACEHOLDER stock portraits in `fixtures/testimonial-avatars.ts` until real ones arrive,
+docs/content-proposals.md P40), and every card on the site crops to one ratio, 16:9 — so one master
+serves every placement and a cover is never re-cut per band.
+
+**Found in.** Home round 3, 11 Oct 2026 (`feat/pages-pass-1`).

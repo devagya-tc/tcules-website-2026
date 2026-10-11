@@ -1,5 +1,7 @@
 # PageHero
 
+> **Amended, home round 3 (11 Oct 2026).** `stats` sets two to four figures (Stat md) in one row a `block` under the actions, at every width — the record inside the hero rather than a band of its own. See docs/page-mapping.md § 19.
+
 ## 0 · Front matter
 
 | | |

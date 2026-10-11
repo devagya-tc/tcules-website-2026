@@ -1,5 +1,7 @@
 # Accordion
 
+> **Amended, home round 3 (11 Oct 2026).** The question rests at full ink and no longer moves on hover (`--acc-question-ink-hover` deleted); the answer takes `--acc-answer-ink`, one clear step quieter, so the question reads as the question. Only the chevron answers the pointer. See docs/page-mapping.md § 19.
+
 ## 0 · Front matter
 
 |                     |                                                                                                                         |
