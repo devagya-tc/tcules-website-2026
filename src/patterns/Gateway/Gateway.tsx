@@ -22,55 +22,71 @@ export type GatewayItem = {
   service: string;
 };
 
+/**
+ * How the situations are presented (home round 7, 11 Oct 2026; both on /design/kit/gateway).
+ *
+ *   select  THE SELECTOR (home). Six titles down one column, every one at full ink. A marker — a
+ *           raised ground — sits behind the current situation and SLIDES to whichever one the
+ *           pointer or focus is on, and the answer beside the list slides with it, level with the
+ *           title. Running the pointer down the list glides the marker and the answer through each
+ *           option in turn: browsing, not clicking.
+ *   expand  The accordion of situations: ruled rows, the current one open in place with its
+ *           sentence and service under its title. Explored alternative: in-flow, so the rows move as
+ *           one opens and another closes.
+ *
+ * A presentation choice, never a CMS field.
+ */
+export type GatewayArrangement = 'select' | 'expand';
+
 export type GatewayProps = {
   items: readonly GatewayItem[];
+  arrangement?: GatewayArrangement;
   /** The element each situation's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
 };
 
-/* How long the pointer must rest on a situation before the answer follows it. Long enough that a
-   diagonal move from a lower title to the answer does not re-select every title it crosses; short
-   enough to read as immediate. Behaviour, not a token: nothing in CSS reads it. */
-const HOVER_INTENT_MS = 90;
+/* `expand` only: the rows reflow as one opens, so the pointer must rest a beat before a row opens,
+   or the row under it moves away and the next one opens in a cascade. The selector needs none —
+   nothing in its list moves — and reacts at once, which is what makes running down it feel like
+   browsing. Behaviour, not a token: nothing in CSS reads it. */
+const EXPAND_INTENT_MS = 140;
 
 /**
- * TIER 2 — Gateway, the situation selector (home "What do you need next?", round 6, 11 Oct 2026).
+ * TIER 2 — Gateway, the situation selector (home "What do you need next?", rounds 6–7, 11 Oct 2026).
  *
- * What the band is for (owner): "as a visitor, i may not know if i need product design service or
- * design system service, but i'll probably know if i want to launch a new product or get teams
- * building from one system." So the reader's first act is RECOGNITION across six situations, and
- * only then reading one sentence and going. The IA follows that order:
+ * The band's job (owner): "as a visitor, i may not know if i need product design service or design
+ * system service, but i'll probably know if i want to launch a new product or get teams building
+ * from one system." So the reader's first act is RECOGNITION across six situations, then reading
+ * one sentence, then going. The IA follows that order:
  *
  *   1. The six situations are the band's largest, and only, repeated thing: h3 titles down one
- *      column, all visible at once, nothing between them but air. Scanning them is the job.
- *   2. One situation is lit — ink and a blue arrow — and the other five rest in a quieter ink. The
- *      lit one is the eye's entry; pointing at, or tabbing to, another lights it instead.
- *   3. The lit situation's answer — its sentence and the service that delivers it — stands beside
- *      it, level with the chosen title: the answer is anchored to its question, and it moves with
- *      the choice. One sentence on screen at a time, not six, so the band is never dense.
+ *      column, all visible at once, ALL AT FULL INK (round 7, owner: "not fading the text out").
+ *   2. The current situation is marked by a raised ground behind it and a blue arrow after it. The
+ *      marker is the eye's entry and it moves to whatever the reader points at or tabs to.
+ *   3. The current situation's answer — its sentence and its service — stands beside it, level with
+ *      it, and travels with the marker. One sentence on screen at a time, so the band is never dense.
  *
- * Below 1024 there is no pointer to point with and no column to answer in, so every situation shows
- * its sentence and its service under its title, all at once.
+ * Below 1024 there is no pointer and no column to answer in, so every situation shows its sentence
+ * and its service under its title, all at once.
  *
- * Every word is in the server-rendered HTML at every width: each situation's sentence and service
- * live inside its own anchor (shown below 1024, `display: none` from 1024, where the answer column
- * shows the lit one). Nothing is hidden behind a click, so nothing is lost to search.
+ * SEARCH: every word is in the server-rendered HTML at every width. Each situation's sentence and
+ * service live inside its own anchor (shown below 1024, `display: none` from 1024, where the answer
+ * column mirrors the current one). Google indexes content present in the HTML at full weight even
+ * where it is collapsed (mobile-first indexing; Mueller, 2020) — and the mobile render, which is the
+ * one Google indexes, shows everything anyway. Nothing loads on interaction.
  *
- * Accessibility: each situation is one anchor, one tab stop, to its service. Its sentence is its
- * description (`aria-describedby`, which reads hidden content). The answer column is a visual mirror
- * of the lit situation: `aria-hidden`, its link out of the tab order, because the title the reader
- * is on already goes to the same place.
- *
- * Rounds 1–5 set this band as cards and ruled grids in five styles; the owner rejected each as a
- * restyle of the same shape rather than a design for the band's job (page-mapping § 22).
+ * ACCESSIBILITY: each situation is one anchor, one tab stop, to its service; its sentence is its
+ * description (`aria-describedby`, which reads hidden content). The answer column is a visual
+ * mirror: `aria-hidden`, its link out of the tab order, because the title the reader is on already
+ * goes to the same place.
  */
-export function Gateway({ items, titleAs = 'h3', className }: GatewayProps) {
+export function Gateway({ items, arrangement = 'select', titleAs = 'h3', className }: GatewayProps) {
   const Title = titleAs;
   const uid = useId();
   const [active, setActive] = useState(0);
-  const [shift, setShift] = useState(0);
-  const listRef = useRef<HTMLElement>(null);
+  const [geo, setGeo] = useState({ markY: 0, markH: 0, shift: 0 });
+  const trackRef = useRef<HTMLDivElement>(null);
   const paneRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -81,18 +97,24 @@ export function Gateway({ items, titleAs = 'h3', className }: GatewayProps) {
   };
   const pointTo = (i: number) => {
     clearIntent();
-    intent.current = setTimeout(() => setActive(i), HOVER_INTENT_MS);
+    if (arrangement === 'expand') intent.current = setTimeout(() => setActive(i), EXPAND_INTENT_MS);
+    else setActive(i);
   };
   useEffect(() => clearIntent, []);
 
-  /* The answer stands level with the lit title, clamped so it never runs below the list's end. */
+  /* Where the marker and the answer stand: the marker on the current row; the answer level with
+     its title, clamped so it never runs below the list's end. */
   const measure = useCallback(() => {
-    const list = listRef.current;
-    const pane = paneRef.current;
+    const track = trackRef.current;
     const item = itemRefs.current[active];
-    if (!list || !pane || !item) return;
-    const max = Math.max(0, list.offsetHeight - pane.offsetHeight);
-    setShift(Math.min(item.offsetTop - list.offsetTop, max));
+    if (!track || !item) return;
+    const pane = paneRef.current;
+    const max = pane ? Math.max(0, track.offsetHeight - pane.offsetHeight) : 0;
+    setGeo({
+      markY: item.offsetTop,
+      markH: item.offsetHeight,
+      shift: Math.min(item.offsetTop, max),
+    });
   }, [active]);
 
   useLayoutEffect(() => {
@@ -107,65 +129,92 @@ export function Gateway({ items, titleAs = 'h3', className }: GatewayProps) {
   const lit = items[active] ?? items[0];
   if (!lit) return null;
 
-  return (
-    <Layout columns={{ lg: [8, 4] }} colGap="column" rowGap="none" className={cx(styles.root, className)}>
-      <Layout as="ul" rowGap="gutter" ref={listRef} className={styles.list}>
-        {items.map((item, i) => {
-          const descId = `${uid}-${item.id}-desc`;
-          return (
-            <li
-              key={item.id}
-              ref={(el) => {
-                itemRefs.current[i] = el;
-              }}
-              className={styles.item}
-              data-lit={i === active ? '' : undefined}
-            >
-              <a
-                href={item.href}
-                className={styles.link}
-                aria-describedby={descId}
-                onPointerEnter={() => pointTo(i)}
-                onPointerLeave={clearIntent}
-                onFocus={() => {
-                  clearIntent();
-                  setActive(i);
-                }}
-                data-btn-link-group=""
-              >
-                <Layout rowGap="text">
-                  <Title className={styles.title}>
-                    {item.title}
-                    <span className={styles.arrow} aria-hidden="true">
-                      <Icon name="arrow-right" size="xl" />
+  const linkCue = (label: string) => (
+    <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+      {label}
+    </Button>
+  );
+
+  const situation = (item: GatewayItem, i: number) => {
+    const descId = `${uid}-${item.id}-desc`;
+    return (
+      <li
+        key={item.id}
+        ref={(el) => {
+          itemRefs.current[i] = el;
+        }}
+        className={styles.item}
+        data-lit={i === active ? '' : undefined}
+      >
+        <a
+          href={item.href}
+          className={styles.link}
+          aria-describedby={descId}
+          onPointerEnter={() => pointTo(i)}
+          onPointerLeave={clearIntent}
+          onFocus={() => {
+            clearIntent();
+            setActive(i);
+          }}
+          data-btn-link-group=""
+        >
+          <Layout rowGap="none">
+            <Title className={styles.title}>
+              {item.title}
+              <span className={styles.arrow} aria-hidden="true">
+                <Icon name="arrow-right" size="xl" />
+              </span>
+            </Title>
+            <span className={styles.detail}>
+              <span className={styles.detailInner}>
+                {/* The sentence keeps a reading measure: the leading 7 of [7, 5] in a full-width
+                    row (expand); in the selector's 8-of-12 track it is already a column. */}
+                <Layout columns={{ lg: [7, 5] }} colGap="column" rowGap="none" className={styles.detailBody}>
+                  <Layout rowGap="text">
+                    <span id={descId} className={styles.body}>
+                      {item.body}
                     </span>
-                  </Title>
-                  <span className={styles.detail}>
-                    <Layout rowGap="text">
-                      <span id={descId} className={styles.body}>
-                        {item.body}
-                      </span>
-                      <span>
-                        <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-                          {item.service}
-                        </Button>
-                      </span>
-                    </Layout>
-                  </span>
+                    <span>{linkCue(item.service)}</span>
+                  </Layout>
                 </Layout>
-              </a>
-            </li>
-          );
-        })}
+              </span>
+            </span>
+          </Layout>
+        </a>
+      </li>
+    );
+  };
+
+  if (arrangement === 'expand') {
+    return (
+      <Layout as="ul" rowGap="none" className={cx(styles.root, styles.expand, className)}>
+        {items.map(situation)}
       </Layout>
+    );
+  }
+
+  const placed = {
+    '--gwy-marker-y': `${geo.markY}px`,
+    '--gwy-marker-h': `${geo.markH}px`,
+  } as CSSProperties;
+
+  return (
+    <Layout columns={{ lg: [8, 4] }} colGap="column" rowGap="none" className={cx(styles.root, styles.select, className)}>
+      <div ref={trackRef} className={styles.track} style={placed}>
+        <span className={styles.marker} aria-hidden="true" data-ready={geo.markH ? '' : undefined} />
+        <Layout as="ul" rowGap="none" className={styles.list}>
+          {items.map(situation)}
+        </Layout>
+      </div>
 
       <div className={styles.answerTrack} aria-hidden="true">
         <div
           ref={paneRef}
           className={styles.answer}
-          style={{ '--gwy-answer-shift': `${shift}px` } as CSSProperties}
+          style={{ '--gwy-answer-shift': `${geo.shift}px` } as CSSProperties}
         >
-          {/* Keyed on the lit situation so the answer re-enters (a short fade) when it changes. */}
+          {/* Keyed on the current situation so its words re-enter (a short fade) as it changes,
+              while the answer's box glides. */}
           <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
             <p className={styles.answerText}>{lit.body}</p>
             <span>

@@ -43,10 +43,10 @@ export default async function KitGatewayPage() {
             <p className={t.eyebrow}>UI kit · the situation selector</p>
             <h1>Gateway</h1>
             <p className={t.lead}>
-              Six reader situations down one column. The reader recognises their situation first, so
-              the titles are the band&rsquo;s largest repeated thing; one is lit, and its sentence
-              and service stand beside it, level with it. Point at or Tab to another situation and
-              the answer follows. Below 1024 every situation shows its sentence and service.
+              Six reader situations down one column, every one at full ink. The reader recognises their
+              situation first, so the titles are the band&rsquo;s largest repeated thing; a marker
+              glides behind the current one and its sentence and service glide beside it. Below
+              1024 every situation shows its sentence and service.
             </p>
           </Layout>
         </Layout>
@@ -55,7 +55,7 @@ export default async function KitGatewayPage() {
       <Variation
         id="paper"
         title="G.1 · Selector on paper — home"
-        note="From 1024: the lit title in ink with its arrow, five at rest in the quieter ink, the answer in the trailing 5 of [7, 5] at lead size with the service as the link, moving level with the lit title. Below 1024: every title, sentence and service in one column. Every word is in the HTML at every width."
+        note="From 1024: every title at full ink. A faint blue marker sits behind the current situation and glides to whichever one the pointer or focus is on, with no delay; the answer (sentence at lead size, the service as the link) glides beside it, level with its title. Run the pointer down the list to browse. Below 1024: every title, sentence and service in one column. Every word is in the HTML at every width."
       />
       <ContentSection heading={heading} headingId="gw-paper">
         <Gateway items={items} />
@@ -64,10 +64,19 @@ export default async function KitGatewayPage() {
       <Variation
         id="tint"
         title="G.2 · Selector on tint"
-        note="The same on the tint ground: the resting titles step to neutral-600 to keep 3:1."
+        note="The same on the tint ground: the marker turns paper."
       />
       <ContentSection heading={heading} headingId="gw-tint" surface="tint">
         <Gateway items={items} />
+      </ContentSection>
+
+      <Variation
+        id="expand"
+        title="G.3 · Expanding rows — explored alternative"
+        note="Ruled rows at full ink; from 1024 the current row opens in place to show its sentence and service, and the others shut. Calm and familiar (an accordion that follows the pointer), but it is in-flow: rows move as one opens and another closes, so it needs a beat of hover intent and cannot feel as fluid as the selector. Below 1024 every row is open."
+      />
+      <ContentSection heading={heading} headingId="gw-expand">
+        <Gateway items={items} arrangement="expand" />
       </ContentSection>
     </>
   );

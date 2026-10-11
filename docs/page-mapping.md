@@ -1341,3 +1341,18 @@ press by every ground arrangement.
 **Removed:** Gateway's `grid`, `index` and `rows` arrangements, `mark`, `cue`, and the item `icon`; the disc and ground tokens. The specimen /design/kit/gateway now shows the selector on paper and tint.
 
 **Measures:** 723 tall at 1440 (one fold), 1,557 at 390. `verify`, `build`, `aria:check` (94 pages) and shots of `/` and the specimen all pass.
+
+### §22.1 · Round 7 — full ink, a gliding marker, smooth browsing (11 Oct 2026)
+
+**Owner:** "i like this idea. it needs to be better so we're not fading the text out. the interaction is also not very smooth like if i'm moving my mouse across the list, it should naturally feel like i went through the options … also need to consider from SEO perspective."
+
+**Causes and fixes:**
+- **The fade.** Round 6 marked the current situation by greying the other five. Now every title stays at full ink, and the current one is marked by a raised faint-blue ground behind it plus its arrow.
+- **Not smooth.** Round 6 waited 90ms of hover intent and then snapped. Now there is no delay. The marker and the answer are moved by transform and glide between rows (`--duration-medium`, standard easing). The rows have no dead strip between targets (16 inset each, no gap), so running the pointer down the list passes through each option in turn.
+- **SEO.** Every sentence and service is server-rendered in its own anchor at every width. Google indexes HTML-present content at full weight even when collapsed (Mueller, March 2020), and the mobile render, which Google indexes, shows everything. Nothing loads on interaction.
+
+**Precedent:** a list with a hover marker and a side preview is the common services-index pattern (Framer "service hover reveal", the Webflow Omakase services list). Ours keeps all titles legible and swaps an answer instead of an image.
+
+**Explored alternative (specimen G.3, `arrangement="expand"`):** ruled rows where the current one opens in place. It is in-flow, so rows move as one opens; it needs 140ms of hover intent and cannot feel as fluid as the selector.
+
+The title track is 8 of 12, so every title sits on one line at 1440. The band is about 755 tall at 1440.
