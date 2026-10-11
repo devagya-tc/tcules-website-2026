@@ -43,9 +43,9 @@ export default function VoiceLedgerSpecimen() {
           <h1>VoiceLedger</h1>
           <p className={t.lead}>
             The reader knows what is going wrong before they know which service they need. So the
-            complaint, in their own words, is the band&rsquo;s large thing (the speech voice,
-            quote-lg) down one edge on hairlines, and where we start is the reply beside it, led by a
-            blue arrow, its first line on the complaint&rsquo;s first baseline (Layout{' '}
+            complaint, in their own words, is the band&rsquo;s large thing (upright serif at h4, its
+            blue quote marks hung into the margin) down one edge on hairlines, and where we start is
+            the reply beside it, no arrow, its first line on the complaint&rsquo;s first baseline (Layout{' '}
             <code>align=&quot;first-baseline&quot;</code>). Quote marks and apostrophes are typeset;
             the words are as authored.
           </p>
@@ -55,7 +55,7 @@ export default function VoiceLedgerSpecimen() {
       <Variation
         id="five"
         title="1 · Five complaints — the shape"
-        note="From 1024 [7, 5]: complaints on one line where they fit, replies beside them. Below 1024 each reply under its complaint, the arrow on its first line."
+        note="From 1024 [7, 5]: complaints on one line where they fit, replies beside them. Below 1024 each reply under its complaint."
       />
       <VoiceLedger
         heading="Where we start depends on what's going wrong"

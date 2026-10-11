@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Icon, Layout, Section, type SectionSurface } from '@/components';
+import { Layout, Section, type SectionSurface } from '@/components';
 
 import styles from './VoiceLedger.module.css';
 
@@ -40,15 +40,43 @@ function typeset(text: string): string {
 }
 
 /**
+ * The complaint with its own quote marks drawn as the row's blue mark: the opening mark hangs into
+ * the margin so the words keep the column's edge, the closing mark sits after the last word. Text
+ * without marks renders as authored.
+ */
+function Voice({ text }: { text: string }) {
+  const set = typeset(text);
+  const match = /^“([\s\S]*)”([.!?]?)$/.exec(set);
+  if (!match) return <>{set}</>;
+  return (
+    <>
+      <span className={styles.open} aria-hidden="true">
+        “
+      </span>
+      {match[1]}
+      <span className={styles.close} aria-hidden="true">
+        ”
+      </span>
+      {match[2]}
+    </>
+  );
+}
+
+/**
  * VoiceLedger — the complaints a team says out loud, each answered by where we start
  * (product-design round 6, 11 Oct 2026; page-mapping § 23).
  *
  * The band's job is recognition: a visitor may not know which service they need, but they know
  * what is going wrong, and they say it in these words. So the complaint is the band's large thing,
- * set in the speech voice (quote-lg) in the leading 7 of [7, 5] from 1024, one row each on a
- * hairline; the answer is the reply beside it, its first line on the complaint's first baseline,
- * led by a blue arrow. The eye runs down one edge of complaints, stops at its own, and reads across
- * to the answer. Below 1024 each reply sits under its complaint.
+ * set in the upright serif at h4 (two steps under the band's h2) in the leading 7 of [7, 5] from
+ * 1024, one row each on a hairline; the answer is the reply beside it, its first line on the
+ * complaint's first baseline. The complaint's own quote marks are its blue mark, the opening one
+ * hung into the margin, so the eye runs down a column of marks. Below 1024 each reply sits under
+ * its complaint.
+ *
+ * Owner, 11 Oct 2026: the italic speech voice was hard to read and a blue arrow before each reply
+ * made the rows look clickable. Upright type, and the quote marks — which say "speech", not "go" —
+ * replace both.
  *
  * It is a ledger, not a card set: the items are lines of speech, read in one pass down one edge,
  * not objects to compare. No photograph: the words are the picture.
@@ -80,13 +108,10 @@ export function VoiceLedger({
                 rowGap="text"
                 align="first-baseline"
               >
-                <h3 className={styles.voice}>{typeset(item.voice)}</h3>
-                <p className={styles.reply}>
-                  <span className={styles.mark}>
-                    <Icon name="arrow-right" size="md" />
-                  </span>
-                  {item.reply}
-                </p>
+                <h3 className={styles.voice}>
+                  <Voice text={item.voice} />
+                </h3>
+                <p className={styles.reply}>{item.reply}</p>
               </Layout>
             </li>
           ))}

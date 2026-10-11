@@ -37,25 +37,25 @@
   max-inline-size: var(--vlg-voice-measure);
 }
 
-/* The reply holds its arrow inside its own start edge, so the complaint and the reply's text share
-   a first baseline (the row's Layout aligns them) and the arrow sits centred on that first line. */
+/* A complaint that opens on its quote mark hangs that mark into the margin: a negative first-line
+   indent (typography, not a margin), so the words keep the column's edge. */
+.voice:has(.open) {
+  text-indent: calc(var(--vlg-hang) * -1);
+}
+
+/* The reply: plain running text beside its complaint, sharing its first baseline. */
 .reply {
-  position: relative;
-  padding-inline-start: calc(var(--vlg-mark-size) + var(--gap-tight));
   font: var(--vlg-reply-text);
   text-wrap: var(--text-running-wrap);
   color: var(--vlg-reply-ink);
   max-inline-size: var(--vlg-reply-measure);
 }
 
-/* The arrow that says "this is what we do about it": the reply's one blue mark, centred on its first
-   line (a box one line tall at the start edge). A mark inside the reply, not a sibling it places. */
-.mark {
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline-start: 0;
-  display: flex;
-  align-items: center;
-  block-size: 1lh;
+/* The complaint's quote marks, the row's one blue mark. The opening mark hangs into the margin by
+   its own width (optical: the words keep the column's edge), so five rows make one column of marks
+   down the band's edge. */
+.open,
+.close {
   color: var(--vlg-mark-ink);
 }
+

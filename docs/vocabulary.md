@@ -221,7 +221,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **testimonial.css** — `--tsm-radius` 8px · `--tsm-rule-width` 1px · `--tsm-avatar-size-md` 48px · `--tsm-avatar-size-sm` 40px · `--tsm-avatar-radius` 999px
 - **thread.css** — `--thread-line-width` 2px · `--thread-node-size` 16px · `--thread-node-border` 2px · `--thread-head-size` 10px · `--thread-node-radius` 999px · `--thread-loop-radius` 8px · `--thread-arc-rise` 40px · `--thread-marker-size` 10px · `--thread-hidden-size` 1px · `--thread-title-tracking-md` 0em · `--thread-title-tracking-sm` 0em
 - **video-testimonial.css** — `--vt-poster-radius` 8px · `--vt-play-size-lg` 88px · `--vt-play-size-md` 64px · `--vt-play-glyph-lg` 32px · `--vt-play-glyph-md` 24px · `--vt-play-glyph-nudge` 2px · `--vt-play-radius` 999px · `--vt-ring-width` 2px · `--vt-ring-offset` 2px · `--vt-quote-rule-width` 2px
-- **voice-ledger.css** — `--vlg-heading-tracking` -0.015em · `--vlg-heading-measure` 32ch · `--vlg-lead-measure` 56ch · `--vlg-voice-tracking` -0.005em · `--vlg-voice-measure` 32ch · `--vlg-reply-measure` 56ch · `--vlg-rule-width` 1px · `--vlg-mark-size` 16px
+- **voice-ledger.css** — `--vlg-heading-tracking` -0.015em · `--vlg-heading-measure` 32ch · `--vlg-lead-measure` 56ch · `--vlg-voice-tracking` -0.005em · `--vlg-voice-measure` 32ch · `--vlg-reply-measure` 56ch · `--vlg-rule-width` 1px · `--vlg-hang` 0.42em
 
 ### The three layout primitives — their real prop APIs
 
