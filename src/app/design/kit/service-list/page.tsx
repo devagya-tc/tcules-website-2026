@@ -44,7 +44,7 @@ import t from '../../_specimen/typeroles.module.css';
  * Band order alternates the head, the ground and the card shape (icon boxes · centred covers · rows
  * on tint · four covers · a row of four icon boxes · a rail) so no two bands are the same rectangle, which is the squint test
  * (§ 8.5) applied to the specimen. The two image routers differ by shape as well as head: three whole
- * cards under a display head, then six on a rail that runs off the page's end edge.
+ * cards under a h1 head, then six on a rail that runs off the page's end edge.
  */
 
 const photo = (id: PhotoId): BlockCardMedia => ({ type: 'image', image: getKitPhoto(id) });
@@ -294,7 +294,7 @@ const VARIATIONS = [
   {
     id: 'image-three',
     name: 'Image router, three',
-    note: 'Three linked photographs under a centred display head.',
+    note: 'Three linked photographs under a centred h1 head.',
   },
   {
     id: 'list',
@@ -400,13 +400,13 @@ export default function ServiceListKitSpecimen() {
       </ContentSection>
 
       {/* ── 02 · C-image-3, H-compact centred ──────────────────────────────────────────────── */}
-      {/* Three linked cards at 16:9 under a centred display head, the copy written as the condition
+      {/* Three linked cards at 16:9 under a centred h1 head, the copy written as the condition
           that sends a reader there; three across from 768 (BlockCardSet), a scroll row at 390. The
           `horizon` at its foot meets the tint list router below. */}
       <Title id="image-three" />
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         data-band="C-image"
         eyebrow="Where to start"
         heading="Three ways in"

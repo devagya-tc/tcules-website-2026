@@ -54,13 +54,15 @@
      .leadBeside. Like the lead, no tracking companion. */
   --csec-lead-text-beside: var(--text-body-lg);
 
-  /* The display head: the band's h2 at the display role on the display measure, as PageHero's.
-     Two callers: the media split's head (cmp-media-split), the copy column's one large element
-     beside the photograph unless the caller sets `media.head="title"`; and headingSize="display"
-     (cmp-feature, 6 Oct 2026), for the band that opens an argument. Read by .headingDisplay only. */
-  --csec-heading-text-display: var(--text-display);
-  --csec-heading-tracking-display: var(--text-display-tracking);
-  --csec-heading-measure-display: var(--measure-display);
+  /* headingSize="xl": the band's h2 at the h1 role, on the heading's own title measure. Two callers:
+     the media split's head (cmp-media-split), the copy column's one large element beside the
+     photograph unless the caller sets `media.head="lg"`; and headingSize="xl", for the band whose
+     heading is its one large thing (it opens an argument). It was the DISPLAY role, as PageHero's,
+     until home round 5 (owner, 11 Oct 2026: "display text should only be used for heros. any other
+     section should use h1/h2 depending on the prominence it requires"), so the `display` size is
+     retired and display is the hero's alone. Read by .headingXl only. */
+  --csec-heading-text-xl: var(--text-h1);
+  --csec-heading-tracking-xl: var(--text-h1-tracking);
 
   /* The media split's photograph box — a ratio, inline over block: 4:3 above the copy, 4:5 beside
      it from 1024 (§ 3.7 item 4). The ratio is a floor; a taller copy column stretches the box. */

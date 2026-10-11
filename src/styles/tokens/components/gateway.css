@@ -1,19 +1,20 @@
 /* ══ Component layer — Gateway ═══════════════════════════════════════════════════
-   Tier 2. A situation router (home round 4, 11 Oct 2026): a set of reader situations, each a whole
-   link to the one service that answers it — the situation as the title, its sentence, and the
-   service named on the cue. Three arrangements were explored on /design/kit/gateway (index, rows,
-   grid); every one reads these tokens.
+   Tier 2. A situation router (home rounds 4 and 5, 11 Oct 2026): a set of reader situations, each
+   a whole link to the one service that answers it — the situation as the title, its sentence, and
+   the service named on the cue. Three arrangements (grid, index, rows) and the grid's marks and
+   cues are on /design/kit/gateway; every one reads these tokens.
 
    Naming: --gwy-{part}-{role}-{state}
-     parts   title · body · service · mark · rule · ring · ground
+     parts   title · body · service · mark · disc · rule · ring · ground
      roles   text · tracking · ink · width
      states  rest (no suffix) · hover · pressed
 
-   The words stay ink (§ 4.3). Blue is the foreground accent and lands twice per row at most: the
-   cue's arrow at rest, and the title under the pointer. The rule is neutral on every surface: a
+   The words stay ink (§ 4.3). Blue is the foreground accent: the cue and the glyph in its disc at
+   rest, and the title under the pointer. The rule is neutral on every surface: a
    blue rule is a mark, never a divider.
 
-   State-token absences are assertions: the body, the service label and the rule never move; the
+   State-token absences are assertions: the body, the service label and the rule never move (the
+   disc's ground does, so it carries a hover step); the
    cue's own three steps are Button's, handed down through `data-btn-link-group`.
 
    Every surface block declares every surface-dependent token.
@@ -21,9 +22,10 @@
 
 /* ── Geometry and type · identical on every surface ──────────────────────────── */
 :root {
-  /* The situation is the reason to click (owner, home round 2), so it is the row's largest thing:
-     h3 in the index, where it owns a 5-of-12 track and the band's display heading is the one size
-     above it; h4 in the narrower arrangements (rows beside a head, a third-width grid cell). */
+  /* The situation is the reason to click (owner, home round 2), so it is the cell's largest thing:
+     h3 in the index, where it owns a 5-of-12 track; h4 in the narrower arrangements (rows beside a
+     head, a third-width grid cell), one title step under the band's h2 heading (round 5: display is
+     the hero's alone). */
   --gwy-title-text-lg: var(--text-h3);
   --gwy-title-tracking-lg: var(--text-h3-tracking);
   --gwy-title-text-md: var(--text-h4);
@@ -41,6 +43,13 @@
      ground's edge. The radius is the photograph radius, as BlockCard's box. */
   --gwy-ground-reach: var(--space-16);
   --gwy-ground-radius: var(--radius-8);
+  /* The grid title's reserved height in lines (round 5): two, the longest situation's wrap in a
+     third-width cell, so every sentence in a row starts on one line. A count, not a distance. */
+  --gwy-title-lines: 2;
+  /* The glyph disc (grid `mark`): a 24 glyph (Icon xl) inside a 12 inset makes a 48 disc. Optical,
+     not a layout distance (gap rule 1): the inset centres a glyph in its own ground. */
+  --gwy-disc-inset: var(--space-12);
+  --gwy-disc-radius: var(--radius-full);
   --gwy-ink-duration: var(--duration-fast);
   --gwy-ink-easing: var(--easing-standard);
   --gwy-ring-width: var(--focus-ring-width);
@@ -54,11 +63,15 @@
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
   --gwy-title-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --gwy-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the grid's arrow */
-  --gwy-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  /* Quieter than the title by a full step (round 5: "dense"): the sentence confirms a choice the
+     title already made, so it recedes. 600 is the paper AA floor for 14px. */
+  --gwy-body-ink: var(--color-neutral-600); /* 4.92:1 */
   --gwy-service-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
   --gwy-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --gwy-ground-hover: var(--color-paper-deep); /* the index row under the pointer */
   --gwy-ground-pressed: var(--color-neutral-100);
+  --gwy-disc-ground: var(--color-brandeis-50); /* the glyph disc; brandeis-500 on it 5.6:1 */
+  --gwy-disc-ground-hover: var(--color-paper); /* on the raised paper-deep ground the disc turns paper */
   --gwy-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --gwy-ring-gap-color: var(--color-paper);
 }
@@ -69,11 +82,13 @@
   --gwy-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --gwy-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --gwy-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --gwy-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --gwy-body-ink: var(--color-neutral-700); /* 7.27:1 — stays; 600 would be 4.39:1 */
   --gwy-service-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --gwy-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --gwy-ground-hover: var(--color-neutral-100);
   --gwy-ground-pressed: var(--color-neutral-200);
+  --gwy-disc-ground: var(--color-brandeis-50);
+  --gwy-disc-ground-hover: var(--color-paper);
   --gwy-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
   --gwy-ring-gap-color: var(--color-paper-deep);
 }
@@ -84,11 +99,13 @@
   --gwy-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --gwy-title-ink-pressed: var(--color-brandeis-100); /* 13.61:1 — lifts, the ink direction */
   --gwy-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
-  --gwy-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --gwy-body-ink: var(--color-neutral-400); /* 8.05:1 */
   --gwy-service-ink: var(--color-neutral-400); /* 8.05:1 */
   --gwy-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --gwy-ground-hover: var(--color-neutral-900);
   --gwy-ground-pressed: var(--color-neutral-800);
+  --gwy-disc-ground: var(--color-neutral-800);
+  --gwy-disc-ground-hover: var(--color-neutral-950);
   --gwy-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
   --gwy-ring-gap-color: var(--color-neutral-950);
 }
@@ -104,6 +121,8 @@
   --gwy-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --gwy-ground-hover: var(--color-brandeis-600);
   --gwy-ground-pressed: var(--color-brandeis-700);
+  --gwy-disc-ground: var(--color-brandeis-600);
+  --gwy-disc-ground-hover: var(--color-brandeis-500);
   --gwy-ring-color: var(--color-white); /* 6.23:1 against gap */
   --gwy-ring-gap-color: var(--color-brandeis-500);
 }

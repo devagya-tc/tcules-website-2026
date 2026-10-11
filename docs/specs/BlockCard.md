@@ -1481,7 +1481,7 @@ Supersedes the phone-scroll rule and the open question in the amendment above.
 - **Hover covers the arrow.** `.cue` is named beside `.cued` in the hover and pressed rules: it carries
   its own rest ink, so on blue a hover that coloured only the title left a white arrow behind.
 
-Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (the band's h2 at
+Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (retired in home round 5, 11 Oct 2026, for `headingSize="xl"`, the h1 role) (the band's h2 at
 `--text-display`) and `asideFill` (the C-icon head-track photograph ends on the body's last line).
 
 

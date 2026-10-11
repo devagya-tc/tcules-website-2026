@@ -28,12 +28,15 @@
   /* The CLOSES step up (cmp-cta fix round 1, 6 Oct 2026): at h2 the page's last ask carried no
      more weight than a mid-page block, and the references set the close's H2 at ~72 (Meridian) or
      as a centred display column over drawn art (Quantum). So the split close is h1 (54) in its 673
-     copy track, and the open close is display (67) in a centred column at the display measure. The
-     K offer stays h2: it interrupts, it does not end. The element is an `h2` in every case. */
+     copy track, and the open close was display (67) in a centred column. Since home round 5 (owner,
+     11 Oct 2026: "display text should only be used for heros") the open close is h1 too: a close is
+     the page's last ask and takes the prominent step, but display belongs to the hero alone. The
+     open pair stays its own so the centred close can move without the split one. The K offer stays
+     h2: it interrupts, it does not end. The element is an `h2` in every case. */
   --cta-close-heading-text: var(--text-h1);
   --cta-close-heading-tracking: var(--text-h1-tracking);
-  --cta-open-heading-text: var(--text-display);
-  --cta-open-heading-tracking: var(--text-display-tracking);
+  --cta-open-heading-text: var(--text-h1);
+  --cta-open-heading-tracking: var(--text-h1-tracking);
   --cta-lead-text: var(--text-lead);
   --cta-body-text: var(--text-body-lg);
   /* A point is a step with a shape, not a line of body copy: the label takes the serif title
@@ -60,7 +63,8 @@
      and --text-body-lg are two of the seven roles that ship none, so a
      --cta-lead-tracking would name a value that does not exist. */
   --cta-heading-measure: var(--measure-title);
-  --cta-open-heading-measure: var(--measure-display);
+  /* The centred close's measure: the title measure, as every title role below display (round 5). */
+  --cta-open-heading-measure: var(--measure-title);
   --cta-body-measure: var(--measure-body);
   /* The LEDE's measure — the copy under the heading in every K and L band (cmp-cta fix round 1).
      At the body measure it ran ~650 under a ~415–530 heading and inverted the reference rule

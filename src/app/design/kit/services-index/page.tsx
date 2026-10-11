@@ -40,7 +40,7 @@ export const metadata: Metadata = {
  *              title-led panorama moved to the about page, so no two showcase heroes share a shape
  *    2  C-icon the router: six linked services under a stacked head, no photograph (owner, 9 Oct
  *              2026: a section of clickable cards stacks its head and carries no image)
- *    3  C      four fixed-scope audits, centred display head, per-card links
+ *    3  C      four fixed-scope audits, centred h1 head, per-card links
  *    4  B      what every service shares: the media split, the designer at the wall at the END
  *              and four tiles — in place of the J statement, which repeated home's (§ 8.3: B)
  *    5  N      who the work is for: a stacked head, then the two lists across the full column, the
@@ -370,7 +370,7 @@ export default function KitServicesIndexPage() {
       <ContentSection
         data-band="C-image"
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Fixed-scope audits"
         heading="Not ready for a project?"
         headingId="si-audits"
@@ -383,7 +383,7 @@ export default function KitServicesIndexPage() {
       <ContentSection
         data-band="B"
         arrangement="media"
-        media={{ image: WALL_PHOTO, side: 'end', head: 'title' }}
+        media={{ image: WALL_PHOTO, side: 'end', head: 'lg' }}
         eyebrow="Across every service"
         heading="Whichever door you use, the same team ships it"
         headingId="si-shared"

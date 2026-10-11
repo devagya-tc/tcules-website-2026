@@ -208,7 +208,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...head(band)}
           data-band="B"
           arrangement="media"
-          media={{ image, side: unit.side ?? 'end', head: 'title' }}
+          media={{ image, side: unit.side ?? 'end', head: 'lg' }}
           footer={ctaRow(bandLinks(band), false)}
         >
           <Layout as="ul" rowGap="none">
@@ -243,7 +243,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...head(band)}
           data-band="B"
           arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'title' }}
+          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'lg' }}
         >
           {tiles(leads(band))}
           {note.map((runs, index) => (
@@ -323,7 +323,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...head(band)}
           data-band="B"
           arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'end', head: 'title' }}
+          media={{ image: slotImage(page, band.id), side: unit.side ?? 'end', head: 'lg' }}
         >
           {tiles(rows)}
           {after.map((runs, index) => (
@@ -374,7 +374,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             image: slotImage(page, band.id),
             side: unit.side ?? 'start',
             weight: 'photo',
-            head: 'title',
+            head: 'lg',
           }}
         >
           {tiles(rows)}
@@ -427,7 +427,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...head(band)}
           data-band="B"
           arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'title' }}
+          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'lg' }}
         >
           {tiles(rows.slice(0, 2))}
         </ContentSection>
@@ -490,7 +490,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...headProps}
           data-band="B"
           arrangement="media"
-          media={{ image, side: unit.side ?? 'end', head: 'title' }}
+          media={{ image, side: unit.side ?? 'end', head: 'lg' }}
         >
           {story}
         </ContentSection>

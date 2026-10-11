@@ -653,7 +653,7 @@ const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
  *           points and an optional contact strip in 10 (673 at 1470), top-aligned, the full
  *           EnquiryForm filling 7 (471) to the column edge, on paper; with `texture`, at
  *           `density="open"`, the `closing` equaliser rising in the copy column's foot. No proof.
- *   open    the close that asks for a CLICK — a centred column: display heading, lede, a centred
+ *   open    the close that asks for a CLICK — a centred column: h1 heading (display until home round 5), lede, a centred
  *           3-up row of points, the actions on the axis, at `density="open"`. With proof, [3, 2]
  *           left-aligned and the proof beside.
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:

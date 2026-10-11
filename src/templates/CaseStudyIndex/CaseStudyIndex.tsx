@@ -304,7 +304,7 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
         media={{
           image: { ...cover, width: cover.width, height: cover.height },
           side: 'start',
-          head: 'title',
+          head: 'lg',
         }}
       >
         {story}

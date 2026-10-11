@@ -219,7 +219,7 @@ export default function BannerSpecimen() {
           <p className={s.specTitle}>A run · bandHead, h3 claims, a supporting quote, footer</p>
           <p className={s.specNote}>
             Home round 3 (11 Oct 2026): a band whose reasons each need a screen is a RUN of beside
-            banners, alternating sides, one Section each. The run&rsquo;s display heading opens the
+            banners, alternating sides, one Section each. The run&rsquo;s h1 heading opens the
             first banner (<code>bandHead</code>) and its closing action ends the last (
             <code>footer</code>); each claim is an h3 at the h2 role (<code>headingAs</code>),
             and the client&rsquo;s words support it as the quiet unboxed card (

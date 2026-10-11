@@ -435,7 +435,7 @@ export default function ContentSectionSpecimen() {
       ))}
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'lg', image: photo('studio-sticky-board-ux') }}
         eyebrow='arrangement="media"'
         heading="How a week with us actually runs"
         headingId="csec-compare-media"
@@ -1077,7 +1077,7 @@ export default function ContentSectionSpecimen() {
       </Label>
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'lg', image: photo('studio-sticky-board-ux') }}
         eyebrow="Photo start · 4 tiles · centred"
         heading="How a week with us actually runs"
         headingId="csec-media-tiles"
@@ -1087,7 +1087,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('designer-desk-monitor'), side: 'end' }}
+        media={{ head: 'lg', image: photo('designer-desk-monitor'), side: 'end' }}
         eyebrow="Photo end · 2 tiles + CtaRow · pinned (the default)"
         heading="The team you work with is the team that ships"
         headingId="csec-media-ctarow"
@@ -1100,7 +1100,7 @@ export default function ContentSectionSpecimen() {
       <ContentSection
         arrangement="media"
         media={{
-          head: 'title',
+          head: 'lg',
           image: photo('designer-desk-monitor'),
           side: 'end',
           pin: false,
@@ -1115,7 +1115,7 @@ export default function ContentSectionSpecimen() {
       </ContentSection>
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('stylus-tablet-sketch') }}
+        media={{ head: 'lg', image: photo('stylus-tablet-sketch') }}
         eyebrow="No blocks + CtaRow · centred · degrade case"
         heading="Drawn first, then built properly"
         headingId="csec-media-lead"
@@ -1130,7 +1130,7 @@ export default function ContentSectionSpecimen() {
       />
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('whiteboard-two-hands'), side: 'end' }}
+        media={{ head: 'lg', image: photo('whiteboard-two-hands'), side: 'end' }}
         eyebrow="Head actions, no blocks · centred · degrade case"
         heading="Start with the decision in front of you"
         headingId="csec-media-actions"
@@ -1139,7 +1139,7 @@ export default function ContentSectionSpecimen() {
       />
       <ContentSection
         arrangement="media"
-        media={{ head: 'title', image: photo('studio-sticky-board-ux') }}
+        media={{ head: 'lg', image: photo('studio-sticky-board-ux') }}
         surface="tint"
         eyebrow="Copy at the ceiling · 2 tiles + CtaRow"
         heading={HEADING_LONG}
@@ -1155,7 +1155,7 @@ export default function ContentSectionSpecimen() {
       <FoldExempt reason={`${OVER_BUDGET}: proves a copy column taller than the photo`}>
         <ContentSection
           arrangement="media"
-          media={{ head: 'title', image: photo('stylus-tablet-sketch'), side: 'end' }}
+          media={{ head: 'lg', image: photo('stylus-tablet-sketch'), side: 'end' }}
           eyebrow="CMS stress · copy taller than the photo · fold-exempt"
           heading={HEADING_LONG}
           headingId="csec-media-overflow"
@@ -1247,8 +1247,8 @@ export default function ContentSectionSpecimen() {
         }
       />
 
-      <Label title='16 · headingSize="display" and asideFill'>
-        headingSize=&quot;display&quot; sets the same h2 at the display role on the display
+      <Label title='16 · headingSize="xl" and asideFill'>
+        headingSize=&quot;xl&quot; sets the same h2 at the display role on the display
         measure: a head that opens an argument, at the ~70 of the references against cards at 22
         to 28, so the scale gap between head and set is unmistakable. It changes the scale,
         never the element. Shown centred and start-aligned. asideFill (beside, photo aside only)
@@ -1259,7 +1259,7 @@ export default function ContentSectionSpecimen() {
       </Label>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Display · centred"
         heading="Three places products slow down"
         headingId="csec-display-centred"
@@ -1268,7 +1268,7 @@ export default function ContentSectionSpecimen() {
         <Cards />
       </ContentSection>
       <ContentSection
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Display · stacked"
         heading="Where the work starts"
         headingId="csec-display-stacked"

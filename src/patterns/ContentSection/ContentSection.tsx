@@ -120,16 +120,18 @@ export type ContentSectionMedia = {
    */
   weight?: 'copy' | 'photo';
   /**
-   * The head's scale (final fix round, 6 Oct 2026). Default `display`: in a media split the head is
-   * the copy column's one large element. `title` keeps the band's h2 role, for a head that would
-   * run past two display lines in its track, or a copy column (an accordion) that needs the height.
+   * The head's scale (final fix round, 6 Oct 2026), in `ContentSectionHeadingSize`'s steps. Default
+   * `xl` (the h1 role): in a media split the head is the copy column's one large element. `lg` keeps
+   * the band's h2 role, for a head that would run past two lines in its track, or a copy column (an
+   * accordion) that needs the height. (Until home round 5 the default was the display role and `lg`
+   * was spelled `title`; display is the hero's alone since 11 Oct 2026.)
    *
    * An explicit choice rather than a rule on the heading's length, which this used to be: a hidden
    * character cutoff dropped a whole role at 23 characters for a reason no author could see, and
    * two B bands on one page set their heads at different scales. The fold is the check instead —
-   * a display head that runs long makes its band too tall, and `npm run fold:check` fails it.
+   * a prominent head that runs long makes its band too tall, and `npm run fold:check` fails it.
    */
-  head?: 'display' | 'title';
+  head?: 'xl' | 'lg';
   /**
    * The band's `counterweight` texture (visual-direction § 6.3): a defined field of the pixel grid
    * at the FOOT of the copy column, on the photograph's bottom edge — the copy column's mass,
@@ -147,18 +149,24 @@ export type ContentSectionMedia = {
 export type ContentSectionMediaHeight = 'ratio' | 'copy';
 
 /**
- * The heading's type step (a component size, so a t-shirt name). `lg` is the section h2 (43), the
- * default. `md` sets the same `h2` element at the h3 role (34), for a band whose large thing is not
- * its heading: the S stats band, where a 43 head over 54 mono figures read as a heading over its
- * captions (final fix round, 6 Oct 2026 — the figures must clearly win, § 3.3 "one large thing per
- * band"). `display` sets it at --text-display (≈ 67–70 at 1440) on the display measure, for the one
- * or two bands on a page that open an argument (cmp-feature fix round 1, 6 Oct 2026): the
- * references' section titles run at about 70 against the 43 of h2, and a page whose every band is
- * h2 has no headline rhythm. Budget it: a display title on one line is ~30 taller than h2, so pair
- * it with a set that has the room (a C-image-3 band at 598 still clears 830). The element never
- * changes: the band's place in the outline is not its scale.
+ * The heading's type step (a component size, so a t-shirt name). The element never changes: the
+ * band's place in the outline is not its scale.
+ *
+ * THE RULE (home round 5, owner 11 Oct 2026: "display text should only be used for heros. any other
+ * section should use h1/h2 depending on the prominence it requires"):
+ *
+ *   xl  the h1 role (54). For the band whose HEADING is its one large thing — it opens an argument
+ *       (the media split's head beside its photograph, a feature band's opener). One or two a page.
+ *   lg  the section h2 (43), the default. For the band whose CONTENT is its large thing — a set, a
+ *       grid, proof, a form, an FAQ. Most bands.
+ *   md  the same `h2` element at the h3 role (34), for a band whose large thing would be out-sized
+ *       even by an h2: the S stats band, where a 43 head over 54 mono figures read as a heading over
+ *       its captions (final fix round, 6 Oct 2026 — § 3.3 "one large thing per band").
+ *
+ * `display` (the hero's role, ≈ 67) was a fourth step until round 5 and is retired: display belongs
+ * to PageHero alone.
  */
-export type ContentSectionHeadingSize = 'lg' | 'md' | 'display';
+export type ContentSectionHeadingSize = 'xl' | 'lg' | 'md';
 
 type ContentSectionBaseProps = {
   /**
@@ -554,12 +562,12 @@ export function ContentSection(props: ContentSectionProps) {
   /* ── The head text's three parts ─────────────────────────────────────────────
      Built once, placed by the arrangement. `.centred` sets the text centred inside each part's own
      measure; the Layout holding the parts centres the parts themselves (justifyItems). */
-  /* In `media` the heading takes the display role unless the caller set `media.head="title"` (see
+  /* In `media` the heading takes the h1 role unless the caller set `media.head="lg"` (see
      ContentSectionMedia). The eyebrow is the same in every arrangement: its blue is the mark, not
      the label (fix round 1, 7 Oct 2026 — the media eyebrow's accent ink made one band's label blue
      and every other band's grey, which read as drift rather than a rule). */
   const inMedia = arrangement === 'media' && Boolean(media);
-  const displayHead = inMedia && Boolean(heading) && media?.head !== 'title';
+  const xlHead = inMedia && Boolean(heading) && media?.head !== 'lg';
   /* The counterweight is a texture, and a texture sits on paper only (§ 6.2). */
   const onPaper = (surface ?? 'paper') === 'paper';
   if (inMedia && media?.counterweight && !onPaper) {
@@ -589,7 +597,7 @@ export function ContentSection(props: ContentSectionProps) {
       id={headingId}
       className={cx(
         styles.heading,
-        (displayHead || headingSize === 'display') && styles.headingDisplay,
+        (xlHead || headingSize === 'xl') && styles.headingXl,
         headingSize === 'md' && styles.headingMd,
         centredAll && styles.centred,
         centredLg && styles.centredLg,

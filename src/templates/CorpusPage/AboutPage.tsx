@@ -135,7 +135,7 @@ function Ahmedabad({ page }: { page: CorpusPage }) {
       {...head(b)}
       data-band="B"
       arrangement="media"
-      media={{ image: slotImage(page, b.id), side: 'start', pin: false, head: 'title' }}
+      media={{ image: slotImage(page, b.id), side: 'start', pin: false, head: 'lg' }}
     >
       <Text paragraphs={paragraphRuns(b.blocks)} />
     </ContentSection>
@@ -245,7 +245,7 @@ function Difference({ page }: { page: CorpusPage }) {
         {...head(b)}
         data-band="B"
         arrangement="media"
-        media={{ image: slotImage(page, b.id), side: 'end', head: 'title' }}
+        media={{ image: slotImage(page, b.id), side: 'end', head: 'lg' }}
       >
         <ListTiles rows={all.slice(0, 2).map(row)} columns={2} />
       </ContentSection>
@@ -298,7 +298,7 @@ function Leadership({ page }: { page: CorpusPage }) {
       {...head(b)}
       data-band="B"
       arrangement="media"
-      media={{ image: slotImage(page, b.id), side: 'end', pin: false, head: 'title' }}
+      media={{ image: slotImage(page, b.id), side: 'end', pin: false, head: 'lg' }}
     >
       <Layout rowGap="stack">
         {leaders.map(({ item, own }) => (
@@ -458,7 +458,7 @@ function Constant({ page }: { page: CorpusPage }) {
         image: slotImage(page, b.id),
         side: 'end',
         pin: false,
-        head: 'title',
+        head: 'lg',
         weight: 'photo',
       }}
     >

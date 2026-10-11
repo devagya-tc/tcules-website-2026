@@ -279,6 +279,7 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
     const para = item.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph');
     const target = linkLines(item)[0];
     if (!target) return [];
+    const glyph = glyphForRoute(target.href);
     return [
       {
         id: slugOf(item.headingText),
@@ -286,6 +287,7 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
         body: para ? plain(para.runs) : '',
         href: target.href,
         service: target.labelText,
+        ...(glyph ? { icon: <Icon name={glyph} size="xl" /> } : {}),
       },
     ];
   });
@@ -298,19 +300,22 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
  * cards two across (1,072), which the owner found still plain ("could again be so much better",
  * round 4).
  *
- * Round 4: a ROUTER, not a card set (Gateway `index`, chosen over a split and a grid on
- * /design/kit/gateway). The six situations run down one edge as h3 titles on one line each, the
- * service named under each on its cue, and the sentence beside them, quiet, in the trailing five
- * of [7, 5]. A founder reads the six titles in one pass, stops at their own, and sees where it leads
- * without reading a sentence; the sentence is there to confirm. Every row is one link, and under the
- * pointer it raises a ground across both tracks. No imagery and no glyphs: the "What we do" boxes
- * two bands later carry the service glyphs in a 3 × 2 grid, and this is the page's only
- * single-column typographic index. One fold: 814 at 1440.
+ * Round 4: a ROUTER, not a card set (Gateway `index`): six h3 titles down one edge, the sentence
+ * beside them. Round 5 (owner, 11 Oct 2026): the owner preferred the round-4 GRID ("i like this the
+ * best") but found it "too dense and boring … nothing is guiding my eye", and ruled display type for
+ * heroes only. So the heading is the section h2 (the band's six choices are its large thing, not its
+ * heading), and the grid was refined on /design/kit/gateway: the mono service line and the lone arrow
+ * became one blue link at each cell's foot (two text layers and a call, not three layers of one
+ * grey), the sentence steps to a quieter ink, rows sit a `stack` apart, and each cell hangs the
+ * destination's glyph in a tinted disc beside its title (Gateway `mark="hang"`) — an entry point the
+ * eye lands on, in a different skeleton from What we do's bare glyph over a title two bands later.
+ * Every cell is one link; under the pointer or on focus a ground hangs from its rule. One fold: 822
+ * at 1440.
  */
 function Situations({ b }: BandProps) {
   return (
-    <ContentSection {...head(b)} data-band="C-router" headingSize="display">
-      <Gateway items={gatewayItems(b)} arrangement="index" />
+    <ContentSection {...head(b)} data-band="C-router">
+      <Gateway items={gatewayItems(b)} arrangement="grid" mark="hang" />
     </ContentSection>
   );
 }
@@ -481,7 +486,7 @@ function Capabilities({ b }: BandProps) {
  * single band (1,595 at 1440), so no screen ever held one complete reason.
  *
  * Now a RUN of four beside banners (kit I.3 and I.4), alternating — photograph at the end, then the
- * start — each its own Section, so each reason is one screen: the band's display heading opens the
+ * start — each its own Section, so each reason is one screen: the band's h1 heading opens the
  * first banner (`bandHead`), the closing link ends the last (`footer`). In each, the claim is the h3
  * at the h2 role, its sentence the lead, and the client's words the quiet supporting testimonial
  * under it (TestimonialCard `sm`, unboxed): claim first, proof second (home round 2). The index

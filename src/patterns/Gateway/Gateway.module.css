@@ -70,13 +70,16 @@
    the anchor's own box ran through the title's first glyph, because the anchor has no inset. The
    ground is the ring's gap, so no gap colour is needed. `isolation` keeps the ground behind the copy
    and inside the row. */
-.root .indexLink {
+.root .groundLink {
   position: relative;
   isolation: isolate;
+}
+
+.root .indexLink {
   padding-block: 0;
 }
 
-.root .indexLink::before {
+.root .groundLink::before {
   position: absolute;
   z-index: -1;
   inset: calc(-1 * var(--gwy-ground-reach));
@@ -87,25 +90,36 @@
     box-shadow var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
-.root .indexLink:hover,
-.root .indexLink:active,
-.root .indexLink:focus-visible {
+.root .groundLink:hover,
+.root .groundLink:active,
+.root .groundLink:focus-visible {
   background-color: transparent;
   box-shadow: none;
 }
 
-.root .indexLink:hover::before {
+.root .groundLink:hover::before {
   background-color: var(--gwy-ground-hover);
 }
 
-.root .indexLink:active::before {
+.root .groundLink:active::before {
   background-color: var(--gwy-ground-pressed);
 }
 
 /* Last, so a focused row keeps its ring while it is also hovered or pressed. */
-.root .indexLink:focus-visible::before {
+.root .groundLink:focus-visible::before {
   background-color: var(--gwy-ground-hover);
   box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+}
+
+/* The grid cell with a ground (cue `link`, round 5). The cell keeps its hairline; the anchor's block
+   inset (`text`, above) is the air between the rule and the copy, and under the pointer the ground
+   fills the cell BELOW the rule — reaching past the copy on the inline axis only — so the rule stays
+   drawn and the raised cell reads as a panel hanging from it: square where it meets the rule,
+   rounded at its foot. */
+.root .groundCell::before {
+  inset-block: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
 }
 
 /* The grid cell's stack fills the stretched anchor so the arrow (Layout pinLast) sits on one line
@@ -146,6 +160,39 @@
   text-transform: var(--text-mono-case);
 }
 
+/* A grid title holds two lines from 768, where cells share a row: one-line and two-line titles then
+   start their sentences on one line across the row, instead of the bodies stepping down and up
+   (round 5: the zigzag). Sizing, not spacing — the reserved line is the title's own box. Below 768
+   the cells stack and a title takes its own height. */
+@media (min-width: 768px) {
+  .titleReserve {
+    min-block-size: calc(var(--gwy-title-lines) * 1lh);
+  }
+}
+
+/* The destination's glyph in a tinted disc (grid `mark`): the cell's entry point, so the eye lands
+   on a shape before it reads. The disc is the glyph's own box — an inset round the 24 glyph and a
+   full radius — so it arranges nothing. */
+/* The hung disc's track: a plain block, so the stretched track does not stretch the disc. */
+.discTrack {
+  display: block;
+}
+
+.disc {
+  display: block;
+  inline-size: max-content;
+  padding: var(--gwy-disc-inset);
+  border-radius: var(--gwy-disc-radius);
+  background-color: var(--gwy-disc-ground);
+  color: var(--gwy-mark-ink);
+  transition: background-color var(--gwy-ink-duration) var(--gwy-ink-easing);
+}
+
+.root .link:hover .disc,
+.root .link:focus-visible .disc {
+  background-color: var(--gwy-disc-ground-hover);
+}
+
 /* The grid cell's cue: the arrow alone, in the mark ink (the foreground accent). */
 .arrow {
   display: block;
@@ -164,7 +211,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root .link,
-  .root .indexLink::before,
+  .root .groundLink::before,
+  .disc,
   .title {
     transition: none;
   }

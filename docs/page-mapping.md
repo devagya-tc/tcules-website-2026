@@ -1241,3 +1241,69 @@ at 1440 and 390: no overflow, no page errors. Home also read at 1024 and 1280.
   leaves an open field between the words and the speaker (the speaker is pinned to the foot). It is
   anchored at both edges, which is the rule; a panel that stopped at the image's foot would cut the
   speaker off from the quote. From 1440 the panel is 16:9 and matches the image exactly.
+
+## 21 · Home round 5 (owner review, 11 Oct 2026)
+
+| Note | Cause | Fix | Scope |
+|---|---|---|---|
+| "display text should only be used for heros. any other section should use h1/h2 depending on the prominence it requires" | Display (67) had leaked into four non-hero places: ContentSection `headingSize="display"`, the media split's default head, Banner's run heading (`bandHead`) and CtaSection's `open` close. Each chose display for "prominence", so the hero lost its rank | The `display` size is retired from every non-hero component. **The rule:** h1 (`headingSize="xl"`) when the band's HEADING is its one large thing — it opens an argument (a media split's head beside its photograph, a feature band's opener, a run's head over its banners, the page's closing ask); h2 (the default `lg`) when the band's CONTENT is its large thing (a set, a grid, proof, a form, an FAQ); h3-at-h2 (`md`) where even h2 out-sizes the content (stats). Display is PageHero's alone. ContentSection `headingSize` is now `xl \| lg \| md`; `media.head` is `xl \| lg` (default `xl`; `title` renamed `lg` at every caller); `--csec-heading-text-xl`, `--bnr-band-heading-text` and `--cta-open-heading-text` read `--text-h1` on `--measure-title` | Global (tokens: content-section, banner, cta-section; ContentSection API) |
+| Gateway grid "reads as too dense and boring … nothing is guiding my eye" | See § 21.1 | See § 21.1 | Global (Gateway `grid`) |
+| Hero 29 past the fold | Only its bottom padding crosses (§ 20) | Accepted by the owner ("only the padding"); no change | — |
+
+**Bands changed by the display rule.** On the 10 corpus routes: home "What do you need next?"
+(display → h2: its six situations are the large thing), home "Why teams choose Tcules" (run head,
+display → h1), About "Work with Tcules" and glossary "Why design system matters in product work"
+(the open close, display → h1). Every route now renders exactly one 67 element, its hero h1
+(measured across all ten). In the kit: every `headingSize="display"` on `/design/kit/feature`,
+`/design/kit/service-list`, `/design/kit/services-index` and `/design/content-section` is now `xl`
+(they open their bands), every media split head on `/design/kit/media-split` is h1 by default, the
+media-split specimen's own title is a plain h1, and `/design/banner` and `/design/kit/cta` follow
+their tokens. Left alone: PageHero, the hero specimen's title, Statement (already h1 since 7 Oct),
+and Proof's `display` arrangement and the stat/score figures, which are quote and figure roles,
+not the display type role.
+
+### 21.1 The gateway grid, refined (home's layout again)
+
+**Diagnosis of the round-4 grid** (`/design/kit/gateway`, R4 · C, the owner's pick): six identical
+blocks of equal weight, so the eye has no entry point; three text layers per cell (mono service,
+serif title, grey sentence) of similar grey density; a lone arrow that names nothing; bodies starting
+at different heights as the titles wrap, so each row zigzags; rows only a `gutter` apart; and a
+display heading out-shouting all of it.
+
+**Refinements explored on `/design/kit/gateway`** (round 4's three directions kept below them,
+labelled). All take the section h2, the service as the blue link pinned to the cell's foot (so the
+mono line and the lone arrow go: two layers and a call), a quieter sentence, rows a `stack` apart,
+and a hover/focus ground that hangs from the cell's rule (square under it, rounded at the foot).
+
+| Refinement | Verdict | 1440 | 390 |
+|---|---|---|---|
+| R5.1 · link only | Calmer and shortest, but still six grey blocks with nowhere to land first; reserving two title lines (to line the sentences up) left holes under the one-line titles | 778 | 1,674 |
+| R5.2 · glyph disc above the title | The discs give the eye an entry, but glyph-over-title in a 3 × 2 grid is What we do's skeleton two bands later, and the disc row runs it past the fold | 922 | 2,106 |
+| **R5.3 · glyph disc hung beside the title (chosen)** | Each cell gains a shape at no height; the eye path is rule → disc → title along a row, then down to the line of calls; glyph-beside-title is a skeleton of its own | 822 | 1,798 |
+
+**Why R5.3.** It is the only one that gives the eye somewhere to land without costing the fold or
+repeating "What we do". The disc carries the destination's glyph (one glyph per destination, G12),
+tinted, so the six read as a row of blue shapes before any word is read; the title is the cell's
+largest thing; the sentence recedes; the blue link ends every cell on one line.
+
+**Iterations on R5.3.**
+1. The link sat under the disc's track, off the copy's edge, and the calls stepped with the
+   sentences: the disc now has its own stretched track, the copy and its link share the second
+   track's edge, and the link is pinned (`equalRows` on the hung track, `pinLast` in the copy).
+   Titles take their own height (no reserved line, so no holes beside the disc).
+2. The sentence steps to the quieter ink (`--gwy-body-ink` neutral-600 on paper, 4.92:1; tint keeps
+   700, ink lifts to 400), and the hover/focus ground hangs square from the rule instead of
+   rounding under it. On hover or focus the title turns blue, the disc turns paper on the raised
+   ground and the link underlines; the focus ring sits on the ground's edge.
+
+**Built, global.** Gateway `grid` is the default arrangement and gains `mark` (`none \| disc \|
+hang`, the glyph from `GatewayItem.icon`, an `Icon` the caller composes) and `cue` (`link \|
+arrow`; `arrow` is the round-4 cell, kept for the specimen). New tokens: `--gwy-title-lines`,
+`--gwy-disc-inset` (optical: 12 round the 24 glyph), `--gwy-disc-radius`, `--gwy-disc-ground{,-hover}`
+on every surface. `gatewayItems` passes each destination's glyph from `glyphForRoute`. The whole cell
+is one anchor, one tab stop.
+
+**Measured (home, `data-band="C-router"`):** 822 at 1440 (inside the 830 fold), 932 at 1024 (three
+up; the long titles wrap to three lines), 1,055 at 768 (two up), 1,798 at 390 (one up). Shots:
+`/`, the nine other corpus routes and the touched specimens at 1440 and 390, no overflow, no page
+errors.

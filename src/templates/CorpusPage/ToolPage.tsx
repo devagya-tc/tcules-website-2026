@@ -163,7 +163,7 @@ function ToolBand({
           image: slotImage(page, band.id),
           side: 'end',
           weight: 'photo',
-          head: 'title',
+          head: 'lg',
         }}
       >
         <ContentSectionText>
