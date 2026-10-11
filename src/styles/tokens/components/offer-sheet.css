@@ -19,10 +19,11 @@
   --ofs-heading-text: var(--text-h2);
   --ofs-heading-tracking: var(--text-h2-tracking);
   --ofs-heading-measure: var(--measure-title);
-  /* A promise title is the h3 role: one step under the band's h2 (7 Oct ruling 3), and the largest
-     repeated thing in the band, because the promise is what the reader came to read. */
-  --ofs-title-text: var(--text-h3);
-  --ofs-title-tracking: var(--text-h3-tracking);
+  /* A promise title is the h4 role: the largest repeated thing in the band, because the promise is
+     what the reader came to read, but TWO steps under the band's h2 (owner, 11 Oct: at one step the
+     items compete with the section heading — the home gateway ruling). */
+  --ofs-title-text: var(--text-h4);
+  --ofs-title-tracking: var(--text-h4-tracking);
   --ofs-title-measure: var(--measure-title);
   --ofs-body-text: var(--text-body);
   --ofs-body-measure: var(--measure-lead);
