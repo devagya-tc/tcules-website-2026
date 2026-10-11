@@ -43,3 +43,20 @@
   color: var(--ofs-body-ink);
   max-inline-size: var(--ofs-body-measure);
 }
+
+/* `asideImage`: the image's box. Stacked below 1024 it takes the card ratio; beside the promises
+   from 1024 it fills the trailing track from their top to their foot (the row's stretch), as the
+   testimonial panel does, and Media cover-crops into it. */
+.asideFrame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--ofs-aside-ratio);
+  border-radius: var(--ofs-aside-radius);
+}
+
+@media (min-width: 1024px) {
+  .asideFrame {
+    aspect-ratio: auto;
+    block-size: 100%;
+  }
+}

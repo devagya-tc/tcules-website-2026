@@ -25,6 +25,8 @@
   --ofs-title-text: var(--text-h4);
   --ofs-title-tracking: var(--text-h4-tracking);
   --ofs-title-measure: var(--measure-title);
+  --ofs-aside-ratio: var(--ratio-standard);
+  --ofs-aside-radius: var(--radius-8);
   --ofs-body-text: var(--text-body);
   --ofs-body-measure: var(--measure-lead);
   --ofs-rule-width: var(--border-width-hairline);

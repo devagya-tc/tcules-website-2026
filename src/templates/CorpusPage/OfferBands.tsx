@@ -355,6 +355,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
 
     /* What you receive: a list of deliverables, with the product shot beside it. */
+    /* What you receive — the deliverables as ONE offer (OfferSheet, as "What you get" on the service
+       page; owner, 11 Oct 2026): two rows of two promises, each on its rule and blue mark, the
+       product shot filling the trailing 1 beside them, and the next step closing their column. */
     case 'deliverables': {
       const list = blocksOf(band, 'list')[0];
       const rows: Lead[] = (list?.items ?? []).flatMap((item) => {
@@ -363,19 +366,25 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       });
       const after = trailingAfterList(band);
       return (
-        <ContentSection
+        <OfferSheet
           {...head(band)}
-          data-band="B"
-          arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'end', head: 'lg' }}
-        >
-          {tiles(rows)}
-          {after.map((runs, index) => (
-            <ContentSectionText key={index}>
-              <p>{renderInline(runs)}</p>
-            </ContentSectionText>
-          ))}
-        </ContentSection>
+          items={rows.map((row) => ({
+            title: row.title,
+            ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
+              ? { bodyHtml: inlineToHtml(row.body) }
+              : { body: plain(row.body) }),
+          }))}
+          {...(hasSlot(page, band.id) ? { asideImage: slotImage(page, band.id) } : {})}
+          note={
+            after.length > 0 ? (
+              <ContentSectionText>
+                {after.map((runs, index) => (
+                  <p key={index}>{renderInline(runs)}</p>
+                ))}
+              </ContentSectionText>
+            ) : undefined
+          }
+        />
       );
     }
 

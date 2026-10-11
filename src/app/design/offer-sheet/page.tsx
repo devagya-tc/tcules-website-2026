@@ -1,5 +1,6 @@
 import { Layout, Section } from '@/components';
 import { OfferSheet, TestimonialCard, type TestimonialItem } from '@/patterns';
+import { getKitPhoto } from '@/lib/photos';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -86,6 +87,19 @@ export default function OfferSheetSpecimen() {
         note="Without a voice the promises take the full column, still two up: a sheet, not a row of four."
       />
       <OfferSheet heading="What you get" headingId="ofs-none" items={FOUR} />
+
+      <Variation
+        id="image"
+        title="2b · An image beside, and a closing note"
+        note="`asideImage`: the image fills the trailing 1 from the promises' top to their foot, cover-cropped (16:9 where it stacks below 1024). `note`: a closing line under the promises, in their column. The audit's &ldquo;What you receive&rdquo;."
+      />
+      <OfferSheet
+        heading="What you receive"
+        headingId="ofs-image"
+        items={FOUR}
+        asideImage={getKitPhoto('team-laptops-table')}
+        note={<p className={t.body}>Your developers can work through the list themselves.</p>}
+      />
 
       <Variation
         id="six"

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, type SectionSurface } from '@/components';
+import { Layout, Media, Section, type MediaImage, type SectionSurface } from '@/components';
+import { HEAD_TRACK } from '@/lib/image-sizes';
 
 import styles from './OfferSheet.module.css';
 
@@ -28,6 +29,14 @@ export type OfferSheetProps = {
    * pattern, so the panel is a slot. Absent, the sheet takes the full column, promises two up.
    */
   aside?: ReactNode;
+  /**
+   * An image as the aside instead (the audit's "What you receive", owner 11 Oct 2026): it fills the
+   * trailing 1 from the promises' top to their foot, cover-cropped, as the testimonial does; 16:9
+   * where it stacks below 1024. Ignored when `aside` is given.
+   */
+  asideImage?: MediaImage;
+  /** A closing line under the promises, in their column (in practice the next step). A slot. */
+  note?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -55,6 +64,8 @@ export function OfferSheet({
   headingId,
   items,
   aside,
+  asideImage,
+  note,
   surface = 'paper',
 }: OfferSheetProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
@@ -79,19 +90,35 @@ export function OfferSheet({
     </Layout>
   );
 
+  const sheet = note ? (
+    <Layout rowGap="stack">
+      {promises}
+      {note}
+    </Layout>
+  ) : (
+    promises
+  );
+  const side =
+    aside ??
+    (asideImage ? (
+      <div className={styles.asideFrame}>
+        <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
+      </div>
+    ) : undefined);
+
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
       <Layout rowGap="stack">
         <h2 id={headingId} className={styles.heading}>
           {heading}
         </h2>
-        {aside ? (
+        {side ? (
           <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
-            {promises}
-            {aside}
+            {sheet}
+            {side}
           </Layout>
         ) : (
-          promises
+          sheet
         )}
       </Layout>
     </Section>
