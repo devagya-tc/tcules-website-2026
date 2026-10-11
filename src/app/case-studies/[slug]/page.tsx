@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import { getCaseStudyPage, type CaseStudyBlock, type CaseStudyImage } from '@/content';
 import { caseStudyPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -255,33 +255,13 @@ export default async function CaseStudyPage({ params }: PageProps<'/case-studies
         }
         media={heroMedia}
         surface="paper"
-      >
-        {caseStudy.profile.length > 0 ||
-        caseStudy.categories.length > 0 ||
-        caseStudy.tags.length > 0 ? (
-          <Layout rowGap="block">
-            {caseStudy.profile.length > 0 ? (
-              <Layout as="dl" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="block">
-                {caseStudy.profile.map((item) => (
-                  <Layout key={item.id} rowGap="inline">
-                    <dt>{item.label}</dt>
-                    <dd>{item.value}</dd>
-                  </Layout>
-                ))}
-              </Layout>
-            ) : null}
-            {caseStudy.categories.length > 0 || caseStudy.tags.length > 0 ? (
-              <Cluster as="ul" colGap="text" rowGap="tight">
-                {[...caseStudy.categories, ...caseStudy.tags].map((label) => (
-                  <li key={label}>
-                    <Tag>{label}</Tag>
-                  </li>
-                ))}
-              </Cluster>
-            ) : null}
-          </Layout>
-        ) : null}
-      </PageHero>
+        facts={caseStudy.profile.map((item) => ({
+          id: item.id,
+          label: item.label,
+          value: item.value,
+        }))}
+        labels={[...caseStudy.categories, ...caseStudy.tags]}
+      />
 
       {caseStudy.statements.length > 0 ? (
         <Section surface="tint" aria-labelledby="case-study-statements-heading">

@@ -273,6 +273,7 @@ export type {
   HeroCredit,
   HeroCreditRole,
   HeroDates,
+  HeroFact,
   HeroAction,
   HeroActions,
   HeroArrangement,

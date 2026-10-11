@@ -10,6 +10,7 @@ import {
   RatingBadge,
   Section,
   Stat,
+  Tag,
   Texture,
   TextureShape,
   type MediaImage,
@@ -68,6 +69,12 @@ export type HeroDates =
   /* A page that states only when it was last updated ("Last updated on 7 Oct ’26") — the corpus's
      new articles carry no published date, and inventing one would be a false fact. */
   | { published?: undefined; modified: string };
+
+/**
+ * One fact about the subject, as a labelled pair in the byline strip ("Company" → "Benchmark
+ * Gensuite"). Set like the dates: a mono key over its value (owner, 11 Oct 2026).
+ */
+export type HeroFact = { id: string; label: string; value: string };
 
 /** One action. `href` comes from `@/lib/routes` at the call site, never written out there. */
 export type HeroAction = { label: string; href: string };
@@ -346,6 +353,17 @@ type PageHeroBaseProps = {
   credits?: readonly HeroCredit[];
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
+  /**
+   * Facts about the subject (a case's company, sector and work), before the credits and dates in the
+   * same strip. With any fact the strip is an even grid rather than a wrapping row, because a fact's
+   * value can run to a sentence.
+   */
+  facts?: readonly HeroFact[];
+  /**
+   * The page's taxonomy as chips, directly under the lead copy (owner, 11 Oct 2026: "move the tags
+   * just below the description line"). Distinct from `tags`, the unboxed record after the actions.
+   */
+  labels?: readonly string[];
   /** How long the page takes to read, as the page states it ("11 min"), after the dates. */
   readingTime?: string;
   /**
@@ -588,6 +606,8 @@ export function PageHero({
   credits = [],
   dates,
   readingTime,
+  facts = [],
+  labels = [],
   actions = [],
   media,
   arrangement = 'stacked',
@@ -607,7 +627,12 @@ export function PageHero({
   const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
   const [lead, ...rest] = paragraphs;
 
-  const pairs: BylinePair[] = credits.map((credit, index) => ({
+  const pairs: BylinePair[] = facts.map((fact) => ({
+    id: `fact-${fact.id}`,
+    label: fact.label,
+    value: fact.value,
+  }));
+  pairs.push(...credits.map((credit, index) => ({
     /* The role is not unique — a podcast can carry two guest groups — so the index is part of
        the key. These rows never reorder: they are frontmatter in array order. */
     id: `${credit.role}-${index}`,
@@ -618,7 +643,7 @@ export function PageHero({
         {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
       </>
     ),
-  }));
+  })));
 
   if (dates?.published) {
     pairs.push({
@@ -787,17 +812,41 @@ export function PageHero({
      A <dl> rather than a Cluster of spans, because each <dt> is then announced immediately before
      its own <dd>. 4px between a key and its value against 24px between one pair and the next is a
      six-fold difference, so each pair reads as one unit — no rule, no dot, no separator. */
+  const pairItems = pairs.map((pair) => (
+    <Layout key={pair.id} rowGap="inline">
+      <dt className={styles.key}>{pair.label}</dt>
+      <dd className={styles.value}>{pair.value}</dd>
+    </Layout>
+  ));
   const bylineNode =
-    pairs.length > 0 ? (
+    pairs.length === 0 ? null : facts.length > 0 ? (
+      <Layout
+        as="dl"
+        columns={{ base: 1, md: 2, lg: Math.min(pairs.length, 4) }}
+        colGap="gutter"
+        rowGap="block"
+        className={styles.byline}
+      >
+        {pairItems}
+      </Layout>
+    ) : (
       <Cluster as="dl" colGap="stack" rowGap="block" align="start" className={styles.byline}>
-        {pairs.map((pair) => (
-          <Layout key={pair.id} rowGap="inline">
-            <dt className={styles.key}>{pair.label}</dt>
-            <dd className={styles.value}>{pair.value}</dd>
-          </Layout>
+        {pairItems}
+      </Cluster>
+    );
+
+  /* ── labels · the taxonomy chips, a block under the copy, inside the opening ───── */
+  const shownLabels = [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
+  const labelsNode =
+    shownLabels.length === 0 ? null : (
+      <Cluster as="ul" colGap="text" rowGap="tight" justify={centredHead ? 'center' : 'start'}>
+        {shownLabels.map((label) => (
+          <li key={label}>
+            <Tag>{label}</Tag>
+          </li>
         ))}
       </Cluster>
-    ) : null;
+    );
 
   /* ── extras · the caller's block. No class: it carries nothing. The <div> groups whatever is
      passed into ONE row of the stack. */
@@ -1013,6 +1062,7 @@ export function PageHero({
         {eyebrowNode}
         {titleNode}
         {copyNode}
+        {labelsNode}
       </Layout>
       {bylineNode}
       {extrasNode}
@@ -1055,6 +1105,8 @@ export function PageHero({
             {eyebrowNode}
             {titleNode}
             {copyNode}
+            {labelsNode}
+        {labelsNode}
           </Layout>
           {/* The figures are their own block, a `stack` under the ask (home round 4), as in the
               split stack below; the byline, extras, actions and tags keep this column's `block`. */}

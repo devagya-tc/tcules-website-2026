@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Cluster, Layout, Prose, Section, Tag } from '@/components';
+import { Layout, Prose, Section } from '@/components';
 import {
   LongformRoute,
   isCorpusLongform,
@@ -330,17 +330,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
         }
         media={heroMedia}
         surface="paper"
-      >
-        {labels.length > 0 ? (
-          <Cluster as="ul" colGap="text" rowGap="tight">
-            {labels.map((label) => (
-              <li key={label}>
-                <Tag>{label}</Tag>
-              </li>
-            ))}
-          </Cluster>
-        ) : null}
-      </PageHero>
+      
+        labels={labels}
+      />
+
 
       {blog.blocks.length > 0 ? (
         <Section as="div" surface="paper">
