@@ -47,14 +47,27 @@ export default function EngagementOptionsSpecimen() {
 
       <Variation
         id="four"
-        title="1 · Four scopes and a note — the shape"
-        note="One row per option from 768, the 2:1 drawing in 5 of [5, 7] beside its words, swapping sides row by row; rows a column apart. Below 768 each drawing heads its words at full width. The note (the caller's Callout) a stack under the rows."
+        title="1 · Four scopes and a note — image cards, two by two (product design)"
+        note="Each drawing on its plate at 16:9 is the card's image, then the name and what it is; two across from 768, one below; 32 across and a column down. The note (the caller's Callout) a stack under the set."
       />
       <EngagementOptions
         heading="Ways to work with us"
         headingId="eop-four"
         options={FOUR}
         note={NOTE}
+      />
+
+      <Variation
+        id="rows"
+        title="1b · Alternating rows — explored"
+        note="One row per option from 768, the 2:1 drawing in 5 of [5, 7] beside its words, swapping sides row by row; rows a column apart. Roomier, but four rows run to about two folds (1,551 at 1440). Below 768 each drawing heads its words at full width."
+      />
+      <EngagementOptions
+        heading="Ways to work with us"
+        headingId="eop-rows"
+        options={FOUR}
+        note={NOTE}
+        arrangement="rows"
       />
 
       <Variation

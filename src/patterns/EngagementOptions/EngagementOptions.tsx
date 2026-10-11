@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react';
 
 import { Layout, Section, type SectionSurface } from '@/components';
+import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
 
@@ -22,6 +23,16 @@ export type EngagementOption = {
   scope?: EngagementScope;
 };
 
+/**
+ * How the options are set (owner, 11 Oct 2026).
+ *   grid  image cards two by two (one column below 768): the scope drawing on its plate at 16:9 as
+ *         each card's image, then the name and what it is. THE BAND (product design).
+ *   rows  one alternating row per option, the 2:1 drawing in 5 of [5, 7] beside its words, sides
+ *         swapping row by row. Explored: roomier, but four rows run to about two folds (1,551 at
+ *         1440).
+ */
+export type EngagementArrangement = 'grid' | 'rows';
+
 export type EngagementOptionsProps = {
   /** The band's anchor. */
   id?: string;
@@ -35,18 +46,25 @@ export type EngagementOptionsProps = {
   note?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
+  /** Default `grid`. See `EngagementArrangement`. */
+  arrangement?: EngagementArrangement;
 };
 
 const W = 320;
 const H = 180;
-/* From 768 the drawing shares a row with its words, so its field is cropped to 2:1 (top and bottom
-   strips of dots only; every shape sits between y 30 and 150) to keep four rows from towering. */
+/* `rows`: from 768 the drawing shares a row with its words, so its field is cropped to 2:1 (top and
+   bottom strips of dots only; every shape sits between y 30 and 150) to keep four rows from
+   towering. `grid` shows the whole 16:9 field on its plate — the card image ratio (one ratio on
+   every card, owner 11 Oct). */
 const CROP = 10;
 
-function Drawing({ scope, uid }: { scope: EngagementScope; uid: string }) {
+function Drawing({ scope, uid, cropped }: { scope: EngagementScope; uid: string; cropped?: boolean }) {
+  const crop = cropped ? CROP : 0;
   const grid = `${uid}-field`;
   return (
-    <svg className={styles.drawing} viewBox={`0 ${CROP} ${W} ${H - 2 * CROP}`} focusable="false" aria-hidden="true">
+    <svg
+      className={cx(styles.drawing, !cropped && styles.plate)}
+      viewBox={`0 ${crop} ${W} ${H - 2 * crop}`} focusable="false" aria-hidden="true">
       <defs>
         <pattern id={grid} width="20" height="20" patternUnits="userSpaceOnUse">
           <circle className={styles.field} cx="10" cy="10" r="1.1" />
@@ -117,15 +135,15 @@ function Drawing({ scope, uid }: { scope: EngagementScope; uid: string }) {
  * round 6, 11 Oct 2026; page-mapping § 23).
  *
  * The reader is choosing a shape for their own project, so the options are genuinely comparable
- * objects: peers, one row each from 768, the scope drawing and the words side by side and swapping
- * sides row by row (owner, 11 Oct: four across was too tight — "more space for each item … the same
- * alternating pattern"). Rows are a `column` apart. Below 768 each drawing heads its words, full
- * width at 2:1. The drawings are what make them
+ * objects: peers, set as image cards two by two (owner, 11 Oct: four across was too tight, the
+ * alternating rows ran to two folds — "what about 4 image cards in a 2x2 grid?"). See
+ * `EngagementArrangement`. The drawings are what make them
  * comparable before reading: the same field, a different blue shape for each scope. The limit on the
  * claim (when we are not the right team) closes the band as a note, a `stack` under the row.
  *
  * Not a Thread: the options are not stages in order. Not icon cards: the specialist services band
- * on the same page already is one, and a glyph cannot show scope. No boxes, no discs.
+ * on the same page already is one, and a glyph cannot show scope. No boxes round the card, no discs:
+ * the plate is the card's image, as a photograph would be.
  */
 export function EngagementOptions({
   id,
@@ -135,6 +153,7 @@ export function EngagementOptions({
   options,
   note,
   surface = 'paper',
+  arrangement = 'grid',
 }: EngagementOptionsProps) {
   const uid = useId().replace(/:/g, '');
   const shown = options.filter((option) => option.title.trim().length > 0);
@@ -147,29 +166,47 @@ export function EngagementOptions({
           </h2>
           {lead ? <p className={styles.lead}>{lead}</p> : null}
         </Layout>
-        <Layout as="ul" rowGap="column">
-          {shown.map((option, index) => (
-            <li key={option.title}>
-              {/* One row per option, the drawing and the words side by side, swapping sides row by
-                  row from 768 so the eye zigzags down the set (owner, 11 Oct: "more space for each
-                  item … the same alternating pattern"). Below 768 the drawing heads its words, full
-                  width at 2:1: beside them, the column gap left both too narrow. */}
-              <Layout
-                columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-                reverse={{ md: index % 2 === 1 }}
-                colGap="column"
-                rowGap="block"
-                align="center"
-              >
-                {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} /> : null}
+        {arrangement === 'grid' ? (
+          /* Image cards, two by two: a borderless tile each (the drawing's plate is the image, the
+             name and its words under it), 32 across and a `column` down the set — the row seam of
+             every borderless card set. */
+          <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="column">
+            {shown.map((option, index) => (
+              <li key={option.title}>
                 <Layout rowGap="block">
-                  <h3 className={styles.title}>{option.title}</h3>
-                  <p className={styles.body}>{option.body}</p>
+                  {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} /> : null}
+                  <Layout rowGap="text">
+                    <h3 className={styles.title}>{option.title}</h3>
+                    <p className={styles.body}>{option.body}</p>
+                  </Layout>
                 </Layout>
-              </Layout>
-            </li>
-          ))}
-        </Layout>
+              </li>
+            ))}
+          </Layout>
+        ) : (
+          <Layout as="ul" rowGap="column">
+            {shown.map((option, index) => (
+              <li key={option.title}>
+                {/* One row per option, the drawing and the words side by side, swapping sides row
+                    by row from 768. Below 768 the drawing heads its words, full width at 2:1:
+                    beside them, the column gap left both too narrow. */}
+                <Layout
+                  columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+                  reverse={{ md: index % 2 === 1 }}
+                  colGap="column"
+                  rowGap="block"
+                  align="center"
+                >
+                  {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} cropped /> : null}
+                  <Layout rowGap="block">
+                    <h3 className={styles.title}>{option.title}</h3>
+                    <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                  </Layout>
+                </Layout>
+              </li>
+            ))}
+          </Layout>
+        )}
         {note}
       </Layout>
     </Section>

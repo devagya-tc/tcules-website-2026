@@ -23,8 +23,10 @@
   --eop-lead-measure: var(--measure-lead);
   --eop-title-text: var(--text-h4);
   --eop-title-tracking: var(--text-h4-tracking);
-  /* With a half-width row to itself, what an option is reads at the lead size. */
-  --eop-body-text: var(--text-lead-lg);
+  --eop-body-text: var(--text-body);
+  /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
+  --eop-body-text-rows: var(--text-lead-lg);
+  --eop-plate-radius: var(--radius-8);
   --eop-body-measure: var(--measure-lead);
   /* Strokes stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
   --eop-line-width: var(--border-width-3); /* a workflow: the drawing's heavy stroke */
@@ -37,6 +39,7 @@
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
+  --eop-plate-ground: var(--color-paper-deep); /* the card image's plate */
   --eop-heading-ink: var(--color-neutral-900); /* 14.62:1 */
   --eop-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --eop-title-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -51,6 +54,7 @@
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
+  --eop-plate-ground: var(--color-paper); /* the card image's plate */
   --eop-heading-ink: var(--color-neutral-900); /* 13.05:1 */
   --eop-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --eop-title-ink: var(--color-neutral-900); /* 13.05:1 */
@@ -65,6 +69,7 @@
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
 [data-surface='ink'] {
+  --eop-plate-ground: var(--color-neutral-900); /* the card image's plate */
   --eop-heading-ink: var(--color-white); /* 17.26:1 */
   --eop-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --eop-title-ink: var(--color-white); /* 17.26:1 */
@@ -79,6 +84,7 @@
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
+  --eop-plate-ground: var(--color-brandeis-600); /* the card image's plate */
   --eop-heading-ink: var(--color-white); /* 6.23:1 */
   --eop-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --eop-title-ink: var(--color-white); /* 6.23:1 */

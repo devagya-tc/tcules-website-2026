@@ -33,7 +33,18 @@
   max-inline-size: var(--eop-body-measure);
 }
 
+/* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
+.bodyRows {
+  font: var(--eop-body-text-rows);
+}
+
 /* ── The scope drawing ───────────────────────────────────────────────────────── */
+
+/* `grid`: the drawing on its plate, the card's image. The radius is the photograph radius. */
+.plate {
+  background-color: var(--eop-plate-ground);
+  border-radius: var(--eop-plate-radius);
+}
 
 .drawing {
   display: block;

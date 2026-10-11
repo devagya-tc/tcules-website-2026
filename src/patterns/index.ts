@@ -378,6 +378,7 @@ export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpr
 /* EngagementOptions — ways to work with us, comparable at a glance through one scope drawing each. */
 export {
   EngagementOptions,
+  type EngagementArrangement,
   type EngagementOption,
   type EngagementOptionsProps,
   type EngagementScope,
