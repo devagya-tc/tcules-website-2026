@@ -13,8 +13,9 @@
    rest, and the title under the pointer. The rule is neutral on every surface: a
    blue rule is a mark, never a divider.
 
-   State-token absences are assertions: the body, the service label and the rule never move (the
-   disc's ground does, so it carries a hover step); the
+   State-token absences are assertions: the service label and the rule never move (the disc's
+   ground does, so it carries a hover step; so does the body, whose quiet paper ink fails AA on the
+   raised ground — see --gwy-body-ink-hover); the
    cue's own three steps are Button's, handed down through `data-btn-link-group`.
 
    Every surface block declares every surface-dependent token.
@@ -66,6 +67,10 @@
   /* Quieter than the title by a full step (round 5: "dense"): the sentence confirms a choice the
      title already made, so it recedes. 600 is the paper AA floor for 14px. */
   --gwy-body-ink: var(--color-neutral-600); /* 4.92:1 */
+  /* On the raised ground (hover, focus, pressed) the sentence steps back up: 600 on paper-deep is
+     4.39:1 and on neutral-100 4.16:1, under AA for 14px, and a keyboard reader holds focus there
+     (round 5 critic). 700 is 7.27:1 on paper-deep, 6.89:1 pressed. */
+  --gwy-body-ink-hover: var(--color-neutral-700);
   --gwy-service-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
   --gwy-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --gwy-ground-hover: var(--color-paper-deep); /* the index row under the pointer */
@@ -83,6 +88,7 @@
   --gwy-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --gwy-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --gwy-body-ink: var(--color-neutral-700); /* 7.27:1 — stays; 600 would be 4.39:1 */
+  --gwy-body-ink-hover: var(--color-neutral-700); /* 6.89:1 on neutral-100, 6.11:1 pressed */
   --gwy-service-ink: var(--color-neutral-700); /* 7.27:1 — stepped; 600 would be 4.39:1 */
   --gwy-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --gwy-ground-hover: var(--color-neutral-100);
@@ -100,6 +106,7 @@
   --gwy-title-ink-pressed: var(--color-brandeis-100); /* 13.61:1 — lifts, the ink direction */
   --gwy-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
   --gwy-body-ink: var(--color-neutral-400); /* 8.05:1 */
+  --gwy-body-ink-hover: var(--color-neutral-400); /* 6.88:1 on neutral-900, 5.56:1 pressed */
   --gwy-service-ink: var(--color-neutral-400); /* 8.05:1 */
   --gwy-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --gwy-ground-hover: var(--color-neutral-900);
@@ -117,6 +124,7 @@
   --gwy-title-ink-pressed: var(--color-brandeis-100); /* 4.91:1 */
   --gwy-mark-ink: var(--color-white); /* 6.23:1 */
   --gwy-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --gwy-body-ink-hover: var(--color-brandeis-50); /* 6.79:1 on brandeis-600, 9.09:1 pressed */
   --gwy-service-ink: var(--color-brandeis-100); /* 4.91:1 */
   --gwy-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --gwy-ground-hover: var(--color-brandeis-600);

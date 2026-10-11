@@ -1307,3 +1307,14 @@ is one anchor, one tab stop.
 up; the long titles wrap to three lines), 1,055 at 768 (two up), 1,798 at 390 (one up). Shots:
 `/`, the nine other corpus routes and the touched specimens at 1440 and 390, no overflow, no page
 errors.
+
+**Critic pass (round 5).** Display: one 67 element per corpus route, its hero h1, at 1440 and 390;
+no `--text-display` read outside PageHero. h1 lands on the banner run's head (home "Why teams choose
+Tcules") and the open closes (About, glossary); every form, set, grid, proof and FAQ band is h2; the
+tool page's tint close stays h2 (prose guidance, not an ask). The corpus media splits all opt to `lg`
+as they did before round 5 (long heads beside lists), so `xl` there is the specimen default only.
+One defect, fixed at the token: on the raised ground the quieter paper sentence (neutral-600) fell to
+4.39:1 on paper-deep and 4.16:1 pressed, under AA for 14px, and a keyboard reader holds focus there.
+New `--gwy-body-ink-hover` on every surface (paper steps to 700, 7.27:1; tint, ink and blue keep
+their rest ink, each checked on its own raised and pressed ground), read under hover, focus and
+press by every ground arrangement.

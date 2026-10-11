@@ -151,6 +151,7 @@
   color: var(--gwy-body-ink);
   font: var(--gwy-body-text);
   text-wrap: var(--text-running-wrap);
+  transition: color var(--gwy-ink-duration) var(--gwy-ink-easing);
 }
 
 .service {
@@ -199,6 +200,13 @@
   color: var(--gwy-mark-ink);
 }
 
+/* The sentence on a raised ground keeps AA: a ground arrangement only, since only it raises one. */
+.root .groundLink:hover .body,
+.root .groundLink:active .body,
+.root .groundLink:focus-visible .body {
+  color: var(--gwy-body-ink-hover);
+}
+
 .root .link:hover .title,
 .root .link:focus-visible .title {
   color: var(--gwy-title-ink-hover);
@@ -213,6 +221,7 @@
   .root .link,
   .root .groundLink::before,
   .disc,
+  .body,
   .title {
     transition: none;
   }
