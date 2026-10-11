@@ -201,7 +201,7 @@ export const PLACEHOLDER_SLOTS: Readonly<
     height: 1600,
     kind: 'studio photo',
     shows:
-      'A researcher running a usability session with a nurse on a real task, on the device the nurse actually uses.',
+      'A researcher running a usability session with a nurse on a real task, on the device the nurse actually uses. **Unused from 11 Oct 2026:** the approach band became one OfferSheet of five principles three across (owner: the photo split read as two sections), so it takes no photograph. Keep the brief for a future placement.',
   },
   '/expertise/healthtech#hero': {
     src: '/placeholders/expertise-healthtech--hero.svg',
@@ -221,12 +221,21 @@ export const PLACEHOLDER_SLOTS: Readonly<
   },
   '/expertise/healthtech#proof:vovisto': {
     src: '/placeholders/expertise-healthtech--proof--vovisto.svg',
-    width: 1280,
-    height: 1600,
+    width: 1600,
+    height: 900,
     kind: 'product shot',
     shows:
-      "Vovisto: a travel coordinator's view and a healthcare professional's portal view of the same congress trip (budget, approval, flights, hotel). Approved screen required. The frontmatter asks for one screen (`healthtech_asset`, CuramCare or Vovisto); if only one is approved it goes in the CuramCare slot and the Vovisto band drops its media.",
+      "Vovisto: a travel coordinator's view and a healthcare professional's portal view of the same congress trip (budget, approval, flights, hotel). Approved screen required. The frontmatter asks for one screen (`healthtech_asset`, CuramCare or Vovisto); if only one is approved it goes in the CuramCare slot and the Vovisto band drops its media. Owner, 11 Oct 2026: Vovisto is a case, so it renders as a horizontal case card, whose crop is 16:9.",
   },
+  '/expertise/healthtech#why-tcules:requirements-settled-while-they-are-cheap-to-change':
+    {
+      src: '/placeholders/expertise-healthtech--why-tcules--requirements-settled-while-they-are-cheap-to-change.svg',
+      width: 1600,
+      height: 1067,
+      kind: 'studio photo',
+      shows:
+        'A Tcules designer walking a client\'s team through a flow on screen, the client pointing at an open question while it is still cheap to change. Beside banner (11 Oct 2026, the home "why" pattern); the first reason uses the bound studio photograph.',
+    },
   '/insights/cpq-ux-design#design-for-the-revision-not-the-first-draft': {
     src: '/placeholders/insights-cpq-ux-design--design-for-the-revision-not-the-first-draft.svg',
     width: 1600,

@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 
 import { Layout } from '@/components';
 import {
+  Banner,
   BlockCard,
   BlockCardSet,
   Callout,
@@ -13,8 +14,6 @@ import {
   EngagementOptions,
   ListCard,
   OfferSheet,
-  ReadDown,
-  Statement,
   TestimonialBeside,
   TestimonialCard,
   Thread,
@@ -34,24 +33,22 @@ import type {
   CorpusMediaBinding,
   CorpusPage,
 } from '@/lib/corpus-types';
-import { glyphForPersona, glyphForRoute } from '@/lib/glyphs';
+import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
 import {
-  AsidePhoto,
   EnquiryBand,
   FaqItems,
   GenericBlocks,
   ListTiles,
-  TableLegend,
   bodyOf,
   head,
+  headingIdOf,
   testimonialItem,
   type RatingsById,
 } from './blocks';
 import { bindingNamed, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
-import styles from './CorpusPage.module.css';
 import type { OfferUnit } from './plan';
 import {
   bandLinks,
@@ -419,31 +416,46 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
       const rows = leads(band);
+      /* D — the "why" band as a run of beside banners, one reason each, alternating sides (as
+         home's "Why teams choose Tcules", owner 11 Oct 2026): the reason leads at the banner's
+         heading, its sentence under it, a photograph beside. The first reason takes the studio
+         photograph the page binds; each other reason its own slot. */
       if (unit.variant === 'D') {
         const studio = ctx.shared['about_studio_review'];
-        const image: SlotImage | undefined = studio
-          ? corpusImage(studio)
-          : hasSlot(page, band.id)
-            ? slotImage(page, band.id)
-            : undefined;
         return (
-          <ContentSection
-            {...head(band)}
-            data-band="D"
-            {...(image
-              ? {
-                  arrangement: 'beside' as const,
-                  asideFill: true,
-                  headSide: unit.side === 'end' ? ('end' as const) : ('start' as const),
-                  aside: <AsidePhoto image={image} />,
-                }
-              : { arrangement: 'beside' as const })}
-          >
-            <ReadDown
-              columns={1}
-              rows={rows.map((row) => ({ title: row.title, ...bodyOf(row.body) }))}
-            />
-          </ContentSection>
+          <>
+            {rows.map((row, index) => {
+              const slug = slugOf(row.title);
+              const image: SlotImage | undefined = hasSlot(page, band.id, slug)
+                ? { ...slotImage(page, band.id, slug), kind: 'photograph' as const }
+                : index === 0
+                  ? studio
+                    ? corpusImage(studio)
+                    : hasSlot(page, band.id)
+                      ? { ...slotImage(page, band.id), kind: 'photograph' as const }
+                      : undefined
+                  : undefined;
+              if (!image) return null;
+              return (
+                <Banner
+                  key={row.title}
+                  form="beside"
+                  mediaSide={index % 2 === 0 ? 'end' : 'start'}
+                  id={index === 0 ? band.id : undefined}
+                  bandHead={
+                    index === 0
+                      ? { heading: band.headingText, headingId: headingIdOf(band) }
+                      : undefined
+                  }
+                  heading={row.title}
+                  headingAs="h3"
+                  headingId={`${band.id}-${slug}`}
+                  lead={renderInline(row.body)}
+                  image={image}
+                />
+              );
+            })}
+          </>
         );
       }
       return (
@@ -463,55 +475,54 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* M17 — people who each have a question: icon cards with the table's two header words once above. */
+    /* People who each have a question, in their own words (VoiceLedger, as the service page's
+       "Where we start"; owner, 11 Oct 2026: the icon-card grid was "too dense and doesn't make
+       sense"). Each question is the row's large thing — what a visitor recognises — and the person
+       asking stands beside it; the closing line sits under the rows, in the same band (it was a
+       Statement band of its own, part b, which read as a second section). */
     case 'personas': {
-      if (unit.part === 'b') {
-        const closing = trailingAfterTable(band);
-        return (
-          <Fragment>
-            {closing.map((runs, index) => (
-              <Statement
-                key={index}
-                as="p"
-                align="center"
-                id={index === 0 ? unit.id : `${unit.id}-${index + 1}`}
-              >
-                {plain(runs)}
-              </Statement>
-            ))}
-          </Fragment>
-        );
-      }
+      if (unit.part === 'b') return null;
+      const table = blocksOf(band, 'table')[0];
+      const closing = trailingAfterTable(band);
       return (
-        <ContentSection {...head(band)} data-band="C-icon" lead={leadText(band)}>
-          <Personas band={band} />
-        </ContentSection>
+        <VoiceLedger
+          {...head(band)}
+          lead={leadText(band)}
+          items={(table?.rows ?? []).map((row) => ({
+            voice: plain(row[1] ?? []),
+            reply: plain(row[0] ?? []),
+          }))}
+          note={
+            closing.length > 0 ? (
+              <ContentSectionText>
+                {closing.map((runs, index) => (
+                  <p key={index}>{renderInline(runs)}</p>
+                ))}
+              </ContentSectionText>
+            ) : undefined
+          }
+        />
       );
     }
 
-    /* Principles: the first two beside a photograph, the rest as text cards. */
+    /* Principles: ONE set (OfferSheet, as "What you get"; owner, 11 Oct 2026: two beside a
+       photograph and three more in a band under it read as "2 sections or one?"). The principles three
+       across (3 + 2 for five) on their rules and blue marks, in the full column: with the photograph
+       beside them five ran two up to a lonely fifth and past the fold, so the band takes no photo. */
     case 'principles': {
+      if (unit.part === 'b') return null;
       const rows = leads(band);
-      if (unit.part === 'b') {
-        return (
-          <ContentSection id={unit.id} data-band="C-text">
-            {/* The same tiles as part a, three across: one set of five principles split across two
-                bands reads as one set only when the last three are the first two's object, at the
-                first two's type (pages pass 1 critic: a BlockCardSet here set the three a step
-                apart from the two). */}
-            {tiles(rows.slice(2), 3)}
-          </ContentSection>
-        );
-      }
       return (
-        <ContentSection
+        <OfferSheet
           {...head(band)}
-          data-band="B"
-          arrangement="media"
-          media={{ image: slotImage(page, band.id), side: unit.side ?? 'start', head: 'lg' }}
-        >
-          {tiles(rows.slice(0, 2))}
-        </ContentSection>
+          items={rows.map((row) => ({
+            title: row.title,
+            ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
+              ? { bodyHtml: inlineToHtml(row.body) }
+              : { body: plain(row.body) }),
+          }))}
+          across={rows.length % 3 === 0 || rows.length === 5 ? 3 : 2}
+        />
       );
     }
 
@@ -532,24 +543,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const image = hasSlot(page, band.id, qualifier)
         ? slotImage(page, band.id, qualifier)
         : undefined;
-      const story = (
-        <Layout rowGap="block">
-          <h3 className={styles.itemTitle}>
-            {caseLink ? (
-              <a href={caseLink.href} className={styles.itemLink}>
-                {item.headingText}
-              </a>
-            ) : (
-              item.headingText
-            )}
-          </h3>
-          <Layout rowGap="text">
-            {item.blocks.map((block, index) =>
-              block.type === 'paragraph' ? <p key={index}>{renderInline(block.runs)}</p> : null,
-            )}
-          </Layout>
-        </Layout>
-      );
       const first = unit.part === 'a';
       const headProps = first ? head(band) : { id: unit.id };
       const quote = item.blocks.find(
@@ -578,18 +571,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           </ContentSection>
         );
       }
-      return image ? (
-        <ContentSection
-          {...headProps}
-          data-band="B"
-          arrangement="media"
-          media={{ image, side: unit.side ?? 'end', head: 'lg' }}
-        >
-          {story}
-        </ContentSection>
-      ) : (
-        <ContentSection {...headProps} data-band="C-text">
-          {story}
+      /* A story with no client quote is still a case (owner, 11 Oct 2026: "that's probably going
+         to be a case study so treat it as such"): one horizontal case card, its cover beside its
+         words, linked to the case (a flagged placeholder until it publishes, P43). */
+      const paragraphs = item.blocks.flatMap((b) =>
+        b.type === 'paragraph' ? [inlineToHtml(b.runs)] : [],
+      );
+      return (
+        <ContentSection {...headProps} data-band="M">
+          <ul>
+            <BlockCard
+              title={item.headingText}
+              bodyHtml={paragraphs}
+              size="lg"
+              orientation="horizontal"
+              {...(image ? { media: { type: 'image' as const, image } } : {})}
+              {...(caseLink ? { href: caseLink.href, cue: 'title' as const } : {})}
+            />
+          </ul>
         </ContentSection>
       );
     }
@@ -683,26 +682,6 @@ function Router({ band }: { band: CorpusBand }) {
           href={row.href}
         />
       ))}
-    </Layout>
-  );
-}
-
-/** M17 — the personas: the table's two header words once as a legend, then a glyph card per person. */
-function Personas({ band }: { band: CorpusBand }) {
-  const table = blocksOf(band, 'table')[0];
-  if (!table) return null;
-  const [from, to] = table.header;
-  const glyphs = table.rows.map((row) => glyphForPersona(plain(row[0] ?? [])));
-  const items: BlockCardSetItem[] = table.rows.map((row, index) => ({
-    id: plain(row[0] ?? []),
-    title: plain(row[0] ?? []),
-    body: plain(row[1] ?? []),
-    icon: glyphs.every(Boolean) ? glyphs[index] : undefined,
-  }));
-  return (
-    <Layout rowGap="block">
-      <TableLegend from={plain(from ?? [])} to={plain(to ?? [])} />
-      <BlockCardSet items={items} lead="none" across={3} frame="none" scroll="never" />
     </Layout>
   );
 }

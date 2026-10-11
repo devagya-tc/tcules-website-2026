@@ -25,7 +25,9 @@
      the band's heading outranks its items. */
   --vlg-voice-text: var(--text-h4);
   --vlg-voice-tracking: var(--text-h4-tracking);
-  --vlg-voice-measure: var(--measure-title);
+  /* The voice runs the width of its track (7 of [7, 5]): a title measure broke six-row ledgers'
+     questions onto two lines each and doubled the band (healthtech, 11 Oct 2026). */
+  --vlg-voice-measure: none;
   --vlg-reply-text: var(--text-lead);
   --vlg-reply-measure: var(--measure-lead);
   --vlg-rule-width: var(--border-width-hairline);

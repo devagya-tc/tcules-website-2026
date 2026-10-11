@@ -22,6 +22,8 @@ export type VoiceLedgerProps = {
   lead?: string;
   /** Three to six complaints. */
   items: readonly VoiceLedgerItem[];
+  /** A closing line under the rows, in the band (healthtech's "These people rarely meet…"). A slot. */
+  note?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -80,6 +82,7 @@ export function VoiceLedger({
   headingId,
   lead,
   items,
+  note,
   surface = 'paper',
 }: VoiceLedgerProps) {
   const shown = items.filter((item) => item.voice.trim().length > 0);
@@ -109,6 +112,7 @@ export function VoiceLedger({
             </li>
           ))}
         </Layout>
+        {note}
       </Layout>
     </Section>
   );

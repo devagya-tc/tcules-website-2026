@@ -61,6 +61,7 @@ export default function VoiceLedgerSpecimen() {
         heading="Where we start depends on what's going wrong"
         headingId="vlg-five"
         items={FIVE}
+        note={<p className={t.body}>A closing line under the rows (`note`), in the same band.</p>}
       />
 
       <Variation

@@ -89,6 +89,18 @@ export default function OfferSheetSpecimen() {
       <OfferSheet heading="What you get" headingId="ofs-none" items={FOUR} />
 
       <Variation
+        id="three-across"
+        title="2c · Five, three across"
+        note="`across={3}` with no aside: five principles read 3 + 2 instead of two up to a lonely fifth (healthtech's &ldquo;How we design health products&rdquo;)."
+      />
+      <OfferSheet
+        heading="How we design"
+        headingId="ofs-three"
+        items={[...FOUR, { title: 'Your reviewers can follow our reasoning.', body: 'The thinking behind each flow, in writing.' }]}
+        across={3}
+      />
+
+      <Variation
         id="image"
         title="2b · An image beside, and a closing note"
         note="`asideImage`: the image fills the trailing 1 from the promises' top to their foot, cover-cropped (16:9 where it stacks below 1024). `note`: a closing line under the promises, in their column. The audit's &ldquo;What you receive&rdquo;."

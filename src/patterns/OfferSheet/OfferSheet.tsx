@@ -37,6 +37,11 @@ export type OfferSheetProps = {
   asideImage?: MediaImage;
   /** A closing line under the promises, in their column (in practice the next step). A slot. */
   note?: ReactNode;
+  /**
+   * Promises per row from 1024 when there is no aside: 2 (default) or 3. Five principles set two up
+   * left the fifth alone on a third row; three up they read 3 + 2 (healthtech, 11 Oct 2026).
+   */
+  across?: 2 | 3;
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -66,6 +71,7 @@ export function OfferSheet({
   aside,
   asideImage,
   note,
+  across = 2,
   surface = 'paper',
 }: OfferSheetProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
@@ -74,7 +80,12 @@ export function OfferSheet({
   }
 
   const promises = (
-    <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="stack">
+    <Layout
+      as="ul"
+      columns={{ base: 1, md: 2, lg: aside || asideImage ? 2 : across }}
+      colGap="gutter"
+      rowGap="stack"
+    >
       {shown.map((item) => (
         <li key={item.title} className={styles.item}>
           <Layout rowGap="text">
