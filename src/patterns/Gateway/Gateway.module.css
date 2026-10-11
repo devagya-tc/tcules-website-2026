@@ -10,13 +10,14 @@
 }
 
 /* The whole situation is the anchor. `display: block` de-inlines it so the hit area is the row; it
-   arranges nothing (its one child is a Layout). Its block inset is the row's own air, a `text`
-   above and below (a dense table's cell inset), so the marker has a ground to paint and adjacent
-   rows meet with no dead strip between targets: the pointer is always on some situation. */
+   arranges nothing (its one child is a Layout). Its block inset is the row's own air, a `block`
+   above and below (round 8, owner: "more spacing and breathing room around each item"; it was a
+   `text`), so the marker has a ground to paint and adjacent rows meet with no dead strip between
+   targets: the pointer is always on some situation. */
 .link {
   display: block;
   position: relative;
-  padding-block: var(--gap-text);
+  padding-block: var(--gap-block);
   color: inherit;
   text-decoration: none;
 }
@@ -111,7 +112,7 @@
 /* The answer stands level with the current title (the row's top inset carried as its own) and
    glides with the marker; its words re-enter with a short fade as the situation changes. */
 .answer {
-  padding-block-start: var(--gap-text);
+  padding-block-start: var(--gap-block);
   transform: translateY(var(--gwy-answer-shift));
   transition: transform var(--gwy-glide-duration) var(--gwy-easing);
 }

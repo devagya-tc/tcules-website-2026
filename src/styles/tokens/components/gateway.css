@@ -16,9 +16,11 @@
 /* ── Geometry, type and motion · identical on every surface ──────────────────── */
 :root {
   /* The situation is the reason to click (owner, home round 2), so it is the band's largest
-     repeated thing: h3, one step under the band's h2 heading (display is the hero's alone). */
-  --gwy-title-text: var(--text-h3);
-  --gwy-title-tracking: var(--text-h3-tracking);
+     repeated thing — but two steps under the band's h2 heading, not one: at h3 (34 under 43) the
+     six titles competed with the heading (owner, round 8). h4 (28) lets the heading lead and the
+     list read as its answers. */
+  --gwy-title-text: var(--text-h4);
+  --gwy-title-tracking: var(--text-h4-tracking);
   /* Below 1024 each sentence sits under its title as support. */
   --gwy-body-text: var(--text-body);
   /* From 1024 the current situation's sentence is THE answer, the only paragraph on the band, so
