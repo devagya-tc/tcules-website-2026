@@ -8,9 +8,11 @@ import {
   CtaRow,
   CtaSection,
   DataTable,
+  EngagementOptions,
   OfferSheet,
   VoiceLedger,
   type BlockCardSetItem,
+  type EngagementScope,
   type HeroStat,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
@@ -20,10 +22,8 @@ import { HEAD_TRACK } from '@/lib/image-sizes';
 import { placeholderImage } from '@/lib/placeholders';
 
 import {
-  AsidePhoto,
   CorpusHero,
   FaqItems,
-  ListTiles,
   QuoteGroupBand,
   bodyOf,
   head,
@@ -279,25 +279,28 @@ function Difference({ page }: { page: CorpusPage }) {
 
 /* ── 6 · how Tcules works: five principles, closed ───────────────────────────── */
 
+/* Each principle's drawing, in the authored order (EngagementOptions' scopes). */
+const HOW_SCOPES: readonly EngagementScope[] = ['start', 'direct', 'inside', 'overlap', 'commercial'];
+
+/**
+ * Five working principles as the "Ways to work with us" cards (owner, 11 Oct 2026): a drawing each on
+ * its plate, the principle under it, its two paragraphs as one body. Five across from 1440. They were
+ * five tiles in two columns beside a stand-in photograph — "a hella lot of content for this one
+ * section"; the drawings make the five comparable before a word is read.
+ */
 function HowWeWork({ page }: { page: CorpusPage }) {
   const b = band(page, 'how-we-work');
-  const rows = items(b).map((item) => ({
-    title: item.headingText,
-    bodyHtml: paragraphRuns(item.blocks).map((runs) => inlineToHtml(runs)),
-  }));
-  /* Five working principles, all in view: an About page states how the studio works rather than
-     hiding it behind five closed rows (it was an accordion). The photograph stands in the head track
-     at a fixed 4:5. */
   return (
-    <ContentSection
-      {...head(b)}
-      data-band="D"
-      arrangement="beside"
-      asideFill
-      aside={<AsidePhoto image={slotImage(page, b.id)} />}
-    >
-      <ListTiles rows={rows} columns={2} />
-    </ContentSection>
+    <EngagementOptions
+      id={b.id}
+      heading={b.headingText}
+      headingId={headingIdOf(b)}
+      options={items(b).map((item, index) => ({
+        title: item.headingText,
+        body: paragraphRuns(item.blocks).map(plain).join(' '),
+        scope: HOW_SCOPES[index],
+      }))}
+    />
   );
 }
 

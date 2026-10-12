@@ -33,6 +33,16 @@
   max-inline-size: var(--eop-body-measure);
 }
 
+/* Five across: a fifth of the column each, so the card steps drop one (h5 over body-sm). */
+.titleDense {
+  font: var(--eop-title-text-dense);
+  letter-spacing: var(--eop-title-tracking-dense);
+}
+
+.bodyDense {
+  font: var(--eop-body-text-dense);
+}
+
 /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
 .bodyRows {
   font: var(--eop-body-text-rows);
@@ -108,4 +118,32 @@
   stroke: var(--eop-member-ink);
   stroke-width: var(--eop-node-width);
   vector-effect: non-scaling-stroke;
+}
+
+/* An optional continuation: the path not yet taken, dashed in the quiet ink. */
+.trail {
+  fill: none;
+  stroke: var(--eop-member-ink);
+  stroke-width: var(--eop-node-width);
+  stroke-dasharray: var(--eop-region-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+/* The client's environment: a window in the quiet ink, its chrome rule and dots. */
+.frame {
+  fill: var(--eop-node-fill);
+  stroke: var(--eop-member-ink);
+  stroke-width: var(--eop-region-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.frameRule {
+  fill: none;
+  stroke: var(--eop-member-ink);
+  stroke-width: var(--eop-node-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.frameDot {
+  fill: var(--eop-member-ink);
 }

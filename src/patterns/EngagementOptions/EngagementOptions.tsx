@@ -11,8 +11,23 @@ import styles from './EngagementOptions.module.css';
  *   area      a product area or a whole product: a region holding several workflows
  *   embedded  a designer in your team: one blue node among your team's
  *   build     design and build: a drawn region becoming a built one
+ * How an engagement runs (about, "How Tcules works", owner 11 Oct 2026):
+ *   start      start where the uncertainty is: the first node lit, the rest of the path optional
+ *   direct     work directly with the people doing the work: our node joined to each of theirs
+ *   inside     work inside the client's product environment: our workflow inside their window
+ *   overlap    across time zones: two working days, the overlap between them marked
+ *   commercial the commercial shape follows the work: a fixed piece, a defined project, a monthly run
  */
-export type EngagementScope = 'feature' | 'area' | 'embedded' | 'build';
+export type EngagementScope =
+  | 'feature'
+  | 'area'
+  | 'embedded'
+  | 'build'
+  | 'start'
+  | 'direct'
+  | 'inside'
+  | 'overlap'
+  | 'commercial';
 
 export type EngagementOption = {
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
@@ -40,7 +55,10 @@ export type EngagementOptionsProps = {
   heading: string;
   headingId: string;
   lead?: string;
-  /** Two to four options, peers: none is featured (a featured option reads as a recommendation). */
+  /**
+   * Two to five options, peers: none is featured (a featured option reads as a recommendation). Five
+   * set five across from 1440 (three from 1024) at the denser card steps, h5 over body-sm.
+   */
   options: readonly EngagementOption[];
   /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
   note?: ReactNode;
@@ -118,6 +136,64 @@ function Drawing({ scope, uid, cropped }: { scope: EngagementScope; uid: string;
         </>
       ) : null}
 
+      {scope === 'start' ? (
+        <>
+          <path className={styles.trail} d="M90,90 L270,90" />
+          {[150, 210, 270].map((cx) => (
+            <circle key={cx} className={styles.member} cx={cx} cy="90" r="6" />
+          ))}
+          <path className={styles.line} d="M50,90 L90,90" />
+          <circle className={styles.halo} cx="90" cy="90" r="16" />
+          <circle className={styles.nodeShut} cx="90" cy="90" r="8" />
+        </>
+      ) : null}
+
+      {scope === 'direct' ? (
+        <>
+          {[50, 90, 130].map((cy) => (
+            <path key={cy} className={styles.line} d={`M100,90 L220,${cy}`} />
+          ))}
+          {[50, 90, 130].map((cy) => (
+            <circle key={cy} className={styles.member} cx="220" cy={cy} r="8" />
+          ))}
+          <circle className={styles.halo} cx="100" cy="90" r="16" />
+          <circle className={styles.nodeShut} cx="100" cy="90" r="8" />
+        </>
+      ) : null}
+
+      {scope === 'inside' ? (
+        <>
+          <rect className={styles.frame} x="50" y="30" width="220" height="120" rx="8" />
+          <path className={styles.frameRule} d="M50,52 L270,52" />
+          {[66, 80, 94].map((cx) => (
+            <circle key={cx} className={styles.frameDot} cx={cx} cy="41" r="3" />
+          ))}
+          <path className={styles.line} d="M90,100 L230,100" />
+          <circle className={styles.nodeOpen} cx="90" cy="100" r="6" />
+          <circle className={styles.nodeShut} cx="160" cy="100" r="5" />
+          <circle className={styles.nodeShut} cx="230" cy="100" r="6" />
+        </>
+      ) : null}
+
+      {scope === 'overlap' ? (
+        <>
+          <rect className={styles.halo} x="140" y="44" width="80" height="92" rx="6" />
+          <rect className={styles.frame} x="50" y="60" width="170" height="20" rx="10" />
+          <rect className={styles.region} x="140" y="100" width="130" height="20" rx="10" />
+          <path className={styles.trail} d="M140,36 L140,144 M220,36 L220,144" />
+        </>
+      ) : null}
+
+      {scope === 'commercial' ? (
+        <>
+          <rect className={styles.built} x="44" y="70" width="40" height="40" rx="6" />
+          <rect className={styles.region} x="104" y="70" width="100" height="40" rx="6" />
+          {[224, 246, 268].map((x) => (
+            <rect key={x} className={styles.built} x={x} y="70" width="16" height="40" rx="4" />
+          ))}
+        </>
+      ) : null}
+
       {scope === 'build' ? (
         <>
           <rect className={styles.drawn} x="40" y="50" width="100" height="80" rx="8" />
@@ -157,6 +233,8 @@ export function EngagementOptions({
 }: EngagementOptionsProps) {
   const uid = useId().replace(/:/g, '');
   const shown = options.filter((option) => option.title.trim().length > 0);
+  /* Five options: five across from 1440 at the denser card steps. */
+  const dense = shown.length >= 5;
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="engagement-options">
       <Layout rowGap="stack">
@@ -171,14 +249,19 @@ export function EngagementOptions({
              column below: a borderless tile each (the drawing's plate is the image, the
              name and its words under it), 32 across and a `column` down the set — the row seam of
              every borderless card set. */
-          <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="column">
+          <Layout
+            as="ul"
+            columns={dense ? { base: 1, md: 2, lg: 3, xl: 5 } : { base: 1, md: 2, lg: 4 }}
+            colGap="gutter"
+            rowGap="column"
+          >
             {shown.map((option, index) => (
               <li key={option.title}>
                 <Layout rowGap="block">
                   {option.scope ? <Drawing scope={option.scope} uid={`${uid}-${index}`} /> : null}
                   <Layout rowGap="text">
-                    <h3 className={styles.title}>{option.title}</h3>
-                    <p className={styles.body}>{option.body}</p>
+                    <h3 className={cx(styles.title, dense && styles.titleDense)}>{option.title}</h3>
+                    <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
                   </Layout>
                 </Layout>
               </li>

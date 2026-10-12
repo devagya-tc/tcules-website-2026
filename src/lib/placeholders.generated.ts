@@ -131,14 +131,6 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Designers and engineers at work together in the Ahmedabad studio, critiquing one piece of work, framed wide enough to read as the whole studio. Banner `below`, added in the critic pass.',
   },
-  '/about#how-we-work': {
-    src: '/placeholders/about--how-we-work.svg',
-    width: 1280,
-    height: 1600,
-    kind: 'studio photo',
-    shows:
-      "A Tcules lead designer working directly with a client team, in the client's own tools and review rhythm. 4:5 since the home round 2 critic: the slot is an `asideFill` aside beside a five-item accordion, about 0.9:1 at 1440, and the 3:2 panel cropped to it cut the label's right-hand edge.",
-  },
   '/about#leadership:jatin-leuva': {
     src: '/placeholders/about--leadership--jatin-leuva.svg',
     width: 1600,

@@ -1,8 +1,6 @@
-import { Fragment } from 'react';
 
 import { Layout } from '@/components';
 import {
-  Banner,
   BlockCard,
   BlockCardSet,
   Callout,
@@ -44,7 +42,6 @@ import {
   ListTiles,
   bodyOf,
   head,
-  headingIdOf,
   testimonialItem,
   type RatingsById,
 } from './blocks';
@@ -422,40 +419,44 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
          photograph the page binds; each other reason its own slot. */
       if (unit.variant === 'D') {
         const studio = ctx.shared['about_studio_review'];
+        /* D — the "why" band as one section of image cards, a reason each: a 16:9 photograph, the
+           reason as the card's title, its sentence under it. The first reason takes the studio
+           photograph the page binds; each other reason its own slot. Home's one-banner-per-reason
+           run is for reasons that fill a fold (a claim, a paragraph and a client's words); a
+           sentence each, as here, left every banner a short caption floating beside a large photo
+           (owner, 12 Oct 2026, healthtech: "idk what but this looks bad"). */
+        const cards: BlockCardSetItem[] = rows.flatMap((row, index) => {
+          const slug = slugOf(row.title);
+          const image: SlotImage | undefined = hasSlot(page, band.id, slug)
+            ? { ...slotImage(page, band.id, slug), kind: 'photograph' as const }
+            : index === 0
+              ? studio
+                ? corpusImage(studio)
+                : hasSlot(page, band.id)
+                  ? { ...slotImage(page, band.id), kind: 'photograph' as const }
+                  : undefined
+              : undefined;
+          return [
+            {
+              id: slug,
+              title: row.title,
+              ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
+                ? { bodyHtml: [inlineToHtml(row.body)] }
+                : { body: plain(row.body) }),
+              ...(image ? { media: { type: 'image' as const, image } } : {}),
+            },
+          ];
+        });
         return (
-          <>
-            {rows.map((row, index) => {
-              const slug = slugOf(row.title);
-              const image: SlotImage | undefined = hasSlot(page, band.id, slug)
-                ? { ...slotImage(page, band.id, slug), kind: 'photograph' as const }
-                : index === 0
-                  ? studio
-                    ? corpusImage(studio)
-                    : hasSlot(page, band.id)
-                      ? { ...slotImage(page, band.id), kind: 'photograph' as const }
-                      : undefined
-                  : undefined;
-              if (!image) return null;
-              return (
-                <Banner
-                  key={row.title}
-                  form="beside"
-                  mediaSide={index % 2 === 0 ? 'end' : 'start'}
-                  id={index === 0 ? band.id : undefined}
-                  bandHead={
-                    index === 0
-                      ? { heading: band.headingText, headingId: headingIdOf(band) }
-                      : undefined
-                  }
-                  heading={row.title}
-                  headingAs="h3"
-                  headingId={`${band.id}-${slug}`}
-                  lead={renderInline(row.body)}
-                  image={image}
-                />
-              );
-            })}
-          </>
+          <ContentSection {...head(band)} data-band="C-cards">
+            <BlockCardSet
+              items={cards}
+              lead="none"
+              across={cards.length >= 3 ? 3 : 2}
+              size="lg"
+              scroll="never"
+            />
+          </ContentSection>
         );
       }
       return (
