@@ -17,6 +17,9 @@
   --skt-line-width: var(--border-width-3);
   /* The dashed connection, in the drawing's own units (SVG user space). */
   --skt-dash: 5 4;
+  /* The field's dot: an optical size, and the edge it softens over so it is not jagged. */
+  --skt-dot-radius: var(--border-width-hairline);
+  --skt-dot-soft: var(--border-width-hairline);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

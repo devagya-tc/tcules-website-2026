@@ -70,7 +70,7 @@ const SPECIMENS = [
       {
         href: '/design/sketch',
         name: 'Sketch',
-        note: 'a small drawing on its 16:9 plate, one scene per service, a stand-in for an illustration; 3 surfaces',
+        note: 'a small drawing on its 16:9 plate, one scene per service (seven), a stand-in for an illustration in the home and About selectors; 3 surfaces',
       },
       {
         href: '/design/brand-mark',

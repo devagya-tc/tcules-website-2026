@@ -109,12 +109,10 @@
   min-inline-size: 0;
 }
 
-/* The answer stands level with the current title (the row's top inset carried as its own) and
-   glides with the marker; its words re-enter with a short fade as the situation changes. */
+/* The answer holds one place, level with the first title (the row's top inset carried as its own),
+   at every selection; only its content re-enters, with a short fade and rise. */
 .answer {
   padding-block-start: var(--gap-block);
-  transform: translateY(var(--gwy-answer-shift));
-  transition: transform var(--gwy-glide-duration) var(--gwy-easing);
 }
 
 .answerBody {
@@ -135,9 +133,11 @@
 @keyframes gwy-enter {
   from {
     opacity: 0;
+    transform: translateY(var(--gwy-enter-rise));
   }
   to {
     opacity: 1;
+    transform: none;
   }
 }
 
@@ -214,7 +214,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .arrow,
-  .answer,
   .select .marker,
   .expand .detailInner {
     transition: none;

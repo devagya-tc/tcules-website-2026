@@ -5,12 +5,16 @@
   display: block;
   inline-size: 100%;
   block-size: auto;
-  background-color: var(--skt-plate-ground);
   border-radius: var(--skt-plate-radius);
-}
-
-.field {
-  fill: var(--skt-field-ink);
+  /* The dot field: one dot centred in each 20-unit tile of the 320 × 180 drawing, as shares of the
+     plate (20 / 320, 20 / 180), so it scales with the drawing as the SVG pattern did. */
+  background-color: var(--skt-plate-ground);
+  background-image: radial-gradient(
+    circle,
+    var(--skt-field-ink) var(--skt-dot-radius),
+    transparent calc(var(--skt-dot-radius) + var(--skt-dot-soft))
+  );
+  background-size: 6.25% 11.111%;
 }
 
 .frame {
@@ -59,6 +63,15 @@
 
 .tick {
   stroke: var(--skt-accent-on);
+}
+
+/* The whole of something not yet built: its frame dashed, in the quiet ink. */
+.trailFrame {
+  fill: none;
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  stroke-dasharray: var(--skt-dash);
+  vector-effect: non-scaling-stroke;
 }
 
 /* A connection not yet made: dashed, in the quiet ink. */

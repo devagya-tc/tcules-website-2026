@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-import { BrandMark, Icon, Layout, RatingBadge, Section } from '@/components';
+import { BrandMark, Icon, Layout, RatingBadge, Section, Sketch } from '@/components';
 import {
   Banner,
   BlockCard,
@@ -31,6 +31,7 @@ import type {
 import { glyphForRoute } from '@/lib/glyphs';
 import { renderInline } from '@/lib/inline-render';
 import { placeholderImage } from '@/lib/placeholders';
+import { sketchForRoute } from '@/lib/sketches';
 
 import {
   CorpusHero,
@@ -288,6 +289,15 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
         body: para ? plain(para.runs) : '',
         href: target.href,
         service: target.labelText,
+        /* A drawing of the service each situation leads to, in the answer (owner, 12 Oct 2026:
+           "similar design here on the homepage with some visual element in the content area"). */
+        ...(sketchForRoute(target.href)
+          ? {
+              visual: (
+                <Sketch name={sketchForRoute(target.href)!} />
+              ),
+            }
+          : {}),
       },
     ];
   });

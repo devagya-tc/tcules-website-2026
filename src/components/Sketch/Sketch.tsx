@@ -1,8 +1,11 @@
 import styles from './Sketch.module.css';
+import type { SketchName } from '@/lib/sketches';
 
 /**
- * What a sketch shows. One scene per service, each drawing only what the service's name says, in the
- * kit's plate language (EngagementOptions, TracePlates): the dot field, quiet frames, one blue subject.
+ * What a sketch shows (the names live in @/lib/sketches, with the route map). One scene per service,
+ * each drawing only what the service's name says, in the kit's plate language (EngagementOptions,
+ * TracePlates): the dot field, quiet frames, one blue subject.
+ *   new-product            the whole product dashed, its first release built solid, the launch lit
  *   product-design         a screen whose one flow is drawn through it, the decision point lit
  *   product-modernisation  a cluttered legacy screen becoming the same screen, clean
  *   design-systems         a set of components, one of them placed into a screen
@@ -10,18 +13,10 @@ import styles from './Sketch.module.css';
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
  */
-export type SketchName =
-  | 'product-design'
-  | 'product-modernisation'
-  | 'design-systems'
-  | 'ai-product-ux'
-  | 'design-engineering'
-  | 'software-development';
+export type { SketchName };
 
 export type SketchProps = {
   name: SketchName;
-  /** Distinct per page when several sketches share one (the dot field's pattern id). */
-  uid: string;
 };
 
 const W = 320;
@@ -31,10 +26,10 @@ const H = 180;
  * Sketch — a small drawing on its plate (16:9, the photograph radius), a stand-in for an illustration
  * where a block needs a visual subject and no illustration exists (owner, 12 Oct 2026, the About
  * services selector: "some visual element with the text on the right side would be nice").
- * Decorative: `aria-hidden`, the words beside it carry the meaning. Strokes are non-scaling.
+ * Decorative: `aria-hidden`, the words beside it carry the meaning. Strokes are non-scaling. The dot
+ * field is the plate's CSS background, so a sketch carries no id and any number can share a page.
  */
-export function Sketch({ name, uid }: SketchProps) {
-  const field = `${uid}-field`;
+export function Sketch({ name }: SketchProps) {
   return (
     <svg
       className={styles.sketch}
@@ -42,12 +37,19 @@ export function Sketch({ name, uid }: SketchProps) {
       focusable="false"
       aria-hidden="true"
     >
-      <defs>
-        <pattern id={field} width="20" height="20" patternUnits="userSpaceOnUse">
-          <circle className={styles.field} cx="10" cy="10" r="1.1" />
-        </pattern>
-      </defs>
-      <rect x="0" y="0" width={W} height={H} fill={`url(#${field})`} />
+
+      {name === 'new-product' ? (
+        <>
+          <rect className={styles.trailFrame} x="50" y="30" width="220" height="120" rx="8" />
+          <rect className={styles.region} x="70" y="50" width="96" height="80" rx="6" />
+          <path className={styles.copy} d="M84,72 L140,72" />
+          <path className={styles.copy} d="M84,88 L126,88" />
+          <rect className={styles.solid} x="84" y="104" width="44" height="14" rx="4" />
+          <path className={styles.line} d="M166,90 L222,90" />
+          <circle className={styles.halo} cx="236" cy="90" r="15" />
+          <circle className={styles.node} cx="236" cy="90" r="7" />
+        </>
+      ) : null}
 
       {name === 'product-design' ? (
         <>

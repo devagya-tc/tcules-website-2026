@@ -43,9 +43,10 @@ export type GatewayItem = {
  *
  *   select  THE SELECTOR (home). Six titles down one column, every one at full ink. A marker — a
  *           raised ground — sits behind the current situation and SLIDES to whichever one the
- *           pointer or focus is on, and the answer beside the list slides with it, level with the
- *           title. Running the pointer down the list glides the marker and the answer through each
- *           option in turn: browsing, not clicking.
+ *           pointer or focus is on. The answer beside the list holds ONE place, level with the
+ *           first title, at one height for every option (owner, 12 Oct 2026); its content re-enters
+ *           with a short fade and rise as the selection changes. Running the pointer down the list
+ *           glides the marker and refreshes the answer: browsing, not clicking.
  *   expand  The accordion of situations: ruled rows, the current one open in place with its
  *           sentence and service under its title. Explored alternative: in-flow, so the rows move as
  *           one opens and another closes.
@@ -80,8 +81,9 @@ const EXPAND_INTENT_MS = 140;
  *      column, all visible at once, ALL AT FULL INK (round 7, owner: "not fading the text out").
  *   2. The current situation is marked by a raised ground behind it and a blue arrow after it. The
  *      marker is the eye's entry and it moves to whatever the reader points at or tabs to.
- *   3. The current situation's answer — its sentence and its service — stands beside it, level with
- *      it, and travels with the marker. One sentence on screen at a time, so the band is never dense.
+ *   3. The current situation's answer — its sentence and its service — stands in one place beside
+ *      the list, and its content re-enters with each change. One sentence on screen at a time, so the
+ *      band is never dense.
  *
  * Below 1024 there is no pointer and no column to answer in, so every situation shows its sentence
  * and its service under its title, all at once.
@@ -101,9 +103,8 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
   const Title = titleAs;
   const uid = useId();
   const [active, setActive] = useState(0);
-  const [geo, setGeo] = useState({ markY: 0, markH: 0, shift: 0 });
+  const [geo, setGeo] = useState({ markY: 0, markH: 0 });
   const trackRef = useRef<HTMLDivElement>(null);
-  const paneRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const intent = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -118,19 +119,12 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
   };
   useEffect(() => clearIntent, []);
 
-  /* Where the marker and the answer stand: the marker on the current row; the answer level with
-     its title, clamped so it never runs below the list's end. */
+  /* Where the marker stands: on the current row. The answer does not move (it holds the list's top). */
   const measure = useCallback(() => {
     const track = trackRef.current;
     const item = itemRefs.current[active];
     if (!track || !item) return;
-    const pane = paneRef.current;
-    const max = pane ? Math.max(0, track.offsetHeight - pane.offsetHeight) : 0;
-    setGeo({
-      markY: item.offsetTop,
-      markH: item.offsetHeight,
-      shift: Math.min(item.offsetTop, max),
-    });
+    setGeo({ markY: item.offsetTop, markH: item.offsetHeight });
   }, [active]);
 
   useLayoutEffect(() => {
@@ -230,13 +224,11 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
       </div>
 
       <div className={styles.answerTrack} aria-hidden="true">
-        <div
-          ref={paneRef}
-          className={styles.answer}
-          style={{ '--gwy-answer-shift': `${geo.shift}px` } as CSSProperties}
-        >
-          {/* Keyed on the current situation so its words re-enter (a short fade) as it changes,
-              while the answer's box glides. */}
+        <div className={styles.answer}>
+          {/* ONE place for every answer (owner, 12 Oct 2026: "it renders at 1 height for all the
+              items"): the pane holds the top of the list and never moves. Keyed on the current
+              item, so its drawing and words re-enter with a short fade and rise as the pointer moves
+              — the micro-animation is the only motion on this side. */}
           <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
             {lit.visual != null ? <div className={styles.answerVisual}>{lit.visual}</div> : null}
             <p className={styles.answerText}>{lit.body}</p>

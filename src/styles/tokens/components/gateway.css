@@ -37,9 +37,11 @@
      first situation current, the marker hidden until measured). */
   --gwy-marker-y: 0px;
   --gwy-marker-h: 0px;
-  --gwy-answer-shift: 0px;
+  /* How far a new answer rises as it fades in: the micro-animation under the pointer. An optical
+     motion distance, not a layout distance (gap rule 1). */
+  --gwy-enter-rise: var(--space-8);
   /* Motion (round 7, owner: "if i'm moving my mouse across the list, it should naturally feel like
-     i went through the options"). The marker and the answer GLIDE: long enough to be seen
+     i went through the options"). The marker GLIDES (the answer holds still since 12 Oct 2026): long enough to be seen
      travelling, short enough to keep up with a pointer running down six rows. Fades are quicker. */
   --gwy-glide-duration: var(--duration-medium);
   --gwy-quick-duration: var(--duration-fast);
