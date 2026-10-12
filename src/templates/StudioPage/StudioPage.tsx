@@ -13,12 +13,15 @@ import {
   PageHero,
   ProfileCard,
   ProfileFollow,
+  OfferSheet,
   Statement,
   TestimonialWall,
   VoiceLedger,
   type EngagementScope,
   type HeroTrail,
 } from '@/patterns';
+
+import styles from './StudioPage.module.css';
 
 type Link = { label: string; href: string };
 type Titled = { title: string; body: string };
@@ -29,24 +32,21 @@ type Titled = { title: string; body: string };
  */
 export type StudioPageContent = {
   hero: { title: string; lede: string; stats: readonly { value: string; label: string }[] };
+  studio: { founding: string; centre: string; meaning: string };
   ahmedabad: { heading: string; paragraphs: readonly string[] };
   services: {
     heading: string;
     lead?: string;
     items: readonly (Titled & { href: string; label: string })[];
   };
-  practice: { heading: string; lead?: string; items: readonly Titled[]; link?: Link };
+  practice: { heading: string; lead?: string; items: readonly Titled[] };
   who: {
     heading: string;
     lead?: string;
     items: readonly { voice: string; reply: string }[];
     note?: string;
   };
-  difference: {
-    statement: { eyebrow?: string; text: string };
-    complexity: { heading: string; lead?: string; items: readonly Titled[] };
-    continuity: { heading: string; lead: string };
-  };
+  difference: { heading: string; items: readonly Titled[]; link?: Link };
   how: { heading: string; items: readonly Titled[] };
   people: {
     heading: string;
@@ -82,8 +82,9 @@ export type StudioPageProps = {
   trail?: HeroTrail;
   /** The photographs the route resolves: bound studio media, register placeholders, case covers. */
   images: {
+    studio: MediaImage;
     ahmedabad: MediaImage;
-    continuity: MediaImage;
+    team: MediaImage;
     lab: MediaImage;
     careers: MediaImage;
     /** By the leader's `portrait` slug. */
@@ -122,16 +123,16 @@ const id = (heading: string) =>
  * TIER 3 — the About page as it should read (owner, 12 Oct 2026: "present the information in the
  * most consumable format. a person would most likely not read a section with 5 paragraphs of text").
  *
- * Every band carries one idea in the shape that idea needs, and no band holds more than two or three
- * short paragraphs. The arrangement changes band to band, so the page never repeats one rectangle:
- * the hero with the record's figures; a photograph beside the city; a selector for six services;
- * two claims; the three situations as the questions layout; a statement; three examples; a banner;
- * five drawn principles; two people and the studio; featured work; the Lab on the dark band; the
+ * The corpus's sections in the corpus's order, under its own headings, each cut for length (owner,
+ * 12 Oct 2026: "optimize length and not change the narrative or structure"), and each in the shape its
+ * job needs, so the page never repeats one rectangle: the hero with the record's figures; the opening
+ * line set large beside the studio; the city beside its photograph; the practice as two claims; six
+ * services in a selector with a sketch each; the three situations; the five differences as one set;
+ * five drawn principles; two people and the studio; featured work and the Lab on the dark band; the
  * clients' words; the record; the questions; the coda; the ask; careers.
  */
 export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageProps) {
   const practiceId = id(c.practice.heading);
-  const complexityId = id(c.difference.complexity.heading);
   return (
     <>
       <PageHero
@@ -144,6 +145,20 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
       />
 
       <ContentSection
+        id="studio"
+        arrangement="media"
+        media={{ image: images.studio, side: 'end', pin: false, weight: 'photo' }}
+      >
+        {/* The studio's own line ("Product Design sits at the centre of the studio") is the band's
+            large thing; who founded it reads above, what the centre means below. */}
+        <Layout rowGap="block">
+          <p className={styles.founding}>{c.studio.founding}</p>
+          <p className={styles.centre}>{c.studio.centre}</p>
+          <p className={styles.meaning}>{c.studio.meaning}</p>
+        </Layout>
+      </ContentSection>
+
+      <ContentSection
         id="ahmedabad"
         heading={c.ahmedabad.heading}
         headingId="ahmedabad-heading"
@@ -153,6 +168,21 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         <ContentSectionText>
           <Prose html={c.ahmedabad.paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join('')} />
         </ContentSectionText>
+      </ContentSection>
+
+      <ContentSection
+        id={practiceId}
+        heading={c.practice.heading}
+        headingId={`${practiceId}-heading`}
+        lead={c.practice.lead}
+      >
+        <BlockCardSet
+          items={c.practice.items.map((item) => ({ id: item.title, ...item }))}
+          lead="none"
+          across={2}
+          size="lg"
+          scroll="never"
+        />
       </ContentSection>
 
       <ContentSection
@@ -175,22 +205,6 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         />
       </ContentSection>
 
-      <ContentSection
-        id={practiceId}
-        heading={c.practice.heading}
-        headingId={`${practiceId}-heading`}
-        lead={c.practice.lead}
-        footer={c.practice.link ? <CtaRow actions={[c.practice.link]} /> : undefined}
-      >
-        <BlockCardSet
-          items={c.practice.items.map((item) => ({ id: item.title, ...item }))}
-          lead="none"
-          across={2}
-          size="lg"
-          scroll="never"
-        />
-      </ContentSection>
-
       <VoiceLedger
         id="who-we-work-with"
         heading={c.who.heading}
@@ -200,33 +214,15 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         note={c.who.note ? <p>{c.who.note}</p> : undefined}
       />
 
-      <Statement as="p" align="start" eyebrow={c.difference.statement.eyebrow} surface="tint">
-        {c.difference.statement.text}
-      </Statement>
-
-      <ContentSection
-        id={complexityId}
-        heading={c.difference.complexity.heading}
-        headingId={`${complexityId}-heading`}
-        lead={c.difference.complexity.lead}
-      >
-        <BlockCardSet
-          items={c.difference.complexity.items.map((item) => ({ id: item.title, ...item }))}
-          lead="none"
-          across={3}
-          numbered
-          scroll="never"
-        />
-      </ContentSection>
-
-      <Banner
-        form="beside"
-        mediaSide="start"
-        id="continuity"
-        headingId="continuity-heading"
-        heading={c.difference.continuity.heading}
-        lead={c.difference.continuity.lead}
-        image={{ ...images.continuity, kind: 'photograph' }}
+      <OfferSheet
+        id="difference"
+        heading={c.difference.heading}
+        headingId="difference-heading"
+        across={3}
+        items={c.difference.items}
+        note={
+          c.difference.link ? <CtaRow rule={false} actions={[c.difference.link]} /> : undefined
+        }
       />
 
       <EngagementOptions
@@ -250,7 +246,11 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
               />
             ))}
           </Layout>
-          <ProfileFollow body={c.people.follow.body} link={c.people.follow.link} />
+          <ProfileFollow
+            body={c.people.follow.body}
+            link={c.people.follow.link}
+            image={images.team}
+          />
         </Layout>
       </ContentSection>
 

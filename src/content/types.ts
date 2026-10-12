@@ -1216,24 +1216,22 @@ export type IdealAboutPage = {
     lede: string;
     stats: Array<{ value: string; label: string }>;
   };
+  /** The opening, split from the hero: who founded the studio and what sits at its centre. */
+  studio: { founding: string; centre: string; meaning: string };
   ahmedabad: { heading: string; paragraphs: string[] };
   services: {
     heading: string;
     lead?: string;
     items: Array<IdealTitled & { href: string; label: string }>;
   };
-  practice: { heading: string; lead?: string; items: IdealTitled[]; link?: IdealLink };
+  practice: { heading: string; lead?: string; items: IdealTitled[] };
   who: {
     heading: string;
     lead?: string;
     items: Array<{ voice: string; reply: string }>;
     note?: string;
   };
-  difference: {
-    statement: { eyebrow?: string; text: string };
-    complexity: { heading: string; lead?: string; items: IdealTitled[] };
-    continuity: { heading: string; lead: string };
-  };
+  difference: { heading: string; items: IdealTitled[]; link?: IdealLink };
   how: { heading: string; items: IdealTitled[] };
   people: {
     heading: string;

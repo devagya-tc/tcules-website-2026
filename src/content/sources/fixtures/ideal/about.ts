@@ -6,21 +6,11 @@ import type { IdealAboutPage } from '../../../types';
  * of the about page by optimizing the content lengths").
  *
  * Not a source. The live /about renders the `_pages/` corpus verbatim; this is the worked example of
- * the same page edited for consumption, rendered at /design/about-ideal. Every fact is the corpus's
- * (dates, counts, names, services, clients, engagement models) and the client quotes are verbatim;
- * the prose is EDITED — shortened, merged where two sections said one thing, split where one section
- * said five. The editorial choices, band by band:
- *
- *   hero          the opening section folds into the hero: founding, founders, the centre
- *   ahmedabad     four paragraphs → two short ones and the design heritage line
- *   services      six two-paragraph cards → one sentence each, read one at a time (a selector)
- *   practice      "The practice keeps moving" + "AI is changing both sides" → two claims side by side
- *   difference    five two-paragraph principles → three bands: a statement, three examples of complex
- *                 software, and senior people + connected design and code as one banner
- *   how           five two-paragraph principles → one sentence each under a drawing
- *   people        bios to two sentences
- *   record        sixteen rows → the eight a buyer checks
- *   faq           nine questions → seven, answers to one or two sentences (work/hiring → careers)
+ * the same page edited for LENGTH (owner, 12 Oct 2026: "optimize length and not change the narrative
+ * or structure"). Every section of the corpus is here, in its order, under its own heading, with its
+ * own items; each is cut to a sentence or two per paragraph. Facts (dates, counts, names, services,
+ * clients, engagement models) and client quotes are the corpus's, unchanged. Rendered at
+ * /design/about-ideal.
  *
  * Proposed copy for the content team, not approved copy.
  */
@@ -29,7 +19,7 @@ export const idealAbout: IdealAboutPage = {
     eyebrow: 'About Tcules',
     title:
       'Tcules is a digital product design studio shaped in Ahmedabad, creating software products for businesses across the world.',
-    lede: 'Founded in 2017 by Jatin Leuva and Rakesh Chitroda. We understand people and systems well enough to make better product decisions, and we carry those decisions through to software that works.',
+    lede: 'For generations, Ahmedabad has turned ideas into things people live with. NID and CEPT helped establish modern design education in India here, and today they sit in a much broader design ecosystem.',
     stats: [
       { value: '2017', label: 'Founded' },
       { value: '90+', label: 'Projects' },
@@ -37,12 +27,20 @@ export const idealAbout: IdealAboutPage = {
     ],
   },
 
+  studio: {
+    founding:
+      'Tcules was founded here in 2017 by Jatin Leuva and Rakesh Chitroda. Since then we have worked on more than 90 projects across 19 countries.',
+    centre: 'Product Design sits at the centre of the studio.',
+    meaning:
+      'Understanding people and systems well enough to make better product decisions, giving complicated ideas useful form, and carrying those decisions through to software that works.',
+  },
+
   ahmedabad: {
     heading: 'Ahmedabad is part of how we work',
     paragraphs: [
-      'For five and a half years we worked remotely. In 2022 we opened our Ahmedabad studio and brought the team together.',
-      'Working in one place lets designers and engineers share context, inspect the same product and own the quality of the whole, not just their part of it.',
-      'It is also a city where making, design and enterprise have long sat close together. NID and CEPT helped establish modern design education in India here.',
+      'Tcules worked remotely for its first five and a half years. In 2022 we opened our Ahmedabad studio and brought the team together.',
+      'Working in one place lets designers and engineers share context, inspect the same product and own the quality of the whole.',
+      'It also means talented people can build a career in Ahmedabad doing product work that reaches far beyond it.',
     ],
   },
 
@@ -91,18 +89,17 @@ export const idealAbout: IdealAboutPage = {
 
   practice: {
     heading: 'The practice keeps moving',
-    lead: 'AI is changing what we design and how we design it. We are changing the practice, not attaching new tools to an old process.',
+    lead: 'Product Design remains the centre. The capabilities and methods around it keep evolving with technology, products and our clients.',
     items: [
       {
-        title: 'In the products we design.',
-        body: 'AI-native products, copilots, AI features and increasingly agentic software, with authority, evidence, review and recovery designed in.',
+        title: 'The products are changing.',
+        body: 'Software is becoming more intelligent and able to act for people. We have worked across AI-native products, copilots and AI features, and into agentic software.',
       },
       {
-        title: 'In how we design them.',
-        body: 'Agents and purpose-built tools help with research, inspection, synthesis, production and verification. A person still makes the call.',
+        title: 'So is the practice.',
+        body: 'Not new tools on an old process: learning where machines do useful work, where people need visibility and control, and where human judgement matters more.',
       },
     ],
-    link: { label: 'How AI-native Product Design works', href: '/how-we-work/ai-native-product-design' },
   },
 
   who: {
@@ -126,23 +123,30 @@ export const idealAbout: IdealAboutPage = {
   },
 
   difference: {
-    statement: {
-      eyebrow: 'What makes the practice different',
-      text: 'Product Design is the centre of the work, not a stage between requirements and engineering.',
-    },
-    complexity: {
-      heading: 'Complex software is a design material',
-      lead: 'Roles, rules, states, exceptions, data and habits. We work through them rather than simplifying them away.',
-      items: [
-        { title: 'A mature SaaS product', body: 'Changes without erasing what existing users already know.' },
-        { title: 'A new platform', body: 'Several workflows become one coherent product model.' },
-        { title: 'An AI product', body: 'Authority and recovery are designed before people let it act.' },
-      ],
-    },
-    continuity: {
-      heading: 'The people who shape the product stay with it',
-      lead: 'You work directly with the practitioners responsible for your product. Because design and code live in one practice, decisions survive the journey from the design file to the working product.',
-    },
+    heading: 'What makes the practice different',
+    items: [
+      {
+        title: 'Product Design is the centre, not a stage.',
+        body: 'Research, modelling, workflows, interface, prototyping, Design Systems and implementation decisions belong to one responsibility: making and keeping good product decisions.',
+      },
+      {
+        title: 'Complex software is treated as a design material.',
+        body: 'Roles, rules, states, exceptions and habits are worked through, not simplified away, in a mature SaaS product, a new platform or an AI product.',
+      },
+      {
+        title: 'Senior judgement stays close to the work.',
+        body: 'The people shaping the direction stay involved, and you work with them directly. Specialists join when a problem needs them.',
+      },
+      {
+        title: 'Design and engineering can stay connected.',
+        body: 'Design and code in one practice, so decisions survive the journey from the design file to the working product.',
+      },
+      {
+        title: 'AI is changing both sides of our work.',
+        body: 'We design products that use AI, and use AI to practise Product Design: deciding where it helps, where it adds risk and where a person makes the call.',
+      },
+    ],
+    link: { label: 'How AI-native Product Design works at Tcules', href: '/how-we-work/ai-native-product-design' },
   },
 
   how: {
@@ -245,13 +249,21 @@ export const idealAbout: IdealAboutPage = {
     heading: 'Tcules at a glance',
     rows: [
       ['Company', 'Tcules UX Private Limited'],
-      ['Founded', '2017, by Jatin Leuva and Rakesh Chitroda'],
+      ['Category', 'Digital product design studio'],
+      ['Founded', '2017'],
+      ['Founders', 'Jatin Leuva and Rakesh Chitroda'],
       ['Studio', 'Ahmedabad, India'],
       ['Core practice', 'Product Design'],
-      ['Projects', 'More than 90, for clients in 19 countries'],
-      ['Selected clients', 'Doodle, Eden AI, Dealpath, Omny AI, Benchmark Gensuite, Knovos, Primelis and GT Tools'],
-      ['Services', 'Product Design, Product Modernisation, Design Systems, AI Product UX, Design Engineering and Software Development'],
-      ['Engagements', 'Fixed-price audits, fixed-scope projects and monthly product partnerships'],
+      ['Services', 'Product Design, Product Modernisation, Design Systems, AI Product UX, Design Engineering, Software Development'],
+      ['Projects', 'More than 90'],
+      ['Client reach', '19 countries'],
+      ['Typical clients', 'Growth-stage SaaS teams, established software companies, founders building new software'],
+      ['Selected clients', 'Doodle, Eden AI, Dealpath, Omny AI, Benchmark Gensuite, Knovos, Primelis, GT Tools'],
+      ['Engagements', 'Fixed-price audits, fixed-scope projects, monthly partnerships'],
+      ['Working model', 'Ahmedabad studio, working directly with product teams across time zones'],
+      ['Collaboration', 'A lead designer as your main contact; specialists join as needed'],
+      ['Website', 'tcules.com'],
+      ['LinkedIn', 'linkedin.com/company/tcules'],
     ],
   },
 
@@ -289,9 +301,19 @@ export const idealAbout: IdealAboutPage = {
           '<p>AI takes part in both the products we design and how we design them, from research and synthesis to implementation and verification.</p>',
       },
       {
-        question: 'Why Ahmedabad?',
+        question: 'Why is Tcules based in Ahmedabad?',
         answerHtml:
           '<p>A deep design inheritance, strong design schools, an entrepreneurial culture and emerging talent, and a place where designers and engineers can build careers while working on products across the world.</p>',
+      },
+      {
+        question: 'What is it like to work at Tcules?',
+        answerHtml:
+          '<p>An on-site product studio where people understand the product, question assumptions, critique work and take growing responsibility for the result.</p>',
+      },
+      {
+        question: 'What does Tcules look for when hiring?',
+        answerHtml:
+          '<p>The ability to observe, reason, communicate, learn and make. As AI takes on routine production, framing problems and staying accountable for outcomes matter more.</p>',
       },
     ],
   },

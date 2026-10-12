@@ -845,7 +845,7 @@ function MediaSplit({
       colGap="section"
       rowGap="stack"
       reverse={media.side === 'end' ? { lg: true } : undefined}
-      align={pinned ? 'stretch' : 'start'}
+      align={pinned ? 'stretch' : 'center'}
     >
       <div className={styles.photoTrack}>
         <div

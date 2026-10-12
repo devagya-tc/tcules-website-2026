@@ -82,8 +82,9 @@ export default async function AboutIdeal() {
         ),
       )}
       images={{
-        ahmedabad: bound('about_team'),
-        continuity: bound('about_studio_review'),
+        studio: placeholderImage(ROUTES.about, 'studio'),
+        ahmedabad: bound('about_studio_review'),
+        team: bound('about_team'),
         lab: bound('about_work_wall'),
         careers: placeholderImage(ROUTES.about, 'careers'),
         portraits: Object.fromEntries(
