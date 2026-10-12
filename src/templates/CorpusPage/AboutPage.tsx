@@ -415,7 +415,7 @@ function WorkYouCanInspect({
  * The Future Interfaces Lab, as a band of its own after the cases (owner, 11 Oct 2026: "the FIL section
  * is just text and image. i think that can be designed really well"). The cases' link to every case
  * moves to the cases band's foot, where it belongs; the Lab is a Banner beside its working-wall
- * photograph, on the tint ground, its name (the sentence's own link words) as the banner's heading and
+ * photograph, on the dark band (owner, 12 Oct 2026: "use the dark band for FIL"), its name (the sentence's own link words) as the banner's heading and
  * the sentence as the lead, and the Lab's link as the banner's one action (its own link words).
  */
 function Lab({
@@ -441,7 +441,7 @@ function Lab({
         link ? <CtaRow rule={false} actions={[{ label: name, href: link.href }]} /> : undefined
       }
       image={{ ...slotImage(page, b.id), kind: 'photograph' }}
-      surface="tint"
+      surface="ink"
     />
   );
 }
