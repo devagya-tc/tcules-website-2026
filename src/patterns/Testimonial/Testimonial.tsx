@@ -103,6 +103,19 @@ function bindShortWords(html: string): string {
  * both (critic, home round 2). Typesetting, like `bindShortWords`: the marks change, the words do
  * not. Tags are left alone, so attribute quotes are never touched.
  */
+/**
+ * A testimonial always shows its quote marks (owner, 12 Oct 2026: "it should always have the quote
+ * marks"): a quote authored without them gets an opening mark before its first word and a closing one
+ * after its last, inside the markup. Marks already there are left alone.
+ */
+function withQuoteMarks(html: string): string {
+  const text = html.replace(/<[^>]*>/g, '').trim();
+  let out = html;
+  if (!/^["“]/.test(text)) out = out.replace(/^((?:\s*<[^>]+>)*\s*)/, '$1“');
+  if (!/["”]$/.test(text)) out = out.replace(/(\s*(?:<\/[^>]+>\s*)*)$/, '”$1');
+  return out;
+}
+
 function curlQuotes(html: string): string {
   return html
     .split(/(<[^>]*>)/)
@@ -148,6 +161,8 @@ export function TestimonialCard({
   fill = false,
 }: TestimonialCardProps) {
   if (!valid(item)) return null;
+  /* Every testimonial carries its star rating (owner, 12 Oct 2026); say so when one arrives without. */
+  if (typeof item.rating !== 'number') warn(`"${item.name}" has no rating; every testimonial shows one.`);
   const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
   const quiet = size === 'sm';
   return (
@@ -173,7 +188,7 @@ export function TestimonialCard({
         ) : null}
         <blockquote className={styles.quote}>
           <Prose
-            html={bindShortWords(curlQuotes(item.quoteHtml))}
+            html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
             className={styles.quoteProse}
           />
         </blockquote>
@@ -411,7 +426,7 @@ export function TestimonialBeside({
           ) : null}
           <blockquote className={cx(styles.quote, styles.quotePanel)}>
             <Prose
-              html={bindShortWords(curlQuotes(item.quoteHtml))}
+              html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
               className={styles.quoteProse}
             />
           </blockquote>

@@ -61,7 +61,14 @@ export type StudioPageContent = {
   };
   testimonials: {
     heading: string;
-    items: readonly { id: string; quoteHtml: string; name: string; role: string; company: string }[];
+    items: readonly {
+      id: string;
+      quoteHtml: string;
+      name: string;
+      role: string;
+      company: string;
+      rating?: number;
+    }[];
   };
   record: { heading: string; rows: readonly (readonly [string, string])[] };
   faq: { heading: string; items: readonly { question: string; answerHtml: string }[] };

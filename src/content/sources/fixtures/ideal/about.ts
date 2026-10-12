@@ -215,7 +215,7 @@ export const idealAbout: IdealAboutPage = {
     heading: 'What clients say',
     items: [
       {
-        id: 'samy-melaine',
+        id: 'FP-EDEN-USERS',
         quoteHtml:
           '<p>Our users gave us great feedback about the new design, and they came forward and told us without us asking for it.</p>',
         name: 'Samy Melaine',
@@ -223,7 +223,7 @@ export const idealAbout: IdealAboutPage = {
         company: 'Eden AI',
       },
       {
-        id: 'roland-sailer',
+        id: 'CL-RINGIER-COLLAB',
         quoteHtml:
           '<p>It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.</p>',
         name: 'Roland Sailer',
@@ -231,7 +231,7 @@ export const idealAbout: IdealAboutPage = {
         company: 'Ringier Media Switzerland',
       },
       {
-        id: 'dhanur-aashray-majety',
+        id: 'UW-JOVE-INTEGRATION',
         quoteHtml:
           '<p>The Tcules team integrated well with our internal PMs and designers, contributing meaningfully to high-fidelity design deliverables that most often met our product standards.</p>',
         name: 'Dhanur Aashray Majety',

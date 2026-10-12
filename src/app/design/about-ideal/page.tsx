@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCaseRefs, getCorpusPage, getIdealAboutPage } from '@/content';
+import { getCaseRefs, getCorpusPage, getIdealAboutPage, getTestimonialRatings } from '@/content';
 import { caseStudyLink } from '@/lib/case-links';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
@@ -26,7 +26,21 @@ export const metadata: Metadata = {
 export default async function AboutIdeal() {
   const [content, page] = await Promise.all([getIdealAboutPage(), getCorpusPage(ROUTES.about)]);
   if (!page) notFound();
-  const caseRefs = await getCaseRefs(caseRoutesIn(page));
+  const [caseRefs, ratings] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getTestimonialRatings(content.testimonials.items.map((item) => item.id)),
+  ]);
+  /* Every testimonial carries its star rating (owner, 12 Oct 2026), from the same table as /about. */
+  const rated = {
+    ...content,
+    testimonials: {
+      ...content.testimonials,
+      items: content.testimonials.items.map((item) => ({
+        ...item,
+        ...(ratings[item.id] ? { rating: ratings[item.id]!.value } : {}),
+      })),
+    },
+  };
 
   /* The studio media the corpus binds, by binding id. */
   const bound = (bindingId: string) => {
@@ -56,7 +70,7 @@ export default async function AboutIdeal() {
 
   return (
     <StudioPage
-      content={content}
+      content={rated}
       trail={heroTrail(
         [
           { label: 'Home', href: ROUTES.home },
