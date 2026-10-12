@@ -1,6 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react';
 
 import { Button, Icon, Layout } from '@/components';
 import { cx } from '@/lib/cx';
@@ -20,6 +29,13 @@ export type GatewayItem = {
   href: string;
   /** The destination's name — "Product Design". Pass authored case; mono uppercases it. */
   service: string;
+  /**
+   * A drawing for the answer (owner, 12 Oct 2026: "some visual element with the text on the right
+   * side"), composed by the caller — a `Sketch` or an illustration. When the items carry visuals the
+   * selector's answer pane leads with the current one on its 16:9 plate above the sentence, and the
+   * columns open to [7, 5] to give it room. Decorative: the pane is aria-hidden.
+   */
+  visual?: ReactNode;
 };
 
 /**
@@ -193,13 +209,19 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
     );
   }
 
+  const withVisuals = items.some((item) => item.visual != null);
   const placed = {
     '--gwy-marker-y': `${geo.markY}px`,
     '--gwy-marker-h': `${geo.markH}px`,
   } as CSSProperties;
 
   return (
-    <Layout columns={{ lg: [8, 4] }} colGap="column" rowGap="none" className={cx(styles.root, styles.select, className)}>
+    <Layout
+      columns={{ lg: withVisuals ? [7, 5] : [8, 4] }}
+      colGap="column"
+      rowGap="none"
+      className={cx(styles.root, styles.select, className)}
+    >
       <div ref={trackRef} className={styles.track} style={placed}>
         <span className={styles.marker} aria-hidden="true" data-ready={geo.markH ? '' : undefined} />
         <Layout as="ul" rowGap="none" className={styles.list}>
@@ -216,6 +238,7 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
           {/* Keyed on the current situation so its words re-enter (a short fade) as it changes,
               while the answer's box glides. */}
           <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
+            {lit.visual != null ? <div className={styles.answerVisual}>{lit.visual}</div> : null}
             <p className={styles.answerText}>{lit.body}</p>
             <span>
               <Button

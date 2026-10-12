@@ -121,6 +121,11 @@
   animation: gwy-enter var(--gwy-glide-duration) var(--gwy-easing);
 }
 
+/* The answer's drawing, above its sentence (the body's `block` seam): its own plate and ratio. */
+.answerVisual {
+  min-inline-size: 0;
+}
+
 .answerText {
   font: var(--gwy-answer-text);
   color: var(--gwy-answer-ink);

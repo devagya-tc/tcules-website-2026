@@ -1,0 +1,102 @@
+/* Sketch — the plate and the drawing's marks. Every value is a --skt-* token in
+   tokens/components/sketch.css. Strokes are non-scaling, so a line keeps one weight at every width. */
+
+.sketch {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  background-color: var(--skt-plate-ground);
+  border-radius: var(--skt-plate-radius);
+}
+
+.field {
+  fill: var(--skt-field-ink);
+}
+
+.frame {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-frame-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.frameQuiet {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.rule {
+  fill: none;
+  stroke: var(--skt-frame-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.copy,
+.copyQuiet {
+  fill: none;
+  stroke: var(--skt-copy-ink);
+  stroke-width: var(--skt-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.copyQuiet {
+  stroke: var(--skt-quiet-ink);
+}
+
+.line,
+.tick {
+  fill: none;
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-line-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.tick {
+  stroke: var(--skt-accent-on);
+}
+
+/* A connection not yet made: dashed, in the quiet ink. */
+.trail {
+  fill: none;
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  stroke-dasharray: var(--skt-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.region {
+  fill: var(--skt-region-fill);
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.tile {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.solid,
+.node,
+.mark {
+  fill: var(--skt-accent);
+}
+
+.nodeOpen {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.halo {
+  fill: var(--skt-region-fill);
+}

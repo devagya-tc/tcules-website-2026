@@ -1,4 +1,4 @@
-import { Layout, Prose, type MediaImage } from '@/components';
+import { Layout, Prose, Sketch, type MediaImage, type SketchName } from '@/components';
 import {
   Accordion,
   Banner,
@@ -95,6 +95,16 @@ export type StudioPageProps = {
   caseHrefs: Readonly<Record<string, string>>;
 };
 
+/* Each service's drawing in the selector's answer, by the service page it links to. */
+const SERVICE_SKETCHES: Readonly<Record<string, SketchName>> = {
+  '/services/product-design': 'product-design',
+  '/services/product-modernisation': 'product-modernisation',
+  '/services/design-systems': 'design-systems',
+  '/services/ai-product-ux': 'ai-product-ux',
+  '/services/design-engineering': 'design-engineering',
+  '/services/software-development': 'software-development',
+};
+
 /* How Tcules works: each principle's drawing, in order. */
 const HOW_SCOPES: readonly EngagementScope[] = ['start', 'direct', 'inside', 'overlap', 'commercial'];
 
@@ -158,6 +168,9 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
             body: item.body,
             href: item.href,
             service: item.label,
+            visual: SERVICE_SKETCHES[item.href] ? (
+              <Sketch name={SERVICE_SKETCHES[item.href]!} uid={`svc-${id(item.title)}`} />
+            ) : undefined,
           }))}
         />
       </ContentSection>

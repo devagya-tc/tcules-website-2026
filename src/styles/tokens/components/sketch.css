@@ -1,0 +1,73 @@
+/* ══ Component layer — Sketch ══════════════════════════════════════════════════
+   Tier 1 mark. A small drawing on its plate, a stand-in for an illustration (12 Oct 2026), in the
+   plate language EngagementOptions and TracePlates set: dot field, quiet frames, one blue subject.
+
+   Naming: --skt-{part}-{role}
+     parts  plate · field · frame · quiet · copy · line · accent · region · dash
+     roles  ground · ink · fill · width · radius
+
+   No state tokens: a sketch is decorative and inert. Every surface block declares every
+   surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --skt-plate-radius: var(--radius-8);
+  --skt-frame-width: var(--border-width-2);
+  --skt-copy-width: var(--border-width-3);
+  --skt-line-width: var(--border-width-3);
+  /* The dashed connection, in the drawing's own units (SVG user space). */
+  --skt-dash: 5 4;
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --skt-plate-ground: var(--color-paper-deep);
+  --skt-field-ink: var(--color-neutral-300); /* decoration */
+  --skt-frame-fill: var(--color-paper);
+  --skt-frame-ink: var(--color-neutral-500); /* 3.1:1, a graphic object */
+  --skt-quiet-ink: var(--color-neutral-400); /* decoration */
+  --skt-copy-ink: var(--color-neutral-300); /* decoration */
+  --skt-accent: var(--color-brandeis-500); /* 6.17:1 */
+  --skt-accent-on: var(--color-white);
+  --skt-region-fill: var(--color-brandeis-100); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --skt-plate-ground: var(--color-paper);
+  --skt-field-ink: var(--color-neutral-300);
+  --skt-frame-fill: var(--color-paper-deep);
+  --skt-frame-ink: var(--color-neutral-600);
+  --skt-quiet-ink: var(--color-neutral-400);
+  --skt-copy-ink: var(--color-neutral-400);
+  --skt-accent: var(--color-brandeis-500);
+  --skt-accent-on: var(--color-white);
+  --skt-region-fill: var(--color-brandeis-100);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --skt-plate-ground: var(--color-neutral-900);
+  --skt-field-ink: var(--color-neutral-700);
+  --skt-frame-fill: var(--color-neutral-950);
+  --skt-frame-ink: var(--color-neutral-400);
+  --skt-quiet-ink: var(--color-neutral-600);
+  --skt-copy-ink: var(--color-neutral-700);
+  --skt-accent: var(--color-brandeis-300);
+  --skt-accent-on: var(--color-neutral-950);
+  --skt-region-fill: var(--color-neutral-800);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --skt-plate-ground: var(--color-brandeis-600);
+  --skt-field-ink: var(--color-brandeis-400);
+  --skt-frame-fill: var(--color-brandeis-500);
+  --skt-frame-ink: var(--color-brandeis-100);
+  --skt-quiet-ink: var(--color-brandeis-300);
+  --skt-copy-ink: var(--color-brandeis-300);
+  --skt-accent: var(--color-white);
+  --skt-accent-on: var(--color-brandeis-600);
+  --skt-region-fill: var(--color-brandeis-400);
+}

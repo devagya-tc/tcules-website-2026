@@ -68,6 +68,11 @@ const SPECIMENS = [
         note: "a client's logo in a set — mask in the ground's ink, equal area of ink by measured density, capped 40 tall, 240 wide guard, ±15% correction, 4 surfaces",
       },
       {
+        href: '/design/sketch',
+        name: 'Sketch',
+        note: 'a small drawing on its 16:9 plate, one scene per service, a stand-in for an illustration; 3 surfaces',
+      },
+      {
         href: '/design/brand-mark',
         name: 'BrandMark',
         note: 'third-party marks (LinkedIn, YouTube, Clutch) at their own proportions, monochrome, 4 surfaces',
