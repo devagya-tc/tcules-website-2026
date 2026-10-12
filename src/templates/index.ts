@@ -23,6 +23,8 @@ export type {
   CaseStoryPartProps,
   CaseStoryProps,
 } from './CaseStory';
+export { StudioPage } from './StudioPage';
+export type { StudioPageContent, StudioPageProps } from './StudioPage';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {

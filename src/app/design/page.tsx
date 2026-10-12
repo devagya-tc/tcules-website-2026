@@ -293,6 +293,11 @@ const SPECIMENS = [
         note: 'a case study as a story — chapters with a still marker column, steps, pull quotes, a principle band and annotated figures — at the Benchmark Gensuite case copied locally from Strapi',
       },
       {
+        href: '/design/about-ideal',
+        name: 'StudioPage',
+        note: 'the About page with its copy edited for consumption (fixtures/ideal/about.ts): one idea per band, a different arrangement each — compare with /about',
+      },
+      {
         href: '/design/service-page',
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',

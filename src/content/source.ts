@@ -1,4 +1,5 @@
 import { fixtureSource } from './sources/fixtures';
+import { idealAbout } from './sources/fixtures/ideal/about';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
@@ -27,6 +28,7 @@ import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import type {
   CaseStory,
+  IdealAboutPage,
   AboutContentSource,
   CorpusContentSource,
   AuditContentSource,
@@ -376,3 +378,8 @@ export type {
   ToolContentColumn,
   ToolContentSource,
 } from './types';
+
+/** The About page with its copy edited for consumption — the /design/about-ideal worked example. */
+export async function getIdealAboutPage(): Promise<IdealAboutPage> {
+  return idealAbout;
+}

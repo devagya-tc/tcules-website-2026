@@ -1201,6 +1201,69 @@ export type CaseStory = {
   seo?: ContentSeo;
 };
 
+/** A link in the ideal About copy. */
+export type IdealLink = { label: string; href: string };
+type IdealTitled = { title: string; body: string };
+
+/**
+ * The About page with its copy edited for consumption (fixtures/ideal/about.ts, owner 12 Oct 2026).
+ * One field per band; every list is short by design. Images are resolved by the route.
+ */
+export type IdealAboutPage = {
+  hero: {
+    eyebrow?: string;
+    title: string;
+    lede: string;
+    stats: Array<{ value: string; label: string }>;
+  };
+  ahmedabad: { heading: string; paragraphs: string[] };
+  services: {
+    heading: string;
+    lead?: string;
+    items: Array<IdealTitled & { href: string; label: string }>;
+  };
+  practice: { heading: string; lead?: string; items: IdealTitled[]; link?: IdealLink };
+  who: {
+    heading: string;
+    lead?: string;
+    items: Array<{ voice: string; reply: string }>;
+    note?: string;
+  };
+  difference: {
+    statement: { eyebrow?: string; text: string };
+    complexity: { heading: string; lead?: string; items: IdealTitled[] };
+    continuity: { heading: string; lead: string };
+  };
+  how: { heading: string; items: IdealTitled[] };
+  people: {
+    heading: string;
+    leaders: Array<{
+      name: string;
+      role: string;
+      bio: string;
+      linkedin: IdealLink;
+      /** The register slot qualifier for the portrait (`/about#leadership:<portrait>`). */
+      portrait: string;
+    }>;
+    follow: { body: string; link: IdealLink };
+  };
+  work: {
+    heading: string;
+    cases: Array<{ name: string; body: string }>;
+    all: IdealLink;
+    lab: { heading: string; lead: string; link: IdealLink };
+  };
+  testimonials: {
+    heading: string;
+    items: Array<{ id: string; quoteHtml: string; name: string; role: string; company: string }>;
+  };
+  record: { heading: string; rows: Array<[string, string]> };
+  faq: { heading: string; items: Array<{ question: string; answerHtml: string }> };
+  coda: { eyebrow?: string; text: string };
+  cta: { heading: string; body: string; action: IdealLink };
+  careers: { heading: string; lead: string; action: IdealLink };
+};
+
 export type CaseStudyContentSource = {
   getCaseStudyPage(slug: string): Promise<CaseStudyPage | null>;
   getCaseStudyListingPage(slug: string): Promise<CaseStudyListingPage | null>;

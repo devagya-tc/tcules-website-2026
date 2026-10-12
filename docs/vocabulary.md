@@ -251,5 +251,5 @@ seam to size.
 
 - **Primitives** (`src/components/`): `BrandMark` · `Button` · `ClientMark` · `Cluster` · `Icon` · `Input` · `Layout` · `Logo` · `Media` · `Prose` · `RatingBadge` · `Section` · `StarRating` · `Stat` · `Tag` · `Texture`
 - **Patterns** (`src/patterns/`): `Accordion` · `Banner` · `BlockCard` · `Breadcrumbs` · `Callout` · `CaseSpread` · `ContentSection` · `Contrast` · `CtaRow` · `CtaSection` · `DataTable` · `EngagementModel` · `EngagementOptions` · `EnquiryForm` · `Figure` · `Gateway` · `ListCard` · `LogoGrid` · `OfferSheet` · `PageHero` · `ProcessFlow` · `ProfileCard` · `Proof` · `SiteFooter` · `SiteNav` · `Slider` · `Statement` · `TableOfContents` · `Testimonial` · `Thread` · `TracePlates` · `VideoTestimonial` · `VoiceLedger`
-- **Templates** (`src/templates/`): `CaseStory` · `CaseStudyIndex` · `CorpusPage` · `ServicePage`
+- **Templates** (`src/templates/`): `CaseStory` · `CaseStudyIndex` · `CorpusPage` · `ServicePage` · `StudioPage`
 
