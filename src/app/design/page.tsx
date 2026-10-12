@@ -198,6 +198,11 @@ const SPECIMENS = [
         note: 'the evidence block — display (start | center), compact, featured portrait, case, group, rating-led, checked figures, 4 surfaces',
       },
       {
+        href: '/design/profile-card',
+        name: 'ProfileCard',
+        note: 'a person (square or circle portrait, name, position, bio, LinkedIn foot) in the testimonial panel, and ProfileFollow, the one follow banner under a set; 3 surfaces',
+      },
+      {
         href: '/design/testimonial',
         name: 'Testimonial',
         note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',

@@ -1,0 +1,76 @@
+/* ProfileCard — the person panel and the follow banner. Layout owns every seam; every value is a
+   --pfc-* token in tokens/components/profile-card.css. */
+
+/* A peer in a row: the item stretches to the row and the card fills it, so pinLast drops the LinkedIn
+   foot to one baseline across the set. Sizing, not spacing. */
+.item {
+  display: block;
+  block-size: 100%;
+  min-inline-size: 0;
+}
+
+/* The panel: a `gutter` inset, the quiet ground, the 8 radius, no edge (as TestimonialCard's box). */
+.card {
+  block-size: 100%;
+  padding: var(--gap-gutter);
+  background: var(--pfc-ground);
+  border-radius: var(--pfc-radius);
+}
+
+/* The portrait: a fixed square, the photograph corner, Media filling it from the centre. */
+.portrait {
+  display: block;
+  flex: none;
+  inline-size: var(--pfc-portrait-size);
+  aspect-ratio: var(--ratio-portrait);
+  border-radius: var(--pfc-portrait-radius);
+  overflow: hidden;
+}
+
+.circle {
+  border-radius: var(--radius-full);
+}
+
+.who {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.name {
+  font: var(--pfc-name-text);
+  letter-spacing: var(--pfc-name-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--pfc-name-ink);
+}
+
+.role {
+  font: var(--pfc-role-text);
+  letter-spacing: var(--pfc-role-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--pfc-role-ink);
+}
+
+.bio {
+  font: var(--pfc-bio-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--pfc-bio-ink);
+}
+
+/* The foot: the LinkedIn link on a hairline, as the testimonial's attribution sits on one. */
+.foot {
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--pfc-rule-width) solid var(--pfc-rule);
+}
+
+/* ── The follow banner ── the cards' panel, one row. */
+.follow {
+  padding: var(--gap-gutter);
+  background: var(--pfc-ground);
+  border-radius: var(--pfc-radius);
+}
+
+.followBody {
+  font: var(--pfc-follow-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--pfc-bio-ink);
+}

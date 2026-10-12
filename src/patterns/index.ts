@@ -388,3 +388,6 @@ export {
 /* TracePlates — one screen followed from the approved design to what users see, a drawn plate per
    stage and one trace through them (the design-to-code audit's "What we trace", 11 Oct 2026). */
 export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } from './TracePlates';
+
+/* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
+export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';

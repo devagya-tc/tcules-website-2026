@@ -134,18 +134,18 @@ export const PLACEHOLDER_SLOTS: Readonly<
   '/about#leadership:jatin-leuva': {
     src: '/placeholders/about--leadership--jatin-leuva.svg',
     width: 1600,
-    height: 900,
+    height: 1600,
     kind: 'studio photo',
     shows:
-      'Jatin Leuva in the Ahmedabad studio, at work with the team rather than posed against a backdrop. About redesign (11 Oct 2026): the people band is profile cards, one 16:9 photograph each (every card image is 16:9).',
+      'Jatin Leuva in the Ahmedabad studio, at work with the team rather than posed against a backdrop. About (12 Oct 2026): a ProfileCard portrait, square, the face centred a little above the middle.',
   },
   '/about#leadership:rakesh-chitroda': {
     src: '/placeholders/about--leadership--rakesh-chitroda.svg',
     width: 1600,
-    height: 900,
+    height: 1600,
     kind: 'studio photo',
     shows:
-      "Rakesh Chitroda in the Ahmedabad studio, in conversation with a client or the team. Profile card, as Jatin's.",
+      "Rakesh Chitroda in the Ahmedabad studio, in conversation with a client or the team. ProfileCard portrait, as Jatin's.",
   },
   '/about#studio': {
     src: '/placeholders/about--studio.svg',

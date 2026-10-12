@@ -1,0 +1,63 @@
+/* ══ Component layer — ProfileCard ═════════════════════════════════════════════
+   Tier 2. A person (portrait, name, position, bio, LinkedIn) and the follow banner under a set of
+   them (about, 12 Oct 2026). The panel is TestimonialCard's: the quiet ground, the 8 radius, no edge.
+
+   Naming: --pfc-{part}-{role}
+     parts  ground · portrait · name · role · bio · rule · follow
+     roles  ink · text · tracking · size · radius · width
+
+   No state tokens: the panel does not respond to a pointer; its link is a Button.
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --pfc-radius: var(--radius-8);
+  /* The portrait leads the panel, a step larger than a testimonial's 48 avatar: a component size. */
+  --pfc-portrait-size: var(--space-80);
+  --pfc-portrait-radius: var(--radius-8);
+  /* The name at the card-title step; the position in the mono label voice under it. */
+  --pfc-name-text: var(--text-h4);
+  --pfc-name-tracking: var(--text-h4-tracking);
+  --pfc-role-text: var(--text-micro);
+  --pfc-role-tracking: var(--text-micro-tracking);
+  --pfc-bio-text: var(--text-body);
+  --pfc-follow-text: var(--text-lead);
+  --pfc-rule-width: var(--border-width-hairline);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --pfc-ground: var(--color-paper-deep);
+  --pfc-name-ink: var(--color-neutral-900);
+  --pfc-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
+  --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-rule: var(--color-neutral-300); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --pfc-ground: var(--color-paper);
+  --pfc-name-ink: var(--color-neutral-900);
+  --pfc-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
+  --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-rule: var(--color-neutral-200); /* decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --pfc-ground: var(--color-neutral-900);
+  --pfc-name-ink: var(--color-white);
+  --pfc-role-ink: var(--color-neutral-400);
+  --pfc-bio-ink: var(--color-neutral-200);
+  --pfc-rule: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --pfc-ground: var(--color-paper);
+  --pfc-name-ink: var(--color-neutral-900);
+  --pfc-role-ink: var(--color-neutral-600);
+  --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-rule: var(--color-neutral-200); /* decoration */
+}

@@ -1,7 +1,6 @@
-import { Button, Cluster, Icon, Layout, Media, Prose } from '@/components';
+import { Layout, Prose } from '@/components';
 import {
   Banner,
-  BlockCard,
   BlockCardSet,
   ContentSection,
   ContentSectionText,
@@ -10,6 +9,8 @@ import {
   DataTable,
   EngagementOptions,
   OfferSheet,
+  ProfileCard,
+  ProfileFollow,
   VoiceLedger,
   type BlockCardSetItem,
   type EngagementScope,
@@ -18,7 +19,6 @@ import {
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
-import { HEAD_TRACK } from '@/lib/image-sizes';
 import { placeholderImage } from '@/lib/placeholders';
 
 import {
@@ -72,8 +72,6 @@ function Text({
 }
 
 /* An external link opens in a new tab and says so to the engine's privacy default. */
-const NEW_TAB = { target: '_blank', rel: 'noopener' } as const;
-
 /**
  * TIER 3 — the About page, from the `_pages/` corpus (page-mapping § 4.10).
  *
@@ -307,11 +305,10 @@ function HowWeWork({ page }: { page: CorpusPage }) {
 /* ── 7 · the people behind the studio ────────────────────────────────────────── */
 
 /**
- * PROFILE CARDS, then the studio's LinkedIn item (owner, 11 Oct 2026). Each leader is a card: a 16:9
- * photograph (every card image is 16:9), the role as the quiet line above the name, the bio, and the
- * LinkedIn link as the card's one action. The heading "Jatin Leuva, Founder & CEO" is split at its
- * first comma into the name and the role. Then the wider studio: the team photograph beside the
- * studio sentence and the link to follow Tcules.
+ * PROFILE CARDS, then ONE studio LinkedIn banner (owner, 12 Oct 2026: "somewhat like the testimonial
+ * card. image (square or circle), name, position, bio, linkedin. and then 1 tcules linkedin banner").
+ * The heading "Jatin Leuva, Founder & CEO" is split at its first comma into the name and the position.
+ * Each portrait is a square register placeholder until the shoot; the banner carries the team photo.
  */
 function Leadership({ page }: { page: CorpusPage }) {
   const b = band(page, 'leadership');
@@ -319,63 +316,40 @@ function Leadership({ page }: { page: CorpusPage }) {
     const at = item.blocks.findIndex((block) => block.type === 'links');
     const [name = item.headingText, ...role] = item.headingText.split(', ');
     const own = item.blocks.slice(0, at + 1);
-    const link = blocksOf({ ...b, blocks: own }, 'links')[0]?.links[0];
     return {
       name,
       role: role.join(', '),
       bio: paragraphRuns(own),
-      link,
+      link: blocksOf({ ...b, blocks: own }, 'links')[0]?.links[0],
       after: item.blocks.slice(at + 1),
     };
   });
-  const cards: BlockCardSetItem[] = leaders.map((leader) => ({
-    id: leader.name,
-    eyebrow: leader.role || undefined,
-    title: leader.name,
-    ...(leader.bio.length > 0
-      ? { bodyHtml: leader.bio.map((runs) => inlineToHtml(runs)) }
-      : {}),
-    media: {
-      type: 'image',
-      image: { ...placeholderImage(page.route, b.id, slugOf(leader.name)), kind: 'photograph' },
-    },
-    href: leader.link?.href,
-    ctaLabel: leader.link?.labelText,
-  }));
   const after = leaders.flatMap((leader) => leader.after);
   const studioLink = blocksOf({ ...b, blocks: after }, 'links')[0]?.links[0];
   const studioText = paragraphRuns(after);
-  /* One row from 1024: the two profile cards, then the studio item in the third track with the same
-     anatomy (16:9 photograph, then the words, then the link), so the LinkedIn item reads as the set's
-     close rather than a second section under it. */
   return (
     <ContentSection {...head(b)} data-band="P">
-      <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
-        {/* BlockCard is its own <li>. */}
-        {cards.map(({ id, ...card }) => (
-          <BlockCard key={id} {...card} tracks={3} cue="cta" linkScope="cta" />
-        ))}
-        {studioText.length > 0 || studioLink ? (
-          <li>
-            <Layout rowGap="block">
-              <Media image={slotImage(page, b.id)} ratio="16/9" sizes={HEAD_TRACK} />
-              <Text paragraphs={studioText} />
-              {studioLink ? (
-                <Cluster>
-                  <Button
-                    as="a"
-                    href={studioLink.href}
-                    {...NEW_TAB}
-                    emphasis="link"
-                    tone="primary"
-                    icon={<Icon name="arrow-right-up" />}
-                  >
-                    {studioLink.labelText}
-                  </Button>
-                </Cluster>
-              ) : null}
-            </Layout>
-          </li>
+      <Layout rowGap="gutter">
+        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+          {leaders.map((leader) => (
+            <ProfileCard
+              key={leader.name}
+              name={leader.name}
+              role={leader.role || undefined}
+              bio={leader.bio.length > 0 ? leader.bio.map(plain).join(' ') : undefined}
+              portrait={placeholderImage(page.route, b.id, slugOf(leader.name))}
+              linkedin={
+                leader.link ? { label: leader.link.labelText, href: leader.link.href } : undefined
+              }
+            />
+          ))}
+        </Layout>
+        {studioLink ? (
+          <ProfileFollow
+            body={studioText.map(plain).join(' ')}
+            link={{ label: studioLink.labelText, href: studioLink.href }}
+            image={slotImage(page, b.id)}
+          />
         ) : null}
       </Layout>
     </ContentSection>
