@@ -631,7 +631,7 @@ function Evidence(props: ProofCompactProps | ProofDisplayProps) {
       colGap={both ? 'section' : undefined}
       rowGap={both ? 'stack' : undefined}
       justifyItems={centred ? 'center' : undefined}
-      className={styles.root}
+      className={cx(styles.root, arrangement === 'compact' && styles.compact)}
     >
       {acceptedQuote ? (
         <Quote

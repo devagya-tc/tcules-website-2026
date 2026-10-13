@@ -49,6 +49,33 @@
   }
 }
 
+/* The closing pair: when a four-track row ends on two marks, each spans two tracks, so the last row
+   is two half-row cells and the grid stays a whole rectangle (ten marks: 4 + 4 + 2). LogoGrid.tsx
+   decides where, from the count. Placement of this unit's own cells, as .fill* above. */
+@media (max-width: 767.98px) {
+  .pairBase {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .pairMd {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .pairLg {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1440px) {
+  .pairXl {
+    grid-column: span 2;
+  }
+}
+
 .open {
   clip-path: inset(var(--lgrid-rule-width) 0 0 var(--lgrid-rule-width));
 }
@@ -73,6 +100,18 @@
   text-transform: var(--text-mono-case);
   color: var(--lgrid-context-ink);
   text-wrap: var(--text-title-wrap);
+}
+
+/* A client with no approved mark yet (G1): its name typeset as a wordmark — the wordmark role (sans,
+   semibold, tight) in the marks' own ink, centred in the cell. A set may mix drawn and typeset marks
+   (home round 1, 10 Oct 2026), so the typeset one takes the drawn ones' voice rather than the card
+   title's: at the h5 serif in the ground's ink it read as a list of names, not a wall of logos. */
+.wordmark {
+  font: var(--text-wordmark);
+  letter-spacing: var(--text-wordmark-tracking);
+  color: var(--lgrid-wordmark-ink);
+  text-wrap: var(--text-title-wrap);
+  text-align: center;
 }
 
 /* The beside head's short heading: the h4 role on the h2 element (9 Oct review), so the grid

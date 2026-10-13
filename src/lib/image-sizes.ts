@@ -183,6 +183,12 @@ export const LIST_CARD_THUMBNAIL = '160px';
 export const PROOF_PORTRAIT = '64px';
 
 /**
+ * The testimonial card's circular avatar (home round 3, 11 Oct 2026): a fixed 48 box (40 on the
+ * supporting card), so the ask is its own width; the ladder's smallest rung serves it at 2× and 3×.
+ */
+export const TESTIMONIAL_AVATAR = '48px';
+
+/**
  * The SiteNav rail card: about 300 beside the rail from 1024, the sheet's column below it.
  * PROVISIONAL — the rail card's width is the rail's, and SiteNav confirms this when it moves onto
  * Media. The fluid term is the full column, so the sheet can over-fetch and never under-fetch.
@@ -229,3 +235,14 @@ export function coverSizes(sizes: string, source: number, frames: readonly numbe
 export const READ_DOWN_PHOTO =
   `(min-width: ${CAP}px) ${Math.round(((CONTAINER - SPLIT_GAP) * 2) / 3)}px, ` +
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + SPLIT_GAP}px) * 2 / 3), ${FLUID_COLUMN}`;
+
+/** The `column` seam (64) between two halves that must read as separate (CLAUDE.md § gap scale). */
+const COLUMN_GAP = 64;
+
+/**
+ * CaseSpread's evidence image: 7 of [5, 7] from 1024 with the `column` seam (product-design round 6,
+ * 11 Oct 2026). (1240 − 64) × 7 / 12 = 686 at the cap; below 1024 the full column.
+ */
+export const CASE_SPREAD_MEDIA =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - COLUMN_GAP) * 7) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + COLUMN_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;

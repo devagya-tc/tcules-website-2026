@@ -1,0 +1,97 @@
+/* ══ Component layer — Gateway ═══════════════════════════════════════════════════
+   Tier 2. The situation selector (home rounds 6–7, 11 Oct 2026): six reader situations down one
+   column at full ink, a marker gliding behind the current one, its answer beside it. See
+   src/patterns/Gateway/Gateway.tsx for the IA.
+
+   Naming: --gwy-{part}-{role}
+     parts   title · arrow · body · answer · marker · rule · ring
+     roles   text · tracking · ink · ground
+
+   The words stay ink (§ 4.3). Blue is the accent: the current situation's arrow, the marker's faint
+   blue ground (the selection), and the service's link (Button's own tokens).
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry, type and motion · identical on every surface ──────────────────── */
+:root {
+  /* The situation is the reason to click (owner, home round 2), so it is the band's largest
+     repeated thing — but two steps under the band's h2 heading, not one: at h3 (34 under 43) the
+     six titles competed with the heading (owner, round 8). h4 (28) lets the heading lead and the
+     list read as its answers. */
+  --gwy-title-text: var(--text-h4);
+  --gwy-title-tracking: var(--text-h4-tracking);
+  /* Below 1024 each sentence sits under its title as support. */
+  --gwy-body-text: var(--text-body);
+  /* From 1024 the current situation's sentence is THE answer, the only paragraph on the band, so
+     it reads at the larger lead size. */
+  --gwy-answer-text: var(--text-lead-lg);
+  /* The arrow's side bearing after the title's last word, and how far it slides in. Optical, not a
+     layout distance (gap rule 1). */
+  --gwy-arrow-inset: var(--space-12);
+  /* How far the marker's ground reaches past the copy on each side. Paint only (gap rule 1): the
+     copy stays flush with the band's heading. */
+  --gwy-marker-reach: var(--space-24);
+  --gwy-marker-radius: var(--radius-8);
+  /* Runtime values the pattern sets inline as it measures; these are the server-rendered rest (the
+     first situation current, the marker hidden until measured). */
+  --gwy-marker-y: 0px;
+  --gwy-marker-h: 0px;
+  /* How far a new answer rises as it fades in: the micro-animation under the pointer. An optical
+     motion distance, not a layout distance (gap rule 1). */
+  --gwy-enter-rise: var(--space-8);
+  /* Motion (round 7, owner: "if i'm moving my mouse across the list, it should naturally feel like
+     i went through the options"). The marker GLIDES (the answer holds still since 12 Oct 2026): long enough to be seen
+     travelling, short enough to keep up with a pointer running down six rows. Fades are quicker. */
+  --gwy-glide-duration: var(--duration-medium);
+  --gwy-quick-duration: var(--duration-fast);
+  --gwy-easing: var(--easing-standard);
+  --gwy-rule-width: var(--border-width-hairline);
+  --gwy-ring-width: var(--focus-ring-width);
+  --gwy-ring-radius: var(--radius-4);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --gwy-title-ink: var(--color-neutral-900); /* 14.62:1; 13.9:1 on the marker */
+  --gwy-arrow-ink: var(--color-brandeis-500); /* 5.6:1 on the marker */
+  --gwy-body-ink: var(--color-neutral-700);
+  --gwy-answer-ink: var(--color-neutral-800);
+  --gwy-marker-ground: var(--color-brandeis-50);
+  --gwy-rule-ink: var(--color-neutral-300); /* decoration */
+  --gwy-ring-color: var(--color-brandeis-500);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --gwy-title-ink: var(--color-neutral-900);
+  --gwy-arrow-ink: var(--color-brandeis-500);
+  --gwy-body-ink: var(--color-neutral-700);
+  --gwy-answer-ink: var(--color-neutral-800);
+  --gwy-marker-ground: var(--color-paper);
+  --gwy-rule-ink: var(--color-neutral-400); /* decoration */
+  --gwy-ring-color: var(--color-brandeis-500);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --gwy-title-ink: var(--color-white);
+  --gwy-arrow-ink: var(--color-brandeis-300);
+  --gwy-body-ink: var(--color-neutral-400);
+  --gwy-answer-ink: var(--color-neutral-200);
+  --gwy-marker-ground: var(--color-neutral-900);
+  --gwy-rule-ink: var(--color-neutral-700); /* decoration */
+  --gwy-ring-color: var(--color-brandeis-300);
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --gwy-title-ink: var(--color-white);
+  --gwy-arrow-ink: var(--color-white);
+  --gwy-body-ink: var(--color-brandeis-50);
+  --gwy-answer-ink: var(--color-white);
+  --gwy-marker-ground: var(--color-brandeis-600);
+  --gwy-rule-ink: var(--color-brandeis-300); /* decoration */
+  --gwy-ring-color: var(--color-white);
+}

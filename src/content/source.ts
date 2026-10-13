@@ -1,6 +1,12 @@
 import { fixtureSource } from './sources/fixtures';
+import { idealAbout } from './sources/fixtures/ideal/about';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
+import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
+import { BORROWED_QUOTES } from './sources/fixtures/borrowed-quotes';
+import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
+import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
+import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
 import { blogSource } from './sources/strapi/blog';
 import { careersSource } from './sources/strapi/careers';
@@ -21,7 +27,10 @@ import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
 import type {
+  CaseStory,
+  IdealAboutPage,
   AboutContentSource,
+  CorpusContentSource,
   AuditContentSource,
   BlogContentSource,
   CareerContentSource,
@@ -43,6 +52,12 @@ import type {
   TermsOfUseContentSource,
   ToolContentSource,
 } from './types';
+import type {
+  BorrowedQuote,
+  CorpusBlock,
+  TestimonialAvatarRecord,
+  TestimonialRating,
+} from './corpus-types.ts';
 
 /**
  * THE SEAM.
@@ -74,6 +89,8 @@ const servicesSource: ServiceContentSource = serviceSource;
 const servicesMastersSource: ServicesMasterContentSource = servicesMasterSource;
 const termsOfUsePagesSource: TermsOfUseContentSource = termsOfUseSource;
 const toolsSource: ToolContentSource = toolSource;
+/** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
+const corpusPagesSource: CorpusContentSource = corpusSource;
 
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
@@ -85,6 +102,18 @@ export const getCareerPage = careersPagesSource.getCareerPage.bind(careersPagesS
 export const getCaseStudyListingPage =
   caseStudiesSource.getCaseStudyListingPage.bind(caseStudiesSource);
 export const getCaseStudyPage = caseStudiesSource.getCaseStudyPage.bind(caseStudiesSource);
+
+/* The cases that have an ideal local copy, structured as a story (fixtures/ideal/case-studies). */
+const CASE_STORIES: ReadonlyMap<string, CaseStory> = new Map([
+  [benchmarkGensuite.slug, benchmarkGensuite],
+]);
+/**
+ * A case's IDEAL rendering where one exists: the CMS's words copied locally and split into the parts
+ * the design needs (owner, 11 Oct 2026). Null for every other case, which renders from Strapi.
+ */
+export async function getCaseStory(slug: string): Promise<CaseStory | null> {
+  return CASE_STORIES.get(slug) ?? null;
+}
 /**
  * The case-study listing with its IDEAL copy laid over the live entries — for the template's
  * specimen only, never a live route. Real entries, covers and links; the copy the content rules
@@ -129,6 +158,74 @@ export const getServicesMasterPage =
 export const getTermsOfUsePage =
   termsOfUsePagesSource.getTermsOfUsePage.bind(termsOfUsePagesSource);
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
+export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
+export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
+
+/**
+ * Star ratings for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER values today
+ * (fixtures/testimonial-ratings.ts, owner 10 Oct 2026); each carries `placeholder: true` until a real
+ * per-review rating replaces it. An id with no rating is absent, so its quote renders without stars.
+ */
+export async function getTestimonialRatings(
+  ids: readonly string[],
+): Promise<Record<string, TestimonialRating>> {
+  const found: Record<string, TestimonialRating> = {};
+  for (const id of ids) {
+    const rating = TESTIMONIAL_RATINGS[id];
+    if (rating) found[id] = rating;
+  }
+  return found;
+}
+
+/**
+ * Portraits for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER stock portraits
+ * today (fixtures/testimonial-avatars.ts, owner 11 Oct 2026), each `placeholder: true`. An id with
+ * none is absent, so its card shows no avatar.
+ */
+export async function getTestimonialAvatars(
+  ids: readonly string[],
+): Promise<Record<string, TestimonialAvatarRecord>> {
+  const found: Record<string, TestimonialAvatarRecord> = {};
+  for (const id of ids) {
+    const avatar = TESTIMONIAL_AVATARS[id];
+    if (avatar) found[id] = avatar;
+  }
+  return found;
+}
+
+type QuoteBlock = Extract<CorpusBlock, { type: 'quote' }>;
+
+const quotesIn = (blocks: readonly CorpusBlock[]): QuoteBlock[] =>
+  blocks.flatMap((block) =>
+    block.type === 'quote' ? [block] : block.type === 'item' ? quotesIn(block.blocks) : [],
+  );
+
+/**
+ * Real testimonials from other corpus pages, shown in a band of this page whose source authors none
+ * (fixtures/borrowed-quotes.ts, owner 11 Oct 2026). Each quote block is read from the page it
+ * belongs to, by testimonial id, so the words are that page's own; one whose page or id cannot be
+ * found is left out. Every result is `placeholder: true`.
+ */
+export async function getBorrowedQuotes(route: string): Promise<BorrowedQuote[]> {
+  const refs = BORROWED_QUOTES[route] ?? [];
+  const found: BorrowedQuote[] = [];
+  for (const ref of refs) {
+    const page = await corpusPagesSource.getCorpusPage(ref.from);
+    const quote = page
+      ? quotesIn(page.bands.flatMap((band) => band.blocks)).find(
+          (block) => block.testimonialId === ref.testimonialId,
+        )
+      : undefined;
+    if (quote) {
+      found.push({ band: ref.band, item: ref.item, from: ref.from, quote, placeholder: true });
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `getBorrowedQuotes: ${ref.testimonialId} not found on ${ref.from}; the quote is left out.`,
+      );
+    }
+  }
+  return found;
+}
 
 export type {
   Page,
@@ -281,3 +378,8 @@ export type {
   ToolContentColumn,
   ToolContentSource,
 } from './types';
+
+/** The About page with its copy edited for consumption — the /design/about-ideal worked example. */
+export async function getIdealAboutPage(): Promise<IdealAboutPage> {
+  return idealAbout;
+}

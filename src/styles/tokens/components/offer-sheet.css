@@ -1,0 +1,74 @@
+/* ══ Component layer — OfferSheet ═════════════════════════════════════════════════
+   Tier 2. "What you get": the outcomes a buyer walks away with, read as ONE offer, with the client's
+   words anchored beside it (product-design round 6, 11 Oct 2026; page-mapping § 23). The promises
+   are clauses of one offer, not objects to compare or click, so they sit unframed under one heading;
+   only the testimonial, a different kind of thing (a voice), takes a panel — the caller's
+   TestimonialCard, passed as `aside`.
+
+   Naming: --ofs-{part}-{role}
+     parts  heading · title · body · rule · mark
+     roles  text · tracking · measure · ink · width · length
+
+   Each promise opens on Stat's device: a hairline across its own width with a short blue mark at its
+   start, so the eye lands on four blue marks before it reads a word. No icon, no disc, no box. No
+   state tokens: nothing responds to a pointer. Every surface block declares every surface-dependent
+   token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ofs-heading-text: var(--text-h2);
+  --ofs-heading-tracking: var(--text-h2-tracking);
+  --ofs-heading-measure: var(--measure-title);
+  /* A promise title is the h4 role: the largest repeated thing in the band, because the promise is
+     what the reader came to read, but TWO steps under the band's h2 (owner, 11 Oct: at one step the
+     items compete with the section heading — the home gateway ruling). */
+  --ofs-title-text: var(--text-h4);
+  --ofs-title-tracking: var(--text-h4-tracking);
+  --ofs-title-measure: var(--measure-title);
+  --ofs-aside-ratio: var(--ratio-standard);
+  --ofs-aside-radius: var(--radius-8);
+  --ofs-body-text: var(--text-body);
+  --ofs-body-measure: var(--measure-lead);
+  --ofs-rule-width: var(--border-width-hairline);
+  /* The mark is drawn ON the hairline: 2px tall, one gutter long. A component size (the mark's own
+     geometry), not a distance between two things, so it reads the ramp, as Stat's does. */
+  --ofs-mark-width: var(--border-width-2);
+  --ofs-mark-length: var(--space-32);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --ofs-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --ofs-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --ofs-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --ofs-rule-ink: var(--color-neutral-300); /* decoration */
+  --ofs-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --ofs-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --ofs-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --ofs-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --ofs-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
+  --ofs-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --ofs-heading-ink: var(--color-white); /* 17.26:1 */
+  --ofs-title-ink: var(--color-white); /* 17.26:1 */
+  --ofs-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --ofs-rule-ink: var(--color-neutral-700); /* decoration */
+  --ofs-mark-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --ofs-heading-ink: var(--color-white); /* 6.23:1 */
+  --ofs-title-ink: var(--color-white); /* 6.23:1 */
+  --ofs-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --ofs-rule-ink: var(--color-brandeis-300); /* decoration */
+  --ofs-mark-ink: var(--color-white); /* 6.23:1 */
+}

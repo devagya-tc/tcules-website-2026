@@ -73,7 +73,7 @@ export default function InputSpecimenPage() {
           {/* Four across from lg (cmp-form final round): two by two, the band was 948 at 1470 and
               ran past the fold. Each track is 286 at 1440 and 216 at 1024, and the control has no
               minimum width, so all four fit. */}
-          <Layout columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">
+          <Layout columns={{ base: 1, md: 2, lg: 5 }} colGap="gutter" rowGap="stack">
             <Specimen
               title="Standard · input"
               note="Point, tab, type, and disable from markup."
@@ -87,6 +87,20 @@ export default function InputSpecimenPage() {
               <Layout as="label" rowGap="tight">
                 <span>What are you working on?</span>
                 <Input as="textarea" />
+              </Layout>
+            </Specimen>
+            <Specimen
+              title={'scale="lg" · input and textarea'}
+              note="48 at every width, the value at the lead role (body below 768), a five-line textarea: a form that is its band's primary object (home round 3)."
+            >
+              <Layout rowGap="text">
+                <Input scale="lg" aria-label="Email" placeholder="Email" type="email" />
+                <Input
+                  as="textarea"
+                  scale="lg"
+                  aria-label="What are you working on?"
+                  placeholder="What are you working on?"
+                />
               </Layout>
             </Specimen>
             <Specimen title="Invalid and disabled" note="Neither state uses opacity.">

@@ -1,0 +1,132 @@
+/* ══ Component layer — CaseStory (templates) ════════════════════════════════════
+   Tier 3. A case study as a story (11 Oct 2026): what the template draws itself — the chapter marker
+   (number and label), the reading column's words and pull quote, the step and peer items, the
+   annotated figure's caption and notes, and the close. Hero, Statement and Media carry their own.
+
+   Naming: --cst-{part}-{role}
+     parts  number · key · heading · paragraph · quote · step · note · caption · statement · closing · rule
+     roles  text · tracking · ink · width
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The chapter number is the marker's largest thing: the stat role, in the blue accent. */
+  --cst-number-text: var(--text-stat-lg);
+  --cst-number-tracking: var(--text-stat-lg-tracking);
+  --cst-key-text: var(--text-micro);
+  --cst-key-tracking: var(--text-micro-tracking);
+  /* Chapter headings are the band's h2. */
+  --cst-heading-text: var(--text-h2);
+  --cst-heading-tracking: var(--text-h2-tracking);
+  /* The reading column reads at the lead step: these are the case's own words, read in full. */
+  --cst-paragraph-text: var(--text-lead);
+  --cst-quote-text: var(--text-quote);
+  --cst-quote-rule-width: var(--border-width-2);
+  /* Steps and peers: h4 two steps under the band's h2, the body role under it. */
+  --cst-step-title-text: var(--text-h4);
+  --cst-step-title-tracking: var(--text-h4-tracking);
+  --cst-step-body-text: var(--text-body);
+  --cst-index-text: var(--text-micro);
+  --cst-index-tracking: var(--text-micro-tracking);
+  --cst-caption-text: var(--text-body-lg);
+  --cst-note-text: var(--text-body);
+  /* The note's numeral disc: an optical size, not a distance. */
+  --cst-note-mark-size: var(--space-24);
+  /* Problem and solution: two large sentences facing each other. */
+  --cst-statement-text: var(--text-h4);
+  --cst-statement-tracking: var(--text-h4-tracking);
+  /* The close's heading is a whole claim (a 30-word sentence), so it sets a step under the chapter
+     headings, at h3, or it runs to five lines. */
+  --cst-closing-text: var(--text-h3);
+  --cst-closing-tracking: var(--text-h3-tracking);
+  --cst-closing-body-text: var(--text-lead-lg);
+  --cst-rule-width: var(--border-width-hairline);
+  /* The marker column holds still while its chapter scrolls, clear of the sticky nav. */
+  --cst-marker-sticky-top: var(--gap-section);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --cst-number-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --cst-key-ink: var(--color-neutral-600); /* 4.92:1 — AA floor */
+  --cst-heading-ink: var(--color-neutral-900);
+  --cst-paragraph-ink: var(--color-neutral-800);
+  --cst-quote-ink: var(--color-neutral-900);
+  --cst-quote-rule-ink: var(--color-brandeis-500);
+  --cst-step-title-ink: var(--color-neutral-900);
+  --cst-step-body-ink: var(--color-neutral-700);
+  --cst-index-ink: var(--color-brandeis-500);
+  --cst-caption-ink: var(--color-neutral-900);
+  --cst-note-ink: var(--color-neutral-800);
+  --cst-note-mark-ground: var(--color-brandeis-500);
+  --cst-note-mark-ink: var(--color-white);
+  --cst-statement-ink: var(--color-neutral-900);
+  --cst-closing-ink: var(--color-neutral-900);
+  --cst-closing-body-ink: var(--color-neutral-800);
+  --cst-rule-ink: var(--color-neutral-300); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --cst-number-ink: var(--color-brandeis-500);
+  --cst-key-ink: var(--color-neutral-700); /* 7.27:1 — 600 would be 4.39:1 */
+  --cst-heading-ink: var(--color-neutral-900);
+  --cst-paragraph-ink: var(--color-neutral-800);
+  --cst-quote-ink: var(--color-neutral-900);
+  --cst-quote-rule-ink: var(--color-brandeis-500);
+  --cst-step-title-ink: var(--color-neutral-900);
+  --cst-step-body-ink: var(--color-neutral-700);
+  --cst-index-ink: var(--color-brandeis-500);
+  --cst-caption-ink: var(--color-neutral-900);
+  --cst-note-ink: var(--color-neutral-800);
+  --cst-note-mark-ground: var(--color-brandeis-500);
+  --cst-note-mark-ink: var(--color-white);
+  --cst-statement-ink: var(--color-neutral-900);
+  --cst-closing-ink: var(--color-neutral-900);
+  --cst-closing-body-ink: var(--color-neutral-800);
+  --cst-rule-ink: var(--color-neutral-400); /* decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --cst-number-ink: var(--color-brandeis-300);
+  --cst-key-ink: var(--color-neutral-400);
+  --cst-heading-ink: var(--color-white);
+  --cst-paragraph-ink: var(--color-neutral-100);
+  --cst-quote-ink: var(--color-white);
+  --cst-quote-rule-ink: var(--color-brandeis-300);
+  --cst-step-title-ink: var(--color-white);
+  --cst-step-body-ink: var(--color-neutral-300);
+  --cst-index-ink: var(--color-brandeis-300);
+  --cst-caption-ink: var(--color-white);
+  --cst-note-ink: var(--color-neutral-100);
+  --cst-note-mark-ground: var(--color-brandeis-300);
+  --cst-note-mark-ink: var(--color-neutral-950);
+  --cst-statement-ink: var(--color-white);
+  --cst-closing-ink: var(--color-white);
+  --cst-closing-body-ink: var(--color-neutral-100);
+  --cst-rule-ink: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --cst-number-ink: var(--color-white);
+  --cst-key-ink: var(--color-brandeis-50);
+  --cst-heading-ink: var(--color-white);
+  --cst-paragraph-ink: var(--color-white);
+  --cst-quote-ink: var(--color-white);
+  --cst-quote-rule-ink: var(--color-white);
+  --cst-step-title-ink: var(--color-white);
+  --cst-step-body-ink: var(--color-brandeis-50);
+  --cst-index-ink: var(--color-white);
+  --cst-caption-ink: var(--color-white);
+  --cst-note-ink: var(--color-white);
+  --cst-note-mark-ground: var(--color-white);
+  --cst-note-mark-ink: var(--color-brandeis-600);
+  --cst-statement-ink: var(--color-white);
+  --cst-closing-ink: var(--color-white);
+  --cst-closing-body-ink: var(--color-brandeis-50);
+  --cst-rule-ink: var(--color-brandeis-300); /* decoration */
+}

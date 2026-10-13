@@ -106,8 +106,8 @@
   /* The ratios a photograph may be cut to, inline over block — the closed set of § 5.4's
      placements, one token each so the ratio a placement names is a decision in one file. Named by
      the ratio itself, because the ratio IS the meaning: a 4:5 is the media split, a 3:1 the banner,
-     and two names for one ratio would be the --sec-gap mistake. --ratio-cover and --ratio-portrait
-     (primitives) stay the shared CARD crops; these are Media's own boxes. */
+     and two names for one ratio would be the --sec-gap mistake. --ratio-standard and --ratio-portrait
+     (primitives) stay the shared CARD and portrait crops; these are Media's own boxes. */
   --media-ratio-4x5: 4 / 5;
   --media-ratio-5x4: 5 / 4;
   --media-ratio-3x1: 3 / 1;

@@ -33,11 +33,11 @@ const READ_DOWN: readonly ReadDownRow[] = [
 
 /* ── Thumbnail records ────────────────────────────────────────────────────────────
    Whole `MediaImage` records, the shape a page receives from `@/content`. The kind is the record's,
-   and Media draws the edge from it; ListCard only owns the 160 × 3:2 box. The assets are the brand
+   and Media draws the edge from it; ListCard only owns the 160 × 16:9 box. The assets are the brand
    framework's own (the Media specimen's set), not 2560 masters — this proves the mechanism. */
 
 /* One part, no panel: a single workflow node whose own edge holds against the light grounds. The
-   ch05 § 9 case for a case-study thumbnail. Portrait, so the 3:2 fill crops it top and bottom —
+   ch05 § 9 case for a case-study thumbnail. Portrait, so the 16:9 fill crops it top and bottom —
    which is what the central-safe-area supply rule is for. */
 const CUT_OUT: MediaImage = {
   src: '/design/media/cutout-node.png',
@@ -48,7 +48,7 @@ const CUT_OUT: MediaImage = {
 };
 
 /* A light-UI part whose pale edge does not hold 3:1 against paper — the B5 case, on a panel. It is
-   3:2 already, so the crop takes nothing and only the inset decides what is left of it. */
+   3:2, so the 16:9 crop takes a sliver top and bottom and the inset decides what is left of it. */
 const PANEL_PART: MediaImage = {
   src: '/design/media/cutout-reviews.png',
   alt: 'Review-analysis panel: user reviews summarised as benefit chips.',
@@ -454,6 +454,22 @@ export default function ListCardSpecimenPage() {
             </Specimen>
           </Layout>
           <Specimen
+            title="bodyHtml · a body with a link and a second paragraph"
+            note="For a corpus item whose body carries a link or more than one paragraph, which `body` would flatten. One entry per paragraph, trusted inline HTML built from a parsed tree; the paragraphs sit a `text` apart and take the row's own body role. An unlinked row only: a linked row is one anchor, and a link inside it would be an anchor in an anchor."
+          >
+            <Rows>
+              <ListCard
+                arrangement="stacked"
+                size="md"
+                title="Design and build."
+                bodyHtml={[
+                  'We design it, then our <a href="/services/design-engineering">Design Engineering</a> and <a href="/services/software-development">Software Development</a> teams build it.',
+                  'A second paragraph, for a body that needs one.',
+                ]}
+              />
+            </Rows>
+          </Specimen>
+          <Specimen
             title="Numbered rows · md and sm · the ordinal's baseline"
             note="The ordinal's optical offset is a function of the title's size, so it steps too: 4 against h4, 0 against h5. The numeral's baseline sits on the title's first baseline in both."
           >
@@ -772,7 +788,7 @@ export default function ListCardSpecimenPage() {
             <ListCard
               arrangement="stacked"
               title="Thumbnail marker"
-              body="ListCard owns the 160 × 3:2 box; Media fills it with its srcset, lazy load and edge by kind."
+              body="ListCard owns the 160 × 16:9 box; Media fills it with its srcset, lazy load and edge by kind."
               marker={thumb(CUT_OUT)}
             />
             <ListCard
@@ -790,7 +806,7 @@ export default function ListCardSpecimenPage() {
             <h2>2a · The thumbnail, by kind</h2>
             <p>
               The thumbnail is <code>Media</code> in <code>fit=&quot;fill&quot;</code>, inside
-              ListCard&rsquo;s own 160 × 3:2 box (<code>--ratio-cover</code>), lazy, with{' '}
+              ListCard&rsquo;s own 160 × 16:9 box (<code>--ratio-standard</code>), lazy, with{' '}
               <code>sizes=&quot;160px&quot;</code> from <code>LIST_CARD_THUMBNAIL</code>. The
               edge is the record&rsquo;s kind, drawn by Media — ListCard never restyles it. Per
               ch05 § 9 and ruling C1 a thumbnail belongs only to case-study and insight/resource
@@ -802,7 +818,7 @@ export default function ListCardSpecimenPage() {
             <ListCard
               arrangement="stacked"
               title="Cut-out · one part · legal"
-              body="No edge: the part's own silhouette is the frame. The 3:2 fill crops a portrait part top and bottom, so its subject must sit in the central safe area."
+              body="No edge: the part's own silhouette is the frame. The 16:9 fill crops a portrait part top and bottom, so its subject must sit in the central safe area."
               marker={thumb(CUT_OUT)}
               href={ROUTES.caseStudies}
             />

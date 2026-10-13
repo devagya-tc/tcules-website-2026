@@ -12,7 +12,7 @@ import {
   TextureShape,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
 
@@ -68,29 +68,14 @@ export type BlockCardMedia =
 export type BlockCardTitleElement = 'h2' | 'h3' | 'h4';
 
 /**
- * The crop a cover takes (visual-direction § 1.4 rule 1, 6 Oct 2026). A presentation choice the SET
- * makes, because it depends on the count:
- *
- *   cover  3:2   one or two cards, and the horizontal arrangement. The default.
- *   wide   16:9  a set of three or more across. At 392 a 3:2 cover is 261 tall and the band runs
- *                past the fold; 16:9 is 221, which is what § 1.4's Card-3 (381) is built on.
- *   panorama  21:9  the tall lead of a spotlight set (BlockCardSet `lead="beside"`): 802 wide in
- *                the 2:1 track, where 16:9 would be 451 and put the band past the fold.
- *   double  2:1 from 1024, 16:9 below   the wide lead of BlockCardSet `lead="wide"`, in the 2fr of
- *   square  1:1 from 1024, 16:9 below   [2, 1, 1]; its companions take `square`. 2:1 of a 2fr track
- *                is 1:1 of a 1fr one, so the row's covers share one height at every width. Below
- *                1024 the row is the ordinary set, so both are its 16:9. The ratio follows the
- *                arrangement, and the arrangement changes at 1024 (Media's `{ base, lg }` rule).
- *   pair  16:5 from 1024, 16:9 below   a LINKED pair of covered cards under a stacked head, each
- *                ~604 wide (BlockCardSet). 21:9 was 259 tall and the C-pair band ran 888 against the
- *                830 fold (9 Oct 2026); 16:5 is 189, 12 under it. Below 1024 the pair is 16:9,
- *                the set's own crop.
- *   headshot  1:1 at EVERY width   a person's face (page-showcase fix round 2, 7 Oct 2026). A
- *                square portrait set 16:9 cut heads at the hat and the chin at every width; the
- *                headshot keeps the source's own square, so the face is never the crop's casualty.
- *                Composed by the caller in its own Layout; BlockCardSet's count rule never picks it.
+ * There is no crop to choose. Every cover is 16:9, at every width and in every arrangement (owner,
+ * home round 3, 11 Oct 2026: "i wouldn't want random image ratios on the cards ever"): one
+ * standard image ratio across the site, so a cover is authored once at a 2560 × 1440 master and
+ * reads the same in a row of four, a featured row and beside a quote (--bcrd-media-ratio →
+ * --ratio-standard). The `ratio` prop and its seven crops (cover 3:2, wide 16:9, panorama 21:9,
+ * double 2:1, square 1:1, pair 16:5, headshot 1:1) are retired; a band that runs long at 16:9
+ * changes its arrangement, never the crop.
  */
-export type BlockCardRatio = 'cover' | 'wide' | 'panorama' | 'double' | 'square' | 'headshot' | 'pair';
 
 /**
  * How a WHOLE-CARD link says it navigates. One cue per card, never both.
@@ -132,7 +117,7 @@ export type BlockCardFrame = 'none' | 'box';
  *
  *   vertical    the grid tile: media above copy, filling one track of a multi-column Layout.
  *   horizontal  the row: two equal tracks from md, 64 apart. With an image, media beside copy at
- *               3:2, the tile's own crop. Without one, the copy splits instead — eyebrow and title in the first track,
+ *               16:9, the one card ratio. Without one, the copy splits instead — eyebrow and title in the first track,
  *               body and cta in the second — so a text-only row is a head beside its body rather
  *               than a single column with an empty half. Either way it defaults to the `lg` size,
  *               because a row spanning the column carries more weight than a tile. This is the
@@ -181,17 +166,6 @@ const SIZE_CLASS: Record<BlockCardSize, string | undefined> = {
   sm: styles.sizeSm,
 };
 
-/** One modifier per crop, on the image box; the module reads the ratio token under it. */
-const RATIO_CLASS: Record<BlockCardRatio, string | undefined> = {
-  cover: undefined,
-  wide: styles.wide,
-  panorama: styles.panorama,
-  double: styles.double,
-  square: styles.square,
-  headshot: styles.headshot,
-  pair: styles.pair,
-};
-
 /**
  * The three texture fields, in TextureShape's own terms (percent of the cover, Figma blur). Each
  * leaves the grid strongest in a different region, so a row of three stand-ins reads as three
@@ -226,11 +200,14 @@ const DOWNLOAD_LABEL = 'Download';
 
 /**
  * The attributes a record with no intrinsic size is given: the proportions of the box it fills,
- * restating --bcrd-media-ratio (--ratio-cover, 3/2) by hand, because TypeScript cannot read a
+ * restating --bcrd-media-ratio (--ratio-standard, 16/9) by hand, because TypeScript cannot read a
  * custom property. They never lay anything out — `fill` sizes the image to the box — so they are a
  * well-formed pair, not a measurement.
  */
-const FILL_BOX = { width: 3, height: 2 } as const;
+const FILL_BOX = { width: 16, height: 9 } as const;
+
+/** What an `href` makes clickable. See `BlockCardProps.linkScope`. */
+export type BlockCardLinkScope = 'card' | 'cta';
 
 /**
  * A closed card record. Grid geometry, surface and action rendering all stay outside the public
@@ -246,6 +223,15 @@ export type BlockCardProps = {
    * quote is the description (owner, 7 Oct 2026) — leaves it off, and no warning is raised.
    */
   body?: string;
+  /**
+   * The body as trusted inline HTML, one entry per paragraph (page-mapping G3): for a corpus item
+   * whose body carries a link, a bold run or a second paragraph, which `body: string` would flatten.
+   * Built by `inlineToHtml` from a parsed tree at the content seam, never from a raw string a caller
+   * typed. Exclusive with `body`. A card whose `href` makes the whole frame the anchor (`linkScope`
+   * `card`) may not hold a link: a link inside a whole-card link is an anchor in an anchor. Under
+   * `linkScope` `cta` it may.
+   */
+  bodyHtml?: readonly string[];
   /**
    * One optional quiet label above the title — a client, a category, a content type, a kicker.
    * A plain string rather than a structured record: what belongs here varies by page, so the
@@ -280,8 +266,6 @@ export type BlockCardProps = {
   tracks?: BlockCardTracks;
   /** The type step. Defaults to `lg` when horizontal and `md` when vertical. */
   size?: BlockCardSize;
-  /** The cover's crop. Defaults to `cover` (3:2). Ignored when horizontal, which is always 3:2. */
-  ratio?: BlockCardRatio;
   /**
    * A Solar Bold glyph on its own row above the title of a card with NO cover — the icon card of
    * C-icon (owner, 9 Oct 2026: stacked, never inline). Sized from the title's role, from
@@ -300,12 +284,14 @@ export type BlockCardProps = {
   /** The card's finish. Defaults to `none`. See `BlockCardFrame`. */
   frame?: BlockCardFrame;
   /**
-   * The cover takes the card's spare height when the card is stretched taller than its own
-   * content, never dropping below its ratio (Layout `fillFirst`). A set's decision, for the one
-   * card stretched to a taller neighbour: the spotlight's lead beside its two notes. Vertical
-   * cards with a cover only; ignored otherwise.
+   * What an `href` makes clickable (page-mapping G3b). `card` (default) is the whole frame as ONE anchor,
+   * said by its cue. `cta` keeps the frame a plain `<div>` and makes the cta Button the card's ONLY
+   * anchor, so the card's body may carry links of its own without an anchor sitting inside an anchor.
+   * It forces the `cta` cue (a card whose pointer target is one small button has no title cue to give),
+   * and a set takes it for every card, like `frame`: a row of six where one answers the pointer
+   * differently reads as a recommendation.
    */
-  grow?: boolean;
+  linkScope?: BlockCardLinkScope;
   /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
@@ -329,15 +315,7 @@ function mediaRecord(image: BlockCardImage): MediaImage {
 /** Kinds a cover crop would damage: shown whole, centred, with air inside the ruled box. */
 const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']);
 
-function ImageMedia({
-  image,
-  sizes,
-  ratio,
-}: {
-  image: BlockCardImage;
-  sizes: string;
-  ratio: BlockCardRatio;
-}) {
+function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) {
   /* An illustration or a cut-out is not cropped (cmp-feature, 6 Oct 2026): the cover crop took the
      label off the top of the drawing and the run button off the part. `contain` shows the whole
      object at the largest size that fits, and the box's inset gives it the air a lifted part needs
@@ -347,8 +325,7 @@ function ImageMedia({
   return (
     /* The card owns the ratio box and Media fills it: `fit="fill"` is a cover crop, anchored where
        Media anchors it, of a box the parent has already sized — which is what this wrapper is. One
-       ratio per card, set by its set: 3:2 for one or two and in the row, 16:9 for three or more
-       across (§ 1.4 rule 1, 6 Oct 2026).
+       ratio for every card: 16:9, the site's standard (home round 3, 11 Oct 2026).
 
        The box also owns the EDGE, for every kind (29 Sep, ch05 amendment 5a). A card crops every
        asset mechanically to its own ratio, so the boundary is a cut the card made, not the
@@ -358,7 +335,7 @@ function ImageMedia({
        The inner span is what zooms. It scales inside the box, so the ruled edge never moves and
        the overflow is clipped at it; scaling the <img> itself would reach into Media's element.
        Lazy is Media's default: a card is never the page's LCP. */
-    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio], contained && styles.contained)}>
+    <span className={cx(styles.imageMedia, contained && styles.contained)}>
       <span className={styles.imageZoom}>
         <Media
           image={mediaRecord(image)}
@@ -379,15 +356,13 @@ function ImageMedia({
  */
 function TextureMedia({
   recipe = 0,
-  ratio,
   icon,
 }: {
   recipe?: BlockCardTextureRecipe;
-  ratio: BlockCardRatio;
   icon?: IconName;
 }) {
   return (
-    <span className={cx(styles.imageMedia, RATIO_CLASS[ratio])} aria-hidden="true">
+    <span className={styles.imageMedia} aria-hidden="true">
       <span className={styles.imageZoom}>
         <span className={styles.textureCover}>
           <Texture>
@@ -423,6 +398,7 @@ function TextureMedia({
 export function BlockCard({
   title,
   body,
+  bodyHtml,
   eyebrow,
   media,
   titleAs: Title = 'h3',
@@ -432,21 +408,24 @@ export function BlockCard({
   imageSide = 'left',
   tracks = 2,
   size,
-  ratio = 'cover',
   icon,
   index,
   cue,
   frame = 'none',
+  linkScope = 'card',
   meta,
-  grow = false,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
     return null;
   }
 
-  const hasBody = body !== undefined && body.trim().length > 0;
-  if (body !== undefined && !hasBody)
+  const hasBodyHtml = bodyHtml !== undefined && bodyHtml.some((html) => html.trim().length > 0);
+  if (hasBodyHtml && body !== undefined) {
+    warn(`both body and bodyHtml for ${JSON.stringify(title)}; bodyHtml wins.`);
+  }
+  const hasBody = hasBodyHtml || (body !== undefined && body.trim().length > 0);
+  if (!hasBodyHtml && body !== undefined && !hasBody)
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
 
   const hasEyebrow = eyebrow !== undefined && eyebrow.trim().length > 0;
@@ -465,22 +444,14 @@ export function BlockCard({
   const horizontal = orientation === 'horizontal';
   const step = size ?? (horizontal ? 'lg' : 'md');
 
-  const coverRatio: BlockCardRatio = horizontal ? 'cover' : ratio;
   const imageNode = hasImage ? (
     <ImageMedia
       image={image}
-      sizes={
-        coverRatio === 'panorama'
-          ? FULL_COLUMN
-          : horizontal || tracks === 2
-            ? CARD_TWO_TRACKS
-            : CARD_THREE_TRACKS
-      }
-      ratio={coverRatio}
+      sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
     />
   ) : media?.type === 'texture' ? (
     /* The card's icon, if any, moves onto the texture: one head object, never two. */
-    <TextureMedia recipe={media.recipe} ratio={coverRatio} icon={icon} />
+    <TextureMedia recipe={media.recipe} icon={icon} />
   ) : null;
 
   /* The icon heads a card with no cover; a cover wins, because a card has one head object. */
@@ -505,8 +476,11 @@ export function BlockCard({
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
+  const ctaScoped = destination !== undefined && linkScope === 'cta';
   const cueKind: BlockCardCue | undefined = destination
-    ? (cue ?? (textOnly ? 'cta' : 'title'))
+    ? ctaScoped
+      ? 'cta'
+      : (cue ?? (textOnly ? 'cta' : 'title'))
     : undefined;
 
   const download = cueKind === 'download';
@@ -540,14 +514,28 @@ export function BlockCard({
      one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
   const ctaButton =
     cueKind === 'cta' || download ? (
-      <Button
-        as="span"
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name={download ? 'download' : 'arrow-right'} />}
-      >
-        {label}
-      </Button>
+      ctaScoped ? (
+        /* The static frame's one anchor (G3b): a real link, in the tab order, so the body above it
+           can hold links of its own. */
+        <Button
+          as="a"
+          href={destination}
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name="arrow-right" />}
+        >
+          {label}
+        </Button>
+      ) : (
+        <Button
+          as="span"
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name={download ? 'download' : 'arrow-right'} />}
+        >
+          {label}
+        </Button>
+      )
     ) : null;
   const cta =
     ctaButton || metaNode ? (
@@ -577,7 +565,20 @@ export function BlockCard({
      mark at rest to be the link; a card whose action is not obvious from its title takes the cta. */
   const cued = cueKind === 'title';
   const titleNode = <Title className={cx(styles.title, cued && styles.cued)}>{title}</Title>;
-  const bodyNode = hasBody ? <p className={styles.body}>{body}</p> : null;
+  const bodyNode = hasBodyHtml ? (
+    /* Trusted HTML, one paragraph each (`bodyHtml`). The paragraphs are a Layout at `text`: the
+       card's own paragraph step, so no margin and no Prose flow is needed, and the type role is the
+       `.body` div's, inherited by every <p>. */
+    <div className={styles.body}>
+      <Layout rowGap="text">
+        {bodyHtml.map((html, index) => (
+          <p key={index} dangerouslySetInnerHTML={{ __html: html }} />
+        ))}
+      </Layout>
+    </div>
+  ) : hasBody ? (
+    <p className={styles.body}>{body}</p>
+  ) : null;
 
   /* The copy: eyebrow, title and body as one group at `text` (16), then the cta a block (24) below
      it. 16 is one step under the section head's 24, so a card reads as a smaller unit of the same
@@ -654,10 +655,7 @@ export function BlockCard({
       </Layout>
     );
   } else {
-    /* `grow`: the stack fills the stretched frame and its first row — the cover — takes what is
-       spare, so a lead beside taller notes ends level with them instead of over a dead strip. */
-    const grows = grow && imageNode !== null;
-    if (cta && !grows) {
+    if (cta) {
       /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
          2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
          and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
@@ -677,7 +675,7 @@ export function BlockCard({
       );
     } else {
       frameContent = (
-        <Layout rowGap="block" fillFirst={grows} className={grows ? styles.grow : undefined}>
+        <Layout rowGap="block">
           {imageNode}
           {ruleNode}
           {content}
@@ -688,7 +686,7 @@ export function BlockCard({
 
   return (
     <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
-      {destination ? (
+      {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of
            every link Button inside it. Without it the cta would sit at rest forever. Emitted only

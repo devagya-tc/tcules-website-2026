@@ -1,5 +1,7 @@
 # CtaSection
 
+> **Amended, home round 3 (11 Oct 2026).** The split close makes the FORM the band's primary object: [5, 7] from 1024 with the form in the 7 on a raised panel (a nested surface one step off the band's ground, `--cta-panel-ground`, 8 radius, `block` inset) and the copy beside it at the offer's h2, centred on the panel. See docs/page-mapping.md § 19.
+
 > **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5,
 > `docs/specs/Button.md` § 14a). Supersedes the colour amendment below. `converts` is removed from
 > every arrangement and `@/lib/conversion` is deleted: there is no ink solid. The CLOSES (`open`,

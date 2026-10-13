@@ -3,4 +3,5 @@ export type {
   CaseStudyIndexClosing,
   CaseStudyIndexItem,
   CaseStudyIndexProps,
+  CaseStudyIndexSection,
 } from './CaseStudyIndex';

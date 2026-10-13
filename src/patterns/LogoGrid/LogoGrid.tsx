@@ -5,8 +5,28 @@ import { cx } from '@/lib/cx';
 
 import styles from './LogoGrid.module.css';
 
-/** One client: the same record ClientMark takes, density included — it is what sizes the mark. */
-export type LogoGridMark = Omit<ClientMarkProps, 'className'>;
+/** One client with an approved mark: the same record ClientMark takes, density included — it is what sizes the mark. */
+export type LogoGridMarkArt = Omit<ClientMarkProps, 'className'>;
+
+/**
+ * One client with NO approved mark yet (page-mapping G1): the name alone, typeset as a WORDMARK.
+ * The asset policy says "render names as fallback; never invent a logo asset", so a client without
+ * an SVG is still a member of the set — set in the wordmark role (sans, semibold, tight) in the
+ * marks' own ink, so it sits in its cell as a logo does and never reads as a line of text.
+ */
+export type LogoGridMarkName = { name: string; src?: undefined };
+
+/**
+ * One cell of the grid: an approved mark, or a typeset wordmark for a client whose SVG has not
+ * arrived. A set MAY mix them (home round 1, 10 Oct 2026, owner: "why would you list client names
+ * when we have the logos?"). Until then a set with one missing mark set EVERY cell as a name in the
+ * card-title serif, so the one real mark on the home page (Doodle) was hidden and the band read as a
+ * list of names. The wordmark is drawn at the marks' ink and close to their cap height, so a drawn
+ * mark beside a typeset one reads as two logos, not a logo beside a word.
+ */
+export type LogoGridMark = LogoGridMarkArt | LogoGridMarkName;
+
+const hasArt = (mark: LogoGridMark): mark is LogoGridMarkArt => Boolean(mark.src);
 
 /**
  * The width of the track the grid sits in, which decides how many cells fit across.
@@ -84,6 +104,25 @@ const FILL_CLASS: Record<Breakpoint, string | undefined> = {
 function lastFills(count: number, columns: Record<Breakpoint, number>) {
   return (Object.keys(columns) as Breakpoint[]).filter(
     (bp) => columns[bp] > 1 && count % columns[bp] === 1,
+  );
+}
+
+const PAIR_CLASS: Record<Breakpoint, string | undefined> = {
+  base: styles.pairBase,
+  md: styles.pairMd,
+  lg: styles.pairLg,
+  xl: styles.pairXl,
+};
+
+/**
+ * The breakpoints at which the last row holds TWO cells in a row of four, which then span two
+ * tracks each (home round 3, 11 Oct 2026: ten marks — the in-house set and Eden AI — are 4 + 4 + 2).
+ * Two cells hanging at the start of a four-track row read as a ragged edge; two half-row cells
+ * close the rectangle, the way `lastFills` closes it for one.
+ */
+function lastPairs(count: number, columns: Record<Breakpoint, number>) {
+  return (Object.keys(columns) as Breakpoint[]).filter(
+    (bp) => columns[bp] === 4 && count % 4 === 2,
   );
 }
 
@@ -175,6 +214,7 @@ export function LogoGrid({
 
   const columns = logoGridColumns(marks.length, beside ? 'body' : track);
   const fills = lastFills(marks.length, columns);
+  const pairs = lastPairs(marks.length, columns);
   const Context = heading ? 'p' : (contextAs ?? 'h2');
 
   const cells = (
@@ -188,9 +228,14 @@ export function LogoGrid({
           className={cx(
             styles.cell,
             ...(i === marks.length - 1 ? fills.map((bp) => FILL_CLASS[bp]) : []),
+            ...(i >= marks.length - 2 ? pairs.map((bp) => PAIR_CLASS[bp]) : []),
           )}
         >
-          <ClientMark {...mark} />
+          {!hasArt(mark) ? (
+            <span className={styles.wordmark}>{mark.name}</span>
+          ) : (
+            <ClientMark {...mark} />
+          )}
         </Cluster>
       ))}
     </Layout>

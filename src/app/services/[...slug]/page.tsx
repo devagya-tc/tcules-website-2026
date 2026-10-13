@@ -20,6 +20,7 @@ import {
   type ServiceContentColumn,
   type ServiceSection,
 } from '@/content';
+import { OfferRoute, isCorpusOffer, offerMetadata, offerSlugs } from '@/app/_corpus/offer';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
 import {
@@ -347,10 +348,16 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
+export function generateStaticParams() {
+  return offerSlugs('/services').map((slug) => ({ slug: slug.split('/') }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<'/services/[...slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await offerMetadata(`/services/${requestedSlug(slug)}`);
+  if (corpus) return corpus;
   const service = await getServicePage(requestedSlug(slug));
 
   if (!service) {
@@ -387,6 +394,8 @@ export async function generateMetadata({
 
 export default async function ServicePage({ params }: PageProps<'/services/[...slug]'>) {
   const { slug } = await params;
+  const route = `/services/${requestedSlug(slug)}`;
+  if (isCorpusOffer(route)) return <OfferRoute route={route} />;
   const service = await getServicePage(requestedSlug(slug));
 
   if (!service) notFound();

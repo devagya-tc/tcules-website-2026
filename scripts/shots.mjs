@@ -5,6 +5,13 @@
  *   npm run shots                        every specimen
  *   npm run shots -- page-hero figure    only these
  *   npm run shots -- --base=http://localhost:3000    an explicit server, trusted as given
+ *   npm run shots -- --routes=/,/about,/services/product-design    arbitrary SITE routes
+ *
+ * `--routes=` is the page mode: the listed paths (comma-separated, as the site serves them) are
+ * captured full-page at 1440 and 390 with the same overflow and page-error report, written as
+ * `<route-slug>-<width>.png` (`/` is `home`, `/services/product-design` is `services-product-design`).
+ * It does not run the specimen index or any specimen, and it takes no crops. The server rules below
+ * are unchanged and apply to both modes.
  *
  * Why this exists: "checked at 1440 and 390" is on every task's definition of done, and until now
  * it meant a person opening a browser and resizing it. The owner decides; they should not have to
@@ -52,6 +59,26 @@ const OUT = '.shots';
 const args = process.argv.slice(2);
 const baseArg = args.find((a) => a.startsWith('--base='));
 const only = args.filter((a) => !a.startsWith('--'));
+const routesArg = args.find((a) => a.startsWith('--routes='));
+const pageRoutes = routesArg
+  ? routesArg
+      .slice('--routes='.length)
+      .split(',')
+      .map((r) => r.trim())
+      .filter(Boolean)
+  : null;
+if (pageRoutes && (pageRoutes.length === 0 || pageRoutes.some((r) => !r.startsWith('/')))) {
+  console.error(
+    '--routes takes comma-separated paths that start with /, e.g. --routes=/,/about',
+  );
+  process.exit(1);
+}
+if (pageRoutes && only.length > 0) {
+  console.error('--routes and named specimens are separate modes; use one.');
+  process.exit(1);
+}
+/** `/` -> `home`, `/services/product-design` -> `services-product-design`. */
+const routeSlug = (r) => r.replace(/^\/|\/$/g, '').replaceAll('/', '-') || 'home';
 
 const designDir = 'src/app/design';
 /* Every specimen route under design/, nested ones included (`kit/cta`). A folder is a route only if
@@ -69,7 +96,7 @@ function specimenRoutes(dir, prefix = '') {
       return [...own, ...specimenRoutes(join(dir, d), `${name}/`)];
     });
 }
-const all = specimenRoutes(designDir);
+const all = pageRoutes ? [] : specimenRoutes(designDir);
 /* A nested specimen (`kit/cta`) is named by its path under design/ and must have a page. */
 const unknown = only.filter(
   (n) => !all.includes(n) && !existsSync(join(designDir, n, 'page.tsx')),
@@ -78,7 +105,7 @@ if (unknown.length > 0) {
   console.error(`No specimen route for: ${unknown.join(', ')}`);
   process.exit(1);
 }
-const names = only.length > 0 ? only : ['index', ...all];
+const names = pageRoutes ? pageRoutes : only.length > 0 ? only : ['index', ...all];
 
 async function answers(url) {
   try {
@@ -172,18 +199,20 @@ const report = [];
 
 try {
   for (const name of names) {
-    const path = name === 'index' ? '/design' : `/design/${name}`;
+    const path = pageRoutes ? name : name === 'index' ? '/design' : `/design/${name}`;
     for (const width of WIDTHS) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
-      await page.goto(base + path, { waitUntil: 'networkidle' });
+      const res = await page.goto(base + path, { waitUntil: 'networkidle' });
+      if (pageRoutes && res && res.status() >= 400)
+        errors.push(`HTTP ${res.status()} for ${path}`);
       await page.evaluate(() => document.fonts.ready);
       await loadEveryImage(page);
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       );
-      const slug = name.replaceAll('/', '-');
+      const slug = pageRoutes ? routeSlug(name) : name.replaceAll('/', '-');
       const file = `${slug}-${width}.png`;
       // Next's dev indicator is a fixed badge in a shadow root (`nextjs-portal`): in a full-page
       // capture it sat over the page's first band, and the owner's crops showed it as page content.
@@ -291,11 +320,11 @@ const rows = names
   .join('\n');
 writeFileSync(
   join(OUT, 'index.html'),
-  `<!doctype html><meta charset="utf-8"><title>Specimen shots</title>
+  `<!doctype html><meta charset="utf-8"><title>${pageRoutes ? 'Page' : 'Specimen'} shots</title>
 <style>body{font:14px system-ui;margin:24px;background:#f3f1ea}h2{font-size:16px;margin:32px 0 8px}h3{font-size:13px;margin:20px 0 6px}
 .row{display:grid;grid-template-columns:3fr 1fr;gap:16px;align-items:start}figure{margin:0}
 figcaption{font:12px ui-monospace,monospace;margin-bottom:4px}img{width:100%;border:1px solid #cfcfce;background:#fff}</style>
-<h1>Specimen shots</h1>\n${rows}\n`,
+<h1>${pageRoutes ? 'Page' : 'Specimen'} shots</h1>\n${rows}\n`,
 );
 writeFileSync(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 

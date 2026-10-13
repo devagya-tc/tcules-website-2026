@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Layout, Prose, Section } from '@/components';
+import { Cluster, Icon, Layout, Prose, Section } from '@/components';
 import {
   CtaSection,
   EnquiryForm,
@@ -197,6 +197,14 @@ export default function CtaSectionSpecimenPage() {
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
         surface="paper"
+      />
+      {/* `mark`: a bare blue glyph above the lede, the eye's entry into the close (the corpus pages'
+          enquiry band, owner 11 Oct 2026). */}
+      <CtaSection
+        mark={<Icon name="chat-round-dots" size="xl" />}
+        heading="Tell us what you are trying to ship"
+        body={SPLIT_BODY}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
       />
       <CtaSection
         arrangement="open"

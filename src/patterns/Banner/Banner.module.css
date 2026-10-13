@@ -23,6 +23,16 @@
   max-inline-size: var(--bnr-heading-measure);
 }
 
+/* A run's band heading (`bandHead`): the display role, the band's one title over a run of banners
+   whose own headings are h3 at the h2 role. */
+.bandHeading {
+  font: var(--bnr-band-heading-text);
+  letter-spacing: var(--bnr-band-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--bnr-heading-ink);
+  max-inline-size: var(--bnr-band-heading-measure);
+}
+
 .lead {
   font: var(--bnr-lead-text);
   text-wrap: var(--text-running-wrap);

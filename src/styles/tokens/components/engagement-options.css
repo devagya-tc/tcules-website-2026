@@ -1,0 +1,102 @@
+/* ══ Component layer — EngagementOptions ══════════════════════════════════════════
+   Tier 2. "Ways to work with us": the ways an engagement can be shaped, comparable at a glance
+   (product-design round 6, 11 Oct 2026; page-mapping § 23). Each option carries a small SCOPE
+   DRAWING on the same dot field, so the four read as one comparison before a word is read: a single
+   workflow is one line, a product area is a region, a designer in your team is one blue node among
+   yours, design and build is a drawn region becoming a built one. The drawing language is the
+   EngagementModel chart's (the dot field, the blue line, the open and closed nodes, the blue field),
+   so it is the kit's, not a new look; it draws only what each option's name says.
+
+   Naming: --eop-{part}-{role}
+     parts  heading · lead · title · body · field · line · region · node · member · halo
+     roles  text · tracking · measure · ink · fill · width · dash
+
+   No icons, no discs, no boxes. No state tokens: nothing responds to a pointer. Every surface block
+   declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --eop-heading-text: var(--text-h2);
+  --eop-heading-tracking: var(--text-h2-tracking);
+  --eop-heading-measure: var(--measure-title);
+  --eop-lead-text: var(--text-lead);
+  --eop-lead-measure: var(--measure-lead);
+  --eop-title-text: var(--text-h4);
+  --eop-title-tracking: var(--text-h4-tracking);
+  --eop-body-text: var(--text-body);
+  /* Five across (a fifth of the column each): one step down for the title and the body. */
+  --eop-title-text-dense: var(--text-h5);
+  --eop-title-tracking-dense: var(--text-h5-tracking);
+  --eop-body-text-dense: var(--text-body-sm);
+  /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
+  --eop-body-text-rows: var(--text-lead-lg);
+  --eop-plate-radius: var(--radius-8);
+  --eop-body-measure: var(--measure-lead);
+  /* Strokes stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
+  --eop-line-width: var(--border-width-3); /* a workflow: the drawing's heavy stroke */
+  --eop-region-width: var(--border-width-2); /* a region's edge */
+  --eop-node-width: var(--border-width-2); /* an open node's ring */
+  /* The drawn-but-not-built region's dash, in the drawing's own units (SVG user space). */
+  --eop-region-dash: 6 5;
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --eop-plate-ground: var(--color-paper-deep); /* the card image's plate */
+  --eop-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --eop-lead-ink: var(--color-neutral-700); /* 8.14:1 */
+  --eop-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --eop-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --eop-field-ink: var(--color-neutral-300); /* decoration: the dot field */
+  --eop-line-ink: var(--color-brandeis-500); /* the accent, as foreground: 6.17:1 */
+  --eop-region-fill: var(--color-brandeis-100); /* decoration */
+  --eop-node-fill: var(--color-paper); /* an open node takes the band's ground */
+  --eop-member-ink: var(--color-neutral-500); /* your team's nodes: 3.1:1, a graphic object */
+  --eop-halo-fill: var(--color-brandeis-100); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --eop-plate-ground: var(--color-paper); /* the card image's plate */
+  --eop-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --eop-lead-ink: var(--color-neutral-800); /* 10.54:1 */
+  --eop-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --eop-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --eop-field-ink: var(--color-neutral-400); /* decoration */
+  --eop-line-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --eop-region-fill: var(--color-brandeis-100); /* decoration */
+  --eop-node-fill: var(--color-paper-deep);
+  --eop-member-ink: var(--color-neutral-600); /* 3.5:1, a graphic object */
+  --eop-halo-fill: var(--color-brandeis-100); /* decoration */
+}
+
+/* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
+[data-surface='ink'] {
+  --eop-plate-ground: var(--color-neutral-900); /* the card image's plate */
+  --eop-heading-ink: var(--color-white); /* 17.26:1 */
+  --eop-lead-ink: var(--color-neutral-300); /* 11.07:1 */
+  --eop-title-ink: var(--color-white); /* 17.26:1 */
+  --eop-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --eop-field-ink: var(--color-neutral-700); /* decoration */
+  --eop-line-ink: var(--color-brandeis-300); /* 7.32:1 — blue lifts on ink */
+  --eop-region-fill: var(--color-brandeis-800); /* decoration */
+  --eop-node-fill: var(--color-neutral-950);
+  --eop-member-ink: var(--color-neutral-400); /* 8.05:1 */
+  --eop-halo-fill: var(--color-brandeis-800); /* decoration */
+}
+
+/* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
+[data-surface='blue'] {
+  --eop-plate-ground: var(--color-brandeis-600); /* the card image's plate */
+  --eop-heading-ink: var(--color-white); /* 6.23:1 */
+  --eop-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --eop-title-ink: var(--color-white); /* 6.23:1 */
+  --eop-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --eop-field-ink: var(--color-brandeis-400); /* decoration */
+  --eop-line-ink: var(--color-white); /* 6.23:1 */
+  --eop-region-fill: var(--color-brandeis-400); /* decoration */
+  --eop-node-fill: var(--color-brandeis-500);
+  --eop-member-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --eop-halo-fill: var(--color-brandeis-400); /* decoration */
+}

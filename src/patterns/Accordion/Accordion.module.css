@@ -156,15 +156,14 @@
   /* A CMS question can arrive as one unbroken string — a URL, a product name. `anywhere` breaks it
      rather than letting it widen the trigger past the root and push the mark off the row. */
   overflow-wrap: anywhere;
-  font: var(--text-h5);
-  letter-spacing: var(--text-h5-tracking);
+  font: var(--acc-question-text);
+  letter-spacing: var(--acc-question-tracking);
   /* Running wrap, not the title's `balance` (final fix round, 6 Oct 2026). A question shares its row
      with the mark at the inline end, so a balanced break halves the line and leaves the gap before
      the mark empty: at 390 "What does the first / month look like?" broke at half the column with
      ~150 of nothing before the chevron. `pretty` fills the line and only avoids a lone last word. */
   text-wrap: var(--text-running-wrap);
   color: var(--acc-question-ink);
-  transition: color var(--acc-transition-duration) var(--acc-transition-easing);
 }
 
 /* The mark is a fixed-basis child of the trigger's Cluster: no grow, no shrink, natural width. The
@@ -199,31 +198,23 @@
   display: block;
 }
 
-/* Hover, keyboard focus and open all resolve to one raised ink — three states, one value, so the
-   token layer declares it once (see accordion.css). Focus joins them because the ring alone used
-   to arrive alongside the hover ground, and a focused row that reads quieter than a hovered one
-   is a regression for the keyboard. */
-.trigger:hover .question,
-.trigger:focus-visible .question,
-.item[open] .question {
-  color: var(--acc-question-ink-hover);
-}
-
+/* Hover, keyboard focus and open move the chevron only (home round 3): the question already rests
+   at full ink, so there is no raised step left for it to take. */
 .trigger:hover .mark,
 .trigger:focus-visible .mark,
 .item[open] .mark {
   color: var(--acc-mark-ink-hover);
 }
 
-/* Accordion says NOTHING about the answer's type or its colour, and this class is the whole of
-   what it does say: the inset, the measure and the wrapping.
+/* The answer: the inset, the measure, the wrapping, and its INK (owner, home round 3: the question
+   and answer lacked contrast). The question is serif h5 at full ink; the answer is the sans body
+   (Prose's own flow, --text-body) one clear step quieter, --acc-answer-ink. Two classes so it
+   outranks Prose's root colour on the same element; links, strong and code inside keep Prose's
+   own inks. */
+.root .answer {
+  color: var(--acc-answer-ink);
+}
 
-   The redesign wanted 16px under the 22px question — 18 was a 1.22 ratio and neither element led,
-   where 16 gives 1.38 — and Prose's flow is --text-body, so there is nothing left to restate. An
-   earlier pass here raised the selector to (0,2,0) to override Prose's root at 18px; when Prose
-   stepped its whole flow down to 16 that override became a no-op, and a no-op with an explanation
-   attached is worse than no rule. There is no --acc-answer-ink either: a strong, a link or a code
-   span inside an answer has to match Prose everywhere else on the site. */
 .answer {
   min-inline-size: 0;
   max-inline-size: var(--measure-body);

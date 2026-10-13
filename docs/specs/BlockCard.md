@@ -1,5 +1,7 @@
 # BlockCard
 
+> **Amended, home round 3 (11 Oct 2026).** Every cover is 16:9 (`--ratio-standard`) at every width and in every arrangement. The `ratio` prop and its seven crops (cover, wide, panorama, double, square, pair, headshot) and the `grow` prop are retired; BlockCardSet no longer takes `ratio`. Where this spec names a per-set crop, read 16:9. See docs/page-mapping.md § 19 and docs/kit/brand-amendments.md (home round 3).
+
 ## 0 · Front matter
 
 |                     |                                                                                                                        |
@@ -1479,7 +1481,7 @@ Supersedes the phone-scroll rule and the open question in the amendment above.
 - **Hover covers the arrow.** `.cue` is named beside `.cued` in the hover and pressed rules: it carries
   its own rest ink, so on blue a hover that coloured only the title left a white arrow behind.
 
-Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (the band's h2 at
+Outside BlockCard, for its bands: ContentSection gains `headingSize="display"` (retired in home round 5, 11 Oct 2026, for `headingSize="xl"`, the h1 role) (the band's h2 at
 `--text-display`) and `asideFill` (the C-icon head-track photograph ends on the body's last line).
 
 

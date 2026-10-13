@@ -1,0 +1,92 @@
+/* ══ Component layer — Testimonial ══════════════════════════════════════════════════
+   Tier 2. The rated testimonial card (home round 2, 10 Oct 2026, from the owner's four references:
+   rated cards in a grid, staggered cards beside a heading, a bordered quote grid). One client's
+   words, the stars that client gave, and who they are.
+
+   Naming: --tsm-{part}-{role}
+     parts: ground | quote | name | role | rule | avatar | panel
+
+   Home round 3 (11 Oct 2026): the quote is SANS (the lead role on the card, body on the supporting
+   card, lead-lg in the diptych's panel), the initials monogram is gone (banned: "the current
+   initials in a box is illegal"), and a speaker with a photograph gets a circular avatar; one
+   without gets none. The two monogram inks left every surface block with it.
+
+   A CARD WITH A GROUND, deliberately, and the one exception to "cards have no boxes" (5 Oct 2026)
+   besides the boxed logo grid: every reference the owner chose sets each review in its own panel,
+   and a wall of six italic quotes with no panel read as one column of italics (home round 1). The
+   panel is a quiet ground with NO edge (the 9 Oct box ruling: padding, no border) and the 8 radius.
+   On paper it is the tint ground; on tint it is paper, so a quote wall on a tint band reads as
+   lifted cards. Never blue (index.css § Blue: blue is never a card fill), so the blue surface sets
+   a paper card and paper inks.
+
+   The unboxed card (`frame="none"`, a quote that supports a claim) sits on the surface itself, so
+   its words take the -quiet inks, chosen for the surface's ground rather than the card's: they
+   differ only on blue, where the boxed card is paper and the unboxed quote is on blue.
+
+   The surface register (ground and ink) because the card is a small surface its words sit on; the
+   avatar is a photograph and carries no colour. No state tokens: a testimonial is not
+   a control and nothing in it responds to a pointer.
+
+   Every surface restates every token (index.css, rule 2). */
+
+:root {
+  --tsm-radius: var(--radius-8);
+  --tsm-rule-width: var(--border-width-hairline);
+  /* The quote's sans roles (home round 3): the card that is the thing, the supporting card, and the
+     diptych's panel, one step each. */
+  --tsm-quote-text: var(--text-lead);
+  --tsm-quote-text-sm: var(--text-body);
+  --tsm-quote-text-panel: var(--text-lead-lg);
+  /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),
+     40 on the supporting card. A circle (owner, home round 3), the one round portrait in the kit. */
+  --tsm-avatar-size-md: 48px;
+  --tsm-avatar-size-sm: 40px;
+  --tsm-avatar-radius: var(--radius-full);
+  /* The diptych's panel from 1440: the card ratio, so its edges are the case cover's. */
+  --tsm-panel-ratio: var(--ratio-standard);
+}
+
+:root,
+[data-surface='paper'] {
+  --tsm-ground: var(--color-paper-deep);
+  --tsm-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
+  --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-name-ink: var(--color-neutral-900);
+  --tsm-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
+  --tsm-rule: var(--color-neutral-300);
+  --tsm-name-ink-quiet: var(--color-neutral-900);
+  --tsm-role-ink-quiet: var(--color-neutral-600);
+}
+
+[data-surface='tint'] {
+  --tsm-ground: var(--color-paper);
+  --tsm-quote-ink: var(--color-neutral-800); /* 11.81:1 on paper */
+  --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper-deep */
+  --tsm-name-ink: var(--color-neutral-900);
+  --tsm-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
+  --tsm-rule: var(--color-neutral-200);
+  --tsm-name-ink-quiet: var(--color-neutral-900);
+  --tsm-role-ink-quiet: var(--color-neutral-700);
+}
+
+[data-surface='ink'] {
+  --tsm-ground: var(--color-neutral-900);
+  --tsm-quote-ink: var(--color-white);
+  --tsm-quote-ink-quiet: var(--color-neutral-300);
+  --tsm-name-ink: var(--color-white);
+  --tsm-role-ink: var(--color-neutral-400);
+  --tsm-rule: var(--color-neutral-700);
+  --tsm-name-ink-quiet: var(--color-white);
+  --tsm-role-ink-quiet: var(--color-neutral-400);
+}
+
+[data-surface='blue'] {
+  --tsm-ground: var(--color-paper);
+  --tsm-quote-ink: var(--color-neutral-800);
+  --tsm-quote-ink-quiet: var(--color-brandeis-50);
+  --tsm-name-ink: var(--color-neutral-900);
+  --tsm-role-ink: var(--color-neutral-600);
+  --tsm-rule: var(--color-neutral-200);
+  --tsm-name-ink-quiet: var(--color-white);
+  --tsm-role-ink-quiet: var(--color-brandeis-100);
+}

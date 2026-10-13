@@ -720,15 +720,15 @@ function Caption({
 }
 
 const VARIATIONS = [
-  'C-image-3 · display · centred · whole-card links',
+  'C-image-3 · h1 · centred · whole-card links',
   'C-spotlight · 2:1 lead beside a stacked pair',
   'C-image-3 · with a section action',
   'C-wide · a 2:1 lead and two squares, one height',
-  'C-image-3 · display H-compact · per-card CTA',
-  'C-image-3 · display H-title · CtaRow, one-line titles',
+  'C-image-3 · h1 H-compact · per-card CTA',
+  'C-image-3 · h1 H-title · CtaRow, one-line titles',
   'C-image-3 · unlinked, numbered, no CTA',
   'C-image-4 · lead none · numbered',
-  'C-image-4 · display H-compact · per-card CTA',
+  'C-image-4 · h1 H-compact · per-card CTA',
   'C-image-6 · Slider showing three',
   'C-pair · staggered, under its head',
   'C-text-3 · hairline + index, unlinked',
@@ -759,8 +759,8 @@ const kf = (n: number) => `kf-${String(n).padStart(2, '0')}`;
  * the spotlight (`beside`), the wide lead (`wide`) and the staggered pair (`stagger`) — which the
  * order below puts between the equal rows, so no two neighbouring bands are the same rectangle.
  *
- * Heads: centred H-compact and H-title heads take headingSize="display" (fix round 2), so the
- * head-to-card scale gap is the references' ~70 over 22–28; stacked and beside heads keep h2, where
+ * Heads: centred H-compact and H-title heads take headingSize="xl" (fix round 2; the h1 role since
+ * home round 5, when display became the hero's alone), so the head clearly outranks its 22–28 cards; stacked and beside heads keep h2, where
  * the head shares its row with a lead or a body.
  */
 export default function FeatureKitSpecimen() {
@@ -795,14 +795,14 @@ export default function FeatureKitSpecimen() {
         </Layout>
       </PageHero>
 
-      <Caption n={1} name={VARIATIONS[0]} fit="display head · 3-up 381">
-        ContentSection headingSize=&quot;display&quot;: the band&rsquo;s h2 at the display role,
-        so the head sits three rungs over its cards. Whole-card links; each title ends in the
+      <Caption n={1} name={VARIATIONS[0]} fit="h1 head · 3-up 381">
+        ContentSection headingSize=&quot;xl&quot;: the band&rsquo;s h2 at the h1 role (display
+        is the hero&rsquo;s alone since home round 5), so the head sits rungs over its cards. Whole-card links; each title ends in the
         blue arrow, and on hover the title joins it and the cover leans in.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Services"
         heading="Three ways we help"
         headingId={kf(1)}
@@ -850,7 +850,7 @@ export default function FeatureKitSpecimen() {
         not a box.
       </Caption>
       <ContentSection
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Case studies"
         heading="Three products, in use"
         headingId={kf(4)}
@@ -858,12 +858,12 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={WIDE} lead="wide" />
       </ContentSection>
 
-      <Caption n={5} name={VARIATIONS[4]} fit="display head · 381 + 64">
+      <Caption n={5} name={VARIATIONS[4]} fit="h1 head · 381 + 64">
         Each card names its own destination in a blue link under the copy; the title stays ink.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Engagements"
         heading="Pick a starting point"
         headingId={kf(5)}
@@ -871,11 +871,11 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={ENGAGEMENTS} lead="none" cue="cta" />
       </ContentSection>
 
-      <Caption n={6} name={VARIATIONS[5]} fit="display head · 347 + 96">
+      <Caption n={6} name={VARIATIONS[5]} fit="h1 head · 347 + 96">
         Unlinked cards with one-line titles, and the band&rsquo;s ask in a CtaRow a stack below.
       </Caption>
       <ContentSection
-        headingSize="display"
+        headingSize="xl"
         eyebrow="The craft"
         heading="What we do every week"
         headingId={kf(6)}
@@ -889,14 +889,14 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={CRAFT} lead="none" numbered label="The craft" />
       </ContentSection>
 
-      <Caption n={7} name={VARIATIONS[6]} fit="display head · 381">
+      <Caption n={7} name={VARIATIONS[6]} fit="h1 head · 381">
         No link and no CTA: the set describes, it does not route. Studio photographs, our own.
         On a phone the row scrolls and, holding nothing focusable, takes the tab stop under its
         label.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="A working week"
         heading="How a week runs"
         headingId={kf(7)}
@@ -918,13 +918,13 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={STUDIO} lead="none" numbered label="The studio" />
       </ContentSection>
 
-      <Caption n={9} name={VARIATIONS[8]} fit="display head · 301 + 64">
+      <Caption n={9} name={VARIATIONS[8]} fit="h1 head · 301 + 64">
         Four linked cards with per-card links. On a phone the row scrolls sideways, bleeding to
         the screen edge with the next card peeking.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Audits"
         heading="Fixed-scope product audits"
         headingId={kf(9)}
@@ -933,12 +933,12 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={AUDITS} lead="none" cue="cta" />
       </ContentSection>
 
-      <Caption n={10} name={VARIATIONS[9]} fit="display head · 381 + 64">
+      <Caption n={10} name={VARIATIONS[9]} fit="h1 head · 381 + 64">
         Five or more image cards never wrap to a second row (826): they become a Slider showing
         three, composed around BlockCards by the page.
       </Caption>
       <ContentSection
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Case studies"
         heading="More of the work"
         headingId={kf(10)}
@@ -952,7 +952,6 @@ export default function FeatureKitSpecimen() {
               media={photo(card.image)}
               href={ROUTES.caseStudies}
               tracks={3}
-              ratio="wide"
               size="md"
             />
           ))}
@@ -973,13 +972,13 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={MODES} lead="none" cue="cta" stagger />
       </ContentSection>
 
-      <Caption n={12} name={VARIATIONS[11]} fit="display head · 217">
+      <Caption n={12} name={VARIATIONS[11]} fit="h1 head · 217">
         A text card takes a hairline at its own top edge, the width of the card, then 24 to a
         blue index. The gutter breaks the rule, so it reads as three objects, not a table.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Principles"
         heading="Three things we hold to"
         headingId={kf(12)}
@@ -1000,14 +999,14 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={READING} lead="none" cue="cta" />
       </ContentSection>
 
-      <Caption n={14} name={VARIATIONS[13]} fit="display head · 217">
+      <Caption n={14} name={VARIATIONS[13]} fit="h1 head · 217">
         Surface proof — on pages, tint is the proof band only (§ 1.7). Whole-card links on text
         cards take the title cue: no glyph, the title goes blue on hover.
       </Caption>
       <ContentSection
         align="center"
         surface="tint"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Expertise"
         heading="Where we work best"
         headingId={kf(14)}
@@ -1016,11 +1015,11 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={WHERE} lead="none" cue="title" />
       </ContentSection>
 
-      <Caption n={15} name={VARIATIONS[14]} fit="display head · 2 × 191 + 64">
+      <Caption n={15} name={VARIATIONS[14]} fit="h1 head · 2 × 191 + 64">
         Six text cards, two rows of three, bodies held to two lines.
       </Caption>
       <ContentSection
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Method"
         heading="Six steps, in this order"
         headingId={kf(15)}
@@ -1097,13 +1096,13 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={PAIR} lead="none" />
       </ContentSection>
 
-      <Caption n={20} name={VARIATIONS[19]} fit="display head · 381">
+      <Caption n={20} name={VARIATIONS[19]} fit="h1 head · 381">
         The middle item has no cover. With a stand-in pool, the set takes the first fitting
         studio photograph for it: never a hole, never an empty frame, never a label.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Insights"
         heading="Notes from the studio"
         headingId={kf(20)}
@@ -1125,14 +1124,14 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={MIXED} lead="none" standIns={false} />
       </ContentSection>
 
-      <Caption n={22} name={VARIATIONS[21]} fit="display head · 301">
+      <Caption n={22} name={VARIATIONS[21]} fit="h1 head · 301">
         Any card may carry any kind. In a card the crop box rules every kind with one hairline
         and an 8 radius; Media draws no edge of its own. The illustration and the cut-out are
         cut to one region for the card and shown whole inside it, an 8 inset off the rule.
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Imagery"
         heading="Four kinds of card image"
         headingId={kf(22)}
@@ -1141,7 +1140,7 @@ export default function FeatureKitSpecimen() {
         <BlockCardSet items={KINDS} lead="none" numbered label="Four kinds of card image" />
       </ContentSection>
 
-      <Caption n={23} name={VARIATIONS[22]} fit="display head · 381 + 64">
+      <Caption n={23} name={VARIATIONS[22]} fit="h1 head · 381 + 64">
         Resources with no covers yet. standIns=&quot;texture&quot; gives each the card&rsquo;s
         own texture cover — the grid at full strength over half the box, the glyph large in its
         corner — and the download cue and a format line say what the file is before it is
@@ -1149,7 +1148,7 @@ export default function FeatureKitSpecimen() {
       </Caption>
       <ContentSection
         align="center"
-        headingSize="display"
+        headingSize="xl"
         eyebrow="Resources"
         heading="Tools we use with clients"
         headingId={kf(23)}

@@ -1,0 +1,74 @@
+/* StarRating — five glyphs, filled, half or empty. Every value is --star-*.
+
+   The row is the inside of one mark (as RatingBadge's pill is one control), so it lays itself out
+   with inline-flex rather than through a Cluster: a primitive does not import a sibling. The gap
+   between stars is the scale's smallest step, the distance inside a key and its value. No margin. */
+
+.root {
+  display: inline-flex;
+  gap: var(--gap-inline);
+  align-items: center;
+  line-height: 0;
+}
+
+.md {
+  --star-size: var(--star-size-md);
+}
+
+.sm {
+  --star-size: var(--star-size-sm);
+}
+
+/* One star's box: the size is the component's, so the glyph handed in fills it whatever size the
+   caller gave its Icon (Button sizes its glyph the same way). */
+.star {
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: var(--star-size);
+  block-size: var(--star-size);
+}
+
+.star svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.empty {
+  display: block;
+  color: var(--star-empty-fg);
+}
+
+/* The filled glyph laid over the empty one. A half star clips it at half the box from the inline
+   start, so the fill reads in the direction of the text. */
+.filled {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  display: block;
+  inline-size: 100%;
+  overflow: hidden;
+  color: var(--star-fill-fg);
+}
+
+/* The glyph keeps the whole star's size inside the clipped half (reset.css caps media at 100% of
+   their box, which would shrink it to the half instead of cropping it). */
+.filled svg {
+  inline-size: var(--star-size);
+  block-size: var(--star-size);
+  max-inline-size: none;
+}
+
+.half {
+  inline-size: 50%;
+}
+
+/* On a card with its own ground: the card colours (star-rating.css § On a card). */
+.onCard .empty {
+  color: var(--star-card-empty-fg);
+}
+
+.onCard .filled {
+  color: var(--star-card-fill-fg);
+}

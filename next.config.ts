@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+import { CASE_SLUG_REDIRECTS, caseStudyPath } from './src/lib/routes';
+
 const nextConfig: NextConfig = {
   /**
    * Hosts allowed to request DEV-ONLY assets — the JS chunks, the HMR socket, the dev font
@@ -21,6 +23,15 @@ const nextConfig: NextConfig = {
    * this machine. Adjust the subnet if this repo is checked out somewhere on a different one.
    */
   allowedDevOrigins: ['192.168.1.*', '*.local'],
+  /** The corpus's planned case slugs → the live Strapi slugs (routes.ts § CASE_SLUG_REDIRECTS).
+      Temporary, so nothing caches the planned slug as moved for good. */
+  async redirects() {
+    return Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => ({
+      source: caseStudyPath(from),
+      destination: caseStudyPath(to),
+      permanent: false,
+    }));
+  },
 };
 
 export default nextConfig;

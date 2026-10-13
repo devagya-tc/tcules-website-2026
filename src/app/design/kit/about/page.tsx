@@ -154,7 +154,7 @@ export default async function KitAboutPage() {
       <ContentSection
         data-band="B"
         arrangement="media"
-        media={{ image: STUDIO_BOARD, side: 'start', head: 'title' }}
+        media={{ image: STUDIO_BOARD, side: 'start', head: 'lg' }}
         eyebrow="Inside the studio"
         heading="How a week runs here"
         headingId="about-week"

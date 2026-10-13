@@ -1,0 +1,42 @@
+import type { TestimonialRating } from '../../corpus-types.ts';
+
+/**
+ * PLACEHOLDER — per-testimonial star ratings, keyed by testimonial id (the frontmatter's
+ * `testimonial_ids`).
+ *
+ * NOT REAL DATA. The owner asked on 10 Oct 2026 (home review, round 2) for the rated testimonial
+ * card to show "ratings from 4 to 5 for each testimonial for now". Every value below was chosen to
+ * fill that brief, varied in half steps; none was read off a review. A star rating printed beside
+ * a named client's words is a claim about what that client said, so these MUST be replaced with
+ * each review's own published rating (the 13 Clutch reviews carry one each) or removed before the
+ * site launches. docs/content-proposals.md P36 tracks it; `placeholder: true` is how a check finds
+ * every one that is left.
+ *
+ * Read only through `getTestimonialRatings` (source.ts). A testimonial with no entry renders with no
+ * stars, never a default score.
+ */
+const PLACEHOLDER = true;
+
+const rating = (value: number): TestimonialRating => ({ value, placeholder: PLACEHOLDER });
+
+export const TESTIMONIAL_RATINGS: Readonly<Record<string, TestimonialRating>> = {
+  /* Home: selected work */
+  'FP-DOODLE-EFFICIENCY': rating(5),
+  'FP-EDEN-DEVELOPERS': rating(4.5),
+  /* Home: why teams choose Tcules; /services/product-design */
+  'CL-VIDEOPLASTY-DECISIONS': rating(5),
+  'CL-AUX-COMPLEXITY': rating(4.5),
+  'DRAFT-PRIMELIS-TEAM': rating(5),
+  /* Home: what clients say; /about */
+  'CL-RINGIER-COLLAB': rating(5),
+  'UW-JOVE-INTEGRATION': rating(4),
+  'DRAFT-KNOVOS-CANDOUR': rating(4.5),
+  'DRAFT-CURAMCARE-RESEARCH-BUILD': rating(5),
+  'DRAFT-DOODLE-RESEARCH': rating(4.5),
+  'DRAFT-EDEN-PLATFORM': rating(5),
+  'FP-EDEN-USERS': rating(4.5),
+  /* /expertise/healthtech */
+  'DRAFT-CURAMCARE-ONEILL': rating(5),
+  /* /case-studies */
+  'SSOT-TRISHANYA-RAJU-FOUNDER-THE-WANDERING-RAV': rating(5),
+};

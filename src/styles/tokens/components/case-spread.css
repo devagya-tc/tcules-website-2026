@@ -1,0 +1,89 @@
+/* ══ Component layer — CaseSpread ═════════════════════════════════════════════════
+   Tier 2. One worked example told so the right parts carry the weight (product-design round 6,
+   11 Oct 2026; page-mapping § 23): the OUTCOME is the claim, beside the evidence that shows it; the
+   problem and what we did are the backstory under both. Claim leads, proof supports.
+
+   Naming: --csp-{part}-{role}
+     parts  heading · claim · claim-title · claim-body · claim-rule · story-title · story-body ·
+            rule · media
+     roles  text · tracking · measure · ink · width · radius · ratio
+
+   The claim is marked as Callout's example tone marks a scene: a blue rule down its start edge, a
+   mark and not a box (nothing closes the other three sides). The evidence is one 16:9 frame, the
+   site's one card ratio, ruled and rounded as a card cover is. No state tokens: nothing responds
+   to a pointer (the action is the caller's link). Every surface block declares every
+   surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --csp-heading-text: var(--text-h2);
+  --csp-heading-tracking: var(--text-h2-tracking);
+  --csp-heading-measure: var(--measure-title);
+  /* The result reads at the story's own sizes (owner, 11 Oct 2026: "same size across the body");
+     the blue rule alone marks it as the payoff. */
+  --csp-claim-title-text: var(--csp-story-title-text);
+  --csp-claim-title-tracking: var(--csp-story-title-tracking);
+  --csp-claim-body-text: var(--csp-story-body-text);
+  --csp-claim-body-measure: var(--measure-lead);
+  --csp-claim-rule-width: var(--border-width-2);
+  --csp-story-title-text: var(--text-h5);
+  --csp-story-title-tracking: var(--text-h5-tracking);
+  --csp-story-body-text: var(--text-body);
+  --csp-story-body-measure: var(--measure-lead);
+  --csp-rule-width: var(--border-width-hairline);
+  --csp-media-ratio: var(--ratio-standard);
+  --csp-media-rule-width: var(--border-width-hairline);
+  --csp-media-radius: var(--radius-8);
+  /* Where the sticky evidence stops under the viewport's top: clear of the site nav, a section's
+     air. A distance, so a gap step. */
+  --csp-media-sticky-top: var(--gap-section);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --csp-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --csp-claim-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --csp-claim-body-ink: var(--color-neutral-900); /* 14.62:1 */
+  --csp-claim-rule-ink: var(--color-brandeis-500); /* a mark */
+  --csp-story-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --csp-story-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --csp-rule-ink: var(--color-neutral-300); /* decoration */
+  --csp-media-rule-ink: var(--color-neutral-300); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --csp-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --csp-claim-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --csp-claim-body-ink: var(--color-neutral-900); /* 13.05:1 */
+  --csp-claim-rule-ink: var(--color-brandeis-500); /* a mark */
+  --csp-story-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --csp-story-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --csp-rule-ink: var(--color-neutral-400); /* decoration */
+  --csp-media-rule-ink: var(--color-neutral-400); /* decoration */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --csp-heading-ink: var(--color-white); /* 17.26:1 */
+  --csp-claim-title-ink: var(--color-white); /* 17.26:1 */
+  --csp-claim-body-ink: var(--color-white); /* 17.26:1 */
+  --csp-claim-rule-ink: var(--color-brandeis-300); /* a mark */
+  --csp-story-title-ink: var(--color-white); /* 17.26:1 */
+  --csp-story-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --csp-rule-ink: var(--color-neutral-700); /* decoration */
+  --csp-media-rule-ink: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --csp-heading-ink: var(--color-white); /* 6.23:1 */
+  --csp-claim-title-ink: var(--color-white); /* 6.23:1 */
+  --csp-claim-body-ink: var(--color-white); /* 6.23:1 */
+  --csp-claim-rule-ink: var(--color-white); /* a mark */
+  --csp-story-title-ink: var(--color-white); /* 6.23:1 */
+  --csp-story-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --csp-rule-ink: var(--color-brandeis-300); /* decoration */
+  --csp-media-rule-ink: var(--color-brandeis-300); /* decoration */
+}

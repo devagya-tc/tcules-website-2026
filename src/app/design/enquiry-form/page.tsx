@@ -39,6 +39,7 @@ function Enquiry({
   contact = false,
   compact = false,
   lined = false,
+  corpus = false,
   urlLabel,
 }: {
   outcome?: 'success' | 'error' | 'pending';
@@ -46,11 +47,27 @@ function Enquiry({
   contact?: boolean;
   compact?: boolean;
   lined?: boolean;
+  corpus?: boolean;
   urlLabel?: EnquiryUrlLabel;
 }) {
   const action = `${ENDPOINTS.enquiryDesign}?outcome=${outcome}`;
 
   if (compact) return <EnquiryForm variant="compact" action={action} context={CONTEXT} />;
+
+  /* The corpus enquiry (page-mapping G2): the corpus's own URL label, no scheduling link (none is
+     authored and no destination exists), and the page's own success words. */
+  if (corpus)
+    return (
+      <EnquiryForm
+        action={action}
+        context={CONTEXT}
+        urlLabel="Product or company URL"
+        success={{
+          heading: 'Your enquiry has reached us.',
+          body: "We'll reply within one business day.",
+        }}
+      />
+    );
 
   if (contact)
     return <EnquiryForm variant="contact" action={action} scheduleHref={ROUTES.contact} />;
@@ -118,6 +135,15 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry compact />}
       />
       <CtaSection
+        eyebrow="Variant · enquiry, from the corpus"
+        heading="Send an enquiry without a scheduling link"
+        body={[
+          'The corpus pages’ form: the URL field’s own label, no “See available times” (none is authored and no scheduling destination exists), and the page’s own success words. Submit it for the success view.',
+        ]}
+        form={<Enquiry corpus />}
+        surface="tint"
+      />
+      <CtaSection
         eyebrow={`Fields · line`}
         heading="The line field, kept as an option"
         body={[
@@ -175,6 +201,24 @@ export default function EnquiryFormSpecimenPage() {
         form={<Enquiry outcome="success" urlLabel="Where can we see it?" />}
       />
 
+      {/* Home round 3: the form as the band's primary object — lg fields, the submit across the
+          panel, and the caller's own resting line ("After sending: …" in the corpus). */}
+      <CtaSection
+        eyebrow="Primary · lg fields · caller's caption"
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it.']}
+        form={
+          <EnquiryForm
+            variant="enquiry"
+            urlLabel="Product or company URL"
+            fieldScale="lg"
+            submit="full"
+            caption="We'll reply within one business day."
+            action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+            context={CONTEXT}
+          />
+        }
+      />
       {(['paper', 'tint', 'ink', 'blue'] as const).map((surface) => (
         <CtaSection
           key={surface}

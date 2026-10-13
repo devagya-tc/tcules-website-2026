@@ -1,0 +1,40 @@
+/* ══ Component layer — StudioPage (templates) ═══════════════════════════════════
+   Tier 3. The About page's opening band (12 Oct 2026): the founding line, the studio's own line set
+   large, and what it means. Every other band is a kit unit with a layer of its own.
+
+   Naming: --stp-{part}-{role}  ·  parts founding · centre · meaning  ·  roles text · tracking · ink
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --stp-founding-text: var(--text-body);
+  /* The band has no heading; its one line takes the h2 role, the band's large thing. */
+  --stp-centre-text: var(--text-h2);
+  --stp-centre-tracking: var(--text-h2-tracking);
+  --stp-meaning-text: var(--text-lead);
+}
+
+:root,
+[data-surface='paper'] {
+  --stp-founding-ink: var(--color-neutral-700);
+  --stp-centre-ink: var(--color-neutral-900);
+  --stp-meaning-ink: var(--color-neutral-800);
+}
+
+[data-surface='tint'] {
+  --stp-founding-ink: var(--color-neutral-700);
+  --stp-centre-ink: var(--color-neutral-900);
+  --stp-meaning-ink: var(--color-neutral-800);
+}
+
+[data-surface='ink'] {
+  --stp-founding-ink: var(--color-neutral-300);
+  --stp-centre-ink: var(--color-white);
+  --stp-meaning-ink: var(--color-neutral-100);
+}
+
+[data-surface='blue'] {
+  --stp-founding-ink: var(--color-brandeis-50);
+  --stp-centre-ink: var(--color-white);
+  --stp-meaning-ink: var(--color-white);
+}

@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
+import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
 import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
@@ -276,17 +276,10 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         dates={published ? { published } : undefined}
         media={heroMedia}
         surface="paper"
-      >
-        {labels.length > 0 ? (
-          <Cluster as="ul" colGap="text" rowGap="tight">
-            {labels.map((label) => (
-              <li key={label}>
-                <Tag>{label}</Tag>
-              </li>
-            ))}
-          </Cluster>
-        ) : null}
-      </PageHero>
+      
+        labels={labels}
+      />
+
 
       {podcast.blocks.length > 0 ? (
         <Section as="div" surface="paper">

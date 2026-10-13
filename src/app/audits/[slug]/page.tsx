@@ -19,6 +19,7 @@ import {
   type AuditContentColumn,
 } from '@/content';
 import { auditPath, ROUTES } from '@/lib/routes';
+import { OfferRoute, isCorpusOffer, offerMetadata, offerSlugs } from '@/app/_corpus/offer';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
   Accordion,
@@ -237,10 +238,16 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
+export function generateStaticParams() {
+  return offerSlugs('/audits').map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<'/audits/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await offerMetadata(`/audits/${slug}`);
+  if (corpus) return corpus;
   const audit = await getAuditPage(slug);
 
   if (!audit) {
@@ -277,6 +284,7 @@ export async function generateMetadata({
 
 export default async function AuditPage({ params }: PageProps<'/audits/[slug]'>) {
   const { slug } = await params;
+  if (isCorpusOffer(`/audits/${slug}`)) return <OfferRoute route={`/audits/${slug}`} />;
   const audit = await getAuditPage(slug);
 
   if (!audit) notFound();

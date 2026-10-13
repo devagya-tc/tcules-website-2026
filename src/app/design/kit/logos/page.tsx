@@ -14,6 +14,7 @@ import { CtaRow, ListCard, LogoGrid, logoGridColumns } from '@/patterns';
 import { Specimen, specimenStyles as s } from '../../_specimen/Specimen';
 import {
   CLIENTS,
+  EDEN_AI,
   DOODLE,
   GT_TOOLS,
   INCLUUDE,
@@ -192,6 +193,19 @@ export default async function KitLogosPage() {
         />
       </Section>
 
+      {/* ── 03b ─────────────────────────────────────────────────────────────────────────── */}
+      <Label title="03b · Ten cells · the closing pair">
+        {`The nine with Eden AI's PNG, ten (home round 3). Where four across leaves two, each spans two tracks, so the last row is a closing pair and the grid stays a whole rectangle. ${shape(10)}.`}
+      </Label>
+      <Section aria-labelledby="logos-ten">
+        <LogoGrid
+          marks={[EDEN_AI, ...CLIENTS]}
+          context="Some of the teams we've worked with"
+          headingId="logos-ten"
+          align="center"
+        />
+      </Section>
+
       {/* ── 04 ──────────────────────────────────────────────────────────────────────────── */}
       <Label title="04 · Twelve cells">
         {`Stress count: three marks repeated to reach twelve, still a whole rectangle. ${shape(12)}.`}
@@ -218,7 +232,28 @@ export default async function KitLogosPage() {
       </Section>
 
       {/* ── 06 ──────────────────────────────────────────────────────────────────────────── */}
-      <Label title="06 · The other surfaces">
+      <Label title="06 · Typeset wordmarks, when a mark is missing">
+        {`A client with no approved SVG is still in the set, its name typeset as a wordmark (the asset policy: never invent a logo). Home round 1 (10 Oct 2026): a set may mix them — the drawn marks keep their art and each missing one takes the wordmark role in the marks' own ink — so one missing file no longer hides every real mark as a list of names. Led by the rating, as the home band is. Six: ${shape(6)}.`}
+      </Label>
+      <Section aria-labelledby="logos-names">
+        <LogoGrid
+          badge={badge}
+          marks={[
+            DOODLE,
+            { name: 'Dealpath' },
+            { name: 'Benchmark Gensuite' },
+            { name: 'Eden AI' },
+            { name: 'JoVE' },
+            { name: 'Ringier Media Switzerland' },
+          ]}
+          context="Some of the teams we’ve worked with"
+          headingId="logos-names"
+          align="center"
+        />
+      </Section>
+
+      {/* ── 07 ──────────────────────────────────────────────────────────────────────────── */}
+      <Label title="07 · The other surfaces">
         Token proof, not placements: the rule and context inks on tint, ink and blue. Blue and
         ink are never this band&rsquo;s ground on a page.
       </Label>

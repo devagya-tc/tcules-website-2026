@@ -35,7 +35,6 @@
      on the track's width), 2:3. The floors are the general --csec-photo-ratio{,-beside}. Past the
      ceiling the stretch stops and the photo keeps the eyebrow's line with air beneath — at 1024,
      where the copy wraps taller, it had run to ~2:5. */
-  --csec-media-ceiling-lg: 1.5;
 
   --csec-eyebrow-text: var(--text-eyebrow);
   --csec-eyebrow-tracking: var(--text-eyebrow-tracking);
@@ -54,13 +53,15 @@
      .leadBeside. Like the lead, no tracking companion. */
   --csec-lead-text-beside: var(--text-body-lg);
 
-  /* The display head: the band's h2 at the display role on the display measure, as PageHero's.
-     Two callers: the media split's head (cmp-media-split), the copy column's one large element
-     beside the photograph unless the caller sets `media.head="title"`; and headingSize="display"
-     (cmp-feature, 6 Oct 2026), for the band that opens an argument. Read by .headingDisplay only. */
-  --csec-heading-text-display: var(--text-display);
-  --csec-heading-tracking-display: var(--text-display-tracking);
-  --csec-heading-measure-display: var(--measure-display);
+  /* headingSize="xl": the band's h2 at the h1 role, on the heading's own title measure. Two callers:
+     the media split's head (cmp-media-split), the copy column's one large element beside the
+     photograph unless the caller sets `media.head="lg"`; and headingSize="xl", for the band whose
+     heading is its one large thing (it opens an argument). It was the DISPLAY role, as PageHero's,
+     until home round 5 (owner, 11 Oct 2026: "display text should only be used for heros. any other
+     section should use h1/h2 depending on the prominence it requires"), so the `display` size is
+     retired and display is the hero's alone. Read by .headingXl only. */
+  --csec-heading-text-xl: var(--text-h1);
+  --csec-heading-tracking-xl: var(--text-h1-tracking);
 
   /* The media split's photograph box — a ratio, inline over block: 4:3 above the copy, 4:5 beside
      it from 1024 (§ 3.7 item 4). The ratio is a floor; a taller copy column stretches the box. */
@@ -74,8 +75,6 @@
   /* The stretched photo's ceiling, as block over inline (a multiplier on the track's width, not a
      ratio): a copy column taller than the photo grows it to at most 3:5 copy-led and 4:5
      photo-led. Past it the copy runs on below the photo instead of the photo becoming a strip. */
-  --csec-photo-stretch-max-beside: 5 / 3;
-  --csec-photo-stretch-max-lead: 5 / 4;
 
   --csec-heading-measure: var(--measure-title);
   --csec-lead-measure: var(--measure-lead);
@@ -84,7 +83,6 @@
   /* asideFill's floor (cmp-feature, 6 Oct 2026): a component size, not a distance. 160 is about
      2.4:1 at the 381 head track and 2:1 at the 326 phone column, where the aside sits at exactly
      this height; below it a head-track photograph reads as a strip. */
-  --csec-aside-min-size: 10rem;
   /* asideFill below 1024. Below lg the band is stacked, so there is no body beside the aside for it
      to fill, and the floor alone made it a 704 × 160 strip at 768 (4.4:1). Round 1 gave it the
      head-aside's own 3:2, and at 768 that was a 704 × 469 photograph that outweighed the six cards
@@ -92,6 +90,8 @@
      silhouette (cmp-services fix round 2). 21:9 keeps it a photograph (302 tall at 768, 140 at 390)
      but makes it the band's banner rather than its subject, so the router still reads as a router. */
   --csec-aside-ratio: var(--ratio-panorama);
+  /* From 1024 the aside stands in the head track beside the body: the copy-led portrait, fixed. */
+  --csec-aside-ratio-beside: var(--csec-photo-ratio-beside);
   /* Below 768 (page-product-design fix round 1): at the 326 phone column the panorama was a 326 ×
      140 strip (2.3:1) that showed a slice of the scene, while B's and K's photos took 4:3 a band
      away. The phone takes 4:3 too; 768 to 1023 keeps the panorama for the reason above. */

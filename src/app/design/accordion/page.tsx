@@ -36,37 +36,37 @@ const SURFACE_ITEMS = CORE_ITEMS.slice(0, 3);
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
-    note: 'Questions rest at neutral-800 and rise to neutral-950; the mark rests quieter at neutral-500. Brandeis appears in one place only, the focus ring.',
+    note: 'The question at full ink (neutral-950), the answer one clear step quieter (neutral-700): the question reads as the question (home round 3). Only the blue chevron moves on hover.',
   },
   {
     surface: 'tint',
-    note: 'The same two ink steps against paper-deep, with the mark one further down the ramp at neutral-600 — neutral-500 on this ground misses the 3:1 non-text floor.',
+    note: 'The same two steps against paper-deep: the question neutral-950, the answer neutral-700.',
   },
   {
     surface: 'ink',
-    note: 'The ladder inverts: neutral-300 rests and white is the raised step, so the open question is the brightest thing in the set.',
+    note: 'The ladder inverts: the question white, the answer neutral-400.',
   },
   {
     surface: 'blue',
-    note: 'Both steps come out of the Brandeis tints rather than a second colour family, and the raised step is white.',
+    note: 'The question white, the answer the quiet Brandeis-100 — the ink ladder in Brandeis tints.',
   },
 ] as const;
 
 const NESTED_SURFACE_TOKENS = {
   tint: [
-    ['--acc-question-ink', '--color-neutral-800'],
-    ['--acc-question-ink-hover', '--color-neutral-950'],
-    ['--acc-mark-ink', '--color-neutral-600'],
-    ['--acc-mark-ink-hover', '--color-neutral-950'],
+    ['--acc-question-ink', '--color-neutral-950'],
+    ['--acc-answer-ink', '--color-neutral-700'],
+    ['--acc-mark-ink', '--color-brandeis-500'],
+    ['--acc-mark-ink-hover', '--color-brandeis-700'],
     ['--acc-rule-ink', '--color-neutral-300'],
     ['--acc-ring-color', '--color-brandeis-500'],
     ['--acc-ring-gap-color', '--color-paper-deep'],
   ],
   ink: [
-    ['--acc-question-ink', '--color-neutral-300'],
-    ['--acc-question-ink-hover', '--color-white'],
-    ['--acc-mark-ink', '--color-neutral-500'],
-    ['--acc-mark-ink-hover', '--color-white'],
+    ['--acc-question-ink', '--color-white'],
+    ['--acc-answer-ink', '--color-neutral-400'],
+    ['--acc-mark-ink', '--color-brandeis-300'],
+    ['--acc-mark-ink-hover', '--color-brandeis-100'],
     ['--acc-rule-ink', '--color-neutral-800'],
     ['--acc-ring-color', '--color-brandeis-300'],
     ['--acc-ring-gap-color', '--color-neutral-950'],

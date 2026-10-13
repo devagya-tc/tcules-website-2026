@@ -1,0 +1,225 @@
+/* Gateway — the situation selector (home rounds 6–7, 11 Oct 2026). Layout arranges everything; this
+   module supplies type, inks, the marker, the answer's position, the open/close and the one width
+   switch. No margins, no hand-rolled grid or flex, no surface selector: every colour is a --gwy-*
+   token. */
+
+.root,
+.list,
+.item {
+  min-inline-size: 0;
+}
+
+/* The whole situation is the anchor. `display: block` de-inlines it so the hit area is the row; it
+   arranges nothing (its one child is a Layout). Its block inset is the row's own air, a `block`
+   above and below (round 8, owner: "more spacing and breathing room around each item"; it was a
+   `text`), so the marker has a ground to paint and adjacent rows meet with no dead strip between
+   targets: the pointer is always on some situation. */
+.link {
+  display: block;
+  position: relative;
+  padding-block: var(--gap-block);
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:hover,
+.link:focus-visible {
+  text-decoration: none;
+}
+
+.link:focus {
+  outline: none;
+}
+
+/* Focus rings the row's marker ground rather than the copy (which sits flush with the heading, so
+   a ring on the anchor's own edge would cut the title's first glyph). */
+.link:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: 0 calc(var(--gwy-marker-reach) * -1);
+  border-radius: var(--gwy-marker-radius);
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+  pointer-events: none;
+}
+
+/* Every title at full ink, always (round 7: "not fading the text out"). */
+.title {
+  font: var(--gwy-title-text);
+  letter-spacing: var(--gwy-title-tracking);
+  color: var(--gwy-title-ink);
+}
+
+/* The arrow rides the title's last line, after its last word, and slides in on the current
+   situation. A glyph's side bearing, not a layout distance (gap rule 1): --gwy-arrow-inset is
+   optical. */
+.arrow {
+  display: inline-block;
+  padding-inline-start: var(--gwy-arrow-inset);
+  vertical-align: middle;
+  color: var(--gwy-arrow-ink);
+  opacity: 0;
+  transform: translateX(calc(var(--gwy-arrow-inset) * -1));
+  transition:
+    opacity var(--gwy-quick-duration) var(--gwy-easing),
+    transform var(--gwy-glide-duration) var(--gwy-easing);
+}
+
+.item[data-lit] .arrow {
+  opacity: 1;
+  transform: none;
+}
+
+/* The situation's own sentence and service, under its title. `detailBody` carries the `text` step
+   from the title as its own inset, so the step closes with the detail when a row is shut. */
+.detail,
+.detailInner {
+  display: block;
+}
+
+.detailInner {
+  overflow: hidden;
+}
+
+.detailBody {
+  padding-block-start: var(--gap-text);
+}
+
+.body {
+  display: block;
+  font: var(--gwy-body-text);
+  color: var(--gwy-body-ink);
+}
+
+/* ── select ─────────────────────────────────────────────────────────────────────────
+   The marker: a raised ground behind the current row that GLIDES between rows. It reaches past the
+   copy on both sides by --gwy-marker-reach (paint only: the copy stays flush with the heading). Its
+   place and height are measured by the pattern and handed in as custom properties; the transition
+   is what makes running down the list read as passing through each option. */
+.track {
+  position: relative;
+  isolation: isolate;
+}
+
+.marker {
+  display: none;
+}
+
+.answerTrack {
+  display: none;
+  min-inline-size: 0;
+}
+
+/* The answer holds one place, level with the first title (the row's top inset carried as its own),
+   at every selection; only its content re-enters, with a short fade and rise. */
+.answer {
+  padding-block-start: var(--gap-block);
+}
+
+.answerBody {
+  animation: gwy-enter var(--gwy-glide-duration) var(--gwy-easing);
+}
+
+/* The answer's drawing, above its sentence (the body's `block` seam): its own plate and ratio. */
+.answerVisual {
+  min-inline-size: 0;
+}
+
+.answerText {
+  font: var(--gwy-answer-text);
+  color: var(--gwy-answer-ink);
+  text-wrap: pretty;
+}
+
+@keyframes gwy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--gwy-enter-rise));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── expand ─────────────────────────────────────────────────────────────────────────
+   Ruled rows (one edge each, never four): a hairline opens the set and closes every row. */
+.expand {
+  border-block-start: var(--gwy-rule-width) solid var(--gwy-rule-ink);
+  interpolate-size: allow-keywords;
+}
+
+.expand .item {
+  border-block-end: var(--gwy-rule-width) solid var(--gwy-rule-ink);
+}
+
+.expand .link {
+  padding-block: var(--gap-block);
+}
+
+.expand .link:focus-visible::after {
+  inset: 0;
+  border-radius: var(--gwy-ring-radius);
+}
+
+/* From 1024 the pointer is there to browse with. A width switch of what is SHOWN, not of a
+   distance. */
+@media (min-width: 1024px) {
+  .select .detail {
+    display: none;
+  }
+
+  .select .marker {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    inset-block-start: 0;
+    inset-inline: calc(var(--gwy-marker-reach) * -1);
+    block-size: var(--gwy-marker-h);
+    border-radius: var(--gwy-marker-radius);
+    background-color: var(--gwy-marker-ground);
+    opacity: 0;
+    transform: translateY(var(--gwy-marker-y));
+    transition:
+      transform var(--gwy-glide-duration) var(--gwy-easing),
+      block-size var(--gwy-glide-duration) var(--gwy-easing),
+      opacity var(--gwy-quick-duration) var(--gwy-easing);
+  }
+
+  .select .marker[data-ready] {
+    opacity: 1;
+  }
+
+  .select .answerTrack {
+    display: block;
+  }
+
+  /* expand: every row but the current one is shut; the current one opens in place. */
+  .expand .detailInner {
+    block-size: 0;
+    transition: block-size var(--gwy-glide-duration) var(--gwy-easing);
+  }
+
+  .expand .item[data-lit] .detailInner {
+    block-size: auto;
+  }
+}
+
+/* Below 1024 every situation is read in full, sentence and service shown, so no situation is
+   "current" and no arrow marks one. */
+@media (max-width: 1023px) {
+  .arrow {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .select .marker,
+  .expand .detailInner {
+    transition: none;
+  }
+
+  .answerBody {
+    animation: none;
+  }
+}

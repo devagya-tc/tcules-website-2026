@@ -20,6 +20,8 @@ export {
   getIdealServiceStory,
   idealServiceSlugs,
   getCaseStudyPage,
+  getCaseStory,
+  getIdealAboutPage,
   getContactPage,
   createClientContact,
   getEventPage,
@@ -36,7 +38,13 @@ export {
   getServicesMasterPage,
   getTermsOfUsePage,
   getToolPage,
+  getCorpusPage,
+  listCorpusPages,
+  getTestimonialRatings,
+  getTestimonialAvatars,
+  getBorrowedQuotes,
 } from './source';
+export { getCaseRefs, getCorpusBindings } from './corpus-refs';
 export type {
   Page,
   PageBlock,
@@ -136,6 +144,11 @@ export type {
   MatterDesignSystemImage,
   MatterDesignSystemContentSource,
   CaseStudyPage,
+  CaseStory,
+  IdealAboutPage,
+  CaseStoryChapter,
+  CaseStoryFigure,
+  CaseStoryPart,
   CaseStudyListingPage,
   CaseStudyListingItem,
   CaseStudyListingImage,
@@ -189,3 +202,18 @@ export type {
   ToolContentColumn,
   ToolContentSource,
 } from './types';
+export type {
+  CorpusPage,
+  CorpusSeo,
+  CorpusBreadcrumb,
+  CorpusConversion,
+  CorpusMediaBinding,
+  CorpusComposition,
+  CorpusHero,
+  CorpusLink,
+  CorpusFormField,
+  CorpusBlock,
+  CorpusBand,
+  CorpusCaseRef,
+  CorpusContentSource,
+} from './corpus-types';

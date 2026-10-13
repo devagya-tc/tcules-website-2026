@@ -1,0 +1,235 @@
+/* TracePlates — the plates, their drawings, the trace and its connectors.
+
+   Layout owns every seam. Every value is a --trp-* token in tokens/components/trace-plates.css.
+   Strokes are non-scaling, so a line keeps one weight at every plate width. */
+
+.stage {
+  min-inline-size: 0;
+}
+
+/* The plate: the drawing's ground, 16:9 (the drawing's own viewBox), the photograph radius. It is
+   the positioning context for the connector into the next plate. */
+.plate {
+  position: relative;
+  background-color: var(--trp-plate-ground);
+  border-radius: var(--trp-plate-radius);
+}
+
+/* ── The trace ──────────────────────────────────────────────────────────────────
+   Drawn here, not in the drawing, so every segment — in from a plate's edge to the screen, out of
+   the screen to the edge, and across the seam to the next plate — carries one dash at one size at
+   every width (a dash drawn in the SVG scaled with the plate and never matched the seam's). Each
+   segment is a strip of the trace's width painted with a repeating dash.
+
+   Where the screen sits in the plate, as shares of the plate (the drawing's 240 × 135 window from
+   (40, 22.5)): frame x 80–240 → 16.667%–83.333%; frame y 34–146 → 8.519%–91.481%; the action's
+   centre (128, 116) → 36.667% across, 69.259% down. The tokens hold them. */
+.plate::before,
+.plate::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+/* across: in at the start edge, out at the end edge, both on the action's centre line. */
+.across .plate::before,
+.across .plate::after {
+  inset-block-start: calc(var(--trp-trace-y) - var(--trp-trace-width) / 2);
+  block-size: var(--trp-trace-width);
+  background-image: linear-gradient(to right, var(--trp-accent) 0 var(--trp-dash-on), transparent 0);
+  background-size: var(--trp-dash-period) 100%;
+}
+
+.across .plate::before {
+  inset-inline-start: 0;
+  inline-size: var(--trp-frame-start);
+}
+
+.across .plate::after {
+  inset-inline-start: var(--trp-frame-end);
+  inline-size: calc(100% - var(--trp-frame-end));
+}
+
+/* down: in at the top edge, out at the bottom, both on the action's centre column. */
+.down .plate::before,
+.down .plate::after {
+  inset-inline-start: calc(var(--trp-trace-x) - var(--trp-trace-width) / 2);
+  inline-size: var(--trp-trace-width);
+  background-image: linear-gradient(to bottom, var(--trp-accent) 0 var(--trp-dash-on), transparent 0);
+  background-size: 100% var(--trp-dash-period);
+}
+
+.down .plate::before {
+  inset-block-start: 0;
+  block-size: var(--trp-frame-top);
+}
+
+.down .plate::after {
+  inset-block-start: var(--trp-frame-bottom);
+  block-size: calc(100% - var(--trp-frame-bottom));
+}
+
+/* The first plate's trace starts on an open node, the last one's lands on a filled one, each a
+   node's reach in from the edge; those plates' outer segments start and stop at the node. */
+.node {
+  position: absolute;
+  z-index: 1;
+  inline-size: var(--trp-node-size);
+  block-size: var(--trp-node-size);
+  border: var(--trp-trace-width) solid var(--trp-accent);
+  border-radius: var(--radius-full);
+  background-color: var(--trp-plate-ground);
+}
+
+.node[data-end='last'] {
+  background-color: var(--trp-accent);
+}
+
+.across .node {
+  inset-block-start: calc(var(--trp-trace-y) - var(--trp-node-size) / 2);
+}
+
+.across .node[data-end='first'] {
+  inset-inline-start: var(--trp-node-reach);
+}
+
+.across .node[data-end='last'] {
+  inset-inline-end: var(--trp-node-reach);
+}
+
+.across .stage:first-child .plate::before {
+  inset-inline-start: var(--trp-node-reach);
+  inline-size: calc(var(--trp-frame-start) - var(--trp-node-reach));
+}
+
+.across .stage:last-child .plate::after {
+  inline-size: calc(100% - var(--trp-frame-end) - var(--trp-node-reach));
+}
+
+.down .node {
+  inset-inline-start: calc(var(--trp-trace-x) - var(--trp-node-size) / 2);
+}
+
+/* Down, the screen nearly fills the plate's height, so the end nodes sit ON the plate's top and
+   bottom edges (centred on them) rather than squeezed between the edge and the frame. */
+.down .node[data-end='first'] {
+  inset-block-start: calc(var(--trp-node-size) / -2);
+}
+
+.down .node[data-end='last'] {
+  inset-block-end: calc(var(--trp-node-size) / -2);
+}
+
+/* Across the seam to the next plate: from 1024 (one row) the out segment runs on over the gutter;
+   down, from 768 (plate beside its words, plates one under another) it runs on over the row seam. */
+@media (min-width: 1024px) {
+  .across .stage:not(:last-child) .plate::after {
+    inline-size: calc(100% - var(--trp-frame-end) + var(--gap-gutter));
+  }
+}
+
+@media (min-width: 768px) {
+  .down .stage:not(:last-child) .plate::after {
+    block-size: calc(100% - var(--trp-frame-bottom) + var(--gap-block));
+  }
+}
+
+.drawing {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.field {
+  fill: var(--trp-field-ink);
+}
+
+.frame {
+  fill: var(--trp-frame-fill);
+  stroke: var(--trp-frame-ink);
+  stroke-width: var(--trp-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.rule {
+  fill: none;
+  stroke: var(--trp-frame-ink);
+  stroke-width: var(--trp-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.dot {
+  fill: var(--trp-copy-ink);
+}
+
+.copy {
+  fill: none;
+  stroke: var(--trp-copy-ink);
+  stroke-width: var(--trp-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.action {
+  fill: var(--trp-accent);
+}
+
+.actionOpen {
+  fill: var(--trp-frame-fill);
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-mark-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.token {
+  fill: none;
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.mark,
+.tick {
+  fill: none;
+  stroke: var(--trp-accent);
+  stroke-width: var(--trp-mark-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.tick {
+  stroke-width: var(--trp-trace-width);
+}
+
+/* A state nobody specified: dashed, in the frame's neutral, empty. */
+.gap {
+  fill: none;
+  stroke: var(--trp-gap-ink);
+  stroke-width: var(--trp-mark-width);
+  stroke-dasharray: var(--trp-dash);
+  vector-effect: non-scaling-stroke;
+}
+
+.title {
+  font: var(--trp-title-text);
+  letter-spacing: var(--trp-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--trp-title-ink);
+}
+
+.down .title {
+  font: var(--trp-title-text-down);
+  letter-spacing: var(--trp-title-tracking-down);
+}
+
+.down .body {
+  font: var(--trp-body-text-down);
+}
+
+.body {
+  font: var(--trp-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--trp-body-ink);
+}

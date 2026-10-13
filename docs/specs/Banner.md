@@ -1,5 +1,7 @@
 # Banner
 
+> **Amended, home round 3 (11 Oct 2026).** A RUN of beside banners can make one band: `bandHead` (the band's display h2 over the first banner's split), `headingAs="h3"` for each banner's claim, `support` (a quiet testimonial under the lead) and `footer` (the run's closing action under the last). The owner overrides "never two beside banners in sight" for a run. See docs/page-mapping.md § 19.
+
 | | |
 |---|---|
 | Status | **implemented** (cmp-banner, 6 Oct 2026) |

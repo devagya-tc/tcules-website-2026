@@ -1,0 +1,74 @@
+/* CaseSpread — type, ink, the claim's mark, the story rules and the evidence frame.
+
+   Section paints the band; Layout owns every seam. Every value is a --csp-* token in
+   tokens/components/case-spread.css. Paddings are the inside of an element's own edge (the claim's
+   rule, a story item's ruled top), always a gap-scale step. No margins. */
+
+.heading {
+  font: var(--csp-heading-text);
+  letter-spacing: var(--csp-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-heading-ink);
+  max-inline-size: var(--csp-heading-measure);
+}
+
+/* The story's rail: each step hangs a gutter inside a hairline down its start edge, and the steps
+   meet with no gap so the rail is one line; a step's air is its own end inset (a `block`). The
+   result's segment is the blue rule, heavier: the line arrives at the payoff. */
+.step,
+.result {
+  padding-inline-start: var(--gap-gutter);
+  padding-block-end: var(--gap-block);
+  border-inline-start: var(--csp-rule-width) solid var(--csp-rule-ink);
+}
+
+.result {
+  padding-block-end: 0;
+  border-inline-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
+}
+
+.claimTitle {
+  font: var(--csp-claim-title-text);
+  letter-spacing: var(--csp-claim-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-claim-title-ink);
+}
+
+.claimBody {
+  font: var(--csp-claim-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--csp-claim-body-ink);
+  max-inline-size: var(--csp-claim-body-measure);
+}
+
+.storyTitle {
+  font: var(--csp-story-title-text);
+  letter-spacing: var(--csp-story-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--csp-story-title-ink);
+}
+
+.storyBody {
+  font: var(--csp-story-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--csp-story-body-ink);
+  max-inline-size: var(--csp-story-body-measure);
+}
+
+/* From 1024 the evidence holds in view beside the story while it is read. */
+@media (min-width: 1024px) {
+  .evidence {
+    position: sticky;
+    inset-block-start: var(--csp-media-sticky-top);
+  }
+}
+
+/* The evidence: one 16:9 frame, ruled and rounded as a card cover is; Media fills it. */
+.frame {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: var(--csp-media-ratio);
+  overflow: hidden;
+  border: var(--csp-media-rule-width) solid var(--csp-media-rule-ink);
+  border-radius: var(--csp-media-radius);
+}

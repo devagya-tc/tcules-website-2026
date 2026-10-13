@@ -15,6 +15,8 @@ export type Step = {
    * a wall (§ 3.6).
    */
   body?: string;
+  /** The body as trusted inline HTML, one entry per paragraph (ListCard `bodyHtml`). Exclusive with `body`. */
+  bodyHtml?: readonly string[];
 };
 
 export type StepsProps = {
@@ -69,6 +71,7 @@ export function Steps({ steps, titleAs = 'h3' }: StepsProps) {
           titleAs={titleAs}
           title={step.title}
           body={step.body}
+          bodyHtml={step.bodyHtml}
           marker={{ type: 'number', value: index + 1 }}
         />
       ))}

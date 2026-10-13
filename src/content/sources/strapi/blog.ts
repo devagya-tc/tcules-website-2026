@@ -137,6 +137,26 @@ function iframePublishedContent(block: StrapiBlogBlock): string {
   return [value(block.title), value(block.description)].filter(Boolean).join(' — ');
 }
 
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+/**
+ * The body's date-and-reading-time line ("2 May ‘25 ⸱ 11 Min Read", or "8 Min Read" alone) split into
+ * the authored date as ISO and the reading time ("11 min"). The CMS carries both in one title-only
+ * iframe block; the page presents them as two byline pairs.
+ */
+function publishedLine(line: string): { date?: string; readingTime?: string } {
+  const minutes = /(\d+)\s*min\s*read/iu.exec(line)?.[1];
+  const day = /(\d{1,2})\s+([a-z]{3})[a-z]*\s+[‘’']?(\d{2}|\d{4})\b/iu.exec(line);
+  const month = day ? MONTHS.indexOf(day[2]!.toLowerCase()) : -1;
+  const year = day ? (day[3]!.length === 2 ? `20${day[3]}` : day[3]) : undefined;
+  return {
+    ...(day && month >= 0
+      ? { date: `${year}-${String(month + 1).padStart(2, '0')}-${day[1]!.padStart(2, '0')}` }
+      : {}),
+    ...(minutes ? { readingTime: `${minutes} min` } : {}),
+  };
+}
+
 function blockId(block: StrapiBlogBlock, index: number): string {
   return `${value(block.__typename) || 'blog-block'}-${value(block.id) || index}`;
 }
@@ -453,6 +473,7 @@ function mapBlog(
     publishedContentBlockIndex >= 0
       ? iframePublishedContent(sections[publishedContentBlockIndex] ?? {})
       : '';
+  const published = publishedLine(publishedContent);
   const heroVideoBlockIndex = sections.findIndex(
     (block) =>
       block.__typename === 'ComponentBlogAndCasestudiesVideo' &&
@@ -499,7 +520,8 @@ function mapBlog(
     description: value(rawBlog.seo?.metaDescription) || contentSummary(rawBlog),
     ...(value(rawBlog.createdAt) ? { createdAt: value(rawBlog.createdAt) } : {}),
     ...(value(rawBlog.publishedAt) ? { publishedAt: value(rawBlog.publishedAt) } : {}),
-    ...(publishedContent ? { publishedContent } : {}),
+    ...(published.date ? { publishedContent: published.date } : {}),
+    ...(published.readingTime ? { readingTime: published.readingTime } : {}),
     ...(value(rawBlog.updatedAt) ? { updatedAt: value(rawBlog.updatedAt) } : {}),
     ...(heroVideoId ? { heroVideo: { id: heroVideoId, title: `${title} video` } } : {}),
     ...(featureImage ? { featureImage } : {}),

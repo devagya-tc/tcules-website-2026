@@ -224,6 +224,25 @@
   font: var(--hero-value-text);
 }
 
+/* The strip: a hairline above, the lede's air below it. Padding, not a margin — the rule is the
+   strip's own edge, and the stack around it still owns the seam. */
+.byline {
+  border-block-start: var(--hero-byline-rule-width) solid var(--hero-byline-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+/* A credited name leads the strip; who they are sits under it, a size down. */
+.name {
+  color: var(--hero-name-ink);
+  font-weight: var(--hero-name-weight);
+}
+
+.detail {
+  display: block;
+  color: var(--hero-detail-ink);
+  font: var(--hero-detail-text);
+}
+
 /* ── The media · one slot, two renderings ──────────────────────────────────────
    Below the copy in `stacked`, beside it from 1024 in `beside` and `wide` — and no arrangement is
    set here. Each split is a Layout in the TSX (`columns`, `colGap="section"`): what changes at a

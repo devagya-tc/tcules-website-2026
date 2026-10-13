@@ -39,7 +39,7 @@ export const metadata: Metadata = {
  *   - copy that needs the width (four tiles, a ruled list) takes the 667 and the photo 4:5 in 477;
  *     copy that is short (a head and a CtaRow, an accordion, two tiles and a CtaRow) gives the photo
  *     the 667 at 6:5 (`media.weight="photo"`), so the photograph sets the band's weight;
- *   - the head is display scale unless the band sets `media.head="title"` — an explicit choice, and
+ *   - the head is h1 scale unless the band sets `media.head="lg"` — an explicit choice, and
  *     fold:check fails a head that runs long;
  *   - a copy column with room for it ends in the counterweight (`media.counterweight`), a defined
  *     field of the pixel grid on the photo's bottom edge; a full copy column carries none;
@@ -250,7 +250,7 @@ const V = {
     id: 'photo-start-four-tiles',
     short: 'Studio · 4 tiles',
     name: 'Photo left, four tiles',
-    note: 'The copy-led band, as product design sets it: our own studio board at 4:5 in 477 beside a display head and a 2 × 2 of tiles in 667. The copy fills the photograph’s height, so it is centred on it and needs no counterweight — the tiles are the mass. On a phone each tile becomes an icon-and-title row.',
+    note: 'The copy-led band, as product design sets it: our own studio board at 4:5 in 477 beside a h1 head and a 2 × 2 of tiles in 667. The copy fills the photograph’s height, so it is centred on it and needs no counterweight — the tiles are the mass. On a phone each tile becomes an icon-and-title row.',
     facts: ['weight · copy', 'studio-sticky-board-ux', 'no texture'],
   },
   stock: {
@@ -278,8 +278,8 @@ const V = {
     id: 'lead-ctarow',
     short: 'Lead · CtaRow',
     name: 'Photo leads, the head and a CtaRow, the counterweight at the end',
-    note: 'The shortest copy and the largest photograph. The display head, its lead and one link sit on the photo’s top edge; the counterweight, a defined field of the pixel grid, sits on its bottom edge in the copy column, as QuantumLab’s strip sits under its text. The ask is a blue link, never a solid: the field is the band’s blue mass.',
-    facts: ['weight · photo', 'counterweight · end', 'display head'],
+    note: 'The shortest copy and the largest photograph. The h1 head, its lead and one link sit on the photo’s top edge; the counterweight, a defined field of the pixel grid, sits on its bottom edge in the copy column, as QuantumLab’s strip sits under its text. The ask is a blue link, never a solid: the field is the band’s blue mass.',
+    facts: ['weight · photo', 'counterweight · end', 'h1 head'],
   },
   list: {
     id: 'ruled-list',
@@ -292,7 +292,7 @@ const V = {
     id: 'accordion',
     short: 'Accordion',
     name: 'Photo leads, an accordion with the first row open',
-    note: 'After Executra: the photograph at 6:5 in 667, the copy column an Accordion with its first answer open so the band never lands closed. The head keeps the h2 role (head="title") so four questions fit the photo’s height.',
+    note: 'After Executra: the photograph at 6:5 in 667, the copy column an Accordion with its first answer open so the band never lands closed. The head keeps the h2 role (head="lg") so four questions fit the photo’s height.',
     facts: ['weight · photo', 'head · title', 'Accordion'],
   },
   mirror: {
@@ -356,7 +356,7 @@ export default function MediaSplitKitSpecimen() {
         <Layout columns={{ lg: [1, 1] }} colGap="section" rowGap="stack" align="end">
           <Layout rowGap="block">
             <p className={t.eyebrow}>UI kit · Band B</p>
-            <h1 className={t.display}>The photograph and the argument</h1>
+            <h1>The photograph and the argument</h1>
             <p className={t.lead}>
               One ContentSection, one photograph and a short body: tiles, a ruled list, an
               accordion or a single ask. Long copy takes the wide column; short copy hands it to
@@ -424,7 +424,7 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.ask}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('workshop-whiteboard-lounge'), weight: 'photo', head: 'title' }}
+          media={{ image: photo('workshop-whiteboard-lounge'), weight: 'photo', head: 'lg' }}
           eyebrow="Discovery"
           heading="Two weeks, one plan"
           headingId="b-ask"
@@ -469,7 +469,7 @@ export default function MediaSplitKitSpecimen() {
       <Variant variation={V.faq}>
         <ContentSection
           arrangement="media"
-          media={{ image: photo('pair-laptop-notebook'), weight: 'photo', head: 'title' }}
+          media={{ image: photo('pair-laptop-notebook'), weight: 'photo', head: 'lg' }}
           eyebrow="Working together"
           heading="Before we start"
           headingId="b-faq"

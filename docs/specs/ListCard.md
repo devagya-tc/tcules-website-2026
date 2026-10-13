@@ -1,5 +1,7 @@
 # ListCard
 
+> **Amended, home round 3 (11 Oct 2026).** The thumbnail is 16:9 (`--lcrd-thumbnail-ratio` → `--ratio-standard`), the site's one card ratio. See docs/page-mapping.md § 19.
+
 ## 0 · Front matter
 
 |                     |                                                                                                                        |

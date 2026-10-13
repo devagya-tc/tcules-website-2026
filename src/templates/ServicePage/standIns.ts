@@ -28,7 +28,7 @@ import type { ServiceStory, StoryBlock, StoryCase, StoryCover } from '@/lib/serv
    cover always wins: the listing's cover reaches a case before this runs, so a stand-in fills only
    what the CMS does not have. */
 
-/* The card image's ratio is CARD_RATIO from src/lib/photos.ts — BlockCard's real crop box, 3/2 — the
+/* The card image's ratio is CARD_RATIO from src/lib/photos.ts — BlockCard's real crop box, 16/9 — the
    same answer PHOTO_PLACEMENTS' card placements measure against, so there is one in the codebase. */
 
 /**

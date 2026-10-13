@@ -1,30 +1,42 @@
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { Cluster, Layout, Section } from '@/components';
+import {
+  getBorrowedQuotes,
+  getCorpusPage,
+  getTestimonialAvatars,
+  getTestimonialRatings,
+} from '@/content';
+import { corpusMetadata } from '@/lib/corpus-metadata';
+import { ROUTES } from '@/lib/routes';
+import { HomePage } from '@/templates';
 
 /**
- * A placeholder home page that doubles as the first real use of the primitives: a Section
- * band, a Layout stack inside it, and a Cluster of links. Replaced by the actual home page
- * when page work starts.
+ * `/` — read from the `_pages/` corpus and composed by the home template. Composition only: the
+ * route reads the page and passes it down; every arrangement decision is the template's.
  */
-export default function HomePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getCorpusPage(ROUTES.home);
+  return page ? corpusMetadata(page) : { title: 'Tcules' };
+}
+
+export default async function Home() {
+  const page = await getCorpusPage(ROUTES.home);
+  if (!page) notFound();
+  /* A band item whose source authors no quote takes a real one from another corpus page
+     (PLACEHOLDER, home round 3); its testimonial id joins the page's for ratings and avatars. */
+  const borrowedQuotes = await getBorrowedQuotes(page.route);
+  const ids = [
+    ...page.composition.testimonialIds,
+    ...borrowedQuotes.flatMap((entry) =>
+      entry.quote.testimonialId ? [entry.quote.testimonialId] : [],
+    ),
+  ];
+  const [ratings, avatars] = await Promise.all([
+    getTestimonialRatings(ids),
+    getTestimonialAvatars(ids),
+  ]);
   return (
-    <Section>
-      <Layout rowGap="stack">
-        <Layout rowGap="block">
-          <h1>Tcules</h1>
-          <p>
-            Scaffolding. Three layout primitives, no tokens yet — the proving ground is where
-            they are exercised.
-          </p>
-        </Layout>
-        <Cluster colGap="text" rowGap="tight">
-          <Link href="/design">Proving ground</Link>
-          <Link href="/design/section">Section</Link>
-          <Link href="/design/layout">Layout</Link>
-          <Link href="/design/cluster">Cluster</Link>
-        </Cluster>
-      </Layout>
-    </Section>
+    <HomePage page={page} ratings={ratings} avatars={avatars} borrowedQuotes={borrowedQuotes} />
   );
 }

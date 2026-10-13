@@ -1,0 +1,46 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import { getCaseRefs, getCorpusPage } from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
+import { corpusMetadata } from '@/lib/corpus-metadata';
+import { LongformPage, type LongformFamily } from '@/templates';
+
+/**
+ * The corpus-backed article (`/insights/*`) and glossary (`/glossary/*`) routes. Only the pages whose
+ * band shapes the page-mapping has verified switch to the corpus; the rest keep their current source
+ * until their own batch maps them (page-mapping § 1.2). Adding a page to the list is the whole act of
+ * switching it, and its image slots must have register rows first (src/lib/placeholders.ts).
+ */
+export const PASS_1_LONGFORM_ROUTES: ReadonlySet<string> = new Set([
+  '/insights/cpq-ux-design',
+  '/glossary/design-system',
+]);
+
+export const isCorpusLongform = (route: string): boolean => PASS_1_LONGFORM_ROUTES.has(route);
+
+const FAMILIES: Readonly<Record<string, LongformFamily>> = {
+  '/insights': 'article',
+  '/glossary': 'term',
+};
+
+/** The route's `generateStaticParams` entries for one family: the path segments after the family. */
+export function longformSlugs(family: '/insights' | '/glossary'): string[] {
+  return [...PASS_1_LONGFORM_ROUTES]
+    .filter((route) => route.startsWith(`${family}/`))
+    .map((route) => route.slice(family.length + 1));
+}
+
+export async function longformMetadata(route: string): Promise<Metadata | null> {
+  if (!isCorpusLongform(route)) return null;
+  const page = await getCorpusPage(route);
+  return page ? corpusMetadata(page) : null;
+}
+
+export async function LongformRoute({ route }: { route: string }) {
+  const page = await getCorpusPage(route);
+  const family = FAMILIES[`/${route.split('/')[1]}`];
+  if (!page || !family) notFound();
+  const caseRefs = await getCaseRefs(caseRoutesIn(page));
+  return <LongformPage page={page} family={family} caseRefs={caseRefs} />;
+}

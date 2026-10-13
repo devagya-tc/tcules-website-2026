@@ -14,6 +14,43 @@ export type {
   CaseStudyIndexClosing,
   CaseStudyIndexItem,
   CaseStudyIndexProps,
+  CaseStudyIndexSection,
 } from './CaseStudyIndex';
+export { CaseStory } from './CaseStory';
+export type {
+  CaseStoryChapterProps,
+  CaseStoryFigureProps,
+  CaseStoryPartProps,
+  CaseStoryProps,
+} from './CaseStory';
+export { StudioPage } from './StudioPage';
+export type { StudioPageContent, StudioPageProps } from './StudioPage';
 export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
+export {
+  AboutPage,
+  HomePage,
+  LongformPage,
+  OfferPage,
+  ToolPage,
+  corpusEnquiryForm,
+  coverFor,
+  gatewayItems,
+  kindOf,
+  planOffer,
+  proofQuote,
+  slugOf,
+  testimonialItem,
+} from './CorpusPage';
+export type {
+  AboutPageProps,
+  HomePageProps,
+  LongformFamily,
+  LongformPageProps,
+  OfferPageProps,
+  ToolPageProps,
+  OfferKind,
+  OfferPart,
+  OfferUnit,
+  RatingsById,
+} from './CorpusPage';

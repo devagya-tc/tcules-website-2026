@@ -209,9 +209,9 @@ export type {
   BlockCardSize,
   BlockCardTitleElement,
   BlockCardTracks,
-  BlockCardRatio,
   BlockCardCue,
   BlockCardFrame,
+  BlockCardLinkScope,
   BlockCardTextureRecipe,
   BlockCardSetProps,
   BlockCardSetItem,
@@ -245,11 +245,7 @@ export type {
 } from './ContentSection';
 
 export { CtaRow } from './CtaRow';
-export type {
-  CtaRowProps,
-  CtaRowAction,
-  CtaRowAlign,
-} from './CtaRow';
+export type { CtaRowProps, CtaRowAction, CtaRowAlign } from './CtaRow';
 
 export { Slider } from './Slider';
 export type { SliderProps, SliderPerView, SliderAlign } from './Slider';
@@ -277,6 +273,7 @@ export type {
   HeroCredit,
   HeroCreditRole,
   HeroDates,
+  HeroFact,
   HeroAction,
   HeroActions,
   HeroArrangement,
@@ -290,6 +287,7 @@ export type {
   HeroCutItem,
   HeroRating,
   HeroLeadSize,
+  HeroStat,
 } from './PageHero';
 
 export { SiteFooter } from './SiteFooter';
@@ -303,7 +301,7 @@ export type {
   SiteFooterSocial,
 } from './SiteFooter';
 export { Banner } from './Banner';
-export type { BannerProps, BannerForm, BannerMediaSide, BannerLink } from './Banner';
+export type { BannerProps, BannerForm, BannerMediaSide, BannerLink, BannerBandHead } from './Banner';
 export { Statement } from './Statement';
 export type {
   StatementProps,
@@ -343,5 +341,53 @@ export {
   logoGridColumns,
   type LogoGridProps,
   type LogoGridMark,
+  type LogoGridMarkArt,
+  type LogoGridMarkName,
   type LogoGridTrack,
 } from './LogoGrid';
+
+/* Testimonial — the rated testimonial card: stars, the client's words, the speaker; a wall of them;
+   and one beside the case it is about (home round 2, 10 Oct 2026). Every testimonial GROUP uses it. */
+export {
+  TestimonialBeside,
+  TestimonialCard,
+  TestimonialWall,
+  type TestimonialAvatar,
+  type TestimonialBesideArrangement,
+  type TestimonialBesideProps,
+  type TestimonialCardProps,
+  type TestimonialFrame,
+  type TestimonialItem,
+  type TestimonialSize,
+  type TestimonialWallProps,
+} from './Testimonial';
+
+/* Gateway — the situation selector: six reader situations, one lit, its answer beside it (home
+   "What do you need next?", round 6, 11 Oct 2026). */
+export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';
+
+/* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
+/* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
+export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
+
+/* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
+export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
+
+/* CaseSpread — one worked example: the outcome as the claim beside its evidence, the story under. */
+export { CaseSpread, type CaseSpreadPart, type CaseSpreadProps } from './CaseSpread';
+
+/* EngagementOptions — ways to work with us, comparable at a glance through one scope drawing each. */
+export {
+  EngagementOptions,
+  type EngagementArrangement,
+  type EngagementOption,
+  type EngagementOptionsProps,
+  type EngagementScope,
+} from './EngagementOptions';
+
+/* TracePlates — one screen followed from the approved design to what users see, a drawn plate per
+   stage and one trace through them (the design-to-code audit's "What we trace", 11 Oct 2026). */
+export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } from './TracePlates';
+
+/* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
+export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';

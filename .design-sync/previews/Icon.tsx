@@ -53,9 +53,12 @@ const NAMES = [
   'refresh-square',
   'stars',
   'clipboard-check',
+  'cart',
+  'wallet',
+  'heart-pulse',
 ] as const;
 
-/** All thirty-nine glyphs at the default 16. Every one is solid and filled with currentColor. */
+/** Every glyph at the default 16. Every one is solid and filled with currentColor. */
 export function TheSet() {
   return (
     <Cluster colGap="text" rowGap="text">

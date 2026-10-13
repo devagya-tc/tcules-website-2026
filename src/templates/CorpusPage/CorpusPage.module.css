@@ -1,0 +1,100 @@
+/* CorpusPage · the little the kit units do not already carry.
+
+   Every colour is --cpg-*, re-declared per surface in tokens/components/corpus-page.css. Type is
+   consumed as composites. Layout and Cluster own every arrangement and every seam; this module owns
+   ink and type roles only. No margins, no distances. */
+
+/* The hero's quiet proof line (a labelled line: "Selected work: …"). It sits in PageHero's extras
+   row, which carries no ink of its own, so the line states its own. The authored italic stays: the
+   line is an `em` run. */
+/* The long-form reading column. Prose declares no measure: the caller owns it (27 Aug 2026), and the
+   rail was meant to be what narrowed it. Beside the rail the [1, 4] body track is 940 at 1440, which
+   set the case's argument at ~130 characters a line. The text caps itself at the body measure; the
+   blocks between its runs (Steps, the boxed tables, the bound artefacts) keep the whole track, and
+   both share the one inline-start edge — the shell's own stated form (/design/table-of-contents,
+   "the text caps itself, the block does not"). A measure is a type decision, not a distance. */
+.reading {
+  max-inline-size: var(--measure-body);
+}
+
+.proofLine {
+  font: var(--text-body-sm);
+  color: var(--cpg-ink-muted);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* The persona legend: the set's two header words once, above the cards, in the eyebrow voice.
+   Mono is always uppercase and in presentation only, so the case is the stylesheet's. */
+.legend {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cpg-ink-label);
+}
+
+.legendMark {
+  color: var(--cpg-mark);
+}
+
+/* An item's own heading inside a band's copy (a reason, a case in a slide, a case story): an h3
+   element at the h4 role. The band's h2 is the scale's first step, and a heading inside its body that
+   set at the h3 role read as a second band title beside it. A set's heading always outranks its
+   items (7 Oct ruling 3) — these ARE the items. The ink is the ground's, inherited as every
+   heading's is. */
+.itemTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The tool mount (G10): a labelled panel in the place the tool will be. A hairline box on a quiet
+   ground at a reserved height, its two lines at the start edge. Container padding is the gap scale's
+   `gutter`; the arrangement of its two lines is a Layout's. */
+.panel {
+  min-block-size: var(--cpg-panel-height-md);
+  padding: var(--gap-gutter);
+  background: var(--cpg-panel-ground);
+  border: var(--border-width-hairline) solid var(--cpg-panel-rule);
+}
+
+.panelLabel {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--cpg-ink-label);
+}
+
+.panelNote {
+  font: var(--text-body-sm);
+  color: var(--cpg-ink-muted);
+}
+
+/* A case story's title as the link to its case (owner, 11 Oct 2026: every case mention links). The
+   title is the cue, as a title-cued card's is: the heading's own ink at rest, the accent and an
+   underline under the pointer or focus. A browser-blue underlined h4 read as a stray body link. */
+.itemLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.itemLink:hover,
+.itemLink:focus-visible {
+  color: var(--cpg-mark);
+  text-decoration: underline;
+}
+
+/* About's coda (11 Oct 2026): the short declarative lines large, the explaining sentence at the lead
+   step between them. Type composites only; the ink is the band's own. */
+.codaLine {
+  font: var(--text-h3);
+  letter-spacing: var(--text-h3-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.codaBody {
+  font: var(--text-lead);
+  text-wrap: var(--text-running-wrap);
+  color: var(--cpg-ink-label);
+  max-inline-size: var(--measure-lead);
+}
+

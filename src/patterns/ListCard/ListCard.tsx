@@ -131,6 +131,13 @@ export type ListCardProps = ListCardFormProps & {
    * is present but whitespace-only is a CMS fault, so it is omitted with a warning.
    */
   body?: string;
+  /**
+   * The body as trusted inline HTML, one entry per paragraph (page-mapping G3): for an item whose
+   * body carries a link, a bold run or a second paragraph, which `body: string` would flatten.
+   * Built by `inlineToHtml` at the content seam. Exclusive with `body`. On a row or tile with an
+   * `href` the whole item is one anchor, so its HTML may not hold a link.
+   */
+  bodyHtml?: readonly string[];
   /** Optional leading content. Absence removes both the slot and its adjacent seam. */
   marker?: ListCardMarker;
   /** Heading semantics without a visual type change. */
@@ -261,6 +268,7 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
 export function ListCard({
   title,
   body,
+  bodyHtml,
   marker,
   form = 'row',
   arrangement = 'split',
@@ -276,10 +284,28 @@ export function ListCard({
     return null;
   }
 
-  const hasBody = body !== undefined && body.trim().length > 0;
-  if (body !== undefined && !hasBody) {
+  const hasBodyHtml = bodyHtml !== undefined && bodyHtml.some((html) => html.trim().length > 0);
+  if (hasBodyHtml && body !== undefined) {
+    warn(`both body and bodyHtml for ${JSON.stringify(title)}; bodyHtml wins.`);
+  }
+  const hasBody = hasBodyHtml || (body !== undefined && body.trim().length > 0);
+  if (!hasBodyHtml && body !== undefined && !hasBody) {
     warn(`body is blank for ${JSON.stringify(title)}; omitting the paragraph.`);
   }
+  /* The body element, in one place: a paragraph, or — for `bodyHtml` — a div of paragraphs a `text`
+     apart (the card's own paragraph step; no Prose margins), carrying the same role class. */
+  const bodyNode = (className: string | undefined) =>
+    hasBodyHtml ? (
+      <div className={className}>
+        <Layout rowGap="text">
+          {bodyHtml.map((html, index) => (
+            <p key={index} dangerouslySetInnerHTML={{ __html: html }} />
+          ))}
+        </Layout>
+      </div>
+    ) : hasBody ? (
+      <p className={className}>{body}</p>
+    ) : null;
   const isTile = form === 'tile';
   const boxed = isTile && frame === 'box';
   const step: ListCardSize = size ?? (isTile ? 'sm' : 'md');
@@ -352,7 +378,7 @@ export function ListCard({
   const tileCopy = (
     <Layout rowGap="text" className={styles.content}>
       {titleNode(styles.title)}
-      {hasBody ? <p className={styles.body}>{body}</p> : null}
+      {bodyNode(styles.body)}
     </Layout>
   );
   let tileHead: ReactNode = tileCopy;
@@ -395,12 +421,12 @@ export function ListCard({
   const rowCopy = isSplit ? (
     <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
       {titleNode(cx(styles.title, styles.splitTitle))}
-      {hasBody ? <p className={cx(styles.body, styles.splitBody)}>{body}</p> : null}
+      {bodyNode(cx(styles.body, styles.splitBody))}
     </Cluster>
   ) : (
     <Layout rowGap="text" className={styles.content}>
       {titleNode(styles.title)}
-      {hasBody ? <p className={styles.body}>{body}</p> : null}
+      {bodyNode(styles.body)}
     </Layout>
   );
 

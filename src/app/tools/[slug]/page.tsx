@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Layout, Prose, type LayoutProps } from '@/components';
+import { ToolRoute, isCorpusTool, toolMetadata, toolSlugs } from '@/app/_corpus/tool';
 import { getToolPage, type ToolBlock, type ToolContentColumn } from '@/content';
 import { ROUTES, toolPath } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
@@ -194,10 +195,16 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
+export function generateStaticParams() {
+  return toolSlugs().map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<'/tools/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await toolMetadata(`/tools/${slug}`);
+  if (corpus) return corpus;
   const tool = await getToolPage(slug);
 
   if (!tool) {
@@ -234,6 +241,7 @@ export async function generateMetadata({
 
 export default async function ToolPage({ params }: PageProps<'/tools/[slug]'>) {
   const { slug } = await params;
+  if (isCorpusTool(`/tools/${slug}`)) return <ToolRoute route={`/tools/${slug}`} />;
   const tool = await getToolPage(slug);
 
   if (!tool) notFound();

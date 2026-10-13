@@ -4,7 +4,7 @@
    docs/specs/Banner.md.
 
    Naming: --bnr-{part}-{role}
-     parts  eyebrow · heading · lead · strip · strip-label · illustration
+     parts  eyebrow · heading · band-heading · lead · strip · strip-label · illustration
      roles  text (a type composite) · tracking · measure · ink · width · height · zoom · shift
 
    Type, ink and the illustration's phone zoom. Section paints the band (density `tight` for the banner, `strip` for the
@@ -27,6 +27,14 @@
   --bnr-heading-text: var(--text-h2);
   --bnr-heading-tracking: var(--text-h2-tracking);
   --bnr-heading-measure: var(--measure-title);
+  /* A run's band heading (home round 3): the h1 role over the run's h3 claims at h2. It was the
+     display role until home round 5 (owner, 11 Oct 2026: "display text should only be used for
+     heros. any other section should use h1/h2 depending on the prominence it requires"). A run's
+     head opens an argument that four bands carry, so it takes the prominent step, h1, on the title
+     measure every title role below display keeps. */
+  --bnr-band-heading-text: var(--text-h1);
+  --bnr-band-heading-tracking: var(--text-h1-tracking);
+  --bnr-band-heading-measure: var(--measure-title);
   /* --text-lead is a body role and carries no tracking companion. */
   --bnr-lead-text: var(--text-lead);
   --bnr-lead-measure: var(--measure-lead);

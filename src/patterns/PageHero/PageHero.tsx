@@ -9,6 +9,8 @@ import {
   Media,
   RatingBadge,
   Section,
+  Stat,
+  Tag,
   Texture,
   TextureShape,
   type MediaImage,
@@ -50,14 +52,29 @@ export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
  * One group per role rather than one per person is what keeps the label from being repeated
  * three times for a podcast with three guests — the names are joined into a single value.
  */
-export type HeroCredit = { role: HeroCreditRole; people: readonly [string, ...string[]] };
+export type HeroCredit = {
+  role: HeroCreditRole;
+  people: readonly [string, ...string[]];
+  /** Who they are, as authored ("COO, Tcules"), set under the names a size down. */
+  detail?: string;
+};
 
 /**
  * The dates, as ISO strings. `published` is required, so a modified-only date cannot be
  * expressed; `modified` renders only when it is present AND differs from `published`, because
  * two identical dates under two different labels is a fact about the CMS, not about the page.
  */
-export type HeroDates = { published: string; modified?: string };
+export type HeroDates =
+  | { published: string; modified?: string }
+  /* A page that states only when it was last updated ("Last updated on 7 Oct ’26") — the corpus's
+     new articles carry no published date, and inventing one would be a false fact. */
+  | { published?: undefined; modified: string };
+
+/**
+ * One fact about the subject, as a labelled pair in the byline strip ("Company" → "Benchmark
+ * Gensuite"). Set like the dates: a mono key over its value (owner, 11 Oct 2026).
+ */
+export type HeroFact = { id: string; label: string; value: string };
 
 /** One action. `href` comes from `@/lib/routes` at the call site, never written out there. */
 export type HeroAction = { label: string; href: string };
@@ -307,6 +324,10 @@ type PageHeroBaseProps = {
    * ("Services"), by the same comparison `eyebrowBesideTrail` uses (`repeatsTrail`, `@/lib/trail`).
    * Uppercased by the stylesheet, not by the data, so the frontmatter keeps its authored casing.
    *
+   * NOT RENDERED when `trail` is set (owner, 11 Oct 2026): the breadcrumb already says where the
+   * page is, so a hero with a trail has nothing above its title but the trail. The prop stays for
+   * the trail-less hero (home) and for data that carries one; PageHero drops it, not the caller.
+   *
    * A slot, not a variant: absent renders no element and no seam, which is why there is no
    * `variant="caseStudy"` selecting it. It sits 24px above the title rather than 8, because 8
    * under a 12px label reads as a caption stuck to the title and 24 reads as a label above one.
@@ -332,6 +353,19 @@ type PageHeroBaseProps = {
   credits?: readonly HeroCredit[];
   /** The date pairs, after the credits. Absent renders nothing. */
   dates?: HeroDates;
+  /**
+   * Facts about the subject (a case's company, sector and work), before the credits and dates in the
+   * same strip. With any fact the strip is an even grid rather than a wrapping row, because a fact's
+   * value can run to a sentence.
+   */
+  facts?: readonly HeroFact[];
+  /**
+   * The page's taxonomy as chips, directly under the lead copy (owner, 11 Oct 2026: "move the tags
+   * just below the description line"). Distinct from `tags`, the unboxed record after the actions.
+   */
+  labels?: readonly string[];
+  /** How long the page takes to read, as the page states it ("11 min"), after the dates. */
+  readingTime?: string;
   /**
    * The ground this band paints, and therefore the trail's too. Defaults to `paper`.
    *
@@ -375,11 +409,20 @@ type PageHeroBaseProps = {
   arrangement?: HeroArrangement;
   /**
    * Taxonomy marks after the actions: an unboxed mono grid, each after a 6px blue pixel, three
-   * columns from 768 and two below. At most six render (a development warning names the rest), so
+   * columns from 768 and two below (four tags are 2 × 2 at every width). At most six render (a development warning names the rest), so
    * the set is two balanced rows. Inert; a list, so a reader is told how many. Keep the title to 3
    * lines when tags are set.
    */
   tags?: readonly string[];
+  /**
+   * The studio's record as figures, INSIDE the hero (owner, home round 3, 11 Oct 2026: "could the
+   * facts/figures section be integrated into the hero so it doesn't take one entire section?").
+   * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `text`
+   * under the actions: as many tracks as figures, at every width, so three figures never orphan.
+   * Two to four; more belong in a facts band. Records rather than nodes, so the hero owns the size,
+   * the row and the seam. Absent renders no row and no seam.
+   */
+  stats?: readonly HeroStat[];
   /**
    * The Tcules pixel-grid texture, for a paper hero with NO media only: the end-fade, the field
    * Statement's `end-fade` draws (end −120, 30% wide, blur 160, the band's full height), so it runs
@@ -410,6 +453,12 @@ type PageHeroBaseProps = {
    */
   children?: ReactNode;
 };
+
+/** One figure in the hero's record row. Structurally `Stat`'s value, unit and label. */
+export type HeroStat = { value: string; unit?: string; label: string };
+
+/** The record row's limits: two to four figures read as one row in the copy column. */
+const MAX_STATS = 4;
 
 /**
  * Nought, one or two actions. Position decides emphasis: the first renders the blue SOLID with no
@@ -465,6 +514,7 @@ const CREDIT_LABELS: Record<HeroCreditRole, string> = {
    what a person calls it. Both labels live here for the same reason the credit labels do. */
 const PUBLISHED_LABEL = 'Published';
 const MODIFIED_LABEL = 'Updated';
+const READING_LABEL = 'Reading time';
 
 /* One long date, formatted once at module scope rather than per render.
    `timeZone: 'UTC'` is load-bearing rather than tidy: a bare "2026-03-03" parses as UTC
@@ -555,11 +605,15 @@ export function PageHero({
   trail,
   credits = [],
   dates,
+  readingTime,
+  facts = [],
+  labels = [],
   actions = [],
   media,
   arrangement = 'stacked',
   surface = 'paper',
   tags = [],
+  stats = [],
   texture = false,
   announcement,
   children,
@@ -573,31 +627,43 @@ export function PageHero({
   const paragraphs = (body ?? []).filter((paragraph) => paragraph.trim().length > 0);
   const [lead, ...rest] = paragraphs;
 
-  const pairs: BylinePair[] = credits.map((credit, index) => ({
+  const pairs: BylinePair[] = facts.map((fact) => ({
+    id: `fact-${fact.id}`,
+    label: fact.label,
+    value: fact.value,
+  }));
+  pairs.push(...credits.map((credit, index) => ({
     /* The role is not unique — a podcast can carry two guest groups — so the index is part of
        the key. These rows never reorder: they are frontmatter in array order. */
     id: `${credit.role}-${index}`,
     label: CREDIT_LABELS[credit.role],
-    value: joinPeople(credit.people),
-  }));
+    value: (
+      <>
+        <span className={styles.name}>{joinPeople(credit.people)}</span>
+        {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
+      </>
+    ),
+  })));
 
-  if (dates) {
+  if (dates?.published) {
     pairs.push({
       id: 'published',
       label: PUBLISHED_LABEL,
       value: <time dateTime={dates.published}>{formatDate(dates.published)}</time>,
     });
-    /* A modified date equal to the published one is not a second fact. Rendering both would put
-       "Published 3 March 2026" and "Updated 3 March 2026" side by side, which reads as a mistake
-       because it is one — the CMS stamping a modified date on save. */
-    if (dates.modified && dates.modified !== dates.published) {
-      pairs.push({
-        id: 'modified',
-        label: MODIFIED_LABEL,
-        value: <time dateTime={dates.modified}>{formatDate(dates.modified)}</time>,
-      });
-    }
   }
+  /* A modified date equal to the published one is not a second fact. Rendering both would put
+     "Published 3 March 2026" and "Updated 3 March 2026" side by side, which reads as a mistake
+     because it is one — the CMS stamping a modified date on save. */
+  if (dates?.modified && dates.modified !== dates.published) {
+    pairs.push({
+      id: 'modified',
+      label: MODIFIED_LABEL,
+      value: <time dateTime={dates.modified}>{formatDate(dates.modified)}</time>,
+    });
+  }
+
+  if (readingTime) pairs.push({ id: 'reading', label: READING_LABEL, value: readingTime });
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
@@ -668,8 +734,8 @@ export function PageHero({
   if (process.env.NODE_ENV !== 'production' && trail !== undefined) {
     if (eyebrow !== undefined && repeatsTrail(eyebrow, trail.labels, trail.structural)) {
       console.warn(
-        `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. Drop it, or replace it ` +
-          `with a category or format the trail cannot say (for example "Fintech · Platform rebuild").`,
+        `PageHero: eyebrow "${eyebrow}" repeats a crumb in the trail. It is not rendered: a hero ` +
+          `with a breadcrumb carries no eyebrow (owner, 11 Oct 2026).`,
       );
     }
     const last = trail.labels.at(-1);
@@ -706,9 +772,15 @@ export function PageHero({
       />
     </div>
   ) : null;
+  /* A hero with a breadcrumb carries NO text eyebrow (owner, 11 Oct 2026: "lets not put anything
+     in the eyebrow since the breadcrumb already tells the page location"). The trail is the line
+     above the title on every page that has one; the eyebrow survives only on a hero without a trail
+     (home). Enforced here rather than at each caller, so a CMS eyebrow cannot bring it back. A
+     score is not a location, so `rating` keeps the slot either way. */
+  const shownEyebrow = trail === undefined ? eyebrow : undefined;
   const eyebrowNode = rating ? (
     ratingNode
-  ) : eyebrow ? (
+  ) : shownEyebrow ? (
     <Cluster
       as="p"
       colGap="tight"
@@ -717,7 +789,7 @@ export function PageHero({
       nowrap
       className={styles.eyebrow}
     >
-      <span>{eyebrow}</span>
+      <span>{shownEyebrow}</span>
     </Cluster>
   ) : null;
   const titleNode = <h1 className={styles.title}>{title}</h1>;
@@ -740,17 +812,41 @@ export function PageHero({
      A <dl> rather than a Cluster of spans, because each <dt> is then announced immediately before
      its own <dd>. 4px between a key and its value against 24px between one pair and the next is a
      six-fold difference, so each pair reads as one unit — no rule, no dot, no separator. */
+  const pairItems = pairs.map((pair) => (
+    <Layout key={pair.id} rowGap="inline">
+      <dt className={styles.key}>{pair.label}</dt>
+      <dd className={styles.value}>{pair.value}</dd>
+    </Layout>
+  ));
   const bylineNode =
-    pairs.length > 0 ? (
-      <Cluster as="dl" colGap="block" rowGap="block" align="start">
-        {pairs.map((pair) => (
-          <Layout key={pair.id} rowGap="inline">
-            <dt className={styles.key}>{pair.label}</dt>
-            <dd className={styles.value}>{pair.value}</dd>
-          </Layout>
+    pairs.length === 0 ? null : facts.length > 0 ? (
+      <Layout
+        as="dl"
+        columns={{ base: 1, md: 2, lg: Math.min(pairs.length, 4) }}
+        colGap="gutter"
+        rowGap="block"
+        className={styles.byline}
+      >
+        {pairItems}
+      </Layout>
+    ) : (
+      <Cluster as="dl" colGap="stack" rowGap="block" align="start" className={styles.byline}>
+        {pairItems}
+      </Cluster>
+    );
+
+  /* ── labels · the taxonomy chips, a block under the copy, inside the opening ───── */
+  const shownLabels = [...new Set(labels.map((label) => label.trim()).filter(Boolean))];
+  const labelsNode =
+    shownLabels.length === 0 ? null : (
+      <Cluster as="ul" colGap="text" rowGap="tight" justify={centredHead ? 'center' : 'start'}>
+        {shownLabels.map((label) => (
+          <li key={label}>
+            <Tag>{label}</Tag>
+          </li>
         ))}
       </Cluster>
-    ) : null;
+    );
 
   /* ── extras · the caller's block. No class: it carries nothing. The <div> groups whatever is
      passed into ONE row of the stack. */
@@ -814,10 +910,57 @@ export function PageHero({
         {tagItems}
       </Cluster>
     ) : (
-      <Layout as="ul" columns={{ base: 2, md: 3 }} colGap="block" rowGap="text">
+      /* Four tags are 2 × 2 (a record of four facts, home's studio line): in three columns they set
+         3 + 1, an orphan, and in a 572 track a nowrap mono tag of 21 characters fills its whole
+         175 column and touches its neighbour's pixel. Two tracks give each tag 274. Every other
+         count keeps the two balanced rows of three. */
+      <Layout
+        as="ul"
+        columns={shownTags.length === 4 ? 2 : { base: 2, md: 3 }}
+        colGap="block"
+        rowGap="text"
+      >
         {tagItems}
       </Layout>
     );
+
+  /* ── stats · the record as figures, one row under the actions (home round 3) ──────────
+     As many tracks as figures at EVERY width (a 326 phone column holds three ~87 tracks: the md
+     figure steps to 32 there and the label wraps to two lines), so three figures are one row rather
+     than 2 + 1. Each Stat opens on its own hairline with the blue mark, which is what divides the
+     record from the ask above it; the gutter breaks the rule between them. A list, so a reader is
+     told how many. More than four would crowd the copy column: the first four render, and a
+     development warning names the rest. */
+  const shownStats = stats.slice(0, MAX_STATS);
+  if (process.env.NODE_ENV !== 'production' && stats.length > MAX_STATS) {
+    console.warn(`PageHero: ${stats.length} stats; the hero sets the first ${MAX_STATS}.`);
+  }
+  const statsNode =
+    shownStats.length === 0 ? null : (
+      <Layout
+        as="ul"
+        columns={{ base: shownStats.length }}
+        colGap="gutter"
+        rowGap="block"
+      >
+        {shownStats.map((stat) => (
+          <Stat
+            key={`${stat.value}-${stat.label}`}
+            as="li"
+            size="md"
+            value={stat.value}
+            unit={stat.unit}
+            label={stat.label}
+            align={centredHead ? 'center' : 'start'}
+          />
+        ))}
+      </Layout>
+    );
+  /* The ask and the record are two blocks, a `stack` apart in the stack below (owner, home round 4,
+     11 Oct 2026: the figures sat "too close" to the button). Round 3 grouped them a `text` apart on
+     the argument that each Stat's own hairline divides them; at 16 the row of figures read as part of
+     the button's group. The step is chosen by what it separates, a block from a block, not by the
+     fold: the home hero now ends past the 1470 fold (page-mapping § 20). */
 
   /* ── media · below the copy, beside it, or under a centred or display head ─────────────────
      An image renders through Media, which owns the edge (by kind), the srcset and the loading;
@@ -919,10 +1062,12 @@ export function PageHero({
         {eyebrowNode}
         {titleNode}
         {copyNode}
+        {labelsNode}
       </Layout>
       {bylineNode}
       {extrasNode}
       {actionsNode}
+      {statsNode}
       {tagsNode}
     </Layout>
   );
@@ -960,11 +1105,20 @@ export function PageHero({
             {eyebrowNode}
             {titleNode}
             {copyNode}
+            {labelsNode}
+        {labelsNode}
           </Layout>
-          <Layout rowGap="block">
-            {bylineNode}
-            {extrasNode}
-            {actionsNode}
+          {/* The figures are their own block, a `stack` under the ask (home round 4), as in the
+              split stack below; the byline, extras, actions and tags keep this column's `block`. */}
+          <Layout rowGap="stack">
+            {bylineNode || extrasNode || actionsNode ? (
+              <Layout rowGap="block">
+                {bylineNode}
+                {extrasNode}
+                {actionsNode}
+              </Layout>
+            ) : null}
+            {statsNode}
             {tagsNode}
           </Layout>
         </Layout>

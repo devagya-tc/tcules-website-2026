@@ -10,7 +10,8 @@ import styles from './EnquiryForm.module.css';
 
 /* The plain noun first; the two longer labels stay for the placements whose page asks a different
    question of the link. See § Field labels on FieldGroup. */
-export type EnquiryUrlLabel = 'Website' | 'Link to the work' | 'Where can we see it?';
+export type EnquiryUrlLabel =
+  'Website' | 'Link to the work' | 'Where can we see it?' | 'Product or company URL';
 
 export type AuditUrlLabel = 'Site to audit';
 
@@ -58,6 +59,25 @@ type SharedProps = {
    * type.
    */
   nextSteps?: readonly EnquiryNextStep[];
+  /**
+   * The success view's own words, where the page authors them (the corpus's `on_success`, page-mapping
+   * G2): a heading and the line under it. The CALLER's copy, as `nextSteps` is. Absent, the view
+   * says "Thanks. We have your enquiry." and its one line, as it always has.
+   */
+  success?: { heading: string; body: string };
+  /**
+   * The resting line beside or under the submit — what happens after a send — in the page's own
+   * words (home round 3, 11 Oct 2026): the corpus authors "We'll reply within one business day." on
+   * every enquiry, and the form printed its own "We reply within a business day." beside it. The
+   * CALLER's copy, as `success` is. Absent, the form's own line. The status of a send replaces it in
+   * the same live region.
+   */
+  caption?: string;
+  /**
+   * The fields' size step, passed to every Input (`scale`). `md` (default); `lg` (48, the value at
+   * the lead role) where the form is the band's primary object — the enquiry close (home round 3).
+   */
+  fieldScale?: 'md' | 'lg';
 };
 
 /** One step in the success view's "what happens next". */
@@ -67,15 +87,18 @@ export type EnquiryNextStep = { label: string; detail?: string };
    read as one group rather than as a form with a stray link under it. Amended 29 Sep 2026
    (tracker 2.17): it used to be CtaSection's, rendered a --gap-stack below the form.
 
-   REQUIRED on enquiry and audit. Every one of the 56 enquiry/audit instances must offer it, and
-   that constraint used to be CtaSection's `scheduleHref`; it moved here with the link, so the type
-   still refuses an enquiry form without one. Optional on contact: the contact page's own form is
-   the scheduling conversation, and a link to it from itself would be a loop. */
+   REQUIRED on audit. Every audit instance must offer it, and that constraint used to be CtaSection's
+   `scheduleHref`; it moved here with the link, so the type still refuses an audit form without one.
+   Optional on contact: the contact page's own form is the scheduling conversation, and a link to it
+   from itself would be a loop. OPTIONAL on enquiry since 10 Oct 2026 (page-mapping G2): the corpus
+   authors a scheduling link on case pages only, and no scheduling destination exists in
+   `src/lib/routes.ts`, so a corpus enquiry that names none must be able to say so rather than
+   invent a href. Where the page passes one, the link renders exactly as before. */
 type EnquiryVariantProps = SharedProps & {
   variant?: 'enquiry';
   urlLabel?: EnquiryUrlLabel;
   context: EnquiryContextBase & { intent?: never };
-  scheduleHref: string;
+  scheduleHref?: string;
 };
 
 type AuditVariantProps = SharedProps & {
@@ -421,6 +444,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       required: true,
       disabled: submitting,
       appearance,
+      scale: props.fieldScale ?? 'md',
       invalid: Boolean(messages[spec.key]),
       'aria-describedby': messageId,
     } as const;
@@ -459,6 +483,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
             autoComplete="url"
             placeholder={`${urlLabel} (optional)`}
             appearance={appearance}
+            scale={props.fieldScale ?? 'md'}
             disabled={submitting}
             onBlur={(event) => {
               event.currentTarget.value = normaliseUrl(event.currentTarget.value);
@@ -498,14 +523,16 @@ export function EnquiryForm(props: EnquiryFormProps) {
             </span>
             <Layout rowGap="text">
               <h3 className={styles.successHeading}>
-                {variant === 'contact'
-                  ? 'Thanks. We have your message.'
-                  : 'Thanks. We have your enquiry.'}
+                {props.success?.heading ??
+                  (variant === 'contact'
+                    ? 'Thanks. We have your message.'
+                    : 'Thanks. We have your enquiry.')}
               </h3>
               <p className={styles.successBody}>
-                {steps.length > 0
-                  ? 'Here is what happens next.'
-                  : 'We will reply to the address you gave us.'}
+                {props.success?.body ??
+                  (steps.length > 0
+                    ? 'Here is what happens next.'
+                    : 'We will reply to the address you gave us.')}
               </p>
             </Layout>
           </Layout>
@@ -609,7 +636,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         role="status"
         aria-live="polite"
       >
-        {status || CAPTION}
+        {status || (props.caption?.trim() ? props.caption : CAPTION)}
       </p>
     </Cluster>
   );

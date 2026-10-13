@@ -55,7 +55,7 @@ export const ROUTES = {
   contentDiscovery: '/expertise/content-knowledge-discovery-platforms',
   commerce: '/expertise/commerce-transactional-products',
   fintech: '/expertise/fintech-insurtech',
-  healthtech: '/expertise/healthtech-care',
+  healthtech: '/expertise/healthtech',
   edtech: '/expertise/edtech-learning',
   martech: '/expertise/martech-salestech',
   proptech: '/expertise/proptech-contech-field-operations',
@@ -156,6 +156,11 @@ export function anchorHref(id: (typeof ANCHORS)[keyof typeof ANCHORS]): `#${stri
   return `#${id}`;
 }
 
+/** A corpus page through its template in the proving ground: `/design/corpus-page/<file-slug>`. */
+export function designCorpusPagePath(fileSlug: string): string {
+  return `${ROUTES.design}/corpus-page/${encodeURIComponent(fileSlug)}`;
+}
+
 /** The designed service page in the proving ground: `/design/service-page/<slug>`. */
 export function designServicePagePath(slug: string): string {
   return `${ROUTES.design}/service-page/${encodeURIComponent(slug)}`;
@@ -185,6 +190,84 @@ export function expertisePath(slug: string): string {
 /** Build one canonical case-study detail path from the named route family. */
 export function caseStudyPath(slug: string): string {
   return `${ROUTES.caseStudies}/${encodeURIComponent(slug)}`;
+}
+
+/**
+ * The case studies, by the client name the copy uses for them (owner, 11 Oct 2026: "everytime a
+ * case study appears, it should be linked to the case study page"). Named here, once, so a card, a
+ * proof line or a sentence that names a client finds its case without a literal path at the call
+ * site; `caseStudyLink` (@/lib/case-links) is the lookup. Each slug is a `_pages/case-studies__<slug>.md`
+ * page's case as Strapi publishes it today: case pages keep the CMS content and its live slugs, not the
+ * corpus rewrite (owner, 11 Oct 2026: "keep what's on strapi right now"). CASE_SLUG_REDIRECTS sends
+ * the corpus's planned slugs, which its own pages link to, on to the live ones.
+ * Aliases are the other ways the corpus names the same client ("Benchmark", "Auxentios Technology").
+ */
+export const CASE_STUDY_SLUGS = {
+  Doodle: 'doodle-case-study-automating-enterprise-meeting-scheduling',
+  Dealpath: 'enterprise-workflow-redesign-dealpath-real-estate',
+  'Benchmark Gensuite': 'legacy-saas-modernisation-information-architecture',
+  Benchmark: 'legacy-saas-modernisation-information-architecture',
+  'Eden AI': 'unifying-workflow-creation-through-intelligent-search',
+  Auxentios: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  'Auxentios Technology': 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  Scissors: 'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'GT Tools': 'redesigning-for-a-shopify-website-ux-design',
+  ConnectX: 'ai-native-building-energy-product-connectx',
+  BuildTwin: 'ai-quality-control-expert-review-buildtwin',
+  'Novus Insights': 'saas-ux-ui-case-study-ai-for-market-research-automation',
+  'Omny AI': 'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
+  OctiFi: 'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
+  Ryzeo: 'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
+  'Gold Image Printing': 'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'The Wandering Raven': 'transforming-an-edtech-platform-into-an-engaging-learning-experience',
+  'The Chain Hut': 'ux-ui-design-and-development-for-magento-of-a-silver-chain-store',
+  'Kirana store payments': 'ux-research-for-kirana-store-payment-app',
+} as const;
+
+/**
+ * PLACEHOLDER case links: clients the copy presents as case work whose case page does not exist
+ * yet. Each points at the case index with a greppable fragment (so the link opens a real page, 200)
+ * until its case publishes; then it moves to CASE_STUDY_SLUGS. Listed in content proposal P43.
+ * The value is the slug the case is expected to publish under, where the corpus names one.
+ */
+export const CASE_STUDY_PLACEHOLDERS = {
+  CuramCare: 'curamcare',
+  Vovisto: 'vovisto-healthcare-event-travel-platform',
+} as const;
+
+/**
+ * The corpus's planned case slug → the slug the case lives at on Strapi today, for the 11 cases whose
+ * corpus page renamed it. next.config.ts serves these as temporary redirects so every corpus link
+ * opens the live case; when a case moves to its planned slug, its entry goes.
+ */
+export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
+  'auxentios-cpq-product-mvp-design':
+    'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  'benchmark-gensuite-enterprise-suite-modernisation':
+    'legacy-saas-modernisation-information-architecture',
+  'eden-ai-workflow-builder-search-redesign':
+    'unifying-workflow-creation-through-intelligent-search',
+  'gold-image-printing-web-to-print-erp-modernisation':
+    'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'gt-tools-shopify-product-discovery':
+    'redesigning-for-a-shopify-website-ux-design',
+  'novus-insights-ai-survey-product-design':
+    'saas-ux-ui-case-study-ai-for-market-research-automation',
+  'octifi-mobile-lending-product-design':
+    'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
+  'omny-ai-suggestion-trust-redesign':
+    'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
+  'ryzeo-marketing-automation-ux-revamp':
+    'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
+  'scissors-staffing-software-object-oriented-ux':
+    'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'wandering-raven-edtech-moodle-experience':
+    'transforming-an-edtech-platform-into-an-engaging-learning-experience',
+};
+
+/** A placeholder case link: the case index, marked so every one can be found and replaced. */
+export function caseStudyPlaceholderPath(slug: string): string {
+  return `${ROUTES.caseStudies}#placeholder-case-${encodeURIComponent(slug)}`;
 }
 
 /** Build one canonical podcast-detail path from the named insights family. */
@@ -266,11 +349,14 @@ export const EXTERNAL = {
 
 /**
  * Endpoints, which are not routes. Named here anyway so a form action is not a literal in a
- * pattern's fixture. NOTHING SERVES THIS YET — the newsletter field posts to a 404 until an
- * `app/api/newsletter/route.ts` exists.
+ * pattern's fixture. NOTHING SERVES `newsletter` OR `enquiry` YET — the newsletter field posts to a
+ * 404 until an `app/api/newsletter/route.ts` exists, and the corpus pages' enquiry form posts to a
+ * 404 until `app/api/enquiry/route.ts` does (FORM_ENDPOINT_VERIFICATION, a release dependency on
+ * every corpus page).
  */
 export const ENDPOINTS = {
   newsletter: '/api/newsletter',
   contact: '/api/contact',
+  enquiry: '/api/enquiry',
   enquiryDesign: '/api/design/enquiry',
 } as const;

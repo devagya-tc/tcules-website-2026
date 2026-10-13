@@ -59,7 +59,7 @@
   min-inline-size: 0;
 }
 
-/* The crop box Media fills. It owns the ratio — the card's, not the asset's — clips the cover
+/* The crop box Media fills. It owns the ratio — the card's one 16:9, not the asset's — clips the cover
    crop and the zoom to it, and draws the one hairline every kind takes in a card (ch05 amendment
    5a; Media is passed `edge="placement"` and draws none). The border sits inside the box under the
    global border-box, so a ruled tile and its neighbour's copy stay on one inline edge. */
@@ -72,50 +72,8 @@
   border-radius: var(--bcrd-media-radius);
 }
 
-/* Three or more across: 16:9 (visual-direction § 1.4 rule 1). The set chooses it via `ratio`. */
-.wide {
-  aspect-ratio: var(--bcrd-media-ratio-wide);
-}
-
-/* The spotlight's tall lead: 21:9 in the 2:1 track (BlockCardSet lead="beside"). */
-.panorama {
-  aspect-ratio: var(--bcrd-media-ratio-panorama);
-}
-
-/* The wide lead's row (BlockCardSet lead="wide"): 16:9 while the set is the ordinary stack or 2-up,
-   then 2:1 and 1:1 from 1024 in [2, 1, 1], where they are one height. The one breakpoint in this
-   module, and it swaps a ratio, never a distance: the crop follows the arrangement, which changes
-   at 1024 (Media's { base, lg } rule). */
-.double,
-.square,
-.pair {
-  aspect-ratio: var(--bcrd-media-ratio-wide);
-}
-
-/* A person's face: 1:1 at every width (`headshot`), the source portrait's own square. */
-.headshot {
-  aspect-ratio: var(--bcrd-media-ratio-square);
-}
-
-@media (min-width: 1024px) {
-  .double {
-    aspect-ratio: var(--bcrd-media-ratio-double);
-  }
-
-  .square {
-    aspect-ratio: var(--bcrd-media-ratio-square);
-  }
-
-  /* The linked pair (BlockCardSet): flatter from 1024, where the two run ~604 each, so the C-pair
-     band keeps the 830 fold (9 Oct 2026). */
-  .pair {
-    aspect-ratio: var(--bcrd-media-ratio-pair);
-  }
-}
-
-/* The card's stack fills the stretched frame, so a row has spare height to take: the first (the
-   cover, Layout fillFirst, under `grow`) or the last (the cta, Layout pinLast, so every action in a
-   set's row sits on one line). Sizing only. */
+/* The card's stack fills the stretched frame, so a row has spare height to take: the last row (the
+   cta, Layout pinLast, so every action in a set's row sits on one line). Sizing only. */
 .grow {
   block-size: 100%;
 }

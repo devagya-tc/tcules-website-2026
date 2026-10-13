@@ -1,0 +1,142 @@
+import type { CorpusBand, CorpusBlock, CorpusLink } from '@/lib/corpus-types';
+import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
+
+/**
+ * Reading a corpus band's shapes.
+ *
+ * The corpus is markdown, so a "labelled claim" arrives in four spellings: a parsed `labelled`
+ * block (`**Label.** Body`), a paragraph that opens with a bold run whose last character is not
+ * `.` `:` or `?` (`**"Customers keep getting stuck."** We watch…`), a list item that opens the same
+ * way, and a paragraph that opens with a link (`[UX Research](/…): find out…`). These helpers
+ * normalise them to one `Lead` so a template decides a shape from the words' structure and never
+ * from a band id, and so every label rule (page-mapping § 0 rule 1) lives in one place.
+ *
+ * Nothing here writes a word. Every function returns the authored runs, trimmed of the one
+ * punctuation mark a rule names, or a plain-text flattening of them.
+ */
+
+export type Lead = {
+  /** The label's runs, as authored (a trailing colon is dropped by `labelTitle`, not here). */
+  label: InlineRun[];
+  /** What follows the label. */
+  body: InlineRun[];
+};
+
+/** A bold label's text as a card or row TITLE: a trailing colon goes, a full stop or comma stays. */
+export function labelTitle(label: readonly InlineRun[]): string {
+  return inlineToText(label)
+    .replace(/\s*:\s*$/, '')
+    .trim();
+}
+
+/** The runs with their leading whitespace removed (a body that follows a label starts after the gap). */
+export function trimStart(runs: readonly InlineRun[]): InlineRun[] {
+  const [first, ...rest] = runs;
+  if (first?.type === 'text') {
+    const text = first.text.replace(/^\s+/, '');
+    return text ? [{ type: 'text', text }, ...rest] : [...rest];
+  }
+  return [...runs];
+}
+
+/** The runs with their trailing whitespace removed. */
+export function trimEnd(runs: readonly InlineRun[]): InlineRun[] {
+  const copy = [...runs];
+  const last = copy.at(-1);
+  if (last?.type === 'text') {
+    const text = last.text.replace(/\s+$/, '');
+    if (text) copy[copy.length - 1] = { type: 'text', text };
+    else copy.pop();
+  }
+  return copy;
+}
+
+/** A paragraph or list item that opens with a bold run: its label and the rest. */
+export function boldLead(runs: readonly InlineRun[]): Lead | null {
+  const [first, ...rest] = runs;
+  if (first?.type !== 'strong') return null;
+  return { label: first.children, body: trimStart(rest) };
+}
+
+/** A block as a label and a body, whichever of the spellings it was written in. */
+export function leadOf(block: CorpusBlock): Lead | null {
+  if (block.type === 'labelled') return { label: block.label, body: block.body };
+  if (block.type === 'paragraph') return boldLead(block.runs);
+  return null;
+}
+
+/**
+ * A paragraph that opens with a link and then a colon (`[UX Research](/…): find out how…`): the
+ * link and the words after the colon, which stay lower-case as authored (rule 1).
+ */
+export function linkLead(
+  block: CorpusBlock,
+): { link: Extract<InlineRun, { type: 'link' }>; body: InlineRun[] } | null {
+  if (block.type !== 'paragraph') return null;
+  const [first, second, ...rest] = block.runs;
+  if (first?.type !== 'link' || second?.type !== 'text' || !second.text.startsWith(':'))
+    return null;
+  const tail = second.text.replace(/^:\s*/, '');
+  return { link: first, body: tail ? [{ type: 'text', text: tail }, ...rest] : rest };
+}
+
+/** The paragraph runs of a block list, in order. */
+export function paragraphs(blocks: readonly CorpusBlock[]): InlineRun[][] {
+  return blocks.flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
+}
+
+/** One paragraph of runs as trusted HTML, as `<p>…</p>`. */
+export const html = paragraphHtml;
+
+/** The inline HTML of one paragraph (no wrapper), for `bodyHtml` entries. */
+export const inline = inlineToHtml;
+
+/** True when runs hold a link anywhere. */
+export function hasLink(runs: readonly InlineRun[]): boolean {
+  return runs.some(
+    (run) => run.type === 'link' || ('children' in run && hasLink(run.children)),
+  );
+}
+
+/** Plain text of runs. */
+export const plain = inlineToText;
+
+export function blocksOf<T extends CorpusBlock['type']>(
+  band: CorpusBand,
+  type: T,
+): Extract<CorpusBlock, { type: T }>[] {
+  return band.blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: T }> => block.type === type,
+  );
+}
+
+/** The links of every lone-link line in a band, in order. */
+export function bandLinks(band: CorpusBand): CorpusLink[] {
+  return blocksOf(band, 'links').flatMap((block) => block.links);
+}
+
+/** The first non-comment block that is not a quote or links line: the band's lead paragraph. */
+export function leadParagraph(band: CorpusBand): InlineRun[] | undefined {
+  const first = band.blocks.find((block) => block.type !== 'comment');
+  return first?.type === 'paragraph' ? first.runs : undefined;
+}
+
+/** The index of the last element that satisfies `test`, or -1 (ES2022 has no `findLastIndex`). */
+export function lastIndexWhere<T>(items: readonly T[], test: (item: T) => boolean): number {
+  for (let index = items.length - 1; index >= 0; index -= 1) {
+    if (test(items[index] as T)) return index;
+  }
+  return -1;
+}
+
+/**
+ * A paragraph that is one link and nothing else, with or without the full stop the author closed it
+ * with (`[Tell us where quotes slow down](/contact).`): the link. A line like that is an ask, so it
+ * becomes a button, and the button draws no full stop (page-mapping § 0 rule 1).
+ */
+export function loneLink(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }> | null {
+  const [first, second, ...rest] = runs;
+  if (first?.type !== 'link' || rest.length > 0) return null;
+  if (second === undefined) return first;
+  return second.type === 'text' && /^\s*[.]?\s*$/.test(second.text) ? first : null;
+}

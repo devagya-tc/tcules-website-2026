@@ -31,7 +31,7 @@
                             entirely under reduced motion.
    --vt-quote-rule-width    the site blockquote's rule (ch10 B2.07), as Proof draws it.            */
 :root {
-  --vt-poster-ratio: var(--ratio-wide);
+  --vt-poster-ratio: var(--ratio-standard);
   --vt-poster-ratio-wide: var(--ratio-cinema);
   --vt-poster-radius: var(--radius-8);
   --vt-play-size-lg: 88px;

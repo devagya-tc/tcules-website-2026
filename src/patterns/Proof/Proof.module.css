@@ -69,6 +69,26 @@
   text-wrap: var(--text-running-wrap);
 }
 
+/* The compact quote at a narrow MEASURE (pages pass 1 critic, 10 Oct 2026; kept in home round 1).
+   Compact is the quote inside a reading flow, and a flow can be a narrow column: the home page's
+   wall of client voices sets six quotes in three ~392 columns at 1440, where the 28 reading role held
+   five words a line and a fifty-word quote ran twelve lines — the wall became a column of italics.
+   The figure is therefore its own size container and, below a 30rem track, takes --text-quote-sm,
+   which is --text-quote's own phone step: a phone column and a desktop column are the same measure,
+   so they take the same size. Chosen by the track the quote is SET in, never by which band it is in.
+   Compact only: the group's peers (three across, ~390) are an approved composition and keep the
+   reading role. The query condition is a measure, not a distance (tokens-check exempts at-rule
+   preludes for the same reason it exempts media queries). */
+.compact {
+  container: proof-compact / inline-size;
+}
+
+@container proof-compact (max-width: 30rem) {
+  .sizeMd .quoteText {
+    font: var(--text-quote-sm);
+  }
+}
+
 /* Centred (typographic G, under a centred head — § 3.5). There is no inline-start
    edge to run the rule down, so the rule leaves the quote's side for the mark above it, and the
    inset that cleared it goes too. Balanced, not pretty, here and only here: centred lines of
@@ -159,7 +179,6 @@
 .groupItem > .quote {
   block-size: 100%;
 }
-
 
 /* The speaker group sizes to its content and never shrinks below it; the source link takes what
    is left or wraps beneath. */

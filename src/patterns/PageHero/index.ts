@@ -4,6 +4,7 @@ export type {
   HeroCredit,
   HeroCreditRole,
   HeroDates,
+  HeroFact,
   HeroAction,
   HeroActions,
   HeroArrangement,
@@ -17,4 +18,5 @@ export type {
   HeroCutItem,
   HeroRating,
   HeroLeadSize,
+  HeroStat,
 } from './PageHero';

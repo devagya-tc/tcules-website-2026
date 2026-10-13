@@ -113,6 +113,8 @@
 @import 'components/block-card.css';
 @import 'components/accordion.css';
 @import 'components/proof.css';
+@import 'components/testimonial.css';
+@import 'components/profile-card.css';
 @import 'components/callout.css';
 @import 'components/figure.css';
 @import 'components/table-of-contents.css';
@@ -120,15 +122,20 @@
 @import 'components/cta-row.css';
 @import 'components/slider.css';
 @import 'components/tag.css';
+@import 'components/sketch.css';
 @import 'components/texture.css';
 @import 'components/client-mark.css';
 @import 'components/data-table.css';
 @import 'components/brand-mark.css';
 @import 'components/rating-badge.css';
+@import 'components/star-rating.css';
 @import 'components/process-flow.css';
 @import 'components/stat.css';
 @import 'components/thread.css';
 @import 'components/service-page.css';
+@import 'components/corpus-page.css';
+@import 'components/case-story.css';
+@import 'components/studio-page.css';
 @import 'components/banner.css';
 @import 'components/statement.css';
 @import 'components/engagement-model.css';
@@ -136,6 +143,12 @@
 @import 'components/video-testimonial.css';
 
 @import 'components/logo-grid.css';
+@import 'components/gateway.css';
+@import 'components/offer-sheet.css';
+@import 'components/voice-ledger.css';
+@import 'components/case-spread.css';
+@import 'components/engagement-options.css';
+@import 'components/trace-plates.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

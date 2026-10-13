@@ -1,0 +1,148 @@
+/* Testimonial — the rated card, a wall of them, and one beside its case. Every colour is --tsm-*.
+
+   Layout and Cluster own every relationship: the card's stack, the attribution row, the wall's
+   columns and the pair. This module owns the card's ground, its inset and the parts' type and ink.
+   The inset is padding inside the card's own box and the attribution's rule is its own top edge:
+   neither spaces the card from anything. No margin, no breakpoint, no state. */
+
+.item,
+.wall,
+.beside {
+  min-inline-size: 0;
+}
+
+.card {
+  min-inline-size: 0;
+}
+
+/* The panel: a `gutter` inset (the card is a container; the gap scale names its padding for that),
+   the quiet ground and the 8 radius, and no edge (9 Oct box ruling). */
+.box {
+  padding: var(--gap-gutter);
+  background: var(--tsm-ground);
+  border-radius: var(--tsm-radius);
+}
+
+/* A peer in a row: the list item is stretched to the row (a stretched grid item has a definite
+   height, so 100% resolves), the card fills it, and pinLast drops the attribution to the foot so a
+   row of peers shares one baseline for the speakers. Sizing, not spacing. */
+.fill {
+  min-inline-size: 0;
+}
+
+.fillCard {
+  block-size: 100%;
+}
+
+/* The client's words in the SANS (owner, home round 3, 11 Oct 2026: small text, readability
+   first): the lead role (18) on the card that is the thing, wrapped pretty so the last line alone
+   shortens. The italic serif reading quote it replaced was the harder read at a card's measure. */
+.quote {
+  min-inline-size: 0;
+  /* A measure in the quote's own type: no effect inside a card's track, and a cap when an unboxed
+     quote is handed a full column (a supporting quote under a row of claims). */
+  max-inline-size: var(--measure-body);
+  font: var(--tsm-quote-text);
+  color: var(--tsm-quote-ink);
+  text-wrap: var(--text-running-wrap);
+  overflow-wrap: anywhere;
+}
+
+/* The supporting card: one role down, the body (16), in the quieter ink. */
+.sm .quote {
+  font: var(--tsm-quote-text-sm);
+  color: var(--tsm-quote-ink-quiet);
+}
+
+/* The diptych's panel (TestimonialBeside `diptych`): a boxed card (`.box` gives the ground, the
+   `gutter` inset and the 8 radius) whose edges are set by the case beside it. The pair's row is
+   top-aligned, so the panel's top is always the cover's top; its foot depends on the width.
+     1024–1439  the panel stretches to the row, its foot the case's last line: stars, words and the
+                speaker do not fit a 16:9 of these tracks (a 464 track is a 261 panel against ~350
+                of content), and a panel past the cover's foot met nothing.
+     from 1440  the card ratio, so its foot is the cover's foot. The ratio is a floor: a grid item
+                with an aspect ratio grows past it when its content is taller, so a long quote
+                never clips.
+   Below 1024 the pair stacks and the panel takes its content's height. Each query swaps a sizing
+   rule, never a distance. */
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .panel {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 1440px) {
+  .panel {
+    aspect-ratio: var(--tsm-panel-ratio);
+  }
+}
+
+/* The panel's words at the lead-lg role (20): the panel is as large as the cover beside it, so the
+   quote takes one step up from the card's 18, still sans. */
+.quotePanel {
+  font: var(--tsm-quote-text-panel);
+}
+
+/* Prose stays the trusted-HTML seam; the two-class selector outranks its root so the quote's own
+   composite and ink win. */
+.quote .quoteProse {
+  font: inherit;
+  color: inherit;
+}
+
+/* The speaker's row opens on a hairline inside a panel, a `block` of air under it: the person is the
+   card's foot. Padding and the part's own edge, so no seam outside the row changes. */
+.attribution {
+  min-inline-size: 0;
+}
+
+.attributionRuled {
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--tsm-rule-width) solid var(--tsm-rule);
+}
+
+/* The circular avatar (home round 3): a fixed square clipped to a circle, Media filling it. flex:
+   none so the nowrap row can never squeeze it. The CIRCLE is the owner's ruling for a person beside
+   a testimonial (docs/kit/brand-amendments.md, home round 3), against ch05 §6's "never a circle". */
+.avatar {
+  display: block;
+  flex: none;
+  inline-size: var(--tsm-avatar-size-md);
+  aspect-ratio: var(--ratio-portrait);
+  border-radius: var(--tsm-avatar-radius);
+  overflow: hidden;
+}
+
+.avatarSm {
+  inline-size: var(--tsm-avatar-size-sm);
+}
+
+.who {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.name {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--tsm-name-ink);
+}
+
+.role {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
+  color: var(--tsm-role-ink);
+}
+
+/* Unboxed (a supporting quote on the surface itself): the -quiet inks, set for the surface. */
+.card:not(.box) .name {
+  color: var(--tsm-name-ink-quiet);
+}
+
+.card:not(.box) .role {
+  color: var(--tsm-role-ink-quiet);
+}

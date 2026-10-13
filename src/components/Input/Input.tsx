@@ -22,6 +22,14 @@ type SharedProps = {
    * same states, so a form can change appearance without changing size.
    */
   appearance?: 'box' | 'line';
+  /**
+   * The control's size step (home round 3, 11 Oct 2026). `md` (default) is 40, the md Button's
+   * height, stepping to the 44 touch floor below 768. `lg` is 48 at every width with the value at
+   * the lead role (18) and a taller textarea — for a form that is the band's primary object (the
+   * enquiry close), where generous fields are part of the invitation. Named `scale` because `size`
+   * is the native input's own attribute.
+   */
+  scale?: 'md' | 'lg';
   className?: string;
 };
 
@@ -45,6 +53,7 @@ export function Input({
   as = 'input',
   invalid = false,
   appearance = 'box',
+  scale = 'md',
   className,
   'aria-invalid': ariaInvalid,
   ...rest
@@ -59,6 +68,7 @@ export function Input({
     styles.control,
     as === 'textarea' && styles.textarea,
     appearance === 'line' && styles.line,
+    scale === 'lg' && styles.lg,
     invalidState && styles.invalid,
     className,
   );

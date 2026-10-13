@@ -68,6 +68,11 @@ const SPECIMENS = [
         note: "a client's logo in a set — mask in the ground's ink, equal area of ink by measured density, capped 40 tall, 240 wide guard, ±15% correction, 4 surfaces",
       },
       {
+        href: '/design/sketch',
+        name: 'Sketch',
+        note: 'a small drawing on its 16:9 plate, one scene per service (seven), a stand-in for an illustration in the home and About selectors; 3 surfaces',
+      },
+      {
         href: '/design/brand-mark',
         name: 'BrandMark',
         note: 'third-party marks (LinkedIn, YouTube, Clutch) at their own proportions, monochrome, 4 surfaces',
@@ -76,6 +81,11 @@ const SPECIMENS = [
         href: '/design/rating-badge',
         name: 'RatingBadge',
         note: 'a third-party score and its source as one outline pill, mark passed in, 4 surfaces',
+      },
+      {
+        href: '/design/star-rating',
+        name: 'StarRating',
+        note: 'one review score as five stars — filled, half, empty — glyph passed in, md and sm, 4 surfaces',
       },
       {
         href: '/design/stat',
@@ -175,7 +185,7 @@ const SPECIMENS = [
       {
         href: '/design/block-card',
         name: 'BlockCard',
-        note: 'the borderless card — cover media via Media, text-only sets, the featured set, 4 surfaces',
+        note: 'the borderless card — cover media via Media, text-only sets, the featured set, the set-stated crop and the phone pair, 4 surfaces',
       },
       {
         href: '/design/contrast',
@@ -193,6 +203,41 @@ const SPECIMENS = [
         note: 'the evidence block — display (start | center), compact, featured portrait, case, group, rating-led, checked figures, 4 surfaces',
       },
       {
+        href: '/design/profile-card',
+        name: 'ProfileCard',
+        note: 'a person (square or circle portrait, name, position, bio, LinkedIn foot) in the testimonial panel, and ProfileFollow, the one follow banner under a set; 3 surfaces',
+      },
+      {
+        href: '/design/testimonial',
+        name: 'Testimonial',
+        note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',
+      },
+      {
+        href: '/design/offer-sheet',
+        name: 'OfferSheet',
+        note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
+      },
+      {
+        href: '/design/voice-ledger',
+        name: 'VoiceLedger',
+        note: 'complaints in the customer\'s words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint',
+      },
+      {
+        href: '/design/case-spread',
+        name: 'CaseSpread',
+        note: 'one worked example — problem, what we did and the result on one rail (blue at the result) beside its sticky 16:9 evidence; three steps, no action, paper and tint',
+      },
+      {
+        href: '/design/engagement-options',
+        name: 'EngagementOptions',
+        note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, paper and tint',
+      },
+      {
+        href: '/design/trace-plates',
+        name: 'TracePlates',
+        note: 'one screen followed through every hand-over — a drawn plate per stage (design, handoff, code, running product, sign-off) and one dashed trace through them; across and down, three stages, paper and tint',
+      },
+      {
         href: '/design/callout',
         name: 'Callout',
         note: 'the quiet scope note — semantic routing, placement equivalence, narrow tracks, 4 surfaces',
@@ -205,7 +250,7 @@ const SPECIMENS = [
       {
         href: '/design/data-table',
         name: 'DataTable',
-        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, 4 surfaces',
+        note: 'the comparison table, always boxed — 1 to 5 data columns, column behaviour, marks, the stacked order at 326 and 392, a split record that joins below 1024, 4 surfaces',
       },
       {
         href: '/design/page-hero',
@@ -245,12 +290,27 @@ const SPECIMENS = [
       {
         href: '/design/case-study-index',
         name: 'CaseStudyIndex',
-        note: 'the case-study index page type, with the live entries and their ideal copy',
+        note: 'the case-study index page type, with the live entries and their ideal copy; the grouped form (featured set, covers, thumbnail rows, a story, a form close) is shown at /design/corpus-page/case-studies',
+      },
+      {
+        href: '/design/case-story',
+        name: 'CaseStory',
+        note: 'a case study as a story — chapters with a still marker column, steps, pull quotes, a principle band and annotated figures — at the Benchmark Gensuite case copied locally from Strapi',
+      },
+      {
+        href: '/design/about-ideal',
+        name: 'StudioPage',
+        note: 'the About page with its copy edited for consumption (fixtures/ideal/about.ts): one idea per band, a different arrangement each — compare with /about',
       },
       {
         href: '/design/service-page',
         name: 'ServicePage',
         note: 'the six service lines, designed from their own content rather than the CMS translation; ?slots=1 shows the images each is designed to carry',
+      },
+      {
+        href: '/design/corpus-page',
+        name: 'CorpusPage',
+        note: 'the templates the _pages corpus renders through: HomePage for /, OfferPage for a service, an audit or an expertise page, LongformPage for a case, ToolPage for a free tool and the grouped case-study index, each shown with the plan that decided its bands',
       },
     ],
   },
@@ -275,7 +335,12 @@ const SPECIMENS = [
       {
         href: '/design/kit/logos',
         name: 'LogoGrid',
-        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone',
+        note: 'client marks in boxed hairline cells (closed by default, open the alternative); columns from the count so rows are full at 8, 9 and 12; two across on a phone; a missing SVG as a typeset wordmark beside drawn marks',
+      },
+      {
+        href: '/design/kit/gateway',
+        name: 'Gateway',
+        note: 'the situation selector on home’s six situations: titles down one column, one lit, its sentence and service beside it and level with it; every situation in full below 1024; paper and tint',
       },
       {
         href: '/design/kit/facts',

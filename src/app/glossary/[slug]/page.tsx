@@ -13,6 +13,12 @@ import {
   type LayoutProps,
 } from '@/components';
 import {
+  LongformRoute,
+  isCorpusLongform,
+  longformMetadata,
+  longformSlugs,
+} from '@/app/_corpus/longform';
+import {
   getGlossaryPage,
   type GlossaryAction,
   type GlossaryBlock,
@@ -255,8 +261,14 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
+export function generateStaticParams() {
+  return longformSlugs('/glossary').map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: GlossaryPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await longformMetadata(`/glossary/${slug}`);
+  if (corpus) return corpus;
   const glossary = await getGlossaryPage(slug);
 
   if (!glossary) {
@@ -293,6 +305,7 @@ export async function generateMetadata({ params }: GlossaryPageProps): Promise<M
 
 export default async function GlossaryPage({ params }: GlossaryPageProps) {
   const { slug } = await params;
+  if (isCorpusLongform(`/glossary/${slug}`)) return <LongformRoute route={`/glossary/${slug}`} />;
   const glossary = await getGlossaryPage(slug);
 
   if (!glossary) notFound();

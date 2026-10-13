@@ -1152,6 +1152,116 @@ export type CaseStudyPage = {
   seo?: ContentSeo;
 };
 
+/**
+ * A case study as a STORY: the same words as `CaseStudyPage`, with the body split into the parts its
+ * rich text only implied, so each can be designed rather than poured into one prose column (owner,
+ * 11 Oct 2026). Today only an ideal local copy fills it (fixtures/ideal/case-studies); it is also
+ * the recommended Strapi model for a case body.
+ */
+export type CaseStoryFigure = {
+  id: string;
+  image: CaseStudyImage;
+  /** "Figure 1". */
+  label: string;
+  caption: string;
+  /** The numbered observations on the figure, in order. */
+  notes: string[];
+};
+
+export type CaseStoryPart =
+  | { type: 'paragraphs'; paragraphs: string[] }
+  | { type: 'quote'; quote: string; attribution: string }
+  /** A "Label: text" list: steps in order, or peers (the three user needs). */
+  | { type: 'steps'; ordered?: boolean; items: Array<{ label: string; body: string }> }
+  | { type: 'principle'; label: string; text: string }
+  | { type: 'figures'; figures: CaseStoryFigure[] };
+
+export type CaseStoryChapter = {
+  id: string;
+  /** "01". */
+  number: string;
+  /** "The opportunity". */
+  label: string;
+  heading: string;
+  parts: CaseStoryPart[];
+};
+
+export type CaseStory = {
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt?: string;
+  heroImage?: CaseStudyImage;
+  profile: Array<{ id: string; label: string; value: string }>;
+  categories: string[];
+  tags: string[];
+  statements: Array<{ id: string; title: string; body: string }>;
+  chapters: CaseStoryChapter[];
+  closing?: { label: string; heading: string; paragraphs: string[] };
+  seo?: ContentSeo;
+};
+
+/** A link in the ideal About copy. */
+export type IdealLink = { label: string; href: string };
+type IdealTitled = { title: string; body: string };
+
+/**
+ * The About page with its copy edited for consumption (fixtures/ideal/about.ts, owner 12 Oct 2026).
+ * One field per band; every list is short by design. Images are resolved by the route.
+ */
+export type IdealAboutPage = {
+  hero: {
+    eyebrow?: string;
+    title: string;
+    lede: string;
+    stats: Array<{ value: string; label: string }>;
+  };
+  /** The opening, split from the hero: who founded the studio and what sits at its centre. */
+  studio: { founding: string; centre: string; meaning: string };
+  ahmedabad: { heading: string; paragraphs: string[] };
+  services: {
+    heading: string;
+    lead?: string;
+    items: Array<IdealTitled & { href: string; label: string }>;
+  };
+  practice: { heading: string; lead?: string; items: IdealTitled[] };
+  who: {
+    heading: string;
+    lead?: string;
+    items: Array<{ voice: string; reply: string }>;
+    note?: string;
+  };
+  difference: { heading: string; items: IdealTitled[]; link?: IdealLink };
+  how: { heading: string; items: IdealTitled[] };
+  people: {
+    heading: string;
+    leaders: Array<{
+      name: string;
+      role: string;
+      bio: string;
+      linkedin: IdealLink;
+      /** The register slot qualifier for the portrait (`/about#leadership:<portrait>`). */
+      portrait: string;
+    }>;
+    follow: { body: string; link: IdealLink };
+  };
+  work: {
+    heading: string;
+    cases: Array<{ name: string; body: string }>;
+    all: IdealLink;
+    lab: { heading: string; lead: string; link: IdealLink };
+  };
+  testimonials: {
+    heading: string;
+    items: Array<{ id: string; quoteHtml: string; name: string; role: string; company: string }>;
+  };
+  record: { heading: string; rows: Array<[string, string]> };
+  faq: { heading: string; items: Array<{ question: string; answerHtml: string }> };
+  coda: { eyebrow?: string; text: string };
+  cta: { heading: string; body: string; action: IdealLink };
+  careers: { heading: string; lead: string; action: IdealLink };
+};
+
 export type CaseStudyContentSource = {
   getCaseStudyPage(slug: string): Promise<CaseStudyPage | null>;
   getCaseStudyListingPage(slug: string): Promise<CaseStudyListingPage | null>;
@@ -1474,7 +1584,10 @@ export type BlogPage = {
   description: string;
   createdAt?: string;
   publishedAt?: string;
+  /** The authored publish date (ISO), from the body's date-and-reading-time line, where it has one. */
   publishedContent?: string;
+  /** How long the piece takes to read, as authored ("11 min"). */
+  readingTime?: string;
   updatedAt?: string;
   heroVideo?: { id: string; title: string };
   featureImage?: BlogImage;
@@ -1657,3 +1770,6 @@ export type ContentSource = {
    */
   getNavigation(): Promise<Navigation>;
 };
+
+/* The `_pages/` corpus view models (corpus-types.ts), re-exported so callers import `@/content`. */
+export type * from './corpus-types';

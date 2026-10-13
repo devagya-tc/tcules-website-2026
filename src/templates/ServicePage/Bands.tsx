@@ -74,8 +74,8 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
     /* B — the photograph beside the head and its tiles (§ 3.4 B). Four tiles fill the 667 copy
        column (594 of the photo's 596 at 1470), so the photo takes the 477 at 4:5. Two tiles take
        `weight: 'photo'` (plan `photoWeight`): the photograph in the 667 at 6:5, the copy in the 477
-       centred on it. Both keep the h2 role — a display head beside the hero's display h1 and the J
-       statement made three display voices, two back to back (fix round 2) — and neither carries
+       centred on it. Both keep the h2 role (`media.head: 'lg'`) — a prominent head beside the hero's display h1 and the J
+       statement made three large voices, two back to back (fix round 2) — and neither carries
        the counterweight texture (plan § 6.4). */
     case 'B': {
       if (job?.kind !== 'signals' || !photo) break;
@@ -87,7 +87,7 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
             image: getKitPhoto(photo),
             side: 'start',
             weight: band.photoWeight ? 'photo' : 'copy',
-            head: 'title',
+            head: 'lg',
           }}
         >
           <Signals block={job} inSplit />

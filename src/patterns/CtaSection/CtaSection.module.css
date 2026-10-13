@@ -16,6 +16,9 @@
    ground is `--sec-ground` and nothing else. That is the hard constraint "must not own its ground"
    read as a rule about what this stylesheet may contain rather than about which props exist, and
    the spec's §14 names the grep that proves it.
+   ONE exception since home round 3 (11 Oct 2026): the split close's form panel (`.formPanel`, at the
+   foot) paints --cta-panel-ground — the ground of the small surface the panel itself declares, so
+   the form reads as the band's primary object. The band's own ground is still Section's.
 
    No `display: grid` and no `display: flex`. All three arrangements are `Layout` and `Cluster` in
    the TSX — the two-column split, the 3-up points row in `open`, the 2- and 3-up points grid in
@@ -79,6 +82,18 @@
    tracked mono label reads as letter-spaced body text rather than as a label, which is why the case
    belongs to the role. Applied in CSS rather than in the data, so the frontmatter keeps its
    authored casing and reversing the decision is one declaration in the token layer. */
+/* The lede's mark: a bare glyph, blue, sized up from Icon's 24 to --cta-mark-size (the container
+   sizes the glyph it is handed, as Button does). */
+.mark {
+  display: block;
+  color: var(--cta-mark-ink);
+}
+
+.mark svg {
+  inline-size: var(--cta-mark-size);
+  block-size: var(--cta-mark-size);
+}
+
 .eyebrow {
   max-inline-size: var(--cta-body-measure);
   color: var(--cta-eyebrow-ink);
@@ -249,5 +264,19 @@
 .contactValue {
   color: var(--cta-body-ink);
   font: var(--cta-body-text);
+}
+
+/* ── The split close's form panel (home round 3, 11 Oct 2026) ─────────────────────
+   The form as the band's primary object: a small surface of its own (the TSX sets `data-surface`
+   one step off the band's ground), painted with that surface's --cta-panel-ground, at the 8 radius,
+   a `block` inside on every side — the boxed card's inset (9 Oct box ruling). The inset is the
+   panel's own padding, not outer spacing; no edge and no shadow (nothing on the site casts one).
+   `block`, not `gutter`: in the 326 phone column a 32 inset left the fields 236 of text, and the
+   "Product or company URL (optional)" cue was cut; at 24 it is 252 and reads whole. */
+.formPanel {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+  background: var(--cta-panel-ground);
+  border-radius: var(--cta-panel-radius);
 }
 

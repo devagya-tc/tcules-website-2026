@@ -1,7 +1,9 @@
 import type { ClientMarkProps } from '@/components';
+import { clientMark } from '@/lib/client-marks';
 
 /**
- * The nine real client marks (public/clients/*.svg), for the specimens only — the ClientMark
+ * The nine real client marks (public/clients/*.svg), read from `src/lib/client-marks.ts` (the site's
+ * one record of them) and named here for the specimens — the ClientMark
  * specimen and the kit's H family (/design/kit/logos) read the same records, so a size judged on
  * one is the size rendered on the other. On the site the same facts arrive from the CMS beside the
  * file: the viewBox, the density, and any weight correction "recorded with the asset" (ch05 §10).
@@ -20,23 +22,23 @@ import type { ClientMarkProps } from '@/components';
  */
 export type ClientRecord = Omit<ClientMarkProps, 'className'>;
 
-const client = (
-  name: string,
-  file: string,
-  width: number,
-  height: number,
-  density: number,
-): ClientRecord => ({ name, src: `/clients/${file}.svg`, width, height, density });
+const client = (name: string): ClientRecord => {
+  const record = clientMark(name);
+  if (!record) throw new Error(`No approved mark for "${name}" in src/lib/client-marks.ts.`);
+  return record;
+};
 
-export const OMNY = client('Omny', 'omny', 93.982, 24.792, 0.28);
-export const LATITUDEPAY = client('LatitudePay', 'latitudepay', 133.896, 18.2, 0.16);
-export const QUOTER = client('Quoter', 'quoter', 93.996, 28.002, 0.22);
-export const KNOVOS = client('Knovos', 'knovos', 85.232, 14, 0.33);
-export const SAFEXPAY = client('SafeXpay', 'safexpay', 83.02, 22.398, 0.25);
-export const DOODLE = client('Doodle', 'doodle', 104, 24, 0.4);
-export const PLEDGE = client('Pledge', 'pledge', 92.032, 19.6, 0.35);
-export const GT_TOOLS = client('GT Tools', 'gttools', 67.384, 19.6, 0.36);
-export const INCLUUDE = client('Incluude', 'incluude', 88.906, 16.851, 0.39);
+export const OMNY = client('Omny');
+export const LATITUDEPAY = client('LatitudePay');
+export const QUOTER = client('Quoter');
+export const KNOVOS = client('Knovos');
+export const SAFEXPAY = client('SafeXpay');
+export const DOODLE = client('Doodle');
+export const PLEDGE = client('Pledge');
+export const GT_TOOLS = client('GT Tools');
+export const INCLUUDE = client('Incluude');
+/* Eden AI's mark is a trimmed transparent PNG (home round 3): only its alpha is used, as a mask. */
+export const EDEN_AI = client('Eden AI');
 
 /** The set, in the order a strip reads. Which mark leads is a content decision. */
 export const CLIENTS: readonly ClientRecord[] = [

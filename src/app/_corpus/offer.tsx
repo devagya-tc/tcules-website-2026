@@ -1,0 +1,58 @@
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import {
+  getCaseRefs,
+  getCorpusBindings,
+  getCorpusPage,
+  getTestimonialRatings,
+} from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
+import { corpusMetadata } from '@/lib/corpus-metadata';
+import { OfferPage } from '@/templates';
+
+/**
+ * The corpus-backed offer routes (`/services/*`, `/audits/*`, `/expertise/*`) share one reader.
+ *
+ * Each of those routes serves a whole family, and only the pages whose band shapes the page-mapping
+ * has verified switch to the corpus; the rest keep their current source until their own batch maps
+ * them. The allowlist is one list, here, so no unverified corpus page switches silently
+ * (page-mapping § 1.2). Adding a page to it is the whole act of switching it.
+ *
+ * `_corpus` is underscore-prefixed, so Next does not route it. It holds no layout decision: it reads
+ * the page and its cited cases and hands them to the template.
+ */
+export const PASS_1_OFFER_ROUTES: ReadonlySet<string> = new Set([
+  '/services/product-design',
+  '/audits/design-to-code-audit',
+  '/expertise/healthtech',
+]);
+
+/** Studio photographs an offer page may reuse, by binding id (page-mapping § 0 rule 5.3). */
+const SHARED_BINDINGS = ['about_studio_review'] as const;
+
+export const isCorpusOffer = (route: string): boolean => PASS_1_OFFER_ROUTES.has(route);
+
+/** The route's `generateStaticParams` entries for one family: the last path segments of its pages. */
+export function offerSlugs(family: '/services' | '/audits' | '/expertise'): string[] {
+  return [...PASS_1_OFFER_ROUTES]
+    .filter((route) => route.startsWith(`${family}/`))
+    .map((route) => route.slice(family.length + 1));
+}
+
+export async function offerMetadata(route: string): Promise<Metadata | null> {
+  if (!isCorpusOffer(route)) return null;
+  const page = await getCorpusPage(route);
+  return page ? corpusMetadata(page) : null;
+}
+
+export async function OfferRoute({ route }: { route: string }) {
+  const page = await getCorpusPage(route);
+  if (!page) notFound();
+  const [caseRefs, shared, ratings] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getCorpusBindings(SHARED_BINDINGS),
+    getTestimonialRatings(page.composition.testimonialIds),
+  ]);
+  return <OfferPage page={page} caseRefs={caseRefs} shared={shared} ratings={ratings} />;
+}

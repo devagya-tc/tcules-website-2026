@@ -6,7 +6,7 @@
    wordmark, badge, symbol between words — read as one set of equals.
 
    Naming: --lgrid-{part}-{role}
-     parts: cell | rule | context | radius
+     parts: cell | rule | context | wordmark | radius
 
    The cell's inner padding and the gaps around the grid are distances, so the pattern reads the
    gap scale directly; the eyebrow role is read directly too. Neither is aliased here. */
@@ -45,19 +45,26 @@
 [data-surface='paper'] {
   --lgrid-rule-ink: var(--color-neutral-200); /* decoration */
   --lgrid-context-ink: var(--color-neutral-600); /* 4.92:1 */
+  /* A typeset wordmark (a client whose SVG has not arrived): the marks' own ink on this ground, so
+     a drawn mark and a typeset one are one colour (ClientMark's --cmark-ink, duplicated on purpose:
+     a component never reads another's tokens). */
+  --lgrid-wordmark-ink: var(--color-neutral-600); /* 4.92:1 */
 }
 
 [data-surface='tint'] {
   --lgrid-rule-ink: var(--color-neutral-200); /* decoration */
   --lgrid-context-ink: var(--color-neutral-700); /* 7.27:1 */
+  --lgrid-wordmark-ink: var(--color-neutral-600); /* 4.39:1 on paper-deep */
 }
 
 [data-surface='ink'] {
   --lgrid-rule-ink: var(--color-neutral-700); /* decoration */
   --lgrid-context-ink: var(--color-neutral-400); /* 8.05:1 */
+  --lgrid-wordmark-ink: var(--color-neutral-300); /* 11.07:1 on neutral-950 */
 }
 
 [data-surface='blue'] {
   --lgrid-rule-ink: var(--color-brandeis-400); /* decoration */
   --lgrid-context-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --lgrid-wordmark-ink: var(--color-brandeis-200); /* 3.78:1, large text */
 }

@@ -18,6 +18,7 @@ import {
   type ExpertiseBlock,
   type ExpertiseContentColumn,
 } from '@/content';
+import { OfferRoute, isCorpusOffer, offerMetadata, offerSlugs } from '@/app/_corpus/offer';
 import { expertisePath, ROUTES } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail } from '@/lib/trail';
 import {
@@ -280,10 +281,16 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
+export function generateStaticParams() {
+  return offerSlugs('/expertise').map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<'/expertise/[slug]'>): Promise<Metadata> {
   const { slug } = await params;
+  const corpus = await offerMetadata(`/expertise/${slug}`);
+  if (corpus) return corpus;
   const expertise = await getExpertisePage(slug);
 
   if (!expertise) {
@@ -320,6 +327,7 @@ export async function generateMetadata({
 
 export default async function ExpertisePage({ params }: PageProps<'/expertise/[slug]'>) {
   const { slug } = await params;
+  if (isCorpusOffer(`/expertise/${slug}`)) return <OfferRoute route={`/expertise/${slug}`} />;
   const expertise = await getExpertisePage(slug);
 
   if (!expertise) notFound();

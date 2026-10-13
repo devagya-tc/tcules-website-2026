@@ -372,6 +372,25 @@ const MISMATCH: DataTableProps = {
   ],
 };
 
+/* A long record — twelve facts, one value column — for `split`. */
+const LONG_RECORD: DataTableProps = {
+  keyColumn: { heading: 'Fact' },
+  columns: [{ heading: 'Current public record' }],
+  rows: [
+    ['Company', 'Northwind Studio Private Limited'],
+    ['Category', 'Digital product design studio'],
+    ['Founded', '2017'],
+    ['Headquarters and studio', 'Ahmedabad, India'],
+    ['Core practice', 'Product Design'],
+    ['Projects', 'More than 90'],
+    ['Client reach', '19 countries'],
+    ['Typical clients', 'Growth-stage SaaS teams and established software companies'],
+    ['Engagement models', 'Fixed-price audits, fixed-scope projects and monthly partnerships'],
+    ['Collaboration', 'A lead designer guides the work and is your main point of contact'],
+    ['Languages', 'English, Hindi and Gujarati'],
+  ].map(([header, value]) => ({ header: header ?? '', cellsHtml: [p(value ?? '')] })),
+};
+
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
     surface: 'paper',
@@ -466,6 +485,56 @@ export default function DataTableSpecimenPage() {
             note="Six columns in 1176 is about 196 a column. Heads that wrap sit on the rule with their one-line neighbours."
           >
             <DataTable {...FIVE_COLUMNS} />
+          </Specimen>
+          <Specimen
+            title="Named by the heading above it · labelledBy"
+            note="A corpus table sits under its band’s own h2, so a visible caption would print the heading twice. labelledBy names the scroll region and the table by that heading’s id, with no caption. Without a caption or labelledBy the region is named by the key column’s head."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-labelled-by">Every gap gets a cause</h3>
+              <DataTable
+                {...ROUTE_TABLE}
+                caption={undefined}
+                summary={undefined}
+                labelledBy="dt-labelled-by"
+              />
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="A record with no header row · head={false}"
+            note="A key/value record such as a case's 'At a glance': its first row is a pair, so there is no head to draw and none is invented. Rows only, one value column, named by the heading above it with labelledBy. A table WITH a head row and one value column (About's 'Fact · Current public record') is sized the same way: at 390 the pair fits the track and never scrolls."
+          >
+            <Layout rowGap="block">
+              <h3 id="dt-record">At a glance</h3>
+              <DataTable
+                head={false}
+                labelledBy="dt-record"
+                keyColumn={{ heading: '' }}
+                columns={[{ heading: '' }]}
+                rows={[
+                  {
+                    header: 'Product',
+                    cellsHtml: [
+                      'An established environment, health and safety software suite.',
+                    ],
+                  },
+                  {
+                    header: 'Our role',
+                    cellsHtml: ['Shared interface direction and coded prototypes.'],
+                  },
+                  {
+                    header: 'The key question',
+                    cellsHtml: [
+                      'How can the suite look modern without breaking its customers’ habits?',
+                    ],
+                  },
+                  {
+                    header: 'What we delivered',
+                    cellsHtml: ['Coded prototypes of the shared patterns.'],
+                  },
+                ]}
+              />
+            </Layout>
           </Specimen>
         </Layout>
       </Section>
@@ -708,7 +777,29 @@ export default function DataTableSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <Layout rowGap="block">
-            <h2>10 · Two adjacent</h2>
+            <h2>10 · Split — two halves wide, one table narrow</h2>
+            <p>
+              `split` (owner, 10 Oct 2026): a long record sets as two boxed halves side by side
+              from 1024, each with its head row, the first taking the odd row. Below 1024 the
+              halves JOIN into one continuous table: no gap, the second frame’s top edge gone,
+              its head row collapsed out of sight (still read), and a shared key floor so the
+              column rule runs straight through the join. Resize past 1024 to see both; the 390
+              shot shows the join.
+            </p>
+          </Layout>
+          <Specimen
+            title="Eleven facts, split"
+            note="Six beside five from 1024; one table of eleven below it. For a record (one value column) only — a comparison table warns."
+          >
+            <DataTable {...LONG_RECORD} split caption="At a glance" />
+          </Specimen>
+        </Layout>
+      </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>11 · Two adjacent</h2>
             <p>
               The caller’s Layout owns the seam between them (--gap-stack here, as
               ContentSection does between blocks). DataTable sets no outer spacing.

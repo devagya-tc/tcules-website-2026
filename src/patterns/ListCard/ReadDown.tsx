@@ -17,6 +17,8 @@ export type ReadDownRow = {
    * line longer, so write to the 1440 ceiling and stay under it.
    */
   body?: string;
+  /** The body as trusted inline HTML, one entry per paragraph (ListCard `bodyHtml`). Exclusive with `body`. */
+  bodyHtml?: readonly string[];
   /** A Solar Bold glyph, blue (§ 4.2). Give every row one or none: a set is all-icon or all-text. */
   icon?: IconName;
 };
@@ -140,6 +142,7 @@ export function ReadDown({ rows, columns = 1, titleAs = 'h3', photo, rail }: Rea
           titleAs={titleAs}
           title={row.title}
           body={row.body}
+          bodyHtml={row.bodyHtml}
           marker={row.icon ? { type: 'icon', name: row.icon } : undefined}
         />
       ))}
