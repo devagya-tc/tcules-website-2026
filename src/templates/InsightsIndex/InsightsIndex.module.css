@@ -136,3 +136,12 @@
 .panel {
   padding-block-start: var(--gap-gutter);
 }
+
+/* ── F · the river's date break ── a month heads its run: the h4 role in the title ink, the
+   largest thing in the feed after the band's own heading, so the eye finds its place by date. */
+.month {
+  color: var(--iix-month-ink);
+  font: var(--iix-month-text);
+  letter-spacing: var(--iix-month-tracking);
+  text-wrap: var(--text-title-wrap);
+}

@@ -30,6 +30,12 @@
 >    brandeis-300 · white), month and year under it at `tight` in the eyebrow's voice, in a fixed
 >    `--lcrd-date-inline` (96) column. A `<time>` with `dateTime`; without one, text. The caller formats
 >    both strings. Specimen: `/design/list-card`, the eyebrow and date-marker blocks.
+> 4. **The thumbnail has an outline** (owner, 13 Oct 2026, superseding "a radius and no frame"): one
+>    hairline round the thumbnail box, as every card image has, so a light photograph or a sketch plate
+>    separates from the ground. `--lcrd-thumbnail-rule-width` (hairline) and `--lcrd-thumbnail-rule-ink`
+>    per surface — neutral-300 · neutral-400 · neutral-700 · brandeis-300, decoration — BlockCard's
+>    cover-rule values duplicated on purpose. Specimen: every thumbnail row, including the four-surface
+>    proof.
 > 3. **`marker: { type: 'sketch'; name: SketchName }`** — a GENERATED thumbnail: a Sketch scene in the
 >    thumbnail's own 16:9 box, for an item with no cover whose subject maps to a scene (owner: generated
 >    graphic before photograph). Decorative. Specimen: the eyebrow block's guide row.

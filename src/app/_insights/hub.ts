@@ -251,6 +251,8 @@ export function insightsIndexProps(
           heading: page.lab.heading,
           body: page.lab.description,
           action: { label: page.lab.action.label, href: page.lab.action.href },
+          /* The Lab's own drawing: experiments carried into a product (Sketch 'lab'). */
+          visual: 'lab' as const,
         }
       : undefined,
     feed: {

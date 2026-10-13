@@ -1255,7 +1255,7 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all fourteen ListCard colour tokens from itself; no
+              The tint panel below resolves all fifteen ListCard colour tokens from itself; no
               ink value may leak through an omitted declaration.
             </p>
           </Layout>

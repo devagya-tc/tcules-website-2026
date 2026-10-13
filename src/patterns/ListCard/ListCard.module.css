@@ -259,6 +259,10 @@
   inline-size: var(--lcrd-thumbnail-inline-md);
   aspect-ratio: var(--lcrd-thumbnail-ratio);
   overflow: hidden;
+  /* The image's edge (owner, 13 Oct 2026, superseding "a radius and no frame"): one hairline round
+     the box, as every card image has, so a light photograph or a sketch plate separates from the
+     ground. The same width and inks as BlockCard's cover rule, duplicated on purpose in this layer. */
+  border: var(--lcrd-thumbnail-rule-width) solid var(--lcrd-thumbnail-rule-ink);
   border-radius: var(--lcrd-thumbnail-radius);
 }
 

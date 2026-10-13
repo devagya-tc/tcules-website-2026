@@ -10,7 +10,9 @@ export type SketchName =
   | 'design-systems'
   | 'ai-product-ux'
   | 'design-engineering'
-  | 'software-development';
+  | 'software-development'
+  /** The Future Interfaces Lab: experiments on the bench, one promoted into a product. */
+  | 'lab';
 
 const BY_ROUTE: Readonly<Record<string, SketchName>> = {
   '/services/new-product-design-first-release': 'new-product',

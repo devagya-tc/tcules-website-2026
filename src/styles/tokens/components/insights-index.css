@@ -4,7 +4,7 @@
    title, sentence) and the feed's filter labels. Every card, row, chip and band draws its own.
 
    Naming: --iix-{part}-{role}
-     parts  count · topic-icon · topic-title · topic-body · filter-label · rail · toggle · ring
+     parts  count · topic-icon · topic-title · topic-body · filter-label · rail · toggle · ring · month
      roles  text · tracking · ink · width · sticky-top · duration · easing
 
    Every surface block declares every surface-dependent token. Every band this template paints is
@@ -40,6 +40,9 @@
   --iix-toggle-easing: var(--easing-standard);
   --iix-ring-width: var(--focus-ring-width);
   --iix-ring-offset: var(--focus-ring-offset);
+  /* The river's date break (13 Oct 2026): a month at the h4 role heads its run of pieces. */
+  --iix-month-text: var(--text-h4);
+  --iix-month-tracking: var(--text-h4-tracking);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -54,6 +57,7 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the control's mark */
   --iix-toggle-rule-ink: var(--color-neutral-300); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  --iix-month-ink: var(--color-neutral-900); /* 14.62:1 */
 }
 
 /* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
@@ -67,6 +71,7 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 5.51:1 */
   --iix-toggle-rule-ink: var(--color-neutral-400); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 5.51:1 */
+  --iix-month-ink: var(--color-neutral-900); /* 13.06:1 */
 }
 
 /* ── Surface: ink ── words lift, the accent lifts to 300 ───────────────────────── */
@@ -80,6 +85,7 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-300); /* 7.32:1 */
   --iix-toggle-rule-ink: var(--color-neutral-700); /* decoration */
   --iix-ring-color: var(--color-brandeis-300); /* 7.32:1 */
+  --iix-month-ink: var(--color-white);
 }
 
 /* ── Surface: blue ── declared for self-containment; this template paints no blue band of its own */
@@ -93,4 +99,5 @@
   --iix-toggle-glyph-ink: var(--color-white); /* 6.23:1 */
   --iix-toggle-rule-ink: var(--color-brandeis-300); /* decoration */
   --iix-ring-color: var(--color-white); /* 6.23:1 */
+  --iix-month-ink: var(--color-white); /* 6.23:1 */
 }

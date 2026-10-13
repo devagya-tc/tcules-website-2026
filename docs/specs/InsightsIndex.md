@@ -44,9 +44,17 @@ One per page.
 | B | **Front page**: one lead, a curated mix of up to four, one per format first | `BlockCardSet lead="beside"`: the lead's cover in the 2, the mix as text cards in the 1 | yes when ≥ 1 item |
 | C | **Start with your problem**: up to four topic collections | `Layout` 4 → 2 → 1; each column an `Icon` head, an h3, one sentence, `ListCard` rows, a related link | optional (`collections`) |
 | D | **Format rows**, in the template's fixed order, each its own shape (table below) | `ContentSection` with `actionsAt="end"` "All podcasts" `CtaRow` | one per format with items |
-| E | **Lab**: the other organisation's offer | `CtaSection arrangement="offer"` on blue — the page's one reserved band (component-audit § 2) | optional |
-| F | **Feed**: everything, latest first; the filter rail beside it | `ContentSection`; `Layout [1, 2]` at `section`; `Tag filter` chips; `ListCard` rows with an eyebrow; "Show more" link | yes |
+| E | **Lab**: the other organisation's offer | `ContentSection beside` on INK (owner, 13 Oct 2026: not blue): heading, lead and its link in the head track, the Lab's own Sketch scene (`lab`: experiments on the bench, the working one carried left into a product, facing the copy) filling the two-thirds track. The page passes the scene as `lab.visual`; without one it falls back to `CtaSection offer` on ink | optional |
+| F | **Feed**: everything, latest first; the filter rail beside it (a `<details>` below 1024) | `ContentSection`; `Layout [1, 2]` at `section`; `Tag filter` chips; the RIVER (below); "Show more" link | yes |
 | G | **Close** | `CtaSection arrangement="open"` on tint, only with an action | optional |
+
+**The river (band F, owner 13 Oct 2026: "the last section is too boring").** The feed was one
+ListCard row shape for its whole length. It is now a river with rhythm from position and scale, still
+strictly newest first: a **date break** (the month, h3 at the h4 role) heads each month; the month's
+newest piece is a **feature** (a horizontal `BlockCard`, `lg`, image beside words); runs of **rows**
+(`ListCard`, format · date · length; events keep their date column) are broken by a **pair** (two
+covered `BlockCard`s) wherever the next two consecutive pieces both carry an image, at most once per
+four rows. Images missing a cover follow § 12a. No ground, no box. Items are h4 under the month h3.
 
 **The format shapes (band D)** — chosen by what each format IS, not by its count:
 
@@ -64,7 +72,7 @@ Order: the canonical order is articles · events · podcasts · research · vide
 then RE-DEALT (`alternate`) so a covered band (articles, podcasts, videos, and guides when every guide
 has a cover) and a text band take turns, whichever formats are present — so no two text-heavy bands
 meet when a format is missing or a catalogue drops to text (CLAUDE.md § Design quality). A surplus of
-text bands can only fall at the end. The blue Lab band sits between the last row and the feed,
+text bands can only fall at the end. The ink Lab band, now a visual band (its Sketch scene), sits between the last row and the feed,
 closing the front page and opening the archive.
 
 **Ruling, feed → close.** The feed (a list) is followed by the close on tint. They are both words, but
@@ -101,7 +109,7 @@ template renders links and never reads `searchParams`.
 same voice as BlockCard's eyebrow ("Podcast · 25 Aug 2026"). Built in the tier below because the feed
 and the episode rows need it and a row has nowhere else to say what kind of thing it is.
 
-**Not props, deliberately:** surface (each band's ground is the template's: paper everywhere, blue Lab,
+**Not props, deliberately:** surface (each band's ground is the template's: paper everywhere, ink Lab,
 tint close), the format order, each format's shape, the front page's count (1 + 4), the row
 capacities, colour, gap, padding. A CMS that could reorder or reshape the bands is how the old site
 grew 111 sections.
@@ -148,7 +156,7 @@ sentence) and the filter group labels. Every other colour is a pattern's own.
 
 Paper: the quiet-label ramp BlockCard's eyebrow uses. Tint: the label steps to 700 because 600 is
 4.39:1 there. Ink: lifted, as BlockCard's. Blue: the brandeis-50/100 pair BlockCard uses. Every band
-on this page is paper except the Lab (blue, rendered by CtaSection) and the close (tint, CtaSection);
+on this page is paper except the Lab (ink, ContentSection with its Sketch scene) and the close (tint, CtaSection);
 the other surfaces are declared for self-containment (tokens rule 2).
 
 ## 7 · Geometry & spacing
@@ -209,7 +217,7 @@ display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--te
   <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">…</Layout>
 </ContentSection>
 {rows.map(row => <ContentSection id={`format-${kind}`} heading actions={<CtaRow rule={false} …/>} actionsAt="end">{shape}</ContentSection>)}
-<CtaSection arrangement="offer" surface="blue" … />
+<ContentSection surface="ink" arrangement="beside" heading lead actions={<CtaRow rule={false} />}><Sketch name="lab" /></ContentSection>
 <ContentSection id="feed" heading lead>
   <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
     <aside>{filter groups}</aside>

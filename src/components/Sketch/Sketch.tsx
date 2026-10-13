@@ -12,6 +12,10 @@ import type { SketchName } from '@/lib/sketches';
  *   ai-product-ux          a suggestion card with the person's accept, the AI's sparkle beside it
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
+ *   lab                    three experiments on the bench (two still dashed), the working one
+ *                          carried left into a product screen, the AI mark on its corner — the
+ *                          Lab's argument: experiments become product. Faces left, toward the
+ *                          copy it sits beside (13 Oct 2026, the insights Lab band)
  */
 export type { SketchName };
 
@@ -37,7 +41,6 @@ export function Sketch({ name }: SketchProps) {
       focusable="false"
       aria-hidden="true"
     >
-
       {name === 'new-product' ? (
         <>
           <rect className={styles.trailFrame} x="50" y="30" width="220" height="120" rx="8" />
@@ -68,7 +71,11 @@ export function Sketch({ name }: SketchProps) {
         <>
           <rect className={styles.frameQuiet} x="30" y="40" width="110" height="100" rx="8" />
           {[58, 70, 82, 94, 106, 118].map((y, i) => (
-            <path key={y} className={styles.copyQuiet} d={`M44,${y} L${i % 2 ? 110 : 126},${y}`} />
+            <path
+              key={y}
+              className={styles.copyQuiet}
+              d={`M44,${y} L${i % 2 ? 110 : 126},${y}`}
+            />
           ))}
           <path className={styles.line} d="M152,90 L170,90" />
           <path className={styles.line} d="M163,83 L170,90 L163,97" />
@@ -88,7 +95,15 @@ export function Sketch({ name }: SketchProps) {
             [84, 84],
             [40, 128],
           ].map(([x, y]) => (
-            <rect key={`${x}-${y}`} className={styles.tile} x={x} y={y} width="34" height="24" rx="5" />
+            <rect
+              key={`${x}-${y}`}
+              className={styles.tile}
+              x={x}
+              y={y}
+              width="34"
+              height="24"
+              rx="5"
+            />
           ))}
           <rect className={styles.solid} x="84" y="128" width="34" height="24" rx="5" />
           <path className={styles.trail} d="M124,140 L176,112" />
@@ -107,7 +122,10 @@ export function Sketch({ name }: SketchProps) {
           <rect className={styles.solid} x="92" y="104" width="64" height="20" rx="10" />
           <path className={styles.tick} d="M114,114 L120,120 L132,108" />
           <rect className={styles.frameQuiet} x="164" y="104" width="64" height="20" rx="10" />
-          <path className={styles.mark} d="M232,22 L236,34 L248,38 L236,42 L232,54 L228,42 L216,38 L228,34 Z" />
+          <path
+            className={styles.mark}
+            d="M232,22 L236,34 L248,38 L236,42 L232,54 L228,42 L216,38 L228,34 Z"
+          />
         </>
       ) : null}
 
@@ -142,6 +160,24 @@ export function Sketch({ name }: SketchProps) {
           <path className={styles.line} d="M210,132 L244,132 L244,90" />
           <circle className={styles.halo} cx="244" cy="76" r="16" />
           <circle className={styles.node} cx="244" cy="76" r="8" />
+        </>
+      ) : null}
+      {name === 'lab' ? (
+        <>
+          <rect className={styles.trailFrame} x="206" y="26" width="84" height="36" rx="6" />
+          <rect className={styles.tile} x="206" y="72" width="84" height="36" rx="6" />
+          <path className={styles.copyQuiet} d="M218,86 L268,86" />
+          <path className={styles.copyQuiet} d="M218,96 L248,96" />
+          <rect className={styles.trailFrame} x="206" y="118" width="84" height="36" rx="6" />
+          <path className={styles.trail} d="M206,90 L160,90" />
+          <rect className={styles.frame} x="30" y="36" width="130" height="108" rx="8" />
+          <path className={styles.copy} d="M46,58 L118,58" />
+          <rect className={styles.region} x="46" y="74" width="98" height="32" rx="5" />
+          <rect className={styles.solid} x="46" y="118" width="40" height="12" rx="6" />
+          <path
+            className={styles.mark}
+            d="M30,20 L34,32 L46,36 L34,40 L30,52 L26,40 L14,36 L26,32 Z"
+          />
         </>
       ) : null}
     </svg>

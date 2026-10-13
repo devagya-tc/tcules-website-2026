@@ -10,6 +10,7 @@ const NAMES: readonly SketchName[] = [
   'ai-product-ux',
   'design-engineering',
   'software-development',
+  'lab',
 ];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 
@@ -20,9 +21,10 @@ export default function SketchSpecimen() {
         <Layout rowGap="block">
           <h1>Sketch</h1>
           <p>
-            A small drawing on its 16:9 plate, a stand-in where a block needs a visual subject and
-            no illustration exists: one scene per service (home and About selectors), in the plate language of EngagementOptions
-            and TracePlates. Decorative. The selector&rsquo;s answer on the ideal About leads with it.
+            A small drawing on its 16:9 plate, a stand-in where a block needs a visual subject
+            and no illustration exists: one scene per service (home and About selectors), in the
+            plate language of EngagementOptions and TracePlates. Decorative. The
+            selector&rsquo;s answer on the ideal About leads with it.
           </p>
         </Layout>
       </Section>

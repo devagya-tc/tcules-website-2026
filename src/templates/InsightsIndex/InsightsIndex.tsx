@@ -6,6 +6,7 @@ import {
   Icon,
   Layout,
   Section,
+  Sketch,
   Tag,
   type IconName,
   type SketchName,
@@ -121,7 +122,11 @@ export type InsightsIndexProps = {
   featuredId?: string;
   formats?: readonly InsightsIndexFormat[];
   collections?: readonly InsightsIndexCollection[];
-  lab?: { heading: string; body?: string; action: HeroAction };
+  /**
+   * The Lab: the other organisation's offer, the page's one dark band (owner, 13 Oct 2026: ink, not
+   * blue). `visual` is the drawing it carries beside its words — a Sketch scene the page picks.
+   */
+  lab?: { heading: string; body?: string; action: HeroAction; visual?: SketchName };
   feed: InsightsIndexFeed;
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
@@ -431,16 +436,33 @@ export function InsightsIndex({
       })}
 
       {lab ? (
-        <CtaSection
-          arrangement="offer"
-          surface="blue"
-          heading={lab.heading}
-          body={lab.body?.trim() ? [lab.body] : undefined}
-          actions={[lab.action]}
-        />
+        lab.visual ? (
+          /* The Lab on ink (owner, 13 Oct 2026), its words in the head track and its drawing — the
+             Lab's own Sketch scene, experiments carried into a product, facing the copy — filling
+             the two-thirds track: a band with one thing to show, not an empty slab of colour. */
+          <ContentSection
+            id="lab"
+            heading={lab.heading}
+            headingId="lab-heading"
+            lead={lab.body?.trim() ? lab.body : undefined}
+            surface="ink"
+            arrangement="beside"
+            actions={<CtaRow rule={false} actions={[lab.action]} />}
+          >
+            <Sketch name={lab.visual} />
+          </ContentSection>
+        ) : (
+          <CtaSection
+            arrangement="offer"
+            surface="ink"
+            heading={lab.heading}
+            body={lab.body?.trim() ? [lab.body] : undefined}
+            actions={[lab.action]}
+          />
+        )
       ) : null}
 
-      <Feed feed={feed} />
+      <Feed feed={feed} standIn={standIn} />
 
       {closing?.action ? (
         <CtaSection
@@ -829,7 +851,7 @@ function Catalogue({
  * page onto the feed they filter). Every control is a link the page built, so the state is the URL:
  * shareable, back-button safe, and indexable without script.
  */
-function Feed({ feed }: { feed: InsightsIndexFeed }) {
+function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) {
   const filtered = feed.clearHref !== undefined;
   const count = filtered
     ? `${feed.total} of ${feed.all} match`
@@ -935,20 +957,7 @@ function Feed({ feed }: { feed: InsightsIndexFeed }) {
 
         <Layout rowGap="stack">
           {feed.items.length > 0 ? (
-            <Layout as="ul" rowGap="none">
-              {feed.items.map((item) => (
-                <ListCard
-                  key={item.id}
-                  titleAs="h3"
-                  size="sm"
-                  arrangement="stacked"
-                  eyebrow={line(LABEL[item.kind].one, dateOf(item.publishedAt), lengthOf(item))}
-                  title={item.title}
-                  body={bodyOf(item)}
-                  href={item.href}
-                />
-              ))}
-            </Layout>
+            <River items={feed.items} standIn={standIn} />
           ) : (
             <p>Nothing matches these filters.</p>
           )}
@@ -968,5 +977,182 @@ function Feed({ feed }: { feed: InsightsIndexFeed }) {
         </Layout>
       </Layout>
     </ContentSection>
+  );
+}
+
+/* ── F · the river ────────────────────────────────────────────────────────────── */
+
+const MONTH = new Intl.DateTimeFormat('en-GB', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+/** Rows between two pairs in a month: a pair breaks a run of rows before it reads as a table. */
+const ROW_RUN = 4;
+
+type RiverPart =
+  | { kind: 'feature'; item: InsightsIndexItem }
+  | { kind: 'pair'; items: readonly [InsightsIndexItem, InsightsIndexItem] }
+  | { kind: 'rows'; items: readonly InsightsIndexItem[] };
+
+/** Can this item carry an image in the river: a cover of its own, or a generated scene. */
+const pictured = (item: InsightsIndexItem) =>
+  coverOf(item) !== undefined || (item.graphics?.length ?? 0) > 0;
+
+/**
+ * One month of the river, still newest first: its newest piece as the feature (the image beside
+ * its words), then runs of rows broken by a PAIR wherever the next two pieces both carry an image.
+ * Order is never changed to make a shape: a pair forms only from two consecutive pictured pieces.
+ */
+function monthParts(items: readonly InsightsIndexItem[]): RiverPart[] {
+  const [first, ...rest] = items;
+  if (!first) return [];
+  const parts: RiverPart[] = [{ kind: 'feature', item: first }];
+  let run: InsightsIndexItem[] = [];
+  let sincePair = ROW_RUN;
+  for (let i = 0; i < rest.length; i++) {
+    const a = rest[i]!;
+    const b = rest[i + 1];
+    if (b && sincePair >= ROW_RUN && pictured(a) && pictured(b)) {
+      if (run.length > 0) parts.push({ kind: 'rows', items: run });
+      run = [];
+      parts.push({ kind: 'pair', items: [a, b] });
+      sincePair = 0;
+      i++;
+      continue;
+    }
+    run.push(a);
+    sincePair++;
+  }
+  if (run.length > 0) parts.push({ kind: 'rows', items: run });
+  return parts;
+}
+
+/** The river's month buckets, in the order the items arrive (newest first). */
+function months(items: readonly InsightsIndexItem[]) {
+  const groups: { key: string; label: string; items: InsightsIndexItem[] }[] = [];
+  for (const item of items) {
+    const date = parse(item.publishedAt);
+    const key = date ? `${date.getUTCFullYear()}-${date.getUTCMonth()}` : 'undated';
+    const label = date ? MONTH.format(date) : 'Earlier';
+    const group = groups.find((candidate) => candidate.key === key);
+    if (group) group.items.push(item);
+    else groups.push({ key, label, items: [item] });
+  }
+  return groups;
+}
+
+/**
+ * The feed's river (owner, 13 Oct 2026: "the last section is too boring" — it was one row shape for
+ * its whole length). Rhythm from position and scale, The Verge's way, with no ground and no box:
+ * a DATE BREAK heads each month; the month's newest piece is a FEATURE, a horizontal card with its
+ * image; runs of ROWS say format, date and length; and two consecutive pictured pieces become a PAIR
+ * of covered cards that breaks a run. Events keep their date column. Images missing a cover take the
+ * page's stand-in order: a generated scene, else a photograph, else a texture field.
+ */
+function River({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
+  const media = (item: InsightsIndexItem) => coverOf(item) ?? standIn(item);
+  return (
+    <Layout rowGap="column">
+      {months(items).map((month) => {
+        const headingId = `river-${month.key}`;
+        return (
+          <section key={month.key} aria-labelledby={headingId}>
+            <Layout rowGap="block">
+              <h3 id={headingId} className={styles.month}>
+                {month.label}
+              </h3>
+              <Layout rowGap="stack">
+                {monthParts(month.items).map((part, index) => {
+                  if (part.kind === 'feature') {
+                    const item = part.item;
+                    return (
+                      <ul key={index}>
+                        <BlockCard
+                          orientation="horizontal"
+                          imageSide="left"
+                          size="lg"
+                          titleAs="h4"
+                          eyebrow={line(
+                            LABEL[item.kind].one,
+                            dateOf(item.publishedAt),
+                            lengthOf(item),
+                          )}
+                          title={item.title}
+                          body={bodyOf(item)}
+                          media={media(item)}
+                          href={item.href}
+                          cue="title"
+                        />
+                      </ul>
+                    );
+                  }
+                  if (part.kind === 'pair') {
+                    return (
+                      <BlockCardSet
+                        key={index}
+                        lead="none"
+                        cue="title"
+                        titleAs="h4"
+                        items={part.items.map((item) => ({
+                          id: item.id,
+                          title: item.title,
+                          eyebrow: line(
+                            LABEL[item.kind].one,
+                            dateOf(item.publishedAt),
+                            lengthOf(item),
+                          ),
+                          media: media(item),
+                          href: item.href,
+                        }))}
+                      />
+                    );
+                  }
+                  return (
+                    <Layout as="ul" rowGap="none" key={index}>
+                      {part.items.map((item) => {
+                        const date =
+                          item.kind === 'event' ? parse(item.event?.startsAt) : undefined;
+                        return (
+                          <ListCard
+                            key={item.id}
+                            titleAs="h4"
+                            size="sm"
+                            arrangement="stacked"
+                            eyebrow={
+                              item.kind === 'event'
+                                ? line(LABEL.event.one, item.event?.place)
+                                : line(
+                                    LABEL[item.kind].one,
+                                    dateOf(item.publishedAt),
+                                    lengthOf(item),
+                                  )
+                            }
+                            title={item.title}
+                            body={bodyOf(item)}
+                            href={item.href}
+                            marker={
+                              date && item.event
+                                ? {
+                                    type: 'date',
+                                    dateTime: item.event.startsAt,
+                                    day: DAY_OF_MONTH.format(date),
+                                    label: MONTH_YEAR.format(date),
+                                  }
+                                : undefined
+                            }
+                          />
+                        );
+                      })}
+                    </Layout>
+                  );
+                })}
+              </Layout>
+            </Layout>
+          </section>
+        );
+      })}
+    </Layout>
   );
 }
