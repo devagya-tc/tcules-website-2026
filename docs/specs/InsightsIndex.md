@@ -9,7 +9,7 @@
 | **Token prefix** | `--iix-*` (`src/styles/tokens/components/insights-index.css`) |
 | **Designer / date** | Claude Code, 13 Oct 2026, to the owner's decision of the same day |
 | **Implements** | Owner decision 13 Oct 2026: "FRONT PAGE + FEED". Reference: The Verge home page, for how it lists many varied items on one page and keeps it interesting and easy to search. A featured lead and a curated mix at the top; rows per format, each its OWN shape; then a latest-first feed carrying the filters (moved off the top, still URL-driven). Beauty is the core factor. |
-| **Implemented at** | `src/templates/InsightsIndex/InsightsIndex.tsx` · `InsightsIndex.module.css` · `src/styles/tokens/components/insights-index.css` · `ListCard` `eyebrow` (extension, § 3) · specimen `src/app/design/insights-index/page.tsx` · route `src/app/insights/page.tsx` |
+| **Implemented at** | `src/templates/InsightsIndex/InsightsIndex.tsx` · `InsightsIndex.module.css` · `src/styles/tokens/components/insights-index.css` · `ListCard` `eyebrow` and `date` marker (extensions, § 3; ListCard spec amendment 13 Oct) · shared mapping `src/app/_insights/hub.ts` · specimen `src/app/design/insights-index/page.tsx` · route `src/app/insights/page.tsx` |
 
 ## 1 · Identity
 
@@ -17,7 +17,7 @@ The insights hub page type: everything Tcules publishes (articles, guides, resea
 videos, events, interviews) on one page, arranged as a newspaper front page over an archive.
 
 **Tier 3**, because it is a whole page shape: it composes PageHero, BlockCardSet, BlockCard,
-ListCard, Slider, ContentSection, CtaRow, CtaSection, Tag, Stat and Icon, and decides which of them
+ListCard, Slider, ContentSection, CtaRow, CtaSection, Tag and Icon, and decides which of them
 each format gets. The live route and the specimen render the same composition, as `CaseStudyIndex`
 does for `/case-studies`.
 
@@ -53,16 +53,23 @@ One per page.
 | Format | Shape | Why this shape |
 |---|---|---|
 | articles | **wide**: `BlockCardSet lead="wide"`, three covers in [2, 1, 1] | the largest set; size contrast in one row |
-| events | **ledger**: rows led by the DATE as a `Stat` (day, month, year · place) | an event is a date first |
+| events | **ledger**: `ListCard` rows led by the `date` marker (day large, month and year under it), the place as the eyebrow, title beside body | an event is a date first |
 | podcasts | **episode**: the newest as a horizontal `BlockCard` (cover beside copy, "Listen" cta, duration), earlier ones as rows | an episode is one thing you press play on |
-| research | **boxed**: `BlockCardSet frame="box"` text cards with reading time as `meta` | reports are artefacts; the box separates them as objects |
+| research | **reports**: horizontal text `BlockCard`s (head beside body), a `column` apart, "Read the research" cta with reading time as `meta` | an editorial weight: a report is read for its argument. A boxed card has no edge at rest (owner, 9 Oct), so the box read as misaligned text |
 | videos | **rail**: a `Slider` of covered cards | the format people scrub through |
 | interviews | **voices**: text tiles, title-led (`BlockCardSet` text, `md`) | a conversation is its headline |
 | guides | **catalogue**: `ListCard` thumbnail rows in two columns (text rows when any cover is missing) | a shelf of practical walkthroughs |
 
-Order: articles · events · podcasts · research · videos · interviews · guides. It alternates covered
-(visual) and text shapes so that no two text-heavy bands meet (CLAUDE.md § Design quality), and the
-blue Lab band sits between the last row and the feed, closing the front page and opening the archive.
+Order: the canonical order is articles · events · podcasts · research · videos · interviews · guides,
+then RE-DEALT (`alternate`) so a covered band (articles, podcasts, videos, and guides when every guide
+has a cover) and a text band take turns, whichever formats are present — so no two text-heavy bands
+meet when a format is missing or a catalogue drops to text (CLAUDE.md § Design quality). A surplus of
+text bands can only fall at the end. The blue Lab band sits between the last row and the feed,
+closing the front page and opening the archive.
+
+**Ruling, feed → close.** The feed (a list) is followed by the close on tint. They are both words, but
+the close is a ground change carrying one centred ask, the page's bookend on every page type; it is
+not a second text band in the sense of the rule. Recorded so review does not re-open it.
 
 ## 3 · Props / API
 
@@ -78,6 +85,7 @@ Every type is the template's own; the page maps the view model onto it (a templa
 | `formats` | `readonly InsightsIndexFormat[]` | `[]` | per kind: `title`, `lead`, and `href` ("All podcasts") |
 | `collections` | `readonly InsightsIndexCollection[]` | `[]` | band C; absent renders nothing |
 | `lab` | `{ heading; body?; action: HeroAction }` | — | band E |
+| `standIns` | `readonly BlockCardImage[]` | `[]` | catalogue photographs for missing covers, taken in order down the page |
 | `feed` | `InsightsIndexFeed` | — | band F (below) |
 | `closing` | `{ eyebrow?; heading; body?; action? }` | — | band G, only with `action` |
 
@@ -127,8 +135,8 @@ Page-level states, all server-rendered from the URL:
 
 ## 6 · Per-surface colour
 
-The template draws three marks itself: the jump row's count, the collection description and the
-feed's count line. Every other colour is a pattern's own.
+The template draws its own marks: the jump and feed counts, the collection head (glyph, title,
+sentence) and the filter group labels. Every other colour is a pattern's own.
 
 | Token | paper | tint | ink | blue |
 |---|---|---|---|---|
@@ -136,6 +144,7 @@ feed's count line. Every other colour is a pattern's own.
 | `--iix-topic-body-ink` | neutral-700 (8.14:1) | neutral-700 (7.27:1) | neutral-300 | brandeis-50 (5.57:1) |
 | `--iix-topic-title-ink` | neutral-900 | neutral-900 | white | white |
 | `--iix-topic-icon-ink` | brandeis-500 (6.17:1) | brandeis-500 (5.51:1) | brandeis-300 | white |
+| `--iix-filter-label-ink` | neutral-600 (4.92:1) | neutral-700 (7.27:1) | neutral-400 (8.05:1) | brandeis-100 (4.91:1) |
 
 Paper: the quiet-label ramp BlockCard's eyebrow uses. Tint: the label steps to 700 because 600 is
 4.39:1 there. Ink: lifted, as BlockCard's. Blue: the brandeis-50/100 pair BlockCard uses. Every band
@@ -150,14 +159,14 @@ the other surfaces are declared for self-containment (tokens rule 2).
 - front page: BlockCardSet's own (`gutter` across, `column` down)
 - collections: `Layout colGap="gutter" rowGap="stack"`; inside a column `block` (icon → head group),
   `text` (title → sentence), `block` (head group → rows), rows `none`
-- event row: `Layout colGap="gutter"` date beside copy, `text` inside the copy
+- event row: ListCard's own (marker beside copy at `block`; day over label at `tight`)
 - episode: horizontal card, then rows under it at `stack`
 - feed: head over body at ContentSection's `stack`; rail beside list at `section` (a split: controls
   beside a list, two different kinds); filter groups `gutter` apart; label → chips `text`; chips
   `text`/`text` (the 24px touch-target argument the old page made, kept); rows `none`; list → "Show
   more" `stack`
 
-**(b) Component sizes** — none new. The filter rail's sticky offset (`--iix-rail-sticky-top`) reads
+**(b) Component sizes** — none in the template. ListCard's date column `--lcrd-date-inline` (96) is new, measured against "30" at the stat role and "SEPT 2026" at the eyebrow role. The filter rail's sticky offset (`--iix-rail-sticky-top`) reads
 `--gap-section`, clear of the 72 nav bar, as CaseStory's marker does.
 
 **(c) Optical corrections** — none.
@@ -169,11 +178,12 @@ Radius, border, shadow, z-layer: none of the template's own.
 | Part | Role | Tracking |
 |---|---|---|
 | jump count | `--text-ui` (mono, uppercase) | `--text-ui-tracking`, `--text-mono-case` |
-| collection title (h3) | `--text-h5` | `--text-h5-tracking` |
+| collection title (h3) | `--text-h4` | `--text-h4-tracking` |
+| collection glyph | `--text-h5` (its em) | — |
 | collection sentence | `--text-body-sm` | none — this role has no tracking companion |
 | feed count line | `--text-ui` | `--text-ui-tracking`, `--text-mono-case` |
 | filter group label (h3) | `--text-eyebrow` | `--text-eyebrow-tracking`, `--text-mono-case` |
-| event date | Stat `lg` (`--text-stat-lg`) | Stat's own |
+| event date | ListCard `--lcrd-date-day-text` (`--text-stat`) | `--text-stat-tracking` |
 
 Display type: none — the h1 is PageHero's `stacked` h1 (display is hero-only and this hero is not a
 display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--text-title-wrap`.
@@ -221,7 +231,7 @@ module carries only the sticky rail and the three marks in § 6.
   each format band's `id` is its anchor. Counts are part of the link's name ("Podcasts, 2").
 - Filters: each chip is a link; a held chip carries `aria-current` (Tag emits it from `selected`) and
   its `close-circle` is labelled "Clear filter". The rail is an `aside aria-label="Filter the feed"`.
-  The count line is a `p` with `role="status"` so the number is announced after a filter navigation.
+  The count line is a plain `p`: it is server-rendered and changes only on a full navigation, so a live region would add nothing.
 - Every filter and "Show more" href ends in `#<feed id>`, so focus lands on the feed, not the top.
 - Rows and cards: one anchor each (ListCard, BlockCard). The Slider owns its carousel semantics.
 - Reduced motion: nothing here moves; the Slider and cards honour it themselves.
@@ -236,9 +246,9 @@ module carries only the sticky rail and the three marks in § 6.
 | one item | the lead alone (no mix); its format row then falls back to that item |
 | many items (100 per kind) | rows cap (wide 3, ledger 4, episode 1 + 3, boxed 3, rail 8, voices 3, catalogue 6); feed pages 12 at a time |
 | a format with no items | no row, no jump |
-| missing cover | front-page lead and article/video covers take the texture stand-in; the mix and rows are text by design; catalogue drops ALL thumbnails if any is missing (a set is all-image or all-text) |
+| missing cover | the front-page lead, article, podcast and video covers take a catalogue stand-in photograph from the page's `standIns` pool (visual-direction § 5.7), else the texture field; the mix and rows are text by design; catalogue drops ALL thumbnails if any is missing (a set is all-image or all-text) |
 | missing description | the card or row renders title alone |
-| event without a date | the ledger row renders without its date column |
+| event without a date | the ledger row keeps its date column, reading "—" / "Date TBC" as text (no `<time>`); the publish date is never passed off as the event's |
 | podcast without duration | the cta stands alone |
 | collections absent (live CMS today) | band C absent |
 | lab / closing absent | bands absent |
@@ -274,9 +284,11 @@ Each at 1440 and 390 (`npm run shots -- insights-index`), plus the live `/insigh
 
 ## 16 · New token requests
 
-`src/styles/tokens/components/insights-index.css` (§ 6, plus `--iix-rail-sticky-top`), and in
-`list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`, `--lcrd-eyebrow-ink` (per surface,
-BlockCard's eyebrow values, duplicated on purpose: tokens rule 6).
+`src/styles/tokens/components/insights-index.css` (§ 6, plus `--iix-rail-sticky-top` and
+`--iix-hidden-size`), and in `list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`,
+`--lcrd-eyebrow-ink` (per surface, BlockCard's eyebrow values, duplicated on purpose: tokens rule 6),
+`--lcrd-date-day-text`, `--lcrd-date-day-tracking`, `--lcrd-date-inline`, `--lcrd-date-ink` (per
+surface).
 
 ## 17 · Open questions
 
@@ -297,7 +309,7 @@ BlockCard's eyebrow values, duplicated on purpose: tokens rule 6).
 
 - 18 sections present: 0–17.
 - Distances named by role: 14; raw values: 0.
-- New tokens: 6 template + 3 ListCard, every surface block complete.
+- New tokens: 12 template + 7 ListCard, every surface block complete.
 - Patterns reused: PageHero, BlockCardSet, BlockCard, ListCard, Slider, ContentSection, CtaRow,
-  CtaSection, Breadcrumbs; primitives: Section, Layout, Cluster, Button, Icon, Tag, Stat.
-- New patterns: 0. New template: 1. Pattern extended: ListCard (`eyebrow`).
+  CtaSection, Breadcrumbs; primitives: Section, Layout, Cluster, Button, Icon, Tag.
+- New patterns: 0. New template: 1. Pattern extended: ListCard (`eyebrow`, `date` marker).

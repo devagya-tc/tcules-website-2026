@@ -26,13 +26,7 @@ import styles from './InsightsIndex.module.css';
 
 /** The seven formats. The template decides each one's shape and position from this. */
 export type InsightsIndexKind =
-  | 'article'
-  | 'guide'
-  | 'research'
-  | 'podcast'
-  | 'video'
-  | 'event'
-  | 'interview';
+  'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview';
 
 export type InsightsIndexItem = {
   id: string;
@@ -278,7 +272,7 @@ export function InsightsIndex({
   const { lead, mix } = frontPage(items, featuredId);
   const onFront = new Set([lead, ...mix].filter(Boolean).map((item) => item!.id));
 
-  const bands = FORMAT_ORDER.flatMap((kind) => {
+  const present = FORMAT_ORDER.flatMap((kind) => {
     const all = items.filter((item) => item.kind === kind);
     if (all.length === 0) return [];
     const fresh = all.filter((item) => !onFront.has(item.id));
@@ -295,6 +289,7 @@ export function InsightsIndex({
       },
     ];
   });
+  const bands = alternate(present);
 
   const lede = hero.lede?.trim();
   const jumps =
@@ -310,9 +305,13 @@ export function InsightsIndex({
                 tone="neutral"
                 icon={<Icon name="alt-arrow-down" />}
               >
+                {/* The count joins the label inside the Button's one label run, after an en space:
+                    a typographic space in the text, not a box with spacing of its own (a Cluster
+                    here broke the Button's inline row and dropped its glyph to a second line). */}
                 {band.title}
-                <span className={styles.count}>
-                  <span className={styles.hidden}>, </span>
+                <span className={styles.jumpCount}>
+                  <span className={styles.hidden}>,</span>
+                  {'\u2002'}
                   {band.count}
                 </span>
               </Button>
@@ -372,12 +371,14 @@ export function InsightsIndex({
           headingId: `${anchorOf(band.kind)}-heading`,
           lead: band.lead,
         };
-        const shape = <FormatShape
+        const shape = (
+          <FormatShape
             kind={band.kind}
             items={band.items}
             title={band.title}
             standIn={standIn}
-          />;
+          />
+        );
         /* "All …" at the end of the heading's row: the band's way out to the rest of its format. */
         return band.href ? (
           <ContentSection
@@ -427,6 +428,33 @@ export function InsightsIndex({
 }
 
 const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
+
+/** A band whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
+function isVisual(band: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }) {
+  if (band.kind === 'guide') return band.items.every((item) => coverOf(item) !== undefined);
+  return band.kind === 'article' || band.kind === 'podcast' || band.kind === 'video';
+}
+
+/**
+ * The bands in FORMAT_ORDER, re-dealt so a covered band and a text band take turns (CLAUDE.md:
+ * never two text-heavy bands back to back) whichever formats are present and whichever have covers.
+ * Each kind keeps its place within its own group; a surplus of text bands can only go at the end,
+ * which the specimen's sparse state shows does not happen with the CMS's formats.
+ */
+function alternate<T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }>(
+  bands: readonly T[],
+): T[] {
+  const visual = bands.filter(isVisual);
+  const text = bands.filter((band) => !isVisual(band));
+  const out: T[] = [];
+  while (visual.length > 0 || text.length > 0) {
+    const v = visual.shift();
+    if (v) out.push(v);
+    const t = text.shift();
+    if (t) out.push(t);
+  }
+  return out;
+}
 
 /* ── C · collections ──────────────────────────────────────────────────────────── */
 
@@ -582,7 +610,13 @@ function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
 }
 
 /** Podcasts — the episode: the newest as one wide card you press play on, earlier ones as rows. */
-function Episode({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
+function Episode({
+  items,
+  standIn,
+}: {
+  items: readonly InsightsIndexItem[];
+  standIn: StandIn;
+}) {
   const [latest, ...earlier] = items;
   if (!latest) return null;
   return (
@@ -764,9 +798,7 @@ function Feed({ feed }: { feed: InsightsIndexFeed }) {
       <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
         <aside aria-label="Filter the feed" className={styles.rail}>
           <Layout rowGap="gutter">
-            <p className={styles.count} role="status">
-              {count}
-            </p>
+            <p className={styles.feedCount}>{count}</p>
             {feed.filters.map((group) => (
               <Layout key={group.id} rowGap="text">
                 <h3 className={styles.filterLabel}>{group.label}</h3>

@@ -1,6 +1,11 @@
 import { getKitPhoto, type PhotoId } from '../../../lib/photos.ts';
 import { ROUTES } from '../../../lib/routes.ts';
-import type { InsightImage, InsightResource, InsightResourceKind, InsightsPage } from '../../types';
+import type {
+  InsightImage,
+  InsightResource,
+  InsightResourceKind,
+  InsightsPage,
+} from '../../types';
 
 /**
  * The insights hub as DESIGNED — for the InsightsIndex specimen only, never a live route (the live
@@ -470,7 +475,8 @@ export const INSIGHTS_FIXTURE: InsightsPage = {
       id: 'research',
       kind: 'research',
       title: 'Research',
-      description: 'What we found when we measured it: surveys, benchmarks and pattern studies.',
+      description:
+        'What we found when we measured it: surveys, benchmarks and pattern studies.',
     },
     {
       id: 'podcasts',
@@ -562,7 +568,8 @@ export const INSIGHTS_FIXTURE: InsightsPage = {
     {
       id: 'saas-ux',
       title: 'SaaS product experience',
-      description: 'For SaaS teams working on quoting, engagement and where their product should run.',
+      description:
+        'For SaaS teams working on quoting, engagement and where their product should run.',
       items: [
         {
           id: 'c7',
@@ -631,7 +638,8 @@ export const INSIGHTS_FIXTURE: InsightsPage = {
   closing: {
     id: 'talk',
     heading: 'Talk to us',
-    description: 'If one of these pieces describes a problem in your own product, tell us about it.',
+    description:
+      'If one of these pieces describes a problem in your own product, tell us about it.',
     action: { label: 'Tell us about it', href: ROUTES.contact, external: false },
   },
   seo: {

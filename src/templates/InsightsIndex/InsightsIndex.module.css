@@ -1,19 +1,21 @@
 /* InsightsIndex — the marks the hub template draws itself. Layout and Cluster own every seam; every
    value is an --iix-* token in tokens/components/insights-index.css. */
 
-/* A format's count beside its jump, and the feed's count line: a quiet mono label. Inside a link
-   Button the count keeps the label voice but steps back to the quiet ink, so the format's name
-   leads. The gap before it is the Button's own icon-to-label gap, not a margin. */
-.count {
+/* A format's count beside its jump: the label voice in the quiet ink, so the format's name leads.
+   The space before it is an en space in the text itself, not a padding or margin. */
+.jumpCount {
   color: var(--iix-count-ink);
   font: var(--iix-count-text);
   letter-spacing: var(--iix-count-tracking);
   text-transform: var(--text-mono-case);
-  padding-inline-start: var(--gap-tight);
 }
 
-p.count {
-  padding-inline-start: 0;
+/* The feed's count line over its filters: the same quiet label. */
+.feedCount {
+  color: var(--iix-count-ink);
+  font: var(--iix-count-text);
+  letter-spacing: var(--iix-count-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 /* The comma that makes a jump's accessible name "Articles, 36" rather than "Articles36". */

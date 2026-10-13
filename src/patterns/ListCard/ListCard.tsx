@@ -47,7 +47,7 @@ export type ListCardMarker =
       accent, and the month and year under it in the label voice — a row that IS a date first. A
       real `<time>`, not aria-hidden: the date is content, unlike an ordinal. The caller formats
       both strings ("14", "Nov 2026") and passes the ISO value for `dateTime`. Without `dateTime`
-      (a date not yet set: "—", "Date to come") it renders as text, not a `<time>`, so a ledger
+      (a date not yet set: "—", "Date TBC") it renders as text, not a `<time>`, so a ledger
       with one undated row keeps every row's copy on one edge. */
   | { type: 'date'; dateTime?: string; day: string; label: string };
 

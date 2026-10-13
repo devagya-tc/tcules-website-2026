@@ -279,7 +279,7 @@
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --lcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --lcrd-date-ink: var(--color-brandeis-300);
+  --lcrd-date-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-marker-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --lcrd-number-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-neutral-number-ink: var(--color-neutral-500); /* 5.41:1 */
@@ -299,7 +299,7 @@
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --lcrd-date-ink: var(--color-white);
+  --lcrd-date-ink: var(--color-white); /* 6.23:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
   --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */

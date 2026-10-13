@@ -331,6 +331,13 @@ function SurfaceRows() {
         href={EXTERNAL_HREF}
         external
       />
+      <ListCard
+        eyebrow="Ahmedabad · Meetup"
+        title="An eyebrow over a dated row"
+        body="The eyebrow's quiet ink and the date marker's accent ink, read from this surface's own block."
+        marker={{ type: 'date', dateTime: '2026-11-14', day: '14', label: 'Nov 2026' }}
+        href={ROUTES.events}
+      />
     </Rows>
   );
 }
@@ -1247,7 +1254,7 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all eleven ListCard colour tokens from itself; no
+              The tint panel below resolves all fourteen ListCard colour tokens from itself; no
               ink value may leak through an omitted declaration.
             </p>
           </Layout>

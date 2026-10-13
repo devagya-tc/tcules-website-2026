@@ -69,7 +69,12 @@ const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 
 /** `path` may carry a query of its own (the specimen's `?state=`), which every link keeps. */
-function hrefFor(path: string, feedId: string, selected: ReadonlyMap<string, string>, page = 1) {
+function hrefFor(
+  path: string,
+  feedId: string,
+  selected: ReadonlyMap<string, string>,
+  page = 1,
+) {
   const [base = path, own] = path.split('?');
   const query = new URLSearchParams(own);
   [...selected.entries()]
@@ -95,7 +100,9 @@ function toItem(resource: InsightResource): InsightsIndexItem {
           cover: {
             src: image.src,
             alt: image.alt,
-            ...(image.width && image.height ? { width: image.width, height: image.height } : {}),
+            ...(image.width && image.height
+              ? { width: image.width, height: image.height }
+              : {}),
             ...(image.sources ? { sources: image.sources } : {}),
             ...(image.kind ? { kind: image.kind } : {}),
             ...(image.standIn ? { standIn: true } : {}),
@@ -150,7 +157,10 @@ export function insightsIndexProps(
     ),
   );
   const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
-  const current = Math.min(pages, Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1));
+  const current = Math.min(
+    pages,
+    Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1),
+  );
   const visible = matches.slice(0, current * PAGE_SIZE);
 
   const filters: InsightsIndexFilterGroup[] = groups.map((group) => ({
@@ -161,7 +171,12 @@ export function insightsIndexProps(
       const next = new Map(selected);
       if (isSelected) next.delete(group.id);
       else next.set(group.id, option.id);
-      return { id: option.id, label: option.label, href: hrefFor(path, feedId, next), selected: isSelected };
+      return {
+        id: option.id,
+        label: option.label,
+        href: hrefFor(path, feedId, next),
+        selected: isSelected,
+      };
     }),
   }));
 

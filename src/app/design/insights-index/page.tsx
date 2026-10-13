@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { getInsightsFixturePage, type InsightsPage } from '@/content';
+import { ROUTES } from '@/lib/routes';
 import { InsightsIndex } from '@/templates';
 
 import { insightsIndexProps } from '../../_insights/hub';
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const PATH = '/design/insights-index';
+const PATH = ROUTES.designInsightsIndex;
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -65,7 +66,8 @@ function empty(page: InsightsPage): InsightsPage {
 export default async function InsightsIndexSpecimen({ searchParams }: Props) {
   const [fixture, query] = await Promise.all([getInsightsFixturePage(), searchParams]);
   const state = Array.isArray(query.state) ? query.state[0] : query.state;
-  const page = state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
+  const page =
+    state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
   const path = state === 'sparse' || state === 'empty' ? `${PATH}?state=${state}` : PATH;
 
   return <InsightsIndex {...insightsIndexProps(page, query, path)} />;
