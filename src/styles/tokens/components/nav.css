@@ -102,8 +102,13 @@
 
      Re-point the row type and all three want re-measuring: widest label in a column, doubled, plus
      one --gap-column seam and two --gap-gutter edges. */
-  --nav-plate-width-lg: 1056px;
-  --nav-plate-width-md: 780px;
+  /* REVISION 2 re-measured lg and md against the feature column every mega now carries. lg back to
+     1120: Expertise holds two long-label columns beside a feature, and at 1056 "Content, Knowledge
+     and Discovery Platforms" (293) wrapped against a ~274 label track (the row reserves its arrow
+     and gap). md 780 → 880: Insights' story takes half the plate for its photograph, which leaves
+     ~180 per link column against a longest label of 133. */
+  --nav-plate-width-lg: 1120px;
+  --nav-plate-width-md: 880px;
   --nav-plate-width-sm: 560px;
   --nav-plate-radius: var(--radius-8);
   /* The air between the bar's hairline and the plate's top edge. It is a token rather than a bare
@@ -168,8 +173,19 @@
      nothing in the ladder could express before.
 
      Its tracking companion comes back with it, because h6 has one — `none`, as h5's is. */
-  --nav-rail-title-text: var(--text-h6);
-  --nav-rail-title-tracking: var(--text-h6-tracking);
+  /* RENAMED in revision 2, from --nav-rail-title-*: the role now titles every feature column — the
+     Services offers and the Insights story alike — not one rail card. Same role, same reasoning. */
+  --nav-feature-title-text: var(--text-h6);
+  --nav-feature-title-tracking: var(--text-h6-tracking);
+
+  /* The Services preview's crossfade between two scenes. The ramp's medium step: slower than a
+     row's 140ms hover, so the drawing reads as answering the row rather than flickering with it,
+     and well under the plate's 360ms morph, so a switch never waits on it. */
+  --nav-preview-fade: var(--duration-medium);
+  /* The preview's frame. The Sketch is drawn 320 × 180, so 16:9 is the drawing's own ratio rather
+     than a crop; stated here because the stacked scenes are absolutely positioned and the frame has
+     to reserve their height itself. */
+  --nav-preview-ratio: 16 / 9;
 
   /* THE RAIL'S SECONDARY ACTION AND THE SHEET'S BACK CONTROL HAVE NO TOKENS HERE ANY MORE.
      Both were hand-rolled links reading --nav-rail-action-* and --nav-sheet-back-*; both are
@@ -178,12 +194,9 @@
      component's tokens, and a token only this component could read which merely restates what
      Button already decided is the --sec-gap mistake in a different costume.
 
-     A rail card. The image slot holds its ratio whether or not an image is supplied, so the
-     rail's height does not change the day one lands. */
-  --nav-card-radius: var(--radius-8);
-  --nav-card-padding: var(--gap-text);
-  --nav-card-image-radius: var(--radius-4);
-  --nav-card-image-ratio: 16 / 7;
+     A rail card. Since revision 2 it is a serif title row with no box and no image slot — cards
+     have no boxes (owner, 5 Oct), and the slot only ever held a placeholder. Its radius, padding,
+     edge and image tokens went with the box; the arrow is all that is left to size. */
   --nav-card-arrow-size: var(--icon-size-16);
 
   /* Labels — a group's name over its links. Mono, uppercase, the same eyebrow role the rest
@@ -239,8 +252,15 @@
      anchored to the bottom of the viewport, so shorter rows make it shorter, which moves its top
      edge DOWN and every row further below the screen's midpoint. An earlier note here claimed the
      52px height was what kept the six below the line; that was backwards, and it is written out
-     here so nobody restores 18px to protect a measurement that never depended on it. */
-  --nav-sheet-row-text: var(--text-body);
+     here so nobody restores 18px to protect a measurement that never depended on it.
+
+     REVISION 2 moved them to h6 — 18px, but the SERIF title role, not body at 18. The point is the
+     voice, not the size: the root of the sheet is six titles, and set in body they read as a list
+     of copy. h6's line box (24.3) is shorter than body's (25.6), so the row is 48.3 against 49.6 —
+     still over the 44 floor, and by the argument above it moves the six further below the midpoint,
+     not above it. */
+  --nav-sheet-row-text: var(--text-h6);
+  --nav-sheet-row-tracking: var(--text-h6-tracking);
   /* A section-pane link. body-sm to match the plate's rows — the two are the same thing at two
      sizes of screen, and a destination that is 14px on the desktop and 16px on a phone is two
      decisions where there should be one.
@@ -314,9 +334,7 @@
   --nav-row-arrow-ink: var(--color-brandeis-500);
   --nav-label-ink: var(--color-neutral-700); /*  8.14:1 */
   --nav-title-ink: var(--color-neutral-900);
-  --nav-card-edge: var(--color-neutral-200);
-  --nav-card-edge-hover: var(--color-brandeis-500);
-  --nav-card-image-ground: var(--color-paper-deep);
+  --nav-foot-ground: var(--color-paper-deep); /* the plate's base, one step off paper */
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-500);
   --nav-grab-bg: var(--color-neutral-300);
@@ -352,9 +370,7 @@
   --nav-row-arrow-ink: var(--color-brandeis-600);
   --nav-label-ink: var(--color-neutral-700); /*  7.27:1 — 600 would be 4.39:1 */
   --nav-title-ink: var(--color-neutral-900);
-  --nav-card-edge: var(--color-neutral-300);
-  --nav-card-edge-hover: var(--color-brandeis-500);
-  --nav-card-image-ground: var(--color-neutral-200);
+  --nav-foot-ground: var(--color-neutral-100); /* paper-deep is the panel here, so one step on */
   --nav-link-ink: var(--color-neutral-900);
   --nav-link-ink-hover: var(--color-brandeis-600);
   --nav-grab-bg: var(--color-neutral-400);
@@ -395,9 +411,7 @@
   --nav-row-arrow-ink: var(--color-brandeis-300);
   --nav-label-ink: var(--color-neutral-500); /*  5.41:1 */
   --nav-title-ink: var(--color-white);
-  --nav-card-edge: var(--color-neutral-800);
-  --nav-card-edge-hover: var(--color-brandeis-300);
-  --nav-card-image-ground: var(--color-neutral-900);
+  --nav-foot-ground: var(--color-neutral-900);
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-300);
   --nav-grab-bg: var(--color-neutral-700);
@@ -430,9 +444,7 @@
   --nav-row-arrow-ink: var(--color-white);
   --nav-label-ink: var(--color-brandeis-100); /*  4.91:1 */
   --nav-title-ink: var(--color-white);
-  --nav-card-edge: var(--color-brandeis-400);
-  --nav-card-edge-hover: var(--color-white);
-  --nav-card-image-ground: var(--color-brandeis-600);
+  --nav-foot-ground: var(--color-brandeis-600);
   --nav-link-ink: var(--color-white);
   --nav-link-ink-hover: var(--color-brandeis-50);
   --nav-grab-bg: var(--color-brandeis-300);

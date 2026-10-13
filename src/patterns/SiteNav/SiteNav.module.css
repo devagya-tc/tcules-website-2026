@@ -273,7 +273,6 @@
      the last 2px of the last row at exactly the viewport height where the cap starts to bite. */
   max-block-size: calc(var(--nav-panel-max-block) - 2 * var(--nav-rule-width));
   overflow-y: auto;
-  padding: var(--gap-stack) var(--gap-gutter) var(--gap-gutter);
   opacity: 0;
   transform: translateX(calc(var(--nav-pane-shift) * 100%));
   /* The fade is unconditional — it IS the open — while the slide is gated with the plate's size
@@ -289,6 +288,23 @@
 
 .pane[data-open] {
   opacity: 1;
+}
+
+/* ── Body and foot (revision 2) ────────────────────────────────────────────────
+   The pane's padding moved onto its BODY so the foot can run to the plate's edges. The body's air
+   is `stack` above and below — the plate is a floating object and its content needs the same beat
+   from its edge as one block from the next — and `gutter` at the sides, the container gutter. */
+.paneBody {
+  padding: var(--gap-stack) var(--gap-gutter);
+}
+
+/* The foot strip: the plate's base. Its own ground, one step off the panel, and a hairline above
+   so the step reads on a tint plate where the two grounds are close. Padding, not a margin: the
+   strip is a box and its air is inside it. */
+.paneFoot {
+  padding: var(--gap-text) var(--gap-gutter);
+  background: var(--nav-foot-ground);
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
 }
 
 /* ── Inside a pane ─────────────────────────────────────────────────────────────
@@ -330,6 +346,13 @@
   color: var(--nav-row-label-ink-hover);
 }
 
+/* The row whose scene the Services preview is showing (revision 2). Label and arrow hold the blue,
+   without the fill: the fill is "under your pointer", the blue is "this is what the drawing shows",
+   and the selector rule is to mark the current one rather than fade the others. */
+.row[data-previewed] {
+  color: var(--nav-row-label-ink-hover);
+}
+
 .rowLabel {
   font: var(--nav-row-text);
 }
@@ -357,28 +380,26 @@
 
 .row:hover .rowArrow,
 .row:focus-visible .rowArrow,
-.card:hover .rowArrow,
-.card:focus-visible .rowArrow,
+.row[data-previewed] .rowArrow,
 .card:hover .cardArrow,
 .card:focus-visible .cardArrow {
   opacity: 1;
   transform: none;
 }
 
-/* The way through to the section's index, at the foot of the plate. The rule is what makes it read
-   as the end of the pane rather than as a nineteenth destination; the air under the rule is the
-   bar's own padding, and the beat above it belongs to the Layout that holds both. */
+/* The way through to the section's index at the end of a SHEET section. The plate's equivalent is
+   the foot strip above (.paneFoot); in the sheet the hub sits in the scrolling list, and the rule is
+   what makes it read as the end of the section rather than as one more destination. */
 .hubBar {
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
   padding-block-start: var(--gap-text);
 }
 
-/* ── The rail ──────────────────────────────────────────────────────────────────
-   Its hairline is what makes two halves read as two halves. This inset is the air between that rule
-   and the rail's own content, and it is HALF of one seam rather than a seam of its own: the Layout
-   above contributes `gutter` on the other side, so 32 + rule + 32 reads as a single 64 break with
-   the rule in its middle. Both sides have to move together — at `column` here and `column` there
-   the seam was 129px and the rail floated a quarter of the plate away from the columns.
+/* ── The feature column ────────────────────────────────────────────────────────
+   Its hairline is what makes the index and the feature read as two regions. This inset is the air
+   between that rule and the column's own content, and it is HALF of one seam rather than a seam of
+   its own: the Layout above contributes `gutter` on the other side, so 32 + rule + 32 reads as a
+   single 64 break with the rule in its middle.
 
    No token for the 32. It would only rename --gap-gutter, which is the --sec-gap mistake the token
    rules already made once; the reasoning belongs in a comment, not in a second name. */
@@ -387,57 +408,47 @@
   padding-inline-start: var(--gap-gutter);
 }
 
-/* A rail card: an image slot, a title, an arrow. Edged rather than filled — a filled card in a
-   panel that is already a floating box is a box inside a box. */
+/* THE PREVIEW (Services). Every scene is mounted and stacked in one frame, and the previewed one is
+   shown. The frame reserves the drawing's own 16:9 because its children are out of flow; the scenes
+   are absolutely positioned so that a crossfade has both ends on screen at once. This is an overlay
+   stack, not an arrangement — nothing here places one thing beside another. */
+.preview {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--nav-preview-ratio);
+}
+
+.previewScene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--nav-preview-fade) var(--nav-transition-easing);
+}
+
+.previewScene[data-shown] {
+  opacity: 1;
+}
+
+/* A rail card: a serif title row and an arrow. No box (owner, 5 Oct: cards have no boxes), so the
+   affordance is the title taking the blue and the arrow arriving, the same pair a row uses. The
+   title is the feature voice — h6, the serif — because it is an OFFER, a different kind of thing
+   from the destinations listed in sans beside it. */
 .card {
-  display: block;
-  padding: var(--nav-card-padding);
-  border: var(--nav-rule-width) solid var(--nav-card-edge);
-  border-radius: var(--nav-card-radius);
-  color: var(--nav-title-ink);
-  text-decoration: none;
-  transition: border-color var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-/* The edge is the whole affordance — the title does not move with it, and now needs no declaration
-   to stay put. It used to: the shell's old `a:hover` outranked `.card`'s ink and turned the title
-   Section's link blue while the border went brandeis-500, two hover languages on one object and
-   neither of them chosen. Fixed at the source in globals.css. */
-.card:hover,
-.card:focus-visible {
-  border-color: var(--nav-card-edge-hover);
-}
-
-/* The slot holds its ratio whatever it is given, and paints a ground under it so a transparent or
-   still-loading image does not punch a hole in the card. It renders only when an image is passed —
-   see the note on SiteNavCard. */
-.cardImage {
-  display: block;
-  aspect-ratio: var(--nav-card-image-ratio);
-  /* `text`, matching the card's own padding. At `tight` the title sat 8px under a hard-edged filled
-     block inside a card padded 16 all round, so the interior read as two different rhythms and the
-     title looked crowded against the image rather than captioning it. */
-  margin-block-end: var(--gap-text);
-  border-radius: var(--nav-card-image-radius);
-  background: var(--nav-card-image-ground);
-  overflow: hidden;
-}
-
-.cardImage > * {
-  display: block;
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-}
-
-.cardTitle {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-text);
-  font: var(--nav-rail-title-text);
-  letter-spacing: var(--nav-rail-title-tracking);
+  font: var(--nav-feature-title-text);
+  letter-spacing: var(--nav-feature-title-tracking);
   text-wrap: var(--text-title-wrap);
+  color: var(--nav-title-ink);
+  text-decoration: none;
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.card:hover,
+.card:focus-visible {
+  color: var(--nav-row-label-ink-hover);
 }
 
 .cardArrow {
@@ -452,17 +463,48 @@
     transform var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-/* The rail's SECONDARY card is a compact row, not a second card, and the reason is structural: a
-   full card makes the rail taller than the two columns beside it, and then the plate's height is
-   set by the offer instead of by the content.
-
-   THIS IS THE SEAM, NOT THE CONTROL. The control inside it is a `Button emphasis="link"`, which
-   owns its own type, case, ink, focus ring and pressed state — so all that is left here is the rule
-   that separates the offer from the card above it and the air under that rule. Everything this used
-   to declare was a restatement of something Button had already decided. */
+/* The rail's SECONDARY card is a compact row, not a second card: a full card makes the rail taller
+   than the columns beside it, and then the plate's height is set by the offer instead of by the
+   content. THIS IS THE SEAM, NOT THE CONTROL — the control inside is a `Button emphasis="link"`. */
 .railAction {
   padding-block-start: var(--gap-text);
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+/* THE PROOF's client line (Expertise). Quiet, sans, under the figure's meaning: the claim reads
+   first and the name second. The label ink, because it is the same quiet register as a group
+   label, at body size rather than in the mono voice — a name must stay as authored. */
+.featureNote {
+  font: var(--nav-row-text);
+  color: var(--nav-label-ink);
+}
+
+/* THE STORY (Insights). One link for the photograph, the format and the title. Its affordance is
+   the title taking the blue; the photograph does not move, because an image that zooms on hover
+   is decoration the brand does not use. */
+.story {
+  display: block;
+  color: var(--nav-title-ink);
+  text-decoration: none;
+}
+
+.storyMeta {
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--nav-label-ink);
+}
+
+.storyTitle {
+  font: var(--nav-feature-title-text);
+  letter-spacing: var(--nav-feature-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  transition: color var(--nav-transition-duration) var(--nav-transition-easing);
+}
+
+.story:hover .storyTitle,
+.story:focus-visible .storyTitle {
+  color: var(--nav-row-label-ink-hover);
 }
 
 /* ── The sheet ─────────────────────────────────────────────────────────────────
@@ -677,8 +719,11 @@
   color: var(--nav-row-label-ink-hover);
 }
 
+/* The six root rows in the serif title voice since revision 2 — h6, the same row height as the body
+   size they replace, so §10.7's midpoint measurement holds. */
 .sheetControlLabel {
   font: var(--nav-sheet-row-text);
+  letter-spacing: var(--nav-sheet-row-tracking);
 }
 
 .sheetChevron {
@@ -705,6 +750,10 @@
    need the negative margin pull. */
 .sheetBack {
   justify-self: start;
+  /* One line. Button's link variant flows and may wrap, which is right for a long label in a
+     column; here it wrapped the arrow above "Menu" at 390 because the grid cell resolved its width
+     from the min-content of the label (revision 2, R2.2 item 6). */
+  white-space: nowrap;
 }
 
 .sheetTitle {
@@ -791,6 +840,7 @@
 .brand:focus,
 .row:focus,
 .card:focus,
+.story:focus,
 .sheetControl:focus,
 .sheetLink:focus {
   outline: none;
@@ -799,6 +849,7 @@
 .brand:focus-visible,
 .row:focus-visible,
 .card:focus-visible,
+.story:focus-visible,
 .sheetControl:focus-visible,
 .sheetLink:focus-visible {
   outline: none;
@@ -852,6 +903,8 @@
   .rowArrow,
   .card,
   .cardArrow,
+  .previewScene,
+  .storyTitle,
   .sheetScrim,
   .sheet,
   .track,

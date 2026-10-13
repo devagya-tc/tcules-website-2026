@@ -25,19 +25,30 @@ const SERVICES: SiteNavItem = {
   hub: { label: 'All services', href: '/services', status: 'planned' },
   /* The audits carry the longer labels, so the second column takes the larger share and the two end
      up with matching slack. Declared per item because the direction differs by section — Expertise's
-     longer labels are in its FIRST group, so it deliberately has none. */
+     longer labels are in its FIRST group, so it takes [9, 8] instead. */
   columnRatio: [3, 4],
   panelWidth: 'lg',
   groups: [
     {
       label: 'Services',
       links: [
-        soon('Product Design', '/services/product-design'),
-        soon('Product Modernisation', '/services/product-modernisation'),
-        soon('Design Systems', '/services/design-systems'),
-        soon('AI Product UX', '/services/ai-product-ux'),
-        soon('Design Engineering', '/services/design-engineering'),
-        soon('Software Development', '/services/software-development'),
+        /* Each service names its preview scene (revision 2): the feature column draws the Sketch
+           for the row under the pointer. */
+        { ...soon('Product Design', '/services/product-design'), sketch: 'product-design' },
+        {
+          ...soon('Product Modernisation', '/services/product-modernisation'),
+          sketch: 'product-modernisation',
+        },
+        { ...soon('Design Systems', '/services/design-systems'), sketch: 'design-systems' },
+        { ...soon('AI Product UX', '/services/ai-product-ux'), sketch: 'ai-product-ux' },
+        {
+          ...soon('Design Engineering', '/services/design-engineering'),
+          sketch: 'design-engineering',
+        },
+        {
+          ...soon('Software Development', '/services/software-development'),
+          sketch: 'software-development',
+        },
       ],
     },
     {
@@ -64,25 +75,13 @@ const SERVICES: SiteNavItem = {
       ],
     },
   ],
+  /* The feature column, revision 2: `offers` — the service preview, then these two. How We Work
+     is a serif title row now; its placeholder image is gone. */
   rail: {
+    kind: 'offers',
     label: 'Working together',
     cards: [
-      /* The image is a RECORD now, not a slot — {src, alt, width, height}, the same contract Figure
-         and PageHero take, which is what lets the content seam carry it. The file is a placeholder:
-         the artwork for this card is still an open item, and it is diagrammatic so it reads as a
-         stand-in rather than as a photograph nobody chose. */
-      {
-        title: 'How We Work',
-        href: '/how-we-work',
-        status: 'planned',
-        role: 'primary',
-        image: {
-          src: '/nav/how-we-work-placeholder.svg',
-          alt: '',
-          width: 480,
-          height: 210,
-        },
-      },
+      { title: 'How We Work', href: '/how-we-work', status: 'planned', role: 'primary' },
       { title: 'Request Free Audit', href: '/audits', status: 'planned', role: 'secondary' },
     ],
   },
@@ -93,7 +92,24 @@ const EXPERTISE: SiteNavItem = {
   label: 'Expertise',
   form: 'mega',
   matchPaths: ['/expertise'],
-  panelWidth: 'md',
+  /* lg and [9, 8] since revision 2: a feature column beside two long-label columns, the first of
+     which holds the longer labels. */
+  panelWidth: 'lg',
+  columnRatio: [9, 8],
+  /* PROOF: one case reduced to its figure. */
+  rail: {
+    kind: 'proof',
+    label: 'Selected work',
+    value: '75+',
+    unit: 'applications',
+    caption: 'One experience across an enterprise suite, modernised as one system.',
+    client: 'Benchmark Gensuite',
+    link: {
+      label: 'Read the case',
+      href: '/case-studies/legacy-saas-modernisation-information-architecture',
+      status: 'planned',
+    },
+  },
   groups: [
     {
       label: 'Products and platforms',
@@ -127,7 +143,24 @@ const INSIGHTS: SiteNavItem = {
   matchPaths: ['/insights', '/glossary', '/tools'],
   hub: { label: 'All insights', href: '/insights', status: 'planned' },
   columnRatio: [3, 4],
-  panelWidth: 'sm',
+  /* md since revision 2: the latest piece takes half the plate for its photograph. */
+  panelWidth: 'md',
+  rail: {
+    kind: 'story',
+    label: 'Latest',
+    title: 'Customers can finish the task and still lose confidence',
+    meta: 'Article',
+    href: '/insights/articles/silent-ui-regression-debt',
+    status: 'planned',
+    image: {
+      src: '/kit/photos/screen-over-shoulder.webp',
+      alt: '',
+      width: 2400,
+      height: 1800,
+      kind: 'photograph',
+      focus: { x: 0.4, y: 0.45 },
+    },
+  },
   groups: [
     {
       label: 'Formats',

@@ -22,6 +22,108 @@ the rail's width, the sheet's reserve and every duration in §6 are values that 
 raw `px` in a `*.module.css`, which `tokens:check` fails the build on. They are declared in
 `tokens/components/nav.css`, which is where a component's literals live.
 
+## Revision 2 — visual overhaul (13 Oct 2026)
+
+**Status: round one, built.** Owner's verdict on revision 1: *functional, but it looks plain.* Beauty
+is the core factor. This revision is visual. It keeps the behaviour and the IA, and changes the
+hierarchy, the type, the plate's composition and the shape each pane has.
+
+### R2.1 · The job, before the form
+
+Someone opens a section to find out *what this studio does in this area, and where to go*. Each pane
+should answer in one look, and should also give one visual reason to go further. Revision 1 answered
+the first question with columns of 14px labels. It answered the second only in Services, with a
+placeholder image. So three plates looked like one shape at three widths, and none had an entry
+point for the eye.
+
+The fix is not a restyle of the columns. **Each pane gets a feature column whose form fits that
+section's job, and the three forms are different on purpose:**
+
+| Pane | Job of the feature | Form | Visual weight from |
+|---|---|---|---|
+| Services | "What does this service look like?" | **A preview.** The kit's `Sketch` scene for the service under the pointer or focus crossfades in the feature column. It defaults to the first service. The "Working together" offers sit under it. | Imagery that responds: the selector language the owner approved on home and About (one titled row lit, its answer beside it) |
+| Expertise | "Have they done this in a context like mine?" | **Proof.** One case reduced to its figure: a `Stat` (75+ applications), one line saying what it means, the client, and a link to the case. | Scale: the mono stat figure is the largest thing in the plate |
+| Insights | "Is there something worth reading?" | **The latest piece.** A photograph (through `Media`, so it takes the shared tone layer), the article title in the serif, and its format. | A photograph |
+
+So in a squint the three plates read as three ideas: a drawing, a number and a picture. They are
+no longer one list at three widths.
+
+### R2.2 · What changes
+
+1. **The rail generalises into a feature column, `rail.kind`.** `offers` is revision 1's rail
+   (cards), now led by the service preview. `proof` and `story` are new. Every mega carries one, so
+   every plate has the same two-region structure: an index on the left and a feature on the right,
+   split by the hairline. Revision 1 approved that hairline seam, and it is unchanged.
+2. **The plate is split into a body and a foot.** The hub link ("All services", "All insights")
+   moves into a **foot strip** that runs to the plate's edges on `--nav-foot-ground`, one step off the
+   panel ground. Before, it was a hairline row inside the padding. The foot gives the plate a base, so
+   it reads as a finished object rather than a list that stops. Expertise has no hub (IA, §2), so it
+   has no foot. That is the plate's honest shape, not an inconsistency.
+3. **Widths follow the new content.** Expertise goes from `md` to `lg`, because it now carries a
+   feature column. Insights goes from `sm` to `md` for the same reason. Services stays `lg`. The
+   index-to-feature ratio is one value for every pane, **[2, 1]**, rather than [9, 5]. At [9, 5]
+   Expertise's longest label ("Content, Knowledge and Discovery Platforms", 293px) would wrap at
+   1056. At [2, 1] each link column holds about 304px and the feature about 320.
+4. **The preview row is lit.** In Services, the service whose sketch is showing keeps its blue label
+   and arrow while the pointer travels across to the feature column. Without that, nothing would say
+   which row the drawing belongs to (selector rule: mark the current one, never fade the others).
+5. **The sheet carries the same feature.** At the end of each section, before the hub link, the
+   section shows its proof or its latest piece. Services shows How We Work as a serif title row. The
+   preview is not shown in the sheet: there is no hover on touch, and a sketch that never changes is
+   decoration. The six root rows move from `--text-body` to `--text-h6` (18 serif). That is the same
+   row height (48px against 49.6), so §10.7 still holds, and the top level of the sheet now reads in
+   the brand's title voice rather than as body copy.
+6. **Bugs found while looking.** The sheet's Back control wrapped its arrow above "Menu" at 390. It
+   is now held on one line. The plate and the sheet now carry `data-surface` themselves. Before, they
+   resolved surface tokens from whatever enclosed the header, so a `surface="ink"` nav on a paper
+   page painted a paper plate (and the feature's `Sketch` reads `[data-surface]` too).
+
+### R2.3 · What stays (locked: revision 1's approved bones)
+
+The sticky bar and its contents. The one morphing plate: pane arithmetic, measured height, gated
+morph, managed tab order, inert panes, hover intent and every dismissal path. The two-level sheet,
+its hug heights, swipe to dismiss and the sticky foot with both offers. The IA in
+`navigation.ts` (every group, label, order and href). Both CTAs. The row's direction-B hover, the
+hairline seam, no shadow, no row descriptions, no glyphs on rows.
+
+### R2.4 · Content added (view model and fixture, never hard-coded)
+
+- `SiteNavLink.sketch?: SketchName`. This is the preview scene for a service row. The fixture names
+  the six scenes `@/lib/sketches` already maps for the same routes.
+- `SiteNavRail` becomes a union on `kind`: `offers` (cards, as before), `proof` (`value`, `unit?`,
+  `label`, `client`, `link`) and `story` (`eyebrow`, `title`, `meta`, `href`, `image: MediaImage`).
+- The How We Work placeholder image leaves the fixture. The preview replaces it in the plate, and an
+  empty diagram is worse than a title row in the sheet.
+- The Expertise proof uses the Benchmark Gensuite case ("One experience across 75+ applications",
+  from the case-study listing's ideal copy). The Insights story uses the newest corpus article,
+  "Customers can finish the task and still lose confidence" (published 7 Aug 2026), with a kit
+  photograph as its stand-in image. Both are content choices that the owner or the content team may
+  swap. The view model takes any case or piece.
+
+### R2.5 · Tokens
+
+New in `nav.css`: `--nav-foot-ground` (per surface), `--nav-feature-title-text` and its tracking (h6,
+the serif title role that the rail card already used, renamed for the column it now serves),
+`--nav-preview-fade`, and `--nav-sheet-row-text` re-pointed to h6 with its tracking companion.
+`--nav-card-*` image tokens go, because no rail card renders an image any more. `--nav-plate-width-sm`
+stays: `compact` still resolves to it.
+
+### R2.6 · Open questions (none BLOCKING)
+
+1. **The proof and the story are editorial picks.** Which case and which article the plate features,
+   and whether they rotate, belong to the owner or the content team. The defaults are explained in
+   R2.4.
+2. **The preview in the plate only.** The sheet shows no sketch (R2.2 item 5). If the owner wants a
+   visual at the root of the sheet as well, the candidate is the preview of the first service. It has
+   been left out until asked for.
+3. **The bar itself is unchanged in round one.** The plate and the sheet were what read as plain.
+   If round two takes on the bar, the candidates are the active item's treatment (a held fill today)
+   and the item voice (mono uppercase through `Button`).
+4. **Foot strip on tint.** On a tint header the foot steps to neutral-100, which is subtle against
+   paper-deep. Judge it on `/design/site-nav`.
+
+---
+
 ## 1 · Identity
 
 The control surface for navigation. One per page, `position: sticky`, above the page at `--nav-z`.

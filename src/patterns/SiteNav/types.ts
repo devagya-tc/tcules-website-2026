@@ -1,4 +1,5 @@
-import type { SectionSurface } from '@/components';
+import type { MediaImage, SectionSurface } from '@/components';
+import type { SketchName } from '@/lib/sketches';
 
 /**
  * The site navigation's information architecture, as a shape.
@@ -63,6 +64,14 @@ export type SiteNavLink = {
   label: string;
   href: string;
   status: SiteNavStatus;
+  /**
+   * The preview scene for this row, drawn in the plate's feature column while the row is under the
+   * pointer or focus (revision 2, docs/specs/SiteNav.md R2.1). Services only today: the kit's
+   * `Sketch` has one scene per service and nothing for an audit or an industry, and a row with no
+   * scene simply leaves the last one showing. Named in the fixture rather than looked up here, so a
+   * pattern does not learn the route map.
+   */
+  sketch?: SketchName;
 };
 
 /** A named list of links — one column of a plate, one block of a sheet pane. */
@@ -72,44 +81,72 @@ export type SiteNavGroup = {
 };
 
 /**
- * A rail card. The primary one leads with an image; the secondary is a compact row under it.
+ * A rail card: an offer in the Services feature column. The primary renders as a serif title row;
+ * the secondary is a compact link under a rule.
  *
  * The secondary is NOT a second card, and that is structural rather than aesthetic: a full card
  * makes the rail taller than the two columns beside it, and then the plate's height is set by the
  * offer instead of by the content — which is the one thing the morph must not depend on.
  *
- * `image` is a RECORD, not a slot, and that changed on purpose. It was a `ReactNode` so the caller
- * could decide what filled it — which read well until the caller turned out to be the content seam,
- * and content is a `.ts` module that cannot hold JSX. The image then had nowhere to live except a
- * component, which is where a nav's artwork least belongs.
- *
- * `{ src, alt, width, height }` is also simply the house contract: `Figure` established it,
- * `PageHero` follows it, and both render a native `<img>`. Being the one pattern with a different
- * image shape was never a virtue.
- *
- * Still optional. Without one the card renders title-only rather than showing an empty frame: an
- * unfilled grey rectangle in a live header reads as a broken image, not as a placeholder.
+ * NO IMAGE ANY MORE (revision 2). The primary used to lead with an image slot that only ever held a
+ * named placeholder. The service preview now gives the column its picture in the plate, and in the
+ * sheet an empty diagram was worse than a title row.
  */
-export type SiteNavCardImage = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-};
-
 export type SiteNavCard = {
   title: string;
   href: string;
   status: SiteNavStatus;
   role: 'primary' | 'secondary';
-  image?: SiteNavCardImage;
 };
 
-/** The plate's third column. Services alone has one. */
-export type SiteNavRail = {
+/**
+ * The plate's feature column: the visual reason to go further. One per mega, and a DIFFERENT FORM
+ * per section on purpose (docs/specs/SiteNav.md R2.1): three plates should read as three ideas in a
+ * squint, not as one list at three widths.
+ *
+ *   offers  Services. The preview of the service under the pointer (from `SiteNavLink.sketch`),
+ *           then the "Working together" offers as cards.
+ *   proof   Expertise. One case reduced to its figure: the number, what it means, whose it was,
+ *           and the way to the case.
+ *   story   Insights. The latest piece: a photograph, its title in the serif, its format.
+ *
+ * A union rather than one bag of optional fields, so a proof without its figure or a story without
+ * its title is a type error rather than a quietly empty column.
+ */
+export type SiteNavRailOffers = {
+  kind: 'offers';
   label: string;
   cards: readonly SiteNavCard[];
 };
+
+export type SiteNavRailProof = {
+  kind: 'proof';
+  label: string;
+  /** The figure, verbatim: "75+". Rendered by `Stat`, so its rules apply. A symbol is part of it. */
+  value: string;
+  /** What it counts, as a word: "applications". */
+  unit?: string;
+  /** What the number means. One sentence, 12 words or fewer. */
+  caption: string;
+  /** Whose work it was. A quiet sans line, never a logo the fixture does not have. */
+  client: string;
+  /** The case. Its label is the control's text: "Read the case". */
+  link: SiteNavLink;
+};
+
+export type SiteNavRailStory = {
+  kind: 'story';
+  label: string;
+  title: string;
+  /** The piece's format, short: "Article". Set in the mono label voice. */
+  meta: string;
+  href: string;
+  status: SiteNavStatus;
+  /** A photograph through `Media`, so it takes the shared tone layer. The column crops it 16:9. */
+  image: MediaImage;
+};
+
+export type SiteNavRail = SiteNavRailOffers | SiteNavRailProof | SiteNavRailStory;
 
 /**
  * A top-level bar item.
@@ -167,9 +204,9 @@ export type SiteNavItem = {
   /**
    * How wide the plate opens for this item.
    *
-   * The plate shrinks to its content — 1056 for Services, 780 for Expertise, 560 for Insights —
-   * because a plate held at the full content width beside four short rows shows 500px of empty
-   * ground, and that reads as a mistake rather than as restraint.
+   * The plate shrinks to its content — 1120 for Services and Expertise, 880 for Insights since
+   * revision 2's feature columns — because a plate held at the full content width beside four short
+   * rows shows hundreds of px of empty ground, and that reads as a mistake rather than as restraint.
    *
    * It is DECLARED rather than derived. A pattern cannot count words: deriving the width from
    * link counts would silently re-lay out the plate the day a group gains a seventh item, and the

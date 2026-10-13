@@ -1,5 +1,6 @@
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
-import { ENDPOINTS, EXTERNAL, ROUTES } from '@/lib/routes';
+import { getKitPhoto } from '@/lib/photos';
+import { ENDPOINTS, EXTERNAL, ROUTES, articlePath, caseStudyPath } from '@/lib/routes';
 
 import { CLUTCH_RATING } from './ratings';
 
@@ -73,13 +74,25 @@ const SERVICES: SiteNavItem = {
   groups: [
     {
       label: 'Services',
+      /* Each service names its preview scene (docs/specs/SiteNav.md R2.4): the same scene
+         @/lib/sketches maps to the same route, so the plate, home's selector and About draw one
+         picture per service. */
       links: [
-        soon('Product Design', ROUTES.productDesign),
-        soon('Product Modernisation', ROUTES.productModernisation),
-        soon('Design Systems', ROUTES.designSystems),
-        soon('AI Product UX', ROUTES.aiProductUx),
-        soon('Design Engineering', ROUTES.designEngineering),
-        soon('Software Development', ROUTES.softwareDevelopment),
+        { ...soon('Product Design', ROUTES.productDesign), sketch: 'product-design' },
+        {
+          ...soon('Product Modernisation', ROUTES.productModernisation),
+          sketch: 'product-modernisation',
+        },
+        { ...soon('Design Systems', ROUTES.designSystems), sketch: 'design-systems' },
+        { ...soon('AI Product UX', ROUTES.aiProductUx), sketch: 'ai-product-ux' },
+        {
+          ...soon('Design Engineering', ROUTES.designEngineering),
+          sketch: 'design-engineering',
+        },
+        {
+          ...soon('Software Development', ROUTES.softwareDevelopment),
+          sketch: 'software-development',
+        },
       ],
     },
     {
@@ -103,25 +116,14 @@ const SERVICES: SiteNavItem = {
       ],
     },
   ],
+  /* The feature column is `offers`: the service preview leads it in the plate, and these two sit
+     under it. How We Work lost its placeholder image in revision 2 — the preview is the column's
+     picture now (docs/specs/SiteNav.md R2.4). */
   rail: {
+    kind: 'offers',
     label: 'Working together',
     cards: [
-      /* A PLACEHOLDER, and named so it cannot be mistaken for the real thing: the artwork for this
-         card is still the spec's first open item. It is diagrammatic on purpose — a pod, a track and
-         a phase — so it reads as a stand-in rather than as a photograph nobody chose. Swap the file
-         and the alt together; the ratio and the crop belong to the slot, not to the asset. */
-      {
-        title: 'How We Work',
-        href: ROUTES.howWeWork,
-        status: 'planned',
-        role: 'primary',
-        image: {
-          src: '/nav/how-we-work-placeholder.svg',
-          alt: '',
-          width: 480,
-          height: 210,
-        },
-      },
+      { title: 'How We Work', href: ROUTES.howWeWork, status: 'planned', role: 'primary' },
       {
         title: 'Request Free Audit',
         href: ROUTES.audits,
@@ -138,8 +140,8 @@ const SERVICES: SiteNavItem = {
    groups now — the previous shape made the first a set of promise rows and the second a rail,
    which is two treatments for one kind of thing.
 
-   No rail, so the plate narrows to 780. Public Sector and Regulated Industries is struck in the
-   content doc and is not here.
+   Its feature column is a PROOF (revision 2). Public Sector and Regulated Industries is struck in
+   the content doc and is not here.
 
    AND NO HUB LINK, unlike Services and Insights. That is a decision rather than an omission: it is
    the one mega whose index page nobody has asked to send people to. Add `hub` here the day
@@ -149,12 +151,28 @@ const EXPERTISE: SiteNavItem = {
   label: 'Expertise',
   form: 'mega',
   matchPaths: [ROUTES.expertise],
-  /* NO columnRatio, and that is a measurement rather than an oversight. Expertise is the one mega
-     whose FIRST group holds the longer labels — "Content, Knowledge and Discovery Platforms" at 293
-     against "PropTech, ConTech and Field Operations" at 259 — so the [3, 4] its siblings use would
-     leave that column 0.1px of clearance and wrap it. Equal tracks already sit at 49 and 83 slack,
-     which is as balanced as this copy gets. */
-  panelWidth: 'md',
+  /* `lg` since revision 2: the pane carries a feature column now, and the two long-label columns
+     need ~300 each beside it. [9, 8] because THIS section's first column holds the longer labels
+     (293 against 259), the opposite of Services and Insights — at equal tracks the first wrapped. */
+  panelWidth: 'lg',
+  columnRatio: [9, 8],
+  /* PROOF, not a list: "have they done this in a context like mine?" is the question this section
+     is opened with, and one case reduced to its figure answers it in a glance. The pick is
+     editorial (spec R2.6 item 1); the copy is the case-study listing's ideal copy for the same
+     case, so the plate and the index say the same thing. */
+  rail: {
+    kind: 'proof',
+    label: 'Selected work',
+    value: '75+',
+    unit: 'applications',
+    caption: 'One experience across an enterprise suite, modernised as one system.',
+    client: 'Benchmark Gensuite',
+    link: {
+      label: 'Read the case',
+      href: caseStudyPath('legacy-saas-modernisation-information-architecture'),
+      status: 'planned',
+    },
+  },
   groups: [
     {
       label: 'Products and platforms',
@@ -182,12 +200,11 @@ const EXPERTISE: SiteNavItem = {
 };
 
 /* ── Insights ─────────────────────────────────────────────────────────────────────
-   Formats, then the things that are not a format. Four and four, so the plate narrows to 560 — the
-   smallest of the three, and the reason the plate has three widths at all.
+   Formats, then the things that are not a format. Four and four, beside the latest piece, which
+   takes half the plate (revision 2).
 
    Research and Series are struck, as is the whole third group (Current, Rising Topics, Latest
-   Insights, Future Interfaces Lab) — the Lab is a bar item now, which is most of why. The pane has
-   room for that group as a third column if it comes back. */
+   Insights, Future Interfaces Lab) — the Lab is a bar item now, which is most of why. */
 const INSIGHTS: SiteNavItem = {
   key: 'insights',
   label: 'Insights',
@@ -196,7 +213,21 @@ const INSIGHTS: SiteNavItem = {
   hub: { label: 'All insights', href: ROUTES.insights, status: 'planned' },
   /* Same shape as Services — "Tools and Resources" against "Podcasts" — so the same ratio. */
   columnRatio: [3, 4],
-  panelWidth: 'sm',
+  /* `md` since revision 2, for the feature column. */
+  panelWidth: 'md',
+  /* THE LATEST PIECE: a photograph, the title in the serif, the format. The newest corpus article
+     (published 7 Aug 2026). The photograph is a kit stand-in, chosen for the subject — someone at a
+     screen — and goes through Media, so it takes the shared tone layer. Swap the record when a
+     newer piece lands (spec R2.6 item 1). */
+  rail: {
+    kind: 'story',
+    label: 'Latest',
+    title: 'Customers can finish the task and still lose confidence',
+    meta: 'Article',
+    href: articlePath('silent-ui-regression-debt'),
+    status: 'planned',
+    image: getKitPhoto('screen-over-shoulder'),
+  },
   groups: [
     {
       label: 'Formats',

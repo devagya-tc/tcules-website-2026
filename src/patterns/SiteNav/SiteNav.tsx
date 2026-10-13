@@ -11,13 +11,23 @@ import type {
   PointerEvent,
 } from 'react';
 
-import { Button, Cluster, Icon, Layout, Logo, Section } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Logo,
+  Media,
+  Section,
+  Sketch,
+  Stat,
+} from '@/components';
 import { isActivePath } from '@/lib/activePath';
 import { cx } from '@/lib/cx';
 import { ROUTES } from '@/lib/routes';
 
 import styles from './SiteNav.module.css';
-import type { SiteNavCard, SiteNavItem, SiteNavProps } from './types';
+import type { SiteNavItem, SiteNavLink, SiteNavProps, SiteNavRail } from './types';
 
 /**
  * SiteNav — the site header: a sticky bar, one morphing PLATE for the three menu sections above
@@ -58,6 +68,11 @@ import type { SiteNavCard, SiteNavItem, SiteNavProps } from './types';
  * the panes keep the geometry they had, so the plate does not resize and re-slide on its way out.
  * The same argument gives `lastSection` its job on mobile.
  */
+
+/* ── Revision 2 · visual overhaul (13 Oct 2026, docs/specs/SiteNav.md R2) ─────────────────────────
+   Everything above this line is revision 1's mechanics and is unchanged. What changed is what a
+   pane DRAWS: every mega carries a feature column of its own form (PlatePane, Feature), the hub link
+   sits in a foot strip at the plate's base, and the stage, scrims and sheet carry `data-surface`. */
 
 /** Hover intent before a mega opens. Long enough that a sweep across the bar opens nothing. */
 const HOVER_INTENT_MS = 100;
@@ -674,12 +689,18 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           alone. */}
       <span
         className={styles.scrim}
+        data-surface={surface}
         data-open={plateOpen || undefined}
         aria-hidden="true"
         onClick={closePlate}
       />
+      {/* `data-surface` on the stage and the sheet themselves (revision 2). They sit outside the
+          bar's Section, so without it every --nav-* and --skt-* token they read resolved against
+          whatever enclosed the HEADER — a `surface="ink"` nav on a paper page painted a paper plate.
+          The prop promises one surface for bar, plate and sheet; this is what keeps the promise. */}
       <div
         className={styles.stage}
+        data-surface={surface}
         data-open={plateOpen || undefined}
         data-morph={morph || undefined}
       >
@@ -718,6 +739,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
           IS the transition, which is why it is measured rather than left to `auto`. */}
       <span
         className={styles.sheetScrim}
+        data-surface={surface}
         data-open={sheetOpen || undefined}
         aria-hidden="true"
         onClick={() => setNav({ sheet: false, section: null })}
@@ -726,6 +748,7 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
         id={sheetId}
         ref={sheetRef}
         className={styles.sheet}
+        data-surface={surface}
         data-open={sheetOpen || undefined}
         data-dragging={drag > 0 || undefined}
         data-level={section ? 'section' : 'root'}
@@ -841,194 +864,286 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
 }
 
 /**
- * One section of the plate: two label-and-links columns, and the rail where there is one.
+ * One section of the plate: an INDEX of label-and-links columns, a FEATURE column beside it, and a
+ * foot strip under both where the section has an index page of its own.
  *
- * No row descriptions, deliberately — the revised IA dropped them. Rows are labels; the group
- * label above them carries the meaning, which is what lets twelve destinations fit in a plate
- * that is still mostly air.
+ * ── Revision 2 (docs/specs/SiteNav.md R2) ───────────────────────────────────────────────────────
+ * The columns are unchanged — no row descriptions, no glyphs, rows are labels and the group label
+ * carries the meaning. What changed is that every mega now has a feature, and that the feature is a
+ * different FORM per section: a preview in Services, a proof in Expertise, the latest piece in
+ * Insights. Three plates used to be one list at three widths; in a squint they are now a drawing, a
+ * number and a picture.
+ *
+ * The preview is the one piece of state in here. It is the selector the owner approved on home and
+ * About — one titled row lit, its answer beside it — and it lives in the pane rather than in the nav
+ * because nothing outside the pane needs it, and because a remount (there is none today) should
+ * start it over at the first service rather than wherever it was left.
  */
 function PlatePane({ item }: { item: SiteNavItem }) {
   const groups = item.groups ?? [];
-  const primary = item.rail?.cards.filter((card) => card.role === 'primary') ?? [];
-  const secondary = item.rail?.cards.filter((card) => card.role === 'secondary') ?? [];
+  const scenes = groups.flatMap((group) => group.links).filter((link) => link.sketch);
+  const [previewed, setPreviewed] = useState(scenes[0]?.href ?? null);
 
-  const body = (
-    /* Two nested Layouts, and the two seams are DIFFERENT STEPS on purpose.
+  const index = (
+    /* Equal unless the item says otherwise — see SiteNavItem.columnRatio. Spread, because Layout
+       takes a mutable number[] and the prop is a readonly tuple so a caller cannot mutate it.
 
-       The OUTER seam is `gutter` (32), not `column`. The rail draws a hairline on its own leading
-       edge and insets its content by another 32, so 32 + rule + 32 lands the whole thing at the 64
-       a `column` seam would have given, with the rule in the middle of it — which is what the
-       pre-rebuild design documented and what the rebuild lost by using `column` on both sides. That
-       put 129px between the second column's track and the rail's content, and 177 between its last
-       label and the same point: a quarter of the plate spent on one gap.
-
-       The INNER seam is `gutter` (32) as well. Those two are peer groups rather than two halves that
-       must read apart — the rail is the thing this pane genuinely divides, and it has a rule to say
-       so. One caveat lives with it: a row's hover fill extends --nav-row-padding-inline past its
-       track on both sides, so a 32 seam leaves 16px between a lit fill and the next column's text
-       where 64 left 48. Tight, and checked; do not tighten it further without re-measuring that.
-
-       NINE-TO-FIVE, and the ratio does one job: holding the rail still while everything else moves.
-       Under [2,1] the plate's cuts fall on the rail too — it would sit at 287 here — shrinking the
-       one element whose width buys anything, its 16:7 image slot. At [9,5] the rail holds ~310 and
-       the columns hold ~276 against a longest label of 230. The rail's width is a CONSEQUENCE of
-       this ratio, which is why there is still no --nav-rail-width token; see
-       docs/specs/SiteNav.md §12. */
-    <Layout columns={item.rail ? [9, 5] : undefined} colGap="gutter" rowGap="stack">
-      {/* Equal unless the item says otherwise — see SiteNavItem.columnRatio. Spread, because Layout
-          takes a mutable number[] and the prop is a readonly tuple so a caller cannot mutate it. */}
-      <Layout
-        columns={item.columnRatio ? [...item.columnRatio] : 2}
-        colGap="gutter"
-        rowGap="stack"
-      >
-        {groups.map((group) => (
-          <Layout key={group.label} rowGap="block">
-            <p className={styles.groupLabel}>{group.label}</p>
-            <Layout as="ul" rowGap="inline">
-              {group.links.map((link) => (
+       The seam is `gutter` (32): peer groups rather than two halves that must read apart — the
+       feature is the thing this pane genuinely divides, and it has a rule to say so. A row's hover
+       fill extends --nav-row-padding-inline past its track on both sides, so a 32 seam leaves 16px
+       between a lit fill and the next column's text. Tight, and checked. */
+    <Layout
+      columns={item.columnRatio ? [...item.columnRatio] : 2}
+      colGap="gutter"
+      rowGap="stack"
+    >
+      {groups.map((group) => (
+        <Layout key={group.label} rowGap="block">
+          <p className={styles.groupLabel}>{group.label}</p>
+          <Layout as="ul" rowGap="inline">
+            {group.links.map((link) => {
+              /* Only a row with a scene drives the preview. Pointer AND focus, so a keyboard walk
+                 down the list changes the drawing exactly as a mouse does. */
+              const preview = link.sketch ? () => setPreviewed(link.href) : undefined;
+              return (
                 <li key={link.href}>
-                  <Link href={link.href} className={styles.row}>
+                  <Link
+                    href={link.href}
+                    className={styles.row}
+                    /* The row whose scene is showing stays lit after the pointer leaves it for the
+                       feature column — otherwise nothing says which row the drawing belongs to. */
+                    data-previewed={(link.sketch && link.href === previewed) || undefined}
+                    onPointerEnter={preview}
+                    onFocus={preview}
+                  >
                     <span className={styles.rowLabel}>{link.label}</span>
                     <Icon name="arrow-right" className={styles.rowArrow} />
                   </Link>
                 </li>
-              ))}
-            </Layout>
-          </Layout>
-        ))}
-      </Layout>
-
-      {item.rail ? (
-        <Layout as="aside" className={styles.rail} rowGap="block">
-          <p className={styles.groupLabel}>{item.rail.label}</p>
-          <Layout rowGap="text">
-            {primary.map((card) => (
-              <RailCard key={card.href} card={card} />
-            ))}
-            {/* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster,
-                so the control itself is just a control. Button brings the mono case, the focus ring
-                and the pressed step — and its own underline on hover, which replaces the sliding
-                arrow this row used to borrow from the plate's rows. That is the trade: one hover
-                language for controls, another for rows. */}
-            {secondary.map((card) => (
-              <Cluster key={card.href} className={styles.railAction}>
-                <Button
-                  as={Link}
-                  href={card.href}
-                  emphasis="link"
-                  tone="primary"
-                  size="sm"
-                  icon={<Icon name="arrow-right" />}
-                >
-                  {card.title}
-                </Button>
-              </Cluster>
-            ))}
+              );
+            })}
           </Layout>
         </Layout>
-      ) : null}
+      ))}
     </Layout>
   );
 
-  if (!item.hub) return body;
+  const body = item.rail ? (
+    /* THE SHARE FOLLOWS THE FORM. A preview and a proof are a third of the plate ([2, 1]): at the
+       1120 plate that is ~340 for the feature, enough for a 16:9 drawing or a 54px figure, and ~325
+       per link column, enough for Expertise's 293px label. A story is HALF ([1, 1]): it leads with
+       a photograph, the picture is the pane's whole argument, and Insights' eight short labels need
+       barely 180 a column. Derived from the kind rather than declared per item because it is a fact
+       about the form, not about one section's copy.
+
+       The OUTER seam is `gutter` (32), not `column`. The feature draws a hairline on its own leading
+       edge and insets its content by another 32, so 32 + rule + 32 lands at the 64 a `column` seam
+       would have given, with the rule in the middle of it. */
+    <Layout columns={item.rail.kind === 'story' ? [1, 1] : [2, 1]} colGap="gutter" rowGap="stack">
+      {index}
+      <Layout as="aside" className={styles.rail} rowGap="block">
+        <Feature rail={item.rail} scenes={scenes} previewed={previewed} />
+      </Layout>
+    </Layout>
+  ) : (
+    index
+  );
 
   return (
-    /* Nested, so the seam between the columns and the hub bar is a `stack` beat this Layout owns
-       rather than a margin the bar sets on itself. The bar's own hairline and the air under it are
-       paint and padding — inside the box, so neither is the child spacing the layout rule forbids.
-       No token for that 16: a name whose only job is to rename --gap-text is the --sec-gap mistake
-       the token rules already made once. */
-    <Layout rowGap="stack">
-      {body}
-      {/* A Cluster of one, so the control stays content-sized — a bare grid child stretches to its
-          track, and a full-width link emphasis reads as a rule rather than as a link.
-
-          Button rather than a fifth hand-rolled anchor. It brings the mono case, the padding, the
-          arrow slot and the focus ring already decided, which is the whole argument: the one row in
-          this component that was hand-rolled is the one that shipped 6px out of alignment. */}
-      <Cluster className={styles.hubBar}>
-        <Button
-          as={Link}
-          href={item.hub.href}
-          emphasis="link"
-          tone="neutral"
-          size="sm"
-          icon={<Icon name="arrow-right" />}
-        >
-          {item.hub.label}
-        </Button>
-      </Cluster>
+    /* Body and foot are two boxes stacked with no seam: the foot's own ground and padding are what
+       separate them, so the Layout states `none` rather than a beat. The pane is the measured box,
+       so the plate's height includes the foot with nothing to add. */
+    <Layout rowGap="none">
+      <div className={styles.paneBody}>{body}</div>
+      {item.hub ? (
+        /* The FOOT STRIP. It runs to the plate's edges on --nav-foot-ground, one step off the panel,
+           so the plate has a base and reads as a finished object rather than a list that stops.
+           A Cluster of one, so the control stays content-sized — a bare grid child stretches to its
+           track, and a full-width link reads as a rule rather than as a link. */
+        <Cluster className={styles.paneFoot}>
+          <Button
+            as={Link}
+            href={item.hub.href}
+            emphasis="link"
+            tone="primary"
+            size="sm"
+            icon={<Icon name="arrow-right" />}
+          >
+            {item.hub.label}
+          </Button>
+        </Cluster>
+      ) : null}
     </Layout>
   );
 }
 
 /**
- * The rail's primary card: an image slot, a title, an arrow.
+ * The feature column's contents, by kind. Shared by the plate and the sheet — the wrapper decides
+ * the frame (a ruled aside in the plate, a ruled group in the sheet); this decides the shape.
  *
- * The slot renders only when an image is supplied. An empty framed rectangle in a live header
- * reads as a broken image rather than as a placeholder, and the nav fixture has no artwork yet —
- * so the card is title-only there and image-led wherever one is passed.
+ * `scenes` and `previewed` are the plate's preview. The sheet passes none: there is no hover on
+ * touch, and a drawing that never changes is decoration (spec R2.2 item 5).
  */
-function RailCard({ card }: { card: SiteNavCard }) {
+function Feature({
+  rail,
+  scenes = [],
+  previewed = null,
+  stagger,
+}: {
+  rail: SiteNavRail;
+  scenes?: readonly SiteNavLink[];
+  previewed?: string | null;
+  /** The sheet's entrance: a function that returns the next row's stagger props. */
+  stagger?: () => { className?: string; style: CSSProperties };
+}) {
+  const enter = stagger ?? (() => ({ className: '', style: {} }));
+  const labelMotion = enter();
+  const label = (
+    <p className={cx(styles.groupLabel, labelMotion.className)} style={labelMotion.style}>
+      {rail.label}
+    </p>
+  );
+
+  if (rail.kind === 'offers') {
+    const primary = rail.cards.filter((card) => card.role === 'primary');
+    /* The secondary is the plate's only: the sheet's sticky foot already carries that offer, and
+       the same offer twice in one pane is one offer too many. */
+    const secondary = scenes.length > 0 ? rail.cards.filter((card) => card.role === 'secondary') : [];
+    return (
+      <>
+        {scenes.length > 0 ? (
+          /* Every scene is mounted and stacked, and the previewed one is shown: a crossfade needs
+             both ends present, and mounting six small SVGs once is cheaper than remounting one per
+             hover. Decorative — each Sketch is aria-hidden, and the row carries the meaning. */
+          <span className={styles.preview} aria-hidden="true">
+            {scenes.map((link) => (
+              <span
+                key={link.href}
+                className={styles.previewScene}
+                data-shown={link.href === previewed || undefined}
+              >
+                {link.sketch ? <Sketch name={link.sketch} /> : null}
+              </span>
+            ))}
+          </span>
+        ) : null}
+        <Layout rowGap="text">
+          {label}
+          {primary.map((card) => {
+            const motion = enter();
+            return (
+              <Link
+                key={card.href}
+                href={card.href}
+                className={cx(styles.card, motion.className)}
+                style={motion.style}
+              >
+                <span>{card.title}</span>
+                <Icon name="arrow-right" className={styles.cardArrow} />
+              </Link>
+            );
+          })}
+          {/* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster, so
+              the control itself is just a control. */}
+          {secondary.map((card) => (
+            <Cluster key={card.href} className={styles.railAction}>
+              <Button
+                as={Link}
+                href={card.href}
+                emphasis="link"
+                tone="primary"
+                size="sm"
+                icon={<Icon name="arrow-right" />}
+              >
+                {card.title}
+              </Button>
+            </Cluster>
+          ))}
+        </Layout>
+      </>
+    );
+  }
+
+  if (rail.kind === 'proof') {
+    const motion = enter();
+    const tail = enter();
+    return (
+      <>
+        {label}
+        {/* `lg` — the figure is the plate's largest thing, which is the whole point of the form:
+            visual weight from scale, not from a box. The client sits under the meaning as a quiet
+            line rather than inside Stat's label, so the claim reads first and the name second. */}
+        <div className={motion.className} style={motion.style}>
+          <Stat value={rail.value} unit={rail.unit} label={rail.caption} size="lg" />
+        </div>
+        <div className={tail.className} style={tail.style}>
+          <Layout rowGap="tight">
+            <p className={styles.featureNote}>{rail.client}</p>
+            <Cluster>
+            <Button
+              as={Link}
+              href={rail.link.href}
+              emphasis="link"
+              tone="primary"
+              size="sm"
+              icon={<Icon name="arrow-right" />}
+            >
+              {rail.link.label}
+              </Button>
+            </Cluster>
+          </Layout>
+        </div>
+      </>
+    );
+  }
+
+  const motion = enter();
   return (
-    <Link href={card.href} className={styles.card}>
-      {card.image ? (
-        <span className={styles.cardImage}>
-          {/* A native <img>, per the contract Figure established and PageHero follows — there is no
-              Image primitive in this repo and no next/image precedent in a pattern. The slot holds
-              the ratio and the crop; the intrinsic size is here only so the browser can reserve the
-              box before the file arrives. */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- accepted native-image contract */}
-          <img
-            src={card.image.src}
-            alt={card.image.alt}
-            width={card.image.width}
-            height={card.image.height}
-          />
-        </span>
-      ) : null}
-      <span className={styles.cardTitle}>
-        <span>{card.title}</span>
-        <Icon name="arrow-right" className={styles.cardArrow} />
-      </span>
-    </Link>
+    <>
+      {label}
+      {/* One link for the whole piece: the photograph, the format and the title are one
+          destination, and three targets for one page is two too many. */}
+      <Link href={rail.href} className={cx(styles.story, motion.className)} style={motion.style}>
+        <Layout rowGap="text">
+          <Media image={rail.image} ratio="16/9" sizes="(min-width: 1024px) 320px, 100vw" />
+          <Layout rowGap="tight">
+            <span className={styles.storyMeta}>{rail.meta}</span>
+            <span className={styles.storyTitle}>{rail.title}</span>
+          </Layout>
+        </Layout>
+      </Link>
+    </>
   );
 }
 
 /**
- * One section inside the sheet. The same groups, as type only.
+ * One section inside the sheet. The same groups, as type only, then the section's feature.
  *
  * The hub link is here, at the end of the scrolling list, exactly as it is at the foot of the
- * plate. The audit card is not: the sticky foot already carries that offer, and the same offer
- * twice in one pane is one offer too many. Those were one bullet in the spec and they are two
- * different decisions — the card duplicates something, the hub link duplicates nothing.
+ * plate. The feature comes before it: the proof and the latest piece are the section's visual end,
+ * and the hub is the way out of it.
  *
  * Rows carry no glyphs — the settled direction dropped them, and a glyph nobody drew is a
  * placeholder shipped.
  */
 function SheetPane({ item }: { item: SiteNavItem }) {
   const groups = item.groups ?? [];
-  const cards = item.rail?.cards.filter((card) => card.role === 'primary') ?? [];
   let position = 0;
+  const stagger = () => ({
+    className: styles.stagger,
+    style: vars({ '--i': Math.min(position++, STAGGER_CAP) }),
+  });
 
   return (
     <Layout rowGap="block">
       {groups.map((group) => (
         <Layout key={group.label} rowGap="tight" className={styles.sheetGroup}>
-          <p
-            className={cx(styles.sheetLabel, styles.stagger)}
-            style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
-          >
+          <p className={cx(styles.sheetLabel, styles.stagger)} style={stagger().style}>
             {group.label}
           </p>
           <Layout as="ul" rowGap="none">
             {group.links.map((link) => (
-              <li
-                key={link.href}
-                className={styles.stagger}
-                style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
-              >
+              <li key={link.href} {...stagger()}>
                 <Link href={link.href} className={styles.sheetLink}>
                   {link.label}
                 </Link>
@@ -1038,40 +1153,22 @@ function SheetPane({ item }: { item: SiteNavItem }) {
         </Layout>
       ))}
 
-      {item.rail && cards.length > 0 ? (
-        <Layout rowGap="tight" className={styles.sheetGroup}>
-          <p
-            className={cx(styles.sheetLabel, styles.stagger)}
-            style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
-          >
-            {item.rail.label}
-          </p>
-          {cards.map((card) => (
-            <div
-              key={card.href}
-              className={styles.stagger}
-              style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
-            >
-              <RailCard card={card} />
-            </div>
-          ))}
+      {item.rail ? (
+        <Layout rowGap="block" className={styles.sheetGroup}>
+          <Feature rail={item.rail} stagger={stagger} />
         </Layout>
       ) : null}
 
       {/* Inside the scrolling list rather than pinned beside the two actions in the foot. It is a
-          way through, not an offer, and the foot is where the offers live — parking it there would
-          make three actions compete in the one strip a thumb can reach. Last in the stagger, so it
-          arrives after the rows it is the end of. */}
+          way through, not an offer, and the foot is where the offers live. Last in the stagger, so
+          it arrives after the rows it is the end of. */}
       {item.hub ? (
-        <Cluster
-          className={cx(styles.hubBar, styles.stagger)}
-          style={vars({ '--i': Math.min(position++, STAGGER_CAP) })}
-        >
+        <Cluster className={cx(styles.hubBar, styles.stagger)} style={stagger().style}>
           <Button
             as={Link}
             href={item.hub.href}
             emphasis="link"
-            tone="neutral"
+            tone="primary"
             size="sm"
             icon={<Icon name="arrow-right" />}
           >

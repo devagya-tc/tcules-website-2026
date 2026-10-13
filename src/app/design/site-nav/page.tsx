@@ -78,24 +78,31 @@ export default async function SiteNavSpecimenPage() {
           </Layout>
 
           <Specimen
-            title="Plate · two groups and the rail — 1056"
-            note="Services, the widest of the three. Two groups of six plus the rail, which is the only one in the nav. It was 1240 to match the page’s content column, so the plate lined up with the bands behind it — at 14px rows that alignment cost a 255px hole between the two lists, so it came down to 1120 and the pane ratio moved 2:1 to 5:3 in the same edit, which is what keeps the cut on the columns (339 → 278) instead of the rail (308, unchanged). The hub link at the foot is the way through to /services: the trigger opens rather than navigates, so without it the section index has no route to it. Hover a row: direction B — a brandeis-50 fill at the row radius, the label and the arrow both taking the blue, the arrow sliding in from -4px. The fill extends past the text because the row's padding is pulled back out with a negative inset, so the label still aligns with the group label above it. The rail's secondary card is a compact row rather than a second card: a full card would make the rail taller than the columns beside it, and then the plate's height would be set by the offer instead of by the content."
+            title="Revision 2 · three plates, three shapes"
+            note="Round one of the visual overhaul (docs/specs/SiteNav.md R2). Revision 1 drew every section as columns of 14px labels, so the three plates were one list at three widths. Now every mega has a FEATURE column beside its index, split by the same hairline, and the feature's form is different per section on purpose: Services previews the service under your pointer, Expertise shows one case as its figure, Insights shows the latest piece with its photograph. Squint and the three read as a drawing, a number and a picture. Where a section has an index page, its hub link sits in a foot strip at the plate's base on a ground one step off the panel. Hover each item below in turn and watch the box morph between them."
+          >
+            <SiteNav {...only(nav, ['services', 'expertise', 'insights'])} />
+          </Specimen>
+
+          <Specimen
+            title="Services · the preview — 1120"
+            note="Hover Services, then walk down the six services. The feature column crossfades to the kit's Sketch scene for the row under the pointer — the selector the owner approved on home and About, one titled row lit, its answer beside it — and the row whose scene is showing keeps its blue label and arrow when the pointer leaves for the feature, so it is always clear which row the drawing belongs to. Focus drives it too: Tab into the plate and arrow down the list with Tab. Audits have no scene and leave the last one showing. Under the drawing, the Working together offers: How We Work as a serif title row (no box, no placeholder image any more) and Request Free Audit as the compact row under a rule. The foot strip carries All services."
           >
             <SiteNav {...only(nav, ['services'])} />
           </Specimen>
 
           <Specimen
-            title="Plate · no rail — 780 and 560"
-            note="Expertise and Insights. Same vocabulary, no rail, so the plate narrows to its content rather than holding the widest plate's width in empty ground — 780 for two groups of six, 560 for two of four. Both were re-measured when the rows went to 14px: at the old 880 and 720 they left 83px and 163px of empty track per column. Move between them and watch the box morph in both axes at once. The width is DECLARED on the item rather than derived from a link count: deriving it would silently re-lay out the plate the day a group gained a seventh row, and the cause would be invisible in the data and in the markup."
+            title="Expertise · the proof — 1120"
+            note="Hover Expertise. The question this section is opened with is 'have they done this in a context like mine?', so its feature is one case reduced to its figure: the Stat at lg — the largest thing in any plate, weight from scale rather than from a box — what it means, the client, and the way to the case. The pane went from 780 to 1120 to make room, and its columns are [9, 8] because this section's FIRST column holds the longer labels (293 against 259). No foot strip: Expertise has no hub page in the IA, so the plate ends where its content does. The pick of case is editorial (spec R2.6)."
           >
-            <SiteNav {...only(nav, ['expertise', 'insights'])} />
+            <SiteNav {...only(nav, ['expertise'])} />
           </Specimen>
 
           <Specimen
-            title="326 · mobile column — the rail card"
-            note="ch05 B3 approves every image at 326, the phone's column. The rail card is the one image slot that never renders that wide, so it cannot be framed to 326 the way a card in the page can: the plate and the sheet size it, not its parent, and a header in a 326 frame at a wide window would still draw the desktop bar. Measured on this route: 276 × 121 in the plate at 1440, falling to 242 × 106 at 1024 where the plate is narrowest (hover Services), and 314 × 137 in the sheet at 390 (open the menu, then Services) — the sheet's 20px optical inset plus the card's own 16 padding and hairline take it below 326. Its asset is therefore judged at 242, its narrowest slot, which is stricter than the page's 326. The fixture's artwork is a named placeholder; this row is where the real one gets checked."
+            title="Insights · the story — 880"
+            note="Hover Insights. The latest piece: a 16:9 photograph through Media, so it takes the shared tone layer; the format in the mono label voice; the title in the serif. One link for all three. A story takes HALF the plate rather than a third — the picture is the pane's argument, and eight short labels need barely 180 a column — so the plate grew from 560 to 880. The title takes the blue on hover; the photograph does not move."
           >
-            <SiteNav {...only(nav, ['services'])} />
+            <SiteNav {...only(nav, ['insights'])} />
           </Specimen>
 
           <Specimen
@@ -107,14 +114,14 @@ export default async function SiteNavSpecimenPage() {
 
           <Specimen
             title="The full bar"
-            note="Six items and the CTA, in content order — Work sits second because case studies are the strongest proof and should not be the fifth thing read. Below 1024 the items and the CTA disappear and the toggle appears: one breakpoint changing WHAT is in the bar, not how big anything is, which is why the two bars have two heights (72 and 64) rather than one that shrinks."
+            note="Six items and the CTA, in content order — Work sits second because case studies are the strongest proof and should not be the fifth thing read. Below 1024 the items and the CTA disappear and the toggle appears: one breakpoint changing WHAT is in the bar, not how big anything is, which is why the two bars have two heights (72 and 64) rather than one that shrinks. The bar is unchanged in round one (spec R2.6 item 3)."
           >
             <SiteNav {...nav} />
           </Specimen>
 
           <Specimen
             title="The sheet — narrow the window past 1024"
-            note="Everything above collapses to a toggle, and the navigation becomes a bottom sheet. The hub link is here too, at the end of a section’s scrolling list rather than in the sticky foot — the foot holds the two offers, and a third action in the one strip a thumb reaches would compete with both. Three sizes, one step apart: section links 14px matching the plate’s rows, the six root rows 16px since they are the top level on the one surface where they are the primary target, and the rail card 18px. The root rows have no desktop counterpart to match — up there the same six items are the bar, set in mono at 13. All six sit 14px below the midpoint of a 375x812 screen; shrinking them moved the list DOWN, because the sheet is anchored to the bottom and a shorter sheet starts lower. It hugs its list at both levels — all six root items sit in the lower half of the screen where a thumb is, and a section grows to its OWN content, capped at the screen less 88px. Insights hugs at 657; Services and Expertise overrun the cap and scroll at 724. The sticky foot never moves between them: the sheet is anchored to the viewport's bottom edge, so only the top travels. The height change IS the transition, which is why it is measured — CSS cannot animate to auto. Two offers stay pinned at the foot at both levels, primary on the right. While it is open the wordmark is behind the scrim and out of the tab order: the close glyph, the scrim and Back are the exits, and a mark that also dismissed would be a fourth answer to a question that already had three."
+            note="Open the menu (the toggle at the top right of the real header, or this one), then each section, then scroll to its end. Two things changed in round one. The six root rows are set in the serif title voice (h6, 18) rather than body — the same 48px row, so all six still sit below the midpoint of a 375x812 screen. And each section ends with the same feature as its plate, before the hub link: Expertise's figure, Insights' photograph and title, Services' How We Work row. There is no preview in the sheet — touch has no hover, and a drawing that never changes is decoration. Back is held on one line now; at 390 it wrapped its arrow above 'Menu'. Everything else is revision 1: the sheet hugs its list at both levels, grows for a section to the screen less 88px, swipes away, and pins both offers at the foot."
           >
             <SiteNav {...nav} />
           </Specimen>
@@ -130,8 +137,10 @@ export default async function SiteNavSpecimenPage() {
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>
-                Same markup, one prop. Open the plate and check the row fill, the card edge, the
-                rail hairline and the focus ring. On tint every fill steps one deeper, because
+                Same markup, one prop. Open each plate and check the row fill, the hairline seam,
+                the foot strip&rsquo;s ground, the Sketch plate, the stat&rsquo;s blue and the focus
+                ring. The plate and the sheet carry the surface themselves since revision 2, so they
+                no longer inherit it from whatever encloses the header. On tint every fill steps one deeper, because
                 brandeis-50 on paper-deep is invisible and would leave a hover marked by nothing.
                 On ink the fill goes neutral — at the pale end of the blue ramp there is no tint
                 left to see against a near-black ground — and the scrim is the one value in the
@@ -140,7 +149,11 @@ export default async function SiteNavSpecimenPage() {
                 since blue cannot signal itself and a pale-blue label on blue reads as disabled.
               </p>
             </Layout>
-            <SiteNav {...only(nav, ['services', 'work'])} surface={surface} />
+            <SiteNav
+              {...only(nav, ['services', 'work', 'expertise', 'insights'])}
+              surface={surface}
+            />
+            <div className={s.overlayRoom} aria-hidden="true" />
           </Layout>
         </Section>
       ))}

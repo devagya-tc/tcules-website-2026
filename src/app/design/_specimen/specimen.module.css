@@ -35,6 +35,13 @@
   max-width: var(--measure-body);
 }
 
+/* Room for an overlay to open into. An inline SiteNav's plate is absolutely positioned under its
+   bar, and the next band on the page paints over it, so a surface specimen with nothing beneath
+   the bar showed only the top 80px of its plate. Five section steps clears the tallest plate. */
+.overlayRoom {
+  min-block-size: calc(var(--gap-section) * 5);
+}
+
 /* A demo block. Fill plus hairline so the gap between two of them is unmistakable. */
 .box {
   background: color-mix(in srgb, var(--sec-ink) 7%, transparent);
