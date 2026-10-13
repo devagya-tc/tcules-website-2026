@@ -154,7 +154,9 @@ wrapping row has no use for a column or section beat.
    was a second name for one distance and was deleted.
 7. **Surface is declared with `data-surface="paper | tint | ink | blue"` on an ancestor** — a
    Section — never on the control itself. That is what lets a button three components deep get
-   the right treatment without being told where it is.
+   the right treatment without being told where it is. The one other surface declarer is `Island`
+   (owner, 13 Oct 2026): a bounded ground inside a band whose surface is set per instance, so it
+   declares its own `data-surface` exactly as a band does.
 8. **Type is consumed as a composite:** `font: var(--text-h2)` plus
    `letter-spacing: var(--text-h2-tracking)`. Never restate a size or a ratio. Title roles
    re-declare themselves at 1023px and 767px, so a rule needs no breakpoint of its own for type.

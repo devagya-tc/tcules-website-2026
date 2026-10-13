@@ -1,0 +1,74 @@
+/* ══ Component layer — Island ════════════════════════════════════════════════════
+   Tier 1. A bounded ground set INSIDE a band, with the band's own ground around it on every side:
+   the floating box that CtaSection's and Statement's `island` variant put their content in. Built
+   to docs/specs/Island.md (13 Oct 2026).
+
+   Naming: --isl-{part}
+     parts  inset-block · inset-inline · radius · ground · ink
+
+   It is a SURFACE, not a control, so its colour pair is a ground and an ink (token rule 4). The
+   island declares its own data-surface, so everything inside it — a heading's ink, a button, a link,
+   a texture — resolves that surface's tokens; these two only paint the box itself and set the ink
+   bare text inherits. They duplicate Section's grounds and inks BY VALUE, on purpose: a component
+   never reads another component's tokens (rule 6), and the island must match the band of the same
+   surface exactly, or a paper island on a tint band would read as a third tone.
+
+   No edge and no shadow, on any surface: nothing on the site casts one (primitives § shadow), and
+   the box is drawn by the step in ground alone. That is why the island refuses its band's own
+   surface (the patterns enforce it): with no edge, a paper island on paper is no island at all.
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ──────────────────────────────────── */
+:root {
+  /* The inset is the island's air against its own edge — the band's air in miniature — so it takes
+     the band's value per width: 96 from 768 (the `section` step, both axes, so the box is inset
+     evenly and a start-aligned sentence sits in a square of air), and below 768 the band's phone 64
+     on the block axis and the container `gutter` (32) on the inline axis, because a 64 side inset in
+     the 326 phone column left 198 of measure for an h1. Each value is a gap-scale step; this is
+     the box's padding answering to the viewport, the exception Section's padding holds (CLAUDE.md
+     gap-scale rule 4), claimed on the same grounds — see docs/specs/Island.md § 17, Q1. */
+  --isl-inset-block: var(--gap-section);
+  --isl-inset-inline: var(--gap-section);
+  /* The system's one box radius: every photograph, the form panel and the boxed card take 8, so
+     the island is the same family at a larger scale rather than a new, softer object. A larger
+     step would be the first radius over 8 on the site (docs/specs/Island.md § 17, Q2). */
+  --isl-radius: var(--radius-8);
+}
+
+/* Phone: the band's own 64 above and below, the container gutter at the sides. */
+@media (max-width: 767px) {
+  :root {
+    --isl-inset-block: var(--gap-column);
+    --isl-inset-inline: var(--gap-gutter);
+  }
+}
+
+/* ── Surface: paper ─────────────────────────────────────────────────────────────
+   The bright island: on a tint band, the brightest object in it, as the form panel is. */
+:root,
+[data-surface='paper'] {
+  --isl-ground: var(--color-paper);
+  --isl-ink: var(--color-neutral-900); /* 14.62:1 */
+}
+
+/* ── Surface: tint ──────────────────────────────────────────────────────────────
+   The warm island: on a paper band, one step deeper than its surround. */
+[data-surface='tint'] {
+  --isl-ground: var(--color-paper-deep);
+  --isl-ink: var(--color-neutral-900); /* 13.06:1 */
+}
+
+/* ── Surface: ink ── declared for self-containment; IslandSurface does not admit it ──
+   Ink is the footer's ground (visual-direction § 1.7); docs/specs/Island.md § 17, Q3. */
+[data-surface='ink'] {
+  --isl-ground: var(--color-neutral-950);
+  --isl-ink: var(--color-white); /* 17.26:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment; blue is never a ground (§ 4.1) ── */
+[data-surface='blue'] {
+  --isl-ground: var(--color-brandeis-500);
+  --isl-ink: var(--color-white); /* 6.23:1 */
+}

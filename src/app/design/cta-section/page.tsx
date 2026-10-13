@@ -163,9 +163,9 @@ export default function CtaSectionSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Arrangement matrix</h2>
             <p>
-              One size. Split requires a form and rejects proof, open requires actions, and offer
-              accepts either a form or actions while rejecting proof. The renderings immediately below are the
-              matrix, not three separately styled components.
+              One size. Split requires a form and rejects proof, open requires actions, and
+              offer accepts either a form or actions while rejecting proof. The renderings
+              immediately below are the matrix, not three separately styled components.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter">
@@ -638,6 +638,56 @@ export default function CtaSectionSpecimenPage() {
       <SpecimenNote
         title="15 · The kit's props"
         note="media (the K offer's 4:5 photograph, either side), markers (number, icon, plain) and texture (the closes' closing placement) are shown as finished bands at /design/kit/cta, with copy at the § 1.5 ceilings."
+      />
+
+      <SpecimenNote
+        title="16 · The island close (open only)"
+        note="island: the open close on a floating box of its own ground (Island), the band's ground around it on every side. The value is the island's surface; without surface the band takes the other light ground, so island=&quot;tint&quot; keeps the close's tint and drops the band to paper. Four blocks: the flagship (tint island, paper band, points and the solid + ghost pair), the bright island (paper on tint, no points), the proof shape inside an island, and the surface proof on ink. island on split or offer does not compile."
+      />
+      <CtaSection
+        arrangement="open"
+        island="tint"
+        eyebrow="Work with us"
+        heading="Bring the problem as it is"
+        body={OPEN_BODY}
+        points={STANDARD_POINTS}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'See how we work', href: ROUTES.howWeWork },
+        ]}
+      />
+      <CtaSection
+        arrangement="open"
+        island="paper"
+        mark={<Icon name="chat-round-dots" size="xl" />}
+        heading="Tell us what you are trying to ship"
+        body={OPEN_BODY}
+        actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+      />
+      <CtaSection
+        arrangement="open"
+        island="tint"
+        eyebrow="Work with us"
+        heading="Choose the next useful move"
+        body={OPEN_BODY}
+        points={STANDARD_POINTS}
+        actions={[
+          { label: 'Discuss the relevant project', href: ROUTES.contact },
+          { label: 'See how we work', href: ROUTES.howWeWork },
+        ]}
+        proof={<ProofFixture kind="quote" />}
+      />
+      <CtaSection
+        arrangement="open"
+        island="tint"
+        surface="ink"
+        eyebrow="Surface proof"
+        heading="The island keeps its own tokens on ink"
+        body={OPEN_BODY}
+        actions={[
+          { label: 'Start a project', href: ROUTES.contact },
+          { label: 'See how we work', href: ROUTES.howWeWork },
+        ]}
       />
 
       <Section>

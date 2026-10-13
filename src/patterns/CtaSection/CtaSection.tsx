@@ -4,10 +4,14 @@ import {
   Button,
   Cluster,
   Icon,
+  Island,
+  ISLAND_BAND,
+  islandSurfaceOn,
   Layout,
   Media,
   Section,
   type IconName,
+  type IslandSurface,
   type MediaImage,
   type SectionSurface,
 } from '@/components';
@@ -211,6 +215,7 @@ type CtaSplitProps = {
    * between the lede and the strip at 1470 — the dead column § 3.2 warns about.
    */
   contact?: readonly CtaContact[];
+  island?: never;
 };
 
 type CtaOpenProps = {
@@ -224,6 +229,19 @@ type CtaOpenProps = {
   proof?: ReactNode;
   media?: never;
   contact?: never;
+  /**
+   * The island variant (13 Oct 2026): the close on a floating box of its own ground inside the
+   * band, the band's ground around it on every side (`Island`). The value is the island's surface,
+   * chosen per instance. Without `surface`, the band takes the other light ground (`ISLAND_BAND`):
+   * `island="tint"` puts the close's tint on the island and the band goes paper, so the page still
+   * steps paper → tint → the ink footer, the tint now a floating object rather than a band. An
+   * island equal to its band is refused (no edge to read by) and takes the other light ground.
+   *
+   * On `open` only, and that is a type. A split close already raises its form on a panel, and a box
+   * holding a box is the card reflex twice; an offer interrupts mid-page, and a floating box there
+   * would outweigh the close the page ends on.
+   */
+  island?: IslandSurface;
 };
 
 type CtaOfferWithFormProps = {
@@ -233,6 +251,7 @@ type CtaOfferWithFormProps = {
   proof?: never;
   media?: never;
   contact?: never;
+  island?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -254,6 +273,7 @@ type CtaOfferWithActionsProps = {
    */
   media?: CtaMedia;
   contact?: never;
+  island?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -731,6 +751,14 @@ export function CtaSection(props: CtaSectionProps) {
   if (props.arrangement === 'open') {
     /* `present`, not `!== undefined`, so a `proof={false}` reserves nothing (§ 12 row 6). */
     const hasProof = present(props.proof);
+    /* The island variant: the band takes the other light ground unless told, and an island equal
+       to its band is refused (`islandSurfaceOn`). Without an island, the close's own tint. */
+    const band: SectionSurface =
+      props.surface ?? (props.island ? ISLAND_BAND[props.island] : CLOSE_SURFACE);
+    const islandSurface = props.island ? islandSurfaceOn(band, props.island) : undefined;
+    const field = (content: ReactNode) =>
+      islandSurface ? <Island surface={islandSurface}>{content}</Island> : content;
+    const arrangement = islandSurface ? 'open-island' : 'open';
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in
@@ -738,25 +766,27 @@ export function CtaSection(props: CtaSectionProps) {
     if (hasProof) {
       return (
         <Section
-          surface={props.surface ?? CLOSE_SURFACE}
+          surface={band}
           id={props.id}
           data-band={props['data-band']}
           aria-labelledby={headingId}
-          data-arrangement="open"
+          data-arrangement={arrangement}
         >
-          <Layout
-            columns={{ base: 1, lg: [3, 2] }}
-            colGap="section"
-            rowGap="stack"
-            align="start"
-          >
-            <Layout rowGap="stack">
-              {lede({ scale: 'close' })}
-              <CtaPoints shape="row" markers={markers} points={points} />
-              <CtaActions actions={props.actions} kind="ask" />
-            </Layout>
-            <div>{props.proof}</div>
-          </Layout>
+          {field(
+            <Layout
+              columns={{ base: 1, lg: [3, 2] }}
+              colGap="section"
+              rowGap="stack"
+              align="start"
+            >
+              <Layout rowGap="stack">
+                {lede({ scale: 'close' })}
+                <CtaPoints shape="row" markers={markers} points={points} />
+                <CtaActions actions={props.actions} kind="ask" />
+              </Layout>
+              <div>{props.proof}</div>
+            </Layout>,
+          )}
         </Section>
       );
     }
@@ -771,27 +801,29 @@ export function CtaSection(props: CtaSectionProps) {
        row and buttons, which read as a document with an empty right half. */
     return (
       <Section
-        surface={props.surface ?? CLOSE_SURFACE}
+        surface={band}
         id={props.id}
         data-band={props['data-band']}
         aria-labelledby={headingId}
-        data-arrangement="open"
+        data-arrangement={arrangement}
       >
-        <div className={styles.centred}>
-          <Layout rowGap="stack">
-            {lede({ scale: 'open', centred: true })}
-            {/* The points take the middle 4 of [1, 4, 1] — about 8/12, 784 at 1470 — so the row
+        {field(
+          <div className={styles.centred}>
+            <Layout rowGap="stack">
+              {lede({ scale: 'open', centred: true })}
+              {/* The points take the middle 4 of [1, 4, 1] — about 8/12, 784 at 1470 — so the row
                 stays inside the centred column's silhouette rather than spreading the full 1240
                 (final fix round: at full width it read as a three-feature strip under a narrow
                 column). `offset` places the one child; the outer tracks stay empty. */}
-            {hasPoints ? (
-              <Layout columns={{ lg: [1, 4, 1] }} offset={{ lg: 1 }} colGap="gutter">
-                <CtaPoints shape="centred" markers={markers} points={points} />
-              </Layout>
-            ) : null}
-            <CtaActions actions={props.actions} kind="ask" justify="center" />
-          </Layout>
-        </div>
+              {hasPoints ? (
+                <Layout columns={{ lg: [1, 4, 1] }} offset={{ lg: 1 }} colGap="gutter">
+                  <CtaPoints shape="centred" markers={markers} points={points} />
+                </Layout>
+              ) : null}
+              <CtaActions actions={props.actions} kind="ask" justify="center" />
+            </Layout>
+          </div>,
+        )}
       </Section>
     );
   }
