@@ -117,7 +117,9 @@ Nine steps, named for what they separate:
    add a media query that swaps one step for another. One exception (owner, 7 Oct 2026): `Section`'s
    own vertical padding is one value per width — 96, 64 below 768 — and the page's first band
    takes 48 / 32 above its content below 1024, in `tokens/components/section.css` and nowhere else. It is the band's air against the screen, not a
-   distance between two things.
+   distance between two things. `Island`'s inset is the band's air in miniature and holds the same
+   exception (owner, 13 Oct 2026): 96 from 768; 64 block and the 32 gutter inline below it, in
+   `tokens/components/island.css` and nowhere else.
 
 `Layout` and `Cluster` take these names directly as `rowGap` / `colGap` values. Cluster caps at
 `stack`: controls and chips stop at `block`, a strip of client marks is set at `stack`, and a

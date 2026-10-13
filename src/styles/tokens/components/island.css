@@ -28,7 +28,7 @@
      on the block axis and the container `gutter` (32) on the inline axis, because a 64 side inset in
      the 326 phone column left 198 of measure for an h1. Each value is a gap-scale step; this is
      the box's padding answering to the viewport, the exception Section's padding holds (CLAUDE.md
-     gap-scale rule 4), claimed on the same grounds — see docs/specs/Island.md § 17, Q1. */
+     gap-scale rule 4), granted by the owner on 13 Oct 2026 and recorded beside Section's in that rule. */
   --isl-inset-block: var(--gap-section);
   --isl-inset-inline: var(--gap-section);
   /* The system's one box radius: every photograph, the form panel and the boxed card take 8, so

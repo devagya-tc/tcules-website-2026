@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Tier** | 1 primitive (`src/components/Island`), a surface like `Section` |
-| **Status** | implemented (13 Oct 2026). Q1–Q4 below are non-blocking and were built on the recommended default |
+| **Status** | approved (owner, 13 Oct 2026). Q1–Q4 answered: the recommended default on each |
 | **Token prefix** | `--isl-*` (`src/styles/tokens/components/island.css`, registered in `tokens/index.css` straight after `section.css`) |
 | **Designer / date** | Claude, 13 Oct 2026, from the owner's brief: "an island variant for CtaSection and Statement — a floating box within a section", ground set per instance |
 | **Implements** | CtaSection `island` (open only) and Statement `island` (amendments in both specs) |
@@ -177,16 +177,16 @@ existing primitives and gap steps. No new primitive.
    as the only per-width distance. The island claims the same exception on the same grounds (its air
    against its edge, not a distance between two things). Options: (a) ratify the exception for
    `island.css` and add it to CLAUDE.md; (b) one value at every width (`gutter` all round — cramped at
-   1440). **Recommend (a).** Until ratified, CLAUDE.md and `island.css` disagree.
+   1440). **Decided (owner, 13 Oct): (a)** — recorded in CLAUDE.md gap-scale rule 4.
 2. **Radius (non-blocking).** 8 keeps the island in the photograph/panel family; a 1240-wide box at 8
    reads crisp and editorial. A softer 16 would be the first radius over 8 on the site and a new
-   primitive. **Recommend keep 8.**
+   primitive. **Decided (owner, 13 Oct): 8.**
 3. **Ink island (non-blocking).** The ink ground would be the most striking island but ink is the
-   footer's, and an ink close would sit a band's air above it. **Recommend keep excluded**; the token
+   footer's, and an ink close would sit a band's air above it. **Decided (owner, 13 Oct): excluded**; the token
    block is ready if the owner wants one mid-page moment.
 4. **Texture on the CTA island (non-blocking).** Statement carries its textures inside the island;
    the close has no texture today ("the close carries no texture for now"). `corner-pair` inside a
-   paper close island would be the natural first try. **Recommend decide at the next texture review.**
+   paper close island would be the natural first try. **Decided (owner, 13 Oct): deferred to the next texture review.**
 
 ## Appendix — self-audit
 
