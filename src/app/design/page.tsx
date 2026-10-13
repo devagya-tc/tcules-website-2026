@@ -293,6 +293,11 @@ const SPECIMENS = [
         note: 'the case-study index page type, with the live entries and their ideal copy; the grouped form (featured set, covers, thumbnail rows, a story, a form close) is shown at /design/corpus-page/case-studies',
       },
       {
+        href: '/design/insights-index',
+        name: 'InsightsIndex',
+        note: 'the insights hub — front page (lead + mix), topic collections, a band per format each its own shape, the Lab, and the URL-driven feed — over the stress fixture; ?state=sparse is the live CMS’s shape, ?state=empty no items; filters work',
+      },
+      {
         href: '/design/case-story',
         name: 'CaseStory',
         note: 'a case study as a story — chapters with a still marker column, steps, pull quotes, a principle band and annotated figures — at the Benchmark Gensuite case copied locally from Strapi',

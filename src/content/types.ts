@@ -1276,12 +1276,23 @@ export type InsightAction = {
 export type InsightImage = {
   src: string;
   alt: string;
+  /** Intrinsic size and derived rungs, where the source knows them (the kit catalogue does). */
+  width?: number;
+  height?: number;
+  sources?: ImageSource[];
+  kind?: ImageKind;
+  /** A catalogue photograph standing in for a missing cover (visual-direction § 5.7). */
+  standIn?: boolean;
 };
 
 export type InsightFormatCard = {
   id: string;
   title: string;
   image?: InsightImage;
+  /** Which format the card names, when the source can tell. Lets a page attach its words to a row. */
+  kind?: InsightResourceKind;
+  /** One sentence on the format ("Two recorded conversations with product leaders"). */
+  description?: string;
 };
 
 export type InsightFilterOption = {
@@ -1302,19 +1313,52 @@ export type InsightTaxonomy = {
   slug?: string;
 };
 
-export type InsightResourceKind = 'article' | 'event' | 'interview' | 'podcast';
+/**
+ * The seven formats the insights family publishes (routes.ts names an index for each). Strapi holds
+ * four of them today; guides, research and videos are carried by the view model so the page is
+ * designed for them before the CMS has them (docs/strapi-changes.md § 20).
+ */
+export type InsightResourceKind =
+  | 'article'
+  | 'guide'
+  | 'research'
+  | 'event'
+  | 'interview'
+  | 'podcast'
+  | 'video';
 
 export type InsightResource = {
   documentId: string;
   kind: InsightResourceKind;
   title: string;
   slug: string;
+  /** The authored standfirst. Empty when the source has none — never a date or a reading time. */
   description: string;
   image?: InsightImage;
   tags: InsightTaxonomy[];
   categories: InsightTaxonomy[];
   filterIds: string[];
   publishedAt?: string;
+  /** "11 min read", as authored. Articles, guides, research. */
+  readingTime?: string;
+  /** "48 min", as authored. Podcasts and videos. */
+  duration?: string;
+  /** When and where an event happens — not when its page was published. `startsAt` is ISO 8601. */
+  event?: { startsAt: string; place?: string };
+  /** An editor's pick for the hub's lead story. At most one is honoured. */
+  featured?: boolean;
+};
+
+/**
+ * A curated reading list for one problem ("AI inside your product"): a few resources picked by an
+ * editor, and the service page that answers the same problem. Authored, not derived.
+ */
+export type InsightCollection = {
+  id: string;
+  title: string;
+  description: string;
+  items: { id: string; title: string; href: string }[];
+  related?: InsightAction;
 };
 
 export type InsightsPage = {
@@ -1325,6 +1369,8 @@ export type InsightsPage = {
     description: string;
   };
   formatCards: InsightFormatCard[];
+  /** Curated reading lists by problem. Absent where the source has none (Strapi, today). */
+  collections?: InsightCollection[];
   lab?: {
     id: string;
     heading: string;
@@ -1341,6 +1387,7 @@ export type InsightsPage = {
     id: string;
     heading: string;
     description: string;
+    action?: InsightAction;
   };
   seo?: ContentSeo;
 };

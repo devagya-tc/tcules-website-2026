@@ -17,6 +17,20 @@
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
+> **Amendment · 13 Oct 2026 · the insights hub (docs/specs/InsightsIndex.md).** Two additions, both
+> built in this tier because the hub needed them and a row had nowhere else to put them:
+>
+> 1. **`eyebrow?: string`** — one quiet mono label above the title ("Podcast · 25 Aug 2026"),
+>    BlockCard's eyebrow voice and values (`--lcrd-eyebrow-text`, `-tracking`, and `-ink` per surface:
+>    neutral-600 4.92:1 · neutral-700 7.27:1 · neutral-400 8.05:1 · brandeis-100 4.91:1), a `text` (16)
+>    above the title. In a split row it travels with the title in the title's track. Blank warns and
+>    renders nothing.
+> 2. **`marker: { type: 'date'; dateTime?: string; day: string; label: string }`** — the day at the
+>    stat role in the accent (`--lcrd-date-day-text`, `--lcrd-date-ink`: brandeis-500 · brandeis-500 ·
+>    brandeis-300 · white), month and year under it at `tight` in the eyebrow's voice, in a fixed
+>    `--lcrd-date-inline` (96) column. A `<time>` with `dateTime`; without one, text. The caller formats
+>    both strings. Specimen: `/design/list-card`, the eyebrow and date-marker blocks.
+
 > **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
 > arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
 > title is the hover and focus signal. Visible actions are opt-in (`ctaLabel`). Tiles may be boxed

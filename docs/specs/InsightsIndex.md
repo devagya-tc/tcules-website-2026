@@ -1,0 +1,303 @@
+# InsightsIndex — template specification
+
+## 0 · Front matter
+
+| | |
+|---|---|
+| **Tier** | 3 template (`src/templates/InsightsIndex/`) |
+| **Status** | implemented |
+| **Token prefix** | `--iix-*` (`src/styles/tokens/components/insights-index.css`) |
+| **Designer / date** | Claude Code, 13 Oct 2026, to the owner's decision of the same day |
+| **Implements** | Owner decision 13 Oct 2026: "FRONT PAGE + FEED". Reference: The Verge home page, for how it lists many varied items on one page and keeps it interesting and easy to search. A featured lead and a curated mix at the top; rows per format, each its OWN shape; then a latest-first feed carrying the filters (moved off the top, still URL-driven). Beauty is the core factor. |
+| **Implemented at** | `src/templates/InsightsIndex/InsightsIndex.tsx` · `InsightsIndex.module.css` · `src/styles/tokens/components/insights-index.css` · `ListCard` `eyebrow` (extension, § 3) · specimen `src/app/design/insights-index/page.tsx` · route `src/app/insights/page.tsx` |
+
+## 1 · Identity
+
+The insights hub page type: everything Tcules publishes (articles, guides, research, podcasts,
+videos, events, interviews) on one page, arranged as a newspaper front page over an archive.
+
+**Tier 3**, because it is a whole page shape: it composes PageHero, BlockCardSet, BlockCard,
+ListCard, Slider, ContentSection, CtaRow, CtaSection, Tag, Stat and Icon, and decides which of them
+each format gets. The live route and the specimen render the same composition, as `CaseStudyIndex`
+does for `/case-studies`.
+
+**What it is not:**
+
+1. Not a format index (`/insights/podcasts` …). Those are their own pages; this links to them, or to
+   the feed filtered by format while they do not exist (§ 17 Q1).
+2. Not an article page. `CorpusPage/LongformPage` renders an insight.
+3. Not a search page. Filters are a query over a short catalogue (≤ 100 per kind), held in the URL;
+   free-text search is out of scope (§ 17 Q4).
+
+**Nearest existing thing: `CaseStudyIndex`**, which picks a band's arrangement from its position and
+count. This is not a prop on it: the case index has one kind of item and argues by count; this page
+has seven kinds and argues by KIND — each format has a shape of its own so that the page never
+repeats one rectangle down its length (the owner's decision; CLAUDE.md § Design quality).
+
+One per page.
+
+## 2 · Anatomy
+
+| # | Band | Built from | Required |
+|---|---|---|---|
+| A | **Masthead**: trail, h1, lede, the format jumps | `PageHero` stacked, paper, texture; jumps in its `children` slot as a `Cluster` of link `Button`s with a count | yes (jumps only when ≥ 2 formats) |
+| B | **Front page**: one lead, a curated mix of up to four, one per format first | `BlockCardSet lead="beside"`: the lead's cover in the 2, the mix as text cards in the 1 | yes when ≥ 1 item |
+| C | **Start with your problem**: up to four topic collections | `Layout` 4 → 2 → 1; each column an `Icon` head, an h3, one sentence, `ListCard` rows, a related link | optional (`collections`) |
+| D | **Format rows**, in the template's fixed order, each its own shape (table below) | `ContentSection` with `actionsAt="end"` "All podcasts" `CtaRow` | one per format with items |
+| E | **Lab**: the other organisation's offer | `CtaSection arrangement="offer"` on blue — the page's one reserved band (component-audit § 2) | optional |
+| F | **Feed**: everything, latest first; the filter rail beside it | `ContentSection`; `Layout [1, 2]` at `section`; `Tag filter` chips; `ListCard` rows with an eyebrow; "Show more" link | yes |
+| G | **Close** | `CtaSection arrangement="open"` on tint, only with an action | optional |
+
+**The format shapes (band D)** — chosen by what each format IS, not by its count:
+
+| Format | Shape | Why this shape |
+|---|---|---|
+| articles | **wide**: `BlockCardSet lead="wide"`, three covers in [2, 1, 1] | the largest set; size contrast in one row |
+| events | **ledger**: rows led by the DATE as a `Stat` (day, month, year · place) | an event is a date first |
+| podcasts | **episode**: the newest as a horizontal `BlockCard` (cover beside copy, "Listen" cta, duration), earlier ones as rows | an episode is one thing you press play on |
+| research | **boxed**: `BlockCardSet frame="box"` text cards with reading time as `meta` | reports are artefacts; the box separates them as objects |
+| videos | **rail**: a `Slider` of covered cards | the format people scrub through |
+| interviews | **voices**: text tiles, title-led (`BlockCardSet` text, `md`) | a conversation is its headline |
+| guides | **catalogue**: `ListCard` thumbnail rows in two columns (text rows when any cover is missing) | a shelf of practical walkthroughs |
+
+Order: articles · events · podcasts · research · videos · interviews · guides. It alternates covered
+(visual) and text shapes so that no two text-heavy bands meet (CLAUDE.md § Design quality), and the
+blue Lab band sits between the last row and the feed, closing the front page and opening the archive.
+
+## 3 · Props / API
+
+Every type is the template's own; the page maps the view model onto it (a template may not import
+`@/content`).
+
+| Prop | Type | Default | Decides |
+|---|---|---|---|
+| `breadcrumbs` | `readonly BreadcrumbItem[]` | — | the trail |
+| `hero` | `{ title: string; lede?: string; eyebrow?: string }` | — | band A |
+| `items` | `readonly InsightsIndexItem[]` | — | every resource, newest first. Feeds B and D |
+| `featuredId` | `string` | first item with a cover, else the first | B's lead |
+| `formats` | `readonly InsightsIndexFormat[]` | `[]` | per kind: `title`, `lead`, and `href` ("All podcasts") |
+| `collections` | `readonly InsightsIndexCollection[]` | `[]` | band C; absent renders nothing |
+| `lab` | `{ heading; body?; action: HeroAction }` | — | band E |
+| `feed` | `InsightsIndexFeed` | — | band F (below) |
+| `closing` | `{ eyebrow?; heading; body?; action? }` | — | band G, only with `action` |
+
+`InsightsIndexItem` = `{ id; kind: InsightsIndexKind; title; href; description?; cover?: BlockCardImage; publishedAt?: string (ISO); readingTime?; duration?; event?: { startsAt: string (ISO); place?: string } }`.
+
+`InsightsIndexKind` = `'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview'`.
+
+`InsightsIndexFeed` = `{ id; heading; lead?; items (the visible page, already filtered); total (matching); filters: { id; label; options: { id; label; href; selected }[] }[]; clearHref?; moreHref? }`.
+The page computes every href: the URL is the page's (`?filter-<group>=<id>`, `?page=<n>`), so the
+template renders links and never reads `searchParams`.
+
+**ListCard gains `eyebrow?: string`** (tier 2, global): one quiet mono label above the title, the
+same voice as BlockCard's eyebrow ("Podcast · 25 Aug 2026"). Built in the tier below because the feed
+and the episode rows need it and a row has nowhere else to say what kind of thing it is.
+
+**Not props, deliberately:** surface (each band's ground is the template's: paper everywhere, blue Lab,
+tint close), the format order, each format's shape, the front page's count (1 + 4), the row
+capacities, colour, gap, padding. A CMS that could reorder or reshape the bands is how the old site
+grew 111 sections.
+
+**Compile errors rather than review notes:** `kind` outside the union; a collection item without
+`href`; `lab` without an action.
+
+## 4 · Variants × sizes
+
+No variants and no sizes: one page type. What varies is DATA-DRIVEN and listed in § 12 — which
+formats exist, how many items each has, which items have covers. Considered and rejected:
+
+- **A tinted band per format** — rejected: weight comes from scale, imagery and position, never from
+  a ground (CLAUDE.md § Design quality), and two tints would meet.
+- **Numbered "top stories"** — rejected: a ranked list implies a ranking of our own work; the mix is
+  one per format, in date order, unnumbered.
+- **Filters at the top** (today's page) — rejected by the owner; they belong to the feed they filter.
+
+## 5 · States
+
+The template has no interactive state of its own. Its links, chips, cards and the Slider own theirs.
+Page-level states, all server-rendered from the URL:
+
+| State | Rendering |
+|---|---|
+| no filter | feed shows every item, newest first; no "Clear" |
+| filter(s) held | held chips (Tag `selected`, `close-circle` clears that group); a count line ("12 of 41"); "Clear all filters" |
+| no match | "Nothing matches these filters." + "Clear all filters" |
+| empty catalogue | "Nothing has been published yet." No front page, no rows |
+| more to show | "Show more" link to `?page=n+1#feed` |
+
+## 6 · Per-surface colour
+
+The template draws three marks itself: the jump row's count, the collection description and the
+feed's count line. Every other colour is a pattern's own.
+
+| Token | paper | tint | ink | blue |
+|---|---|---|---|---|
+| `--iix-count-ink` | neutral-600 (4.92:1) | neutral-700 (7.27:1) | neutral-400 (8.05:1) | brandeis-100 (4.91:1) |
+| `--iix-topic-body-ink` | neutral-700 (8.14:1) | neutral-700 (7.27:1) | neutral-300 | brandeis-50 (5.57:1) |
+| `--iix-topic-title-ink` | neutral-900 | neutral-900 | white | white |
+| `--iix-topic-icon-ink` | brandeis-500 (6.17:1) | brandeis-500 (5.51:1) | brandeis-300 | white |
+
+Paper: the quiet-label ramp BlockCard's eyebrow uses. Tint: the label steps to 700 because 600 is
+4.39:1 there. Ink: lifted, as BlockCard's. Blue: the brandeis-50/100 pair BlockCard uses. Every band
+on this page is paper except the Lab (blue, rendered by CtaSection) and the close (tint, CtaSection);
+the other surfaces are declared for self-containment (tokens rule 2).
+
+## 7 · Geometry & spacing
+
+**(a) Distances** — gap-scale roles:
+
+- jumps: `Cluster colGap="block" rowGap="text"` (24 / 16: link buttons are 40 tall, 16 clears them)
+- front page: BlockCardSet's own (`gutter` across, `column` down)
+- collections: `Layout colGap="gutter" rowGap="stack"`; inside a column `block` (icon → head group),
+  `text` (title → sentence), `block` (head group → rows), rows `none`
+- event row: `Layout colGap="gutter"` date beside copy, `text` inside the copy
+- episode: horizontal card, then rows under it at `stack`
+- feed: head over body at ContentSection's `stack`; rail beside list at `section` (a split: controls
+  beside a list, two different kinds); filter groups `gutter` apart; label → chips `text`; chips
+  `text`/`text` (the 24px touch-target argument the old page made, kept); rows `none`; list → "Show
+  more" `stack`
+
+**(b) Component sizes** — none new. The filter rail's sticky offset (`--iix-rail-sticky-top`) reads
+`--gap-section`, clear of the 72 nav bar, as CaseStory's marker does.
+
+**(c) Optical corrections** — none.
+
+Radius, border, shadow, z-layer: none of the template's own.
+
+## 8 · Typography
+
+| Part | Role | Tracking |
+|---|---|---|
+| jump count | `--text-ui` (mono, uppercase) | `--text-ui-tracking`, `--text-mono-case` |
+| collection title (h3) | `--text-h5` | `--text-h5-tracking` |
+| collection sentence | `--text-body-sm` | none — this role has no tracking companion |
+| feed count line | `--text-ui` | `--text-ui-tracking`, `--text-mono-case` |
+| filter group label (h3) | `--text-eyebrow` | `--text-eyebrow-tracking`, `--text-mono-case` |
+| event date | Stat `lg` (`--text-stat-lg`) | Stat's own |
+
+Display type: none — the h1 is PageHero's `stacked` h1 (display is hero-only and this hero is not a
+display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--text-title-wrap`.
+
+## 9 · Responsive
+
+- **1023 and below:** front page stacks (lead, then mix); collections 2 across; feed rail moves above
+  the list and stops being sticky; event date stays beside its copy from 768.
+- **767 and below:** collections 1 across; event date above its copy; articles' wide row scrolls (the
+  set's own phone row); the video rail shows one with a peek.
+- **Must not change:** the order of formats, the shapes, any gap step.
+- **Touch targets:** filter chips 24 × 24 (AA floor, SC 2.5.8) with 16 clearance on both axes, so no
+  two targets' 24px circles intersect; link buttons 40 tall; rows and cards are whole-row anchors.
+
+## 10 · Composition
+
+```tsx
+<PageHero trail title body texture surface="paper">
+  <Cluster as="ul" colGap="block" rowGap="text">{jump links}</Cluster>
+</PageHero>
+<Section aria-label="Featured"><BlockCardSet lead="beside" titleAs="h2" items={[lead, ...mix]} /></Section>
+<ContentSection heading="Start with your problem">
+  <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">…</Layout>
+</ContentSection>
+{rows.map(row => <ContentSection id={`format-${kind}`} heading actions={<CtaRow rule={false} …/>} actionsAt="end">{shape}</ContentSection>)}
+<CtaSection arrangement="offer" surface="blue" … />
+<ContentSection id="feed" heading lead>
+  <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
+    <aside>{filter groups}</aside>
+    <Layout rowGap="stack"><Layout as="ul" rowGap="none">{ListCard rows}</Layout>{more}</Layout>
+  </Layout>
+</ContentSection>
+<CtaSection arrangement="open" surface="tint" … />
+```
+
+No hand-rolled grid or flex, no margins on children, nothing overrides Section from outside. The
+module carries only the sticky rail and the three marks in § 6.
+
+## 11 · Accessibility
+
+- One h1 (hero). Front-page card titles are h2 (the set sits directly under the h1, as the case
+  index's does). Every other band has an h2; collection titles, row titles and filter group labels
+  are h3.
+- Jumps: a `nav aria-label="Formats on this page"` around a list of in-page links to `#format-<kind>`;
+  each format band's `id` is its anchor. Counts are part of the link's name ("Podcasts, 2").
+- Filters: each chip is a link; a held chip carries `aria-current` (Tag emits it from `selected`) and
+  its `close-circle` is labelled "Clear filter". The rail is an `aside aria-label="Filter the feed"`.
+  The count line is a `p` with `role="status"` so the number is announced after a filter navigation.
+- Every filter and "Show more" href ends in `#<feed id>`, so focus lands on the feed, not the top.
+- Rows and cards: one anchor each (ListCard, BlockCard). The Slider owns its carousel semantics.
+- Reduced motion: nothing here moves; the Slider and cards honour it themselves.
+
+## 12 · Content edge cases
+
+| Case | Handling |
+|---|---|
+| longest realistic title (~110 chars) | wraps; `overflow-wrap: anywhere` on every title (patterns) |
+| one unbroken token | same |
+| zero items | front page, rows and feed list absent; feed says "Nothing has been published yet" |
+| one item | the lead alone (no mix); its format row then falls back to that item |
+| many items (100 per kind) | rows cap (wide 3, ledger 4, episode 1 + 3, boxed 3, rail 8, voices 3, catalogue 6); feed pages 12 at a time |
+| a format with no items | no row, no jump |
+| missing cover | front-page lead and article/video covers take the texture stand-in; the mix and rows are text by design; catalogue drops ALL thumbnails if any is missing (a set is all-image or all-text) |
+| missing description | the card or row renders title alone |
+| event without a date | the ledger row renders without its date column |
+| podcast without duration | the cta stands alone |
+| collections absent (live CMS today) | band C absent |
+| lab / closing absent | bands absent |
+| 767 track | every shape stacks or scrolls (§ 9) |
+| logical properties | the module uses `inset-block-start` only |
+| nested surface | not applicable: the template sets every surface |
+
+## 13 · Motion
+
+None of the template's own. Card hover, Slider and focus transitions belong to their patterns.
+
+## 14 · Do's and Don'ts
+
+- Do keep every format's shape distinct: at a squint no two adjacent format bands share an
+  arrangement.
+- Do keep the front page's mix one per format before any format repeats.
+- Don't put a decorative image beside a set of linked cards.
+- Don't place two text bands adjacent: the order in § 2 alternates.
+- Don't number or rank any set.
+- Don't read `searchParams` in the template.
+- Don't add a tint band other than the close.
+
+## 15 · Specimen plan
+
+`/design/insights-index`:
+
+1. **Stress fixture** — all seven formats, 52 items, long titles, unbroken tokens, missing covers and
+   descriptions, collections, lab and close. Filters work (the specimen reads its own URL).
+2. `?state=sparse` — the live CMS's shape: three formats, no collections, no close, most covers missing.
+3. `?state=empty` — no items.
+
+Each at 1440 and 390 (`npm run shots -- insights-index`), plus the live `/insights`.
+
+## 16 · New token requests
+
+`src/styles/tokens/components/insights-index.css` (§ 6, plus `--iix-rail-sticky-top`), and in
+`list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`, `--lcrd-eyebrow-ink` (per surface,
+BlockCard's eyebrow values, duplicated on purpose: tokens rule 6).
+
+## 17 · Open questions
+
+1. **Format pages do not exist yet** (`/insights/podcasts` etc. 404). "All podcasts" links to the feed
+   filtered by that format until they do; switching is one line in the route. *Non-blocking.*
+   Recommendation: build one FormatIndex template later, reusing the feed band.
+2. **Guides, research and videos are not in the CMS.** The view model carries the kinds; the fixture
+   proves the shapes; live, those rows are absent. *Non-blocking.* Logged in
+   `docs/strapi-changes.md` § 20.
+3. **Collections ("Start with your problem")** are corpus copy (`_pages/insights.md`) carried by the
+   fixture; Strapi has no curated-collection field. *Non-blocking*, logged.
+4. **Search.** The Verge has none on its front page; a text search over the feed is a later addition.
+   *Non-blocking.*
+5. **The lead story.** No CMS `featured` flag today, so the lead is the newest item with a cover.
+   *Non-blocking*, logged.
+
+## Appendix — self-audit
+
+- 18 sections present: 0–17.
+- Distances named by role: 14; raw values: 0.
+- New tokens: 6 template + 3 ListCard, every surface block complete.
+- Patterns reused: PageHero, BlockCardSet, BlockCard, ListCard, Slider, ContentSection, CtaRow,
+  CtaSection, Breadcrumbs; primitives: Section, Layout, Cluster, Button, Icon, Tag, Stat.
+- New patterns: 0. New template: 1. Pattern extended: ListCard (`eyebrow`).

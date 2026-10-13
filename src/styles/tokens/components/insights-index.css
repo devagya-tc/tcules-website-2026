@@ -1,0 +1,71 @@
+/* ══ Component layer — InsightsIndex (templates) ═════════════════════════════════
+   Tier 3. The insights hub (docs/specs/InsightsIndex.md, 13 Oct 2026): what the template draws
+   itself — the count beside each format jump and over the feed, the topic collections' head (glyph,
+   title, sentence) and the feed's filter labels. Every card, row, chip and band draws its own.
+
+   Naming: --iix-{part}-{role}
+     parts  count · topic-icon · topic-title · topic-body · filter-label · rail
+     roles  text · tracking · ink · sticky-top
+
+   Every surface block declares every surface-dependent token. Every band this template paints is
+   paper; the other three are declared for self-containment (tokens rule 2).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Counts are labels: the mono UI role, uppercase in presentation. */
+  --iix-count-text: var(--text-ui);
+  --iix-count-tracking: var(--text-ui-tracking);
+  /* A topic is a column head one step over its rows (h5): h4, so the head leads its links. */
+  --iix-topic-title-text: var(--text-h4);
+  --iix-topic-title-tracking: var(--text-h4-tracking);
+  /* The glyph is sized from the icon-card step (h5), not the h4 title: at 28 it shouted. */
+  --iix-topic-icon-text: var(--text-h5);
+  --iix-topic-body-text: var(--text-body-sm);
+  /* The glyph is its role's em, as an icon card's is (owner, 7 Oct 2026). */
+  --iix-topic-icon-size: 1em;
+  /* A filter group's name is a label over its chips, not a heading to read. */
+  --iix-filter-label-text: var(--text-eyebrow);
+  --iix-filter-label-tracking: var(--text-eyebrow-tracking);
+  /* The filter rail holds still beside the feed from 1024, clear of the sticky nav bar. */
+  --iix-rail-sticky-top: var(--gap-section);
+  /* The clipped box that keeps a jump's spoken comma out of the layout: a technique's own geometry,
+     the 1px every hidden label in the system uses, duplicated by value (tokens rule 6). */
+  --iix-hidden-size: var(--space-1);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --iix-count-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor */
+  --iix-topic-icon-ink: var(--color-brandeis-500); /* 6.17:1 — icons carry the accent */
+  --iix-topic-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --iix-topic-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --iix-filter-label-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+/* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
+[data-surface='tint'] {
+  --iix-count-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-topic-icon-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --iix-topic-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --iix-topic-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-filter-label-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ── words lift, the accent lifts to 300 ───────────────────────── */
+[data-surface='ink'] {
+  --iix-count-ink: var(--color-neutral-400); /* 8.05:1 */
+  --iix-topic-icon-ink: var(--color-brandeis-300);
+  --iix-topic-title-ink: var(--color-white);
+  --iix-topic-body-ink: var(--color-neutral-300);
+  --iix-filter-label-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment; this template paints no blue band of its own */
+[data-surface='blue'] {
+  --iix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --iix-topic-icon-ink: var(--color-white);
+  --iix-topic-title-ink: var(--color-white);
+  --iix-topic-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --iix-filter-label-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

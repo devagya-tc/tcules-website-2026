@@ -16,6 +16,17 @@ export type {
   CaseStudyIndexProps,
   CaseStudyIndexSection,
 } from './CaseStudyIndex';
+export { InsightsIndex } from './InsightsIndex';
+export type {
+  InsightsIndexCollection,
+  InsightsIndexFeed,
+  InsightsIndexFilterGroup,
+  InsightsIndexFilterOption,
+  InsightsIndexFormat,
+  InsightsIndexItem,
+  InsightsIndexKind,
+  InsightsIndexProps,
+} from './InsightsIndex';
 export { CaseStory } from './CaseStory';
 export type {
   CaseStoryChapterProps,

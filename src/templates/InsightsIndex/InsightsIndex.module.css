@@ -1,0 +1,72 @@
+/* InsightsIndex — the marks the hub template draws itself. Layout and Cluster own every seam; every
+   value is an --iix-* token in tokens/components/insights-index.css. */
+
+/* A format's count beside its jump, and the feed's count line: a quiet mono label. Inside a link
+   Button the count keeps the label voice but steps back to the quiet ink, so the format's name
+   leads. The gap before it is the Button's own icon-to-label gap, not a margin. */
+.count {
+  color: var(--iix-count-ink);
+  font: var(--iix-count-text);
+  letter-spacing: var(--iix-count-tracking);
+  text-transform: var(--text-mono-case);
+  padding-inline-start: var(--gap-tight);
+}
+
+p.count {
+  padding-inline-start: 0;
+}
+
+/* The comma that makes a jump's accessible name "Articles, 36" rather than "Articles36". */
+.hidden {
+  position: absolute;
+  inline-size: var(--iix-hidden-size);
+  block-size: var(--iix-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── C · a collection's head ── glyph, title, sentence, each on its own row. */
+.topicIcon {
+  display: block;
+  color: var(--iix-topic-icon-ink);
+  font: var(--iix-topic-icon-text);
+}
+
+.topicIcon > svg {
+  display: block;
+  width: var(--iix-topic-icon-size);
+  height: var(--iix-topic-icon-size);
+}
+
+.topicTitle {
+  color: var(--iix-topic-title-ink);
+  font: var(--iix-topic-title-text);
+  letter-spacing: var(--iix-topic-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  overflow-wrap: anywhere;
+}
+
+.topicBody {
+  color: var(--iix-topic-body-ink);
+  font: var(--iix-topic-body-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* ── F · the feed's filter rail ── a group's name is a label over its chips. */
+.filterLabel {
+  color: var(--iix-filter-label-ink);
+  font: var(--iix-filter-label-text);
+  letter-spacing: var(--iix-filter-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* The rail holds still beside the feed from 1024, where it is a column of its own; below, it sits
+   above the rows and scrolls with them. The grid aligns it to `start`, so its box is its content's
+   height and sticky has room to travel. */
+@media (min-width: 1024px) {
+  .rail {
+    position: sticky;
+    inset-block-start: var(--iix-rail-sticky-top);
+  }
+}

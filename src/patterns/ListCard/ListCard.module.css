@@ -220,6 +220,29 @@
   color: var(--lcrd-neutral-number-ink);
 }
 
+/* The date fill (13 Oct 2026): a fixed column so every row's copy starts on one edge, the day in
+   the stat voice and the accent ink (a numeral carrying the row's information, § 3.9), the month
+   and year under it in the eyebrow's quiet label voice. */
+.date {
+  display: block;
+  inline-size: var(--lcrd-date-inline);
+}
+
+.dateDay {
+  color: var(--lcrd-date-ink);
+  font: var(--lcrd-date-day-text);
+  letter-spacing: var(--lcrd-date-day-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.dateLabel {
+  color: var(--lcrd-eyebrow-ink);
+  font: var(--lcrd-eyebrow-text);
+  letter-spacing: var(--lcrd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  white-space: nowrap;
+}
+
 /* The icon fill needs no rule of its own, and that absence is the assertion: Icon owns its box, its
    `display: block` and its `flex: none`, so the wrapper contributes only .marker's ink and sizing.
    A `line-height: 0` stood here and could never have applied — the wrapper is a Cluster flex item,
@@ -252,6 +275,15 @@
   color: var(--lcrd-title-ink);
   text-wrap: var(--text-title-wrap);
   transition: color var(--lcrd-transition-duration) var(--lcrd-transition-easing);
+}
+
+/* The kind-and-date label above the title (`eyebrow`, 13 Oct 2026): BlockCard's eyebrow voice, read
+   through this component's own tokens (a component never reads another's). Ink, never blue. */
+.eyebrow {
+  color: var(--lcrd-eyebrow-ink);
+  font: var(--lcrd-eyebrow-text);
+  letter-spacing: var(--lcrd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 .body {
