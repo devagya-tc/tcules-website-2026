@@ -36,7 +36,7 @@ import styles from './VideoTestimonial.module.css';
  *
  * ── Variants ─────────────────────────────────────────────────────────────────────
  *   All three are single-film layouts; none is a group.
- *   featured   a large poster with the quote beside it from 1024 — [3, 2], 64 between — and the
+ *   featured   a large poster with the quote beside it from 1024 — [3, 2], 96 between (a split, owner 13 Oct) — and the
  *              quote under it below. The band's one object.
  *   wide       the poster across the full column in a cinematic crop, the caption under it as one
  *              row from 1024 (the quote, the speaker at its foot). For a band where the film itself
@@ -109,12 +109,12 @@ export type VideoTestimonialProps = {
 };
 
 /* The poster widths at 1470, from Section's 1240 column (src/lib/image-sizes.ts arithmetic):
-   featured is the 3 of [3, 2] with a 64 seam, (1240 - 64) * 3/5 ≈ 706; wide is the whole column,
+   featured is the 3 of [3, 2] with a 96 seam, (1240 - 96) * 3/5 ≈ 687; wide is the whole column,
    1240 once the viewport clears 1240 + two 32 gutters. Below that each is the full column, the
    viewport less two 32 gutters. portrait is its own token width from 768 (--vt-portrait-width-*),
    so its list states those, and the full column below. */
 const SIZES: Record<VideoTestimonialVariant, string> = {
-  featured: '(min-width: 1024px) 706px, calc(100vw - 64px)',
+  featured: '(min-width: 1024px) 687px, calc(100vw - 64px)',
   wide: '(min-width: 1304px) 1240px, calc(100vw - 64px)',
   portrait: '(min-width: 1024px) 352px, (min-width: 768px) 240px, calc(100vw - 64px)',
 };
@@ -263,7 +263,7 @@ export function VideoTestimonial({
     );
   }
 
-  /* The figure's row. featured: [3, 2] from 1024, centred. portrait: the poster's own width (an
+  /* The figure's row. featured: [3, 2] from 1024, centred; a split, so the section step. portrait: the poster's own width (an
      `auto` track sized by the screen's token width) beside the caption from 768, centred; a split,
      so the section step. wide: a single track. */
   const columns = featured
@@ -276,7 +276,7 @@ export function VideoTestimonial({
     <Layout
       as="figure"
       columns={columns}
-      colGap={portrait ? 'section' : 'column'}
+      colGap="section"
       rowGap={variant === 'wide' ? 'block' : 'stack'}
       align={variant === 'wide' ? undefined : 'center'}
       className={cx(styles.root, variant === 'wide' && styles.wide, portrait && styles.portrait)}

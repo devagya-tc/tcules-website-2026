@@ -221,14 +221,13 @@ Added to the existing layer: `--vt-poster-ratio-portrait`, `--vt-poster-ratio-po
 1. **Featured's seam is 64, portrait's is 96.** CLAUDE.md gap rule 2 calls copy beside an image a
    split (96); featured, built and approved before the rule was written down this way, uses
    `column` (64). Portrait follows the rule. Options: (a) leave featured at 64 as approved;
-   (b) move featured to 96 for consistency. Recommend (b), but only on the owner's word — featured
-   is a locked approved piece. Non-blocking.
+   (b) move featured to 96 for consistency. **Decided (owner, 13 Oct): (b)** — featured's seam is now `section` (96).
 2. **Disc position on a talking head.** The disc is centred, the universal affordance; on a close
    9:16 portrait it sits on the speaker's mouth. Option: drop it to the lower third for portrait.
-   Recommend keeping it centred. Non-blocking.
+   **Decided (owner, 13 Oct): centred.**
 3. **A head above a portrait band** exceeds the 830 fold (818 + head). Options: portrait stands
    alone in its band (as built and specified); or a smaller lg poster (~300 wide) when a head is
-   present. Recommend alone. Non-blocking.
+   present. **Decided (owner, 13 Oct): alone.**
 4. **Real vertical films** are not yet delivered; the stand-ins are 8-second clips recorded from the
    poster photographs (fictional speakers). Non-blocking.
 
