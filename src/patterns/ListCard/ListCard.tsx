@@ -9,9 +9,9 @@ import {
   type IconName,
   type MediaImage,
   Sketch,
-  type SketchName,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import type { ArticleSceneName } from '@/lib/sketches';
 import { LIST_CARD_THUMBNAIL } from '@/lib/image-sizes';
 
 import styles from './ListCard.module.css';
@@ -45,10 +45,10 @@ export type ListCardMarker =
   | { type: 'number'; value: number; tone?: ListCardNumberTone }
   | { type: 'icon'; name: IconName }
   | { type: 'thumbnail'; image: MediaImage }
-  /** `sketch` (13 Oct 2026, the insights hub): a GENERATED thumbnail — a Sketch scene on its plate in
-      the thumbnail's own 16:9 box, for an item with no cover whose subject maps to a scene. The
-      caller decides the mapping. Decorative (the Sketch is aria-hidden). */
-  | { type: 'sketch'; name: SketchName }
+  /** `sketch` (13 Oct 2026, the insights hub): a DRAWN thumbnail — the scene drawn for this article
+      (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in data.
+      Decorative (the Sketch is aria-hidden). */
+  | { type: 'sketch'; name: ArticleSceneName }
   /** `date` (13 Oct 2026, the insights hub's events): the day large in the stat voice, in the
       accent, and the month and year under it in the label voice — a row that IS a date first. A
       real `<time>`, not aria-hidden: the date is content, unlike an ordinal. The caller formats

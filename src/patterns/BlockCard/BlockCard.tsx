@@ -9,11 +9,11 @@ import {
   Media,
   type MediaImage,
   Sketch,
-  type SketchName,
   Texture,
   TextureShape,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import type { ArticleSceneName } from '@/lib/sketches';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
@@ -62,12 +62,12 @@ export type BlockCardMedia =
   | { type: 'image'; image: BlockCardImage }
   | { type: 'texture'; recipe?: BlockCardTextureRecipe }
   /**
-   * `sketch` (13 Oct 2026, the insights hub): a GENERATED cover — one of the Sketch scenes (the
-   * service drawings Gateway's selector shows) on its dot-field plate, inside the same ruled 16:9
-   * box. For an artefact with no cover whose subject maps to a scene; the caller decides the
-   * mapping, in data. Decorative like every cover; no type is drawn on it.
+   * `sketch` (13 Oct 2026, the insights hub): a DRAWN cover — the Sketch scene drawn for this one
+   * article from its own argument, on its dot-field plate inside the same ruled 16:9 box. Typed to
+   * the article scenes: a service scene is never a cover (owner). The caller assigns it, item by
+   * item, in data. Decorative like every cover; no type is drawn on it.
    */
-  | { type: 'sketch'; name: SketchName };
+  | { type: 'sketch'; name: ArticleSceneName };
 
 /**
  * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
@@ -394,7 +394,7 @@ function TextureMedia({
  * The generated cover: a Sketch scene filling the ruled 16:9 box. The plate is the Sketch's own
  * (dot field, radius) and the drawing is 16:9 like the box, so nothing is cropped.
  */
-function SketchMedia({ name }: { name: SketchName }) {
+function SketchMedia({ name }: { name: ArticleSceneName }) {
   return (
     <span className={styles.imageMedia} aria-hidden="true">
       <span className={styles.imageZoom}>

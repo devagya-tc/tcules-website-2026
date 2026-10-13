@@ -22,6 +22,7 @@ import type {
 } from './insights-types';
 import { safeContentHref } from './rich-text';
 import { ROUTES } from '../../../lib/routes.ts';
+import { COVER_SCENES } from '../cover-scenes';
 
 /**
  * The Lab band's link. The CMS sends `/labs`, which is not a route; the Lab lives at
@@ -278,6 +279,7 @@ function mapResource(
     slug,
     description: value(resource.description),
     ...(minutes ? { readingTime: minutes } : {}),
+    ...(!image && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
     ...(event ? { event } : {}),
     ...(image ? { image } : {}),
     tags,

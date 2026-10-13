@@ -4,7 +4,7 @@
    title, sentence) and the feed's filter labels. Every card, row, chip and band draws its own.
 
    Naming: --iix-{part}-{role}
-     parts  count · topic-icon · topic-title · topic-body · filter-label · rail · toggle · ring · month
+     parts  count · topic-icon · topic-title · topic-body · filter-label · toggle · panel · ring · month
      roles  text · tracking · ink · width · sticky-top · duration · easing
 
    Every surface block declares every surface-dependent token. Every band this template paints is
@@ -26,8 +26,6 @@
   /* A filter group's name is a label over its chips, not a heading to read. */
   --iix-filter-label-text: var(--text-eyebrow);
   --iix-filter-label-tracking: var(--text-eyebrow-tracking);
-  /* The filter rail holds still beside the feed from 1024, clear of the sticky nav bar. */
-  --iix-rail-sticky-top: var(--gap-section);
   /* The clipped box that keeps a jump's spoken comma out of the layout: a technique's own geometry,
      the 1px every hidden label in the system uses, duplicated by value (tokens rule 6). */
   --iix-hidden-size: var(--space-1);
@@ -40,6 +38,15 @@
   --iix-toggle-easing: var(--easing-standard);
   --iix-ring-width: var(--focus-ring-width);
   --iix-ring-offset: var(--focus-ring-offset);
+  /* The format line's room for a chip's focus ring above and below, inside its scrolling box (an
+     overflow box clips what falls outside it): the ring's width plus its offset. */
+  --iix-ring-room: calc(var(--focus-ring-width) + var(--focus-ring-offset));
+  /* "More filters": the control's corner, and the panel it opens — a dropdown over the river. */
+  --iix-toggle-radius: var(--radius-4);
+  --iix-panel-inline: 560px;
+  --iix-panel-radius: var(--radius-8);
+  --iix-panel-shadow: var(--shadow-crop);
+  --iix-panel-layer: var(--z-dropdown);
   /* The river's date break (13 Oct 2026): a month at the h4 role heads its run of pieces. */
   --iix-month-text: var(--text-h4);
   --iix-month-tracking: var(--text-h4-tracking);
@@ -58,6 +65,7 @@
   --iix-toggle-rule-ink: var(--color-neutral-300); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 6.17:1 */
   --iix-month-ink: var(--color-neutral-900); /* 14.62:1 */
+  --iix-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
@@ -72,6 +80,7 @@
   --iix-toggle-rule-ink: var(--color-neutral-400); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 5.51:1 */
   --iix-month-ink: var(--color-neutral-900); /* 13.06:1 */
+  --iix-panel-ground: var(--color-paper-deep);
 }
 
 /* ── Surface: ink ── words lift, the accent lifts to 300 ───────────────────────── */
@@ -86,6 +95,7 @@
   --iix-toggle-rule-ink: var(--color-neutral-700); /* decoration */
   --iix-ring-color: var(--color-brandeis-300); /* 7.32:1 */
   --iix-month-ink: var(--color-white);
+  --iix-panel-ground: var(--color-neutral-950);
 }
 
 /* ── Surface: blue ── declared for self-containment; this template paints no blue band of its own */
@@ -100,4 +110,5 @@
   --iix-toggle-rule-ink: var(--color-brandeis-300); /* decoration */
   --iix-ring-color: var(--color-white); /* 6.23:1 */
   --iix-month-ink: var(--color-white); /* 6.23:1 */
+  --iix-panel-ground: var(--color-brandeis-500);
 }

@@ -882,30 +882,30 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
           <Specimen
             title='media type "sketch" · a generated cover'
-            note="13 Oct 2026, the insights hub: an artefact with no cover whose subject maps to a service takes that service's Sketch scene on its dot-field plate, inside the same ruled 16:9 box — a generated graphic before any photograph (owner). The caller decides the mapping, in data. No type on it."
+            note="13 Oct 2026, the insights hub: an article with no cover takes the Sketch scene DRAWN for it from its own argument, on its dot-field plate inside the same ruled 16:9 box — never a service scene (owner, revised). The caller assigns it item by item, in data. No type on it."
           >
             <BlockCardSet
               lead="none"
               items={[
                 {
                   id: 'sketch-1',
-                  title: 'Seven generative AI product patterns for SaaS',
+                  title: 'Accepting AI-generated front-end code: what review is for now',
                   eyebrow: '26 Sept 2026 · 14 min read',
-                  media: { type: 'sketch', name: 'ai-product-ux' },
+                  media: { type: 'sketch', name: 'code-review' },
                   href: ROUTES.insights,
                 },
                 {
                   id: 'sketch-2',
-                  title: 'When to hire a design system consultant',
+                  title: 'Vibe-coded app security checklist: 25 checks before real users arrive',
                   eyebrow: '15 Sept 2026 · 10 min read',
-                  media: { type: 'sketch', name: 'design-systems' },
+                  media: { type: 'sketch', name: 'security-checklist' },
                   href: ROUTES.insights,
                 },
                 {
                   id: 'sketch-3',
-                  title: 'Customers can finish the task and still lose confidence',
+                  title: 'I vibe-coded an app. Now what? The path from prototype to production',
                   eyebrow: '28 Aug 2026 · 9 min read',
-                  media: { type: 'sketch', name: 'product-modernisation' },
+                  media: { type: 'sketch', name: 'prototype-to-production' },
                   href: ROUTES.insights,
                 },
               ]}

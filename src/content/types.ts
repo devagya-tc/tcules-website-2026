@@ -1,3 +1,4 @@
+import type { ArticleSceneName } from '@/lib/sketches';
 import type { SiteFooterProps, SiteNavProps } from '@/patterns';
 
 /**
@@ -1347,6 +1348,11 @@ export type InsightResource = {
   event?: { startsAt: string; place?: string };
   /** An editor's pick for the hub's lead story. At most one is honoured. */
   featured?: boolean;
+  /**
+   * The scene drawn for THIS article from its own argument, standing as its cover until a real one
+   * exists (owner, 13 Oct 2026). Assigned item by item (sources/cover-scenes.ts), never by keyword.
+   */
+  coverScene?: ArticleSceneName;
 };
 
 /**

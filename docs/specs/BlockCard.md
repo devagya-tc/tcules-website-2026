@@ -39,10 +39,10 @@ says otherwise, this block and the dated amendments at the end win.
 | **Set shapes** | `lead`: `auto` (featured row from four, the case-study index), `none` (peers), `beside` (spotlight), `wide` ([2, 1, 1]). `stagger` drops the even cards 96 from 1024. Four across from `lg`. Below 768 a covered set of three or more, or a linked set of four or more, is a scroll row bleeding to the screen edge; an unlinked one takes the tab stop and `label`. |
 
 > **Amendment · 13 Oct 2026 · the insights hub (docs/specs/InsightsIndex.md § 12a).** `media` gains a
-> third fill, `{ type: 'sketch'; name: SketchName }`: a GENERATED cover, one of the Sketch scenes on
-> its dot-field plate inside the same ruled 16:9 box, decorative, no type on it. For an artefact with
-> no cover whose subject maps to a service (owner: a generated graphic wherever one can be generated,
-> a catalogue photograph only where nothing fits). The caller decides the mapping, in data.
+> third fill, `{ type: 'sketch'; name: ArticleSceneName }`: a DRAWN cover, a Sketch scene drawn for
+> that one article from its own argument, on its dot-field plate inside the same ruled 16:9 box,
+> decorative, no type on it. Typed to the article scenes: a service scene is never a cover (owner,
+> revised 13 Oct 2026). The caller assigns it item by item, in data, never by keyword.
 > `BlockCardSet` counts a sketch as a cover. Specimen: `/design/block-card` § 2b.
 
 > **Amendment · 5 Oct 2026 · `fdn-spacing` (visual-direction § 1.1 S2, § 1.2, § 7.2).** Where this

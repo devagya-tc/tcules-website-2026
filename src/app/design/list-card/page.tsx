@@ -523,7 +523,7 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   eyebrow="Guide · 12 min read · sketch marker"
                   title="Improve commerce by finding the broken evidence path"
-                  marker={{ type: 'sketch', name: 'product-design' }}
+                  marker={{ type: 'sketch', name: 'prototype-to-production' }}
                   body="Trace where shoppers lose confidence between discovery and delivery, and measure the whole path."
                 />
               </Rows>

@@ -63,43 +63,50 @@
   text-transform: var(--text-mono-case);
 }
 
-/* The rail holds still beside the feed from 1024, where it is a column of its own; below, it sits
-   above the rows and scrolls with them. The grid aligns it to `start`, so its box is its content's
-   height and sticky has room to travel. */
-@media (min-width: 1024px) {
-  .rail {
-    position: sticky;
-    inset-block-start: var(--iix-rail-sticky-top);
-  }
+/* ── F · the filter row ── the format line scrolls sideways where it runs out of room, never wraps:
+   an overflow on the line's own box, not an arrangement. Its scrollbar is hidden: the cut-off chip
+   at the edge says there is more. */
+.formats {
+  min-inline-size: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: var(--iix-ring-room);
 }
 
-/* ── F · the filters' two renderings ── the disclosure below 1024, the open rail from it. Each is
-   `display: none` at the other's widths, so one panel is in the page at a time. */
-.wide {
+.formats::-webkit-scrollbar {
   display: none;
 }
 
-@media (min-width: 1024px) {
-  .narrow {
-    display: none;
-  }
+/* "Clear all" keeps its two words on one line: sized inside the summary's Cluster, not arranged. */
+.keep {
+  flex: none;
+  white-space: nowrap;
+}
 
-  .wide {
-    display: block;
+@media (max-width: 767px) {
+  .moreWord {
+    display: none;
   }
 }
 
-/* The disclosure's control: the label voice, ruled above and below, the whole row the target. The
-   browser's own marker is removed; the glyph at the row's end turns instead. */
+/* "More filters": a native disclosure, its panel dropping below the control over the river, anchored
+   to the row's end edge. Positioned, not arranged: one panel, no siblings to lay out. */
+.more {
+  position: relative;
+}
+
 .toggle {
   display: block;
   list-style: none;
-  padding-block: var(--gap-text);
-  border-block: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
+  padding-block: var(--gap-tight);
+  padding-inline: var(--gap-text);
+  border: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
+  border-radius: var(--iix-toggle-radius);
   color: var(--iix-toggle-ink);
   font: var(--iix-toggle-text);
   letter-spacing: var(--iix-toggle-tracking);
   text-transform: var(--text-mono-case);
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -113,7 +120,7 @@
 }
 
 .toggleCount {
-  color: var(--iix-count-ink);
+  color: var(--iix-toggle-glyph-ink);
 }
 
 .toggleGlyph {
@@ -122,7 +129,7 @@
   transition: transform var(--iix-toggle-duration) var(--iix-toggle-easing);
 }
 
-.narrow[open] .toggleGlyph {
+.more[open] .toggleGlyph {
   transform: rotate(180deg);
 }
 
@@ -132,9 +139,17 @@
   }
 }
 
-/* The open panel's own inset under its control: the groups start a gutter below the rule. */
 .panel {
-  padding-block-start: var(--gap-gutter);
+  position: absolute;
+  inset-block-start: calc(100% + var(--gap-tight));
+  inset-inline-end: 0;
+  z-index: var(--iix-panel-layer);
+  inline-size: min(var(--iix-panel-inline), calc(100vw - 2 * var(--gap-gutter)));
+  padding: var(--gap-gutter);
+  background-color: var(--iix-panel-ground);
+  border: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
+  border-radius: var(--iix-panel-radius);
+  box-shadow: var(--iix-panel-shadow);
 }
 
 /* ── F · the river's date break ── a month heads its run: the h4 role in the title ink, the

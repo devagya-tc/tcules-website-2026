@@ -10,8 +10,8 @@ import {
   Tag,
   type MediaImage,
   type IconName,
-  type SketchName,
 } from '@/components';
+import type { ArticleSceneName } from '@/lib/sketches';
 import { FULL_COLUMN } from '@/lib/image-sizes';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -58,11 +58,11 @@ export type InsightsIndexItem = {
   /** When and where an event happens. `startsAt` is ISO 8601. */
   event?: { startsAt: string; place?: string };
   /**
-   * The generated graphics that suit this item, best first — Sketch scenes chosen by the page from
-   * the item's topic, service or format (the mapping is data, in the page's mapping, never here). A
-   * missing cover takes the first that its neighbour did not just take, before any photograph.
+   * The scene DRAWN for this article from its own argument (owner, 13 Oct 2026), assigned to it on
+   * purpose in data: its cover until a real one exists. Typed to the article scenes, so a service
+   * scene can never stand as a cover.
    */
-  graphics?: readonly SketchName[];
+  scene?: ArticleSceneName;
 };
 
 /** What the page says about one format: its band title, its one sentence, where "All …" goes. */
@@ -86,6 +86,8 @@ export type InsightsIndexCollection = {
 export type InsightsIndexFilterOption = {
   id: string;
   label: string;
+  /** How many pieces choosing it would show, given the other held filters. */
+  count?: number;
   /** The URL with this option applied — or, when `selected`, with its group cleared. */
   href: string;
   selected: boolean;
@@ -108,7 +110,12 @@ export type InsightsIndexFeed = {
   total: number;
   /** How many items exist. */
   all: number;
+  /** FORMAT, the primary filter: "All" first, then each format, one line (owner, 13 Oct 2026). */
+  formats: readonly InsightsIndexFilterOption[];
+  /** The other groups, behind "More filters": only options with results, no one-option groups. */
   filters: readonly InsightsIndexFilterGroup[];
+  /** What is held, each with the link that removes it. Empty when nothing is. */
+  held: readonly { id: string; label: string; href: string }[];
   /** Clears every filter. Present only while one is held. */
   clearHref?: string;
   /** The next page. Present only while more match than are shown. */
@@ -221,26 +228,16 @@ const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
 
 type CoverMedia = NonNullable<BlockCardSetItem['media']>;
 /**
- * Hands out a cover for an item that has none, in the owner's order (13 Oct 2026): a GENERATED
- * graphic wherever the item maps to one (its `graphics`, skipping the scenes the last two stand-ins
- * used so neighbours differ), else the next catalogue photograph, else a texture field.
+ * Hands out a cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article
+ * where it has one, else the next catalogue photograph, else a texture field. Never a generic scene.
  */
 type StandIn = (item: InsightsIndexItem) => CoverMedia;
 
 function standInPool(pool: readonly BlockCardImage[]): StandIn {
   let next = 0;
   let recipe = 0;
-  /* The last two scenes handed out: a row of three never shows one scene twice. */
-  let recent: SketchName[] = [];
   return (item) => {
-    const graphics = item.graphics ?? [];
-    const sketch =
-      graphics.find((name) => !recent.includes(name)) ??
-      graphics.find((name) => name !== recent[recent.length - 1]);
-    if (sketch) {
-      recent = [...recent, sketch].slice(-2);
-      return { type: 'sketch', name: sketch };
-    }
+    if (item.scene) return { type: 'sketch', name: item.scene };
     const image = pool.length > 0 ? pool[next++ % pool.length] : undefined;
     return image
       ? { type: 'image', image: { ...image, standIn: true } }
@@ -491,9 +488,7 @@ function isVisual(
   if (band.kind === 'guide')
     return (
       hasPool ||
-      band.items.every(
-        (item) => coverOf(item) !== undefined || (item.graphics?.length ?? 0) > 0,
-      )
+      band.items.every((item) => coverOf(item) !== undefined || item.scene !== undefined)
     );
   return band.kind === 'article' || band.kind === 'podcast' || band.kind === 'video';
 }
@@ -850,64 +845,15 @@ function Catalogue({
 /* ── F · the feed ─────────────────────────────────────────────────────────────── */
 
 /**
- * Everything, newest first, with its filters beside it (owner: the filters move from the top of the
- * page onto the feed they filter). Every control is a link the page built, so the state is the URL:
- * shareable, back-button safe, and indexable without script.
+ * Everything, newest first, across the full column (owner, 13 Oct 2026: the chip rail took too much
+ * room for what it did). Above the river, ONE compact row at every width: FORMAT, the primary
+ * filter, as a single line of options with counts (a sideways scroll on a phone, never a wrap), and
+ * every other group behind one native "More filters" disclosure on the same row, opening to a small
+ * panel. When something is held, a short summary says so, each item removable, with "Clear all".
+ * Every control is a link the page built: the state is the URL, and nothing needs script.
  */
 function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) {
-  const filtered = feed.clearHref !== undefined;
-  const count = filtered
-    ? `${feed.total} of ${feed.all} match`
-    : `${feed.all} ${feed.all === 1 ? 'piece' : 'pieces'}, newest first`;
-
-  const held = feed.filters.reduce(
-    (sum, group) => sum + group.options.filter((option) => option.selected).length,
-    0,
-  );
-  const panel = (
-    <Layout rowGap="gutter">
-      {feed.filters.map((group) => (
-        <Layout key={group.id} rowGap="text">
-          <h3 className={styles.filterLabel}>{group.label}</h3>
-          {/* Both gaps `text` (16): a Tag is 24 x 24, which MEETS the AA target floor without
-              margin, so the clearance comes from the row (the old page's argument, kept). */}
-          <Cluster as="ul" colGap="text" rowGap="text">
-            {group.options.map((option) => (
-              <li key={option.id}>
-                <Tag
-                  variant="filter"
-                  href={option.href}
-                  selected={option.selected}
-                  icon={
-                    option.selected ? (
-                      <Icon name="close-circle" label="Clear filter" />
-                    ) : undefined
-                  }
-                >
-                  {option.label}
-                </Tag>
-              </li>
-            ))}
-          </Cluster>
-        </Layout>
-      ))}
-      {feed.clearHref ? (
-        <Cluster>
-          <Button
-            as="a"
-            href={feed.clearHref}
-            emphasis="link"
-            tone="neutral"
-            icon={<Icon name="close-circle" />}
-          >
-            Clear all filters
-          </Button>
-        </Cluster>
-      ) : null}
-    </Layout>
-  );
-
-  /* Nothing published: no rail of filters over nothing, just the sentence that says so. */
+  /* Nothing published: no filters over nothing, just the sentence that says so. */
   if (feed.all === 0) {
     return (
       <ContentSection
@@ -921,6 +867,13 @@ function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) 
     );
   }
 
+  const moreHeld = feed.filters.reduce(
+    (sum, group) => sum + group.options.filter((option) => option.selected).length,
+    0,
+  );
+  const chip = (option: InsightsIndexFilterOption) =>
+    option.count === undefined ? option.label : `${option.label} ${option.count}`;
+
   return (
     <ContentSection
       id={feed.id}
@@ -929,34 +882,110 @@ function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) 
       lead={feed.lead}
       surface="paper"
     >
-      <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
-        <aside aria-label="Filter the feed" className={styles.rail}>
-          <Layout rowGap="gutter">
-            <p className={styles.feedCount}>{count}</p>
-            {/* Below 1024 the groups fold into a native disclosure, closed, its control saying how
-                many filters are held (owner, 13 Oct 2026); from 1024 they are the open sticky rail.
-                Two renderings of one panel, each `display: none` at the other's widths, so exactly
-                one is in the page and the accessibility tree at a time — and both work with no
-                script: a <details> is the browser's own, and every chip is a link. */}
-            <details className={styles.narrow}>
-              <summary className={styles.toggle}>
-                <Cluster as="span" justify="between" align="center" colGap="block" nowrap>
-                  <span>
-                    Filters
-                    {held > 0 ? (
-                      <span className={styles.toggleCount}>{`\u2002${held} active`}</span>
-                    ) : null}
-                  </span>
-                  <span className={styles.toggleGlyph}>
-                    <Icon name="alt-arrow-down" />
-                  </span>
+      <Layout rowGap="stack">
+        <Layout rowGap="text">
+          <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
+            {feed.formats.length > 0 ? (
+              <nav aria-label="Format" className={styles.formats}>
+                {/* Both gaps `text` (16): a Tag is 24 x 24, the AA target floor, so the clearance
+                    comes from the row. One line, never a wrap: it scrolls sideways where it runs
+                    out of room. */}
+                <Cluster as="ul" colGap="text" nowrap>
+                  {feed.formats.map((option) => (
+                    <li key={option.id}>
+                      <Tag variant="filter" href={option.href} selected={option.selected}>
+                        {chip(option)}
+                      </Tag>
+                    </li>
+                  ))}
                 </Cluster>
-              </summary>
-              <div className={styles.panel}>{panel}</div>
-            </details>
-            <div className={styles.wide}>{panel}</div>
+              </nav>
+            ) : (
+              <span />
+            )}
+            {feed.filters.length > 0 ? (
+              <details className={styles.more}>
+                <summary className={styles.toggle}>
+                  <Cluster as="span" colGap="tight" align="center" nowrap>
+                    {/* "More" folds away on a phone so the format line keeps the room; the word
+                        "filters" and the count still say what it is. */}
+                    <span>
+                      <span className={styles.moreWord}>More </span>filters
+                    </span>
+                    {moreHeld > 0 ? (
+                      <span className={styles.toggleCount}>{moreHeld}</span>
+                    ) : null}
+                    <span className={styles.toggleGlyph}>
+                      <Icon name="alt-arrow-down" />
+                    </span>
+                  </Cluster>
+                </summary>
+                <div className={styles.panel}>
+                  <Layout rowGap="gutter">
+                    {feed.filters.map((group) => (
+                      <Layout key={group.id} rowGap="text">
+                        <h3 className={styles.filterLabel}>{group.label}</h3>
+                        <Cluster as="ul" colGap="text" rowGap="text">
+                          {group.options.map((option) => (
+                            <li key={option.id}>
+                              <Tag
+                                variant="filter"
+                                href={option.href}
+                                selected={option.selected}
+                                icon={
+                                  option.selected ? (
+                                    <Icon name="close-circle" label="Clear filter" />
+                                  ) : undefined
+                                }
+                              >
+                                {chip(option)}
+                              </Tag>
+                            </li>
+                          ))}
+                        </Cluster>
+                      </Layout>
+                    ))}
+                  </Layout>
+                </div>
+              </details>
+            ) : null}
           </Layout>
-        </aside>
+
+          {feed.held.length > 0 ? (
+            <Cluster colGap="text" rowGap="text" align="center">
+              <p className={styles.feedCount}>
+                {`${feed.total} of ${feed.all}`}
+                <span className={styles.hidden}> pieces match.</span>
+              </p>
+              <span className={styles.feedCount}>Showing</span>
+              <Cluster as="ul" colGap="text" rowGap="text">
+                {feed.held.map((held) => (
+                  <li key={held.id}>
+                    <Tag
+                      variant="filter"
+                      href={held.href}
+                      selected
+                      icon={<Icon name="close-circle" label="Remove filter" />}
+                    >
+                      {held.label}
+                    </Tag>
+                  </li>
+                ))}
+              </Cluster>
+              {feed.clearHref ? (
+                <Button
+                  as="a"
+                  href={feed.clearHref}
+                  emphasis="link"
+                  tone="neutral"
+                  className={styles.keep}
+                >
+                  Clear all
+                </Button>
+              ) : null}
+            </Cluster>
+          ) : null}
+        </Layout>
 
         <Layout rowGap="stack">
           {feed.items.length > 0 ? (
@@ -1001,7 +1030,7 @@ type RiverPart =
 
 /** Can this item carry an image in the river: a cover of its own, or a generated scene. */
 const pictured = (item: InsightsIndexItem) =>
-  coverOf(item) !== undefined || (item.graphics?.length ?? 0) > 0;
+  coverOf(item) !== undefined || item.scene !== undefined;
 
 /**
  * One month of the river, still newest first: its newest piece as the feature (the image beside
@@ -1122,7 +1151,7 @@ function River({ items, standIn }: { items: readonly InsightsIndexItem[]; standI
                             key={item.id}
                             titleAs="h4"
                             size="sm"
-                            arrangement="stacked"
+                            arrangement="split"
                             eyebrow={
                               item.kind === 'event'
                                 ? line(LABEL.event.one, item.event?.place)

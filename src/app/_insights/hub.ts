@@ -1,4 +1,4 @@
-import type { IconName, SketchName } from '@/components';
+import type { IconName } from '@/components';
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { glyphForRoute } from '@/lib/glyphs';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -6,6 +6,7 @@ import { placeholderImage } from '@/lib/placeholders';
 import { blogPath, ROUTES } from '@/lib/routes';
 import type {
   InsightsIndexFilterGroup,
+  InsightsIndexFilterOption,
   InsightsIndexItem,
   InsightsIndexKind,
   InsightsIndexProps,
@@ -39,36 +40,6 @@ const STAND_INS: readonly PhotoId[] = [
   'workshop-hands-writing',
   'pair-testing-overhead',
 ];
-
-/**
- * Which generated graphic suits an insight (owner, 13 Oct 2026: a generated graphic wherever one can
- * be generated, a photograph only where nothing fits). The graphics are the Sketch scenes — one per
- * service, the drawings Gateway's selector shows — so an insight takes the scene of the service its
- * subject belongs to. Read from the item's own taxonomy (tags and categories, as the CMS names them)
- * and then its title, in this priority order; every scene that matches is kept, best first, so the
- * template can give two neighbours different scenes. No match, no graphic: the photograph pool
- * answers. docs/specs/InsightsIndex.md § 12a.
- */
-const GRAPHIC_RULES: readonly (readonly [RegExp, SketchName])[] = [
-  [/ai|agentic|ai-assisted|ai-first|generative/i, 'ai-product-ux'],
-  [/design system|design token/i, 'design-systems'],
-  [/moderni[sz]|replatform|legacy|regression/i, 'product-modernisation'],
-  [/design engineering|prototype|figma|react|front-end|vibe/i, 'design-engineering'],
-  [/0 → 1|first release|new product|mvp/i, 'new-product'],
-  [/system design|context architecture|production/i, 'software-development'],
-  [/information design|design audit|ux audit|onboarding|workflow|cpq|saas/i, 'product-design'],
-];
-
-function graphicsFor(resource: InsightResource): SketchName[] {
-  const taxonomy = [...resource.tags, ...resource.categories].map((t) => t.name).join(' | ');
-  const found: SketchName[] = [];
-  for (const source of [taxonomy, resource.title]) {
-    for (const [pattern, scene] of GRAPHIC_RULES) {
-      if (pattern.test(source) && !found.includes(scene)) found.push(scene);
-    }
-  }
-  return found;
-}
 
 const FILTER_PREFIX = 'filter-';
 const PAGE_KEY = 'page';
@@ -117,10 +88,7 @@ function hrefFor(
 }
 
 function toItem(resource: InsightResource): InsightsIndexItem {
-  const graphics = graphicsFor(resource);
-  /* A cover that is itself a stand-in photograph gives way to a generated graphic when one fits
-     (owner, 13 Oct 2026): generated first, photograph only where nothing fits. A real cover stays. */
-  const image = resource.image?.standIn && graphics.length > 0 ? undefined : resource.image;
+  const image = resource.image;
   return {
     id: resource.documentId,
     kind: resource.kind as InsightsIndexKind,
@@ -147,7 +115,9 @@ function toItem(resource: InsightResource): InsightsIndexItem {
     ...(resource.readingTime ? { readingTime: resource.readingTime } : {}),
     ...(resource.duration ? { duration: resource.duration } : {}),
     ...(resource.event ? { event: resource.event } : {}),
-    graphics,
+    /* A scene DRAWN for this article, assigned in data (never by keyword): its cover until a real
+       one exists. docs/specs/InsightsIndex.md § 12a. */
+    ...(resource.coverScene ? { scene: resource.coverScene } : {}),
   };
 }
 
@@ -156,7 +126,8 @@ export function insightsIndexProps(
   query: Query,
   path: string,
 ): InsightsIndexProps {
-  const feedId = page.resources.id || 'insights-feed';
+  /* The feed's anchor: one stable name, whatever id the CMS gives its section. */
+  const feedId = 'feed';
   const resources = page.resources.items;
   const kinds = KINDS.filter((kind) => resources.some((item) => item.kind === kind));
 
@@ -198,22 +169,80 @@ export function insightsIndexProps(
   );
   const visible = matches.slice(0, current * PAGE_SIZE);
 
-  const filters: InsightsIndexFilterGroup[] = groups.map((group) => ({
-    id: group.id,
-    label: group.label,
-    options: group.options.map((option) => {
-      const isSelected = selected.get(group.id) === option.id;
-      const next = new Map(selected);
-      if (isSelected) next.delete(group.id);
-      else next.set(group.id, option.id);
+  /* Whether an item passes every held filter except the named group's: what that group's own
+     options are counted against, so a count says what choosing it would show. */
+  const passesExcept = (item: InsightResource, except: string) =>
+    [...selected.entries()].every(
+      ([group, option]) =>
+        group === except ||
+        (group === FORMAT_GROUP ? item.kind === option : item.filterIds.includes(option)),
+    );
+  const toggle = (group: string, option: string | undefined) => {
+    const next = new Map(selected);
+    if (option === undefined || selected.get(group) === option) next.delete(group);
+    else next.set(group, option);
+    return hrefFor(path, feedId, next);
+  };
+
+  /* FORMAT, the primary filter: one line, "All" first, each with its count (owner, 13 Oct 2026). */
+  const formatPool = resources.filter((item) => passesExcept(item, FORMAT_GROUP));
+  const formatOptions: InsightsIndexFilterOption[] =
+    kinds.length > 1
+      ? [
+          {
+            id: 'all',
+            label: 'All',
+            count: formatPool.length,
+            href: toggle(FORMAT_GROUP, undefined),
+            selected: !selected.has(FORMAT_GROUP),
+          },
+          ...kinds
+            .map((kind) => ({
+              id: kind,
+              label: FORMAT_NAME[kind],
+              count: formatPool.filter((item) => item.kind === kind).length,
+              href: toggle(FORMAT_GROUP, kind),
+              selected: selected.get(FORMAT_GROUP) === kind,
+            }))
+            .filter((option) => option.count > 0 || option.selected),
+        ]
+      : [];
+
+  /* The rest behind "More filters": only options with results, and a group with one option or none
+     is dropped (owner, 13 Oct 2026). A held option always stays, so it can be cleared. */
+  const filters: InsightsIndexFilterGroup[] = groups
+    .filter((group) => group.id !== FORMAT_GROUP)
+    .map((group) => {
+      const pool = resources.filter((item) => passesExcept(item, group.id));
       return {
-        id: option.id,
-        label: option.label,
-        href: hrefFor(path, feedId, next),
-        selected: isSelected,
+        id: group.id,
+        label: group.label,
+        options: group.options
+          .map((option) => ({
+            id: option.id,
+            label: option.label,
+            count: pool.filter((item) => item.filterIds.includes(option.id)).length,
+            href: toggle(group.id, option.id),
+            selected: selected.get(group.id) === option.id,
+          }))
+          .filter((option) => option.count > 0 || option.selected),
       };
-    }),
-  }));
+    })
+    .filter((group) => group.options.length > 1 || group.options.some((o) => o.selected));
+
+  /* What is held, as a short removable summary: each chip's link drops its own filter. */
+  const held = groups.flatMap((group) => {
+    const option = group.options.find((candidate) => candidate.id === selected.get(group.id));
+    return option
+      ? [
+          {
+            id: `${group.id}-${option.id}`,
+            label: option.label,
+            href: toggle(group.id, undefined),
+          },
+        ]
+      : [];
+  });
 
   const formatTitle = (kind: InsightResourceKind) =>
     page.formatCards.find((card) => card.kind === kind)?.title || FORMAT_NAME[kind];
@@ -262,7 +291,9 @@ export function insightsIndexProps(
       items: visible.map(toItem),
       total: matches.length,
       all: resources.length,
+      formats: formatOptions,
       filters,
+      held,
       clearHref: selected.size > 0 ? hrefFor(path, feedId, new Map()) : undefined,
       moreHref: current < pages ? hrefFor(path, feedId, selected, current + 1) : undefined,
     },

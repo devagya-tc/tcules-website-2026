@@ -45,7 +45,7 @@ One per page.
 | C | **Start with your problem**: up to four topic collections | `Layout` 4 → 2 → 1; each column an `Icon` head, an h3, one sentence, `ListCard` rows, a related link | optional (`collections`) |
 | D | **Format rows**, in the template's fixed order, each its own shape (table below) | `ContentSection` with `actionsAt="end"` "All podcasts" `CtaRow` | one per format with items |
 | E | **Lab**: the other organisation's offer | `ContentSection beside` on INK (owner, 13 Oct 2026: not blue): heading, lead and its link in the head track, the Lab illustration at 16:9 filling the two-thirds track — a register placeholder (`/insights#lab`, docs/image-register.md: "Lab illustration: experiments becoming product") until it is commissioned (owner, 13 Oct 2026: the same graphic was everywhere). The page passes the record as `lab.visual`; without one it falls back to `CtaSection offer` on ink | optional |
-| F | **Feed**: everything, latest first; the filter rail beside it (a `<details>` below 1024) | `ContentSection`; `Layout [1, 2]` at `section`; `Tag filter` chips; the RIVER (below); "Show more" link | yes |
+| F | **Feed**: everything, latest first, across the full column, under ONE compact filter row | `ContentSection`; the filter row (below); the RIVER (below); "Show more" link | yes |
 | G | **Close** | `CtaSection arrangement="open"` on tint, only with an action | optional |
 
 **The river (band F, owner 13 Oct 2026: "the last section is too boring").** The feed was one
@@ -55,6 +55,21 @@ newest piece is a **feature** (a horizontal `BlockCard`, `lg`, image beside word
 (`ListCard`, format · date · length; events keep their date column) are broken by a **pair** (two
 covered `BlockCard`s) wherever the next two consecutive pieces both carry an image, at most once per
 four rows. Images missing a cover follow § 12a. No ground, no box. Items are h4 under the month h3.
+
+**The filter row (band F, owner 13 Oct 2026: "the filters take too much space and aren't doing enough
+of a job").** The sticky rail of chip groups is gone; the river takes the full column. Above it, one
+row at every width (`Layout [1, auto]`):
+- **Format**, the primary filter: "All" then each format, each `Tag filter` with its count ("Guides 5")
+  given the other held filters, on ONE line (`Cluster nowrap`) that scrolls sideways where it runs out
+  of room, never wraps. A format with no results is hidden unless held.
+- **More filters**: one native `<details>` at the row's end showing the held count ("More filters 1";
+  "Filters" on a phone, so the format line keeps the room), opening a small panel that drops over the
+  river. Inside: Industry, Product, Topic — only options with results (counted against the other held
+  filters), a group with one option or none dropped; a held option keeps its clear glyph.
+- **When something is held**, a short summary under the row: "2 of 46 · Showing [Guides ×] [SaaS ×]
+  Clear all"; each chip's link removes just that filter. Nothing is shown when nothing is held.
+All of it is links the page built (`?filter-<group>=<id>`, `#feed`), so it is URL-driven and needs no
+script; there is one design at every width.
 
 **The format shapes (band D)** — chosen by what each format IS, not by its count:
 
@@ -136,7 +151,7 @@ Page-level states, all server-rendered from the URL:
 | State | Rendering |
 |---|---|
 | no filter | feed shows every item, newest first; no "Clear" |
-| filter(s) held | held chips (Tag `selected`, `close-circle` clears that group); a count line ("12 of 41"); "Clear all filters" |
+| filter(s) held | the format line marks its held option; "More filters n"; the summary row ("12 of 41 · Showing [chip ×] … Clear all") |
 | no match | "Nothing matches these filters." + "Clear all filters" |
 | empty catalogue | "Nothing has been published yet." No front page, no rows |
 | more to show | "Show more" link to `?page=n+1#feed` |
@@ -169,12 +184,12 @@ the other surfaces are declared for self-containment (tokens rule 2).
   `text` (title → sentence), `block` (head group → rows), rows `none`
 - event row: ListCard's own (marker beside copy at `block`; day over label at `tight`)
 - episode: horizontal card, then rows under it at `stack`
-- feed: head over body at ContentSection's `stack`; rail beside list at `section` (a split: controls
-  beside a list, two different kinds); filter groups `gutter` apart; label → chips `text`; chips
+- feed: head over body at ContentSection's `stack`; filter row → summary `text`; filters → river
+  `stack`; format line ↔ "More filters" `block`; panel groups `gutter` apart; label → chips `text`; chips
   `text`/`text` (the 24px touch-target argument the old page made, kept); rows `none`; list → "Show
   more" `stack`
 
-**(b) Component sizes** — none in the template. ListCard's date column `--lcrd-date-inline` (96) is new, measured against "30" at the stat role and "SEPT 2026" at the eyebrow role. The filter rail's sticky offset (`--iix-rail-sticky-top`) reads
+**(b) Component sizes** — none in the template. ListCard's date column `--lcrd-date-inline` (96) is new, measured against "30" at the stat role and "SEPT 2026" at the eyebrow role. The filter panel's width (`--iix-panel-inline`, 560, capped at the viewport less two gutters) is a component size; the dropdown layer reads `--z-dropdown`. (The rail's sticky offset is retired with the rail.) Previously:
 `--gap-section`, clear of the 72 nav bar, as CaseStory's marker does.
 
 **(c) Optical corrections** — none.
@@ -198,8 +213,8 @@ display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--te
 
 ## 9 · Responsive
 
-- **1023 and below:** front page stacks (lead, then mix); collections 2 across; the filter rail becomes a
-  closed native disclosure above the list ("Filters · n active"), the count line above it; event date stays beside its copy from 768.
+- **1023 and below:** front page stacks (lead, then mix); collections 2 across; the filter row is the
+  same at every width (the format line scrolls sideways at 390, "More" folds to "Filters"); event date stays beside its copy from 768.
 - **767 and below:** collections 1 across; event date above its copy; articles' wide row scrolls (the
   set's own phone row); the video rail shows one with a peek.
 - **Must not change:** the order of formats, the shapes, any gap step.
@@ -228,7 +243,7 @@ display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--te
 ```
 
 No hand-rolled grid or flex, no margins on children, nothing overrides Section from outside. The
-module carries only the sticky rail and the three marks in § 6.
+module carries only its own marks (§ 6), the format line's overflow and the filter panel's position.
 
 ## 11 · Accessibility
 
@@ -238,7 +253,7 @@ module carries only the sticky rail and the three marks in § 6.
 - Jumps: a `nav aria-label="Formats on this page"` around a list of in-page links to `#format-<kind>`;
   each format band's `id` is its anchor. Counts are part of the link's name ("Podcasts, 2").
 - Filters: each chip is a link; a held chip carries `aria-current` (Tag emits it from `selected`) and
-  its `close-circle` is labelled "Clear filter". The rail is an `aside aria-label="Filter the feed"`.
+  its `close-circle` is labelled "Clear filter". The format line is a `nav aria-label="Format"`; "More filters" is a native `<details>`/`<summary>`.
   The count line is a plain `p`: it is server-rendered and changes only on a full navigation, so a live region would add nothing.
 - Every filter and "Show more" href ends in `#<feed id>`, so focus lands on the feed, not the top.
 - Rows and cards: one anchor each (ListCard, BlockCard). The Slider owns its carousel semantics.
@@ -264,28 +279,32 @@ module carries only the sticky rail and the three marks in § 6.
 | logical properties | the module uses `inset-block-start` only |
 | nested surface | not applicable: the template sets every surface |
 
-## 12a · Generated graphics for missing covers (owner, 13 Oct 2026)
+## 12a · Drawn covers for missing covers (owner, 13 Oct 2026, revised)
 
-**Rule:** a missing cover takes a generated graphic wherever one can be generated, and a catalogue
-photograph only where nothing fits. The graphics are the Sketch scenes (one per service, the drawings
-Gateway's selector shows), set as BlockCard's `sketch` media: generated SVG on the dot-field plate, no
-type on them, no brandeis-900, nothing graded locally.
+**Rule:** a cover graphic is DRAWN FOR ITS ARTICLE, from that article's own argument. A generic
+service scene (the seven in Gateway, home and the nav) is never a cover — it was, briefly, by keyword
+match, and the owner saw "the same graphic everywhere". The keyword mapping is gone.
 
-**The mapping is data**, in `src/app/_insights/hub.ts` (`GRAPHIC_RULES`, `graphicsFor`), never in the
-template: each insight's taxonomy (its tags and categories, as the CMS names them), then its title, is
-matched in priority order — AI → `ai-product-ux`; design system or tokens → `design-systems`;
-modernise / replatform / legacy / regression → `product-modernisation`; design engineering /
-prototype / Figma / React / front-end / vibe → `design-engineering`; 0 → 1 / first release / MVP →
-`new-product`; system design / context architecture / production → `software-development`;
-information design / audits / onboarding / workflow / CPQ / SaaS → `product-design`. Every match is
-kept, best first, as the item's `graphics`. The template takes the first scene the last two stand-ins
-did not use, so a row of three never repeats a scene; an item with no match takes the next photograph
-(`standIns`), and with no pool the texture field.
+**Assignment is data, item by item:** `coverScene` on the view model (`InsightResource`), typed to
+`ArticleSceneName` (`@/lib/sketches`) so a service scene cannot be named, filled by the insights
+source from `src/content/sources/cover-scenes.ts` (CMS slug → scene) only for an item with no
+thumbnail. The template renders it as BlockCard's / ListCard's `sketch` fill; its row is deleted when
+the real cover lands.
 
-A cover that is itself a stand-in photograph gives way to a graphic when one fits; a real cover always
-stays. The guide catalogue's thumbnails take the same order (ListCard's `sketch` marker), so the
-catalogue stays a covered band. BlockCard's and ListCard's `sketch` fills are specified in their own
-specs (13 Oct amendments).
+**Drawn today:** one scene per live item without a cover, each a different composition and different
+objects, in the Sketch plate language (dot plate, no type, Sketch's own colours per surface), facing
+left toward the copy, three or more layers, anchored on the drawing's grid:
+
+| Article | Scene | Concept |
+|---|---|---|
+| Accepting AI-generated front-end code: what review is for now | `code-review` | the generated file ticked through line by line, and a lens held over the two lines that carry the judgement — review is now for the decisions, not for reading every line |
+| Vibe-coded app security checklist: 25 checks before real users arrive | `security-checklist` | a checklist (three done, one open) and the gate it holds shut, real users walking in from the right toward it |
+| I vibe-coded an app. Now what? The path from prototype to production | `prototype-to-production` | a rough dashed sketch's path through four waypoints (the four questions) leftwards into a stored, running system |
+
+**Everything else** without a cover — the stress fixture included, which is never drawn for — takes
+the next catalogue photograph (`standIns`), and with no pool the texture field. The guide catalogue
+keeps thumbnails when each guide has a cover, a scene or a photograph. The Lab band carries its
+register placeholder (`/insights#lab`) until its illustration is commissioned.
 
 ## 13 · Motion
 
@@ -315,7 +334,7 @@ Each at 1440 and 390 (`npm run shots -- insights-index`), plus the live `/insigh
 
 ## 16 · New token requests
 
-`src/styles/tokens/components/insights-index.css` (§ 6, plus `--iix-rail-sticky-top` and
+`src/styles/tokens/components/insights-index.css` (§ 6, plus the panel and ring-room tokens and
 `--iix-hidden-size`), and in `list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`,
 `--lcrd-eyebrow-ink` (per surface, BlockCard's eyebrow values, duplicated on purpose: tokens rule 6),
 `--lcrd-date-day-text`, `--lcrd-date-day-tracking`, `--lcrd-date-inline`, `--lcrd-date-ink` (per
@@ -332,8 +351,8 @@ surface).
    fixture; Strapi has no curated-collection field. *Non-blocking*, logged.
 4. **Search.** **Decided (owner, 13 Oct 2026): no free-text search.**
 6. **Mobile filters.** **Decided (owner, 13 Oct 2026):** below 1024 the filter groups fold into a
-   native `<details>` whose control reads "Filters · n active"; from 1024 the open sticky rail. Both
-   renderings are server-rendered links, one `display: none` at the other's widths. Built.
+   native `<details>` whose control reads "Filters · n active"; from 1024 the open sticky rail.
+   **Superseded the same day** by the one compact filter row (see "The filter row", § 2). Built.
 7. **Missing covers.** **Decided (owner, 13 Oct 2026):** generated graphic wherever one fits, photograph
    otherwise — § 12a. Built.
 8. **Lab link** (CMS sends `/labs`). **Decided (owner, 13 Oct 2026):** the Lab band links to

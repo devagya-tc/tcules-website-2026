@@ -36,9 +36,9 @@
 >    per surface — neutral-300 · neutral-400 · neutral-700 · brandeis-300, decoration — BlockCard's
 >    cover-rule values duplicated on purpose. Specimen: every thumbnail row, including the four-surface
 >    proof.
-> 3. **`marker: { type: 'sketch'; name: SketchName }`** — a GENERATED thumbnail: a Sketch scene in the
->    thumbnail's own 16:9 box, for an item with no cover whose subject maps to a scene (owner: generated
->    graphic before photograph). Decorative. Specimen: the eyebrow block's guide row.
+> 3. **`marker: { type: 'sketch'; name: ArticleSceneName }`** — a DRAWN thumbnail: the scene drawn for
+>    that article (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in
+>    data. Decorative. Specimen: the eyebrow block's guide row.
 
 > **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
 > arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
