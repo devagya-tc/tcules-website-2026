@@ -190,8 +190,8 @@ display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--te
 
 ## 9 · Responsive
 
-- **1023 and below:** front page stacks (lead, then mix); collections 2 across; feed rail moves above
-  the list and stops being sticky; event date stays beside its copy from 768.
+- **1023 and below:** front page stacks (lead, then mix); collections 2 across; the filter rail becomes a
+  closed native disclosure above the list ("Filters · n active"), the count line above it; event date stays beside its copy from 768.
 - **767 and below:** collections 1 across; event date above its copy; articles' wide row scrolls (the
   set's own phone row); the video rail shows one with a peek.
 - **Must not change:** the order of formats, the shapes, any gap step.
@@ -246,7 +246,7 @@ module carries only the sticky rail and the three marks in § 6.
 | one item | the lead alone (no mix); its format row then falls back to that item |
 | many items (100 per kind) | rows cap (wide 3, ledger 4, episode 1 + 3, boxed 3, rail 8, voices 3, catalogue 6); feed pages 12 at a time |
 | a format with no items | no row, no jump |
-| missing cover | the front-page lead, article, podcast and video covers take a catalogue stand-in photograph from the page's `standIns` pool (visual-direction § 5.7), else the texture field; the mix and rows are text by design; catalogue drops ALL thumbnails if any is missing (a set is all-image or all-text) |
+| missing cover | the front-page lead, article, podcast and video covers take a GENERATED graphic where the item maps to one (§ 12a), else a catalogue stand-in photograph from the page's `standIns` pool (visual-direction § 5.7), else the texture field; the mix and rows are text by design; catalogue drops ALL thumbnails if any is missing (a set is all-image or all-text) |
 | missing description | the card or row renders title alone |
 | event without a date | the ledger row keeps its date column, reading "—" / "Date TBC" as text (no `<time>`); the publish date is never passed off as the event's |
 | podcast without duration | the cta stands alone |
@@ -255,6 +255,29 @@ module carries only the sticky rail and the three marks in § 6.
 | 767 track | every shape stacks or scrolls (§ 9) |
 | logical properties | the module uses `inset-block-start` only |
 | nested surface | not applicable: the template sets every surface |
+
+## 12a · Generated graphics for missing covers (owner, 13 Oct 2026)
+
+**Rule:** a missing cover takes a generated graphic wherever one can be generated, and a catalogue
+photograph only where nothing fits. The graphics are the Sketch scenes (one per service, the drawings
+Gateway's selector shows), set as BlockCard's `sketch` media: generated SVG on the dot-field plate, no
+type on them, no brandeis-900, nothing graded locally.
+
+**The mapping is data**, in `src/app/_insights/hub.ts` (`GRAPHIC_RULES`, `graphicsFor`), never in the
+template: each insight's taxonomy (its tags and categories, as the CMS names them), then its title, is
+matched in priority order — AI → `ai-product-ux`; design system or tokens → `design-systems`;
+modernise / replatform / legacy / regression → `product-modernisation`; design engineering /
+prototype / Figma / React / front-end / vibe → `design-engineering`; 0 → 1 / first release / MVP →
+`new-product`; system design / context architecture / production → `software-development`;
+information design / audits / onboarding / workflow / CPQ / SaaS → `product-design`. Every match is
+kept, best first, as the item's `graphics`. The template takes the first scene the last two stand-ins
+did not use, so a row of three never repeats a scene; an item with no match takes the next photograph
+(`standIns`), and with no pool the texture field.
+
+A cover that is itself a stand-in photograph gives way to a graphic when one fits; a real cover always
+stays. The guide catalogue's thumbnails take the same order (ListCard's `sketch` marker), so the
+catalogue stays a covered band. BlockCard's and ListCard's `sketch` fills are specified in their own
+specs (13 Oct amendments).
 
 ## 13 · Motion
 
@@ -293,15 +316,21 @@ surface).
 ## 17 · Open questions
 
 1. **Format pages do not exist yet** (`/insights/podcasts` etc. 404). "All podcasts" links to the feed
-   filtered by that format until they do; switching is one line in the route. *Non-blocking.*
-   Recommendation: build one FormatIndex template later, reusing the feed band.
+   filtered by that format until they do. **Decided (owner, 13 Oct 2026): approved as built.**
 2. **Guides, research and videos are not in the CMS.** The view model carries the kinds; the fixture
    proves the shapes; live, those rows are absent. *Non-blocking.* Logged in
    `docs/strapi-changes.md` § 20.
 3. **Collections ("Start with your problem")** are corpus copy (`_pages/insights.md`) carried by the
    fixture; Strapi has no curated-collection field. *Non-blocking*, logged.
-4. **Search.** The Verge has none on its front page; a text search over the feed is a later addition.
-   *Non-blocking.*
+4. **Search.** **Decided (owner, 13 Oct 2026): no free-text search.**
+6. **Mobile filters.** **Decided (owner, 13 Oct 2026):** below 1024 the filter groups fold into a
+   native `<details>` whose control reads "Filters · n active"; from 1024 the open sticky rail. Both
+   renderings are server-rendered links, one `display: none` at the other's widths. Built.
+7. **Missing covers.** **Decided (owner, 13 Oct 2026):** generated graphic wherever one fits, photograph
+   otherwise — § 12a. Built.
+8. **Lab link** (CMS sends `/labs`). **Decided (owner, 13 Oct 2026):** the Lab band links to
+   ROUTES.futureInterfacesLab; the Strapi mapper rewrites `/labs`, so no page renders it
+   (strapi-changes § 20f). Built.
 5. **The lead story.** No CMS `featured` flag today, so the lead is the newest item with a cover.
    *Non-blocking*, logged.
 

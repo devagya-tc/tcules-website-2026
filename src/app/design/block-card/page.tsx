@@ -808,8 +808,8 @@ export default function BlockCardSpecimenPage() {
             articles, videos, podcasts. The image goes through <code>Media</code> with{' '}
             <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 16:9 (
             <code>--ratio-standard</code>), the one card ratio, in every set and arrangement
-            (home round 3). The box draws
-            one hairline round every kind; Media draws none of its own inside a card.
+            (home round 3). The box draws one hairline round every kind; Media draws none of its
+            own inside a card.
           </BandHead>
           <Specimen
             title="3 case studies · three from lg"
@@ -878,6 +878,37 @@ export default function BlockCardSpecimenPage() {
               lead="none"
               standIns="texture"
               cue="download"
+            />
+          </Specimen>
+          <Specimen
+            title='media type "sketch" · a generated cover'
+            note="13 Oct 2026, the insights hub: an artefact with no cover whose subject maps to a service takes that service's Sketch scene on its dot-field plate, inside the same ruled 16:9 box — a generated graphic before any photograph (owner). The caller decides the mapping, in data. No type on it."
+          >
+            <BlockCardSet
+              lead="none"
+              items={[
+                {
+                  id: 'sketch-1',
+                  title: 'Seven generative AI product patterns for SaaS',
+                  eyebrow: '26 Sept 2026 · 14 min read',
+                  media: { type: 'sketch', name: 'ai-product-ux' },
+                  href: ROUTES.insights,
+                },
+                {
+                  id: 'sketch-2',
+                  title: 'When to hire a design system consultant',
+                  eyebrow: '15 Sept 2026 · 10 min read',
+                  media: { type: 'sketch', name: 'design-systems' },
+                  href: ROUTES.insights,
+                },
+                {
+                  id: 'sketch-3',
+                  title: 'Customers can finish the task and still lose confidence',
+                  eyebrow: '28 Aug 2026 · 9 min read',
+                  media: { type: 'sketch', name: 'product-modernisation' },
+                  href: ROUTES.insights,
+                },
+              ]}
             />
           </Specimen>
           <Specimen
@@ -2007,11 +2038,11 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <BandHead title="23 · One crop, and the phone pair (home rounds 1 and 3)">
-            The set no longer states a crop: every cover is 16:9 (home round 3, 11 Oct 2026), so a
-            linked pair of contained drawings is 16:9 too.{' '}
-            <code>phone=&quot;pair&quot;</code>: two across below 768, never a scroll row, for a
-            set of short covered cards whose title is their whole content — eight sectors
-            stacked ran ~2900 tall at 390 and a scroll row hid seven of them.
+            The set no longer states a crop: every cover is 16:9 (home round 3, 11 Oct 2026), so
+            a linked pair of contained drawings is 16:9 too. <code>phone=&quot;pair&quot;</code>
+            : two across below 768, never a scroll row, for a set of short covered cards whose
+            title is their whole content — eight sectors stacked ran ~2900 tall at 390 and a
+            scroll row hid seven of them.
           </BandHead>
           <Specimen
             title={'Linked covered pair · size="lg"'}

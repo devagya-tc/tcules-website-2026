@@ -72,3 +72,67 @@
     inset-block-start: var(--iix-rail-sticky-top);
   }
 }
+
+/* ── F · the filters' two renderings ── the disclosure below 1024, the open rail from it. Each is
+   `display: none` at the other's widths, so one panel is in the page at a time. */
+.wide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .narrow {
+    display: none;
+  }
+
+  .wide {
+    display: block;
+  }
+}
+
+/* The disclosure's control: the label voice, ruled above and below, the whole row the target. The
+   browser's own marker is removed; the glyph at the row's end turns instead. */
+.toggle {
+  display: block;
+  list-style: none;
+  padding-block: var(--gap-text);
+  border-block: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
+  color: var(--iix-toggle-ink);
+  font: var(--iix-toggle-text);
+  letter-spacing: var(--iix-toggle-tracking);
+  text-transform: var(--text-mono-case);
+  cursor: pointer;
+}
+
+.toggle::-webkit-details-marker {
+  display: none;
+}
+
+.toggle:focus-visible {
+  outline: var(--iix-ring-width) solid var(--iix-ring-color);
+  outline-offset: var(--iix-ring-offset);
+}
+
+.toggleCount {
+  color: var(--iix-count-ink);
+}
+
+.toggleGlyph {
+  display: block;
+  color: var(--iix-toggle-glyph-ink);
+  transition: transform var(--iix-toggle-duration) var(--iix-toggle-easing);
+}
+
+.narrow[open] .toggleGlyph {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggleGlyph {
+    transition: none;
+  }
+}
+
+/* The open panel's own inset under its control: the groups start a gutter below the rule. */
+.panel {
+  padding-block-start: var(--gap-gutter);
+}

@@ -4,8 +4,8 @@
    title, sentence) and the feed's filter labels. Every card, row, chip and band draws its own.
 
    Naming: --iix-{part}-{role}
-     parts  count · topic-icon · topic-title · topic-body · filter-label · rail
-     roles  text · tracking · ink · sticky-top
+     parts  count · topic-icon · topic-title · topic-body · filter-label · rail · toggle · ring
+     roles  text · tracking · ink · width · sticky-top · duration · easing
 
    Every surface block declares every surface-dependent token. Every band this template paints is
    paper; the other three are declared for self-containment (tokens rule 2).
@@ -31,6 +31,15 @@
   /* The clipped box that keeps a jump's spoken comma out of the layout: a technique's own geometry,
      the 1px every hidden label in the system uses, duplicated by value (tokens rule 6). */
   --iix-hidden-size: var(--space-1);
+  /* The filters' disclosure below 1024 (owner, 13 Oct 2026): a control row in the label voice,
+     ruled above and below, its glyph turning when it opens. */
+  --iix-toggle-text: var(--text-ui);
+  --iix-toggle-tracking: var(--text-ui-tracking);
+  --iix-toggle-rule-width: var(--border-width-hairline);
+  --iix-toggle-duration: var(--duration-fast);
+  --iix-toggle-easing: var(--easing-standard);
+  --iix-ring-width: var(--focus-ring-width);
+  --iix-ring-offset: var(--focus-ring-offset);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -41,6 +50,10 @@
   --iix-topic-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --iix-filter-label-ink: var(--color-neutral-600); /* 4.92:1 */
+  --iix-toggle-ink: var(--color-neutral-900); /* 14.62:1 */
+  --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the control's mark */
+  --iix-toggle-rule-ink: var(--color-neutral-300); /* decoration */
+  --iix-ring-color: var(--color-brandeis-500); /* 6.17:1 */
 }
 
 /* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
@@ -50,6 +63,10 @@
   --iix-topic-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --iix-filter-label-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-toggle-ink: var(--color-neutral-900); /* 13.06:1 */
+  --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --iix-toggle-rule-ink: var(--color-neutral-400); /* decoration */
+  --iix-ring-color: var(--color-brandeis-500); /* 5.51:1 */
 }
 
 /* ── Surface: ink ── words lift, the accent lifts to 300 ───────────────────────── */
@@ -59,6 +76,10 @@
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-neutral-300);
   --iix-filter-label-ink: var(--color-neutral-400); /* 8.05:1 */
+  --iix-toggle-ink: var(--color-white);
+  --iix-toggle-glyph-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --iix-toggle-rule-ink: var(--color-neutral-700); /* decoration */
+  --iix-ring-color: var(--color-brandeis-300); /* 7.32:1 */
 }
 
 /* ── Surface: blue ── declared for self-containment; this template paints no blue band of its own */
@@ -68,4 +89,8 @@
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --iix-filter-label-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --iix-toggle-ink: var(--color-white); /* 6.23:1 */
+  --iix-toggle-glyph-ink: var(--color-white); /* 6.23:1 */
+  --iix-toggle-rule-ink: var(--color-brandeis-300); /* decoration */
+  --iix-ring-color: var(--color-white); /* 6.23:1 */
 }

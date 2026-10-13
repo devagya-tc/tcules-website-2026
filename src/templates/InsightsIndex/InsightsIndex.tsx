@@ -1,6 +1,15 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout, Section, Tag, type IconName } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Section,
+  Tag,
+  type IconName,
+  type SketchName,
+} from '@/components';
 import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
@@ -16,6 +25,7 @@ import {
   type BlockCardSetItem,
   type BreadcrumbItem,
   type HeroAction,
+  type ListCardMarker,
 } from '@/patterns';
 
 import styles from './InsightsIndex.module.css';
@@ -44,6 +54,12 @@ export type InsightsIndexItem = {
   duration?: string;
   /** When and where an event happens. `startsAt` is ISO 8601. */
   event?: { startsAt: string; place?: string };
+  /**
+   * The generated graphics that suit this item, best first — Sketch scenes chosen by the page from
+   * the item's topic, service or format (the mapping is data, in the page's mapping, never here). A
+   * missing cover takes the first that its neighbour did not just take, before any photograph.
+   */
+  graphics?: readonly SketchName[];
 };
 
 /** What the page says about one format: its band title, its one sentence, where "All …" goes. */
@@ -110,10 +126,9 @@ export type InsightsIndexProps = {
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
   /**
-   * Catalogue photographs that stand in for missing covers (visual-direction § 5.7: a card with no
-   * cover takes a stand-in, never labelled, replaced when the real cover exists). Taken in order
-   * down the page, so neighbours do not repeat. Absent or empty, a missing cover is the card's own
-   * texture field.
+   * Catalogue photographs for missing covers that no generated graphic suits (visual-direction
+   * § 5.7: never labelled, replaced when the real cover exists). Taken in order down the page.
+   * Absent or empty, the fallback is the card's own texture field.
    */
   standIns?: readonly BlockCardImage[];
 };
@@ -197,13 +212,27 @@ const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
   item.cover?.src.trim() ? { type: 'image', image: item.cover } : undefined;
 
 type CoverMedia = NonNullable<BlockCardSetItem['media']>;
-/** Hands out the next stand-in cover: a photograph from the pool, else a texture field in turn. */
-type StandIn = () => CoverMedia;
+/**
+ * Hands out a cover for an item that has none, in the owner's order (13 Oct 2026): a GENERATED
+ * graphic wherever the item maps to one (its `graphics`, skipping the scenes the last two stand-ins
+ * used so neighbours differ), else the next catalogue photograph, else a texture field.
+ */
+type StandIn = (item: InsightsIndexItem) => CoverMedia;
 
 function standInPool(pool: readonly BlockCardImage[]): StandIn {
   let next = 0;
   let recipe = 0;
-  return () => {
+  /* The last two scenes handed out: a row of three never shows one scene twice. */
+  let recent: SketchName[] = [];
+  return (item) => {
+    const graphics = item.graphics ?? [];
+    const sketch =
+      graphics.find((name) => !recent.includes(name)) ??
+      graphics.find((name) => name !== recent[recent.length - 1]);
+    if (sketch) {
+      recent = [...recent, sketch].slice(-2);
+      return { type: 'sketch', name: sketch };
+    }
     const image = pool.length > 0 ? pool[next++ % pool.length] : undefined;
     return image
       ? { type: 'image', image: { ...image, standIn: true } }
@@ -289,7 +318,7 @@ export function InsightsIndex({
       },
     ];
   });
-  const bands = alternate(present);
+  const bands = alternate(present, standIns.length > 0);
 
   const lede = hero.lede?.trim();
   const jumps =
@@ -356,7 +385,7 @@ export function InsightsIndex({
                   ? line(LABEL[item.kind].one, dateOf(item.publishedAt), lengthOf(item))
                   : line(LABEL[item.kind].one, dateOf(item.publishedAt)),
               href: item.href,
-              media: index === 0 ? (coverOf(item) ?? standIn()) : undefined,
+              media: index === 0 ? (coverOf(item) ?? standIn(item)) : undefined,
             }))}
           />
         </Section>
@@ -430,8 +459,17 @@ export function InsightsIndex({
 const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
 
 /** A band whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
-function isVisual(band: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }) {
-  if (band.kind === 'guide') return band.items.every((item) => coverOf(item) !== undefined);
+function isVisual(
+  band: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
+  hasPool: boolean,
+) {
+  if (band.kind === 'guide')
+    return (
+      hasPool ||
+      band.items.every(
+        (item) => coverOf(item) !== undefined || (item.graphics?.length ?? 0) > 0,
+      )
+    );
   return band.kind === 'article' || band.kind === 'podcast' || band.kind === 'video';
 }
 
@@ -443,9 +481,10 @@ function isVisual(band: { kind: InsightsIndexKind; items: readonly InsightsIndex
  */
 function alternate<T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }>(
   bands: readonly T[],
+  hasPool: boolean,
 ): T[] {
-  const visual = bands.filter(isVisual);
-  const text = bands.filter((band) => !isVisual(band));
+  const visual = bands.filter((band) => isVisual(band, hasPool));
+  const text = bands.filter((band) => !isVisual(band, hasPool));
   const out: T[] = [];
   while (visual.length > 0 || text.length > 0) {
     const v = visual.shift();
@@ -550,7 +589,7 @@ function FormatShape({
     case 'interview':
       return <Voices items={items} />;
     case 'guide':
-      return <Catalogue items={items} />;
+      return <Catalogue items={items} standIn={standIn} />;
   }
 }
 
@@ -570,7 +609,7 @@ function Wide({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn
     <BlockCardSet
       lead={items.length === 3 ? 'wide' : 'none'}
       cue="title"
-      items={items.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn() }))}
+      items={items.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn(item) }))}
     />
   );
 }
@@ -629,7 +668,7 @@ function Episode({
           title={latest.title}
           body={bodyOf(latest)}
           eyebrow={dateOf(latest.publishedAt)}
-          media={coverOf(latest) ?? standIn()}
+          media={coverOf(latest) ?? standIn(latest)}
           href={latest.href}
           cue="cta"
           ctaLabel="Listen"
@@ -697,7 +736,7 @@ function Rail({
           title={item.title}
           body={bodyOf(item)}
           eyebrow={line(dateOf(item.publishedAt), item.duration)}
-          media={coverOf(item) ?? standIn()}
+          media={coverOf(item) ?? standIn(item)}
           href={item.href}
           cue="title"
         />
@@ -722,15 +761,49 @@ function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
  * Guides — the catalogue: rows in two columns, with thumbnails when every guide has a cover and as
  * text when any lacks one (a set is all-image or all-text, never one with holes).
  */
-function Catalogue({ items }: { items: readonly InsightsIndexItem[] }) {
-  const thumbnails = items.every((item) => coverOf(item) !== undefined);
+function Catalogue({
+  items,
+  standIn,
+}: {
+  items: readonly InsightsIndexItem[];
+  standIn: StandIn;
+}) {
+  /* Each guide's thumbnail: its cover, else a generated scene or a stand-in photograph (a texture
+     field has no thumbnail form, so it counts as missing). */
+  const thumbs = items.map((item): ListCardMarker | undefined => {
+    if (item.cover?.src.trim()) {
+      return {
+        type: 'thumbnail',
+        image: {
+          ...item.cover,
+          width: item.cover.width ?? 1600,
+          height: item.cover.height ?? 900,
+        },
+      };
+    }
+    const media = standIn(item);
+    if (media.type === 'sketch') return { type: 'sketch', name: media.name };
+    if (media.type === 'image') {
+      const image = media.image;
+      return {
+        type: 'thumbnail',
+        image: { ...image, width: image.width ?? 1600, height: image.height ?? 900 },
+      };
+    }
+    return undefined;
+  });
+  const thumbnails = thumbs.every(Boolean);
   const half = Math.ceil(items.length / 2);
-  const columns = items.length > 3 ? [items.slice(0, half), items.slice(half)] : [items];
+  const indexed = items.map((item, i) => ({
+    item,
+    marker: thumbnails ? thumbs[i] : undefined,
+  }));
+  const columns = items.length > 3 ? [indexed.slice(0, half), indexed.slice(half)] : [indexed];
   return (
     <Layout columns={{ base: 1, lg: columns.length }} colGap="gutter" rowGap="none">
       {columns.map((column, index) => (
         <Layout as="ul" rowGap="none" key={index}>
-          {column.map((item) => (
+          {column.map(({ item, marker }) => (
             <ListCard
               key={item.id}
               titleAs="h3"
@@ -740,18 +813,7 @@ function Catalogue({ items }: { items: readonly InsightsIndexItem[] }) {
               title={item.title}
               body={bodyOf(item)}
               href={item.href}
-              marker={
-                thumbnails && item.cover
-                  ? {
-                      type: 'thumbnail',
-                      image: {
-                        ...item.cover,
-                        width: item.cover.width ?? 1600,
-                        height: item.cover.height ?? 900,
-                      },
-                    }
-                  : undefined
-              }
+              marker={marker}
             />
           ))}
         </Layout>
@@ -772,6 +834,53 @@ function Feed({ feed }: { feed: InsightsIndexFeed }) {
   const count = filtered
     ? `${feed.total} of ${feed.all} match`
     : `${feed.all} ${feed.all === 1 ? 'piece' : 'pieces'}, newest first`;
+
+  const held = feed.filters.reduce(
+    (sum, group) => sum + group.options.filter((option) => option.selected).length,
+    0,
+  );
+  const panel = (
+    <Layout rowGap="gutter">
+      {feed.filters.map((group) => (
+        <Layout key={group.id} rowGap="text">
+          <h3 className={styles.filterLabel}>{group.label}</h3>
+          {/* Both gaps `text` (16): a Tag is 24 x 24, which MEETS the AA target floor without
+              margin, so the clearance comes from the row (the old page's argument, kept). */}
+          <Cluster as="ul" colGap="text" rowGap="text">
+            {group.options.map((option) => (
+              <li key={option.id}>
+                <Tag
+                  variant="filter"
+                  href={option.href}
+                  selected={option.selected}
+                  icon={
+                    option.selected ? (
+                      <Icon name="close-circle" label="Clear filter" />
+                    ) : undefined
+                  }
+                >
+                  {option.label}
+                </Tag>
+              </li>
+            ))}
+          </Cluster>
+        </Layout>
+      ))}
+      {feed.clearHref ? (
+        <Cluster>
+          <Button
+            as="a"
+            href={feed.clearHref}
+            emphasis="link"
+            tone="neutral"
+            icon={<Icon name="close-circle" />}
+          >
+            Clear all filters
+          </Button>
+        </Cluster>
+      ) : null}
+    </Layout>
+  );
 
   /* Nothing published: no rail of filters over nothing, just the sentence that says so. */
   if (feed.all === 0) {
@@ -799,44 +908,28 @@ function Feed({ feed }: { feed: InsightsIndexFeed }) {
         <aside aria-label="Filter the feed" className={styles.rail}>
           <Layout rowGap="gutter">
             <p className={styles.feedCount}>{count}</p>
-            {feed.filters.map((group) => (
-              <Layout key={group.id} rowGap="text">
-                <h3 className={styles.filterLabel}>{group.label}</h3>
-                {/* Both gaps `text` (16): a Tag is 24 x 24, which MEETS the AA target floor without
-                    margin, so the clearance comes from the row (the old page's argument, kept). */}
-                <Cluster as="ul" colGap="text" rowGap="text">
-                  {group.options.map((option) => (
-                    <li key={option.id}>
-                      <Tag
-                        variant="filter"
-                        href={option.href}
-                        selected={option.selected}
-                        icon={
-                          option.selected ? (
-                            <Icon name="close-circle" label="Clear filter" />
-                          ) : undefined
-                        }
-                      >
-                        {option.label}
-                      </Tag>
-                    </li>
-                  ))}
+            {/* Below 1024 the groups fold into a native disclosure, closed, its control saying how
+                many filters are held (owner, 13 Oct 2026); from 1024 they are the open sticky rail.
+                Two renderings of one panel, each `display: none` at the other's widths, so exactly
+                one is in the page and the accessibility tree at a time — and both work with no
+                script: a <details> is the browser's own, and every chip is a link. */}
+            <details className={styles.narrow}>
+              <summary className={styles.toggle}>
+                <Cluster as="span" justify="between" align="center" colGap="block" nowrap>
+                  <span>
+                    Filters
+                    {held > 0 ? (
+                      <span className={styles.toggleCount}>{`\u2002${held} active`}</span>
+                    ) : null}
+                  </span>
+                  <span className={styles.toggleGlyph}>
+                    <Icon name="alt-arrow-down" />
+                  </span>
                 </Cluster>
-              </Layout>
-            ))}
-            {feed.clearHref ? (
-              <Cluster>
-                <Button
-                  as="a"
-                  href={feed.clearHref}
-                  emphasis="link"
-                  tone="neutral"
-                  icon={<Icon name="close-circle" />}
-                >
-                  Clear all filters
-                </Button>
-              </Cluster>
-            ) : null}
+              </summary>
+              <div className={styles.panel}>{panel}</div>
+            </details>
+            <div className={styles.wide}>{panel}</div>
           </Layout>
         </aside>
 

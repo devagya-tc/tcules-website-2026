@@ -21,6 +21,20 @@ import type {
   StrapiInsightsTaxonomy,
 } from './insights-types';
 import { safeContentHref } from './rich-text';
+import { ROUTES } from '../../../lib/routes.ts';
+
+/**
+ * The Lab band's link. The CMS sends `/labs`, which is not a route; the Lab lives at
+ * ROUTES.futureInterfacesLab (owner, 13 Oct 2026). Mapped here so no page renders `/labs`
+ * (docs/strapi-changes.md § 20f).
+ */
+function labLink(action: InsightAction | undefined): InsightAction | undefined {
+  if (!action) return undefined;
+  const path = action.href.split(/[?#]/)[0]?.replace(/\/+$/, '');
+  return path === '/labs' || path === '/lab'
+    ? { ...action, href: ROUTES.futureInterfacesLab, external: false }
+    : action;
+}
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const INSIGHTS_SLUG = 'insights';
@@ -325,7 +339,7 @@ function mapInsightsPage(
   const heading = displayHeading(rawPage.heading);
   if (!heading) return null;
 
-  const labAction = mapAction(rawPage.secondSection?.link);
+  const labAction = labLink(mapAction(rawPage.secondSection?.link));
   const labHeading = displayHeading(rawPage.secondSection?.heading);
   const lab =
     rawPage.secondSection && labHeading

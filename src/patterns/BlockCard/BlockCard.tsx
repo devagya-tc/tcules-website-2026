@@ -8,6 +8,8 @@ import {
   Layout,
   Media,
   type MediaImage,
+  Sketch,
+  type SketchName,
   Texture,
   TextureShape,
 } from '@/components';
@@ -58,7 +60,14 @@ export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
 export type BlockCardTextureRecipe = 0 | 1 | 2;
 export type BlockCardMedia =
   | { type: 'image'; image: BlockCardImage }
-  | { type: 'texture'; recipe?: BlockCardTextureRecipe };
+  | { type: 'texture'; recipe?: BlockCardTextureRecipe }
+  /**
+   * `sketch` (13 Oct 2026, the insights hub): a GENERATED cover — one of the Sketch scenes (the
+   * service drawings Gateway's selector shows) on its dot-field plate, inside the same ruled 16:9
+   * box. For an artefact with no cover whose subject maps to a scene; the caller decides the
+   * mapping, in data. Decorative like every cover; no type is drawn on it.
+   */
+  | { type: 'sketch'; name: SketchName };
 
 /**
  * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
@@ -382,6 +391,20 @@ function TextureMedia({
 }
 
 /**
+ * The generated cover: a Sketch scene filling the ruled 16:9 box. The plate is the Sketch's own
+ * (dot field, radius) and the drawing is 16:9 like the box, so nothing is cropped.
+ */
+function SketchMedia({ name }: { name: SketchName }) {
+  return (
+    <span className={styles.imageMedia} aria-hidden="true">
+      <span className={styles.imageZoom}>
+        <Sketch name={name} />
+      </span>
+    </span>
+  );
+}
+
+/**
  * BlockCard — one borderless card, built to docs/specs/BlockCard.md.
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
@@ -452,6 +475,8 @@ export function BlockCard({
   ) : media?.type === 'texture' ? (
     /* The card's icon, if any, moves onto the texture: one head object, never two. */
     <TextureMedia recipe={media.recipe} icon={icon} />
+  ) : media?.type === 'sketch' ? (
+    <SketchMedia name={media.name} />
   ) : null;
 
   /* The icon heads a card with no cover; a cover wins, because a card has one head object. */

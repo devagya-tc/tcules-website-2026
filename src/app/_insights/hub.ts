@@ -1,4 +1,4 @@
-import type { IconName } from '@/components';
+import type { IconName, SketchName } from '@/components';
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { glyphForRoute } from '@/lib/glyphs';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -38,6 +38,36 @@ const STAND_INS: readonly PhotoId[] = [
   'workshop-hands-writing',
   'pair-testing-overhead',
 ];
+
+/**
+ * Which generated graphic suits an insight (owner, 13 Oct 2026: a generated graphic wherever one can
+ * be generated, a photograph only where nothing fits). The graphics are the Sketch scenes — one per
+ * service, the drawings Gateway's selector shows — so an insight takes the scene of the service its
+ * subject belongs to. Read from the item's own taxonomy (tags and categories, as the CMS names them)
+ * and then its title, in this priority order; every scene that matches is kept, best first, so the
+ * template can give two neighbours different scenes. No match, no graphic: the photograph pool
+ * answers. docs/specs/InsightsIndex.md § 12a.
+ */
+const GRAPHIC_RULES: readonly (readonly [RegExp, SketchName])[] = [
+  [/ai|agentic|ai-assisted|ai-first|generative/i, 'ai-product-ux'],
+  [/design system|design token/i, 'design-systems'],
+  [/moderni[sz]|replatform|legacy|regression/i, 'product-modernisation'],
+  [/design engineering|prototype|figma|react|front-end|vibe/i, 'design-engineering'],
+  [/0 → 1|first release|new product|mvp/i, 'new-product'],
+  [/system design|context architecture|production/i, 'software-development'],
+  [/information design|design audit|ux audit|onboarding|workflow|cpq|saas/i, 'product-design'],
+];
+
+function graphicsFor(resource: InsightResource): SketchName[] {
+  const taxonomy = [...resource.tags, ...resource.categories].map((t) => t.name).join(' | ');
+  const found: SketchName[] = [];
+  for (const source of [taxonomy, resource.title]) {
+    for (const [pattern, scene] of GRAPHIC_RULES) {
+      if (pattern.test(source) && !found.includes(scene)) found.push(scene);
+    }
+  }
+  return found;
+}
 
 const FILTER_PREFIX = 'filter-';
 const PAGE_KEY = 'page';
@@ -86,7 +116,10 @@ function hrefFor(
 }
 
 function toItem(resource: InsightResource): InsightsIndexItem {
-  const image = resource.image;
+  const graphics = graphicsFor(resource);
+  /* A cover that is itself a stand-in photograph gives way to a generated graphic when one fits
+     (owner, 13 Oct 2026): generated first, photograph only where nothing fits. A real cover stays. */
+  const image = resource.image?.standIn && graphics.length > 0 ? undefined : resource.image;
   return {
     id: resource.documentId,
     kind: resource.kind as InsightsIndexKind,
@@ -113,6 +146,7 @@ function toItem(resource: InsightResource): InsightsIndexItem {
     ...(resource.readingTime ? { readingTime: resource.readingTime } : {}),
     ...(resource.duration ? { duration: resource.duration } : {}),
     ...(resource.event ? { event: resource.event } : {}),
+    graphics,
   };
 }
 

@@ -303,6 +303,9 @@ serves every placement and a cover is never re-cut per band.
   Mapped onto `InsightCollection`. Absent today, so the band does not render live.
 - (d) **A lead story.** A `featured` boolean (or a single relation on the Resource single type). Until
   then the lead is the newest item with a cover.
+- (f) **The Lab link.** The Resource single type's `secondSection.link.href` is `/labs`, which is not a
+  route. The mapper rewrites it to `/future-interfaces-lab` (ROUTES.futureInterfacesLab, owner 13 Oct
+  2026); correct the CMS value so the rewrite can go.
 - (e) **Format copy.** A one-sentence `description` on each `cardDetails` entry, so a format band can
   say what it holds. The format card images are no longer rendered.
 

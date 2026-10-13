@@ -30,6 +30,9 @@
 >    brandeis-300 · white), month and year under it at `tight` in the eyebrow's voice, in a fixed
 >    `--lcrd-date-inline` (96) column. A `<time>` with `dateTime`; without one, text. The caller formats
 >    both strings. Specimen: `/design/list-card`, the eyebrow and date-marker blocks.
+> 3. **`marker: { type: 'sketch'; name: SketchName }`** — a GENERATED thumbnail: a Sketch scene in the
+>    thumbnail's own 16:9 box, for an item with no cover whose subject maps to a scene (owner: generated
+>    graphic before photograph). Decorative. Specimen: the eyebrow block's guide row.
 
 > **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
 > arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
