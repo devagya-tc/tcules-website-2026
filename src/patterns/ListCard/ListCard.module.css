@@ -266,6 +266,14 @@
   border-radius: var(--lcrd-thumbnail-radius);
 }
 
+/* An end image (`markerPosition="end"`) is supplementary: below 768 it would squeeze the copy beside
+   it to ~200px, so the row is its copy alone there (13 Oct 2026, the insights archive). */
+@media (max-width: 767px) {
+  .markerEnd .marker {
+    display: none;
+  }
+}
+
 /* The title breaks only BETWEEN words. `anywhere` stood here and was the mid-word bug ("Produ/ct",
    "Interactio/n"): it lets a word break at any character and, worse, it drops the title's
    min-content to one glyph, so nothing ever pushed back when the old viewport-driven split squeezed

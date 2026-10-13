@@ -514,8 +514,10 @@ export default function ListCardSpecimenPage() {
                 <ListCard
                   size="sm"
                   arrangement="stacked"
-                  eyebrow="Article · 8 Oct 2026 · 11 min read"
+                  eyebrow="Article · 8 Oct 2026 · 11 min read · markerPosition end"
                   title="CPQ UX: designing configure-price-quote software sales teams will use"
+                  marker={thumb(CUT_OUT)}
+                  markerPosition="end"
                   href={ROUTES.insights}
                 />
               </Rows>

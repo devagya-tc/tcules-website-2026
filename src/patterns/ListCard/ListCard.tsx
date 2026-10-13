@@ -188,6 +188,16 @@ export type ListCardProps = ListCardFormProps & {
    * without a destination. Pass ordinary capitalisation; Button sets the case.
    */
   ctaLabel?: string;
+  /**
+   * Which end of a ROW the marker stands at (13 Oct 2026, the insights archive). `start` (default)
+   * leads with it. `end` sets an image marker (`thumbnail`, `sketch`) after the copy, so a list where
+   * only SOME rows carry an image keeps every title and eyebrow on one edge — the archive-index
+   * pattern (docs/research/resources-listing.md). Visual and DOM order agree: the copy first. Ignored
+   * on a tile, whose marker always heads it, and for a number, icon or date marker, which index the
+   * row and must lead it. Below 768 an end image is not shown: it is supplementary (the copy leads
+   * the row), and beside a 326 phone column it squeezed the copy to ~200px.
+   */
+  markerPosition?: 'start' | 'end';
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -328,6 +338,7 @@ export function ListCard({
   href,
   external = false,
   ctaLabel,
+  markerPosition = 'start',
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -498,9 +509,14 @@ export function ListCard({
     </Layout>
   );
 
+  const trailing =
+    markerPosition === 'end' &&
+    marker !== undefined &&
+    (marker.type === 'thumbnail' || marker.type === 'sketch');
+  const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
-      {marker ? <Marker marker={marker} form={form} /> : null}
+      {trailing ? null : markerNode}
       <div className={styles.core}>
         {action ? (
           <Layout rowGap="block">
@@ -511,6 +527,7 @@ export function ListCard({
           rowCopy
         )}
       </div>
+      {trailing ? markerNode : null}
     </Cluster>
   );
 
@@ -524,6 +541,7 @@ export function ListCard({
         isTile && styles.tile,
         boxed && styles.boxed,
         action !== null && styles.withAction,
+        trailing && styles.markerEnd,
       )}
     >
       {destination ? (

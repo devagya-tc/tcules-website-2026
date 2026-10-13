@@ -47,9 +47,12 @@
   --iix-panel-radius: var(--radius-8);
   --iix-panel-shadow: var(--shadow-crop);
   --iix-panel-layer: var(--z-dropdown);
-  /* The river's date break (13 Oct 2026): a month at the h4 role heads its run of pieces. */
-  --iix-month-text: var(--text-h4);
-  --iix-month-tracking: var(--text-h4-tracking);
+  /* The archive's month (13 Oct 2026): the ledger's left column, at the h5 role, the size of the rows'
+     titles beside it, so it reads as their place, not a heading over them. It holds still while its
+     rows scroll, clear of the sticky nav bar. */
+  --iix-month-text: var(--text-h5);
+  --iix-month-tracking: var(--text-h5-tracking);
+  --iix-month-sticky-top: var(--gap-section);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

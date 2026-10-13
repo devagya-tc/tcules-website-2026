@@ -152,11 +152,19 @@
   box-shadow: var(--iix-panel-shadow);
 }
 
-/* ── F · the river's date break ── a month heads its run: the h4 role in the title ink, the
-   largest thing in the feed after the band's own heading, so the eye finds its place by date. */
+/* ── F · the archive's month ── the ledger's left column: a month at the h5 role, holding still
+   beside its rows from 1024 while they scroll (the changelog idiom), clear of the sticky nav. */
 .month {
   color: var(--iix-month-ink);
   font: var(--iix-month-text);
   letter-spacing: var(--iix-month-tracking);
   text-wrap: var(--text-title-wrap);
+}
+
+@media (min-width: 1024px) {
+  .month {
+    position: sticky;
+    inset-block-start: var(--iix-month-sticky-top);
+    padding-block-start: var(--gap-gutter);
+  }
 }

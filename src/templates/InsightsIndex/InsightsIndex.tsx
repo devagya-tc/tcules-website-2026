@@ -462,7 +462,7 @@ export function InsightsIndex({
         )
       ) : null}
 
-      <Feed feed={feed} standIn={standIn} />
+      <Feed feed={feed} />
 
       {closing?.action ? (
         <CtaSection
@@ -852,7 +852,7 @@ function Catalogue({
  * panel. When something is held, a short summary says so, each item removable, with "Clear all".
  * Every control is a link the page built: the state is the URL, and nothing needs script.
  */
-function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) {
+function Feed({ feed }: { feed: InsightsIndexFeed }) {
   /* Nothing published: no filters over nothing, just the sentence that says so. */
   if (feed.all === 0) {
     return (
@@ -984,26 +984,38 @@ function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) 
                 </Button>
               ) : null}
             </Cluster>
-          ) : null}
+          ) : (
+            /* Nothing held: the size of the archive and its order, so the reader knows what the
+               format line and "More filters" narrow (NN/g, Vercel, Figma all state a count). */
+            <p className={styles.feedCount}>{`${feed.all} pieces · newest first`}</p>
+          )}
         </Layout>
 
         <Layout rowGap="stack">
           {feed.items.length > 0 ? (
-            <River items={feed.items} standIn={standIn} />
+            <Archive items={feed.items} />
           ) : (
             <p>Nothing matches these filters.</p>
           )}
-          {feed.moreHref ? (
-            <Cluster>
-              <Button
-                as="a"
-                href={feed.moreHref}
-                emphasis="link"
-                tone="primary"
-                icon={<Icon name="alt-arrow-down" />}
-              >
-                Show more
-              </Button>
+          {feed.items.length > 0 ? (
+            /* Where the reader is in the archive, then the way on: the count every good archive
+               gives ("12 of 46"), and "Show more" as a link to the next page, so it works without
+               script and a reader can share the page they reached (IDEO, Pentagram). */
+            <Cluster colGap="block" rowGap="text" align="center">
+              <p
+                className={styles.feedCount}
+              >{`${feed.items.length} of ${feed.total} shown`}</p>
+              {feed.moreHref ? (
+                <Button
+                  as="a"
+                  href={feed.moreHref}
+                  emphasis="link"
+                  tone="primary"
+                  icon={<Icon name="alt-arrow-down" />}
+                >
+                  Show more
+                </Button>
+              ) : null}
             </Cluster>
           ) : null}
         </Layout>
@@ -1012,62 +1024,26 @@ function Feed({ feed, standIn }: { feed: InsightsIndexFeed; standIn: StandIn }) 
   );
 }
 
-/* ── F · the river ────────────────────────────────────────────────────────────── */
+/* ── F · the archive ──────────────────────────────────────────────────────────── */
 
 const MONTH = new Intl.DateTimeFormat('en-GB', {
   month: 'long',
   year: 'numeric',
   timeZone: 'UTC',
 });
+const DAY_MONTH = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+});
 
-/** Rows between two pairs in a month: a pair breaks a run of rows before it reads as a table. */
-const ROW_RUN = 4;
-
-type RiverPart =
-  | { kind: 'feature'; item: InsightsIndexItem }
-  | { kind: 'pair'; items: readonly [InsightsIndexItem, InsightsIndexItem] }
-  | { kind: 'rows'; items: readonly InsightsIndexItem[] };
-
-/** Can this item carry an image in the river: a cover of its own, or a generated scene. */
-const pictured = (item: InsightsIndexItem) =>
-  coverOf(item) !== undefined || item.scene !== undefined;
-
-/**
- * One month of the river, still newest first: its newest piece as the feature (the image beside
- * its words), then runs of rows broken by a PAIR wherever the next two pieces both carry an image.
- * Order is never changed to make a shape: a pair forms only from two consecutive pictured pieces.
- */
-function monthParts(items: readonly InsightsIndexItem[]): RiverPart[] {
-  const [first, ...rest] = items;
-  if (!first) return [];
-  const parts: RiverPart[] = [{ kind: 'feature', item: first }];
-  let run: InsightsIndexItem[] = [];
-  let sincePair = ROW_RUN;
-  for (let i = 0; i < rest.length; i++) {
-    const a = rest[i]!;
-    const b = rest[i + 1];
-    if (b && sincePair >= ROW_RUN && pictured(a) && pictured(b)) {
-      if (run.length > 0) parts.push({ kind: 'rows', items: run });
-      run = [];
-      parts.push({ kind: 'pair', items: [a, b] });
-      sincePair = 0;
-      i++;
-      continue;
-    }
-    run.push(a);
-    sincePair++;
-  }
-  if (run.length > 0) parts.push({ kind: 'rows', items: run });
-  return parts;
-}
-
-/** The river's month buckets, in the order the items arrive (newest first). */
+/** The archive's month blocks, in the order the items arrive (newest first). */
 function months(items: readonly InsightsIndexItem[]) {
   const groups: { key: string; label: string; items: InsightsIndexItem[] }[] = [];
   for (const item of items) {
     const date = parse(item.publishedAt);
     const key = date ? `${date.getUTCFullYear()}-${date.getUTCMonth()}` : 'undated';
-    const label = date ? MONTH.format(date) : 'Earlier';
+    const label = date ? MONTH.format(date) : 'Undated';
     const group = groups.find((candidate) => candidate.key === key);
     if (group) group.items.push(item);
     else groups.push({ key, label, items: [item] });
@@ -1075,109 +1051,75 @@ function months(items: readonly InsightsIndexItem[]) {
   return groups;
 }
 
+/** The row's image: the item's own cover, or the scene drawn for it. Never a stand-in photograph. */
+function ownImage(item: InsightsIndexItem): ListCardMarker | undefined {
+  if (item.cover?.src.trim()) {
+    return {
+      type: 'thumbnail',
+      image: {
+        ...item.cover,
+        width: item.cover.width ?? 1600,
+        height: item.cover.height ?? 900,
+      },
+    };
+  }
+  return item.scene ? { type: 'sketch', name: item.scene } : undefined;
+}
+
 /**
- * The feed's river (owner, 13 Oct 2026: "the last section is too boring" — it was one row shape for
- * its whole length). Rhythm from position and scale, The Verge's way, with no ground and no box:
- * a DATE BREAK heads each month; the month's newest piece is a FEATURE, a horizontal card with its
- * image; runs of ROWS say format, date and length; and two consecutive pictured pieces become a PAIR
- * of covered cards that breaks a run. Events keep their date column. Images missing a cover take the
- * page's stand-in order: a generated scene, else a photograph, else a texture field.
+ * The archive (owner, 13 Oct 2026: "collect examples of really well done listing pages",
+ * docs/research/resources-listing.md). What the best archives share, applied:
+ *   - ONE stream, newest first, every item in ONE anatomy — format · date · length, then the title,
+ *     then its line — so the eye learns the row once and scans (NN/g, Vercel, Pentagram, Intercom);
+ *     the river's mixed feature / pair / row shapes are gone (the zig-zag The Verge was faulted for);
+ *   - a LEDGER of month blocks: the month stands in a left column and holds while its rows scroll by,
+ *     the changelog idiom (Linear), so date is a place on the page rather than a line in every row;
+ *   - images only where the item has its own — a real cover or the scene drawn for it — set at the
+ *     row's END so a row without one keeps the same edge (Figma's "The latest"); never a stand-in;
+ *   - the row STACKS its line under its title at the reading measure: a split set the line's start
+ *     wherever the row's image left room, so the column of lines zig-zagged; stacked, every row's
+ *     eyebrow, title and line share one edge, and the image closes the row at the column's end.
  */
-function River({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
-  const media = (item: InsightsIndexItem) => coverOf(item) ?? standIn(item);
+function Archive({ items }: { items: readonly InsightsIndexItem[] }) {
   return (
     <Layout rowGap="column">
       {months(items).map((month) => {
-        const headingId = `river-${month.key}`;
+        const headingId = `archive-${month.key}`;
         return (
           <section key={month.key} aria-labelledby={headingId}>
-            <Layout rowGap="block">
+            <Layout
+              columns={{ base: 1, lg: [1, 4] }}
+              colGap="gutter"
+              rowGap="text"
+              align="start"
+            >
               <h3 id={headingId} className={styles.month}>
                 {month.label}
               </h3>
-              <Layout rowGap="stack">
-                {monthParts(month.items).map((part, index) => {
-                  if (part.kind === 'feature') {
-                    const item = part.item;
-                    return (
-                      <ul key={index}>
-                        <BlockCard
-                          orientation="horizontal"
-                          imageSide="left"
-                          size="lg"
-                          titleAs="h4"
-                          eyebrow={line(
-                            LABEL[item.kind].one,
-                            dateOf(item.publishedAt),
-                            lengthOf(item),
-                          )}
-                          title={item.title}
-                          body={bodyOf(item)}
-                          media={media(item)}
-                          href={item.href}
-                          cue="title"
-                        />
-                      </ul>
-                    );
-                  }
-                  if (part.kind === 'pair') {
-                    return (
-                      <BlockCardSet
-                        key={index}
-                        lead="none"
-                        cue="title"
-                        titleAs="h4"
-                        items={part.items.map((item) => ({
-                          id: item.id,
-                          title: item.title,
-                          eyebrow: line(
-                            LABEL[item.kind].one,
-                            dateOf(item.publishedAt),
-                            lengthOf(item),
-                          ),
-                          media: media(item),
-                          href: item.href,
-                        }))}
-                      />
-                    );
-                  }
-                  return (
-                    <Layout as="ul" rowGap="none" key={index}>
-                      {part.items.map((item) => {
-                        const date =
-                          item.kind === 'event' ? parse(item.event?.startsAt) : undefined;
-                        return (
-                          <ListCard
-                            key={item.id}
-                            titleAs="h4"
-                            size="sm"
-                            arrangement="split"
-                            eyebrow={
-                              item.kind === 'event'
-                                ? line(LABEL.event.one, item.event?.place)
-                                : line(
-                                    LABEL[item.kind].one,
-                                    dateOf(item.publishedAt),
-                                    lengthOf(item),
-                                  )
-                            }
-                            title={item.title}
-                            body={bodyOf(item)}
-                            href={item.href}
-                            marker={
-                              date && item.event
-                                ? {
-                                    type: 'date',
-                                    dateTime: item.event.startsAt,
-                                    day: DAY_OF_MONTH.format(date),
-                                    label: MONTH_YEAR.format(date),
-                                  }
-                                : undefined
-                            }
-                          />
+              <Layout as="ul" rowGap="none">
+                {month.items.map((item) => {
+                  const date = parse(item.publishedAt);
+                  const eyebrow =
+                    item.kind === 'event'
+                      ? line(LABEL.event.one, dateOf(item.event?.startsAt), item.event?.place)
+                      : line(
+                          LABEL[item.kind].one,
+                          date ? DAY_MONTH.format(date) : undefined,
+                          lengthOf(item),
                         );
-                      })}
-                    </Layout>
+                  return (
+                    <ListCard
+                      key={item.id}
+                      titleAs="h4"
+                      size="sm"
+                      arrangement="stacked"
+                      eyebrow={eyebrow}
+                      title={item.title}
+                      body={bodyOf(item)}
+                      href={item.href}
+                      marker={ownImage(item)}
+                      markerPosition="end"
+                    />
                   );
                 })}
               </Layout>

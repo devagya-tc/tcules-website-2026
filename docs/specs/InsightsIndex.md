@@ -45,26 +45,38 @@ One per page.
 | C | **Start with your problem**: up to four topic collections | `Layout` 4 → 2 → 1; each column an `Icon` head, an h3, one sentence, `ListCard` rows, a related link | optional (`collections`) |
 | D | **Format rows**, in the template's fixed order, each its own shape (table below) | `ContentSection` with `actionsAt="end"` "All podcasts" `CtaRow` | one per format with items |
 | E | **Lab**: the other organisation's offer | `ContentSection beside` on INK (owner, 13 Oct 2026: not blue): heading, lead and its link in the head track, the Lab illustration at 16:9 filling the two-thirds track — a register placeholder (`/insights#lab`, docs/image-register.md: "Lab illustration: experiments becoming product") until it is commissioned (owner, 13 Oct 2026: the same graphic was everywhere). The page passes the record as `lab.visual`; without one it falls back to `CtaSection offer` on ink | optional |
-| F | **Feed**: everything, latest first, across the full column, under ONE compact filter row | `ContentSection`; the filter row (below); the RIVER (below); "Show more" link | yes |
+| F | **Feed**: everything, latest first, across the full column, under ONE compact filter row | `ContentSection`; the filter row (below); the ARCHIVE (below); "12 of 46 shown · Show more" | yes |
 | G | **Close** | `CtaSection arrangement="open"` on tint, only with an action | optional |
 
-**The river (band F, owner 13 Oct 2026: "the last section is too boring").** The feed was one
-ListCard row shape for its whole length. It is now a river with rhythm from position and scale, still
-strictly newest first: a **date break** (the month, h3 at the h4 role) heads each month; the month's
-newest piece is a **feature** (a horizontal `BlockCard`, `lg`, image beside words); runs of **rows**
-(`ListCard`, format · date · length; events keep their date column) are broken by a **pair** (two
-covered `BlockCard`s) wherever the next two consecutive pieces both carry an image, at most once per
-four rows. Images missing a cover follow § 12a. No ground, no box. Items are h4 under the month h3.
+**The archive (band F, owner 13 Oct 2026: "collect examples of really well done listing pages").**
+Built from `docs/research/resources-listing.md`, which studies twelve listing pages (NN/g, Smashing,
+The Verge, Stripe, Linear, Vercel, Figma, Intercom, Atlassian, Pentagram, Thoughtworks, IDEO). It
+replaces the river, whose mixed feature, pair and row shapes were the zig-zag The Verge's archive was
+faulted for. The variety belongs to bands A–E, and the archive gets ONE anatomy:
+- **Rows, one anatomy** (research patterns 1–2): a ListCard per item. The meta eyebrow comes first
+  (format · day · length; an event shows its own date and place), then the title (h4), then its line
+  stacked under it at the reading measure. A stacked line keeps every row's edge. A split row set the
+  line wherever the image left room, and the column zig-zagged.
+- **A month ledger** (pattern 8, Linear): `Layout [1, 4]`. The month (h3, h5 role) stands in the left
+  column and holds while its rows scroll (sticky from 1024). On a phone it sits above its rows.
+- **Images only where the item has its own** (pattern 4, Figma): a real cover or the scene drawn for
+  it, at the row's END (ListCard `markerPosition="end"`), so titles keep one edge. Never a stand-in
+  photograph or a generic graphic. Hidden below 768.
+- **A stated total and a pager that is a link** (patterns 5 and 7): "46 pieces · newest first" under
+  the filter row. "12 of 46 shown · Show more" closes the list, and "Show more" is a link to
+  `?page=n+1#feed`.
+- Rejected, with reasons in the research doc: numbered pages, a card grid, in-page search, sort
+  controls, full-width date bands.
 
 **The filter row (band F, owner 13 Oct 2026: "the filters take too much space and aren't doing enough
-of a job").** The sticky rail of chip groups is gone; the river takes the full column. Above it, one
+of a job").** The sticky rail of chip groups is gone; the archive takes the full column. Above it, one
 row at every width (`Layout [1, auto]`):
 - **Format**, the primary filter: "All" then each format, each `Tag filter` with its count ("Guides 5")
   given the other held filters, on ONE line (`Cluster nowrap`) that scrolls sideways where it runs out
   of room, never wraps. A format with no results is hidden unless held.
 - **More filters**: one native `<details>` at the row's end showing the held count ("More filters 1";
   "Filters" on a phone, so the format line keeps the room), opening a small panel that drops over the
-  river. Inside: Industry, Product, Topic — only options with results (counted against the other held
+  archive. Inside: Industry, Product, Topic — only options with results (counted against the other held
   filters), a group with one option or none dropped; a held option keeps its clear glyph.
 - **When something is held**, a short summary under the row: "2 of 46 · Showing [Guides ×] [SaaS ×]
   Clear all"; each chip's link removes just that filter. Nothing is shown when nothing is held.
@@ -184,7 +196,7 @@ the other surfaces are declared for self-containment (tokens rule 2).
   `text` (title → sentence), `block` (head group → rows), rows `none`
 - event row: ListCard's own (marker beside copy at `block`; day over label at `tight`)
 - episode: horizontal card, then rows under it at `stack`
-- feed: head over body at ContentSection's `stack`; filter row → summary `text`; filters → river
+- feed: head over body at ContentSection's `stack`; filter row → summary `text`; filters → archive
   `stack`; format line ↔ "More filters" `block`; panel groups `gutter` apart; label → chips `text`; chips
   `text`/`text` (the 24px touch-target argument the old page made, kept); rows `none`; list → "Show
   more" `stack`

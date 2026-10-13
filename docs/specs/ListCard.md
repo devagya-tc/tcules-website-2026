@@ -36,6 +36,11 @@
 >    per surface — neutral-300 · neutral-400 · neutral-700 · brandeis-300, decoration — BlockCard's
 >    cover-rule values duplicated on purpose. Specimen: every thumbnail row, including the four-surface
 >    proof.
+> 5. **`markerPosition?: 'start' | 'end'`** (13 Oct 2026, the insights archive). `end` sets an image
+>    marker (`thumbnail`, `sketch`) after the copy, so a list where only some rows carry an image keeps
+>    every eyebrow and title on one edge (docs/research/resources-listing.md, Figma's "The latest").
+>    Rows only; number, icon and date markers always lead. Below 768 an end image is not shown: it is
+>    supplementary and would squeeze the copy to ~200px. Specimen: the eyebrow block's first row.
 > 3. **`marker: { type: 'sketch'; name: ArticleSceneName }`** — a DRAWN thumbnail: the scene drawn for
 >    that article (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in
 >    data. Decorative. Specimen: the eyebrow block's guide row.
