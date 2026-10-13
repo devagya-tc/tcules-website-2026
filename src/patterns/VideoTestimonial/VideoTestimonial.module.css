@@ -32,6 +32,31 @@
   aspect-ratio: var(--vt-poster-ratio);
 }
 
+/* portrait: a 9:16 film. Below 768 the poster is a 4:5 crop across the column — the true ratio
+   there is a 580 tower on a 326 column — and the box opens to the film's 9:16 on play, as wide
+   opens to 16:9. From 768 the poster IS 9:16 at its token width, in the figure's content-sized
+   track, so poster and player share one box and play moves nothing. */
+.portrait .screen {
+  aspect-ratio: var(--vt-poster-ratio-portrait-crop);
+}
+
+.portrait .playing {
+  aspect-ratio: var(--vt-poster-ratio-portrait);
+}
+
+@media (min-width: 768px) {
+  .portrait .screen {
+    inline-size: var(--vt-portrait-width-md);
+    aspect-ratio: var(--vt-poster-ratio-portrait);
+  }
+}
+
+@media (min-width: 1024px) {
+  .portrait .screen {
+    inline-size: var(--vt-portrait-width-lg);
+  }
+}
+
 .video {
   position: absolute;
   inset: 0;
@@ -117,7 +142,8 @@
 
 /* The disc is sized to the POSTER: below 1024 the poster is the full phone column (about 326 × 183),
    where an 88 disc would cover half its height. So it takes the md disc there and the lg disc from
-   1024, where both layouts give the poster its large width. */
+   1024, where featured and wide give the poster its large width. portrait keeps the md disc at
+   every width: its poster is never wider than 352, where an 88 disc would be a quarter of it. */
 .play {
   inline-size: var(--vt-play-size-md);
   block-size: var(--vt-play-size-md);
@@ -129,12 +155,12 @@
 }
 
 @media (min-width: 1024px) {
-  .play {
+  .root:not(.portrait) .play {
     inline-size: var(--vt-play-size-lg);
     block-size: var(--vt-play-size-lg);
   }
 
-  .play svg {
+  .root:not(.portrait) .play svg {
     inline-size: var(--vt-play-glyph-lg);
     block-size: var(--vt-play-glyph-lg);
   }

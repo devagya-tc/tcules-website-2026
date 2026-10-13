@@ -26,6 +26,19 @@ const TABLET: VideoTestimonialFilm = {
   duration: '5:08',
 };
 
+/* The vertical films: 9:16 stand-ins recorded from their posters, the same way. One captioned and
+   one not, so the label's captions note is shown both ways. */
+const PLAID: VideoTestimonialFilm = {
+  sources: [{ src: '/kit/video/interview-plaid-portrait.webm', type: 'video/webm' }],
+  captions: [{ src: '/kit/video/interview-plaid-portrait.en.vtt', srclang: 'en', label: 'English' }],
+  duration: '1:24',
+};
+
+const OFFICE: VideoTestimonialFilm = {
+  sources: [{ src: '/kit/video/interview-office-portrait.webm', type: 'video/webm' }],
+  duration: '0:58',
+};
+
 /* ── Showcase scaffolding ─────────────────────────────────────────────────────────── */
 
 type Variation = { id: string; title: string; note: string };
@@ -46,6 +59,21 @@ const VARIATIONS = {
     title: 'Wide, a cinematic poster',
     note: 'The second single-film layout: the poster across the whole column in a 3:1 cinematic crop, and under it one row from 1024 — the pulled line at the display quote role in the wide track, the label and the speaker as the film’s credit in the narrow one. Pressing play opens the box to the film’s own 16:9. The crop is what lets a full-width film clear the 830 fold at 1470. For a band where the film itself is the argument. Still one film, and the only testimonial in the band — never beside text quotes, never two at once (owner rule, 9 Oct).',
   },
+  portrait: {
+    id: 'portrait',
+    title: 'Portrait, a vertical film',
+    note: 'The third single-film layout, for a film shot upright on a phone. From 768 the poster stands at its true 9:16 in a content-sized track — 352 wide from 1024, so 626 tall and the band 818, inside the 830 fold at 1470; 240 at 768 — and the caption takes the rest of the row, 96 away: copy beside an image is a split. The caption is centred on the poster’s height, as featured’s is. Below 768 the poster is a 4:5 crop across the column (408 tall at 390, not a 580 tower) and pressing play opens the box to the film’s 9:16. The md disc at every width. Captioned, alone in its band, on paper.',
+  },
+  portraitTint: {
+    id: 'portrait-tint',
+    title: 'Portrait on tint, no captions',
+    note: 'The same unit with no captions file: the label drops its captions note and the control’s name drops “captioned”. Different poster, different speaker, a two-line quote: the centred caption holds a short line as calmly as a long one.',
+  },
+  portraitInk: {
+    id: 'portrait-ink',
+    title: 'Surface proof: portrait on ink',
+    note: 'Token proof, not a recommended band. Every colour comes from the surface; the portrait variant adds geometry only.',
+  },
   ink: {
     id: 'ink',
     title: 'Surface proof: featured on ink',
@@ -57,7 +85,10 @@ const ORDER: Variation[] = [
   VARIATIONS.featured,
   VARIATIONS.featuredBare,
   VARIATIONS.wide,
+  VARIATIONS.portrait,
+  VARIATIONS.portraitTint,
   VARIATIONS.ink,
+  VARIATIONS.portraitInk,
 ];
 
 const CONTRACT: { key: string; body: string }[] = [
@@ -115,8 +146,9 @@ export default function VideoTestimonialKitPage() {
               <p className={s.specNote}>
                 A client interview, set so the reader chooses to watch it: the poster, one play
                 control, the line worth hearing pulled out beside it, and who said it. Two
-                single-film layouts of one VideoTestimonial pattern — featured, quote beside, and
-                wide, a cinematic poster with the quote below. One film per band, and it is the band’s only testimonial.
+                single-film layouts of one VideoTestimonial pattern — featured, quote beside;
+                wide, a cinematic poster with the quote below; and portrait, a vertical 9:16 film
+                with the quote beside it. One film per band, and it is the band’s only testimonial.
               </p>
             </Layout>
             <Layout as="ol" rowGap="text">
@@ -201,7 +233,38 @@ export default function VideoTestimonialKitPage() {
         </ContentSection>
       </Band>
 
-      {/* ── 04 Surface proof: ink ─────────────────────────────────────────────────── */}
+      {/* ── 04 Portrait ─────────────────────────────────────────────────────────── */}
+      <Band variation={VARIATIONS.portrait}>
+        <Section data-band="G-video-portrait">
+          <VideoTestimonial
+            variant="portrait"
+            poster={getKitPhoto('portrait-woman-glasses-plaid')}
+            film={PLAID}
+            quote="Every Friday there was something real in front of our team to react to. By the second month nobody was arguing about opinions — we were arguing about what users had actually done."
+            name="Mei Lin Tan"
+            role="Product Lead"
+            company="Harbourline Logistics"
+            label="Filmed on site"
+          />
+        </Section>
+      </Band>
+
+      {/* ── 05 Portrait on tint, no captions ─────────────────────────────────────── */}
+      <Band variation={VARIATIONS.portraitTint}>
+        <Section surface="tint" data-band="G-video-portrait">
+          <VideoTestimonial
+            variant="portrait"
+            poster={getKitPhoto('portrait-man-blue-office')}
+            film={OFFICE}
+            quote="It was the first agency that asked to sit with our support team."
+            name="Marcus Bello"
+            role="COO"
+            company="Tillpoint"
+          />
+        </Section>
+      </Band>
+
+      {/* ── 06 Surface proof: ink ─────────────────────────────────────────────────── */}
       <Band variation={VARIATIONS.ink}>
         <Section surface="ink" data-band="G-video-featured">
           <VideoTestimonial
@@ -212,6 +275,21 @@ export default function VideoTestimonialKitPage() {
             name="Lena Hoffmann"
             role="Director of Design"
             company="Fairway Health"
+          />
+        </Section>
+      </Band>
+
+      {/* ── 07 Surface proof: portrait on ink ────────────────────────────────────── */}
+      <Band variation={VARIATIONS.portraitInk}>
+        <Section surface="ink" data-band="G-video-portrait">
+          <VideoTestimonial
+            variant="portrait"
+            poster={getKitPhoto('portrait-woman-glasses-plaid')}
+            film={PLAID}
+            quote="We shipped the thing customers asked for, not the thing we assumed they wanted."
+            name="Mei Lin Tan"
+            role="Product Lead"
+            company="Harbourline Logistics"
           />
         </Section>
       </Band>

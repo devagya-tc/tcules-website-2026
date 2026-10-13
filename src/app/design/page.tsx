@@ -360,7 +360,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/video-testimonial',
         name: 'VideoTestimonial',
-        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below), and portrait (9:16 poster beside the quote from 768, 4:5 crop opening to 9:16 below; paper captioned, tint uncaptioned, ink proof); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
       },
       {
         href: '/design/kit/form',
