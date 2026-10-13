@@ -1,5 +1,4 @@
-import type { MediaImage, SectionSurface } from '@/components';
-import type { SketchName } from '@/lib/sketches';
+import type { BrandMarkName, MediaImage, SectionSurface } from '@/components';
 
 /**
  * The site navigation's information architecture, as a shape.
@@ -64,14 +63,6 @@ export type SiteNavLink = {
   label: string;
   href: string;
   status: SiteNavStatus;
-  /**
-   * The preview scene for this row, drawn in the plate's feature column while the row is under the
-   * pointer or focus (revision 2, docs/specs/SiteNav.md R2.1). Services only today: the kit's
-   * `Sketch` has one scene per service and nothing for an audit or an industry, and a row with no
-   * scene simply leaves the last one showing. Named in the fixture rather than looked up here, so a
-   * pattern does not learn the route map.
-   */
-  sketch?: SketchName;
 };
 
 /** A named list of links — one column of a plate, one block of a sheet pane. */
@@ -81,57 +72,73 @@ export type SiteNavGroup = {
 };
 
 /**
- * A rail card: an offer in the Services feature column. The primary renders as a serif title row;
- * the secondary is a compact link under a rule.
+ * The plate's feature column: the reason to go further. One per mega, and a DIFFERENT FORM per
+ * section on purpose (docs/specs/SiteNav.md R2.1, R2.1.1): each answers the question that section
+ * is opened with.
  *
- * The secondary is NOT a second card, and that is structural rather than aesthetic: a full card
- * makes the rail taller than the two columns beside it, and then the plate's height is set by the
- * offer instead of by the content — which is the one thing the morph must not depend on.
+ *   offer  Services. "Which one is right for me, and how do I start?" The entry offer — the free
+ *          audit — as the column's subject: its facts, one action, the record behind it.
+ *   cases  Expertise. "Have they done this in a context like mine?" Three cases, each its product
+ *          image, its client and what the product is. A set, never a ranking.
+ *   story  Insights. "Is there something worth reading?" The latest piece with its photograph.
  *
- * NO IMAGE ANY MORE (revision 2). The primary used to lead with an image slot that only ever held a
- * named placeholder. The service preview now gives the column its picture in the plate, and in the
- * sheet an empty diagram was worse than a title row.
+ * A union rather than one bag of optional fields, so an offer without its action or a story without
+ * its title is a type error rather than a quietly empty column.
  */
-export type SiteNavCard = {
-  title: string;
-  href: string;
-  status: SiteNavStatus;
-  role: 'primary' | 'secondary';
+
+/** One fact about an offer: a mono key and its plain value. "Cost" · "Free". */
+export type SiteNavFact = {
+  key: string;
+  value: string;
 };
 
 /**
- * The plate's feature column: the visual reason to go further. One per mega, and a DIFFERENT FORM
- * per section on purpose (docs/specs/SiteNav.md R2.1): three plates should read as three ideas in a
- * squint, not as one list at three widths.
- *
- *   offers  Services. The preview of the service under the pointer (from `SiteNavLink.sketch`),
- *           then the "Working together" offers as cards.
- *   proof   Expertise. One case reduced to its figure: the number, what it means, whose it was,
- *           and the way to the case.
- *   story   Insights. The latest piece: a photograph, its title in the serif, its format.
- *
- * A union rather than one bag of optional fields, so a proof without its figure or a story without
- * its title is a type error rather than a quietly empty column.
+ * A platform rating — a score and the profile it comes from. The same shape the footer's badge
+ * takes (SiteFooterRating), restated rather than imported because a pattern does not import a
+ * pattern; the fixture feeds both from one record (fixtures/ratings.ts).
  */
-export type SiteNavRailOffers = {
-  kind: 'offers';
-  label: string;
-  cards: readonly SiteNavCard[];
+export type SiteNavRating = {
+  platform: string;
+  mark: BrandMarkName;
+  /** As authored — '4.8', never a number. */
+  score: string;
+  href: string;
 };
 
-export type SiteNavRailProof = {
-  kind: 'proof';
+export type SiteNavRailOffer = {
+  kind: 'offer';
   label: string;
-  /** The figure, verbatim: "75+". Rendered by `Stat`, so its rules apply. A symbol is part of it. */
-  value: string;
-  /** What it counts, as a word: "applications". */
-  unit?: string;
-  /** What the number means. One sentence, 12 words or fewer. */
-  caption: string;
-  /** Whose work it was. A quiet sans line, never a logo the fixture does not have. */
+  /** The offer, as one sentence in the serif. */
+  title: string;
+  /** Three or four, concrete. Only facts the offer's own page states — never an invented price. */
+  facts: readonly SiteNavFact[];
+  /** The one action. */
+  action: SiteNavLink;
+  /** The record behind the offer: a rating badge, and a short sourced line beside it. */
+  rating?: SiteNavRating;
+  record?: string;
+  /** A quieter way through, under a rule — How We Work. */
+  more?: SiteNavLink;
+};
+
+/** One case in a `cases` column. The image is the product, so a capture rather than a photograph. */
+export type SiteNavCase = {
+  /** Who it was for — the case's title in the column, because the client IS the evidence. */
   client: string;
-  /** The case. Its label is the control's text: "Read the case". */
-  link: SiteNavLink;
+  /** What the product is: its type and industry, the thing an Expertise visitor matches against. */
+  context: string;
+  href: string;
+  status: SiteNavStatus;
+  image: MediaImage;
+};
+
+export type SiteNavRailCases = {
+  kind: 'cases';
+  label: string;
+  /** Two or three. In authored order; nothing about the order is a ranking. */
+  cases: readonly SiteNavCase[];
+  /** The way through to all of them. */
+  more?: SiteNavLink;
 };
 
 export type SiteNavRailStory = {
@@ -146,7 +153,7 @@ export type SiteNavRailStory = {
   image: MediaImage;
 };
 
-export type SiteNavRail = SiteNavRailOffers | SiteNavRailProof | SiteNavRailStory;
+export type SiteNavRail = SiteNavRailOffer | SiteNavRailCases | SiteNavRailStory;
 
 /**
  * A top-level bar item.

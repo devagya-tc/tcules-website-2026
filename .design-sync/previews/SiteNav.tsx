@@ -32,23 +32,12 @@ const SERVICES: SiteNavItem = {
     {
       label: 'Services',
       links: [
-        /* Each service names its preview scene (revision 2): the feature column draws the Sketch
-           for the row under the pointer. */
-        { ...soon('Product Design', '/services/product-design'), sketch: 'product-design' },
-        {
-          ...soon('Product Modernisation', '/services/product-modernisation'),
-          sketch: 'product-modernisation',
-        },
-        { ...soon('Design Systems', '/services/design-systems'), sketch: 'design-systems' },
-        { ...soon('AI Product UX', '/services/ai-product-ux'), sketch: 'ai-product-ux' },
-        {
-          ...soon('Design Engineering', '/services/design-engineering'),
-          sketch: 'design-engineering',
-        },
-        {
-          ...soon('Software Development', '/services/software-development'),
-          sketch: 'software-development',
-        },
+        soon('Product Design', '/services/product-design'),
+        soon('Product Modernisation', '/services/product-modernisation'),
+        soon('Design Systems', '/services/design-systems'),
+        soon('AI Product UX', '/services/ai-product-ux'),
+        soon('Design Engineering', '/services/design-engineering'),
+        soon('Software Development', '/services/software-development'),
       ],
     },
     {
@@ -75,15 +64,21 @@ const SERVICES: SiteNavItem = {
       ],
     },
   ],
-  /* The feature column, revision 2: `offers` — the service preview, then these two. How We Work
-     is a serif title row now; its placeholder image is gone. */
+  /* The feature column, revision 2.1: the entry offer — the free audit as facts, one action, the
+     record behind it, How We Work as the quieter way through. */
   rail: {
-    kind: 'offers',
-    label: 'Working together',
-    cards: [
-      { title: 'How We Work', href: '/how-we-work', status: 'planned', role: 'primary' },
-      { title: 'Request Free Audit', href: '/audits', status: 'planned', role: 'secondary' },
+    kind: 'offer',
+    label: 'Where to start',
+    title: 'Not sure which service fits? Start with a free audit.',
+    facts: [
+      { key: 'Cost', value: 'Free' },
+      { key: 'You get', value: 'Ranked findings your team can act on' },
+      { key: 'Reply', value: 'Within one business day' },
     ],
+    action: { label: 'Request free audit', href: '/audits', status: 'planned' },
+    rating: { platform: 'Clutch', mark: 'clutch', score: '4.8', href: 'https://clutch.co/profile/tcules-ux-design-studio' },
+    record: '90+ projects',
+    more: { label: 'How we work', href: '/how-we-work', status: 'planned' },
   },
 };
 
@@ -96,19 +91,52 @@ const EXPERTISE: SiteNavItem = {
      which holds the longer labels. */
   panelWidth: 'lg',
   columnRatio: [9, 8],
-  /* PROOF: one case reduced to its figure. */
+  /* CASES, as a set: each its product screen, client, and what the product is. */
   rail: {
-    kind: 'proof',
+    kind: 'cases',
     label: 'Selected work',
-    value: '75+',
-    unit: 'applications',
-    caption: 'One experience across an enterprise suite, modernised as one system.',
-    client: 'Benchmark Gensuite',
-    link: {
-      label: 'Read the case',
-      href: '/case-studies/legacy-saas-modernisation-information-architecture',
-      status: 'planned',
-    },
+    cases: [
+      {
+        client: 'Dealpath',
+        context: 'Real estate investment software',
+        href: '/case-studies/enterprise-workflow-redesign-dealpath-real-estate',
+        status: 'live',
+        image: {
+          src: 'https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp',
+          alt: 'Dealpath listings screen.',
+          width: 3200,
+          height: 2121,
+          kind: 'capture',
+        },
+      },
+      {
+        client: 'Eden AI',
+        context: 'AI workflow builder for developers',
+        href: '/case-studies/unifying-workflow-creation-through-intelligent-search',
+        status: 'live',
+        image: {
+          src: 'https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp',
+          alt: 'Eden AI workflow builder.',
+          width: 1745,
+          height: 884,
+          kind: 'capture',
+        },
+      },
+      {
+        client: 'ConnectX',
+        context: 'AI-native building energy product',
+        href: '/case-studies/ai-native-building-energy-product-connectx',
+        status: 'live',
+        image: {
+          src: 'https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp',
+          alt: 'ConnectX workspace.',
+          width: 4400,
+          height: 2928,
+          kind: 'capture',
+        },
+      },
+    ],
+    more: { label: 'All case studies', href: '/case-studies', status: 'planned' },
   },
   groups: [
     {

@@ -30,6 +30,8 @@ hierarchy, the type, the plate's composition and the shape each pane has.
 
 ### R2.1 · The job, before the form
 
+*(The Services and Expertise rows of the table below are superseded by Revision 2.1.)*
+
 Someone opens a section to find out *what this studio does in this area, and where to go*. Each pane
 should answer in one look, and should also give one visual reason to go further. Revision 1 answered
 the first question with columns of 14px labels. It answered the second only in Services, with a
@@ -41,8 +43,8 @@ section's job, and the three forms are different on purpose:**
 
 | Pane | Job of the feature | Form | Visual weight from |
 |---|---|---|---|
-| Services | "What does this service look like?" | **A preview.** The kit's `Sketch` scene for the service under the pointer or focus crossfades in the feature column. It defaults to the first service. The "Working together" offers sit under it. | Imagery that responds: the selector language the owner approved on home and About (one titled row lit, its answer beside it) |
-| Expertise | "Have they done this in a context like mine?" | **Proof.** One case reduced to its figure: a `Stat` (75+ applications), one line saying what it means, the client, and a link to the case. | Scale: the mono stat figure is the largest thing in the plate |
+| Services *(superseded, R2.1.1)* | "What does this service look like?" | **A preview.** The kit's `Sketch` scene for the service under the pointer or focus crossfades in the feature column. It defaults to the first service. The "Working together" offers sit under it. | Imagery that responds: the selector language the owner approved on home and About (one titled row lit, its answer beside it) |
+| Expertise *(superseded, R2.1.2)* | "Have they done this in a context like mine?" | **Proof.** One case reduced to its figure: a `Stat` (75+ applications), one line saying what it means, the client, and a link to the case. | Scale: the mono stat figure is the largest thing in the plate |
 | Insights | "Is there something worth reading?" | **The latest piece.** A photograph (through `Media`, so it takes the shared tone layer), the article title in the serif, and its format. | A photograph |
 
 So in a squint the three plates read as three ideas: a drawing, a number and a picture. They are
@@ -130,6 +132,113 @@ custom properties `SiteNav.tsx` writes are now listed in `JS_INJECTED` in `scrip
    and the item voice (mono uppercase through `Button`).
 4. **Foot strip on tint.** On a tint header the foot steps to neutral-100, which is subtle against
    paper-deep. Judge it on `/design/site-nav`.
+
+## Revision 2.1 — the Services and Expertise rails (13 Oct 2026)
+
+**Status: built.** The owner reviewed round one and approved all of it except the right-hand rails
+of two menus. **Locked as approved:** the bar, the Insights rail, the foot strip, the mobile sheet
+and the list columns. Revision 2.1 changes only the Services and Expertise feature columns, plus
+the sheet's section ends that mirror them. Where it disagrees with R2.1–R2.5 above, this section
+wins.
+
+### R2.1.1 · Services: the entry offer
+
+**What the owner said.** The preview that changes as you move through the services "doesn't make
+sense". It is removed completely: the hover and focus state, the blue "previewed row", the
+`SiteNavLink.sketch` field and the stacked Sketch scenes. The plate holds no state now.
+
+**The job.** Someone scanning six services and six audits is asking *which one is right for me, and
+how do I start?* The studio's own answer, on `/audits`, is: if you are not sure, start with an audit.
+
+**Options considered.**
+
+- **A · The entry offer (built).** The free audit is the column's subject. It is stated as facts
+  rather than as a promise, and followed by one action and the record behind it. It answers both
+  halves of the question: *if you are not sure which one, start here*, and *this is what starting
+  costs you*. Most of the column's shape comes from structure (a ruled key-and-value list, a rating
+  badge) rather than from a picture, so it does not repeat the photograph in the Insights rail or
+  the product screens in the Expertise rail.
+- **B · How We Work as a compact process (rejected).** Three or four engagement steps. It explains
+  how an engagement runs *once you have chosen*. That is the wrong question for someone still
+  choosing, and steps are generic: any studio's would read the same. It also wants a diagram, and the
+  owner has ruled out another generic graphic.
+- **C · A photograph with a line (rejected).** It is pretty, but it answers nothing, and it would make
+  three plates that all lead with a picture.
+
+**Anatomy, top to bottom.** All of it is in `rail` (`kind: 'offer'`).
+
+| Part | What it is |
+|---|---|
+| Eyebrow | "Where to start" |
+| Title | "Not sure which service fits? Start with a free audit.", in the feature title voice (h6 serif) |
+| Facts | A ruled key-and-value list: mono key, sans value, two tracks of one grid. Cost: Free · You get: Ranked findings your team can act on · Reply: Within one business day |
+| Action | "Request free audit", a `Button` link primary at md. It is the one blue action in the column. |
+| Record | The Clutch `RatingBadge` (from the shared `CLUTCH_RATING`) beside "90+ projects" |
+| More | "How we work", a `Button` link **neutral** under a rule, so it stays quieter than the action |
+
+**Every fact comes from the audit pages** (`_pages/audits*.md`). "Free" is the IA's own label for this
+offer. **There is no duration fact, because no page states one.** See open question 1.
+
+### R2.1.2 · Expertise: the cases
+
+**What the owner said.** The single stat "could be much, much better".
+
+**The job.** *Have they done this in a context like mine?* That question is answered by
+recognition. "That looks like my kind of product, and that is a real company" is worth more than
+one number.
+
+**Options considered.**
+
+- **A · Three cases as small covered rows (built).** Each row has the case's **real product
+  screen**, a client name and a line that says what the product is. The three were picked to span
+  both columns: a real-estate workflow (Dealpath), an AI developer tool (Eden AI) and an energy
+  product (ConnectX). They are in authored order, never numbered or ranked. An "All case studies"
+  link sits under a rule.
+- **B · One featured case with a cover and an outcome stat, plus a logo grid (rejected).** One case
+  covers one industry. The logo marks we have (Omny, Doodle, Quoter and the rest) do not map onto
+  the industries in the columns, so the grid would be proof of reputation rather than of the reader's
+  context. It also makes the menu busy.
+- **C · Revision 2's stat, kept and decorated (rejected).** One number is still one context.
+
+**The images** are the case pages' own product screens, served from Cloudinary with the 1240, 652 and
+320 rungs. They are `kind: 'capture'` and cropped mechanically into a 112px, 4:3 box. The box draws
+the capture's hairline (Media `edge="placement"`) at `--radius-4`. Real Strapi case covers were
+not available in the repo. The bound corpus screens are the real product, which is the better proof
+anyway.
+
+**Each row reads in this order:** the image, the client in the serif (h6), then what the product is in
+quiet sans. Revision 2.1's first pass also had a mono "client · context" line and the listing's case
+title. In a 310px column that wrapped to five lines a row. The client *is* the evidence, so it took
+the title role.
+
+### R2.1.3 · The sheet
+
+Each section's end mirrors the new rails.
+
+- **Services** shows the offer's eyebrow, title, facts, rating and "How we work". It drops the action,
+  because the sticky foot already carries "Request audit".
+- **Expertise** shows the three case rows. The two-track layouts are declared at `base`, so they hold
+  at 390 rather than stacking.
+
+### R2.1.4 · Tokens and types
+
+- **Added:** `--nav-case-thumb-size` (112px), `--nav-case-thumb-ratio` (4 / 3),
+  `--nav-case-thumb-radius` (`--radius-4`), and `--nav-label-line`, which sets a fact's key level with
+  its value's first line.
+- **Removed:** `--nav-preview-fade`, `--nav-preview-ratio` and `--nav-card-arrow-size`.
+- **Types:** `SiteNavRail` is now `offer | cases | story`. New types are `SiteNavFact`,
+  `SiteNavRating`, `SiteNavCase`, `SiteNavRailOffer` and `SiteNavRailCases`. Gone are
+  `SiteNavCard`, `SiteNavRailOffers`, `SiteNavRailProof` and `SiteNavLink.sketch`. `@/lib/sketches`
+  is untouched, because home and About still use it.
+
+### R2.1.5 · Open questions (none BLOCKING)
+
+1. **How long does the free audit take?** The coordinator asked for a duration fact. No page states
+   one, so none is shown. Add `{ key: 'Takes', value: '…' }` to the fixture once the owner gives the
+   number.
+2. **Which three cases.** This is an editorial pick. The view model takes any two or three.
+3. **The case screens are bound corpus captures, not designed covers.** When Strapi case covers
+   are cut for small sizes, swap the `image` records.
 
 ---
 
@@ -242,7 +351,7 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
 | `pane` | one per mega section | 1120 / 1120 / 880px wide (Services / Expertise / Insights, revision 2); an index of two label + link columns and a feature column |
 | `paneFoot` | `Cluster` + `Button emphasis="link"` | the foot strip: the way through to the section index, on `--nav-foot-ground` to the plate's edges — Services and Insights only (R2.2) |
-| `rail` | `<aside>`, the feature column | by `kind`: `offers` (Sketch preview + h6 title row + secondary row), `proof` (`Stat` + client + link), `story` (photograph + format + h6 title). See R2.1 |
+| `rail` | `<aside>`, the feature column | by `kind`: `offer` (title, ruled facts, action, rating, How we work), `cases` (three product-screen rows), `story` (photograph + format + h6 title). See R2.1.1–R2.1.2 |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
 | `sheet` | mobile | bottom sheet, grab handle, two-level track, sticky CTA bar |
 

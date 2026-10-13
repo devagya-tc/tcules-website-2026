@@ -173,14 +173,14 @@
   --nav-feature-title-text: var(--text-h6);
   --nav-feature-title-tracking: var(--text-h6-tracking);
 
-  /* The Services preview's crossfade between two scenes. The ramp's medium step: slower than a
-     row's 140ms hover, so the drawing reads as answering the row rather than flickering with it,
-     and well under the plate's 360ms morph, so a switch never waits on it. */
-  --nav-preview-fade: var(--duration-medium);
-  /* The preview's frame. The Sketch is drawn 320 × 180, so 16:9 is the drawing's own ratio rather
-     than a crop; stated here because the stacked scenes are absolutely positioned and the frame has
-     to reserve their height itself. */
-  --nav-preview-ratio: 16 / 9;
+  /* The Expertise cases' product thumbnail (revision 2.1). A component SIZE, so t-shirt-free and
+     literal like --nav-bar-height: 112 is wide enough that a product screen still reads as a
+     product at a glance, and narrow enough that a serif title beside it keeps ~180px in the
+     ~310px feature column. 4:3 because the case screens are landscape and a squarer box crops
+     them to their working middle. Radius 4, the small-object step, beside the plate's 8. */
+  --nav-case-thumb-size: 112px;
+  --nav-case-thumb-ratio: 4 / 3;
+  --nav-case-thumb-radius: var(--radius-4);
 
   /* THE RAIL'S SECONDARY ACTION AND THE SHEET'S BACK CONTROL HAVE NO TOKENS HERE ANY MORE.
      Both were hand-rolled links reading --nav-rail-action-* and --nav-sheet-back-*; both are
@@ -189,10 +189,8 @@
      component's tokens, and a token only this component could read which merely restates what
      Button already decided is the --sec-gap mistake in a different costume.
 
-     A rail card. Since revision 2 it is a serif title row with no box and no image slot — cards
-     have no boxes (owner, 5 Oct), and the slot only ever held a placeholder. Its radius, padding,
-     edge and image tokens went with the box; the arrow is all that is left to size. */
-  --nav-card-arrow-size: var(--icon-size-16);
+     The rail cards and their arrow token went in revision 2.1: the Services feature is an offer
+     whose action is a Button, and the cases and the story take the title-goes-blue affordance. */
 
   /* Labels — a group's name over its links. Mono, uppercase, the same eyebrow role the rest
      of the system uses for a label that is not a link.
@@ -204,6 +202,9 @@
      the plate prototype actually used. */
   --nav-label-text: var(--text-eyebrow);
   --nav-label-tracking: var(--text-eyebrow-tracking);
+  /* The label's own line box, composed as --nav-row-line is, so a key can sit level with the first
+     line of the value beside it (the offer's facts). */
+  --nav-label-line: calc(var(--font-size-eyebrow) * var(--line-height-eyebrow));
 
   /* ── The mobile sheet ────────────────────────────────────────────────────────
      The reserve is the strip of page left visible above a sheet grown for a section — enough

@@ -42,10 +42,10 @@ export default async function SiteNavSpecimenPage() {
             <h1>SiteNav</h1>
             <p>
               The site header. A sticky bar of six items and one offer; above 1024 the three
-              menu sections open one inset <strong>plate</strong> over the page, and below it the
-              whole navigation is a <strong>sheet</strong> that rises from the bottom. The real
-              one is at the top of this page — scroll, and it stays. What follows is the same
-              component rendered inline, so a plate can be opened beside a note about it.
+              menu sections open one inset <strong>plate</strong> over the page, and below it
+              the whole navigation is a <strong>sheet</strong> that rises from the bottom. The
+              real one is at the top of this page — scroll, and it stays. What follows is the
+              same component rendered inline, so a plate can be opened beside a note about it.
             </p>
             <p>
               An item that opens is a <code>&lt;button aria-expanded&gt;</code>, not a link. A
@@ -63,11 +63,11 @@ export default async function SiteNavSpecimenPage() {
               and fired open, close, open across one gesture.
             </p>
             <p>
-              Open a plate and press Tab: the next stop is the first row inside it, and Shift+Tab
-              from there returns to the item. That is managed rather than structural — one box
-              shared by three triggers cannot live inside any trigger&rsquo;s{' '}
-              <code>&lt;li&gt;</code>, so DOM order cannot supply it. Every pane but the open one
-              is <code>inert</code>, so nothing off-screen holds a tab stop.
+              Open a plate and press Tab: the next stop is the first row inside it, and
+              Shift+Tab from there returns to the item. That is managed rather than structural —
+              one box shared by three triggers cannot live inside any trigger&rsquo;s{' '}
+              <code>&lt;li&gt;</code>, so DOM order cannot supply it. Every pane but the open
+              one is <code>inert</code>, so nothing off-screen holds a tab stop.
             </p>
             <p>
               Closes on Escape (focus returns to the trigger), on a click on the dimmed page, on
@@ -78,22 +78,22 @@ export default async function SiteNavSpecimenPage() {
           </Layout>
 
           <Specimen
-            title="Revision 2 · three plates, three shapes"
-            note="Round one of the visual overhaul (docs/specs/SiteNav.md R2). Revision 1 drew every section as columns of 14px labels, so the three plates were one list at three widths. Now every mega has a FEATURE column beside its index, split by the same hairline, and the feature's form is different per section on purpose: Services previews the service under your pointer, Expertise shows one case as its figure, Insights shows the latest piece with its photograph. Squint and the three read as a drawing, a number and a picture. Where a section has an index page, its hub link sits in a foot strip at the plate's base on a ground one step off the panel. Hover each item below in turn and watch the box morph between them."
+            title="Revision 2.1 · three plates, three answers"
+            note="Every mega has a FEATURE column beside its index, split by the same hairline, and each answers the question its section is opened with. Services: which one is right for me, and how do I start? — the free audit as an offer. Expertise: have they done this in a context like mine? — three real cases. Insights: is there anything worth reading? — the latest piece. All three are static; revision 2's hover preview in Services is gone (2.1). Where a section has an index page, its hub link sits in the foot strip. Hover each item in turn and watch the box morph between them."
           >
             <SiteNav {...only(nav, ['services', 'expertise', 'insights'])} />
           </Specimen>
 
           <Specimen
-            title="Services · the preview — 1120"
-            note="Hover Services, then walk down the six services. The feature column crossfades to the kit's Sketch scene for the row under the pointer — the selector the owner approved on home and About, one titled row lit, its answer beside it — and the row whose scene is showing keeps its blue label and arrow when the pointer leaves for the feature, so it is always clear which row the drawing belongs to. Focus drives it too: Tab into the plate and arrow down the list with Tab. Audits have no scene and leave the last one showing. Under the drawing, the Working together offers: How We Work as a serif title row (no box, no placeholder image any more) and Request Free Audit as the compact row under a rule. The foot strip carries All services."
+            title="Services · the entry offer — 1120"
+            note="Hover Services. Someone scanning six services is deciding where to start, and the studio's own answer (on /audits) is: if you are not sure, start with an audit. So the feature is that offer, stated as facts — cost, what you get, how fast we reply — in a ruled key-and-value list, then one action (Request free audit, the one blue action in the column), then the record behind it: the Clutch rating as its badge and the project count. How We Work stays, quieter, under a rule. Every fact is from the audit pages; there is no duration because no page states one."
           >
             <SiteNav {...only(nav, ['services'])} />
           </Specimen>
 
           <Specimen
-            title="Expertise · the proof — 1120"
-            note="Hover Expertise. The question this section is opened with is 'have they done this in a context like mine?', so its feature is one case reduced to its figure: the Stat at lg — the largest thing in any plate, weight from scale rather than from a box — what it means, the client, and the way to the case. The pane went from 780 to 1120 to make room, and its columns are [9, 8] because this section's FIRST column holds the longer labels (293 against 259). No foot strip: Expertise has no hub page in the IA, so the plate ends where its content does. The pick of case is editorial (spec R2.6)."
+            title="Expertise · the cases — 1120"
+            note="Hover Expertise. The question is 'have they done this in a context like mine?', and it is answered by recognition — so three cases, each led by its PRODUCT (the real screen from its case page, in a small 4:3 crop with a capture's hairline), then the client in the serif and what the product is beneath it. Chosen to span the two columns: a real-estate workflow, an AI developer tool, an energy product. A set in authored order, never numbered or ranked. All case studies sits under a rule. The pane is 1120 with [9, 8] columns, because this section's first column holds the longer labels."
           >
             <SiteNav {...only(nav, ['expertise'])} />
           </Specimen>
@@ -121,7 +121,7 @@ export default async function SiteNavSpecimenPage() {
 
           <Specimen
             title="The sheet — narrow the window past 1024"
-            note="Open the menu (the toggle at the top right of the real header, or this one), then each section, then scroll to its end. Two things changed in round one. The six root rows are set in the serif title voice (h6, 18) rather than body — the same 48px row, so all six still sit below the midpoint of a 375x812 screen. And each section ends with the same feature as its plate, before the hub link: Expertise's figure, Insights' photograph and title, Services' How We Work row. There is no preview in the sheet — touch has no hover, and a drawing that never changes is decoration. Back is held on one line now; at 390 it wrapped its arrow above 'Menu'. Everything else is revision 1: the sheet hugs its list at both levels, grows for a section to the screen less 88px, swipes away, and pins both offers at the foot."
+            note="Open the menu (the toggle at the top right of the real header, or this one), then each section, then scroll to its end. Two things changed in round one. The six root rows are set in the serif title voice (h6, 18) rather than body — the same 48px row, so all six still sit below the midpoint of a 375x812 screen. And each section ends with the same feature as its plate, before the hub link: the audit offer (without its action, which the sticky foot already carries), the three cases, the latest piece. Back is held on one line now; at 390 it wrapped its arrow above 'Menu'. Everything else is revision 1: the sheet hugs its list at both levels, grows for a section to the screen less 88px, swipes away, and pins both offers at the foot."
           >
             <SiteNav {...nav} />
           </Specimen>
@@ -137,16 +137,18 @@ export default async function SiteNavSpecimenPage() {
             <Layout rowGap="tight">
               <p className={s.specTitle}>surface=&quot;{surface}&quot;</p>
               <p className={s.specNote}>
-                Same markup, one prop. Open each plate and check the row fill, the hairline seam,
-                the foot strip&rsquo;s ground, the Sketch plate, the stat&rsquo;s blue and the focus
-                ring. The plate and the sheet carry the surface themselves since revision 2, so they
-                no longer inherit it from whatever encloses the header. On tint every fill steps one deeper, because
-                brandeis-50 on paper-deep is invisible and would leave a hover marked by nothing.
-                On ink the fill goes neutral — at the pale end of the blue ramp there is no tint
-                left to see against a near-black ground — and the scrim is the one value in the
-                whole token layer that leaves the palette, because a neutral-950 scrim over a
-                neutral-950 page recedes nothing. On blue every colour change becomes a fill,
-                since blue cannot signal itself and a pale-blue label on blue reads as disabled.
+                Same markup, one prop. Open each plate and check the row fill, the hairline
+                seam, the foot strip&rsquo;s ground, the offer&rsquo;s ruled facts and rating
+                badge, the case thumbnails&rsquo; hairline and the focus ring. The plate and the
+                sheet carry the surface themselves since revision 2, so they no longer inherit
+                it from whatever encloses the header. On tint every fill steps one deeper,
+                because brandeis-50 on paper-deep is invisible and would leave a hover marked by
+                nothing. On ink the fill goes neutral — at the pale end of the blue ramp there
+                is no tint left to see against a near-black ground — and the scrim is the one
+                value in the whole token layer that leaves the palette, because a neutral-950
+                scrim over a neutral-950 page recedes nothing. On blue every colour change
+                becomes a fill, since blue cannot signal itself and a pale-blue label on blue
+                reads as disabled.
               </p>
             </Layout>
             <SiteNav

@@ -11,7 +11,7 @@
    primitive cannot express: a sticky bar's position, an overlay's escape from the flow, and a box
    whose width and height are animated.
 
-   The exceptions are the CONTROLS — .row, .card, .sheetControl — which are flex boxes holding their
+   The exceptions are the CONTROLS — .row, .sheetControl — which are flex boxes holding their
    own label and glyph. That is a control laying out its own inside, exactly as Button.module.css
    does, and it is not the "hand-rolled grid for arrangement" the layout rule prohibits. Then the
    MACHINERY, each argued where it is declared: .track and .sheet (the animated two-level sheet),
@@ -19,8 +19,7 @@
    flex child — Layout's grid stack cannot hand the leftover height to one row), .grabRail
    (centring one 36px handle), .sheetHead (a three-track grid that centres the title against the
    SHEET rather than against the space Back leaves — no primitive has a centred-middle mode, and
-   that is the conversation to have if a second component ever needs one), and .preview (an
-   overlay stack for a crossfade, not an arrangement). The audit of revision 2 asked for that list
+   that is the conversation to have if a second component ever needs one). The audit of revision 2 asked for that list
    to be complete; it is now.
 
    ── The two measured heights ────────────────────────────────────────────────────
@@ -355,13 +354,6 @@
   color: var(--nav-row-label-ink-hover);
 }
 
-/* The row whose scene the Services preview is showing (revision 2). Label and arrow hold the blue,
-   without the fill: the fill is "under your pointer", the blue is "this is what the drawing shows",
-   and the selector rule is to mark the current one rather than fade the others. */
-.row[data-previewed] {
-  color: var(--nav-row-label-ink-hover);
-}
-
 .rowLabel {
   font: var(--nav-row-text);
 }
@@ -388,10 +380,7 @@
 }
 
 .row:hover .rowArrow,
-.row:focus-visible .rowArrow,
-.row[data-previewed] .rowArrow,
-.card:hover .cardArrow,
-.card:focus-visible .cardArrow {
+.row:focus-visible .rowArrow {
   opacity: 1;
   transform: none;
 }
@@ -417,72 +406,96 @@
   padding-inline-start: var(--gap-gutter);
 }
 
-/* THE PREVIEW (Services). Every scene is mounted and stacked in one frame, and the previewed one is
-   shown. The frame reserves the drawing's own 16:9 because its children are out of flow; the scenes
-   are absolutely positioned so that a crossfade has both ends on screen at once. This is an overlay
-   stack, not an arrangement — nothing here places one thing beside another. */
-.preview {
-  position: relative;
-  display: block;
-  aspect-ratio: var(--nav-preview-ratio);
-}
-
-.previewScene {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity var(--nav-preview-fade) var(--nav-transition-easing);
-}
-
-.previewScene[data-shown] {
-  opacity: 1;
-}
-
-/* A rail card: a serif title row and an arrow. No box (owner, 5 Oct: cards have no boxes), so the
-   affordance is the title taking the blue and the arrow arriving, the same pair a row uses. The
-   title is the feature voice — h6, the serif — because it is an OFFER, a different kind of thing
-   from the destinations listed in sans beside it. */
-.card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-text);
+/* THE OFFER (Services, revision 2.1). The offer as one sentence in the feature voice — the serif
+   title role — because it is a different kind of thing from the destinations listed in sans beside
+   it: not a page to go to, an answer to "where do I start". */
+.offerTitle {
   font: var(--nav-feature-title-text);
   letter-spacing: var(--nav-feature-title-tracking);
   text-wrap: var(--text-title-wrap);
   color: var(--nav-title-ink);
+}
+
+/* Its facts: a ruled key-and-value list. The rule sits on BOTH cells of a row, so it runs the
+   column's width across the gap between them as one line; the air under it is the cell's own
+   padding. The key is the mono label voice in the label ink, the value plain sans in the title
+   ink — so the eye runs down the values and the keys only orient it. */
+.factKey,
+.factValue {
+  padding-block: var(--gap-tight);
+  border-block-start: var(--nav-rule-width) solid var(--nav-rule);
+}
+
+.factKey {
+  /* Optical: the 12px mono key and the 14px sans value share a first BASELINE rather than a top,
+     which is the cap-height difference between the two roles' line boxes. Derived from the two
+     line boxes so it holds no distance of its own. */
+  padding-block-start: calc(
+    var(--gap-tight) + (var(--nav-row-line) - var(--nav-label-line)) / 2
+  );
+  font: var(--nav-label-text);
+  letter-spacing: var(--nav-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--nav-label-ink);
+}
+
+.factValue {
+  font: var(--nav-row-text);
+  color: var(--nav-title-ink);
+}
+
+/* THE CASES (Expertise, revision 2.1). One link per case. Its affordance is the title taking the
+   blue — the same language as the story beside it in Insights; the image does not move. */
+.case {
+  display: block;
+  color: var(--nav-title-ink);
   text-decoration: none;
+}
+
+/* The product's crop box. A small fixed 4:3 window onto the case's own screen — a component size,
+   so a token — with the hairline a capture takes, drawn here by the placement because the crop is
+   a cut the box made (Media `edge="placement"`). The ground under it holds the box while the image
+   loads. */
+.caseThumb {
+  position: relative;
+  display: block;
+  inline-size: var(--nav-case-thumb-size);
+  aspect-ratio: var(--nav-case-thumb-ratio);
+  border: var(--nav-rule-width) solid var(--nav-rule);
+  border-radius: var(--nav-case-thumb-radius);
+  background: var(--nav-foot-ground);
+  overflow: hidden;
+}
+
+/* What the product is, under the client: sans at the row size in the label ink — a phrase that
+   must stay as authored, so not the mono voice. */
+.caseMeta {
+  font: var(--nav-row-text);
+  color: var(--nav-label-ink);
+}
+
+.caseTitle {
+  font: var(--nav-feature-title-text);
+  letter-spacing: var(--nav-feature-title-tracking);
+  text-wrap: var(--text-title-wrap);
   transition: color var(--nav-transition-duration) var(--nav-transition-easing);
 }
 
-.card:hover,
-.card:focus-visible {
+.case:hover .caseTitle,
+.case:focus-visible .caseTitle {
   color: var(--nav-row-label-ink-hover);
 }
 
-.cardArrow {
-  flex: none;
-  inline-size: var(--nav-card-arrow-size);
-  block-size: var(--nav-card-arrow-size);
-  color: var(--nav-row-arrow-ink);
-  opacity: 0;
-  transform: translateX(calc(-1 * var(--nav-row-arrow-travel)));
-  transition:
-    opacity var(--nav-transition-duration) var(--nav-transition-easing),
-    transform var(--nav-transition-duration) var(--nav-transition-easing);
-}
-
-/* The rail's SECONDARY card is a compact row, not a second card: a full card makes the rail taller
-   than the columns beside it, and then the plate's height is set by the offer instead of by the
-   content. THIS IS THE SEAM, NOT THE CONTROL — the control inside is a `Button emphasis="link"`. */
+/* A quiet way through at the foot of a feature — How We Work, All case studies. THIS IS THE SEAM,
+   NOT THE CONTROL: the control inside is a `Button emphasis="link"`; this is the rule above it and
+   the air under that rule. */
 .railAction {
   padding-block-start: var(--gap-text);
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);
 }
 
-/* THE PROOF's client line (Expertise). Quiet, sans, under the figure's meaning: the claim reads
-   first and the name second. The label ink, because it is the same quiet register as a group
-   label, at body size rather than in the mono voice — a name must stay as authored. */
+/* A quiet sourced line — the offer's record beside its rating badge. The label ink at body size
+   rather than in the mono voice: it is a sentence, and must stay as authored. */
 .featureNote {
   font: var(--nav-row-text);
   color: var(--nav-label-ink);
@@ -848,7 +861,7 @@
    the ink header takes an ink gap and a lighter ring with no rule of its own here. */
 .brand:focus,
 .row:focus,
-.card:focus,
+.case:focus,
 .story:focus,
 .sheetControl:focus,
 .sheetLink:focus {
@@ -857,7 +870,7 @@
 
 .brand:focus-visible,
 .row:focus-visible,
-.card:focus-visible,
+.case:focus-visible,
 .story:focus-visible,
 .sheetControl:focus-visible,
 .sheetLink:focus-visible {
@@ -910,9 +923,7 @@
   .pane,
   .row,
   .rowArrow,
-  .card,
-  .cardArrow,
-  .previewScene,
+  .caseTitle,
   .storyTitle,
   .sheetScrim,
   .sheet,

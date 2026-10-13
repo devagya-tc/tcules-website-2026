@@ -2,19 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
 
 import {
+  BrandMark,
   Button,
   Cluster,
   Icon,
   Layout,
   Logo,
   Media,
+  RatingBadge,
   Section,
-  Sketch,
-  Stat,
 } from '@/components';
 import { isActivePath } from '@/lib/activePath';
 import { cx } from '@/lib/cx';
@@ -867,22 +867,16 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
  * One section of the plate: an INDEX of label-and-links columns, a FEATURE column beside it, and a
  * foot strip under both where the section has an index page of its own.
  *
- * ── Revision 2 (docs/specs/SiteNav.md R2) ───────────────────────────────────────────────────────
+ * ── Revision 2 / 2.1 (docs/specs/SiteNav.md R2, R2.1.1) ─────────────────────────────────────────
  * The columns are unchanged — no row descriptions, no glyphs, rows are labels and the group label
- * carries the meaning. What changed is that every mega now has a feature, and that the feature is a
- * different FORM per section: a preview in Services, a proof in Expertise, the latest piece in
- * Insights. Three plates used to be one list at three widths; in a squint they are now a drawing, a
- * number and a picture.
- *
- * The preview is the one piece of state in here. It is the selector the owner approved on home and
- * About — one titled row lit, its answer beside it — and it lives in the pane rather than in the nav
- * because nothing outside the pane needs it, and because a remount (there is none today) should
- * start it over at the first service rather than wherever it was left.
+ * carries the meaning. Every mega has a feature, and the feature is a different FORM per section,
+ * each answering the question that section is opened with: the entry offer in Services, a set of
+ * cases in Expertise, the latest piece in Insights. All three are STATIC — revision 2's
+ * hover-driven preview in Services was taken out in 2.1 (owner: it "doesn't make sense"), and with
+ * it the only state this pane ever held.
  */
 function PlatePane({ item }: { item: SiteNavItem }) {
   const groups = item.groups ?? [];
-  const scenes = groups.flatMap((group) => group.links).filter((link) => link.sketch);
-  const [previewed, setPreviewed] = useState(scenes[0]?.href ?? null);
 
   const index = (
     /* Equal unless the item says otherwise — see SiteNavItem.columnRatio. Spread, because Layout
@@ -901,27 +895,14 @@ function PlatePane({ item }: { item: SiteNavItem }) {
         <Layout key={group.label} rowGap="block">
           <p className={styles.groupLabel}>{group.label}</p>
           <Layout as="ul" rowGap="inline">
-            {group.links.map((link) => {
-              /* Only a row with a scene drives the preview. Pointer AND focus, so a keyboard walk
-                 down the list changes the drawing exactly as a mouse does. */
-              const preview = link.sketch ? () => setPreviewed(link.href) : undefined;
-              return (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={styles.row}
-                    /* The row whose scene is showing stays lit after the pointer leaves it for the
-                       feature column — otherwise nothing says which row the drawing belongs to. */
-                    data-previewed={(link.sketch && link.href === previewed) || undefined}
-                    onPointerEnter={preview}
-                    onFocus={preview}
-                  >
-                    <span className={styles.rowLabel}>{link.label}</span>
-                    <Icon name="arrow-right" className={styles.rowArrow} />
-                  </Link>
-                </li>
-              );
-            })}
+            {group.links.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className={styles.row}>
+                  <span className={styles.rowLabel}>{link.label}</span>
+                  <Icon name="arrow-right" className={styles.rowArrow} />
+                </Link>
+              </li>
+            ))}
           </Layout>
         </Layout>
       ))}
@@ -929,12 +910,12 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   );
 
   const body = item.rail ? (
-    /* THE SHARE FOLLOWS THE FORM. A preview and a proof are a third of the plate ([2, 1]): at the
-       1120 plate that is ~340 for the feature, enough for a 16:9 drawing or a 54px figure, and ~325
-       per link column, enough for Expertise's 293px label. A story is HALF ([1, 1]): it leads with
-       a photograph, the picture is the pane's whole argument, and Insights' eight short labels need
-       barely 180 a column. Derived from the kind rather than declared per item because it is a fact
-       about the form, not about one section's copy.
+    /* THE SHARE FOLLOWS THE FORM. An offer and a set of cases are a third of the plate ([2, 1]):
+       at the 1120 plate that is ~340 for the feature, and ~325 per link column, enough for
+       Expertise's 293px label. A story is HALF ([1, 1]): it leads with a photograph, the picture is
+       the pane's whole argument, and Insights' eight short labels need barely 180 a column. Derived
+       from the kind rather than declared per item because it is a fact about the form, not about
+       one section's copy.
 
        The OUTER seam is `gutter` (32), not `column`. The feature draws a hairline on its own leading
        edge and insets its content by another 32, so 32 + rule + 32 lands at the 64 a `column` seam
@@ -946,7 +927,7 @@ function PlatePane({ item }: { item: SiteNavItem }) {
     >
       {index}
       <Layout as="aside" className={styles.rail} rowGap="block">
-        <Feature rail={item.rail} context="plate" scenes={scenes} previewed={previewed} />
+        <Feature rail={item.rail} context="plate" />
       </Layout>
     </Layout>
   ) : (
@@ -981,29 +962,70 @@ function PlatePane({ item }: { item: SiteNavItem }) {
   );
 }
 
+type Motion = { className?: string; style: CSSProperties };
+
+/** A quiet way through at the foot of a feature, under a rule — How We Work, All case studies. */
+function FeatureMore({
+  link,
+  motion,
+  tone = 'primary',
+}: {
+  link: SiteNavLink;
+  motion: Motion;
+  /** Neutral beside an offer, so the offer's own action stays the one blue control there. */
+  tone?: 'primary' | 'neutral';
+}) {
+  return (
+    /* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster, so the
+       control itself is just a control. */
+    <Cluster className={cx(styles.railAction, motion.className)} style={motion.style}>
+      {/* Two literal branches rather than `tone={tone}`: Button's props are a union keyed on tone,
+          and a widened 'primary' | 'neutral' satisfies neither member. */}
+      {tone === 'neutral' ? (
+        <Button
+          as={Link}
+          href={link.href}
+          emphasis="link"
+          tone="neutral"
+          size="sm"
+          icon={<Icon name="arrow-right" />}
+        >
+          {link.label}
+        </Button>
+      ) : (
+        <Button
+          as={Link}
+          href={link.href}
+          emphasis="link"
+          tone="primary"
+          size="sm"
+          icon={<Icon name="arrow-right" />}
+        >
+          {link.label}
+        </Button>
+      )}
+    </Cluster>
+  );
+}
+
 /**
  * The feature column's contents, by kind. Shared by the plate and the sheet — the wrapper decides
  * the frame (a ruled aside in the plate, a ruled group in the sheet); this decides the shape.
  *
- * `scenes` and `previewed` are the plate's preview. The sheet passes none: there is no hover on
- * touch, and a drawing that never changes is decoration (spec R2.2 item 5).
+ * `context` is stated, not inferred: the sheet drops the offer's action, because the sheet's sticky
+ * foot already carries "Request audit" and the same offer twice in one pane is one too many.
  */
 function Feature({
   rail,
   context,
-  scenes = [],
-  previewed = null,
   stagger,
 }: {
   rail: SiteNavRail;
-  /** Where it renders. Stated, not inferred: the sheet drops the secondary offer its foot repeats. */
   context: 'plate' | 'sheet';
-  scenes?: readonly SiteNavLink[];
-  previewed?: string | null;
   /** The sheet's entrance: a function that returns the next row's stagger props. */
-  stagger?: () => { className?: string; style: CSSProperties };
+  stagger?: () => Motion;
 }) {
-  const enter = stagger ?? (() => ({ className: '', style: {} }));
+  const enter = stagger ?? ((): Motion => ({ style: {} }));
   const labelMotion = enter();
   const label = (
     <p className={cx(styles.groupLabel, labelMotion.className)} style={labelMotion.style}>
@@ -1011,96 +1033,101 @@ function Feature({
     </p>
   );
 
-  if (rail.kind === 'offers') {
-    const primary = rail.cards.filter((card) => card.role === 'primary');
-    /* The secondary is the plate's only: the sheet's sticky foot already carries that offer, and
-       the same offer twice in one pane is one offer too many. */
-    const secondary =
-      context === 'plate' ? rail.cards.filter((card) => card.role === 'secondary') : [];
-    return (
-      <>
-        {scenes.length > 0 ? (
-          /* Every scene is mounted and stacked, and the previewed one is shown: a crossfade needs
-             both ends present, and mounting six small SVGs once is cheaper than remounting one per
-             hover. Decorative — each Sketch is aria-hidden, and the row carries the meaning. */
-          <span className={styles.preview} aria-hidden="true">
-            {scenes.map((link) => (
-              <span
-                key={link.href}
-                className={styles.previewScene}
-                data-shown={link.href === previewed || undefined}
-              >
-                {link.sketch ? <Sketch name={link.sketch} /> : null}
-              </span>
-            ))}
-          </span>
-        ) : null}
-        <Layout rowGap="text">
-          {label}
-          {primary.map((card) => {
-            const motion = enter();
-            return (
-              <Link
-                key={card.href}
-                href={card.href}
-                className={cx(styles.card, motion.className)}
-                style={motion.style}
-              >
-                <span>{card.title}</span>
-                <Icon name="arrow-right" className={styles.cardArrow} />
-              </Link>
-            );
-          })}
-          {/* Wrapped the way the hub link is: the rule and the air above it stay on the Cluster, so
-              the control itself is just a control. */}
-          {secondary.map((card) => (
-            <Cluster key={card.href} className={styles.railAction}>
-              <Button
-                as={Link}
-                href={card.href}
-                emphasis="link"
-                tone="primary"
-                size="sm"
-                icon={<Icon name="arrow-right" />}
-              >
-                {card.title}
-              </Button>
-            </Cluster>
-          ))}
-        </Layout>
-      </>
-    );
-  }
-
-  if (rail.kind === 'proof') {
-    const motion = enter();
+  if (rail.kind === 'offer') {
+    const head = enter();
+    const facts = enter();
     const tail = enter();
     return (
       <>
         {label}
-        {/* `lg` — the figure is the plate's largest thing, which is the whole point of the form:
-            visual weight from scale, not from a box. The client sits under the meaning as a quiet
-            line rather than inside Stat's label, so the claim reads first and the name second. */}
-        <div className={motion.className} style={motion.style}>
-          <Stat value={rail.value} unit={rail.unit} label={rail.caption} size="lg" />
-        </div>
-        <div className={tail.className} style={tail.style}>
-          <Layout rowGap="tight">
-            <p className={styles.featureNote}>{rail.client}</p>
-            <Cluster>
-              <Button
-                as={Link}
-                href={rail.link.href}
-                emphasis="link"
-                tone="primary"
-                size="sm"
-                icon={<Icon name="arrow-right" />}
-              >
-                {rail.link.label}
-              </Button>
-            </Cluster>
+        {/* The offer in one sentence, in the feature voice — the serif title role. */}
+        <p className={cx(styles.offerTitle, head.className)} style={head.style}>
+          {rail.title}
+        </p>
+        {/* THE FACTS, as a ruled key-and-value list: a reader comparing services is deciding
+            whether to start here, and four plain facts decide that faster than a paragraph. Two
+            tracks of one grid, so every value starts on the same line whatever its key's length;
+            the rule above each row is paint on the cells, not spacing. `base`, so the two tracks
+            hold in the sheet too — a bare array stacks below md. */}
+        <div className={facts.className} style={facts.style}>
+          <Layout as="dl" columns={{ base: [1, 2] }} colGap="text" rowGap="none">
+            {rail.facts.map((fact) => (
+              <Fragment key={fact.key}>
+                <dt className={styles.factKey}>{fact.key}</dt>
+                <dd className={styles.factValue}>{fact.value}</dd>
+              </Fragment>
+            ))}
           </Layout>
         </div>
+        <div className={tail.className} style={tail.style}>
+          <Layout rowGap="text">
+            {context === 'plate' ? (
+              <Cluster>
+                <Button
+                  as={Link}
+                  href={rail.action.href}
+                  emphasis="link"
+                  tone="primary"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {rail.action.label}
+                </Button>
+              </Cluster>
+            ) : null}
+            {rail.rating || rail.record ? (
+              /* The record behind the offer: the rating as its badge (a claim with a source,
+                 reachable), and the sourced line beside it. Support, so it sits under the action
+                 and quieter than it. */
+              <Cluster colGap="tight" rowGap="tight" align="center">
+                {rail.rating ? (
+                  <RatingBadge
+                    score={rail.rating.score}
+                    platform={rail.rating.platform}
+                    href={rail.rating.href}
+                    icon={<Icon name="star" size="sm" />}
+                    mark={<BrandMark name={rail.rating.mark} />}
+                  />
+                ) : null}
+                {rail.record ? <span className={styles.featureNote}>{rail.record}</span> : null}
+              </Cluster>
+            ) : null}
+          </Layout>
+        </div>
+        {rail.more ? <FeatureMore link={rail.more} motion={enter()} tone="neutral" /> : null}
+      </>
+    );
+  }
+
+  if (rail.kind === 'cases') {
+    return (
+      <>
+        {label}
+        {/* THE SET. Each case is one link: its product (the real screen from its case page, cropped
+            to a small 4:3 box), then the client in the serif and what the product is beneath it.
+            Product first because recognition is the job — "that looks like my kind of product" —
+            and the client is the proof; the line under it names what the reader is matching
+            against. No numbers, no "featured": a set, not a ranking. */}
+        <Layout as="ul" rowGap="text">
+          {rail.cases.map((item) => {
+            const motion = enter();
+            return (
+              <li key={item.href} className={motion.className} style={motion.style}>
+                <Link href={item.href} className={styles.case}>
+                  <Layout columns={{ base: ['auto', 1] }} colGap="text" align="center">
+                    <span className={styles.caseThumb}>
+                      <Media image={item.image} fit="fill" edge="placement" sizes="120px" />
+                    </span>
+                    <Layout rowGap="inline">
+                      <span className={styles.caseTitle}>{item.client}</span>
+                      <span className={styles.caseMeta}>{item.context}</span>
+                    </Layout>
+                  </Layout>
+                </Link>
+              </li>
+            );
+          })}
+        </Layout>
+        {rail.more ? <FeatureMore link={rail.more} motion={enter()} /> : null}
       </>
     );
   }
@@ -1132,8 +1159,8 @@ function Feature({
  * One section inside the sheet. The same groups, as type only, then the section's feature.
  *
  * The hub link is here, at the end of the scrolling list, exactly as it is at the foot of the
- * plate. The feature comes before it: the proof and the latest piece are the section's visual end,
- * and the hub is the way out of it.
+ * plate. The feature comes before it: the offer, the cases and the latest piece are the section's
+ * visual end, and the hub is the way out of it.
  *
  * Rows carry no glyphs — the settled direction dropped them, and a glyph nobody drew is a
  * placeholder shipped.

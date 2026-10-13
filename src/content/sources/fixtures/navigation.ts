@@ -1,6 +1,14 @@
 import type { SiteFooterProps, SiteNavItem, SiteNavLink, SiteNavProps } from '@/patterns';
+import type { MediaImage } from '@/components';
 import { getKitPhoto } from '@/lib/photos';
-import { ENDPOINTS, EXTERNAL, ROUTES, articlePath, caseStudyPath } from '@/lib/routes';
+import {
+  CASE_STUDY_SLUGS,
+  ENDPOINTS,
+  EXTERNAL,
+  ROUTES,
+  articlePath,
+  caseStudyPath,
+} from '@/lib/routes';
 
 import { CLUTCH_RATING } from './ratings';
 
@@ -48,6 +56,24 @@ import type { Navigation } from '../../types';
 /** Every href below is `planned` and saying so once beats saying it forty-four times. */
 const soon = (label: string, href: string): SiteNavLink => ({ label, href, status: 'planned' });
 
+/**
+ * A case's product screen as an image record: the asset its case page binds, on Cloudinary, with
+ * the delivery rungs Media picks from (1240 · 652 · 320, the same ladder Strapi derives). A CAPTURE,
+ * because it is the product's own screen; the nav crops it mechanically to its thumbnail box.
+ * Dimensions are the measured masters in src/lib/corpus-assets.generated.ts.
+ */
+const CLOUDINARY = 'https://res.cloudinary.com/dbay1gb0s/image/upload/';
+const caseImage = (path: string, width: number, height: number, alt: string): MediaImage => ({
+  src: `${CLOUDINARY}${path}`,
+  alt,
+  width,
+  height,
+  kind: 'capture',
+  sources: [1240, 652, 320]
+    .filter((rung) => rung < width)
+    .map((rung) => ({ src: `${CLOUDINARY}w_${rung},c_limit,q_auto/${path}`, width: rung })),
+});
+
 /* ── Services ─────────────────────────────────────────────────────────────────────
    Two groups of six and the only rail in the nav. The audits are named individually rather than
    pointing at the index, because "which audit" is the question a visitor arrives with — and they
@@ -74,25 +100,13 @@ const SERVICES: SiteNavItem = {
   groups: [
     {
       label: 'Services',
-      /* Each service names its preview scene (docs/specs/SiteNav.md R2.4): the same scene
-         @/lib/sketches maps to the same route, so the plate, home's selector and About draw one
-         picture per service. */
       links: [
-        { ...soon('Product Design', ROUTES.productDesign), sketch: 'product-design' },
-        {
-          ...soon('Product Modernisation', ROUTES.productModernisation),
-          sketch: 'product-modernisation',
-        },
-        { ...soon('Design Systems', ROUTES.designSystems), sketch: 'design-systems' },
-        { ...soon('AI Product UX', ROUTES.aiProductUx), sketch: 'ai-product-ux' },
-        {
-          ...soon('Design Engineering', ROUTES.designEngineering),
-          sketch: 'design-engineering',
-        },
-        {
-          ...soon('Software Development', ROUTES.softwareDevelopment),
-          sketch: 'software-development',
-        },
+        soon('Product Design', ROUTES.productDesign),
+        soon('Product Modernisation', ROUTES.productModernisation),
+        soon('Design Systems', ROUTES.designSystems),
+        soon('AI Product UX', ROUTES.aiProductUx),
+        soon('Design Engineering', ROUTES.designEngineering),
+        soon('Software Development', ROUTES.softwareDevelopment),
       ],
     },
     {
@@ -116,21 +130,28 @@ const SERVICES: SiteNavItem = {
       ],
     },
   ],
-  /* The feature column is `offers`: the service preview leads it in the plate, and these two sit
-     under it. How We Work lost its placeholder image in revision 2 — the preview is the column's
-     picture now (docs/specs/SiteNav.md R2.4). */
+  /* THE ENTRY OFFER (revision 2.1). Someone scanning six services is asking "which one is right
+     for me, and how do I start?" — and the studio's own answer, on /audits, is: if you are not
+     sure, start with an audit. So the column's subject is the free audit, stated as facts rather
+     than as a promise. EVERY FACT IS FROM THE AUDIT PAGES (_pages/audits*.md): one workflow is
+     the result is a ranked list of findings a team can act on, the reply comes
+     within one business day, and the record line is from the /audits why-Tcules line ("more than 90
+     projects since 2017"). "Free" is the
+     IA's own label for this offer. There is NO DURATION, because no page states one — spec R2.1.1
+     open question 1. How We Work stays, as the quieter way through. */
   rail: {
-    kind: 'offers',
-    label: 'Working together',
-    cards: [
-      { title: 'How We Work', href: ROUTES.howWeWork, status: 'planned', role: 'primary' },
-      {
-        title: 'Request Free Audit',
-        href: ROUTES.audits,
-        status: 'planned',
-        role: 'secondary',
-      },
+    kind: 'offer',
+    label: 'Where to start',
+    title: 'Not sure which service fits? Start with a free audit.',
+    facts: [
+      { key: 'Cost', value: 'Free' },
+      { key: 'You get', value: 'Ranked findings your team can act on' },
+      { key: 'Reply', value: 'Within one business day' },
     ],
+    action: { label: 'Request free audit', href: ROUTES.audits, status: 'planned' },
+    rating: CLUTCH_RATING,
+    record: '90+ projects',
+    more: { label: 'How we work', href: ROUTES.howWeWork, status: 'planned' },
   },
 };
 
@@ -140,7 +161,7 @@ const SERVICES: SiteNavItem = {
    groups now — the previous shape made the first a set of promise rows and the second a rail,
    which is two treatments for one kind of thing.
 
-   Its feature column is a PROOF (revision 2). Public Sector and Regulated Industries is struck in
+   Its feature column is a set of CASES (revision 2.1). Public Sector and Regulated Industries is struck in
    the content doc and is not here.
 
    AND NO HUB LINK, unlike Services and Insights. That is a decision rather than an omission: it is
@@ -156,22 +177,54 @@ const EXPERTISE: SiteNavItem = {
      (293 against 259), the opposite of Services and Insights — at equal tracks the first wrapped. */
   panelWidth: 'lg',
   columnRatio: [9, 8],
-  /* PROOF, not a list: "have they done this in a context like mine?" is the question this section
-     is opened with, and one case reduced to its figure answers it in a glance. The pick is
-     editorial (spec R2.6 item 1); the copy is the case-study listing's ideal copy for the same
-     case, so the plate and the index say the same thing. */
+  /* CASES, as a set (revision 2.1). "Have they done this in a context like mine?" is answered by
+     recognition, so each case leads with its PRODUCT — the real screen from its case page — and
+     names the client and what the product is — its type and industry, matching the columns
+     beside it. Three, chosen to span both columns (a real-estate workflow, an AI developer tool,
+     an energy product); the order is not a ranking. hrefs go through CASE_STUDY_SLUGS, the live
+     Strapi slugs. */
   rail: {
-    kind: 'proof',
+    kind: 'cases',
     label: 'Selected work',
-    value: '75+',
-    unit: 'applications',
-    caption: 'One experience across an enterprise suite, modernised as one system.',
-    client: 'Benchmark Gensuite',
-    link: {
-      label: 'Read the case',
-      href: caseStudyPath('legacy-saas-modernisation-information-architecture'),
-      status: 'planned',
-    },
+    cases: [
+      {
+        client: 'Dealpath',
+        context: 'Real estate investment software',
+        href: caseStudyPath(CASE_STUDY_SLUGS.Dealpath),
+        status: 'live',
+        image: caseImage(
+          'v1787139518/section_3_ffd1c5cb2a.webp',
+          3200,
+          2121,
+          'Dealpath listings screen: a pipeline summary above two property listings.',
+        ),
+      },
+      {
+        client: 'Eden AI',
+        context: 'AI workflow builder for developers',
+        href: caseStudyPath(CASE_STUDY_SLUGS['Eden AI']),
+        status: 'live',
+        image: caseImage(
+          'v1773124788/Eden_AI_2_f04afef6ad.webp',
+          1745,
+          884,
+          'Eden AI workflow builder with its search panel open beside the canvas.',
+        ),
+      },
+      {
+        client: 'ConnectX',
+        context: 'AI-native building energy product',
+        href: caseStudyPath(CASE_STUDY_SLUGS.ConnectX),
+        status: 'live',
+        image: caseImage(
+          'v1786970109/Section_4_Image_7ae363fefe.webp',
+          4400,
+          2928,
+          'ConnectX workspace asking what to look at, with three anomaly cards.',
+        ),
+      },
+    ],
+    more: { label: 'All case studies', href: ROUTES.caseStudies, status: 'planned' },
   },
   groups: [
     {
