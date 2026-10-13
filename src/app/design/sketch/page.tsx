@@ -10,7 +10,6 @@ const NAMES: readonly SketchName[] = [
   'ai-product-ux',
   'design-engineering',
   'software-development',
-  'lab',
 ];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 

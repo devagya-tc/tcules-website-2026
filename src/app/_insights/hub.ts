@@ -2,6 +2,7 @@ import type { IconName, SketchName } from '@/components';
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { glyphForRoute } from '@/lib/glyphs';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
+import { placeholderImage } from '@/lib/placeholders';
 import { blogPath, ROUTES } from '@/lib/routes';
 import type {
   InsightsIndexFilterGroup,
@@ -251,8 +252,8 @@ export function insightsIndexProps(
           heading: page.lab.heading,
           body: page.lab.description,
           action: { label: page.lab.action.label, href: page.lab.action.href },
-          /* The Lab's own drawing: experiments carried into a product (Sketch 'lab'). */
-          visual: 'lab' as const,
+          /* The Lab illustration, commissioned later: its register placeholder holds the slot. */
+          visual: placeholderImage(ROUTES.insights, 'lab'),
         }
       : undefined,
     feed: {

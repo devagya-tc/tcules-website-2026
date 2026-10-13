@@ -44,7 +44,7 @@ One per page.
 | B | **Front page**: one lead, a curated mix of up to four, one per format first | `BlockCardSet lead="beside"`: the lead's cover in the 2, the mix as text cards in the 1 | yes when ≥ 1 item |
 | C | **Start with your problem**: up to four topic collections | `Layout` 4 → 2 → 1; each column an `Icon` head, an h3, one sentence, `ListCard` rows, a related link | optional (`collections`) |
 | D | **Format rows**, in the template's fixed order, each its own shape (table below) | `ContentSection` with `actionsAt="end"` "All podcasts" `CtaRow` | one per format with items |
-| E | **Lab**: the other organisation's offer | `ContentSection beside` on INK (owner, 13 Oct 2026: not blue): heading, lead and its link in the head track, the Lab's own Sketch scene (`lab`: experiments on the bench, the working one carried left into a product, facing the copy) filling the two-thirds track. The page passes the scene as `lab.visual`; without one it falls back to `CtaSection offer` on ink | optional |
+| E | **Lab**: the other organisation's offer | `ContentSection beside` on INK (owner, 13 Oct 2026: not blue): heading, lead and its link in the head track, the Lab illustration at 16:9 filling the two-thirds track — a register placeholder (`/insights#lab`, docs/image-register.md: "Lab illustration: experiments becoming product") until it is commissioned (owner, 13 Oct 2026: the same graphic was everywhere). The page passes the record as `lab.visual`; without one it falls back to `CtaSection offer` on ink | optional |
 | F | **Feed**: everything, latest first; the filter rail beside it (a `<details>` below 1024) | `ContentSection`; `Layout [1, 2]` at `section`; `Tag filter` chips; the RIVER (below); "Show more" link | yes |
 | G | **Close** | `CtaSection arrangement="open"` on tint, only with an action | optional |
 
@@ -72,7 +72,7 @@ Order: the canonical order is articles · events · podcasts · research · vide
 then RE-DEALT (`alternate`) so a covered band (articles, podcasts, videos, and guides when every guide
 has a cover) and a text band take turns, whichever formats are present — so no two text-heavy bands
 meet when a format is missing or a catalogue drops to text (CLAUDE.md § Design quality). A surplus of
-text bands can only fall at the end. The ink Lab band, now a visual band (its Sketch scene), sits between the last row and the feed,
+text bands can only fall at the end. The ink Lab band, a visual band (its illustration slot), sits between the last row and the feed,
 closing the front page and opening the archive.
 
 **Ruling, feed → close.** The feed (a list) is followed by the close on tint. They are both words, but
@@ -156,7 +156,7 @@ sentence) and the filter group labels. Every other colour is a pattern's own.
 
 Paper: the quiet-label ramp BlockCard's eyebrow uses. Tint: the label steps to 700 because 600 is
 4.39:1 there. Ink: lifted, as BlockCard's. Blue: the brandeis-50/100 pair BlockCard uses. Every band
-on this page is paper except the Lab (ink, ContentSection with its Sketch scene) and the close (tint, CtaSection);
+on this page is paper except the Lab (ink, ContentSection with its illustration slot) and the close (tint, CtaSection);
 the other surfaces are declared for self-containment (tokens rule 2).
 
 ## 7 · Geometry & spacing
@@ -217,7 +217,7 @@ display hero). Section heads are h2 at ContentSection's `lg`. Titles carry `--te
   <Layout as="ul" columns={{ base: 1, md: 2, lg: 4 }} colGap="gutter" rowGap="stack">…</Layout>
 </ContentSection>
 {rows.map(row => <ContentSection id={`format-${kind}`} heading actions={<CtaRow rule={false} …/>} actionsAt="end">{shape}</ContentSection>)}
-<ContentSection surface="ink" arrangement="beside" heading lead actions={<CtaRow rule={false} />}><Sketch name="lab" /></ContentSection>
+<ContentSection surface="ink" arrangement="beside" heading lead actions={<CtaRow rule={false} />}><Media image={placeholder /insights#lab} /></ContentSection>
 <ContentSection id="feed" heading lead>
   <Layout columns={{ base: 1, lg: [1, 2] }} colGap="section" rowGap="stack" align="start">
     <aside>{filter groups}</aside>

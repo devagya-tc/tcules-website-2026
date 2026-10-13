@@ -12,10 +12,6 @@ import type { SketchName } from '@/lib/sketches';
  *   ai-product-ux          a suggestion card with the person's accept, the AI's sparkle beside it
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
- *   lab                    three experiments on the bench (two still dashed), the working one
- *                          carried left into a product screen, the AI mark on its corner — the
- *                          Lab's argument: experiments become product. Faces left, toward the
- *                          copy it sits beside (13 Oct 2026, the insights Lab band)
  */
 export type { SketchName };
 
@@ -160,24 +156,6 @@ export function Sketch({ name }: SketchProps) {
           <path className={styles.line} d="M210,132 L244,132 L244,90" />
           <circle className={styles.halo} cx="244" cy="76" r="16" />
           <circle className={styles.node} cx="244" cy="76" r="8" />
-        </>
-      ) : null}
-      {name === 'lab' ? (
-        <>
-          <rect className={styles.trailFrame} x="206" y="26" width="84" height="36" rx="6" />
-          <rect className={styles.tile} x="206" y="72" width="84" height="36" rx="6" />
-          <path className={styles.copyQuiet} d="M218,86 L268,86" />
-          <path className={styles.copyQuiet} d="M218,96 L248,96" />
-          <rect className={styles.trailFrame} x="206" y="118" width="84" height="36" rx="6" />
-          <path className={styles.trail} d="M206,90 L160,90" />
-          <rect className={styles.frame} x="30" y="36" width="130" height="108" rx="8" />
-          <path className={styles.copy} d="M46,58 L118,58" />
-          <rect className={styles.region} x="46" y="74" width="98" height="32" rx="5" />
-          <rect className={styles.solid} x="46" y="118" width="40" height="12" rx="6" />
-          <path
-            className={styles.mark}
-            d="M30,20 L34,32 L46,36 L34,40 L30,52 L26,40 L14,36 L26,32 Z"
-          />
         </>
       ) : null}
     </svg>

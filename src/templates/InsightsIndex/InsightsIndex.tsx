@@ -5,12 +5,14 @@ import {
   Cluster,
   Icon,
   Layout,
+  Media,
   Section,
-  Sketch,
   Tag,
+  type MediaImage,
   type IconName,
   type SketchName,
 } from '@/components';
+import { FULL_COLUMN } from '@/lib/image-sizes';
 import { heroTrail } from '@/lib/trail';
 import {
   BlockCard,
@@ -124,9 +126,10 @@ export type InsightsIndexProps = {
   collections?: readonly InsightsIndexCollection[];
   /**
    * The Lab: the other organisation's offer, the page's one dark band (owner, 13 Oct 2026: ink, not
-   * blue). `visual` is the drawing it carries beside its words — a Sketch scene the page picks.
+   * blue). `visual` is the image it carries beside its words — the commissioned Lab illustration,
+   * a register placeholder until it exists (owner, 13 Oct 2026). The page passes the record.
    */
-  lab?: { heading: string; body?: string; action: HeroAction; visual?: SketchName };
+  lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
   feed: InsightsIndexFeed;
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
@@ -437,9 +440,9 @@ export function InsightsIndex({
 
       {lab ? (
         lab.visual ? (
-          /* The Lab on ink (owner, 13 Oct 2026), its words in the head track and its drawing — the
-             Lab's own Sketch scene, experiments carried into a product, facing the copy — filling
-             the two-thirds track: a band with one thing to show, not an empty slab of colour. */
+          /* The Lab on ink (owner, 13 Oct 2026), its words in the head track and its illustration
+             filling the two-thirds track at 16:9: a band with one thing to show, not an empty slab
+             of colour. A register placeholder holds the slot until the illustration is drawn. */
           <ContentSection
             id="lab"
             heading={lab.heading}
@@ -449,7 +452,7 @@ export function InsightsIndex({
             arrangement="beside"
             actions={<CtaRow rule={false} actions={[lab.action]} />}
           >
-            <Sketch name={lab.visual} />
+            <Media image={lab.visual} sizes={FULL_COLUMN} />
           </ContentSection>
         ) : (
           <CtaSection
