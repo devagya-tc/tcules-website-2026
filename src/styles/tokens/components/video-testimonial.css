@@ -1,8 +1,8 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    VIDEO TESTIMONIAL — component tokens
    Tier 2. A client interview on film: a poster with a play control, the line pulled from it, and
-   who said it. Two variants, featured (large poster, quote beside) and in-row (smaller, above the
-   quote, beside two text quotes).
+   who said it. Three single-film variants: featured (16:9 poster, quote beside), wide (a cinematic
+   crop across the column, the caption under it) and portrait (a 9:16 film, quote beside).
 
    Naming: --vt-{part}-{role}
      parts: poster | play | player | quote | name | attribution | meta | ring
@@ -18,12 +18,24 @@
    --vt-poster-ratio-wide   the wide arrangement's poster: a cinematic crop of the 16:9 frame,
                             so a poster across the 1240 column clears the 830 fold at 1470.
                             The player keeps --vt-poster-ratio when it opens.
+   --vt-poster-ratio-portrait  9:16, the vertical film's own ratio: from 768 the poster and the
+                            player share it, so pressing play moves nothing.
+   --vt-poster-ratio-portrait-crop  4:5, the portrait POSTER below 768 only. At 9:16 the full phone
+                            column (326) is 580 tall, two thirds of an 844 screen before a word
+                            of the quote; 4:5 is 408. Pressing play opens the box to the film's
+                            9:16, as wide opens to 16:9.
+   --vt-portrait-width-lg/-md  the portrait poster's width, a component SIZE. lg, from 1024: 352,
+                            so the 9:16 box is 626 tall and the band (626 + Section's 96 above
+                            and below) is 818, inside the 830 fold at 1470. md, 768-1023: 240,
+                            427 tall, leaving the quote 368 of a 704 column at 768.
    --vt-poster-radius       the photograph radius, 8, on the poster's own box (Media is told the
                             placement owns the edge).
    --vt-play-size-lg/-md    the disc. A component SIZE, so t-shirt names and literals. 88 on the
                             featured poster (about a ninth of its 705 width — reads as the object's
-                            control, not a badge); 64 in-row (a sixth of 392). Both clear the 44
-                            target floor by a wide margin.
+                            control, not a badge) and wide from 1024; 64 below 1024, where every
+                            poster is the phone or tablet column, and on the portrait poster at
+                            every width (a fifth of its 352 — 88 would be a quarter). Both clear
+                            the 44 target floor by a wide margin.
    --vt-play-glyph-lg/-md   the triangle inside it, at roughly 0.36 of the disc.
    --vt-play-glyph-nudge    an OPTICAL correction, from the space ramp: a play triangle's mass sits
                             left of its box centre, so it is moved right by 2 to look centred.
@@ -33,6 +45,10 @@
 :root {
   --vt-poster-ratio: var(--ratio-standard);
   --vt-poster-ratio-wide: var(--ratio-cinema);
+  --vt-poster-ratio-portrait: 9 / 16;
+  --vt-poster-ratio-portrait-crop: 4 / 5;
+  --vt-portrait-width-lg: 352px;
+  --vt-portrait-width-md: 240px;
   --vt-poster-radius: var(--radius-8);
   --vt-play-size-lg: 88px;
   --vt-play-size-md: 64px;
