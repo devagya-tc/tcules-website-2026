@@ -11,10 +11,17 @@
    primitive cannot express: a sticky bar's position, an overlay's escape from the flow, and a box
    whose width and height are animated.
 
-   The exceptions are the CONTROLS — .row, .card, .sheetControl, .sheetHead — which are flex boxes
-   holding their own label and glyph. That is a control laying out its own inside, exactly as
-   Button.module.css does, and it is not the "hand-rolled grid for arrangement" the layout rule
-   prohibits. Two of them (.track, .sheet) are the animation machinery described above.
+   The exceptions are the CONTROLS — .row, .card, .sheetControl — which are flex boxes holding their
+   own label and glyph. That is a control laying out its own inside, exactly as Button.module.css
+   does, and it is not the "hand-rolled grid for arrangement" the layout rule prohibits. Then the
+   MACHINERY, each argued where it is declared: .track and .sheet (the animated two-level sheet),
+   .sheetPane (a fixed head over a scroller that must shrink, which needs min-block-size: 0 on a
+   flex child — Layout's grid stack cannot hand the leftover height to one row), .grabRail
+   (centring one 36px handle), .sheetHead (a three-track grid that centres the title against the
+   SHEET rather than against the space Back leaves — no primitive has a centred-middle mode, and
+   that is the conversation to have if a second component ever needs one), and .preview (an
+   overlay stack for a crossfade, not an arrangement). The audit of revision 2 asked for that list
+   to be complete; it is now.
 
    ── The two measured heights ────────────────────────────────────────────────────
    --nav-plate-block and --nav-sheet-block are written from SiteNav.tsx through an inline style,
@@ -209,6 +216,8 @@
   --nav-plate-block: var(--space-0);
 
   position: relative;
+  /* Centring, not spacing: the plate is an overlay box narrower than its stage, and auto inline
+     margins are how a block box centres in its containing block. The stage owns every distance. */
   margin-inline: auto;
   /* PLUS ITS OWN BORDERS. --nav-plate-block is the pane's border box, and this element is
      border-box too — so handing the raw value over left the plate's CONTENT box two hairlines
@@ -613,7 +622,7 @@
 .grabRail {
   display: flex;
   justify-content: center;
-  padding-block: var(--gap-tight) var(--space-2); /* optical: the handle's own air, sub-scale */
+  padding-block: var(--gap-tight) var(--nav-grab-air-end);
 }
 
 .grab {
@@ -804,8 +813,8 @@
 }
 
 /* The sticky foot. Both offers, at both levels, pinned where a thumb reaches: the ghost on the
-   left and the solid primary on the right. The shadow appears only while there is list left below
-   it, which is the one cue that the pane scrolls. */
+   left and the solid primary on the right. Its hairline is the edge; there is no shadow (an earlier
+   note promised one that was never drawn, and the system has no elevation step to draw it with). */
 .sheetFoot {
   padding: var(--nav-sheet-foot-padding-block) var(--nav-sheet-padding-inline);
   border-block-start: var(--nav-rule-width) solid var(--nav-rule);

@@ -60,10 +60,14 @@ no longer one list at three widths.
    it reads as a finished object rather than a list that stops. Expertise has no hub (IA, §2), so it
    has no foot. That is the plate's honest shape, not an inconsistency.
 3. **Widths follow the new content.** Expertise goes from `md` to `lg`, because it now carries a
-   feature column. Insights goes from `sm` to `md` for the same reason. Services stays `lg`. The
-   index-to-feature ratio is one value for every pane, **[2, 1]**, rather than [9, 5]. At [9, 5]
-   Expertise's longest label ("Content, Knowledge and Discovery Platforms", 293px) would wrap at
-   1056. At [2, 1] each link column holds about 304px and the feature about 320.
+   feature column. Insights goes from `sm` to `md` for the same reason. Services stays `lg`. `lg`
+   goes back to 1120 (from 1056) and `md` to 880 (from 780). **The index-to-feature share follows
+   the form:** a preview or a proof takes a third (**[2, 1]**, about 340px), and a story takes half
+   (**[1, 1]**), because its photograph is the pane's whole argument and Insights' eight short labels
+   need only about 180px a column. Expertise's link columns are **[9, 8]**: its first column holds
+   the longer labels (293 against 259), and at equal tracks "Content, Knowledge and Discovery
+   Platforms" wrapped. Below about 1180 the plate is clamped to the viewport, and two Expertise
+   labels wrap onto a second line. The row keeps its arrow on the first line, as in revision 1.
 4. **The preview row is lit.** In Services, the service whose sketch is showing keeps its blue label
    and arrow while the pointer travels across to the feature column. Without that, nothing would say
    which row the drawing belongs to (selector rule: mark the current one, never fade the others).
@@ -90,8 +94,9 @@ hairline seam, no shadow, no row descriptions, no glyphs on rows.
 
 - `SiteNavLink.sketch?: SketchName`. This is the preview scene for a service row. The fixture names
   the six scenes `@/lib/sketches` already maps for the same routes.
-- `SiteNavRail` becomes a union on `kind`: `offers` (cards, as before), `proof` (`value`, `unit?`,
-  `label`, `client`, `link`) and `story` (`eyebrow`, `title`, `meta`, `href`, `image: MediaImage`).
+- `SiteNavRail` becomes a union on `kind`, each with its own `label` (the column's eyebrow):
+  `offers` (`cards`, as before but with no image), `proof` (`value`, `unit?`, `caption`, `client`,
+  `link`) and `story` (`title`, `meta`, `href`, `status`, `image: MediaImage`).
 - The How We Work placeholder image leaves the fixture. The preview replaces it in the plate, and an
   empty diagram is worse than a title row in the sheet.
 - The Expertise proof uses the Benchmark Gensuite case ("One experience across 75+ applications",
@@ -104,9 +109,13 @@ hairline seam, no shadow, no row descriptions, no glyphs on rows.
 
 New in `nav.css`: `--nav-foot-ground` (per surface), `--nav-feature-title-text` and its tracking (h6,
 the serif title role that the rail card already used, renamed for the column it now serves),
-`--nav-preview-fade`, and `--nav-sheet-row-text` re-pointed to h6 with its tracking companion.
-`--nav-card-*` image tokens go, because no rail card renders an image any more. `--nav-plate-width-sm`
-stays: `compact` still resolves to it.
+`--nav-preview-fade`, `--nav-preview-ratio`, `--nav-grab-air-end` (the grab rail's sub-scale air,
+moved out of the module), and `--nav-sheet-row-text` re-pointed to h6 with its tracking companion.
+Removed: the `--nav-card-*` box and image tokens (no rail card has a box or an image now), and,
+after the revision 2 audit, fourteen tokens nothing read: the seven `--nav-item-*` geometry tokens
+and four `--nav-item-*` state fills from before the bar items became Buttons, `--nav-link-ink{,-hover}`
+and `--nav-sheet-shadow`. `--nav-plate-width-sm` stays, because `compact` still resolves to it. The
+custom properties `SiteNav.tsx` writes are now listed in `JS_INJECTED` in `scripts/tokens-check.mjs`.
 
 ### R2.6 · Open questions (none BLOCKING)
 
@@ -231,9 +240,9 @@ of use, and its four `--nav-row-promise-*` tokens were deleted with it.
 | `cta` | `Button` solid primary `sm` | right of the bar |
 | `toggle` | `Button` ghost neutral `iconOnly` | mobile only; glyph `chrome-menu` ↔ `chrome-close` (1 Oct 2026: chrome takes the universal marks, not Solar's — see Icon.md) |
 | `plate` | one box, all three sections | paper, hairline, `--radius-8`, `overflow: hidden`; width and height animate |
-| `pane` | one per mega section | 1056 / 780 / 560px wide; two label + link columns, plus the rail in Services |
-| `hubBar` | `Cluster` + `Button emphasis="link"` | the way through to the section index — Services and Insights only. Hairline above, `--gap-text` under it |
-| `rail` | `<aside>`, ~308px | primary card (image, `h6` title) + secondary row |
+| `pane` | one per mega section | 1120 / 1120 / 880px wide (Services / Expertise / Insights, revision 2); an index of two label + link columns and a feature column |
+| `paneFoot` | `Cluster` + `Button emphasis="link"` | the foot strip: the way through to the section index, on `--nav-foot-ground` to the plate's edges — Services and Insights only (R2.2) |
+| `rail` | `<aside>`, the feature column | by `kind`: `offers` (Sketch preview + h6 title row + secondary row), `proof` (`Stat` + client + link), `story` (photograph + format + h6 title). See R2.1 |
 | `scrim` | fixed box under the plate | `--nav-scrim`, below the bar. The system has no elevation token; edge, radius and scrim do the separating |
 | `sheet` | mobile | bottom sheet, grab handle, two-level track, sticky CTA bar |
 
@@ -287,19 +296,20 @@ and it applies to the rail's block too, because "Working together" is a boundary
 
 **Sticky CTA bar**, present at both levels, pinned to the sheet's foot: **Request audit** (ghost
 neutral) left, **Start a project** (solid primary) right — primary under the right thumb. A
-hairline shadow appears above the bar while list remains below it.
+hairline edges the bar; there is no shadow (corrected in revision 2 — the shadow this line used to
+promise was never drawn, and the system has no elevation step).
 
 **The hub link IS in the mobile pane**, at the end of the scrolling list, exactly as it is at the
 foot of the plate — see §12.12. It is not in the sticky foot: the foot is where the offers live, and
 a third action in the one strip a thumb can reach would compete with both of them.
 
 **Not in the mobile pane:** the Request Free Audit card, because the sticky bar carries that offer.
-Working together renders as the single primary card with its image slot.
+Working together renders as the How We Work title row (revision 2: no image slot). Expertise and
+Insights end with their proof and story (R2.2 item 5).
 
-**Three sizes in the sheet, one step apart each.** Section-pane links are `body-sm` (14), matching
-the plate's rows — the same destination should not be two sizes. The six ROOT rows are `body` (16):
-one step above the links so the two levels are not identical, one step below where they started. The
-rail card is `body-lg` (18), the heaviest thing in the pane.
+**Sizes in the sheet** *(superseded in part by revision 2: the six root rows and the feature titles
+are `h6`, the serif at 18 — R2.2 item 5)*. Section-pane links are `body-sm` (14), matching the plate's
+rows — the same destination should not be two sizes. The root rows were `body` (16) in revision 1.
 
 The root rows have **no desktop counterpart to match** — the same six items are the bar up there, set
 in `--text-ui` at 13 mono uppercase through `Button` — so their size is judged on its own. 16 keeps

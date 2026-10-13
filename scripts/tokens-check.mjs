@@ -54,6 +54,12 @@ const JS_INJECTED = new Set([
   '--cmark-correction',
   '--cmark-optical',
   '--media-focus',
+  '--nav-plate-block', // SiteNav: the open pane's measured height, the pane arithmetic, the sheet's
+  '--nav-pane-shift', // measured hug heights, its drag offset, and the row stagger index
+  '--nav-sheet-block',
+  '--nav-sheet-section-block',
+  '--nav-sheet-drag',
+  '--i',
 ]);
 
 const read = (f) => readFileSync(f, 'utf8');

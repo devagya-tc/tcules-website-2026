@@ -67,14 +67,9 @@
   --nav-ring-width: var(--focus-ring-width);
   --nav-ring-offset: var(--focus-ring-offset);
 
-  /* The bar item. 40 tall so it lines up with a md Button in the same row. */
-  --nav-item-height: 40px;
-  --nav-item-padding-x: var(--space-16); /* optical, not --gap-text: mono side bearings */
-  --nav-item-gap: var(--space-4); /* optical, not --gap-inline: label to chevron */
-  --nav-item-radius: var(--radius-8);
-  --nav-item-text: var(--text-ui);
-  --nav-item-text-tracking: var(--text-ui-tracking);
-  --nav-item-icon-size: var(--icon-size-14);
+  /* The bar item has no tokens here: every bar item is a Button and answers to --btn-*. The seven
+     --nav-item-* geometry tokens and the four state fills predated that and were read by nothing
+     (removed in revision 2, after the audit). --nav-item-fg stays: the wordmark reads it. */
 
   /* ── The plate ───────────────────────────────────────────────────────────────
      THREE WIDTHS, and they are the whole reason the plate is not a Section. Services
@@ -274,6 +269,7 @@
   --nav-sheet-chevron-size: var(--icon-size-16);
   --nav-grab-width: 36px;
   --nav-grab-height: 4px;
+  --nav-grab-air-end: var(--space-2); /* optical: the handle's own air under it, below the gap scale */
 
   /* ── Swipe to dismiss ────────────────────────────────────────────────────────
      The distance a downward drag has to cover before releasing dismisses rather than snaps back,
@@ -322,10 +318,6 @@
 [data-surface='paper'] {
   --nav-rule: var(--color-neutral-200);
   --nav-item-fg: var(--color-neutral-900); /* 14.62:1 */
-  --nav-item-fg-hover: var(--color-brandeis-500);
-  --nav-item-bg-hover: var(--color-neutral-100);
-  --nav-item-fg-active: var(--color-brandeis-500);
-  --nav-item-bg-active: var(--color-brandeis-50); /*  5.57:1 with the label above */
   --nav-panel-ground: var(--color-paper);
   --nav-scrim: rgb(27 27 24 / 0.2); /* neutral-950 at 20% */
   --nav-row-label-ink: var(--color-neutral-900); /* 14.62:1 */
@@ -335,10 +327,7 @@
   --nav-label-ink: var(--color-neutral-700); /*  8.14:1 */
   --nav-title-ink: var(--color-neutral-900);
   --nav-foot-ground: var(--color-paper-deep); /* the plate's base, one step off paper */
-  --nav-link-ink: var(--color-neutral-900);
-  --nav-link-ink-hover: var(--color-brandeis-500);
   --nav-grab-bg: var(--color-neutral-300);
-  --nav-sheet-shadow: rgb(27 27 24 / 0.22);
   --nav-ring-color: var(--color-brandeis-500);
   --nav-ring-gap-color: var(--color-paper);
 }
@@ -353,15 +342,10 @@
    and its label steps to brandeis-600 to hold 5.99:1 against the deeper fill.
 
    The MUTED INKS: neutral-600 on paper-deep is 4.39:1 and FAILS AA, so the label steps to
-   700 (7.27:1). The card's image slot steps to neutral-200, because a paper-deep slot on a
-   paper-deep ground is not a slot.                                                    */
+   700 (7.27:1).                                                    */
 [data-surface='tint'] {
   --nav-rule: var(--color-neutral-300);
   --nav-item-fg: var(--color-neutral-900); /* 13.06:1 */
-  --nav-item-fg-hover: var(--color-brandeis-500);
-  --nav-item-bg-hover: var(--color-neutral-200);
-  --nav-item-fg-active: var(--color-brandeis-500);
-  --nav-item-bg-active: var(--color-brandeis-100); /* stepped; 50 is invisible on paper-deep */
   --nav-panel-ground: var(--color-paper-deep);
   --nav-scrim: rgb(27 27 24 / 0.2);
   --nav-row-label-ink: var(--color-neutral-900); /* 13.06:1 */
@@ -371,10 +355,7 @@
   --nav-label-ink: var(--color-neutral-700); /*  7.27:1 — 600 would be 4.39:1 */
   --nav-title-ink: var(--color-neutral-900);
   --nav-foot-ground: var(--color-neutral-100); /* paper-deep is the panel here, so one step on */
-  --nav-link-ink: var(--color-neutral-900);
-  --nav-link-ink-hover: var(--color-brandeis-600);
   --nav-grab-bg: var(--color-neutral-400);
-  --nav-sheet-shadow: rgb(27 27 24 / 0.22);
   --nav-ring-color: var(--color-brandeis-500);
   --nav-ring-gap-color: var(--color-paper-deep);
 }
@@ -399,10 +380,6 @@
 [data-surface='ink'] {
   --nav-rule: var(--color-neutral-800);
   --nav-item-fg: var(--color-white); /* 17.26:1 */
-  --nav-item-fg-hover: var(--color-brandeis-300); /*  7.32:1 */
-  --nav-item-bg-hover: var(--color-neutral-900);
-  --nav-item-fg-active: var(--color-brandeis-200); /* 10.48:1 — the deeper of the two steps */
-  --nav-item-bg-active: var(--color-neutral-800);
   --nav-panel-ground: var(--color-neutral-950);
   --nav-scrim: rgb(0 0 0 / 0.5); /* see the header: the only non-palette value in this file */
   --nav-row-label-ink: var(--color-white);
@@ -412,10 +389,7 @@
   --nav-label-ink: var(--color-neutral-500); /*  5.41:1 */
   --nav-title-ink: var(--color-white);
   --nav-foot-ground: var(--color-neutral-900);
-  --nav-link-ink: var(--color-white);
-  --nav-link-ink-hover: var(--color-brandeis-300);
   --nav-grab-bg: var(--color-neutral-700);
-  --nav-sheet-shadow: rgb(0 0 0 / 0.5);
   --nav-ring-color: var(--color-brandeis-300);
   --nav-ring-gap-color: var(--color-neutral-950);
 }
@@ -432,10 +406,6 @@
 [data-surface='blue'] {
   --nav-rule: var(--color-brandeis-400);
   --nav-item-fg: var(--color-white); /*  6.23:1 */
-  --nav-item-fg-hover: var(--color-white);
-  --nav-item-bg-hover: var(--color-brandeis-600);
-  --nav-item-fg-active: var(--color-white);
-  --nav-item-bg-active: var(--color-brandeis-700);
   --nav-panel-ground: var(--color-brandeis-500);
   --nav-scrim: rgb(27 27 24 / 0.2);
   --nav-row-label-ink: var(--color-white); /*  6.23:1 */
@@ -445,10 +415,7 @@
   --nav-label-ink: var(--color-brandeis-100); /*  4.91:1 */
   --nav-title-ink: var(--color-white);
   --nav-foot-ground: var(--color-brandeis-600);
-  --nav-link-ink: var(--color-white);
-  --nav-link-ink-hover: var(--color-brandeis-50);
   --nav-grab-bg: var(--color-brandeis-300);
-  --nav-sheet-shadow: rgb(27 27 24 / 0.28);
   --nav-ring-color: var(--color-white);
   --nav-ring-gap-color: var(--color-brandeis-500);
 }

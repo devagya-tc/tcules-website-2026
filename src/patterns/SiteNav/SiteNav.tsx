@@ -3,13 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import type {
-  CSSProperties,
-  FocusEvent,
-  KeyboardEvent,
-  MouseEvent,
-  PointerEvent,
-} from 'react';
+import type { CSSProperties, FocusEvent, KeyboardEvent, MouseEvent, PointerEvent } from 'react';
 
 import {
   Button,
@@ -330,7 +324,9 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       const block =
         parts.reduce((total, part) => total + (part?.offsetHeight ?? 0), 0) + body.offsetHeight;
       if (block <= 0) return;
-      setSectionBlocks((current) => (current[key] === block ? current : { ...current, [key]: block }));
+      setSectionBlocks((current) =>
+        current[key] === block ? current : { ...current, [key]: block },
+      );
     };
 
     measure();
@@ -543,7 +539,8 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
       /* Out the far side. The plate closes and focus continues from the trigger's own place in the
          bar, which is where a reader who has finished with the panel expects to be — not at the
          top of the document, and not back at the start of the bar. */
-      const controls = headerRef.current?.querySelectorAll<HTMLElement>('[data-nav-control]') ?? [];
+      const controls =
+        headerRef.current?.querySelectorAll<HTMLElement>('[data-nav-control]') ?? [];
       const trigger = document.getElementById(triggerId(key));
       const index = [...controls].indexOf(trigger as HTMLElement);
       const next = index === -1 ? undefined : controls[index + 1];
@@ -805,7 +802,10 @@ export function SiteNav({ items, cta, ctaSecondary, surface = 'paper' }: SiteNav
             </div>
           </div>
 
-          <div className={cx(styles.sheetPane, styles.sheetPaneSection)} inert={section === null}>
+          <div
+            className={cx(styles.sheetPane, styles.sheetPaneSection)}
+            inert={section === null}
+          >
             <div ref={headRef} className={styles.sheetHead}>
               {/* A Button, not a bespoke <button>. It was hand-rolled and set a MONO role in
                   sentence case — "Menu" in Geist Mono with the tracking opened, which §8 names as
@@ -939,10 +939,14 @@ function PlatePane({ item }: { item: SiteNavItem }) {
        The OUTER seam is `gutter` (32), not `column`. The feature draws a hairline on its own leading
        edge and insets its content by another 32, so 32 + rule + 32 lands at the 64 a `column` seam
        would have given, with the rule in the middle of it. */
-    <Layout columns={item.rail.kind === 'story' ? [1, 1] : [2, 1]} colGap="gutter" rowGap="stack">
+    <Layout
+      columns={item.rail.kind === 'story' ? [1, 1] : [2, 1]}
+      colGap="gutter"
+      rowGap="stack"
+    >
       {index}
       <Layout as="aside" className={styles.rail} rowGap="block">
-        <Feature rail={item.rail} scenes={scenes} previewed={previewed} />
+        <Feature rail={item.rail} context="plate" scenes={scenes} previewed={previewed} />
       </Layout>
     </Layout>
   ) : (
@@ -986,11 +990,14 @@ function PlatePane({ item }: { item: SiteNavItem }) {
  */
 function Feature({
   rail,
+  context,
   scenes = [],
   previewed = null,
   stagger,
 }: {
   rail: SiteNavRail;
+  /** Where it renders. Stated, not inferred: the sheet drops the secondary offer its foot repeats. */
+  context: 'plate' | 'sheet';
   scenes?: readonly SiteNavLink[];
   previewed?: string | null;
   /** The sheet's entrance: a function that returns the next row's stagger props. */
@@ -1008,7 +1015,8 @@ function Feature({
     const primary = rail.cards.filter((card) => card.role === 'primary');
     /* The secondary is the plate's only: the sheet's sticky foot already carries that offer, and
        the same offer twice in one pane is one offer too many. */
-    const secondary = scenes.length > 0 ? rail.cards.filter((card) => card.role === 'secondary') : [];
+    const secondary =
+      context === 'plate' ? rail.cards.filter((card) => card.role === 'secondary') : [];
     return (
       <>
         {scenes.length > 0 ? (
@@ -1080,15 +1088,15 @@ function Feature({
           <Layout rowGap="tight">
             <p className={styles.featureNote}>{rail.client}</p>
             <Cluster>
-            <Button
-              as={Link}
-              href={rail.link.href}
-              emphasis="link"
-              tone="primary"
-              size="sm"
-              icon={<Icon name="arrow-right" />}
-            >
-              {rail.link.label}
+              <Button
+                as={Link}
+                href={rail.link.href}
+                emphasis="link"
+                tone="primary"
+                size="sm"
+                icon={<Icon name="arrow-right" />}
+              >
+                {rail.link.label}
               </Button>
             </Cluster>
           </Layout>
@@ -1103,9 +1111,13 @@ function Feature({
       {label}
       {/* One link for the whole piece: the photograph, the format and the title are one
           destination, and three targets for one page is two too many. */}
-      <Link href={rail.href} className={cx(styles.story, motion.className)} style={motion.style}>
+      <Link
+        href={rail.href}
+        className={cx(styles.story, motion.className)}
+        style={motion.style}
+      >
         <Layout rowGap="text">
-          <Media image={rail.image} ratio="16/9" sizes="(min-width: 1024px) 320px, 100vw" />
+          <Media image={rail.image} ratio="16/9" sizes="(min-width: 1024px) 380px, 100vw" />
           <Layout rowGap="tight">
             <span className={styles.storyMeta}>{rail.meta}</span>
             <span className={styles.storyTitle}>{rail.title}</span>
@@ -1155,7 +1167,7 @@ function SheetPane({ item }: { item: SiteNavItem }) {
 
       {item.rail ? (
         <Layout rowGap="block" className={styles.sheetGroup}>
-          <Feature rail={item.rail} stagger={stagger} />
+          <Feature rail={item.rail} context="sheet" stagger={stagger} />
         </Layout>
       ) : null}
 
