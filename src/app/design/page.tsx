@@ -37,6 +37,11 @@ const SPECIMENS = [
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
+        href: '/design/island',
+        name: 'Island',
+        note: 'a bounded ground inside a band, set per instance — paper or tint, never its band’s own; 8 radius, no edge, the band’s air as its inset, the page gutter kept at 390; texture inside; 4 pairings',
+      },
+      {
         href: '/design/button',
         name: 'Button',
         note: 'a showcase — blue solid (the page’s one main action) + blue ghost partner + link, in a page; sizes, states, icons, the outline stepper, chrome-only neutral, 4 surfaces',
@@ -220,7 +225,7 @@ const SPECIMENS = [
       {
         href: '/design/voice-ledger',
         name: 'VoiceLedger',
-        note: 'complaints in the customer\'s words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint',
+        note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",
       },
       {
         href: '/design/case-spread',

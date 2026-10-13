@@ -1,0 +1,30 @@
+/* Island — the box: its inset, its radius, its ground and the ink bare text inherits.
+
+   Every value is an --isl-* token in tokens/components/island.css, which re-declares the ground and
+   the ink once per surface. The TSX sets data-surface on this element, so these two declarations
+   resolve the island's own surface rather than the band's — the same mechanism Section uses.
+
+   ── What is NOT here, and why ─────────────────────────────────────────────────
+   No margin: the island sits in Section's column and its band's padding is the air around it.
+   No max-width and no inline size: it fills the column it is given, so its edges align with every
+   other band's content. No border and no shadow: the ground step is the edge (nothing on the site
+   casts a shadow). No display: it arranges nothing; the Layout inside it does. */
+.island {
+  padding-block: var(--isl-inset-block);
+  padding-inline: var(--isl-inset-inline);
+  background: var(--isl-ground);
+  color: var(--isl-ink);
+  border-radius: var(--isl-radius);
+
+  /* The containing block and stacking context for a bleed layer inside the island, as Section is
+     for a band: a Texture (position: absolute; inset: 0; z-index below zero) fills the island's
+     padding box and paints between its ground and its content, not behind the band. */
+  position: relative;
+  isolation: isolate;
+
+  /* A texture field placed past the island's edge (head-half's rect starts 120 beyond the end) is
+     cut at the box, radius included, so it reads as atmosphere arriving from outside the island.
+     `clip`, not `hidden`: no scroll container is created, so nothing inside can be scrolled out of
+     view and a focus ring is never trapped in a scrollport. */
+  overflow: clip;
+}

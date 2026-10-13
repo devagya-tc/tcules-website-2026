@@ -190,6 +190,39 @@ export default function StatementSpecimen() {
           </Statement>
         </Layout>
       ))}
+
+      <Caption index="J · 7" title="The island">
+        <code>island</code>: the statement on a floating box of its own ground (Island), the
+        band&rsquo;s ground around it on every side. The value is the island&rsquo;s surface;
+        without <code>surface</code> the band takes the other light ground. The texture moves
+        inside the island and is cut at its radius, so it needs the paper island (texture is
+        paper only). Start on a tint island; centred on a paper island with the corner pair;
+        start on a paper island with the end-edge fade; and the surface proof on ink.
+      </Caption>
+      <Statement
+        island="tint"
+        eyebrow="What we believe"
+        id="stmt-island"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        {SENTENCE}
+      </Statement>
+      <Statement
+        island="paper"
+        align="center"
+        texture="corner-pair"
+        eyebrow="How we work"
+        id="stmt-island-centre"
+        actions={<CtaRow actions={HOW_WE_WORK} rule={false} />}
+      >
+        One accountable team, from the first question to the shipped build.
+      </Statement>
+      <Statement island="paper" texture="end-fade" eyebrow="Our view" id="stmt-island-fade">
+        A good interface is a product decision someone finally made.
+      </Statement>
+      <Statement island="tint" surface="ink" eyebrow="Surface proof" id="stmt-island-ink">
+        {SENTENCE}
+      </Statement>
     </>
   );
 }
