@@ -4,10 +4,10 @@
    rules; no other file changes, because every consumer reads --font-family-*.
 
    Newsreader   400, 500 + italic  — titles (variable optical size 6..72)
-   Public Sans  400, 500, 600      — body
+   Public Sans  400, 500, 600 + 400 italic — body; the italic is the testimonial quote
    Geist Mono   400, 500, 600      — chrome, stats, code
    ═══════════════════════════════════════════════════════════════════════════════ */
-@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap");
 
 /* ── NOTE, added during integration ─────────────────────────────────────────────
    The @import above does NOT take effect in this codebase, and fails silently.

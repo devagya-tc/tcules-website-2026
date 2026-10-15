@@ -36,7 +36,8 @@
 
 /* The client's words in the SANS (owner, home round 3, 11 Oct 2026: small text, readability
    first): the lead role (18) on the card that is the thing, wrapped pretty so the last line alone
-   shortens. The italic serif reading quote it replaced was the harder read at a card's measure. */
+   shortens. The italic serif reading quote it replaced was the harder read at a card's measure;
+   the slant came back in the sans (15 Oct 2026), carried by the --tsm-quote-text* composites. */
 .quote {
   min-inline-size: 0;
   /* A measure in the quote's own type: no effect inside a card's track, and a cap when an unboxed
