@@ -74,6 +74,7 @@ function itemOf(
     name: string;
     href?: string;
     bodyHtml: string[];
+    detail?: { label: string; value: string };
     ctaLabel?: string;
     band: string;
   },
@@ -84,6 +85,7 @@ function itemOf(
     title: fields.title,
     description: '',
     bodyHtml: fields.bodyHtml,
+    detail: fields.detail,
     ctaLabel: fields.ctaLabel,
     cover: coverFor(
       page,
@@ -102,6 +104,7 @@ function featuredItem(
   band: string,
 ): CaseStudyIndexItem {
   const bodyHtml: string[] = [];
+  let detail: { label: string; value: string } | undefined;
   let href: string | undefined;
   let ctaLabel: string | undefined;
   for (const inner of block.blocks) {
@@ -110,9 +113,20 @@ function featuredItem(
       const lifted = liftTrailingLink(inner.body);
       href = lifted.link?.href;
       ctaLabel = lifted.link ? text(lifted.link.children) : undefined;
-      bodyHtml.push(
-        `<strong>${inlineToHtml(inner.label)}</strong> ${inlineToHtml(lifted.runs)}`,
-      );
+      /* A labelled fact ("**Our role:** research and product design") is the card's detail: the
+         label over its value. The label's trailing colon is not rendered, because the stacking
+         does the colon's job (page-mapping § 0 rule 1). A value that holds a link or a bold run
+         keeps its words in the body instead, so nothing is flattened. */
+      if (lifted.runs.every((run) => run.type === 'text')) {
+        detail = {
+          label: text(inner.label).replace(/:\s*$/, ''),
+          value: text(lifted.runs),
+        };
+      } else {
+        bodyHtml.push(
+          `<strong>${inlineToHtml(inner.label)}</strong> ${inlineToHtml(lifted.runs)}`,
+        );
+      }
     }
   }
   return itemOf(page, refs, {
@@ -120,6 +134,7 @@ function featuredItem(
     name: block.headingText.split(':')[0] ?? block.headingText,
     href,
     bodyHtml,
+    detail,
     ctaLabel,
     band,
   });

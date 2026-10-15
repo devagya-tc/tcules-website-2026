@@ -2,6 +2,7 @@ export { BlockCard } from './BlockCard';
 export type {
   BlockCardProps,
   BlockCardMedia,
+  BlockCardDetail,
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,

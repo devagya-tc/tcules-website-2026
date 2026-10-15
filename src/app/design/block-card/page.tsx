@@ -752,6 +752,24 @@ export default function BlockCardSpecimenPage() {
             <BlockCardSet items={SERVICES.slice(0, 3)} />
           </Specimen>
           <Specimen
+            title="3 items · detail · a labelled fact above the cta"
+            note="A case's role: the label in the mono voice, the value in ink under it, and no rule of its own (the card owns its separator). With a cta the value reserves two lines, so labels and ctas share lines across the set whether a role runs to one line or two."
+          >
+            <BlockCardSet
+              items={SERVICES.slice(0, 3).map((item, i) => ({
+                ...item,
+                detail: {
+                  label: 'Our role',
+                  value: [
+                    'research and product design.',
+                    'modernisation, design systems and coded prototypes.',
+                    'AI Product UX, a coded demo and the production-ready module.',
+                  ][i] as string,
+                },
+              }))}
+            />
+          </Specimen>
+          <Specimen
             title="2 items · BlockCardSet · two from md"
             note="Static situation items, no cta. The object is the title and its paragraph; nothing marks a card's edge, and nothing needs to."
           >

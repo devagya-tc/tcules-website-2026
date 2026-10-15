@@ -203,6 +203,7 @@ export { BlockCard, BlockCardSet, FEATURED_FROM, SMALL_FROM } from './BlockCard'
 export type {
   BlockCardProps,
   BlockCardMedia,
+  BlockCardDetail,
   BlockCardImage,
   BlockCardImageSide,
   BlockCardOrientation,

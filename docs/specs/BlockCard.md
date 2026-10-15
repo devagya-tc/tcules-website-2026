@@ -1623,3 +1623,16 @@ Where earlier sections describe the box or the 32 icon above the title, this ame
    ServicePage's C-icon router, list router and C-pair now stack their heads and take no photograph;
    so do `kit/service-list` 01 / 03 / 05, `kit/feature` 11 / 18 / 19, `kit/home` 11 and
    `kit/services-index` 6. An image may still sit beside non-clickable items (the B band).
+
+## Amendment · 13 Oct 2026 — `detail`
+
+A card may carry **one labelled fact**: `detail: { label, value }`. Content, so a string pair the caller
+reads from the record ("Our role" / "research and product design"; an article's author; a resource's
+format). It is set as the card's foot: the label in the mono eyebrow voice, the value in the title's ink at the
+small body role, and **no rule of its own**: the card already owns its separator, and a second hairline
+inside the copy split one unit in two (owner, 13 Oct 2026). The label sits **above** its value, never beside it.
+It reads existing tokens (`--bcrd-text-rule-*`, `--bcrd-eyebrow-*`, `--bcrd-title-ink`,
+`--bcrd-body-text-sm`), so no token or surface block was added. It groups with the cta and rides to the
+foot of a stretched card; in a vertical card with a cta the value reserves two lines, so a set's labels and ctas share lines.
+Found in the case-study index, where "**Our role:** …" was a bold run inside the body. A value holding a
+link or a bold run stays in `bodyHtml` rather than being flattened.

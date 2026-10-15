@@ -1,11 +1,11 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Prose } from '@/components';
-import { Callout, ContentSection, ContentSectionText, DataTable } from '@/patterns';
+import { Layout, Prose, type LayoutProps } from '@/components';
+import { BlockCard, Callout, ContentSection, ContentSectionText, DataTable } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 
-import { CorpusHero, head, headingIdOf } from './blocks';
+import { CorpusHero, TableLegend, head, headingIdOf } from './blocks';
 import { hasSlot, slotImage } from './images';
 import { formBeforeFaq } from './order';
 import styles from './CorpusPage.module.css';
@@ -27,7 +27,9 @@ type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
  *     tool's shot;
  *   - the band the hero's action points at (`#workspace`) holds the tool: its lead paragraph, then the
  *     mount. A `###` item in it is split into the next band so its table keeps a heading of its own;
- *   - a band with a table is its heading, lead and scope note, then the table in its own band;
+ *   - a band with a table is one band, beside: the heading and lead in the head track, the scope note
+ *     and then the table's tiles in the body, so the set sits under the heading it answers;
+ *   - the workspace item's table is the trace the tool follows: one row across, read as a path;
  *   - the last band is the close, on tint.
  *
  * Paper carries the page; tint is the close alone. Nothing is reordered but the one shared rule
@@ -133,22 +135,21 @@ function ToolBand({
     );
   }
 
-  /* A band with a table: its heading, lead and scope note, then the table in a band of its own. */
+  /* A band with a table: the heading and lead beside the scope note and the table's set. Split into
+     two bands, the set sat a section's air below a head it had no visible tie to, and the note left the
+     band's end half empty; beside, the head track holds the claim and the body holds its evidence. */
   if (table) {
     const [lead, ...note] = paragraphs;
     return (
-      <>
-        <ContentSection
-          {...head(band)}
-          data-band="C-text"
-          lead={lead ? plain(lead) : undefined}
-        >
-          {note.length > 0 ? <Callout tone="example" html={runsHtml(note)} /> : null}
-        </ContentSection>
-        <ContentSection id={`${band.id}-2`} data-band="E">
-          <ToolTable table={table} labelledBy={headingIdOf(band)} />
-        </ContentSection>
-      </>
+      <ContentSection
+        {...head(band)}
+        data-band="C-table"
+        arrangement="beside"
+        lead={lead ? plain(lead) : undefined}
+      >
+        {note.length > 0 ? <Callout tone="example" html={runsHtml(note)} /> : null}
+        <ToolTable table={table} labelledBy={headingIdOf(band)} />
+      </ContentSection>
     );
   }
 
@@ -200,7 +201,7 @@ function ToolItem({ item, id }: { item: ItemBlock; id: string }) {
     <ContentSection id={id} data-band="E">
       <Layout rowGap="block">
         <h3 id={headingId}>{item.headingText}</h3>
-        {table ? <ToolTable table={table} labelledBy={headingId} /> : null}
+        {table ? <ToolTable table={table} labelledBy={headingId} across="row" /> : null}
         {after.length > 0 ? (
           <ContentSectionText>
             <Prose html={runsHtml(after)} />
@@ -211,19 +212,83 @@ function ToolItem({ item, id }: { item: ItemBlock; id: string }) {
   );
 }
 
-/** M15 — a comparison table, boxed, named by the heading above it. */
-function ToolTable({ table, labelledBy }: { table: TableBlock; labelledBy: string }) {
+/**
+ * Tile tracks. `set` (default) is a body-track grid: two across, so a set beside a head never runs
+ * to slivers. `row` is a path read across the full column: every row in one line from 1024, up to
+ * four, numbered because a path has an order; more than four is not a path a reader can follow and
+ * falls back to the set. A set is unnumbered: its rows are peers, and a numeral would rank them.
+ */
+type ToolTableAcross = 'set' | 'row';
+
+function tileColumns(count: number, across: ToolTableAcross): LayoutProps['columns'] {
+  if (across === 'row' && count >= 2 && count <= 4) {
+    return { base: 1, md: 2, lg: count as 2 | 3 | 4 };
+  }
+  return { base: 1, md: 2 };
+}
+
+/**
+ * M15 — a comparison table. A table of a key and one or two further columns is a set of things each
+ * with a fact or two (a part of the interaction and what to specify, a finding and what to check):
+ * tiles, the key as the title, the second column as the body and the third, where there is one, as
+ * the labelled foot. A wider table, or a single row, stays the DataTable it is. Every word is the
+ * table's; the headings of the columns become the foot's label.
+ */
+function ToolTable({
+  table,
+  labelledBy,
+  across = 'set',
+}: {
+  table: TableBlock;
+  labelledBy: string;
+  across?: ToolTableAcross;
+}) {
   const [key = [], ...columns] = table.header;
+  const tiles = columns.length >= 1 && columns.length <= 2 && table.rows.length >= 2;
+
+  if (!tiles) {
+    return (
+      <DataTable
+        labelledBy={labelledBy}
+        keyColumn={{ heading: plain(key) }}
+        columns={columns.map((cell) => ({ heading: plain(cell) }))}
+        rows={table.rows.map((row) => ({
+          header: plain(row[0] ?? []),
+          cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
+        }))}
+      />
+    );
+  }
+
+  const footLabel = columns[1] ? plain(columns[1]) : undefined;
+  const bodyLabel = columns[0] ? plain(columns[0]) : undefined;
   return (
-    <DataTable
-      labelledBy={labelledBy}
-      keyColumn={{ heading: plain(key) }}
-      columns={columns.map((cell) => ({ heading: plain(cell) }))}
-      rows={table.rows.map((row) => ({
-        header: plain(row[0] ?? []),
-        cellsHtml: row.slice(1).map((cell) => inlineToHtml(cell)),
-      }))}
-    />
+    <Layout rowGap="block">
+      {/* The key and body columns' headings, once above the set (M17's legend), so the body keeps the
+          label a tile has no room to repeat. The third column's heading is each tile's foot label. */}
+      {bodyLabel ? <TableLegend from={plain(key)} to={bodyLabel} /> : null}
+      <Layout
+        as="ul"
+        aria-labelledby={labelledBy}
+        columns={tileColumns(table.rows.length, across)}
+        colGap="gutter"
+        rowGap="column"
+        equalRows
+      >
+        {table.rows.map((row, i) => {
+          const foot = footLabel && row[2] ? plain(row[2]) : undefined;
+          return (
+            <BlockCard
+              key={`${labelledBy}-${i}`}
+              index={across === 'row' ? i + 1 : undefined}
+              title={plain(row[0] ?? [])}
+              bodyHtml={[inlineToHtml(row[1] ?? [])]}
+              detail={footLabel && foot ? { label: footLabel, value: foot } : undefined}
+            />
+          );
+        })}
+      </Layout>
+    </Layout>
   );
 }
 

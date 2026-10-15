@@ -63,11 +63,12 @@ Read-only. The output is a decision, not code.
       before the components are fixed. Each component's design is now decided in its own spec (Phase 2), and
       "is the page beautiful" is answered in Phase 3 on the real page. The one idea kept from it: the
       no-visual page is designed first, in 3.2.
-- [ ] **1.4** Illustration concepts and asset inventory (runs alongside Phase 2; needs no code). From
+- [x] **1.4** Illustration concepts and asset inventory (runs alongside Phase 2; needs no code). From
       `visual-assets-plan.md`: for each of the ~26 illustrations, the one-line message, the brief answered in
       ch05 §4d order, and the read-back test. For each case study, run §9a to decide the cover and banner kind
       (cut-out or registry archetype). Also inventory the client work and photography already cleared for use.
-      Output: `docs/illustration-concepts.md`, starting with the six service lines.
+      Output: `docs/illustration-concepts.md`, starting with the six service lines. Concepts done 28 Sep; covers and
+      photography parked. Service-line illustrations round 1 generated (`npm run illustrations`).
 - [x] **1.3** Fill in Phase 2 below from 1.1: one task per component, in dependency order (28 Sep).
 
 ## Phase 2 — Component overhaul

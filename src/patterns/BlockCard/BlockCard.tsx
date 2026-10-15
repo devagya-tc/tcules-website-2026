@@ -307,7 +307,17 @@ export type BlockCardProps = {
    * row when the card has none. Facts about the file, never a second description.
    */
   meta?: string;
+  /**
+   * One labelled fact about the work, set as the card's foot: a hairline, the label in the mono
+   * voice, the value in ink under it ("Our role" / "research and product design"). A case card's
+   * role, an article's author, a resource's format. Content, so it is a string pair the caller reads
+   * from the record; the card draws the key above its value (never beside it) and decides the rest.
+   * It sits above the cta and moves with it to the foot of a stretched card.
+   */
+  detail?: BlockCardDetail;
 };
+
+export type BlockCardDetail = { label: string; value: string };
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`BlockCard: ${message}`);
@@ -437,6 +447,7 @@ export function BlockCard({
   frame = 'none',
   linkScope = 'card',
   meta,
+  detail,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -570,6 +581,34 @@ export function BlockCard({
       </Cluster>
     ) : null;
 
+  /* The detail: the label over its value, and NO rule of its own. A card already owns its separator
+     (a text card's top hairline, a cover's frame), and a second hairline inside the copy split one
+     unit into two (owner, 13 Oct 2026). The mono label is what sets the fact apart, a `block` (24)
+     under the body. The label sits above the value, never beside it (the Callout and ledger rule).
+     The foot groups it with the cta, so the pair rides to the bottom of a stretched card together.
+     In a vertical card WITH a cta the value reserves two lines (`detailPinned`), so a set's ctas and
+     labels share lines whether a role runs to one line or two; without a cta there is nothing to
+     align and the card is as tall as its words. */
+  const hasDetail =
+    detail !== undefined && detail.label.trim().length > 0 && detail.value.trim().length > 0;
+  const detailNode = hasDetail ? (
+    <Layout rowGap="tight" as="dl">
+      <dt className={styles.detailLabel}>{detail.label}</dt>
+      <dd className={cx(styles.detailValue, !horizontal && cta && styles.detailPinned)}>
+        {detail.value}
+      </dd>
+    </Layout>
+  ) : null;
+  const foot =
+    detailNode && cta ? (
+      <Layout rowGap="block">
+        {detailNode}
+        {cta}
+      </Layout>
+    ) : (
+      (detailNode ?? cta)
+    );
+
   const hasIndex = index !== undefined && Number.isFinite(index);
   const indexNode = hasIndex ? <span className={styles.index}>{indexLabel(index)}</span> : null;
   const eyebrowText = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
@@ -627,7 +666,7 @@ export function BlockCard({
         {head}
         {bodyNode}
       </Layout>
-      {cta}
+      {foot}
     </Layout>
   );
 
@@ -674,13 +713,13 @@ export function BlockCard({
           </Layout>
           <Layout rowGap="block" className={styles.content}>
             {bodyNode}
-            {cta}
+            {foot}
           </Layout>
         </Layout>
       </Layout>
     );
   } else {
-    if (cta) {
+    if (foot) {
       /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
          2026: "a link button at its foot"). The stack is flattened so the cta is its own last row,
          and `pinLast` gives that row the spare height of a card stretched to its row's tallest, so
@@ -695,7 +734,7 @@ export function BlockCard({
             {head}
             {bodyNode}
           </Layout>
-          {cta}
+          {foot}
         </Layout>
       );
     } else {

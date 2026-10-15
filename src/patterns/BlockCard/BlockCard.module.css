@@ -126,6 +126,32 @@
   text-transform: var(--text-mono-case);
 }
 
+/* The detail: one labelled fact at the card's foot ("Our role" over "research and product design").
+   The label is the eyebrow's mono voice and ink, a key, so it reads the eyebrow's tokens rather than
+   a second name for the same label. The value is a fact the card stands behind, not running copy, so
+   it takes the title's ink at the small body role: darker than the body above it, the same size as
+   nothing it could be mistaken for. No tokens of its own, and no rule: the card's own separator is the only one. */
+.detailLabel {
+  color: var(--bcrd-eyebrow-ink);
+  font: var(--bcrd-eyebrow-text);
+  letter-spacing: var(--bcrd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.detailValue {
+  max-inline-size: var(--measure-body);
+  overflow-wrap: anywhere;
+  color: var(--bcrd-title-ink);
+  font: var(--bcrd-body-text-sm);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* A vertical card with a cta: the value holds two lines, so the labels and ctas of a set share lines
+   whatever each role's length. A role past two lines still grows; it only stops being aligned. */
+.detailPinned {
+  min-block-size: 2lh;
+}
+
 /* The text-only card's top edge (§ 3.1): a hairline the width of the card, standing in for the top
    edge a cover would give. A block-level span with only a top border — a rule, not a box — and a
    row of the frame Layout, so the 24 beneath it is the Layout's seam and not a margin. Neutral on

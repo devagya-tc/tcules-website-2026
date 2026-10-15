@@ -8,6 +8,18 @@ Each entry: **page / section** · **what's needed** · **why** · **found in** (
 
 ---
 
+## 1. Thirteen article messages are title-derived
+
+**Page / section.** The 13 articles and guides in `docs/illustration-concepts.md` §5 marked "title".
+
+**What's needed.** An editor confirms each message line against the article body, or replaces it. For
+the listicles (*9 UX design tips*, *design thinking vs CX vs UX*), choose the one idea the hero should carry.
+
+**Why.** An illustration carries one message, checked by read-back (ch05 §4). A list of nine tips has
+no one message until someone chooses it.
+
+**Found in.** Tracker 1.4.
+
 ## 2. Case-study cards: client out of the title, one-line description
 
 **Page / section.** `/case-studies` (every card), and anywhere a case study appears as a card.

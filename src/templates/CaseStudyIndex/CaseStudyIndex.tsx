@@ -10,6 +10,7 @@ import {
   ListCard,
   PageHero,
   TestimonialBeside,
+  type BlockCardDetail,
   type BlockCardImage,
   type BreadcrumbItem,
   type HeroAction,
@@ -38,6 +39,8 @@ export type CaseStudyIndexItem = {
    * with `description`, which it replaces where a card carries more than a line ("Our role: …").
    */
   bodyHtml?: readonly string[];
+  /** One labelled fact under the body: "Our role" over "research and product design". */
+  detail?: BlockCardDetail;
   /** The cta wording on a featured card ("Read the Doodle case"). Absent, the card's default. */
   ctaLabel?: string;
 };
@@ -232,8 +235,10 @@ const FOLD_EXEMPT =
   "Index list: the page's whole content, grows with the CMS and is read by scrolling (visual-direction § 1.3).";
 
 /** The record's body: its HTML paragraphs where it has them, else its one line. */
-const bodyOf = (item: CaseStudyIndexItem) =>
-  item.bodyHtml ? { bodyHtml: item.bodyHtml } : { body: item.description };
+const bodyOf = (item: CaseStudyIndexItem) => ({
+  ...(item.bodyHtml ? { bodyHtml: item.bodyHtml } : { body: item.description }),
+  ...(item.detail ? { detail: item.detail } : {}),
+});
 
 const coverOf = (item: CaseStudyIndexItem) =>
   item.cover ? { media: { type: 'image' as const, image: item.cover } } : {};

@@ -647,3 +647,27 @@ proposals below are where that design asks something of the copy.
 - **Problem:** the hero carries "Selected Product Design work: Doodle · Dealpath · Eden AI · Auxentios · Scissors". The page lists those cases in full further down ("More complex products we have made easier to use"), so the line only repeats that list. Set as a line of links under the hero it also read as unfinished (owner, 11 Oct 2026).
 - **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
 - **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
+
+### P47 · `/case-studies` (and any case card) · featured · a case card carries "Our role" as a sentence
+
+- **Problem:** each of the four featured cards ends with "**Our role:** research and product design.",
+  "modernisation, design systems and coded prototypes.", "AI Product UX, a coded demo and the
+  production-ready module.", "product design and development.". It is a second sentence on a card whose
+  job is to get the case opened, the longest runs to two lines in a three-up row, and it makes the cards
+  unequal in height. The case page already states it in its "At a glance" table ("Our role"), so the card
+  repeats the inner page.
+- **Proposal (owner, 13 Oct 2026):** a case card must not carry "Our role". The full statement of role is
+  for the case page. At most, a card carries **tags**, set as the eyebrow or as badges, on **one line**:
+  **either two short tags or one long tag**, never a set that wraps. Budget: about **36 characters in
+  total** across the tags (a mono label at card width fits roughly 40 with its gap), each tag a noun
+  phrase of one to three words. For the four cards, drawn from the words they already use:
+  Doodle "Research · Product design" · Benchmark Gensuite "Modernisation · Design systems" ·
+  ConnectX "AI Product UX · Coded demo" · GT Tools "Product design · Development". The first word of the
+  client line (the card's eyebrow) is unchanged.
+- **Why:** the card reads as one unit (cover, title, one line, a way in); the role is evidence and belongs
+  with the case. Tags give the visitor the shape of the work at a glance without a second paragraph, and
+  a one-line budget keeps a set of cards the same height.
+- **Design in the meantime:** the copy renders as written. "Our role" shows as a labelled detail (label
+  over value, no rule) at the foot of each card. If this lands, the card takes `tags` in place of
+  `detail` for cases, and `detail` is kept only for the long-form uses it fits (an article's author, a
+  resource's format).
