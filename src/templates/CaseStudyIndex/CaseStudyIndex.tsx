@@ -7,8 +7,10 @@ import {
   Breadcrumbs,
   ContentSection,
   CtaSection,
+  IndexGroup,
   ListCard,
   PageHero,
+  TableOfContents,
   TestimonialBeside,
   type BlockCardDetail,
   type BlockCardImage,
@@ -46,16 +48,17 @@ export type CaseStudyIndexItem = {
 };
 
 /**
- * One group of cases under its own heading (page-mapping G9). The section's ARRANGEMENT is decided
- * here from its position and its count, never from its id, so a fifth group arrives already shaped:
+ * One group of cases under its own heading (page-mapping G9). The group's ARRANGEMENT is decided
+ * here from its count, never from its id, so a fifth group arrives already shaped. Every group sits
+ * in the column beside the page's outline rail (listings redesign, 15 Oct 2026), so each shape is
+ * fitted to that column (about 940 at 1440):
  *
- *   first, four or more   the featured set: the first case leads at full width, the rest under it
- *                         (BlockCardSet `auto`, ruling C3), each with a cta
- *   one                   a story: the cover beside the case's title line and body; with its client's
- *                         words (`quote`), the case as a card and the rated quote in its own card
- *                         BESIDE it (TestimonialBeside), never under it in the same column
- *   five or more          thumbnail rows in two columns, a denser catalogue shape than the covers
- *   two to four           equal covers, linked whole cards
+ *   one, with a quote     the case as a card and the rated quote in its own card BESIDE it
+ *                         (TestimonialBeside), never under it in the same column
+ *   one                   the case as one horizontal card at the lead step, its cover on the left
+ *   two or four           covers two across: 2×2 for four
+ *   three                 covers three across
+ *   five or more          ONE column of hairline rows, each with its 16:9 thumbnail: a ledger
  *
  * Neighbouring groups differ because their counts differ, which is the variation the page needs
  * without a ground change.
@@ -117,7 +120,16 @@ export type CaseStudyIndexProps = {
   };
   /** The flat set: one grid of every case, straight under the h1. Ignored when `sections` is given. */
   items?: readonly CaseStudyIndexItem[];
-  /** Grouped cases, each under its own heading (G9). Replaces `items`. */
+  /**
+   * The page's featured set, full width under the hero ("Four to start with"): the first case leads
+   * horizontally and the rest sit under it, each with its body, its labelled fact and its cta
+   * (BlockCardSet `auto`, ruling C3). Outside the rail: it is the page's visual weight.
+   */
+  featured?: CaseStudyIndexSection;
+  /**
+   * Grouped cases, each an IndexGroup in the column beside a sticky outline of the groups — the
+   * browse the hero promises ("by the situation closest to yours"). Replaces `items`.
+   */
   sections?: readonly CaseStudyIndexSection[];
   /** The page's close. Rendered only when it carries an `action`: a close without an ask is not one. */
   closing?: CaseStudyIndexClosing;
@@ -148,6 +160,7 @@ export function CaseStudyIndex({
   breadcrumbs,
   hero,
   items = [],
+  featured,
   sections,
   closing,
 }: CaseStudyIndexProps) {
@@ -170,12 +183,16 @@ export function CaseStudyIndex({
         surface="paper"
       />
 
+      {featured && featured.items.length > 0 ? (
+        <div data-fold-exempt={FOLD_EXEMPT}>
+          <Featured section={featured} />
+        </div>
+      ) : null}
+
       {sections ? (
-        sections.map((section, index) => (
-          <div key={section.id} data-fold-exempt={FOLD_EXEMPT}>
-            <SectionView section={section} first={index === 0} />
-          </div>
-        ))
+        <div data-fold-exempt={FOLD_EXEMPT}>
+          <Situations sections={sections.filter((section) => section.items.length > 0)} />
+        </div>
       ) : items.length > 0 ? (
         /* The fold rule's one exception on this page (visual-direction § 1.3): an INDEX LIST is the
            page's whole content, grows with the CMS (4038 tall at 1470 with today's entries) and is
@@ -244,160 +261,175 @@ const coverOf = (item: CaseStudyIndexItem) =>
   item.cover ? { media: { type: 'image' as const, image: item.cover } } : {};
 
 /**
- * One group, shaped by its position and its count (see `CaseStudyIndexSection`). Every band is a
- * ContentSection on paper: the variation between neighbours is the arrangement, not the ground.
+ * B · the featured set, full width: the first case leads horizontally and the rest sit under it,
+ * each with its body, its "Our role" fact and its "Read the … case" cta (the 13 Oct BlockCard
+ * amendment).
  */
-function SectionView({ section, first }: { section: CaseStudyIndexSection; first: boolean }) {
-  const { items } = section;
-  const common = {
-    id: section.id,
-    heading: section.heading,
-    headingId: `${section.id}-heading`,
-  } as const;
-
-  if (items.length === 0) return null;
-
-  /* One case with its client's words: the case as a card (cover, title, body, link) in the 7, and
-     the rated quote in its own card in the 5, beside it (TestimonialBeside). The quote used to sit
-     under the case in the same column, which read as part of the case (owner, home round 2, 10 Oct
-     2026: "close to the case study but not embedded in it"). */
-  if (items.length === 1 && section.quote) {
-    const [item] = items as [CaseStudyIndexItem];
-    return (
-      <ContentSection {...common} data-band="M">
-        <TestimonialBeside
-          work={
-            <ul>
-              <BlockCard
-                title={item.title}
-                {...bodyOf(item)}
-                {...coverOf(item)}
-                href={item.href}
-                ctaLabel={item.ctaLabel}
-                cue={item.ctaLabel ? 'cta' : 'title'}
-                size="lg"
-              />
-            </ul>
-          }
-          item={section.quote}
-        />
-      </ContentSection>
-    );
-  }
-
-  /* One case: a story. The cover beside the work. */
-  if (items.length === 1) {
-    const [item] = items as [CaseStudyIndexItem];
-    const story = (
-      <Layout as="ul" rowGap="none">
-        <ListCard
-          arrangement="stacked"
-          size="md"
-          titleAs="h3"
-          title={item.title}
-          href={item.href}
-          {...bodyOf(item)}
-        />
-      </Layout>
-    );
-    const cover = item.cover;
-    return cover?.width && cover.height ? (
-      <ContentSection
-        {...common}
-        data-band="B"
-        arrangement="media"
-        media={{
-          image: { ...cover, width: cover.width, height: cover.height },
-          side: 'start',
-          head: 'lg',
-        }}
-      >
-        {story}
-      </ContentSection>
-    ) : (
-      <ContentSection {...common} data-band="C-text">
-        {story}
-      </ContentSection>
-    );
-  }
-
-  /* The first group, four or more: the featured set. */
-  if (first && items.length >= 4) {
-    return (
-      <ContentSection {...common} data-band="M">
-        <BlockCardSet
-          lead="auto"
-          cue="cta"
-          scroll="never"
-          items={items.map((item) => ({
-            id: item.id,
-            title: item.title,
-            ...bodyOf(item),
-            ...coverOf(item),
-            href: item.href,
-            ctaLabel: item.ctaLabel,
-          }))}
-        />
-      </ContentSection>
-    );
-  }
-
-  /* Five or more: thumbnail rows, two columns, filled down the first and then the second. */
-  if (items.length >= 5) {
-    const half = Math.ceil(items.length / 2);
-    const columns = [items.slice(0, half), items.slice(half)];
-    return (
-      <ContentSection {...common} data-band="D">
-        <Layout columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="none">
-          {columns.map((column, index) => (
-            <Layout as="ul" rowGap="none" key={index}>
-              {column.map((item) => (
-                <ListCard
-                  key={item.id}
-                  titleAs="h3"
-                  title={item.title}
-                  href={item.href}
-                  marker={
-                    item.cover
-                      ? {
-                          type: 'thumbnail',
-                          image: {
-                            ...item.cover,
-                            width: item.cover.width ?? 1600,
-                            height: item.cover.height ?? 900,
-                          },
-                        }
-                      : undefined
-                  }
-                  {...bodyOf(item)}
-                />
-              ))}
-            </Layout>
-          ))}
-        </Layout>
-      </ContentSection>
-    );
-  }
-
-  /* Two to four: equal covers, each a whole-card link, stacked on a phone. They scrolled sideways
-     there until 10 Oct 2026 (BlockCardSet's `auto`, one card a view with the next peeking), which hid
-     every case past the first from most readers: the owner's home round 1 ruling — no case sliders —
-     applies to a phone row as much as to a desktop Slider. A page of cases is read down. */
+function Featured({ section }: { section: CaseStudyIndexSection }) {
   return (
-    <ContentSection {...common} data-band="M">
+    <ContentSection
+      id={section.id}
+      heading={section.heading}
+      headingId={`${section.id}-heading`}
+      data-band="M"
+    >
       <BlockCardSet
-        lead="none"
-        cue="title"
+        lead="auto"
+        cue="cta"
         scroll="never"
-        across={items.length === 4 ? 4 : undefined}
-        items={items.map((item) => ({
+        items={section.items.map((item) => ({
           id: item.id,
           title: item.title,
           ...bodyOf(item),
           ...coverOf(item),
           href: item.href,
+          ctaLabel: item.ctaLabel,
         }))}
       />
     </ContentSection>
+  );
+}
+
+/** "4 cases", "1 case": the group's derived fact. */
+const countOf = (n: number) => `${n} ${n === 1 ? 'case' : 'cases'}`;
+
+/**
+ * C · the situations: one IndexGroup per group in the column beside a sticky outline of them (the
+ * claude.com/resources "Jump to", 15 Oct 2026; TableOfContents, in LongformShell's [1, 4] shell). The
+ * 96 between groups is the air between categories, and each group's head draws the hairline that
+ * marks the seam. One group: no outline, the column is the whole band.
+ */
+function Situations({ sections }: { sections: readonly CaseStudyIndexSection[] }) {
+  if (sections.length === 0) return null;
+  const railed = sections.length >= 2;
+  return (
+    <Section as="div" surface="paper" data-band="index">
+      <Layout
+        columns={railed ? { base: 1, lg: [1, 4] } : { base: 1 }}
+        colGap="column"
+        rowGap="stack"
+        align="start"
+      >
+        {railed ? (
+          <TableOfContents
+            items={sections.map((section) => ({
+              label: section.heading,
+              href: `#${section.id}-heading` as const,
+            }))}
+          />
+        ) : null}
+        <Layout rowGap="section">
+          {sections.map((section) => (
+            <IndexGroup
+              key={section.id}
+              id={section.id}
+              heading={section.heading}
+              headingId={`${section.id}-heading`}
+              meta={countOf(section.items.length)}
+            >
+              <GroupBody section={section} />
+            </IndexGroup>
+          ))}
+        </Layout>
+      </Layout>
+    </Section>
+  );
+}
+
+/** One group's cases, shaped by their count (see `CaseStudyIndexSection`). */
+function GroupBody({ section }: { section: CaseStudyIndexSection }) {
+  const { items } = section;
+
+  /* One case with its client's words: the case as a card and the rated quote in its own card beside
+     it (TestimonialBeside; owner, home round 2, 10 Oct 2026: "close to the case study but not
+     embedded in it"). */
+  if (items.length === 1 && section.quote) {
+    const [item] = items as [CaseStudyIndexItem];
+    return (
+      <TestimonialBeside
+        work={
+          <ul>
+            <BlockCard
+              title={item.title}
+              {...bodyOf(item)}
+              {...coverOf(item)}
+              href={item.href}
+              ctaLabel={item.ctaLabel}
+              cue={item.ctaLabel ? 'cta' : 'title'}
+              size="lg"
+            />
+          </ul>
+        }
+        item={section.quote}
+      />
+    );
+  }
+
+  /* One case: one horizontal card, the cover on the left. */
+  if (items.length === 1) {
+    const [item] = items as [CaseStudyIndexItem];
+    return (
+      <ul>
+        <BlockCard
+          orientation="horizontal"
+          imageSide="left"
+          size="lg"
+          title={item.title}
+          {...bodyOf(item)}
+          {...coverOf(item)}
+          href={item.href}
+          cue="title"
+        />
+      </ul>
+    );
+  }
+
+  /* Five or more: one column of rows, each with its 16:9 thumbnail — a ledger, where the two-column
+     split was a full-width answer and is too narrow beside the rail. */
+  if (items.length >= 5) {
+    return (
+      <Layout as="ul" rowGap="none">
+        {items.map((item) => (
+          <ListCard
+            key={item.id}
+            titleAs="h3"
+            title={item.title}
+            href={item.href}
+            marker={
+              item.cover
+                ? {
+                    type: 'thumbnail',
+                    image: {
+                      ...item.cover,
+                      width: item.cover.width ?? 1600,
+                      height: item.cover.height ?? 900,
+                    },
+                  }
+                : undefined
+            }
+            {...bodyOf(item)}
+          />
+        ))}
+      </Layout>
+    );
+  }
+
+  /* Two to four: equal covers, each a whole-card link, stacked on a phone (no case sliders: owner,
+     home round 1). Three across for three; two across for two and four, so four is a 2×2 in the
+     column rather than four slivers. No eyebrow: the title already names the client. */
+  return (
+    <BlockCardSet
+      lead="none"
+      cue="title"
+      scroll="never"
+      across={items.length === 3 ? 3 : 2}
+      items={items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        ...bodyOf(item),
+        ...coverOf(item),
+        href: item.href,
+      }))}
+    />
   );
 }

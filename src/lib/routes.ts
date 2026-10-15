@@ -116,6 +116,7 @@ export const ROUTES = {
   designKitAbout: '/design/kit/about',
   designKitServicesIndex: '/design/kit/services-index',
   designInsightsIndex: '/design/insights-index',
+  designInsightsFormatIndex: '/design/insights-format-index',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
@@ -138,6 +139,12 @@ export const SECTION_INDEXES: readonly string[] = [
   ROUTES.caseStudies,
   ROUTES.expertise,
   ROUTES.insights,
+  /* Each insights format's own listing (15 Oct 2026): a page that lists a family, under the hub. */
+  ROUTES.articles,
+  ROUTES.guides,
+  ROUTES.videos,
+  ROUTES.events,
+  ROUTES.podcasts,
   ROUTES.tools,
   ROUTES.glossary,
 ];
@@ -269,6 +276,35 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
 /** A placeholder case link: the case index, marked so every one can be found and replaced. */
 export function caseStudyPlaceholderPath(slug: string): string {
   return `${ROUTES.caseStudies}#placeholder-case-${encodeURIComponent(slug)}`;
+}
+
+/** The insights formats, as the site names them. */
+export type InsightFormatKind =
+  | 'article'
+  | 'guide'
+  | 'research'
+  | 'podcast'
+  | 'video'
+  | 'event'
+  | 'interview';
+
+const INSIGHT_FORMAT_ROUTES: Record<InsightFormatKind, string> = {
+  article: ROUTES.articles,
+  guide: ROUTES.guides,
+  research: ROUTES.research,
+  podcast: ROUTES.podcasts,
+  video: ROUTES.videos,
+  event: ROUTES.events,
+  interview: ROUTES.interviews,
+};
+
+/**
+ * One insights format's own listing ("All 42 articles" → /insights/articles). Typed against the
+ * kinds, so the hub and the format pages never write a literal. Research and interviews have a name
+ * but no page until they have content (the page 404s on an empty format).
+ */
+export function insightFormatPath(kind: InsightFormatKind): string {
+  return INSIGHT_FORMAT_ROUTES[kind];
 }
 
 /** Build one canonical podcast-detail path from the named insights family. */

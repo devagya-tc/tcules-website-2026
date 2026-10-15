@@ -1,11 +1,12 @@
 /* ══ Component layer — InsightsIndex (templates) ═════════════════════════════════
-   Tier 3. The insights hub (docs/specs/InsightsIndex.md, 13 Oct 2026): what the template draws
-   itself — the count beside each format jump and over the feed, the topic collections' head (glyph,
-   title, sentence) and the feed's filter labels. Every card, row, chip and band draws its own.
+   Tier 3. The insights hub and its format pages (docs/specs/InsightsIndex.md, 13 and 15 Oct 2026):
+   what the templates draw themselves — the archive's count lines, the topic collections' head
+   (glyph, title, sentence), the format row's scrolling box and the archive's filter panel. Every
+   card, row, chip and band draws its own.
 
    Naming: --iix-{part}-{role}
-     parts  count · topic-icon · topic-title · topic-body · filter-label · toggle · panel · ring · month
-     roles  text · tracking · ink · width · sticky-top · duration · easing
+     parts  count · topic-icon · topic-title · topic-body · filter-label · toggle · panel · ring
+     roles  text · tracking · ink · width · duration · easing
 
    Every surface block declares every surface-dependent token. Every band this template paints is
    paper; the other three are declared for self-containment (tokens rule 2).
@@ -26,7 +27,7 @@
   /* A filter group's name is a label over its chips, not a heading to read. */
   --iix-filter-label-text: var(--text-eyebrow);
   --iix-filter-label-tracking: var(--text-eyebrow-tracking);
-  /* The clipped box that keeps a jump's spoken comma out of the layout: a technique's own geometry,
+  /* The clipped box that keeps the count's spoken words out of the layout: a technique's own geometry,
      the 1px every hidden label in the system uses, duplicated by value (tokens rule 6). */
   --iix-hidden-size: var(--space-1);
   /* The filters' disclosure below 1024 (owner, 13 Oct 2026): a control row in the label voice,
@@ -47,12 +48,6 @@
   --iix-panel-radius: var(--radius-8);
   --iix-panel-shadow: var(--shadow-crop);
   --iix-panel-layer: var(--z-dropdown);
-  /* The archive's month (13 Oct 2026): the ledger's left column, at the h5 role, the size of the rows'
-     titles beside it, so it reads as their place, not a heading over them. It holds still while its
-     rows scroll, clear of the sticky nav bar. */
-  --iix-month-text: var(--text-h5);
-  --iix-month-tracking: var(--text-h5-tracking);
-  --iix-month-sticky-top: var(--gap-section);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -67,7 +62,6 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the control's mark */
   --iix-toggle-rule-ink: var(--color-neutral-300); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 6.17:1 */
-  --iix-month-ink: var(--color-neutral-900); /* 14.62:1 */
   --iix-panel-ground: var(--color-paper);
 }
 
@@ -82,7 +76,6 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 5.51:1 */
   --iix-toggle-rule-ink: var(--color-neutral-400); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 5.51:1 */
-  --iix-month-ink: var(--color-neutral-900); /* 13.06:1 */
   --iix-panel-ground: var(--color-paper-deep);
 }
 
@@ -97,7 +90,6 @@
   --iix-toggle-glyph-ink: var(--color-brandeis-300); /* 7.32:1 */
   --iix-toggle-rule-ink: var(--color-neutral-700); /* decoration */
   --iix-ring-color: var(--color-brandeis-300); /* 7.32:1 */
-  --iix-month-ink: var(--color-white);
   --iix-panel-ground: var(--color-neutral-950);
 }
 
@@ -112,6 +104,5 @@
   --iix-toggle-glyph-ink: var(--color-white); /* 6.23:1 */
   --iix-toggle-rule-ink: var(--color-brandeis-300); /* decoration */
   --iix-ring-color: var(--color-white); /* 6.23:1 */
-  --iix-month-ink: var(--color-white); /* 6.23:1 */
   --iix-panel-ground: var(--color-brandeis-500);
 }

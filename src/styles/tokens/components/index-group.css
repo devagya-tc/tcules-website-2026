@@ -1,0 +1,61 @@
+/* ══ Component layer — IndexGroup (patterns) ═════════════════════════════════════
+   Tier 2. One category of an index page, in the column beside the outline rail
+   (docs/specs/IndexGroup.md, 15 Oct 2026): a hairline over its head, a heading, a derived fact and
+   a sentence. Every card or row under the head draws its own.
+
+   Naming: --igrp-{part}-{role}
+     parts  rule · heading · meta · lead
+     roles  text · tracking · ink · width · measure
+     --igrp-rule names the part alone, as button.css's --btn-*-rule does: a rule's only role is its ink.
+
+   The rule is a surface's hairline, the same decoration ink a ListCard row's rule takes on each
+   surface, duplicated by value (tokens rule 6). Every surface block declares every surface-dependent
+   token (tokens rule 2).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The group heading: an h2 element one step under a band's h2 (owner, 15 Oct 2026: "smaller type
+     generally"), so the card titles under it — what people click — stay the group's largest type. */
+  --igrp-heading-text: var(--text-h3);
+  --igrp-heading-tracking: var(--text-h3-tracking);
+  /* The derived count: a label, the mono eyebrow role. */
+  --igrp-meta-text: var(--text-eyebrow);
+  --igrp-meta-tracking: var(--text-eyebrow-tracking);
+  /* The sentence: sans, small body, never serif. */
+  --igrp-lead-text: var(--text-body-sm);
+  --igrp-lead-measure: var(--measure-lead);
+  --igrp-rule-width: var(--border-width-hairline);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --igrp-rule: var(--color-neutral-300); /* decoration */
+  --igrp-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --igrp-meta-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor */
+  --igrp-lead-ink: var(--color-neutral-700); /* 8.15:1 */
+}
+
+/* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
+[data-surface='tint'] {
+  --igrp-rule: var(--color-neutral-400); /* decoration */
+  --igrp-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --igrp-meta-ink: var(--color-neutral-700); /* 7.27:1 */
+  --igrp-lead-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ── words lift ───────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --igrp-rule: var(--color-neutral-700); /* decoration */
+  --igrp-heading-ink: var(--color-white); /* 17.26:1 */
+  --igrp-meta-ink: var(--color-neutral-400); /* 8.05:1 */
+  --igrp-lead-ink: var(--color-neutral-300); /* 11.07:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment; blue is never a ground for an index ── */
+[data-surface='blue'] {
+  --igrp-rule: var(--color-brandeis-300); /* decoration */
+  --igrp-heading-ink: var(--color-white); /* 6.23:1 */
+  --igrp-meta-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+  --igrp-lead-ink: var(--color-brandeis-100); /* 4.91:1 — AA floor */
+}

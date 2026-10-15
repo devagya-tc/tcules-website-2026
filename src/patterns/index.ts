@@ -143,6 +143,11 @@ export type {
 export { Breadcrumbs } from './Breadcrumbs';
 export type { BreadcrumbsProps, BreadcrumbItem } from './Breadcrumbs';
 
+/* IndexGroup is a category of an index page, and NOT a band: it owns no Section and takes no
+   surface, draws its own hairline over its head, and lives in the column beside a TableOfContents
+   (the insights hub, the case index). ContentSection is the band; this is what sits inside one. */
+export { IndexGroup } from './IndexGroup';
+export type { IndexGroupProps } from './IndexGroup';
 export { TableOfContents } from './TableOfContents';
 export type { TableOfContentsProps, TocItem } from './TableOfContents';
 

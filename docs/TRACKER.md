@@ -149,6 +149,12 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [ ] **6.2** Draft preview, and an empty optional section renders nothing.
 - [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
 - [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [x] **6.5** Listings redesign (owner, 15 Oct 2026, after claude.com/resources): `IndexGroup`
+      (pattern, `/design/index-group`) beside a sticky `TableOfContents` on `/insights` and
+      `/case-studies`; the format row in the insights hero; the second-level format pages
+      `/insights/{articles,guides,videos,events,podcasts}` (`InsightsFormatIndex`,
+      `/design/insights-format-index`), which now hold the archive the hub's feed held; the Strapi
+      authored date (strapi-changes § 21). docs/specs/IndexGroup.md, InsightsIndex.md § 2.
 
 ## Parked (handoff says don't freeze yet)
 

@@ -733,3 +733,10 @@ close is now one short lead, one note and one next step. Every service shares th
   hero · B · F · C-icon · J · H · G · L.
 - **Statement.** "How we work" is centred with `texture="corner-pair"`. The template now gives any
   centred statement that wins the corner its bottom-start partner (`Bands.tsx`).
+
+## Insights format pages: hero ledes that state a count (15 Oct 2026)
+
+The format pages (`/insights/articles` etc.) take their hero copy verbatim from the corpus. Two ledes
+state a number the CMS no longer matches: `_pages/insights__articles.md` says "Twelve articles" (42
+are live), `insights__guides.md` "Eight practical guides" (10 live). The format row beside each says
+the live count. Ask: drop the number from the lede, or let the page state it.

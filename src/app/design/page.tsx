@@ -123,6 +123,11 @@ const SPECIMENS = [
         note: 'the outline of a long-form document — sticky rail, live mark, 2 arrangements, 4 surfaces',
       },
       {
+        href: '/design/index-group',
+        name: 'IndexGroup',
+        note: 'one category of an index page beside the outline rail — hairline head, h2 at the h3 role, meta, lead, actions; with and without each, a long heading, cover tiles and hairline rows, 3 surfaces',
+      },
+      {
         href: '/design/content-section',
         name: 'ContentSection',
         note: 'one CMS section as one band — stacked | beside | media (split-head retired), align center, aside, actions, footer, 4 surfaces, stress copy, absent slots, 390',
@@ -295,12 +300,17 @@ const SPECIMENS = [
       {
         href: '/design/case-study-index',
         name: 'CaseStudyIndex',
-        note: 'the case-study index page type, with the live entries and their ideal copy; the grouped form (featured set, covers, thumbnail rows, a story, a form close) is shown at /design/corpus-page/case-studies',
+        note: 'the case-study index page type — the corpus’s grouped form (Four to start with, then the situations as IndexGroups beside the sticky outline rail, each shaped by its count, a form close); ?state=flat is the CMS’s flat set with the ideal copy',
       },
       {
         href: '/design/insights-index',
         name: 'InsightsIndex',
-        note: 'the insights hub — front page (lead + mix), topic collections, a band per format each its own shape, the Lab, and the URL-driven feed — over the stress fixture; ?state=sparse is the live CMS’s shape, ?state=empty no items; filters work',
+        note: 'the insights hub — the format row, front page (lead + mix), an IndexGroup per format beside the sticky outline rail, each its own shape and linking to its format page, collections, the Lab — over the stress fixture; ?state=sparse is the live CMS’s shape, ?state=empty no items',
+      },
+      {
+        href: '/design/insights-format-index',
+        name: 'InsightsFormatIndex',
+        note: 'one insights format’s page — the format row with the format selected, the latest at full column, the archive (topic filters in the URL, cover tiles or hairline rows, Show more) — over the stress fixture; ?state=articles|guides|videos|podcasts|events|research|interviews|sparse|filtered|empty',
       },
       {
         href: '/design/case-story',

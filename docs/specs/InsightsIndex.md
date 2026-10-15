@@ -38,6 +38,37 @@ One per page.
 
 ## 2 · Anatomy
 
+**Listings redesign (owner, 15 Oct 2026; supersedes the band table below where they differ).** After
+claude.com/resources: a listing organised by category, every section one click away, and a second
+level per category. The idea was taken, not the components (no boxed tinted cards, carousel, search
+box or newsletter box).
+
+| # | Band | Built from | Required |
+|---|---|---|---|
+| A | **Hero**: trail, h1, lede, the **format row** — "All 62" (selected), then each format with content and its count, each a link to the format's page | `PageHero`; `FormatRow` (a `nav` "Insights formats", `Cluster nowrap` of filter `Tag` links, scrolls sideways on a phone) in its `children` slot. Replaces the jump cluster | yes (row only with ≥ 2 formats) |
+| B | **Featured**: unchanged, full width, outside the rail | `BlockCardSet lead="beside" titleAs="h2"` | yes when ≥ 1 item |
+| C | **Formats with rail**: one `IndexGroup` per format (`alternate()` order) in the column beside a sticky `TableOfContents` | `Section` → `Layout {base:1, lg:[1,4]} colGap="column"` (the LongformShell shell) → TOC + `Layout rowGap="section"` of groups. Each group: h2 at the h3 role, the format card's sentence, "All 42 articles" (`CtaRow`) to the format page. Shapes per kind re-fitted for the ~940 column: articles a horizontal `lg` lead card then three covers; guides the two-column catalogue; videos the Slider; events the ledger; podcasts the episode; research the reports; interviews the voices. Capacity: article 4, guide 6, video 6, event 3, podcast 3, research 3, interview 3 | one group per format with items; the rail only with ≥ 2 |
+| D | **Collections**: unchanged, after the rail band | as before | optional |
+| E | **Lab**: unchanged (ink) | as before | optional |
+| F | **Close**: unchanged (tint, only with an action) | as before | optional |
+
+**The feed moved, it was not dropped.** The hub's "Everything we've published" feed (approved 13 Oct
+as the hub's archive) now lives on each format's own page — `InsightsFormatIndex`, exported from this
+folder: hero with the format row (this format selected) → the latest item at full column (articles,
+videos, podcasts) → "All articles", the archive with the topic filters (first group as the line,
+the rest behind "More filters"; no filters on an archive of six or fewer), twelve per page, cover tiles
+for the covered kinds and hairline rows for the text kinds, events led by their date and ordered by
+it → the hub's close. Routes: `/insights/{articles,guides,videos,events,podcasts}` (static segments
+over the `[...slug]` catch-all; a format with no items 404s). Specimen:
+`/design/insights-format-index?state=…`. The hero copy is the corpus's
+(`_pages/insights__<format>.md`), verbatim.
+
+The folder holds `InsightsIndex.tsx` (hub), `InsightsFormatIndex.tsx` (format page) and `shared.tsx`
+(types, labels, dates, the format shapes, `FormatRow`, `Archive`): files in one component folder,
+not sideways imports.
+
+**Before 15 Oct 2026:**
+
 | # | Band | Built from | Required |
 |---|---|---|---|
 | A | **Masthead**: trail, h1, lede, the format jumps | `PageHero` stacked, paper, texture; jumps in its `children` slot as a `Cluster` of link `Button`s with a count | yes (jumps only when ≥ 2 formats) |
@@ -354,8 +385,10 @@ surface).
 
 ## 17 · Open questions
 
-1. **Format pages do not exist yet** (`/insights/podcasts` etc. 404). "All podcasts" links to the feed
-   filtered by that format until they do. **Decided (owner, 13 Oct 2026): approved as built.**
+1. **Format pages.** ~~Do not exist yet; "All podcasts" links to the feed filtered by format.~~
+   **Resolved (15 Oct 2026):** `/insights/articles`, `/guides`, `/videos`, `/events` and `/podcasts`
+   are real pages (`InsightsFormatIndex`, § 2), and every "All …" and the format row link to them.
+   Research and interviews get a route when they have content.
 2. **Guides, research and videos are not in the CMS.** The view model carries the kinds; the fixture
    proves the shapes; live, those rows are absent. *Non-blocking.* Logged in
    `docs/strapi-changes.md` § 20.

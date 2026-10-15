@@ -1,134 +1,57 @@
-import type { ReactNode } from 'react';
-
-import {
-  Button,
-  Cluster,
-  Icon,
-  Layout,
-  Media,
-  Section,
-  Tag,
-  type MediaImage,
-  type IconName,
-} from '@/components';
-import type { ArticleSceneName } from '@/lib/sketches';
+import { Button, Cluster, Icon, Layout, Media, Section, type MediaImage } from '@/components';
 import { FULL_COLUMN } from '@/lib/image-sizes';
 import { heroTrail } from '@/lib/trail';
 import {
-  BlockCard,
   BlockCardSet,
   Breadcrumbs,
   ContentSection,
   CtaRow,
   CtaSection,
+  IndexGroup,
   ListCard,
   PageHero,
-  Slider,
+  TableOfContents,
   type BlockCardImage,
-  type BlockCardSetItem,
   type BreadcrumbItem,
   type HeroAction,
-  type ListCardMarker,
 } from '@/patterns';
 
 import styles from './InsightsIndex.module.css';
-
-/* ── The template's own shapes ────────────────────────────────────────────────────
-   A template may not import @/content, so the page maps the view model onto these and the
-   template never learns whether the CMS or the specimen's fixture answered. */
-
-/** The seven formats. The template decides each one's shape and position from this. */
-export type InsightsIndexKind =
-  'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview';
-
-export type InsightsIndexItem = {
-  id: string;
-  kind: InsightsIndexKind;
-  title: string;
-  href: string;
-  /** The standfirst. Absent or blank renders the title alone. */
-  description?: string;
-  cover?: BlockCardImage;
-  /** ISO 8601. Orders nothing here (the page passes items newest first); it is shown. */
-  publishedAt?: string;
-  /** "11 min read". */
-  readingTime?: string;
-  /** "48 min". */
-  duration?: string;
-  /** When and where an event happens. `startsAt` is ISO 8601. */
-  event?: { startsAt: string; place?: string };
-  /**
-   * The scene DRAWN for this article from its own argument (owner, 13 Oct 2026), assigned to it on
-   * purpose in data: its cover until a real one exists. Typed to the article scenes, so a service
-   * scene can never stand as a cover.
-   */
-  scene?: ArticleSceneName;
-};
-
-/** What the page says about one format: its band title, its one sentence, where "All …" goes. */
-export type InsightsIndexFormat = {
-  kind: InsightsIndexKind;
-  title?: string;
-  lead?: string;
-  href: string;
-};
-
-export type InsightsIndexCollection = {
-  id: string;
-  title: string;
-  description: string;
-  /** The glyph heading the column. Absent on any collection, the set renders without glyphs. */
-  icon?: IconName;
-  items: readonly { id: string; title: string; href: string }[];
-  related?: HeroAction;
-};
-
-export type InsightsIndexFilterOption = {
-  id: string;
-  label: string;
-  /** How many pieces choosing it would show, given the other held filters. */
-  count?: number;
-  /** The URL with this option applied — or, when `selected`, with its group cleared. */
-  href: string;
-  selected: boolean;
-};
-
-export type InsightsIndexFilterGroup = {
-  id: string;
-  label: string;
-  options: readonly InsightsIndexFilterOption[];
-};
-
-export type InsightsIndexFeed = {
-  /** The band's id: the fragment every filter and "Show more" href ends in. */
-  id: string;
-  heading: string;
-  lead?: string;
-  /** The rows on screen: already filtered and paged by the page. */
-  items: readonly InsightsIndexItem[];
-  /** How many items match the held filters (all of them, with none held). */
-  total: number;
-  /** How many items exist. */
-  all: number;
-  /** FORMAT, the primary filter: "All" first, then each format, one line (owner, 13 Oct 2026). */
-  formats: readonly InsightsIndexFilterOption[];
-  /** The other groups, behind "More filters": only options with results, no one-option groups. */
-  filters: readonly InsightsIndexFilterGroup[];
-  /** What is held, each with the link that removes it. Empty when nothing is. */
-  held: readonly { id: string; label: string; href: string }[];
-  /** Clears every filter. Present only while one is held. */
-  clearHref?: string;
-  /** The next page. Present only while more match than are shown. */
-  moreHref?: string;
-};
+import {
+  CAPACITY,
+  FormatRow,
+  FormatShape,
+  LABEL,
+  alternate,
+  kindsPresent,
+  bodyOf,
+  coverOf,
+  dateOf,
+  lengthOf,
+  line,
+  parse,
+  standInPool,
+  type InsightsIndexClosing,
+  type InsightsIndexCollection,
+  type InsightsIndexFilterOption,
+  type InsightsIndexFormat,
+  type InsightsIndexItem,
+  type InsightsIndexKind,
+} from './shared';
 
 export type InsightsIndexProps = {
   breadcrumbs: readonly BreadcrumbItem[];
   hero: { title: string; lede?: string; eyebrow?: string };
+  /**
+   * The family's format row in the hero: "All" (selected here), then each format with content and
+   * its count, each linking to that format's own page. See `FormatRow`.
+   */
+  formatRow?: readonly InsightsIndexFilterOption[];
   /** Every resource, newest first. */
   items: readonly InsightsIndexItem[];
   /** The editor's lead story. Absent, the newest item with a cover, else the newest. */
   featuredId?: string;
+  /** Each format's title, sentence and page. "All 42 articles" goes to `href`. */
   formats?: readonly InsightsIndexFormat[];
   collections?: readonly InsightsIndexCollection[];
   /**
@@ -137,9 +60,8 @@ export type InsightsIndexProps = {
    * a register placeholder until it exists (owner, 13 Oct 2026). The page passes the record.
    */
   lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
-  feed: InsightsIndexFeed;
   /** Rendered only with its action: a close without an ask is not one. */
-  closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
+  closing?: InsightsIndexClosing;
   /**
    * Catalogue photographs for missing covers that no generated graphic suits (visual-direction
    * § 5.7: never labelled, replaced when the real cover exists). Taken in order down the page.
@@ -148,102 +70,8 @@ export type InsightsIndexProps = {
   standIns?: readonly BlockCardImage[];
 };
 
-/* ── Decisions the template owns ──────────────────────────────────────────────── */
-
-/**
- * The formats in page order, each with its shape (docs/specs/InsightsIndex.md § 2). The order
- * alternates covered and text shapes, so two text bands never meet, and a format's shape follows
- * what the format IS rather than how many it has.
- */
-const FORMAT_ORDER: readonly InsightsIndexKind[] = [
-  'article',
-  'event',
-  'podcast',
-  'research',
-  'video',
-  'interview',
-  'guide',
-];
-
-const LABEL: Record<InsightsIndexKind, { one: string; many: string }> = {
-  article: { one: 'Article', many: 'Articles' },
-  guide: { one: 'Guide', many: 'Guides' },
-  research: { one: 'Research', many: 'Research' },
-  podcast: { one: 'Podcast', many: 'Podcasts' },
-  video: { one: 'Video', many: 'Videos' },
-  event: { one: 'Event', many: 'Events' },
-  interview: { one: 'Interview', many: 'Interviews' },
-};
-
-/** How many a format's band shows at most. The feed below holds the rest. */
-const CAPACITY: Record<InsightsIndexKind, number> = {
-  article: 3,
-  event: 4,
-  podcast: 4,
-  research: 3,
-  video: 8,
-  interview: 3,
-  guide: 6,
-};
-
 /** The front page's curated mix beside the lead. */
 const MIX = 4;
-
-const DAY = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-const DAY_OF_MONTH = new Intl.DateTimeFormat('en-GB', { day: 'numeric', timeZone: 'UTC' });
-const MONTH_YEAR = new Intl.DateTimeFormat('en-GB', {
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-
-function parse(iso: string | undefined): Date | undefined {
-  if (!iso) return undefined;
-  const date = new Date(iso);
-  return Number.isNaN(date.valueOf()) ? undefined : date;
-}
-
-const dateOf = (iso: string | undefined) => {
-  const date = parse(iso);
-  return date ? DAY.format(date) : undefined;
-};
-
-/** A label line from its parts, blanks dropped: "Podcast · 7 Oct 2026". */
-const line = (...parts: (string | undefined)[]) =>
-  parts.filter((part): part is string => Boolean(part?.trim())).join(' · ') || undefined;
-
-/** The length of the thing: reading time for the read formats, duration for the watched ones. */
-const lengthOf = (item: InsightsIndexItem) => item.duration ?? item.readingTime;
-
-const bodyOf = (item: InsightsIndexItem) =>
-  item.description?.trim() ? item.description : undefined;
-
-const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
-  item.cover?.src.trim() ? { type: 'image', image: item.cover } : undefined;
-
-type CoverMedia = NonNullable<BlockCardSetItem['media']>;
-/**
- * Hands out a cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article
- * where it has one, else the next catalogue photograph, else a texture field. Never a generic scene.
- */
-type StandIn = (item: InsightsIndexItem) => CoverMedia;
-
-function standInPool(pool: readonly BlockCardImage[]): StandIn {
-  let next = 0;
-  let recipe = 0;
-  return (item) => {
-    if (item.scene) return { type: 'sketch', name: item.scene };
-    const image = pool.length > 0 ? pool[next++ % pool.length] : undefined;
-    return image
-      ? { type: 'image', image: { ...image, standIn: true } }
-      : { type: 'texture', recipe: (recipe++ % 3) as 0 | 1 | 2 };
-  };
-}
 
 /**
  * The front page: the lead, then up to four more — one per format before any format repeats, in
@@ -273,19 +101,34 @@ function frontPage(items: readonly InsightsIndexItem[], featuredId: string | und
   return { lead, mix };
 }
 
-/* ── The template ─────────────────────────────────────────────────────────────── */
+/** Events by when they happen, newest first; everything else in the order given. */
+const byRecord = (items: InsightsIndexItem[]) =>
+  items[0]?.kind === 'event'
+    ? items.sort(
+        (a, b) =>
+          (parse(b.event?.startsAt)?.valueOf() ?? -Infinity) -
+          (parse(a.event?.startsAt)?.valueOf() ?? -Infinity),
+      )
+    : items;
+
+const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
+
+/** The fold rule's exception for the railed run (visual-direction § 1.3). */
+const FOLD_EXEMPT = 'Index list: read by scrolling beside its outline (visual-direction § 1.3).';
 
 /**
- * InsightsIndex — the insights hub as a front page over an archive (owner, 13 Oct 2026; reference:
- * The Verge's home page). docs/specs/InsightsIndex.md.
+ * InsightsIndex — the insights hub (docs/specs/InsightsIndex.md; the listings redesign, 15 Oct 2026,
+ * after claude.com/resources: a listing organised by category that makes every section one click
+ * away).
  *
- *   A  masthead       the trail, the h1, the lede, and a jump to every format on the page
- *   B  front page     one lead story with its cover, and a curated mix beside it
- *   C  collections    "start with your problem": reading lists by topic, each with its service
- *   D  format bands   one per format, each its OWN shape, so the page never repeats one rectangle
- *   E  lab            the other organisation's offer, the page's one reserved (blue) band
- *   F  feed           everything, newest first, with the filters beside it, held in the URL
- *   G  close          the ask, on tint, only with an action
+ *   A  hero          the trail, the h1, the lede, and the format row — the family's sub-nav
+ *   B  featured      one lead story with its cover, and four headlines beside it, full width
+ *   C  formats       one IndexGroup per format beside a sticky "On this page" rail: each group its
+ *                    OWN shape, so the run never repeats one rectangle, each with "All 42 …" out to
+ *                    the format's own page, where its whole archive lives
+ *   D  collections   "start with your problem": reading lists by topic, each with its service
+ *   E  lab           the other organisation's offer, the page's one dark (ink) band
+ *   F  close         the ask, on tint, only with an action
  *
  * The live /insights and /design/insights-index render this one composition: the route passes what
  * the CMS holds, the specimen passes the stress fixture.
@@ -293,12 +136,12 @@ function frontPage(items: readonly InsightsIndexItem[], featuredId: string | und
 export function InsightsIndex({
   breadcrumbs,
   hero,
+  formatRow = [],
   items,
   featuredId,
   formats = [],
   collections = [],
   lab,
-  feed,
   closing,
   standIns = [],
 }: InsightsIndexProps) {
@@ -306,9 +149,8 @@ export function InsightsIndex({
   const { lead, mix } = frontPage(items, featuredId);
   const onFront = new Set([lead, ...mix].filter(Boolean).map((item) => item!.id));
 
-  const present = FORMAT_ORDER.flatMap((kind) => {
-    const all = items.filter((item) => item.kind === kind);
-    if (all.length === 0) return [];
+  const present = kindsPresent(items).flatMap((kind) => {
+    const all = byRecord(items.filter((item) => item.kind === kind));
     const fresh = all.filter((item) => !onFront.has(item.id));
     const format = formats.find((candidate) => candidate.kind === kind);
     return [
@@ -318,42 +160,14 @@ export function InsightsIndex({
         lead: format?.lead,
         href: format?.href,
         count: all.length,
-        /* Items already on the front page step aside when the band has others to show. */
+        /* Items already in Featured step aside when the group has others to show. */
         items: (fresh.length > 0 ? fresh : all).slice(0, CAPACITY[kind]),
       },
     ];
   });
-  const bands = alternate(present, standIns.length > 0);
-
+  const groups = alternate(present, standIns.length > 0);
+  const railed = groups.length >= 2;
   const lede = hero.lede?.trim();
-  const jumps =
-    bands.length >= 2 ? (
-      <nav aria-label="Formats on this page">
-        <Cluster as="ul" colGap="block" rowGap="text">
-          {bands.map((band) => (
-            <li key={band.kind}>
-              <Button
-                as="a"
-                href={`#${anchorOf(band.kind)}`}
-                emphasis="link"
-                tone="neutral"
-                icon={<Icon name="alt-arrow-down" />}
-              >
-                {/* The count joins the label inside the Button's one label run, after an en space:
-                    a typographic space in the text, not a box with spacing of its own (a Cluster
-                    here broke the Button's inline row and dropped its glyph to a second line). */}
-                {band.title}
-                <span className={styles.jumpCount}>
-                  <span className={styles.hidden}>,</span>
-                  {'\u2002'}
-                  {band.count}
-                </span>
-              </Button>
-            </li>
-          ))}
-        </Cluster>
-      </nav>
-    ) : null;
 
   return (
     <>
@@ -368,15 +182,15 @@ export function InsightsIndex({
         texture
         surface="paper"
       >
-        {jumps}
+        {formatRow.length > 1 ? <FormatRow options={formatRow} /> : null}
       </PageHero>
 
       {lead ? (
         <Section surface="paper" aria-label="Featured">
           {/* The set sits directly under the h1 with no band heading between, so its titles are the
-              page's h2s (the case index's reason). The mix are HEADLINES — format, date, title, no
-              standfirst — so four of them stand as tall as the lead's cover and copy, the way a
-              front page's rail of headlines balances its lead story. */}
+              page's h2s. The mix are HEADLINES — format, date, title, no standfirst — so four of them
+              stand as tall as the lead's cover and copy, the way a front page's rail of headlines
+              balances its lead story. Full width, outside the rail: the page's visual anchor. */}
           <BlockCardSet
             lead="beside"
             cue="title"
@@ -396,44 +210,69 @@ export function InsightsIndex({
         </Section>
       ) : null}
 
-      {collections.length > 0 ? <Collections collections={collections} /> : null}
+      {items.length === 0 ? (
+        /* Nothing published: no outline over nothing, just the sentence that says so. */
+        <Section surface="paper">
+          <p>Nothing has been published yet.</p>
+        </Section>
+      ) : null}
 
-      {bands.map((band) => {
-        const head = {
-          id: anchorOf(band.kind),
-          heading: band.title,
-          headingId: `${anchorOf(band.kind)}-heading`,
-          lead: band.lead,
-        };
-        const shape = (
-          <FormatShape
-            kind={band.kind}
-            items={band.items}
-            title={band.title}
-            standIn={standIn}
-          />
-        );
-        /* "All …" at the end of the heading's row: the band's way out to the rest of its format. */
-        return band.href ? (
-          <ContentSection
-            key={band.kind}
-            {...head}
-            actionsAt="end"
-            actions={
-              <CtaRow
-                rule={false}
-                actions={[{ label: `All ${band.title.toLowerCase()}`, href: band.href }]}
-              />
-            }
-          >
-            {shape}
-          </ContentSection>
-        ) : (
-          <ContentSection key={band.kind} {...head}>
-            {shape}
-          </ContentSection>
-        );
-      })}
+      {groups.length > 0 ? (
+        <div data-fold-exempt={FOLD_EXEMPT}>
+          <Section as="div" surface="paper" data-band="index">
+            {/* The claude "Jump to": the rail stays put while the groups scroll, so every format is
+                one click away from anywhere in the run (TableOfContents; LongformShell's shell). */}
+            <Layout
+              columns={railed ? { base: 1, lg: [1, 4] } : { base: 1 }}
+              colGap="column"
+              rowGap="stack"
+              align="start"
+            >
+              {railed ? (
+                <TableOfContents
+                  items={groups.map((group) => ({
+                    label: group.title,
+                    href: `#${anchorOf(group.kind)}-heading` as const,
+                  }))}
+                />
+              ) : null}
+              <Layout rowGap="section">
+                {groups.map((group) => (
+                  <IndexGroup
+                    key={group.kind}
+                    id={anchorOf(group.kind)}
+                    heading={group.title}
+                    headingId={`${anchorOf(group.kind)}-heading`}
+                    lead={group.lead}
+                    actions={
+                      group.href ? (
+                        <CtaRow
+                          rule={false}
+                          actions={[
+                            {
+                              label: `All ${group.count} ${group.title.toLowerCase()}`,
+                              href: group.href,
+                            },
+                          ]}
+                        />
+                      ) : undefined
+                    }
+                  >
+                    <FormatShape
+                      kind={group.kind}
+                      items={group.items}
+                      title={group.title}
+                      standIn={standIn}
+                    />
+                  </IndexGroup>
+                ))}
+              </Layout>
+            </Layout>
+          </Section>
+        </div>
+      ) : null}
+
+      {collections.length > 0 ? <Collections collections={collections} /> : null}
 
       {lab ? (
         lab.visual ? (
@@ -462,8 +301,6 @@ export function InsightsIndex({
         )
       ) : null}
 
-      <Feed feed={feed} />
-
       {closing?.action ? (
         <CtaSection
           arrangement="open"
@@ -478,44 +315,7 @@ export function InsightsIndex({
   );
 }
 
-const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
-
-/** A band whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
-function isVisual(
-  band: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
-  hasPool: boolean,
-) {
-  if (band.kind === 'guide')
-    return (
-      hasPool ||
-      band.items.every((item) => coverOf(item) !== undefined || item.scene !== undefined)
-    );
-  return band.kind === 'article' || band.kind === 'podcast' || band.kind === 'video';
-}
-
-/**
- * The bands in FORMAT_ORDER, re-dealt so a covered band and a text band take turns (CLAUDE.md:
- * never two text-heavy bands back to back) whichever formats are present and whichever have covers.
- * Each kind keeps its place within its own group; a surplus of text bands can only go at the end,
- * which the specimen's sparse state shows does not happen with the CMS's formats.
- */
-function alternate<T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }>(
-  bands: readonly T[],
-  hasPool: boolean,
-): T[] {
-  const visual = bands.filter((band) => isVisual(band, hasPool));
-  const text = bands.filter((band) => !isVisual(band, hasPool));
-  const out: T[] = [];
-  while (visual.length > 0 || text.length > 0) {
-    const v = visual.shift();
-    if (v) out.push(v);
-    const t = text.shift();
-    if (t) out.push(t);
-  }
-  return out;
-}
-
-/* ── C · collections ──────────────────────────────────────────────────────────── */
+/* ── D · collections ──────────────────────────────────────────────────────────── */
 
 /**
  * Reading lists by problem, four across: each a glyph, a title and its sentence, then its pieces as
@@ -579,554 +379,5 @@ function Collections({ collections }: { collections: readonly InsightsIndexColle
         ))}
       </Layout>
     </ContentSection>
-  );
-}
-
-/* ── D · the format shapes ────────────────────────────────────────────────────── */
-
-function FormatShape({
-  kind,
-  items,
-  title,
-  standIn,
-}: {
-  kind: InsightsIndexKind;
-  items: readonly InsightsIndexItem[];
-  title: string;
-  standIn: StandIn;
-}): ReactNode {
-  switch (kind) {
-    case 'article':
-      return <Wide items={items} standIn={standIn} />;
-    case 'event':
-      return <Ledger items={items} />;
-    case 'podcast':
-      return <Episode items={items} standIn={standIn} />;
-    case 'research':
-      return <Reports items={items} />;
-    case 'video':
-      return <Rail items={items} label={title} standIn={standIn} />;
-    case 'interview':
-      return <Voices items={items} />;
-    case 'guide':
-      return <Catalogue items={items} standIn={standIn} />;
-  }
-}
-
-/** A card record for a set, eyebrowed with what the band does not already say: date, length. */
-const card = (item: InsightsIndexItem): BlockCardSetItem => ({
-  id: item.id,
-  title: item.title,
-  body: bodyOf(item),
-  eyebrow: line(dateOf(item.publishedAt), lengthOf(item)),
-  media: coverOf(item),
-  href: item.href,
-});
-
-/** Articles — the wide row: three covers in [2, 1, 1], so the newest is twice the others. */
-function Wide({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
-  return (
-    <BlockCardSet
-      lead={items.length === 3 ? 'wide' : 'none'}
-      cue="title"
-      items={items.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn(item) }))}
-    />
-  );
-}
-
-/** Events — the ledger: each row led by its date, the place on the label line. */
-function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout as="ul" rowGap="none">
-      {items.map((item) => {
-        const date = parse(item.event?.startsAt);
-        return (
-          <ListCard
-            key={item.id}
-            titleAs="h3"
-            size={items.length > 3 ? 'sm' : 'md'}
-            eyebrow={item.event?.place}
-            title={item.title}
-            body={bodyOf(item)}
-            href={item.href}
-            /* An event with no date yet keeps the date column, saying so, so every row's copy
-               starts on one edge; the publish date is never passed off as the event's. */
-            marker={
-              date && item.event
-                ? {
-                    type: 'date',
-                    dateTime: item.event.startsAt,
-                    day: DAY_OF_MONTH.format(date),
-                    label: MONTH_YEAR.format(date),
-                  }
-                : { type: 'date', day: '—', label: 'Date TBC' }
-            }
-          />
-        );
-      })}
-    </Layout>
-  );
-}
-
-/** Podcasts — the episode: the newest as one wide card you press play on, earlier ones as rows. */
-function Episode({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
-  const [latest, ...earlier] = items;
-  if (!latest) return null;
-  return (
-    <Layout rowGap="stack">
-      <ul>
-        <BlockCard
-          orientation="horizontal"
-          imageSide="left"
-          size="lg"
-          title={latest.title}
-          body={bodyOf(latest)}
-          eyebrow={dateOf(latest.publishedAt)}
-          media={coverOf(latest) ?? standIn(latest)}
-          href={latest.href}
-          cue="cta"
-          ctaLabel="Listen"
-          meta={latest.duration}
-        />
-      </ul>
-      {earlier.length > 0 ? (
-        <Layout as="ul" rowGap="none">
-          {earlier.map((item) => (
-            <ListCard
-              key={item.id}
-              titleAs="h3"
-              size="sm"
-              eyebrow={line(dateOf(item.publishedAt), item.duration)}
-              title={item.title}
-              body={bodyOf(item)}
-              href={item.href}
-            />
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-}
-
-/** Research — the reports: each a head beside its body, the title at the band's largest card step. */
-function Reports({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout as="ul" rowGap="column">
-      {items.map((item) => (
-        <BlockCard
-          key={item.id}
-          orientation="horizontal"
-          size="md"
-          title={item.title}
-          body={bodyOf(item)}
-          eyebrow={dateOf(item.publishedAt)}
-          href={item.href}
-          cue="cta"
-          ctaLabel="Read the research"
-          meta={item.readingTime}
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/** Videos — the rail: covered cards you scrub through, three in view. */
-function Rail({
-  items,
-  label,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  label: string;
-  standIn: StandIn;
-}) {
-  return (
-    <Slider label={label} perView={3}>
-      {items.map((item) => (
-        <BlockCard
-          key={item.id}
-          tracks={3}
-          size="md"
-          title={item.title}
-          body={bodyOf(item)}
-          eyebrow={line(dateOf(item.publishedAt), item.duration)}
-          media={coverOf(item) ?? standIn(item)}
-          href={item.href}
-          cue="title"
-        />
-      ))}
-    </Slider>
-  );
-}
-
-/** Interviews — voices: text tiles, the headline is the conversation. */
-function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <BlockCardSet
-      lead="none"
-      cue="title"
-      standIns={false}
-      items={items.map((item) => ({ ...card(item), media: undefined }))}
-    />
-  );
-}
-
-/**
- * Guides — the catalogue: rows in two columns, with thumbnails when every guide has a cover and as
- * text when any lacks one (a set is all-image or all-text, never one with holes).
- */
-function Catalogue({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
-  /* Each guide's thumbnail: its cover, else a generated scene or a stand-in photograph (a texture
-     field has no thumbnail form, so it counts as missing). */
-  const thumbs = items.map((item): ListCardMarker | undefined => {
-    if (item.cover?.src.trim()) {
-      return {
-        type: 'thumbnail',
-        image: {
-          ...item.cover,
-          width: item.cover.width ?? 1600,
-          height: item.cover.height ?? 900,
-        },
-      };
-    }
-    const media = standIn(item);
-    if (media.type === 'sketch') return { type: 'sketch', name: media.name };
-    if (media.type === 'image') {
-      const image = media.image;
-      return {
-        type: 'thumbnail',
-        image: { ...image, width: image.width ?? 1600, height: image.height ?? 900 },
-      };
-    }
-    return undefined;
-  });
-  const thumbnails = thumbs.every(Boolean);
-  const half = Math.ceil(items.length / 2);
-  const indexed = items.map((item, i) => ({
-    item,
-    marker: thumbnails ? thumbs[i] : undefined,
-  }));
-  const columns = items.length > 3 ? [indexed.slice(0, half), indexed.slice(half)] : [indexed];
-  return (
-    <Layout columns={{ base: 1, lg: columns.length }} colGap="gutter" rowGap="none">
-      {columns.map((column, index) => (
-        <Layout as="ul" rowGap="none" key={index}>
-          {column.map(({ item, marker }) => (
-            <ListCard
-              key={item.id}
-              titleAs="h3"
-              size="sm"
-              arrangement="stacked"
-              eyebrow={item.readingTime}
-              title={item.title}
-              body={bodyOf(item)}
-              href={item.href}
-              marker={marker}
-            />
-          ))}
-        </Layout>
-      ))}
-    </Layout>
-  );
-}
-
-/* ── F · the feed ─────────────────────────────────────────────────────────────── */
-
-/**
- * Everything, newest first, across the full column (owner, 13 Oct 2026: the chip rail took too much
- * room for what it did). Above the river, ONE compact row at every width: FORMAT, the primary
- * filter, as a single line of options with counts (a sideways scroll on a phone, never a wrap), and
- * every other group behind one native "More filters" disclosure on the same row, opening to a small
- * panel. When something is held, a short summary says so, each item removable, with "Clear all".
- * Every control is a link the page built: the state is the URL, and nothing needs script.
- */
-function Feed({ feed }: { feed: InsightsIndexFeed }) {
-  /* Nothing published: no filters over nothing, just the sentence that says so. */
-  if (feed.all === 0) {
-    return (
-      <ContentSection
-        id={feed.id}
-        heading={feed.heading}
-        headingId={`${feed.id}-heading`}
-        lead={feed.lead}
-      >
-        <p>Nothing has been published yet.</p>
-      </ContentSection>
-    );
-  }
-
-  const moreHeld = feed.filters.reduce(
-    (sum, group) => sum + group.options.filter((option) => option.selected).length,
-    0,
-  );
-  const chip = (option: InsightsIndexFilterOption) =>
-    option.count === undefined ? option.label : `${option.label} ${option.count}`;
-
-  return (
-    <ContentSection
-      id={feed.id}
-      heading={feed.heading}
-      headingId={`${feed.id}-heading`}
-      lead={feed.lead}
-      surface="paper"
-    >
-      <Layout rowGap="stack">
-        <Layout rowGap="text">
-          <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
-            {feed.formats.length > 0 ? (
-              <nav aria-label="Format" className={styles.formats}>
-                {/* Both gaps `text` (16): a Tag is 24 x 24, the AA target floor, so the clearance
-                    comes from the row. One line, never a wrap: it scrolls sideways where it runs
-                    out of room. */}
-                <Cluster as="ul" colGap="text" nowrap>
-                  {feed.formats.map((option) => (
-                    <li key={option.id}>
-                      <Tag variant="filter" href={option.href} selected={option.selected}>
-                        {chip(option)}
-                      </Tag>
-                    </li>
-                  ))}
-                </Cluster>
-              </nav>
-            ) : (
-              <span />
-            )}
-            {feed.filters.length > 0 ? (
-              <details className={styles.more}>
-                <summary className={styles.toggle}>
-                  <Cluster as="span" colGap="tight" align="center" nowrap>
-                    {/* "More" folds away on a phone so the format line keeps the room; the word
-                        "filters" and the count still say what it is. */}
-                    <span>
-                      <span className={styles.moreWord}>More </span>filters
-                    </span>
-                    {moreHeld > 0 ? (
-                      <span className={styles.toggleCount}>{moreHeld}</span>
-                    ) : null}
-                    <span className={styles.toggleGlyph}>
-                      <Icon name="alt-arrow-down" />
-                    </span>
-                  </Cluster>
-                </summary>
-                <div className={styles.panel}>
-                  <Layout rowGap="gutter">
-                    {feed.filters.map((group) => (
-                      <Layout key={group.id} rowGap="text">
-                        <h3 className={styles.filterLabel}>{group.label}</h3>
-                        <Cluster as="ul" colGap="text" rowGap="text">
-                          {group.options.map((option) => (
-                            <li key={option.id}>
-                              <Tag
-                                variant="filter"
-                                href={option.href}
-                                selected={option.selected}
-                                icon={
-                                  option.selected ? (
-                                    <Icon name="close-circle" label="Clear filter" />
-                                  ) : undefined
-                                }
-                              >
-                                {chip(option)}
-                              </Tag>
-                            </li>
-                          ))}
-                        </Cluster>
-                      </Layout>
-                    ))}
-                  </Layout>
-                </div>
-              </details>
-            ) : null}
-          </Layout>
-
-          {feed.held.length > 0 ? (
-            <Cluster colGap="text" rowGap="text" align="center">
-              <p className={styles.feedCount}>
-                {`${feed.total} of ${feed.all}`}
-                <span className={styles.hidden}> pieces match.</span>
-              </p>
-              <span className={styles.feedCount}>Showing</span>
-              <Cluster as="ul" colGap="text" rowGap="text">
-                {feed.held.map((held) => (
-                  <li key={held.id}>
-                    <Tag
-                      variant="filter"
-                      href={held.href}
-                      selected
-                      icon={<Icon name="close-circle" label="Remove filter" />}
-                    >
-                      {held.label}
-                    </Tag>
-                  </li>
-                ))}
-              </Cluster>
-              {feed.clearHref ? (
-                <Button
-                  as="a"
-                  href={feed.clearHref}
-                  emphasis="link"
-                  tone="neutral"
-                  className={styles.keep}
-                >
-                  Clear all
-                </Button>
-              ) : null}
-            </Cluster>
-          ) : (
-            /* Nothing held: the size of the archive and its order, so the reader knows what the
-               format line and "More filters" narrow (NN/g, Vercel, Figma all state a count). */
-            <p className={styles.feedCount}>{`${feed.all} pieces · newest first`}</p>
-          )}
-        </Layout>
-
-        <Layout rowGap="stack">
-          {feed.items.length > 0 ? (
-            <Archive items={feed.items} />
-          ) : (
-            <p>Nothing matches these filters.</p>
-          )}
-          {feed.items.length > 0 ? (
-            /* Where the reader is in the archive, then the way on: the count every good archive
-               gives ("12 of 46"), and "Show more" as a link to the next page, so it works without
-               script and a reader can share the page they reached (IDEO, Pentagram). */
-            <Cluster colGap="block" rowGap="text" align="center">
-              <p
-                className={styles.feedCount}
-              >{`${feed.items.length} of ${feed.total} shown`}</p>
-              {feed.moreHref ? (
-                <Button
-                  as="a"
-                  href={feed.moreHref}
-                  emphasis="link"
-                  tone="primary"
-                  icon={<Icon name="alt-arrow-down" />}
-                >
-                  Show more
-                </Button>
-              ) : null}
-            </Cluster>
-          ) : null}
-        </Layout>
-      </Layout>
-    </ContentSection>
-  );
-}
-
-/* ── F · the archive ──────────────────────────────────────────────────────────── */
-
-const MONTH = new Intl.DateTimeFormat('en-GB', {
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-const DAY_MONTH = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-});
-
-/** The archive's month blocks, in the order the items arrive (newest first). */
-function months(items: readonly InsightsIndexItem[]) {
-  const groups: { key: string; label: string; items: InsightsIndexItem[] }[] = [];
-  for (const item of items) {
-    const date = parse(item.publishedAt);
-    const key = date ? `${date.getUTCFullYear()}-${date.getUTCMonth()}` : 'undated';
-    const label = date ? MONTH.format(date) : 'Undated';
-    const group = groups.find((candidate) => candidate.key === key);
-    if (group) group.items.push(item);
-    else groups.push({ key, label, items: [item] });
-  }
-  return groups;
-}
-
-/** The row's image: the item's own cover, or the scene drawn for it. Never a stand-in photograph. */
-function ownImage(item: InsightsIndexItem): ListCardMarker | undefined {
-  if (item.cover?.src.trim()) {
-    return {
-      type: 'thumbnail',
-      image: {
-        ...item.cover,
-        width: item.cover.width ?? 1600,
-        height: item.cover.height ?? 900,
-      },
-    };
-  }
-  return item.scene ? { type: 'sketch', name: item.scene } : undefined;
-}
-
-/**
- * The archive (owner, 13 Oct 2026: "collect examples of really well done listing pages",
- * docs/research/resources-listing.md). What the best archives share, applied:
- *   - ONE stream, newest first, every item in ONE anatomy — format · date · length, then the title,
- *     then its line — so the eye learns the row once and scans (NN/g, Vercel, Pentagram, Intercom);
- *     the river's mixed feature / pair / row shapes are gone (the zig-zag The Verge was faulted for);
- *   - a LEDGER of month blocks: the month stands in a left column and holds while its rows scroll by,
- *     the changelog idiom (Linear), so date is a place on the page rather than a line in every row;
- *   - images only where the item has its own — a real cover or the scene drawn for it — set at the
- *     row's END so a row without one keeps the same edge (Figma's "The latest"); never a stand-in;
- *   - the row STACKS its line under its title at the reading measure: a split set the line's start
- *     wherever the row's image left room, so the column of lines zig-zagged; stacked, every row's
- *     eyebrow, title and line share one edge, and the image closes the row at the column's end.
- */
-function Archive({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout rowGap="column">
-      {months(items).map((month) => {
-        const headingId = `archive-${month.key}`;
-        return (
-          <section key={month.key} aria-labelledby={headingId}>
-            <Layout
-              columns={{ base: 1, lg: [1, 4] }}
-              colGap="gutter"
-              rowGap="text"
-              align="start"
-            >
-              <h3 id={headingId} className={styles.month}>
-                {month.label}
-              </h3>
-              <Layout as="ul" rowGap="none">
-                {month.items.map((item) => {
-                  const date = parse(item.publishedAt);
-                  const eyebrow =
-                    item.kind === 'event'
-                      ? line(LABEL.event.one, dateOf(item.event?.startsAt), item.event?.place)
-                      : line(
-                          LABEL[item.kind].one,
-                          date ? DAY_MONTH.format(date) : undefined,
-                          lengthOf(item),
-                        );
-                  return (
-                    <ListCard
-                      key={item.id}
-                      titleAs="h4"
-                      size="sm"
-                      arrangement="stacked"
-                      eyebrow={eyebrow}
-                      title={item.title}
-                      body={bodyOf(item)}
-                      href={item.href}
-                      marker={ownImage(item)}
-                      markerPosition="end"
-                    />
-                  );
-                })}
-              </Layout>
-            </Layout>
-          </section>
-        );
-      })}
-    </Layout>
   );
 }

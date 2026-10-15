@@ -1,0 +1,36 @@
+/* IndexGroup — the marks the group draws itself: its head's hairline and its three type roles.
+   Layout owns every seam; every value is an --igrp-* token in tokens/components/index-group.css.
+
+   Classes: .head .heading .meta .lead */
+
+/* The head's hairline across the full column, and the head's air under it: the group's own
+   separator, drawn on its own box, never a margin on a neighbour. */
+.head {
+  padding-block-start: var(--gap-block);
+  border-block-start: var(--igrp-rule-width) solid var(--igrp-rule);
+}
+
+/* An h2 at the h3 role: one step under a band's h2, so the item titles under it lead the group. */
+.heading {
+  color: var(--igrp-heading-ink);
+  font: var(--igrp-heading-text);
+  letter-spacing: var(--igrp-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  overflow-wrap: anywhere;
+}
+
+/* A derived fact under the heading, in the label voice. */
+.meta {
+  color: var(--igrp-meta-ink);
+  font: var(--igrp-meta-text);
+  letter-spacing: var(--igrp-meta-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* The one sentence, sans, at the small body role, on the lead measure. */
+.lead {
+  max-inline-size: var(--igrp-lead-measure);
+  color: var(--igrp-lead-ink);
+  font: var(--igrp-lead-text);
+  text-wrap: var(--text-running-wrap);
+}

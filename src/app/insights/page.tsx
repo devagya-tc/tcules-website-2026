@@ -5,13 +5,10 @@ import { getInsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { InsightsIndex } from '@/templates';
 
+import { liveFormatHref } from '../_insights/format';
 import { insightsIndexProps } from '../_insights/hub';
 
 const INSIGHTS_SLUG = ROUTES.insights.slice(1);
-
-type InsightsPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getInsightsPage(INSIGHTS_SLUG);
@@ -52,14 +49,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The insights hub: a front page over an archive (InsightsIndex, docs/specs/InsightsIndex.md). The
- * route reads the CMS and the URL; `insightsIndexProps` maps both onto the template, and the
- * specimen at /design/insights-index runs the same mapping over the stress fixture.
+ * The insights hub: every format as a group beside its outline, each linking out to the format's own
+ * page (InsightsIndex, docs/specs/InsightsIndex.md). `insightsIndexProps` maps the CMS onto the
+ * template; the specimen at /design/insights-index runs the same mapping over the stress fixture.
  */
-export default async function InsightsPage({ searchParams }: InsightsPageProps) {
-  const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
+export default async function InsightsPage() {
+  const page = await getInsightsPage(INSIGHTS_SLUG);
 
   if (!page) notFound();
 
-  return <InsightsIndex {...insightsIndexProps(page, query, ROUTES.insights)} />;
+  return <InsightsIndex {...insightsIndexProps(page, liveFormatHref)} />;
 }

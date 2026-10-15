@@ -1,24 +1,15 @@
 /* InsightsIndex — the marks the hub template draws itself. Layout and Cluster own every seam; every
    value is an --iix-* token in tokens/components/insights-index.css. */
 
-/* A format's count beside its jump: the label voice in the quiet ink, so the format's name leads.
-   The space before it is an en space in the text itself, not a padding or margin. */
-.jumpCount {
+/* The archive's count lines: the quiet label voice. */
+.count {
   color: var(--iix-count-ink);
   font: var(--iix-count-text);
   letter-spacing: var(--iix-count-tracking);
   text-transform: var(--text-mono-case);
 }
 
-/* The feed's count line over its filters: the same quiet label. */
-.feedCount {
-  color: var(--iix-count-ink);
-  font: var(--iix-count-text);
-  letter-spacing: var(--iix-count-tracking);
-  text-transform: var(--text-mono-case);
-}
-
-/* The comma that makes a jump's accessible name "Articles, 36" rather than "Articles36". */
+/* Words a screen reader needs and the eye does not: "pieces match" after the archive's count. */
 .hidden {
   position: absolute;
   inline-size: var(--iix-hidden-size);
@@ -28,7 +19,7 @@
   white-space: nowrap;
 }
 
-/* ── C · a collection's head ── glyph, title, sentence, each on its own row. */
+/* ── D · a collection's head ── glyph, title, sentence, each on its own row. */
 .topicIcon {
   display: block;
   color: var(--iix-topic-icon-ink);
@@ -55,7 +46,7 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* ── F · the feed's filter rail ── a group's name is a label over its chips. */
+/* ── the archive's filter panel ── a group's name is a label over its chips. */
 .filterLabel {
   color: var(--iix-filter-label-ink);
   font: var(--iix-filter-label-text);
@@ -63,7 +54,7 @@
   text-transform: var(--text-mono-case);
 }
 
-/* ── F · the filter row ── the format line scrolls sideways where it runs out of room, never wraps:
+/* ── the format row and the topic line ── a line scrolls sideways where it runs out of room, never wraps:
    an overflow on the line's own box, not an arrangement. Its scrollbar is hidden: the cut-off chip
    at the edge says there is more. */
 .formats {
@@ -150,21 +141,4 @@
   border: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
   border-radius: var(--iix-panel-radius);
   box-shadow: var(--iix-panel-shadow);
-}
-
-/* ── F · the archive's month ── the ledger's left column: a month at the h5 role, holding still
-   beside its rows from 1024 while they scroll (the changelog idiom), clear of the sticky nav. */
-.month {
-  color: var(--iix-month-ink);
-  font: var(--iix-month-text);
-  letter-spacing: var(--iix-month-tracking);
-  text-wrap: var(--text-title-wrap);
-}
-
-@media (min-width: 1024px) {
-  .month {
-    position: sticky;
-    inset-block-start: var(--iix-month-sticky-top);
-    padding-block-start: var(--gap-gutter);
-  }
 }

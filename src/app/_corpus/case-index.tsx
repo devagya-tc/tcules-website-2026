@@ -25,8 +25,8 @@ import {
  * `/case-studies`, from the corpus (page-mapping § 4.6). The template takes no corpus type, so this
  * module is the one place the page's shapes are read onto its props: a band of `###` cases, a band of
  * bold-led paragraphs ("**[Auxentios](/…): one quoting product.** Eight interviews…"), and a quote.
- * It decides no layout. Which arrangement a group takes is the template's call, from its position
- * and its count.
+ * It decides no layout. The first band is the template's `featured` set and the rest its `sections`;
+ * which arrangement a group takes is the template's call, from its count.
  *
  * `_corpus` is underscore-prefixed, so Next does not route it.
  */
@@ -211,6 +211,9 @@ export async function CaseIndexRoute() {
   const closeBand = page.bands.find((band) => band.id === anchor);
   const lead = closeBand?.blocks.find((block) => block.type === 'paragraph');
   const [action] = page.hero.actions;
+  /* The first band is the featured set ("Four to start with"), full width under the hero; the rest
+     are the situations, each a group beside the outline. The band order is the corpus's. */
+  const [featuredBand, ...situationBands] = page.bands.filter((band) => band.id !== anchor);
 
   return (
     <CaseStudyIndex
@@ -223,9 +226,8 @@ export async function CaseIndexRoute() {
         action: action ? { label: action.labelText, href: action.href } : undefined,
         texture: true,
       }}
-      sections={page.bands
-        .filter((band) => band.id !== anchor)
-        .map((band) => sectionOf(page, refs, band, ratings))}
+      featured={featuredBand ? sectionOf(page, refs, featuredBand, ratings) : undefined}
+      sections={situationBands.map((band) => sectionOf(page, refs, band, ratings))}
       closing={
         closeBand
           ? {
