@@ -223,3 +223,83 @@
     animation: none;
   }
 }
+
+/* ── grid (home round 9) ─────────────────────────────────────────────────────────
+   Six equal cards in one fold. Layout owns the tracks and both seams; this owns the card's hit
+   area, its hover ground and its type. */
+.cell {
+  min-inline-size: 0;
+}
+
+/* The whole card is the anchor, stretched to its row so every target in a row is the same height.
+   No inset: the copy is flush with the band's heading. */
+.card {
+  display: block;
+  position: relative;
+  block-size: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card:hover,
+.card:focus-visible {
+  text-decoration: none;
+}
+
+.card:focus {
+  outline: none;
+}
+
+/* The hover ground, painted past the copy on every side by --gwy-card-reach (paint, not layout:
+   half the `gutter`, so two neighbours' grounds never touch). */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--gwy-card-reach) * -1);
+  border-radius: var(--gwy-marker-radius);
+  background: var(--gwy-marker-ground);
+  opacity: 0;
+  transition: opacity var(--gwy-quick-duration) var(--gwy-easing);
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:focus-visible::before {
+  opacity: 1;
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+}
+
+.cardBody {
+  position: relative;
+  block-size: 100%;
+}
+
+.cardVisual {
+  min-inline-size: 0;
+  block-size: var(--gwy-card-visual-height);
+}
+
+/* ROUGH PASS (round 9): today's drawings are 16:9 sketches, letterboxed into the shorter slot the
+   fold allows. The six new drawings are to be made for this slot's own proportion. */
+.cardVisual > * {
+  block-size: 100%;
+}
+
+/* The card's title in the sans (owner, 15 Oct 2026: the serif "doesn't look good outside of
+   titles, for example in cards"). */
+.cardTitle {
+  font: var(--gwy-card-title-text);
+  letter-spacing: var(--gwy-card-title-tracking);
+  color: var(--gwy-title-ink);
+  text-wrap: balance;
+}
+
+.cardText {
+  display: block;
+  font: var(--gwy-card-body-text);
+  color: var(--gwy-body-ink);
+  text-wrap: pretty;
+}

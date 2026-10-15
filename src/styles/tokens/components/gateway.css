@@ -47,6 +47,19 @@
   --gwy-quick-duration: var(--duration-fast);
   --gwy-easing: var(--easing-standard);
   --gwy-rule-width: var(--border-width-hairline);
+  /* grid (home round 9, 15 Oct 2026): the card's title in the SANS at the h6 size, semibold (the
+     owner: smaller type, serif for titles only, never in cards). Composed from primitives because no
+     usage role sets a sans title yet; if every card title goes sans, this becomes a usage role. */
+  --gwy-card-title-text: var(--font-weight-semibold) var(--font-size-h6)/var(--line-height-h6)
+    var(--font-family-sans);
+  --gwy-card-title-tracking: var(--letter-spacing-none);
+  --gwy-card-body-text: var(--text-body-sm);
+  /* How far the hover ground reaches past the card's copy: paint only (gap rule 1), half the
+     `gutter` so neighbouring grounds never meet. */
+  --gwy-card-reach: var(--space-16);
+  /* The drawing's slot: a component size, set by the fold. Six cards, two rows, the band's head
+     and the nav inside 900: a 16:9 drawing (221 at three tracks) ran the band 110 over. */
+  --gwy-card-visual-height: 152px;
   --gwy-ring-width: var(--focus-ring-width);
   --gwy-ring-radius: var(--radius-4);
 }

@@ -53,8 +53,17 @@ export default async function KitGatewayPage() {
       </Section>
 
       <Variation
+        id="grid"
+        title="G.0 · Grid — home (round 9)"
+        note="All six at equal weight in an even 3×2, every card a link: its drawing, its sans title, its sentence and its service, all visible with no interaction, in one fold. No ground at rest, so the copy is flush with the heading; the hover ground reaches past the copy. Two up from 768, one column below."
+      />
+      <ContentSection heading={heading} headingId="gw-grid">
+        <Gateway items={items} arrangement="grid" />
+      </ContentSection>
+
+      <Variation
         id="paper"
-        title="G.1 · Selector on paper — home"
+        title="G.1 · Selector on paper"
         note="From 1024: every title at full ink. A faint blue marker sits behind the current situation and glides to whichever one the pointer or focus is on, with no delay; the answer (sentence at lead size, the service as the link) glides beside it, level with its title. Run the pointer down the list to browse. Below 1024: every title, sentence and service in one column. Every word is in the HTML at every width."
       />
       <ContentSection heading={heading} headingId="gw-paper">

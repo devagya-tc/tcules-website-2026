@@ -51,9 +51,15 @@ export type GatewayItem = {
  *           sentence and service under its title. Explored alternative: in-flow, so the rows move as
  *           one opens and another closes.
  *
+ *   grid    THE GRID (home round 9, 15 Oct 2026). All six at equal weight in an even 3×2, each a
+ *           whole-card link: its visual, its title, its sentence and the service it leads to, all
+ *           visible at once with no interaction (owner: "an ICP wants to see whatever is most
+ *           relevant to them first", so the band lives in one fold; "we want equal weight cards").
+ *           The reference is Eleken's "What brings SaaS teams to us", with a drawing per card.
+ *
  * A presentation choice, never a CMS field.
  */
-export type GatewayArrangement = 'select' | 'expand';
+export type GatewayArrangement = 'select' | 'expand' | 'grid';
 
 export type GatewayProps = {
   items: readonly GatewayItem[];
@@ -99,7 +105,77 @@ const EXPAND_INTENT_MS = 140;
  * mirror: `aria-hidden`, its link out of the tab order, because the title the reader is on already
  * goes to the same place.
  */
-export function Gateway({ items, arrangement = 'select', titleAs = 'h3', className }: GatewayProps) {
+export function Gateway(props: GatewayProps) {
+  return props.arrangement === 'grid' ? (
+    <GatewayGrid {...props} />
+  ) : (
+    <GatewaySelect {...props} />
+  );
+}
+
+/** The link cue every arrangement ends a situation on: the service's name, as a link, with its arrow. */
+const linkCue = (label: string) => (
+  <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
+    {label}
+  </Button>
+);
+
+/**
+ * `grid`: six peers in one fold. Each card is ONE anchor to its service (one tab stop), its
+ * sentence its description. The cards carry no ground at rest, so the copy stays flush with the
+ * band's heading (the "indent looks off" note on the services grid); the hover ground is painted
+ * past the copy by a pseudo-element, the way the selector's marker reaches. The visual is the
+ * caller's (`visual`), decorative.
+ */
+function GatewayGrid({ items, titleAs = 'h3', className }: GatewayProps) {
+  const Title = titleAs;
+  const uid = useId();
+  return (
+    <Layout
+      as="ul"
+      columns={{ md: 2, lg: 3 }}
+      colGap="gutter"
+      rowGap="gutter"
+      className={cx(styles.root, className)}
+    >
+      {items.map((item) => {
+        const descId = `${uid}-${item.id}-desc`;
+        return (
+          <li key={item.id} className={styles.cell}>
+            <a
+              href={item.href}
+              className={styles.card}
+              aria-describedby={descId}
+              data-btn-link-group=""
+            >
+              <Layout rowGap="block" pinLast className={styles.cardBody}>
+                {item.visual != null ? (
+                  <div className={styles.cardVisual} aria-hidden="true">
+                    {item.visual}
+                  </div>
+                ) : null}
+                <Layout rowGap="tight">
+                  <Title className={styles.cardTitle}>{item.title}</Title>
+                  <span id={descId} className={styles.cardText}>
+                    {item.body}
+                  </span>
+                </Layout>
+                <span>{linkCue(item.service)}</span>
+              </Layout>
+            </a>
+          </li>
+        );
+      })}
+    </Layout>
+  );
+}
+
+function GatewaySelect({
+  items,
+  arrangement = 'select',
+  titleAs = 'h3',
+  className,
+}: GatewayProps) {
   const Title = titleAs;
   const uid = useId();
   const [active, setActive] = useState(0);
@@ -114,7 +190,8 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
   };
   const pointTo = (i: number) => {
     clearIntent();
-    if (arrangement === 'expand') intent.current = setTimeout(() => setActive(i), EXPAND_INTENT_MS);
+    if (arrangement === 'expand')
+      intent.current = setTimeout(() => setActive(i), EXPAND_INTENT_MS);
     else setActive(i);
   };
   useEffect(() => clearIntent, []);
@@ -138,12 +215,6 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
 
   const lit = items[active] ?? items[0];
   if (!lit) return null;
-
-  const linkCue = (label: string) => (
-    <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
-      {label}
-    </Button>
-  );
 
   const situation = (item: GatewayItem, i: number) => {
     const descId = `${uid}-${item.id}-desc`;
@@ -179,7 +250,12 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
               <span className={styles.detailInner}>
                 {/* The sentence keeps a reading measure: the leading 7 of [7, 5] in a full-width
                     row (expand); in the selector's 8-of-12 track it is already a column. */}
-                <Layout columns={{ lg: [7, 5] }} colGap="column" rowGap="none" className={styles.detailBody}>
+                <Layout
+                  columns={{ lg: [7, 5] }}
+                  colGap="column"
+                  rowGap="none"
+                  className={styles.detailBody}
+                >
                   <Layout rowGap="text">
                     <span id={descId} className={styles.body}>
                       {item.body}
@@ -217,7 +293,11 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
       className={cx(styles.root, styles.select, className)}
     >
       <div ref={trackRef} className={styles.track} style={placed}>
-        <span className={styles.marker} aria-hidden="true" data-ready={geo.markH ? '' : undefined} />
+        <span
+          className={styles.marker}
+          aria-hidden="true"
+          data-ready={geo.markH ? '' : undefined}
+        />
         <Layout as="ul" rowGap="none" className={styles.list}>
           {items.map(situation)}
         </Layout>
@@ -230,7 +310,9 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
               item, so its drawing and words re-enter with a short fade and rise as the pointer moves
               — the micro-animation is the only motion on this side. */}
           <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
-            {lit.visual != null ? <div className={styles.answerVisual}>{lit.visual}</div> : null}
+            {lit.visual != null ? (
+              <div className={styles.answerVisual}>{lit.visual}</div>
+            ) : null}
             <p className={styles.answerText}>{lit.body}</p>
             <span>
               <Button
