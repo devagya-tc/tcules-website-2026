@@ -33,10 +33,12 @@
   --tsm-radius: var(--radius-8);
   --tsm-rule-width: var(--border-width-hairline);
   /* The quote's sans roles (home round 3): the card that is the thing, the supporting card, and the
-     diptych's panel, one step each. */
-  --tsm-quote-text: var(--text-lead);
-  --tsm-quote-text-sm: var(--text-body);
-  --tsm-quote-text-panel: var(--text-lead-lg);
+     diptych's panel, one step each. Set italic (owner, 15 Oct 2026: "make testimonials italic") —
+     the sans italic, not the serif, which stays in titles. Prefixed onto the composite because
+     `font:` resets font-style, so the slant has to travel inside the value the consumer reads. */
+  --tsm-quote-text: italic var(--text-lead);
+  --tsm-quote-text-sm: italic var(--text-body);
+  --tsm-quote-text-panel: italic var(--text-lead-lg);
   /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),
      40 on the supporting card. A circle (owner, home round 3), the one round portrait in the kit. */
   --tsm-avatar-size-md: 48px;
