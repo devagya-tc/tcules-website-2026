@@ -107,3 +107,19 @@ very special text". Recorded in `docs/kit/review-7-oct.md`, r7-statement.
   only, from 1024. `corner-pair` is `corner` plus `TextureCorner at="bottom-start"`, a lighter related
   cluster in the opposite corner so a centred band reads balanced; centred only, from 1024.
 - Specimen: `/design/statement` J · 3b and J · 2b; documented with when / never on `/design/texture`.
+
+## Amendment · 13 Oct 2026 — the island (`island`)
+
+Owner brief: an island variant, the statement inside a floating box, its ground set per instance. Built
+on the new tier-1 `Island` (docs/specs/Island.md).
+
+- **`island?: IslandSurface`** (`'paper' | 'tint'`). Without `surface`, the band takes the other light
+  ground (`ISLAND_BAND`); an island equal to its band is refused and takes the other (dev warning).
+- **The texture lives inside the island.** Island is positioned, isolated and clips to its radius, so
+  every recipe (head-half, end-fade, corner, corner-pair) fills the island and arrives from past its
+  edge; the band around stays clean ground. Texture is still paper only (§ 6.2), now judged on the
+  island's ground: it needs `island="paper"` (the bright island on a tint band). Still from 1024 only.
+- Alignment, graphic, eyebrow, element and action are unchanged inside it. `surface` defaults to
+  `paper` only when there is no island. `data-arrangement="island"` on the band.
+- Specimen: `/design/statement` J · 7 — start on a tint island with an action; centred on a paper island
+  with `corner-pair`; start on a paper island with `end-fade`; the surface proof on ink.

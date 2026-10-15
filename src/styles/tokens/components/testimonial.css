@@ -33,7 +33,8 @@
   --tsm-radius: var(--radius-8);
   --tsm-rule-width: var(--border-width-hairline);
   /* The quote's sans roles (home round 3): the card that is the thing, the supporting card, and the
-     diptych's panel, one step each. */
+     diptych's panel, one step each. Upright; the italic is a voice the caller opts into
+     (Testimonial `voice`), not a token. */
   --tsm-quote-text: var(--text-lead);
   --tsm-quote-text-sm: var(--text-body);
   --tsm-quote-text-panel: var(--text-lead-lg);

@@ -37,6 +37,11 @@ const SPECIMENS = [
       },
       { href: '/design/cluster', name: 'Cluster', note: 'inline axis — wrapping rows' },
       {
+        href: '/design/island',
+        name: 'Island',
+        note: 'a bounded ground inside a band, set per instance — paper or tint, never its band’s own; 8 radius, no edge, the band’s air as its inset, the page gutter kept at 390; texture inside; 4 pairings',
+      },
+      {
         href: '/design/button',
         name: 'Button',
         note: 'a showcase — blue solid (the page’s one main action) + blue ghost partner + link, in a page; sizes, states, icons, the outline stepper, chrome-only neutral, 4 surfaces',
@@ -220,7 +225,7 @@ const SPECIMENS = [
       {
         href: '/design/voice-ledger',
         name: 'VoiceLedger',
-        note: 'complaints in the customer\'s words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint',
+        note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",
       },
       {
         href: '/design/case-spread',
@@ -365,7 +370,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/video-testimonial',
         name: 'VideoTestimonial',
-        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
+        note: 'a client interview on film: featured (16:9 poster in [3, 2], display quote beside) under a head on paper and alone on tint, and wide (3:1 poster across the column, opening to 16:9 on play; quote and credit in one row below), and portrait (9:16 poster beside the quote from 768, 4:5 crop opening to 9:16 below; paper captioned, tint uncaptioned, ink proof); one film per band and the band’s only testimonial; poster, play disc, captions track slot, no autoplay, focus hand-off, reduced motion',
       },
       {
         href: '/design/kit/form',

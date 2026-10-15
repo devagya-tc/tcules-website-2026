@@ -351,7 +351,7 @@ No row differs in **slot set**. Every difference is a position, a type role or a
 | `centred` — heading and actions centred, no second column | The shape a marketing page reaches for, and it fails on the form: a centred 470px form under a centred heading is a funnel page, and this block ends an article. It also cannot hold a left-set ordered list, which is the one part that carries "what happens next" |
 | `formLeft` / `reverse` | The default exists to be the same on 56 pages. A mirrored instance is the drift the hard constraint names |
 | `banner` — one line, heading and button on one row | Tempting for the mid-page interrupt, and it loses the points. The free audit's value is the three things that happen next; a banner is an ask with no reason attached, and 37 pages is too many to make that trade on |
-| `card` — the whole block in a bordered, radiused box on the page ground | Decoration doing the work of scale and position. It also breaks the "must not own its ground" constraint in the most literal way available |
+| `card` — the whole block in a bordered, radiused box on the page ground | Decoration doing the work of scale and position. It also breaks the "must not own its ground" constraint in the most literal way available. *Revisited 13 Oct 2026 (owner): the `island` close puts the open arrangement on an `Island` primitive that owns its own ground, with no border; see the amendment at the foot* |
 | `stacked` — form above the copy, single column at all widths | This is `split` at 1023 and below. A separate variant for a rendering the responsive rule already produces is one more name for the same pixels |
 | `twoUpPoints` — points as a 2-up grid in `split` | A 2-up inside a 706px track gives 337px tracks, which is narrower than the `--lay-track-md` 320px floor plus a gutter can carry with a detail line under each label. The vertical list is the answer to the brief's open question about the narrow column |
 | `withProofPanel` — proof in a tinted panel inside the band | A tint panel nested inside an ink band is the measured 1.13:1 failure the brief cites. `Proof` reads `--sec-*` from this band's surface and paints nothing |
@@ -970,3 +970,26 @@ Supersedes the K and close notes in § 0's amendment block where they differ:
   and `.photoLandscape`. A set of points never sits as a separate strip under a split; points stay
   with the copy they belong to. The portrait `[7, 5]` is the only offer-with-photo shape. Earlier
   mentions of the landscape offer above are superseded.
+
+## Amendment · 13 Oct 2026 — the island close (`island`, open only)
+
+Owner brief: an island variant, "a floating box within a section, with the CTA inside it", its ground
+set per instance. Built on the new tier-1 `Island` (docs/specs/Island.md).
+
+- **`island?: IslandSurface`** (`'paper' | 'tint'`) on `arrangement="open"` only; `island?: never` on
+  split and both offers, so the combination does not compile. A split already raises its form on a
+  panel (a box in a box is the card reflex twice); an offer interrupts mid-page and a floating box there
+  would outweigh the close.
+- **Ground.** Without `surface`, the band takes the other light ground (`ISLAND_BAND`): `island="tint"`
+  moves the close's tint onto the island and drops the band to paper, so the page still steps
+  paper → tint → the ink footer. An island equal to its band is refused (`islandSurfaceOn`): it takes the
+  other light ground and warns in development.
+- **Content unchanged.** Both open shapes (centred, and [3, 2] with proof) render inside the island with
+  their own Layouts; the heading stays h1, the actions stay the blue solid + its partner — the page's
+  one main action, resolved on the island's surface.
+- **This revisits the rejected `card` arrangement** (§ rejections: "owns a ground it must not own").
+  CtaSection still owns no ground: the island is a primitive that owns its own, by owner decision, and
+  this stylesheet still paints nothing.
+- `data-arrangement="open-island"` on the band. No texture (the close carries none; Island.md Q4).
+- Specimen: `/design/cta-section` § 16 — tint island on paper (flagship, points + pair), paper island on
+  tint (mark, one action), the proof shape in an island, and the surface proof on ink.

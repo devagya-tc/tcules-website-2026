@@ -96,6 +96,7 @@
 @import 'fonts.css';
 @import 'primitives.css';
 @import 'components/section.css';
+@import 'components/island.css';
 @import 'components/layout.css';
 @import 'components/icon.css';
 @import 'components/media.css';
