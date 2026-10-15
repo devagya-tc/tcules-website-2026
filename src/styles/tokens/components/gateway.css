@@ -60,6 +60,8 @@
   /* The drawing's slot: a component size, set by the fold. Six cards, two rows, the band's head
      and the nav inside 900: a 16:9 drawing (221 at three tracks) ran the band 110 over. */
   --gwy-card-visual-height: 152px;
+  /* tiles (round 10): the preview's sentence, the band's one paragraph from 1024. */
+  --gwy-preview-text: var(--text-lead);
   --gwy-ring-width: var(--focus-ring-width);
   --gwy-ring-radius: var(--radius-4);
 }
@@ -73,6 +75,8 @@
   --gwy-answer-ink: var(--color-neutral-800);
   --gwy-marker-ground: var(--color-brandeis-50);
   --gwy-rule-ink: var(--color-neutral-300); /* decoration */
+  --gwy-tile-ground: var(--color-neutral-50); /* an option tile at rest */
+  --gwy-tile-ground-lit: var(--color-brandeis-50); /* the current tile: the selection */
   --gwy-ring-color: var(--color-brandeis-500);
 }
 
@@ -84,6 +88,8 @@
   --gwy-answer-ink: var(--color-neutral-800);
   --gwy-marker-ground: var(--color-paper);
   --gwy-rule-ink: var(--color-neutral-400); /* decoration */
+  --gwy-tile-ground: var(--color-paper); /* an option tile at rest */
+  --gwy-tile-ground-lit: var(--color-brandeis-50); /* the current tile: the selection */
   --gwy-ring-color: var(--color-brandeis-500);
 }
 
@@ -95,6 +101,8 @@
   --gwy-answer-ink: var(--color-neutral-200);
   --gwy-marker-ground: var(--color-neutral-900);
   --gwy-rule-ink: var(--color-neutral-700); /* decoration */
+  --gwy-tile-ground: var(--color-neutral-900); /* an option tile at rest */
+  --gwy-tile-ground-lit: var(--color-neutral-800); /* the current tile: the selection */
   --gwy-ring-color: var(--color-brandeis-300);
 }
 
@@ -106,5 +114,7 @@
   --gwy-answer-ink: var(--color-white);
   --gwy-marker-ground: var(--color-brandeis-600);
   --gwy-rule-ink: var(--color-brandeis-300); /* decoration */
+  --gwy-tile-ground: var(--color-brandeis-600); /* an option tile at rest */
+  --gwy-tile-ground-lit: var(--color-brandeis-700); /* the current tile: the selection */
   --gwy-ring-color: var(--color-white);
 }

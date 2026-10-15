@@ -303,3 +303,89 @@
   color: var(--gwy-body-ink);
   text-wrap: pretty;
 }
+
+/* ── tiles (home round 10) ───────────────────────────────────────────────────────
+   Option tiles on the left, one preview on the right. The tiles are separate targets, so each
+   carries a quiet ground at rest (the box card's inset exists for its ground); the current tile's
+   ground turns the selection blue and its arrow shows. */
+.tile {
+  display: block;
+  position: relative;
+  block-size: 100%;
+  padding: var(--gap-block);
+  border-radius: var(--gwy-marker-radius);
+  background-color: var(--gwy-tile-ground);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--gwy-quick-duration) var(--gwy-easing);
+}
+
+.tile:hover,
+.tile:focus-visible {
+  text-decoration: none;
+}
+
+.tile:focus {
+  outline: none;
+}
+
+.tile:focus-visible {
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+}
+
+.tileBody {
+  block-size: 100%;
+}
+
+.tileArrow {
+  display: none;
+  color: var(--gwy-arrow-ink);
+}
+
+.previewTrack {
+  display: none;
+  min-inline-size: 0;
+}
+
+/* The preview's sentence: the band's only paragraph from 1024, one step over the tiles' body and
+   still small (owner: smaller type). */
+.previewText {
+  font: var(--gwy-preview-text);
+  color: var(--gwy-answer-ink);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .tileDetail {
+    display: none;
+  }
+
+  .tileArrow {
+    display: block;
+    opacity: 0;
+    transform: translateX(calc(var(--gwy-arrow-inset) * -1));
+    transition:
+      opacity var(--gwy-quick-duration) var(--gwy-easing),
+      transform var(--gwy-glide-duration) var(--gwy-easing);
+  }
+
+  .cell[data-lit] .tile {
+    background-color: var(--gwy-tile-ground-lit);
+  }
+
+  .cell[data-lit] .tileArrow {
+    opacity: 1;
+    transform: none;
+  }
+
+  .previewTrack {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tileArrow {
+    transition: none;
+  }
+}

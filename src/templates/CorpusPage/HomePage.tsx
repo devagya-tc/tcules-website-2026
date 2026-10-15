@@ -314,7 +314,7 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
 function Situations({ b }: BandProps) {
   return (
     <ContentSection {...head(b)} data-band="C-router">
-      <Gateway items={gatewayItems(b)} arrangement="grid" />
+      <Gateway items={gatewayItems(b)} arrangement="tiles" />
     </ContentSection>
   );
 }

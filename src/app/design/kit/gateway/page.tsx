@@ -53,8 +53,17 @@ export default async function KitGatewayPage() {
       </Section>
 
       <Variation
+        id="tiles"
+        title="G.0 · Tiles and preview — home (round 10)"
+        note="From 1024: six option tiles in a 3×2 on the left, titles only, each on a quiet ground; the first is current at rest. Pointer or focus makes a tile current (blue ground, arrow) and the preview on the right shows its drawing at 16:9, its sentence and its service. Clicking a tile goes to its service. Below 1024 every tile shows its sentence and service, two up from 768."
+      />
+      <ContentSection heading={heading} headingId="gw-tiles">
+        <Gateway items={items} arrangement="tiles" />
+      </ContentSection>
+
+      <Variation
         id="grid"
-        title="G.0 · Grid — home (round 9)"
+        title="G.0b · Grid (round 9)"
         note="All six at equal weight in an even 3×2, every card a link: its drawing, its sans title, its sentence and its service, all visible with no interaction, in one fold. No ground at rest, so the copy is flush with the heading; the hover ground reaches past the copy. Two up from 768, one column below."
       />
       <ContentSection heading={heading} headingId="gw-grid">

@@ -57,9 +57,16 @@ export type GatewayItem = {
  *           relevant to them first", so the band lives in one fold; "we want equal weight cards").
  *           The reference is Eleken's "What brings SaaS teams to us", with a drawing per card.
  *
+ *   tiles   THE TILES (home round 10, 15 Oct 2026): the grid, disclosed in two layers. Six equal
+ *           option tiles in a 3×2 on the left carry only their titles, the recognition step; ONE
+ *           preview on the right holds the current situation's drawing, sentence and service (owner:
+ *           "option tiles on the left and one preview on the right"; the grid was "right on the spec
+ *           but too dense"). The first situation is current at rest, so the preview is never empty;
+ *           pointer and focus move it. Below 1024 every tile shows its own sentence and service.
+ *
  * A presentation choice, never a CMS field.
  */
-export type GatewayArrangement = 'select' | 'expand' | 'grid';
+export type GatewayArrangement = 'select' | 'expand' | 'grid' | 'tiles';
 
 export type GatewayProps = {
   items: readonly GatewayItem[];
@@ -106,10 +113,83 @@ const EXPAND_INTENT_MS = 140;
  * goes to the same place.
  */
 export function Gateway(props: GatewayProps) {
-  return props.arrangement === 'grid' ? (
-    <GatewayGrid {...props} />
-  ) : (
-    <GatewaySelect {...props} />
+  if (props.arrangement === 'grid') return <GatewayGrid {...props} />;
+  if (props.arrangement === 'tiles') return <GatewayTiles {...props} />;
+  return <GatewaySelect {...props} />;
+}
+
+/**
+ * `tiles`: the option tiles and their one preview. Each tile is ONE anchor to its service (one tab
+ * stop) with its sentence as its description, present in the HTML at every width and shown under
+ * the title below 1024. The preview is a visual mirror of the current tile — `aria-hidden`, its link
+ * out of the tab order — exactly as the selector's answer is.
+ */
+function GatewayTiles({ items, titleAs = 'h3', className }: GatewayProps) {
+  const Title = titleAs;
+  const uid = useId();
+  const [active, setActive] = useState(0);
+  const lit = items[active] ?? items[0];
+  if (!lit) return null;
+  return (
+    <Layout
+      columns={{ lg: [7, 5] }}
+      colGap="section"
+      rowGap="none"
+      align="start"
+      className={cx(styles.root, className)}
+    >
+      <Layout as="ul" columns={{ md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+        {items.map((item, i) => {
+          const descId = `${uid}-${item.id}-desc`;
+          return (
+            <li key={item.id} className={styles.cell} data-lit={i === active ? '' : undefined}>
+              <a
+                href={item.href}
+                className={styles.tile}
+                aria-describedby={descId}
+                onPointerEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                data-btn-link-group=""
+              >
+                <Layout rowGap="block" pinLast className={styles.tileBody}>
+                  <Title className={styles.cardTitle}>{item.title}</Title>
+                  <span className={styles.tileDetail}>
+                    <Layout rowGap="block">
+                      <span id={descId} className={styles.cardText}>
+                        {item.body}
+                      </span>
+                      <span>{linkCue(item.service)}</span>
+                    </Layout>
+                  </span>
+                  <span className={styles.tileArrow} aria-hidden="true">
+                    <Icon name="arrow-right" />
+                  </span>
+                </Layout>
+              </a>
+            </li>
+          );
+        })}
+      </Layout>
+
+      <div className={styles.previewTrack} aria-hidden="true">
+        <Layout key={lit.id} rowGap="block" className={styles.answerBody}>
+          {lit.visual != null ? <div className={styles.answerVisual}>{lit.visual}</div> : null}
+          <p className={styles.previewText}>{lit.body}</p>
+          <span>
+            <Button
+              as="a"
+              href={lit.href}
+              tabIndex={-1}
+              emphasis="link"
+              tone="primary"
+              icon={<Icon name="arrow-right" />}
+            >
+              {lit.service}
+            </Button>
+          </span>
+        </Layout>
+      </div>
+    </Layout>
   );
 }
 
