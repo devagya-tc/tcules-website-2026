@@ -194,17 +194,40 @@ function mapFormatCard(
 }
 
 /**
- * The article's reading time. Strapi keeps it as the TITLE of the article's iframe block ("10 Min
- * Read"); it used to be folded into the description, which put a reading time where a standfirst
- * belongs. Only a value that says "read" is taken, so an embed's real title never becomes one.
+ * The article's byline facts. Strapi keeps them as the TITLE of the article's iframe block: once just
+ * the reading time ("10 Min Read"), now the authored date AND the reading time in one string
+ * ("26 feb ‘25 ⸱ 13 min read" — a word-separator dot, a left quote). It used to be folded into the description, which put a reading time
+ * where a standfirst belongs, and then read whole as the reading time, which printed a second date
+ * on every card (15 Oct 2026). Each part is taken on its own: only a part that says "read" is the
+ * reading time, so an embed's real title never becomes one, and only a part that parses as a day is
+ * the authored date. docs/strapi-changes.md § 21.
  */
-function readingTime(resource: StrapiInsightsResource): string | undefined {
+function byline(resource: StrapiInsightsResource): { readingTime?: string; authoredAt?: string } {
   const detail = value(
     resource.mainSection?.find(
       (block) => block.__typename === 'ComponentBlogAndCasestudiesIframe',
     )?.title,
   );
-  return /\bmin(ute)?s?\s+read\b/iu.test(detail) ? detail.toLowerCase() : undefined;
+  if (!detail) return {};
+  const parts = detail
+    .split(/\s*[·|•⸱⋅∙]\s*/u)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const minutes = parts.find((part) => /\bmin(ute)?s?\s+read\b/iu.test(part));
+  const authoredAt = parts.map(authoredDate).find(Boolean);
+  return {
+    ...(minutes ? { readingTime: minutes.toLowerCase() } : {}),
+    ...(authoredAt ? { authoredAt } : {}),
+  };
+}
+
+/** "26 Feb '25" or "Feb 26, 2025" as an ISO day; anything else, nothing. A two-digit year is 20xx. */
+function authoredDate(part: string): string | undefined {
+  if (!/\d/u.test(part) || /\bread\b/iu.test(part)) return undefined;
+  const written = part.replace(/['‘’](\d{2})\b/u, '20$1');
+  if (!/\b\d{4}\b/u.test(written)) return undefined;
+  const time = Date.parse(`${written} UTC`);
+  return Number.isNaN(time) ? undefined : new Date(time).toISOString();
 }
 
 /**
@@ -268,8 +291,10 @@ function mapResource(
     const mapped = mapTaxonomy(category, 'category');
     return mapped ? [mapped] : [];
   });
-  const publishedAt = value(resource.publishedAt);
-  const minutes = readingTime(resource);
+  /* The authored date, where the entry states one, is the date: Strapi's `publishedAt` is when the
+     entry was last synced, which stamped every insight with the same day (15 Oct 2026). */
+  const { readingTime: minutes, authoredAt } = byline(resource);
+  const publishedAt = authoredAt ?? value(resource.publishedAt);
   const event = kind === 'event' ? eventDetails(resource) : undefined;
 
   return {

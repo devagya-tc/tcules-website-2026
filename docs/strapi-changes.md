@@ -314,3 +314,23 @@ facts; the view model (`InsightResource`, `InsightCollection`, `InsightFormatCar
 them, and the specimen (`/design/insights-index`) shows each with stress content.
 
 **Found in.** Insights front page, 13 Oct 2026 (`feat/insights-front-page`).
+
+## 21. Insights: an authored date, not the sync date
+
+**Change.** Give every insight (blog, guide, video, event, podcast) an authored `date` field, and move
+the reading time out of the iframe block's `title` into its own field (see § 20 b).
+
+**Today.** Strapi's `publishedAt` is the date an entry was last published, and a sync on 15 Oct 2026
+republished everything, so every card on /insights said "15 Oct 2026". The article's real date sits
+in the iframe block's `title` beside its reading time — "26 Feb '25 · 13 min read" — and the mapper
+read that whole string as the reading time, so cards carried two dates ("VIDEO · 15 OCT 2026 · 26 FEB
+'25 · 13 MIN READ").
+
+**Mapper (done, `src/content/sources/strapi/insights.ts`).** The iframe title is split on its
+separator: the part that says "read" is `readingTime` ("13 min read"), the part that parses as a day
+("26 Feb '25", "Feb 26, 2025"; a two-digit year is 20xx) is the authored date, and when it exists it
+replaces `publishedAt`, so the hub's order and every format page's "newest first" follow it. Entries
+without one keep `publishedAt`. When the CMS carries a real `date` field, read that and delete the
+parse.
+
+**Found in.** Listings redesign, 15 Oct 2026 (`design/listings`).
