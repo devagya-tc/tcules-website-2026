@@ -77,8 +77,9 @@
    Declared for self-containment, not placeable (limit 3). Held at 500 as shipped.      */
 [data-surface="ink"]{
 --tex-ink:var(--color-brandeis-500);
-/* TextureFrame on the ink island (owner, 16 Oct 2026): white, a light grain on the dark ground. */
---tex-ink-soft:var(--color-white);
+/* TextureFrame on the ink island (owner, 16 Oct 2026): a mid grey, a quiet grain on the dark
+   ground (white read harsh). */
+--tex-ink-soft:var(--color-neutral-500);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -86,5 +87,7 @@
    this ground and would draw nothing.                                                  */
 [data-surface="blue"]{
 --tex-ink:var(--color-white);
---tex-ink-soft:var(--color-white);
+/* TextureFrame on the blue island (owner, 16 Oct 2026): a light blue, 200, a tone of the ground
+   rather than white on it (white read harsh). */
+--tex-ink-soft:var(--color-brandeis-200);
 }

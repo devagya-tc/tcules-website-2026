@@ -216,15 +216,17 @@ export function TextureCounterweight() {
 
 /**
  * TextureFrame — the `frame` placement (owner, 16 Oct 2026, the home enquiry close). One soft
- * rounded field on an island's ground, set around the form panel in the island's end column at an
- * even distance on every side, so the form sits in a frame of the island's own texture.
+ * rounded field on an island's ground, RIGHT BEHIND the form panel: it reaches about 40 past the
+ * panel on every side, so the texture reads as the panel's own halo rather than as a region of the
+ * island ("it feels harsh … right behind the form and smaller", owner, same day).
  *
- *   rect, right −2%, width 65%, top −24, height 106%, radius 120, blur 88
+ *   rect, right 56, width 51%, top 24, height 92%, radius 56, blur 40
  *
  * Fitted to the island close: the panel fills the end 7 of a [5, 7] split inside the island's 96
- * inset, so a field 120 wider than the panel on every side is about 65% of the island and starts 24
- * past its end and top edges. Percentages track the split as it reflows; the field is clipped by the
- * island at its radius. Soft, so it is drawn in --tex-ink-soft: white on blue and on ink.
+ * inline and 64 block insets, so a field 40 larger than the panel on every side starts 56 in from
+ * the island's end, 24 in from its top, and is about 51% of the island wide. The width tracks the
+ * split as it reflows. Soft, so it is drawn in --tex-ink-soft: a light blue on blue, a mid grey on
+ * ink — white read harsh.
  *
  * Its rule is the others': never behind a glyph. The copy column is the island's other 5, outside
  * the field but for its feather.
@@ -232,7 +234,7 @@ export function TextureCounterweight() {
 export function TextureFrame() {
   return (
     <Texture className={styles.soft}>
-      <TextureShape right="-2%" width="65%" top={-24} height="106%" radius={120} blur={88} />
+      <TextureShape right={56} width="51%" top={24} height="92%" radius={56} blur={40} />
     </Texture>
   );
 }
