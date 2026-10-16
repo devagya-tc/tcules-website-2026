@@ -45,10 +45,21 @@
   --tsm-avatar-radius: var(--radius-full);
   /* The diptych's panel from 1440: the card ratio, so its edges are the case cover's. */
   --tsm-panel-ratio: var(--ratio-standard);
+  /* TestimonialCase (16 Oct 2026): one case and its client's words as ONE card. Its title is the
+     featured card's h3 (BlockCard lg), its story the body-lg role, and its cover the site's one card
+     ratio, ruled at the placement as every card cover is. */
+  --tsm-case-title-text: var(--text-h3);
+  --tsm-case-title-tracking: var(--text-h3-tracking);
+  --tsm-case-body-text: var(--text-body-lg);
+  --tsm-case-media-ratio: var(--ratio-standard);
+  --tsm-case-media-radius: var(--radius-8);
 }
 
 :root,
 [data-surface='paper'] {
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --tsm-case-media-rule: var(--color-neutral-300); /* decoration */
   --tsm-ground: var(--color-paper-deep);
   --tsm-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper */
@@ -60,6 +71,9 @@
 }
 
 [data-surface='tint'] {
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800); /* 11.81:1 on paper */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper-deep */
@@ -71,6 +85,9 @@
 }
 
 [data-surface='ink'] {
+  --tsm-case-title-ink: var(--color-white);
+  --tsm-case-body-ink: var(--color-neutral-300);
+  --tsm-case-media-rule: var(--color-neutral-700); /* decoration */
   --tsm-ground: var(--color-neutral-900);
   --tsm-quote-ink: var(--color-white);
   --tsm-quote-ink-quiet: var(--color-neutral-300);
@@ -82,6 +99,9 @@
 }
 
 [data-surface='blue'] {
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800);
   --tsm-quote-ink-quiet: var(--color-brandeis-50);

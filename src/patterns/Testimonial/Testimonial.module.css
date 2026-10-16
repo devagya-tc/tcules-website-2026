@@ -156,3 +156,53 @@
 .card:not(.box) .role {
   color: var(--tsm-role-ink-quiet);
 }
+
+/* ── TestimonialCase: the case and its client's words as one card ─────────────────
+   The boxed card's ground, inset and radius (`.box`), at the scale of a featured case. */
+.caseCard {
+  min-inline-size: 0;
+  padding: var(--gap-gutter);
+  background: var(--tsm-ground);
+  border-radius: var(--tsm-radius);
+}
+
+/* The cover: the card ratio, ruled at the placement (Media `edge="placement"`), as every card cover
+   is, so a capture's own edge does not sit inside it as a second line. */
+.caseMedia {
+  display: block;
+  min-inline-size: 0;
+  aspect-ratio: var(--tsm-case-media-ratio);
+  overflow: hidden;
+  border: var(--tsm-rule-width) solid var(--tsm-case-media-rule);
+  border-radius: var(--tsm-case-media-radius);
+}
+
+.caseCopy {
+  min-inline-size: 0;
+}
+
+.caseTitle {
+  font: var(--tsm-case-title-text);
+  letter-spacing: var(--tsm-case-title-tracking);
+  text-wrap: balance;
+  color: var(--tsm-case-title-ink);
+}
+
+.caseBody {
+  font: var(--tsm-case-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--tsm-case-body-ink);
+}
+
+/* Prose stays the trusted-HTML seam; the two-class selector outranks its root. */
+.caseBody .caseProse {
+  font: inherit;
+  color: inherit;
+}
+
+/* The seam between the case and the client: one hairline across the card's inner width. */
+.caseRule {
+  inline-size: 100%;
+  border: 0;
+  border-block-start: var(--tsm-rule-width) solid var(--tsm-rule);
+}
