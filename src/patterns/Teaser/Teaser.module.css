@@ -88,6 +88,21 @@
   text-transform: var(--text-mono-case);
 }
 
+/* Beside a larger title the ordinal grows to a numeral that anchors its row (a guide index), in a
+   wider marker column. */
+.sizeXl .index,
+.sizeLg .index,
+.sizeMd .index {
+  font: var(--tsr-index-text-lg);
+  letter-spacing: var(--tsr-index-tracking-lg);
+}
+
+.sizeXl .markerIndex,
+.sizeLg .markerIndex,
+.sizeMd .markerIndex {
+  inline-size: var(--tsr-marker-index-inline-lg);
+}
+
 /* A compact tile's picture: the stack's full width from md, the row's thumbnail below it. */
 .compactPicture {
   display: block;
@@ -171,6 +186,29 @@
   letter-spacing: var(--tsr-date-day-tracking);
 }
 
+/* The day steps up with the row, so the numeral always clearly outweighs the title beside it; a
+   featured event (beside, xl) sets it at its largest — the date is that item's picture-sized anchor.
+   From md: on a phone the copy needs the width, and the stat step already outweighs the title. */
+@media (min-width: 768px) {
+  .row.sizeXl .day,
+  .row.sizeLg .day,
+  .row.sizeMd .day {
+    font: var(--tsr-date-day-text-lg);
+    letter-spacing: var(--tsr-date-day-tracking-lg);
+  }
+
+  .row.sizeXl .markerDate,
+  .row.sizeLg .markerDate,
+  .row.sizeMd .markerDate {
+    inline-size: var(--tsr-marker-date-inline-lg);
+  }
+}
+
+.beside.sizeXl .day {
+  font: var(--tsr-date-day-text-xl);
+  letter-spacing: var(--tsr-date-day-tracking-xl);
+}
+
 .dateLabel {
   color: var(--tsr-meta-ink);
   font: var(--tsr-date-label-text);
@@ -189,6 +227,7 @@
   text-decoration-color: transparent;
   text-decoration-thickness: var(--tsr-title-underline-width);
   text-underline-offset: var(--tsr-title-underline-offset);
+  text-decoration-skip-ink: auto;
   transition: text-decoration-color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
 }
 

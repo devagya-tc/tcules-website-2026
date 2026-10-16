@@ -27,8 +27,9 @@ export type TeaserMedia =
  *           Equal, because insight titles run long: at 3 : 2 an 80-character title stood six lines deep.
  *   row     a list entry: an optional marker (a date or an ordinal) in a fixed column at the START,
  *           the copy, then the picture as a thumbnail at the row's END — so every row's copy starts on
- *           one edge whether or not it has a picture. A marked row lays its picture full width above
- *           the copy on a phone, where a thumbnail beside a marker and the copy left the copy 140px.
+ *           one edge whether or not it has a picture. On a phone a marked row keeps its marker at the
+ *           start and lays its picture over the copy in the copy's column (`weight`, `flip` and
+ *           the date's scale are placement choices too — see those props and teaser.css).
  */
 export type TeaserArrangement = 'stack' | 'beside' | 'row';
 
@@ -79,6 +80,17 @@ export type TeaserProps = {
    * pictures; the lead of a set never takes it.
    */
   compact?: boolean;
+  /**
+   * `beside` only: the picture at the row's END rather than its start — a set of features alternating
+   * sides, so a column of them zigzags instead of stacking one silhouette. Ignored elsewhere.
+   */
+  flip?: boolean;
+  /**
+   * `beside` only: how the row is shared. `even` (default) halves it, for the long titles insights
+   * carry; `picture` gives the picture seven twelfths and the copy five — a page's featured lead,
+   * where the picture is the larger of the two at the one 16:9 ratio. Ignored elsewhere.
+   */
+  weight?: 'even' | 'picture';
 };
 
 const SIZE_CLASS: Record<TeaserSize, string | undefined> = {
@@ -127,6 +139,8 @@ export function Teaser({
   as: Root = 'li',
   sizes = CARD_TWO_TRACKS,
   compact = false,
+  flip = false,
+  weight = 'even',
 }: TeaserProps) {
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
@@ -212,26 +226,36 @@ export function Teaser({
     inner = (
       /* Copy beside its picture is a split, so the column step — BlockCard's beside, the same. Hung
          from the picture's top edge: the meta line and the image start on one line. */
-      <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="text" align="start">
+      <Layout
+        columns={{ md: weight === 'picture' ? [7, 5] : [1, 1] }}
+        reverse={flip ? { md: true } : undefined}
+        colGap="column"
+        rowGap="text"
+        align="start"
+      >
         {picture}
         {copy}
       </Layout>
     );
   } else if (row && marker) {
-    /* A marked row (a date, an ordinal): from md the picture at the row's end; on a phone above the
-       marker and the copy, full width — beside a marker and a thumbnail the copy was left 140px.
-       The source puts the picture first so a phone's single column shows it on top; reverse mirrors
-       it to the end from md, the auto track travelling with it. */
+    /* A marked row (a date, an ordinal): the marker always heads the row at its start, so the row
+       stays marker-led at every width. Beside it, from md, the copy then the picture as a thumbnail
+       at the row's end; on a phone the picture over the copy in the copy's own column — at the
+       row's end beside a marker the copy was left 140px. The source puts the picture first so the
+       phone shows it on top; reverse mirrors it to the end from md, the auto track travelling with it. */
     inner = (
-      <Layout
-        columns={{ base: 1, md: ['auto', 1] }}
-        reverse={{ md: true }}
-        colGap="column"
-        rowGap="text"
-        align="start"
-      >
-        <span className={cx(styles.thumb, styles.markedThumb)}>{picture}</span>
-        {marked}
+      <Layout columns={{ base: ['auto', 1] }} colGap="block" align="start">
+        <span className={date ? styles.markerDate : styles.markerIndex}>{marker}</span>
+        <Layout
+          columns={{ base: 1, md: ['auto', 1] }}
+          reverse={{ md: true }}
+          colGap="column"
+          rowGap="text"
+          align="start"
+        >
+          <span className={cx(styles.thumb, styles.markedThumb)}>{picture}</span>
+          {copy}
+        </Layout>
       </Layout>
     );
   } else if (row) {
@@ -271,6 +295,7 @@ export function Teaser({
         styles.root,
         SIZE_CLASS[size],
         row && styles.row,
+        arrangement === 'beside' && styles.beside,
         compact && arrangement === 'stack' && styles.compact,
       )}
     >

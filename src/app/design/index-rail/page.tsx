@@ -69,15 +69,17 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
         >
           <IndexRail
             ariaLabel="Browse"
+            label="Curate"
             param="view"
             initialMode={view}
             modes={[
               {
                 id: 'type',
                 label: 'By type',
-                items: TYPES.map((name) => ({
+                items: TYPES.map((name, i) => ({
                   label: name,
                   href: `#type-${name.toLowerCase()}`,
+                  count: 42 - i * 9,
                 })),
                 panel: <View prefix="type" names={TYPES} />,
               },
@@ -97,19 +99,20 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
       <Section aria-label="Picker">
         <Specimen
           title="picker — a format page's formats, the current one marked"
-          note="aria-current=page on the current item: the ink bar and full ink."
+          note="aria-current=page on the current item: full ink and the blue tick; each entry a mono count and its label."
         >
           <IndexRail
             ariaLabel="Formats"
+            label="Formats"
             modes={[
               {
                 id: 'type',
                 label: 'By type',
                 items: [
-                  { label: 'Articles', href: ROUTES.articles, current: true },
-                  { label: 'Guides', href: ROUTES.guides },
-                  { label: 'Videos', href: ROUTES.videos },
-                  { label: 'Events', href: ROUTES.events },
+                  { label: 'Articles', href: ROUTES.articles, current: true, count: 42 },
+                  { label: 'Guides', href: ROUTES.guides, count: 10 },
+                  { label: 'Videos', href: ROUTES.videos, count: 7 },
+                  { label: 'Events', href: ROUTES.events, count: 3 },
                 ],
               },
             ]}

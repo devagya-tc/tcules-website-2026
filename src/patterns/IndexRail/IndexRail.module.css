@@ -1,6 +1,7 @@
-/* IndexRail — Layout arranges the rail beside the content, the switch's two labels and the list (a
-   column from 1024, one line below); this module owns the stick, the sideways scroll of that line,
-   the labels' type, the current marks and the view's crossfade. Every value is --irl-*. */
+/* IndexRail — Layout arranges the rail beside the content, the label over the switch and the list,
+   the switch's two labels and the list (a column from 1024, one line below); this module owns the
+   stick, the phone bar's ground and sideways scroll, the labels' type, the count's column, the
+   current marks, the sliding rule and the arriving view's rise. Every value is --irl-*. */
 
 /* The rail and its content: a jump target when a reader switches view deep in the page. */
 .frame {
@@ -14,20 +15,36 @@
 .root {
   position: sticky;
   inset-block-start: var(--irl-sticky-top);
+  z-index: var(--irl-z);
   min-inline-size: 0;
 }
 
-/* A view arriving fades in, so switching reads as one column changing, not a page jumping. */
-.panel:not([hidden]) {
-  animation: irl-enter var(--irl-duration) var(--irl-easing);
+/* The rail's heading: the label voice at its smallest, quiet. */
+.label {
+  color: var(--irl-label-ink);
+  font: var(--irl-label-text);
+  letter-spacing: var(--irl-label-tracking);
+  text-transform: var(--text-mono-case);
 }
 
-/* The switch: two mono labels, the shown one in ink over a short rule its own width. No track, no
-   chip — the rail's chrome is type, as the page's is. */
+/* A view arriving after a switch rises into place, so switching reads as the same shelf re-sorted,
+   not a page jumping. Never on page load: the class is set by the switch. */
+.panel.entering:not([hidden]),
+.list.entering {
+  animation: irl-enter var(--irl-enter-duration) var(--irl-easing);
+}
+
+/* The switch: a positioning context for the sliding rule (it arranges nothing). */
+.switch {
+  position: relative;
+}
+
+/* The switch's labels: mono, the shown one in ink over a rule its own width. No track, no chip. */
 .mode {
   display: block;
   padding-block-end: var(--irl-mode-rule-gap);
   border-block-end: var(--irl-mode-rule-width) solid transparent;
+  border-radius: var(--irl-ring-radius);
   color: var(--irl-mode-ink);
   font: var(--irl-mode-text);
   letter-spacing: var(--irl-mode-tracking);
@@ -36,9 +53,7 @@
   text-transform: var(--text-mono-case);
   white-space: nowrap;
   text-decoration: none;
-  transition:
-    border-color var(--irl-duration) var(--irl-easing),
-    color var(--irl-duration) var(--irl-easing);
+  transition: color var(--irl-duration) var(--irl-easing);
 }
 
 .mode:hover {
@@ -51,28 +66,70 @@
   color: var(--irl-mode-ink-current);
 }
 
+/* Once measured, the labels' own rules give way to one rule that slides between them. */
+.switch[data-measured] .mode[aria-current='true'] {
+  border-block-end-color: transparent;
+}
+
+.indicator {
+  display: none;
+}
+
+.switch[data-measured] .indicator {
+  display: block;
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  inline-size: var(--irl-indicator-w);
+  block-size: var(--irl-mode-rule-width);
+  background-color: var(--irl-mode-rule-ink);
+  transform: translateX(var(--irl-indicator-x));
+  transition:
+    transform var(--irl-slide-duration) var(--irl-easing),
+    inline-size var(--irl-slide-duration) var(--irl-easing);
+}
+
+/* Focus: the system ring, offset and rounded, never the browser's box hugging the label. */
 .mode:focus-visible,
 .item:focus-visible {
   outline: var(--irl-ring-width) solid var(--irl-ring-color);
-  outline-offset: var(--irl-ring-width);
+  outline-offset: var(--irl-ring-offset);
 }
 
-.list {
-  animation: irl-enter var(--irl-duration) var(--irl-easing);
-}
-
-/* The jump link: the small sans, so it never competes with the serif section titles it points at.
-   The current one takes the ink and a bar at its own start edge, inside the rail column (the label
-   is inset by the bar's room, so nothing crosses the content edge). */
+/* The jump link: a mono count, then the small sans label — an index, never a second set of
+   headings. The current one takes the ink and a blue tick at its own start edge, inside the rail
+   column (the entry is inset by the tick's room, so nothing crosses the content edge). */
 .item {
   display: block;
   position: relative;
   padding-inline-start: var(--irl-item-inset);
+  border-radius: var(--irl-ring-radius);
   color: var(--irl-item-ink);
   font: var(--irl-item-text);
   white-space: nowrap;
   text-decoration: none;
   transition: color var(--irl-duration) var(--irl-easing);
+}
+
+/* An entry with a count hangs its label: a wrapped second line starts under the label, not under
+   the figure (the indent is the count's own column). */
+.item:has(.count) {
+  padding-inline-start: calc(var(--irl-item-inset) + var(--irl-count-inline));
+  text-indent: calc(-1 * var(--irl-count-inline));
+}
+
+/* The count's fixed column, so every label starts on one edge whatever the figure. A sizing
+   declaration on an inline box, not an arrangement. */
+.count {
+  display: inline-block;
+  min-inline-size: var(--irl-count-inline);
+  /* text-indent inherits into an inline-block: the hanging indent is the entry's, not the figure's. */
+  text-indent: 0;
+  color: var(--irl-count-ink);
+  font: var(--irl-count-text);
+  letter-spacing: var(--irl-count-tracking);
+  text-transform: var(--text-mono-case);
+  font-variant-numeric: tabular-nums;
 }
 
 .item::before {
@@ -95,6 +152,10 @@
   color: var(--irl-item-ink-current);
 }
 
+.item[aria-current] .count {
+  color: var(--irl-item-ink-current);
+}
+
 .item[aria-current]::before {
   transform: scaleY(1);
 }
@@ -102,9 +163,11 @@
 @keyframes irl-enter {
   from {
     opacity: 0;
+    transform: translateY(var(--irl-enter-rise));
   }
   to {
     opacity: 1;
+    transform: none;
   }
 }
 
@@ -115,12 +178,22 @@
   }
 }
 
-/* Below 1024 the rail is not beside anything to stick to: it is one line above the content, and
-   that line scrolls sideways when its labels outrun the width (a scroll container, not an
-   arrangement — Layout lays the labels out). */
+/* Below 1024 the rail is a slim bar stuck under the site nav: the switch, then the list in one
+   line that scrolls sideways when its labels outrun the width (a scroll container, not an
+   arrangement — Layout lays the labels out). Its ground runs edge to edge behind the content
+   column's gutters (a painted spread, clipped to the bar's own height), so items scroll under it
+   cleanly. The rail's label is a column heading and stays with the column. */
 @media (max-width: 1023px) {
   .root {
-    position: static;
+    inset-block-start: var(--irl-sticky-top-compact);
+    padding-block: var(--irl-bar-inset);
+    background-color: var(--irl-bar-ground);
+    box-shadow: 0 0 0 var(--irl-bar-bleed) var(--irl-bar-ground);
+    clip-path: inset(0 calc(-1 * var(--irl-bar-bleed)));
+  }
+
+  .label {
+    display: none;
   }
 
   .row {
@@ -132,15 +205,11 @@
     display: none;
   }
 
-  /* An in-page jump list over a phone's single column only pushes the view down: the switch alone
-     heads it there. A picker of pages stays: it is the way to the other formats. */
-  .jumps {
-    display: none;
-  }
-
-  /* In the line, the current page's mark is the switch's: a rule under the label. */
-  .item {
+  /* In the line, the current entry's mark is the switch's: a rule under the label. */
+  .item,
+  .item:has(.count) {
     padding-inline-start: 0;
+    text-indent: 0;
     padding-block-end: var(--irl-mode-rule-gap);
     border-block-end: var(--irl-mode-rule-width) solid transparent;
   }
@@ -150,19 +219,20 @@
   }
 
   .item[aria-current] {
-    border-block-end-color: var(--irl-mode-rule-ink);
+    border-block-end-color: var(--irl-marker-ink);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .mode,
   .item,
-  .item::before {
+  .item::before,
+  .switch[data-measured] .indicator {
     transition: none;
   }
 
-  .list,
-  .panel:not([hidden]) {
+  .list.entering,
+  .panel.entering:not([hidden]) {
     animation: none;
   }
 }

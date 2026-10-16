@@ -164,6 +164,9 @@
    purpose: they are free to move independently.                                */
 :root {
   --font-size-display: 67px;
+  /* A hero whose title is ONE WORD — a format page's "Articles" (beauty round 3, 16 Oct 2026): the
+     word set as the band's graphic, twice display's size. Hero-only, like display; never a heading. */
+  --font-size-mark: 136px;
   --font-size-h1: 54px;
   --font-size-h2: 43px;
   --font-size-h3: 34px;
@@ -233,6 +236,8 @@
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
   --font-size-display-t: 54px;
   --font-size-display-m: 43px;
+  --font-size-mark-t: 104px;
+  --font-size-mark-m: 64px;
   --font-size-h1-t: 43px;
   --font-size-h1-m: 34px;
   --font-size-h2-t: 34px;
@@ -276,6 +281,7 @@
    ladder's suffixes. A role with no variant holds at every width.               */
 :root {
   --line-height-display: 1.04;
+  --line-height-mark: 0.96; /* one word: the line is the word's own height, no leading to share */
   --line-height-h1: 1.06;
   --line-height-h2: 1.1;
   --line-height-h3: 1.16;
@@ -313,6 +319,8 @@
    at 1 on every width, so it has no -m step even though its SIZE has one. */
   --line-height-display-t: 1.06;
   --line-height-display-m: 1.08;
+  --line-height-mark-t: 0.98;
+  --line-height-mark-m: 1;
   --line-height-h1-t: 1.08;
   --line-height-h1-m: 1.12;
   --line-height-h2-t: 1.14;
@@ -343,6 +351,8 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --letter-spacing-display: -0.02em;
+  /* At 136 the serif's side bearings open the word up: one step tighter than display. */
+  --letter-spacing-mark: -0.035em;
   --letter-spacing-h1: -0.018em;
   --letter-spacing-title: -0.015em;
   --letter-spacing-title-tight: -0.01em;
@@ -392,6 +402,9 @@
   --text-display: var(--font-weight-regular) var(--font-size-display)/var(--line-height-display)
     var(--font-family-display);
   --text-display-tracking: var(--letter-spacing-display);
+  --text-mark: var(--font-weight-regular) var(--font-size-mark)/var(--line-height-mark)
+    var(--font-family-display);
+  --text-mark-tracking: var(--letter-spacing-mark);
   --text-h1: var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1)
     var(--font-family-display);
   --text-h1-tracking: var(--letter-spacing-h1);
@@ -507,6 +520,8 @@
   :root {
     --text-display: var(--font-weight-regular)
       var(--font-size-display-t)/var(--line-height-display-t) var(--font-family-display);
+    --text-mark: var(--font-weight-regular) var(--font-size-mark-t)/var(--line-height-mark-t)
+      var(--font-family-display);
     --text-h1: var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-h1-t)
       var(--font-family-display);
     --text-h2: var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-h2-t)
@@ -532,6 +547,8 @@
   :root {
     --text-display: var(--font-weight-regular)
       var(--font-size-display-m)/var(--line-height-display-m) var(--font-family-display);
+    --text-mark: var(--font-weight-regular) var(--font-size-mark-m)/var(--line-height-mark-m)
+      var(--font-family-display);
     --text-h1: var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-h1-m)
       var(--font-family-display);
     --text-h2: var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-h2-m)

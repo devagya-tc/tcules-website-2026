@@ -692,6 +692,21 @@ export default async function PageHeroSpecimenPage() {
         </div>
       ))}
 
+      {/* ── 2b · The one-word title at the mark scale ──────────────────────────── */}
+      <div>
+        <PageHero
+          title="Articles"
+          titleSize="mark"
+          body={['Essays and field notes from building complex products.']}
+          tags={['42 published', 'Latest 15 Oct 2026']}
+          texture
+        />
+        <Note
+          title="2b · titleSize mark — a one-word title"
+          note="--text-mark (136 · 104 · 64): the word is the band's graphic; the end-fade widens toward it, and below 1024 the corner field keeps the texture on a phone."
+        />
+      </div>
+
       {/* ── 3 · The paragraph ladder ───────────────────────────────────────────── */}
       {([1, 2, 3, 4, 5, 6, 12] as const).map((count) => (
         <div key={count}>

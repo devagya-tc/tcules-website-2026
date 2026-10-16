@@ -45,12 +45,24 @@
      date's fits a two-digit day at the stat step and "MAR 2023" under it; the ordinal's, "01". */
   --tsr-marker-date-inline: 5.5rem;
   --tsr-marker-index-inline: 2.5rem;
+  /* Beside a larger title (md and up) the ordinal is a numeral in the stat role — a guide index's
+     anchor — and its column widens to hold "09". */
+  --tsr-index-text-lg: var(--text-stat);
+  --tsr-index-tracking-lg: var(--text-stat-tracking);
+  --tsr-marker-index-inline-lg: 4rem;
 
   /* The date anchor (an event): the day as a numeral in the stat role, the month under it in the
-     label voice. A numeral is the strongest head a typographic item can have — so it is set in the
-     title's ink, not the accent: the blue is the page's action (beauty round, 16 Oct 2026). */
+     label voice, in the surface's accent ink — the date list is the one colour beat in a listing
+     (beauty round 3, 16 Oct 2026). It steps with the row so it always outweighs the title: stat-lg
+     in a row of md and up, stat-xl heading a featured event. */
   --tsr-date-day-text: var(--text-stat);
   --tsr-date-day-tracking: var(--text-stat-tracking);
+  --tsr-date-day-text-lg: var(--text-stat-lg);
+  --tsr-date-day-tracking-lg: var(--text-stat-lg-tracking);
+  --tsr-date-day-text-xl: var(--text-stat-xl);
+  --tsr-date-day-tracking-xl: var(--text-stat-xl-tracking);
+  /* The date column beside a stat-lg day: "11" at 54 and "MAR 2023" under it. */
+  --tsr-marker-date-inline-lg: 7rem;
   --tsr-date-label-text: var(--text-eyebrow);
   --tsr-date-label-tracking: var(--text-eyebrow-tracking);
 
@@ -84,10 +96,10 @@
   --tsr-play-glyph-sm: var(--space-14);
   --tsr-play-inset-sm: var(--space-12);
 
-  /* The hover underline: a hairline under the title, set clear of the descenders. Optical, from
-     the ramp. */
+  /* The hover underline: a hairline under the title, set clear of the descenders — an offset in
+     em so it scales with the title, and skip-ink so descenders break it rather than sit on it. */
   --tsr-title-underline-width: var(--border-width-hairline);
-  --tsr-title-underline-offset: var(--space-4);
+  --tsr-title-underline-offset: 0.18em;
   --tsr-title-ink-duration: var(--duration-fast);
   --tsr-title-ink-easing: var(--easing-standard);
   --tsr-ring-width: var(--focus-ring-width);
@@ -100,7 +112,7 @@
   --tsr-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --tsr-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --tsr-meta-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
-  --tsr-date-ink: var(--color-neutral-900); /* 14.62:1 — the title's ink */
+  --tsr-date-ink: var(--color-brandeis-500); /* the accent: large numerals */
   --tsr-label-ink: var(--color-neutral-900);
   --tsr-index-ink: var(--color-neutral-600); /* 4.92:1 */
   --tsr-title-underline-ink: var(--color-neutral-900);
@@ -115,7 +127,7 @@
   --tsr-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --tsr-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --tsr-meta-ink: var(--color-neutral-700); /* 7.27:1 */
-  --tsr-date-ink: var(--color-neutral-900);
+  --tsr-date-ink: var(--color-brandeis-600);
   --tsr-label-ink: var(--color-neutral-900);
   --tsr-index-ink: var(--color-neutral-700); /* 7.27:1 */
   --tsr-title-underline-ink: var(--color-neutral-900);
@@ -129,7 +141,7 @@
   --tsr-title-ink: var(--color-white);
   --tsr-body-ink: var(--color-neutral-300);
   --tsr-meta-ink: var(--color-neutral-400);
-  --tsr-date-ink: var(--color-white);
+  --tsr-date-ink: var(--color-brandeis-300);
   --tsr-label-ink: var(--color-white);
   --tsr-index-ink: var(--color-neutral-400);
   --tsr-title-underline-ink: var(--color-white);

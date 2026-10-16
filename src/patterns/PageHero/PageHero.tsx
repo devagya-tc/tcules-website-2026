@@ -291,6 +291,13 @@ type PageHeroBaseProps = {
    */
   title: string;
   /**
+   * The title's scale. `display` (default) is every hero's. `mark` is for a title that is ONE WORD —
+   * a format page's "Articles" (beauty round 3, 16 Oct 2026): the word set at twice display's size
+   * so it becomes the band's graphic, and the texture drawn in against it rather than in a separate
+   * gutter. Never for a sentence: a mark title is meant to stand on one line.
+   */
+  titleSize?: 'display' | 'mark';
+  /**
    * The paragraphs, in order. Optional (cmp-feature, 6 Oct 2026): an index page whose h1 is the
    * whole opening — the case-study index — has none, and passed `['']` to satisfy the type, a
    * workaround the filter below made render nothing. Absent and all-blank now mean the same thing.
@@ -598,6 +605,7 @@ type BylinePair = { id: string; label: string; value: ReactNode };
  */
 export function PageHero({
   title,
+  titleSize = 'display',
   body,
   eyebrow,
   rating,
@@ -792,7 +800,9 @@ export function PageHero({
       <span>{shownEyebrow}</span>
     </Cluster>
   ) : null;
-  const titleNode = <h1 className={styles.title}>{title}</h1>;
+  const titleNode = (
+    <h1 className={cx(styles.title, titleSize === 'mark' && styles.titleMark)}>{title}</h1>
+  );
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
@@ -1208,9 +1218,22 @@ export function PageHero({
         /* end-fade: Statement's recipe, a direct child of Section so the field is the band's
            padding box. Run from −50% to 150% of the band's height, so the blur's vertical falloff
            is clipped and the grid holds full strength along the end edge. From 1024 only. */
-        <Texture className={styles.fade}>
-          <TextureShape top="-50%" right={-120} width="30%" height="200%" blur={160} />
-        </Texture>
+        <>
+          <Texture className={styles.fade}>
+            <TextureShape
+              top="-50%"
+              right={-120}
+              width={titleSize === 'mark' ? '48%' : '30%'}
+              height="200%"
+              blur={160}
+            />
+          </Texture>
+          {/* Below 1024: the field in the band's top-end corner, over the trail's empty end and
+              clear of the title, so a phone's hero keeps its texture (beauty round 3). */}
+          <Texture className={styles.fadeCorner}>
+            <TextureShape top="-40%" right={-80} width="70%" height="80%" blur={72} />
+          </Texture>
+        </>
       ) : null}
       {announcement === undefined ? (
         top
