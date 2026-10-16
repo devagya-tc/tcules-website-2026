@@ -14,6 +14,7 @@ import {
   type IslandSurface,
   type MediaImage,
   type SectionSurface,
+  TextureHalo,
   TextureTwoLights,
 } from '@/components';
 import { cx } from '@/lib/cx';
@@ -234,6 +235,12 @@ type CtaSplitProps = {
   art?: ReactNode;
   /** The island's ground texture. `two-lights`: `TextureTwoLights`. Island only. */
   islandTexture?: 'two-lights';
+  /**
+   * The band's texture around the island. `halo`: `TextureHalo`, a soft field centred on the form
+   * panel, so the paper panel stands against texture where it rises out of the island (owner,
+   * 16 Oct 2026: the panel "merging quite a bit with the bg"). Island only.
+   */
+  bandTexture?: 'halo';
 };
 
 type CtaOpenProps = {
@@ -262,6 +269,7 @@ type CtaOpenProps = {
   island?: IslandSurface;
   art?: never;
   islandTexture?: never;
+  bandTexture?: never;
 };
 
 type CtaOfferWithFormProps = {
@@ -274,6 +282,7 @@ type CtaOfferWithFormProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
+  bandTexture?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -298,6 +307,7 @@ type CtaOfferWithActionsProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
+  bandTexture?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -1002,7 +1012,8 @@ export function CtaSection(props: CtaSectionProps) {
      proud at the top and the foot whichever column is taller, and the copy column carries the
      island's foot as its own bottom padding, so the lede sits a stack above the island's lower
      edge. Below 1024 it is an ordinary island: the drawing, the lede, then the form, stacked on the
-     island's ground with no panel (the module says why). */
+     island's ground with no panel (the module says why). The panel is always paper, the brightest
+     ground: on a paper island (a tint band) its hairline is what separates it. */
   if (props.island && hasForm) {
     const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
     const islandSurface = islandSurfaceOn(band, props.island);
@@ -1015,6 +1026,7 @@ export function CtaSection(props: CtaSectionProps) {
         data-arrangement="split"
         data-island={islandSurface}
       >
+        {props.bandTexture === 'halo' ? <TextureHalo /> : null}
         <Island
           surface={islandSurface}
           overhang
@@ -1031,9 +1043,13 @@ export function CtaSection(props: CtaSectionProps) {
             </div>
             <div
               className={cx(styles.formPanel, styles.formPanelRaised)}
-              data-surface={PANEL_SURFACE[islandSurface]}
+              data-surface="paper"
             >
-              {props.form}
+              {/* The panel stretches to the row; when the copy column is the taller, the form is
+                  centred in it rather than leaving the panel a hollow foot. */}
+              <Layout align="center" fillFirst className={styles.panelFill}>
+                {props.form}
+              </Layout>
             </div>
           </Layout>
         </Island>

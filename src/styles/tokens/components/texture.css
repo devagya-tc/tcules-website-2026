@@ -53,7 +53,9 @@
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{
 --tex-ink:var(--color-brandeis-500);
---tex-ink-soft:var(--color-brandeis-500);
+/* The soft placements on paper (TextureHalo, TwoLights on a paper island) are drawn in ink, as the
+   approved study 11A was; the hard placements keep the measured blue. */
+--tex-ink-soft:var(--color-neutral-900);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────

@@ -110,6 +110,7 @@ export {
   TextureCorner,
   TextureCounterweight,
   TextureHorizon,
+  TextureHalo,
   TextureShape,
   TextureTwoLights,
   type TextureClosingProps,

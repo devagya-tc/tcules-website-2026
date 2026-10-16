@@ -421,7 +421,8 @@ export function EnquiryBand({
         data-band="L"
         island="tint"
         islandTexture="two-lights"
-        art={<Media image={ENQUIRY_DESK} sizes="200px" />}
+        bandTexture="halo"
+        art={<Media image={ENQUIRY_DESK} sizes="260px" />}
         heading={band.headingText}
         body={body}
         form={corpusEnquiryForm(page, band, { fields: 'line', submit: 'inline' })}

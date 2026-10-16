@@ -1030,3 +1030,18 @@ of a designer's desk, never cropped, facing the form, above the heading. The own
   lede and the after-line are the page's own words.
 - Specimen: `/design/cta-section` § 1b — the home close as built, and a stress instance with points and a
   contact strip and no drawing, where the copy column outgrows the panel.
+
+### Same day, review round on the built close (owner)
+
+- **The form takes the larger track:** `{ lg: [2, 3], xl: [5, 7] }` ("the form itself feels too small").
+- **More vertical air inside the island:** the raised panel's block inset is a `column`
+  (`--cta-panel-inset-raised-block`), and the copy column's foot is the overhang plus a `stack`.
+- **A bigger drawing:** `--cta-art-inline-size` 200 → 260. When the copy column is the taller one, the
+  form is centred in the stretched panel (`Layout align="center" fillFirst`), so the panel has no
+  hollow foot.
+- **The panel against the band** ("merging quite a bit with the bg"). Two options were built for the
+  owner to compare:
+  - `bandTexture="halo"`: `TextureHalo` on the band (option 1). The home close carries this one.
+  - `island="paper"` on a tint band (option 3, swapped grounds).
+  The panel is now always paper, whatever the island's surface. Specimens: § 1c, § 1d, and § 1e
+  without a band texture.

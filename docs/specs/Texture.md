@@ -433,3 +433,7 @@ the five placements live with when / never, then the mechanism specimens.
   placements' 400 the pools vanished; the approved mock drew them in ink. `--tex-ink` on tint stays
   400, so the hard placements are unchanged.
 - Specimen: `/design/island` § 7 (on the overhang island) and the home close itself.
+- **`TextureHalo`** (same day). One soft ellipse on the BAND, centred on the island close's form panel
+  (left 37%, width 60%, height 760, blur 200, vertically centred). The island paints over it, so it
+  shows only where the panel rises out of the island and at the island's sides. `--tex-ink-soft` on
+  paper is neutral-900, because the approved study 11A drew it in ink. `--tex-ink` on paper stays blue.

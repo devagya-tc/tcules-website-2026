@@ -253,3 +253,22 @@ export function TextureTwoLights({ edge = 50 }: TextureTwoLightsProps) {
     </Texture>
   );
 }
+
+/**
+ * TextureHalo — the `halo` placement (owner, 16 Oct 2026, study 11A, built to stop the island
+ * close's paper panel merging with its paper band). One soft ellipse on the BAND, centred on the
+ * form panel, so the panel stands against texture wherever it rises out of the island. The island
+ * paints over the band's field, so inside the island the halo is hidden: it shows above and below
+ * the island around the panel, and at the island's sides.
+ *
+ *   ellipse, centre at 67% across and mid-height, width 60%, height 760, blur 200
+ *
+ * 67% is the panel's centre in the close's [5, 7] split at 1440. Soft, so --tex-ink-soft.
+ */
+export function TextureHalo() {
+  return (
+    <Texture className={styles.soft}>
+      <TextureShape kind="ellipse" left="37%" width="60%" height={760} blur={200} />
+    </Texture>
+  );
+}

@@ -94,10 +94,9 @@
      sits a stack above the island's lower edge while the drawing above it starts level with the
      panel's top (owner, 16 Oct 2026: more vertical air inside the island). */
   --cta-island-foot: calc(var(--gap-column) + var(--gap-stack));
-  /* The drawing's width in the island close: the designer's desk at 200 is 232 tall, which with the
-     h2 and its lede keeps the copy column inside the three-field panel's height, so the panel has
-     no hollow foot. A component size. */
-  --cta-art-inline-size: 200px;
+  /* The drawing's width in the island close: the designer's desk at 260 is 301 tall (owner, 16 Oct
+     2026: "make the illustration bigger"; it was 200). A component size. */
+  --cta-art-inline-size: 260px;
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105

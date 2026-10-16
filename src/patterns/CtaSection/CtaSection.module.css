@@ -292,6 +292,11 @@
   background: none;
 }
 
+/* The raised panel's content box, full height, so Layout can centre the form in it. Sizing only. */
+.panelFill {
+  block-size: 100%;
+}
+
 /* The drawing: a component size, never cropped (Media renders an illustration whole). */
 .art {
   inline-size: min(100%, var(--cta-art-inline-size));

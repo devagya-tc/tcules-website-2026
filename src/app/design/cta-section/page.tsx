@@ -220,10 +220,39 @@ export default function CtaSectionSpecimenPage() {
         title="1b · The island close"
         note="island='tint' on a split close (home, owner 16 Oct 2026): the copy on a tint island on a paper band, the form's paper panel standing 64 proud of the island's top and foot from 1024 (Island overhang), the designer's desk drawing above the heading, the two-lights texture on the island's ground, line fields and the submit at its own width. Below 1024 the form sits on the island with no panel. The second instance carries points and a contact strip with no drawing or texture: a copy column taller than the panel, where the panel still stretches to stand proud at both edges."
       />
+      <SpecimenNote
+        title="1c · Panel against the ground — option 1, the halo"
+        note="bandTexture='halo': a soft ink field on the paper band, centred on the panel, so the paper panel stands against texture where it rises out of the island. The island paints over the field, so inside the island only the two lights show. This is what the home close carries."
+      />
       <CtaSection
         island="tint"
         islandTexture="two-lights"
-        art={<Media image={DESK} sizes="200px" />}
+        bandTexture="halo"
+        art={<Media image={DESK} sizes="260px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" fields="line" submit="inline" caption="We'll reply within one business day." />}
+      />
+      <SpecimenNote
+        title="1d · Panel against the ground — option 3, swapped grounds"
+        note="island='paper': the band goes tint and the island paper, so where the panel rises out of the island it stands on tint. The panel stays paper, so inside the island its hairline is what separates it. The two lights are drawn in ink on the paper island."
+      />
+      <CtaSection
+        island="paper"
+        islandTexture="two-lights"
+        art={<Media image={DESK} sizes="260px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" fields="line" submit="inline" caption="We'll reply within one business day." />}
+      />
+      <SpecimenNote
+        title="1e · Without a band texture, for comparison"
+        note="The island close as first built: the paper panel on the paper band with only its hairline."
+      />
+      <CtaSection
+        island="tint"
+        islandTexture="two-lights"
+        art={<Media image={DESK} sizes="260px" />}
         heading="Tell us what you're building"
         body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" fields="line" submit="inline" caption="We'll reply within one business day." />}
