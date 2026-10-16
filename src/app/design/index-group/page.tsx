@@ -96,7 +96,7 @@ export default function IndexGroupSpecimen() {
                 { label: 'Guides', href: '#ig-guides-heading' },
               ]}
             />
-            <Layout rowGap="section">
+            <Layout rowGap="column">
               <IndexGroup
                 id="ig-articles"
                 heading="Articles"
@@ -123,7 +123,7 @@ export default function IndexGroupSpecimen() {
       </Section>
 
       <Section surface="paper">
-        <Layout rowGap="section">
+        <Layout rowGap="column">
           <Specimen title="02 · The heading alone" note="No meta, no lead, no actions: the rule and the h2.">
             <IndexGroup id="ig-bare" heading="Designed and built" headingId="ig-bare-heading">
               <Rows />

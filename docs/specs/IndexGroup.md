@@ -18,7 +18,7 @@ items. Tier 2 because it composes Layout and sits under templates in two places 
 CaseStudyIndex); built once instead of inline twice.
 It is NOT a band (ContentSection owns a Section and cannot be nested beside a rail); NOT the outline
 (TableOfContents); NOT a card (BlockCard / ListCard are the items it holds). Several per page, one per
-category, always inside a `Layout rowGap="section"`.
+category, always inside a `Layout rowGap="column"`.
 
 ## 2 · Anatomy
 | Part | Element | Required |
@@ -63,9 +63,13 @@ None: nothing in the group responds to a pointer; the items and the CtaRow carry
 ## 7 · Geometry & spacing
 Hairline `--border-width-hairline` on the head's block-start; `--gap-block` (24) padding above the
 head. Head internals `tight` (8); heading row to actions `block` (24); head to body `stack` (48). The
-group sets no outer margin; the caller's stack sets `section` (96) between groups: each group is a
-section-level unit (it is what a band would be on a page without the rail), so the seam between two
-is the band's air, and the claude.com reference's big gaps between categories. Head to body is
+group sets no outer margin; the caller's stack sets `column` (64) between groups (fix round 1, 16
+Oct 2026; it was `section`, 96). The reason is the relationship, not the look: the groups are peer
+blocks of one kind inside ONE band, so `section` (band padding, or a split between regions of
+different kind) is the wrong step, and `stack` (48) would read as one block's run rather than
+separate categories. `column` is the scale's row seam of a borderless set, and each group adds its
+own hairline and 24 of head air on top, so the seam reads as 64 + rule + 24 — the claude.com
+reference's large gap between categories, from the scale rather than borrowed from the band. Head to body is
 `stack`, not `block`: the head is a category's head over a whole set, not a card's head over its
 body.
 
@@ -79,7 +83,7 @@ re-declares itself at the title roles' breakpoints; no media query of its own.
 
 ## 10 · Composition
 In the `[1, 4]` shell beside `TableOfContents` (LongformShell's arrangement), inside a
-`Layout rowGap="section"`. Holds a BlockCardSet, ListCard rows, a Slider or a TestimonialBeside.
+`Layout rowGap="column"`. Holds a BlockCardSet, ListCard rows, a Slider or a TestimonialBeside.
 
 ## 11 · Accessibility
 A `section` labelled by its h2; the rail's hrefs target the h2 ids, which must be unique per page.
