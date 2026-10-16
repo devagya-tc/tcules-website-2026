@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 import { Icon, Layout, Media, type MediaImage } from '@/components';
 import { cx } from '@/lib/cx';
@@ -35,20 +35,29 @@ import styles from './VideoTestimonial.module.css';
  *   uses Proof; a band with a film in it has the film and nothing else that speaks.
  *
  * ── Variants ─────────────────────────────────────────────────────────────────────
- *   Both are single-film layouts; neither is a group.
- *   featured   a large poster with the quote beside it from 1024 — [3, 2], 64 between — and the
+ *   All three are single-film layouts; none is a group.
+ *   featured   a large poster with the quote beside it from 1024 — [3, 2], 96 between (a split, owner 13 Oct) — and the
  *              quote under it below. The band's one object.
  *   wide       the poster across the full column in a cinematic crop, the caption under it as one
  *              row from 1024 (the quote, the speaker at its foot). For a band where the film itself
  *              is the argument and wants the whole width — and still fits the 830 fold at 1470.
  *              The crop is the POSTER's: pressing play opens the box to the film's own 16:9.
- *   Both take the display quote role and the large play disc from 1024.
+ *   portrait  a vertical film (9:16), shot on a phone or for one. The poster stands at its true
+ *              ratio from 768 in a content-sized track — 352 wide from 1024 (626 tall, so the band
+ *              is 818 and clears the 830 fold at 1470), 240 at 768 — with the caption in the rest of
+ *              the row, 96 between: copy beside an image is a split (CLAUDE.md gap rule 2). The
+ *              caption is centred on the poster's height, as featured's is. (Pinning the speaker
+ *              to the poster's foot was tried and rejected by eye: at 626 tall it opened a 300
+ *              hole between the quote and its speaker.) Below 768 the poster is a 4:5 crop across the column
+ *              (408 at 390, not a 580 tower) and pressing play opens the box to the film's 9:16.
+ *              The md play disc at every width: the poster is never wider than 352.
+ *   All three take the display quote role; featured and wide take the large play disc from 1024.
  *
  * Owns no band and no ground; the caller places it in a Section, and the surface reaches it through
  * data-surface. Imports components only.
  */
 
-export type VideoTestimonialVariant = 'featured' | 'wide';
+export type VideoTestimonialVariant = 'featured' | 'wide' | 'portrait';
 
 /** One encoding of the film. Listed best first; the browser plays the first type it supports. */
 export type VideoTestimonialSource = {
@@ -100,12 +109,14 @@ export type VideoTestimonialProps = {
 };
 
 /* The poster widths at 1470, from Section's 1240 column (src/lib/image-sizes.ts arithmetic):
-   featured is the 3 of [3, 2] with a 64 seam, (1240 - 64) * 3/5 ≈ 706; wide is the whole column,
+   featured is the 3 of [3, 2] with a 96 seam, (1240 - 96) * 3/5 ≈ 687; wide is the whole column,
    1240 once the viewport clears 1240 + two 32 gutters. Below that each is the full column, the
-   viewport less two 32 gutters. */
+   viewport less two 32 gutters. portrait is its own token width from 768 (--vt-portrait-width-*),
+   so its list states those, and the full column below. */
 const SIZES: Record<VideoTestimonialVariant, string> = {
-  featured: '(min-width: 1024px) 706px, calc(100vw - 64px)',
+  featured: '(min-width: 1024px) 687px, calc(100vw - 64px)',
   wide: '(min-width: 1304px) 1240px, calc(100vw - 64px)',
+  portrait: '(min-width: 1024px) 352px, (min-width: 768px) 240px, calc(100vw - 64px)',
 };
 
 /** "4:52" → "4 minutes 52 seconds", so the control's name is not read as a clock time. */
@@ -134,6 +145,7 @@ export function VideoTestimonial({
   const quoteId = useId();
   const captioned = (film.captions?.length ?? 0) > 0;
   const featured = variant === 'featured';
+  const portrait = variant === 'portrait';
 
   function play() {
     const video = videoRef.current;
@@ -220,42 +232,54 @@ export function VideoTestimonial({
   );
 
   /* wide sets the caption as one row from 1024 — the quote with its label, the speaker in the
-     narrow track at the quote's foot — so the band spends its height on the film, not on a stack. */
-  const caption = (
-    <Layout
-      as="figcaption"
-      columns={featured ? undefined : { base: 1, lg: [3, 1] }}
-      colGap="column"
-      rowGap="stack"
-      className={styles.caption}
-    >
-      {featured ? (
-        <Layout rowGap="block">
-          {label_}
-          {pulled}
-        </Layout>
-      ) : (
-        pulled
-      )}
-      {featured ? (
-        speaker
-      ) : (
+     narrow track at the quote's foot — so the band spends its height on the film, not on a stack.
+     featured and portrait stack the label and quote, then the speaker, centred beside the poster. */
+  let caption: ReactNode;
+  if (variant === 'wide') {
+    caption = (
+      <Layout
+        as="figcaption"
+        columns={{ base: 1, lg: [3, 1] }}
+        colGap="column"
+        rowGap="stack"
+        className={styles.caption}
+      >
+        {pulled}
         <Layout rowGap="block">
           {label_}
           {speaker}
         </Layout>
-      )}
-    </Layout>
-  );
+      </Layout>
+    );
+  } else {
+    caption = (
+      <Layout as="figcaption" rowGap="stack" className={styles.caption}>
+        <Layout rowGap="block">
+          {label_}
+          {pulled}
+        </Layout>
+        {speaker}
+      </Layout>
+    );
+  }
+
+  /* The figure's row. featured: [3, 2] from 1024, centred; a split, so the section step. portrait: the poster's own width (an
+     `auto` track sized by the screen's token width) beside the caption from 768, centred; a split,
+     so the section step. wide: a single track. */
+  const columns = featured
+    ? { base: 1, lg: [3, 2] }
+    : portrait
+      ? { base: 1, md: ['auto' as const, 1] }
+      : undefined;
 
   return (
     <Layout
       as="figure"
-      columns={featured ? { base: 1, lg: [3, 2] } : undefined}
-      colGap="column"
-      rowGap={featured ? 'stack' : 'block'}
-      align={featured ? 'center' : undefined}
-      className={cx(styles.root, !featured && styles.wide)}
+      columns={columns}
+      colGap="section"
+      rowGap={variant === 'wide' ? 'block' : 'stack'}
+      align={variant === 'wide' ? undefined : 'center'}
+      className={cx(styles.root, variant === 'wide' && styles.wide, portrait && styles.portrait)}
     >
       {screen}
       {caption}

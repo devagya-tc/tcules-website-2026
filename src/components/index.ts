@@ -55,6 +55,17 @@ export {
   type SectionDensity,
 } from './Section';
 export { Layout, type LayoutProps } from './Layout';
+/* Island is a SURFACE inside a band: one bounded ground, set per instance, with the band's own ground
+   around it — CtaSection's and Statement's `island` variant (13 Oct 2026). Like Section it declares
+   data-surface, so everything inside resolves the island's tokens; unlike Section it keeps the page
+   gutter and owns no column. */
+export {
+  Island,
+  ISLAND_BAND,
+  islandSurfaceOn,
+  type IslandProps,
+  type IslandSurface,
+} from './Island';
 export { Cluster, type ClusterProps } from './Cluster';
 export {
   Button,

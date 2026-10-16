@@ -1,11 +1,15 @@
 import type { ReactNode } from 'react';
 
 import {
+  Island,
+  ISLAND_BAND,
+  islandSurfaceOn,
   Layout,
   Section,
   Texture,
   TextureCorner,
   TextureShape,
+  type IslandSurface,
   type SectionSurface,
 } from '@/components';
 
@@ -88,8 +92,23 @@ export type StatementProps = {
    * (TextureCorner); `corner-pair` that plus its bottom-start partner. See `StatementTexture`.
    */
   texture?: StatementTexture;
-  /** Default `paper`. */
+  /**
+   * The band's ground. Default `paper`, or with `island`, the other light ground from the island's
+   * (a tint island on paper, a paper island on tint — `ISLAND_BAND`).
+   */
   surface?: SectionSurface;
+  /**
+   * The island variant (13 Oct 2026): the statement on a floating box of its own ground inside the
+   * band, the band's ground around it on every side (`Island`). The value is the island's surface,
+   * chosen per instance; one equal to the band's is refused (no edge to read by) and takes the other
+   * light ground, with a development warning.
+   *
+   * The texture moves INTO the island: the field arrives from past the island's edge and is cut at
+   * its radius, so the band around it stays clean ground. Texture is paper only (§ 6.2), so on an
+   * island it needs `island="paper"` — the bright island on a tint band. Alignment, graphic, eyebrow
+   * and action are unchanged inside it.
+   */
+  island?: IslandSurface;
 };
 
 /**
@@ -118,21 +137,28 @@ export function Statement({
   id,
   actions,
   texture,
-  surface = 'paper',
+  surface,
   align = 'start',
   graphic,
+  island,
 }: StatementProps) {
   const heading = Tag === 'h2';
   const labelled = heading && Boolean(id);
-  const onPaper = surface === 'paper';
+  const band: SectionSurface = surface ?? (island ? ISLAND_BAND[island] : 'paper');
+  const islandSurface = island ? islandSurfaceOn(band, island) : undefined;
+  /* The ground the texture sits on: the island's when there is one, else the band's. */
+  const ground: SectionSurface = islandSurface ?? band;
+  const onPaper = ground === 'paper';
   const textured = texture === 'head-half' && onPaper;
   const faded = texture === 'end-fade' && onPaper;
   const cornered = (texture === 'corner' || texture === 'corner-pair') && onPaper;
   const paired = texture === 'corner-pair' && onPaper;
   const centred = align === 'center';
 
-  if (process.env.NODE_ENV !== 'production' && texture && surface !== 'paper') {
-    console.warn(`Statement: texture sits on paper only (§ 6.2); ignored on "${surface}".`);
+  if (process.env.NODE_ENV !== 'production' && texture && !onPaper) {
+    console.warn(
+      `Statement: texture sits on paper only (§ 6.2); ignored on ${islandSurface ? 'a ' : ''}"${ground}"${islandSurface ? ' island' : ''}.`,
+    );
   }
 
   const sentence = (
@@ -145,32 +171,27 @@ export function Statement({
     </Tag>
   );
 
-  return (
-    <Section
-      as={labelled ? 'section' : 'div'}
-      surface={surface}
-      aria-labelledby={labelled ? id : undefined}
-      id={heading ? undefined : id}
-      data-band="J"
-    >
+  const content = (
+    <>
       {textured ? (
         /* head-half, as § 6.3 specifies it (fix round 2): one rect at top −200, end −120, 34% × 296,
-           blur 160, on the BAND's field. The box runs off the band's top edge and past its end
-           edge and stops 96 into the band, inside the 128 of open air, so it clears the sentence
-           box at every width from 1024; only the feather reaches the sentence's first line, at
-           the strength limit 2 allows. Anchored to two edges, it reads as atmosphere arriving
-           from outside the band rather than as an object set in it — the first two builds hung
-           a field mid-track under the eyebrow, and with no edge to bleed from it read as a
-           smudge. A direct child of Section, so the field is the band's padding box and nothing
-           here restates Section's density. From 1024 only (§ 6.3: below 1024, none). */
+           blur 160, on the FIELD — the band's padding box, or the island's when there is one (Island
+           is positioned and clips to its radius as the band does). The box runs off the field's top
+           edge and past its end edge and stops 96 into it, inside the 96–128 of air above the
+           content, so it clears the sentence box at every width from 1024; only the feather reaches
+           the sentence's first line, at the strength limit 2 allows. Anchored to two edges, it reads
+           as atmosphere arriving from outside rather than as an object set in it — the first two
+           builds hung a field mid-track under the eyebrow, and with no edge to bleed from it read as
+           a smudge. A direct child of the field, so nothing here restates its padding. From 1024
+           only (§ 6.3: below 1024, none). */
         <Texture className={styles.texture}>
           <TextureShape top={-200} right={-120} width="34%" height={296} blur={160} />
         </Texture>
       ) : null}
       {faded ? (
         /* end-fade: head-half's rect, its horizontal geometry unchanged (end −120, 30% wide, blur
-           160), but run from −50% to 150% of the band's height, so the blur's vertical falloff lands
-           outside the band and is clipped: the grid is at full strength from top edge to bottom
+           160), but run from −50% to 150% of the field's height, so the blur's vertical falloff lands
+           outside the field and is clipped: the grid is at full strength from top edge to bottom
            edge along the end, and fades only toward the start. 30% rather than 34% so the feather
            stops short of a start-aligned sentence on its title measure at 1024. From 1024 only. */
         <Texture className={styles.texture}>
@@ -181,7 +202,7 @@ export function Statement({
       {paired ? <TextureCorner at="bottom-start" /> : null}
       {/* One column either way. The eyebrow-to-sentence seam is the head rhythm's `block`, the
           sentence-to-action seam the band's `stack`. Centred, Layout centres each part on the
-          band's axis; start-aligned, every part keeps the start edge. */}
+          field's axis; start-aligned, every part keeps the start edge. */}
       <Layout rowGap="stack" justifyItems={centred ? 'center' : undefined}>
         <Layout rowGap="block" justifyItems={centred ? 'center' : undefined}>
           {graphic ? (
@@ -198,6 +219,21 @@ export function Statement({
         </Layout>
         {actions ?? null}
       </Layout>
+    </>
+  );
+
+  return (
+    <Section
+      as={labelled ? 'section' : 'div'}
+      surface={band}
+      aria-labelledby={labelled ? id : undefined}
+      id={heading ? undefined : id}
+      data-band="J"
+      data-arrangement={islandSurface ? 'island' : undefined}
+    >
+      {/* The island variant: the same content on a box of its own ground, with the band's air around
+          it. The island is the field the texture fills, so the band outside it carries none. */}
+      {islandSurface ? <Island surface={islandSurface}>{content}</Island> : content}
     </Section>
   );
 }

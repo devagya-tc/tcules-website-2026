@@ -537,6 +537,7 @@ function WhyTcules({ page, b, ratings, avatars, borrowed }: BandProps) {
                   item={testimonialItem(quote, ratings, avatars)}
                   size="sm"
                   frame="none"
+                  voice="italic"
                 />
               ) : undefined
             }

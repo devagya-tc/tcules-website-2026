@@ -357,6 +357,7 @@ export {
   type TestimonialBesideProps,
   type TestimonialCardProps,
   type TestimonialFrame,
+  type TestimonialVoice,
   type TestimonialItem,
   type TestimonialSize,
   type TestimonialWallProps,
@@ -369,6 +370,9 @@ export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps }
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
 export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
+
+/* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
+export { Reasons, type ReasonsArrangement, type ReasonsItem, type ReasonsProps } from './Reasons';
 
 /* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
 export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';

@@ -1,0 +1,100 @@
+/* ══ Component layer — Reasons ═══════════════════════════════════════════════════
+   Tier 2. "Why Tcules": six argued reasons, each a title, one sentence and a drawing of its claim
+   (why-us mocks rounds 1–4, owner 16 Oct 2026). The drawing is an isometric figure from the ch05
+   §4a kit, facing its words; it illustrates the claim and carries no data.
+
+   Naming: --rsn-{part}-{role}
+     parts  heading · heading-tail · eyebrow · title · body · figure · rule · frame
+     roles  text · tracking · measure · ink · width · height · radius
+
+   Three arrangements share one item: `open` (no rules: the gap scale alone holds the set),
+   `boxed` (LogoGrid's closed frame: cells ruled between, the whole set in one rounded box) and
+   `beside` (the head in a third beside the set; hairline verticals between columns only). No state
+   tokens: nothing responds to a pointer. Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Geometry · identical on every surface ─────────────────────────────────────
+   --rsn-figure-width   a component SIZE: the drawing's track where it sits beside its words
+                        (`open`, `boxed`, and every arrangement below 768). 156 holds a figure whose
+                        ~1.1 ratio fills 140 of height, about the height of a title and a
+                        three-line body, so words and drawing read as one row.
+   --rsn-figure-height  the same drawing's box height beside its words.
+   --rsn-figure-height-sm
+                        `beside` from 768: the drawing heads its words, so it is shorter (112),
+                        which keeps two rows of three inside the 830 fold at 1440.
+   --rsn-figure-height-xs
+                        the phone step: 92 beside a body that wraps to three or four lines.       */
+:root {
+  --rsn-heading-text: var(--text-h2);
+  --rsn-heading-tracking: var(--text-h2-tracking);
+  /* Item titles are h5, the step the home "What we do" cards use four to six across — two steps
+     under h2 would be h4, which set "Senior people, start to finish" on three lines in a 206 track. */
+  --rsn-title-text: var(--text-h5);
+  --rsn-title-tracking: var(--text-h5-tracking);
+  --rsn-title-measure: var(--measure-title);
+  --rsn-body-text: var(--text-body-sm);
+  --rsn-body-measure: var(--measure-lead);
+  --rsn-eyebrow-text: var(--text-eyebrow);
+  --rsn-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --rsn-figure-width: 156px;
+  --rsn-figure-height: 140px;
+  --rsn-figure-height-sm: 112px;
+  --rsn-figure-height-xs: 92px;
+  /* `beside` from 768: the box's ratio, so a drawing heads its column from the column's edge. 6:5
+     is the widest of the set (1.2); a narrower figure centres in it by a few pixels. */
+  --rsn-figure-ratio: 6 / 5;
+  --rsn-rule-width: var(--border-width-hairline);
+  /* The `boxed` frame's corners: the photograph radius, LogoGrid's (owner, 16 Oct 2026: "use the
+     logo-grid approach"), duplicated on purpose — a component never reads another's tokens. */
+  --rsn-frame-radius: var(--radius-8);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --rsn-figure-width: var(--rsn-figure-height-xs);
+    --rsn-figure-height: var(--rsn-figure-height-xs);
+  }
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --rsn-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  /* The heading's second clause: the same h2, stepped back, so the claim leads and its gloss
+     follows in one sentence (Linear's two-tone head, round 1). Large text: 3:1 is the floor. */
+  --rsn-heading-tail-ink: var(--color-neutral-500); /* 3.16:1, large text */
+  --rsn-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 */
+  --rsn-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --rsn-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --rsn-rule-ink: var(--color-neutral-200); /* decoration */
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --rsn-heading-ink: var(--color-neutral-900); /* 13.05:1 */
+  --rsn-heading-tail-ink: var(--color-neutral-600); /* 4.39:1, large text; 500 is 2.87:1 here */
+  --rsn-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
+  --rsn-title-ink: var(--color-neutral-900); /* 13.05:1 */
+  --rsn-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --rsn-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on the deeper ground */
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --rsn-heading-ink: var(--color-white); /* 17.26:1 */
+  --rsn-heading-tail-ink: var(--color-neutral-400); /* 8.05:1 */
+  --rsn-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --rsn-title-ink: var(--color-white); /* 17.26:1 */
+  --rsn-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --rsn-rule-ink: var(--color-neutral-700); /* decoration */
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --rsn-heading-ink: var(--color-white); /* 6.23:1 */
+  --rsn-heading-tail-ink: var(--color-brandeis-200); /* 3.78:1, large text */
+  --rsn-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --rsn-title-ink: var(--color-white); /* 6.23:1 */
+  --rsn-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --rsn-rule-ink: var(--color-brandeis-400); /* decoration */
+}

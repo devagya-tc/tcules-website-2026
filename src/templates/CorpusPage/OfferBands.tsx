@@ -1,4 +1,3 @@
-
 import { Layout } from '@/components';
 import {
   BlockCard,
@@ -209,7 +208,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               : { body: plain(row.body) }),
           }))}
           aside={
-            quote ? <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill /> : undefined
+            quote ? (
+              <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill voice="italic" />
+            ) : undefined
           }
         />
       );
