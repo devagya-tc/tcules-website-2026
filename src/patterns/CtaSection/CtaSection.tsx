@@ -14,8 +14,7 @@ import {
   type IslandSurface,
   type MediaImage,
   type SectionSurface,
-  TextureHalo,
-  TextureTwoLights,
+  TextureFrame,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
@@ -218,29 +217,20 @@ type CtaSplitProps = {
    */
   contact?: readonly CtaContact[];
   /**
-   * The island close (owner, 16 Oct 2026, the home enquiry close): the copy on a floating island of
-   * this surface, and the form's panel rising out of it — 64 above the island's top edge and below
-   * its foot from 1024 (`Island` overhang), so the form is the one object that breaks the box.
-   * The band takes the other light ground unless `surface` says otherwise, as `open`'s island does.
-   *
-   * This lifts `open`'s old ruling that a split close has no island ("a box holding a box is the
-   * card reflex twice"): here the panel is not held by the island, it stands across its edge.
+   * The island close (owner, 16 Oct 2026, the home enquiry close): the copy and the form on a
+   * floating island of this surface, the form on a paper panel inside it. Blue and ink are the
+   * close's grounds (Island.md amendment); the band takes the other ground unless `surface` says
+   * otherwise (`ISLAND_BAND`, paper for both). This lifts 13 Oct's ruling that a split has no island:
+   * the panel is the island's one object, not a box in a box.
    */
   island?: IslandSurface;
   /**
    * The island close's drawing, above the heading: an illustration the caller composes (a `Media`
-   * of kind `illustration`), set at --cta-art-inline-size and never cropped. From 1024 it starts
-   * level with the panel's top, so it rises out of the island beside the form. Island only.
+   * of kind `illustration`), at --cta-art-inline-size and never cropped. Island only.
    */
   art?: ReactNode;
-  /** The island's ground texture. `two-lights`: `TextureTwoLights`. Island only. */
-  islandTexture?: 'two-lights';
-  /**
-   * The band's texture around the island. `halo`: `TextureHalo`, a soft field centred on the form
-   * panel, so the paper panel stands against texture where it rises out of the island (owner,
-   * 16 Oct 2026: the panel "merging quite a bit with the bg"). Island only.
-   */
-  bandTexture?: 'halo';
+  /** The island's texture. `frame`: `TextureFrame`, a soft field framing the form. Island only. */
+  islandTexture?: 'frame';
 };
 
 type CtaOpenProps = {
@@ -269,7 +259,6 @@ type CtaOpenProps = {
   island?: IslandSurface;
   art?: never;
   islandTexture?: never;
-  bandTexture?: never;
 };
 
 type CtaOfferWithFormProps = {
@@ -282,7 +271,6 @@ type CtaOfferWithFormProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
-  bandTexture?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -307,7 +295,6 @@ type CtaOfferWithActionsProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
-  bandTexture?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -1002,21 +989,11 @@ export function CtaSection(props: CtaSectionProps) {
   const hasForm = isValidElement(props.form);
 
   /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
-     The copy on a tint island, the form's paper panel standing across the island's top and foot
-     edges (Island `overhang`), and the drawing above the heading, starting level with the panel's
-     top. [5, 7] at `section` from 1280 (a split: copy and drawing beside a form), the panel in the
-     7, the larger track, as the split close gives its form (owner, 16 Oct 2026: at [6, 5] "the form
-     itself feels too small"); [2, 3] from 1024. The drawing sits a
-     `block` above the heading, as a head's lead-in rather than a block of its own. Both
-     tracks STRETCH to the row: the panel is always the island box's full height, so it stands 64
-     proud at the top and the foot whichever column is taller, and the copy column carries the
-     island's foot as its own bottom padding, so the lede sits a stack above the island's lower
-     edge. Below 1024 it is an ordinary island: the drawing, the lede, then the form, stacked on the
-     island's ground with no panel (the module says why). WITHOUT a drawing nothing rises from the
-     copy column, so it takes the same air at its head as at its foot and every glyph stays on the
-     island's ground (a heading above the island's edge was "illegal", owner, 16 Oct 2026). The
-     panel is always paper, the brightest
-     ground: on a paper island (a tint band) its hairline is what separates it. */
+     The copy and the form on a blue or ink island, the form on a paper panel inside it. [5, 7] at
+     `section` from 1024 (a split: words and drawing beside a form), the form in the larger track.
+     The drawing, heading and lede are ONE group, a `block` apart, centred against the form: the
+     form is usually the taller, and the group never spreads to fill it (owner: "too much space
+     between the illustration and the copy"). Below 1024 it stacks: the group, then the form. */
   if (props.island && hasForm) {
     const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
     const islandSurface = islandSurfaceOn(band, props.island);
@@ -1027,32 +1004,18 @@ export function CtaSection(props: CtaSectionProps) {
         data-band={props['data-band']}
         aria-labelledby={headingId}
         data-arrangement="split"
-        data-island={islandSurface}
       >
-        {props.bandTexture === 'halo' ? <TextureHalo /> : null}
-        <Island
-          surface={islandSurface}
-          overhang
-          ground={props.islandTexture === 'two-lights' ? <TextureTwoLights /> : undefined}
-        >
-          <Layout columns={{ base: 1, lg: [2, 3], xl: [5, 7] }} colGap="section" rowGap="stack">
-            <div className={cx(styles.islandCopy, !present(props.art) && styles.islandCopyGround)}>
-              <Layout rowGap="block">
-                {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
-                {lede({ scale: 'offer' })}
-                <CtaPoints shape="stack" markers={markers} points={points} />
-                {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-              </Layout>
-            </div>
-            <div
-              className={cx(styles.formPanel, styles.formPanelRaised)}
-              data-surface="paper"
-            >
-              {/* The panel stretches to the row; when the copy column is the taller, the form is
-                  centred in it rather than leaving the panel a hollow foot. */}
-              <Layout align="center" fillFirst className={styles.panelFill}>
-                {props.form}
-              </Layout>
+        <Island surface={islandSurface}>
+          {props.islandTexture === 'frame' ? <TextureFrame /> : null}
+          <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
+            <Layout rowGap="block">
+              {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
+              {lede({ scale: 'offer' })}
+              <CtaPoints shape="stack" markers={markers} points={points} />
+              {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+            </Layout>
+            <div className={styles.islandPanel} data-surface="paper">
+              {props.form}
             </div>
           </Layout>
         </Island>

@@ -282,42 +282,16 @@
 
 
 /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────
-   From 1024 the raised panel: the split panel at the floating step — 16 radius under the island's
-   24, a hairline edge (--cta-panel-edge), because a paper panel on a paper band disappears where it
-   stands above and below the island, and a `stack` inset. Still no shadow.
-   Below 1024 there is no panel: nothing rises out of the island there, and a panel inside the
-   island's 32 phone inset left the form 214 of its 256 floor. The form sits on the island's ground. */
-.formPanelRaised {
-  padding: 0;
-  background: none;
-}
-
-/* The raised panel's content box, full height, so Layout can centre the form in it. Sizing only. */
-.panelFill {
-  block-size: 100%;
+   The form's panel inside the island: paper, the 16 radius under the island's 24, a `gutter` inset.
+   No edge and no shadow: paper on blue or ink needs neither. */
+.islandPanel {
+  min-inline-size: 0;
+  padding: var(--cta-panel-inset-island);
+  background: var(--cta-panel-ground);
+  border-radius: var(--cta-panel-radius-island);
 }
 
 /* The drawing: a component size, never cropped (Media renders an illustration whole). */
 .art {
   inline-size: min(100%, var(--cta-art-inline-size));
-}
-
-@media (min-width: 1024px) {
-  .formPanelRaised {
-    padding: var(--cta-panel-inset-raised-block) var(--cta-panel-inset-raised);
-    background: var(--cta-panel-ground);
-    border: var(--border-width-hairline) solid var(--cta-panel-edge);
-    border-radius: var(--cta-panel-radius-raised);
-  }
-
-  /* The copy column's foot: the island's overhang plus a stack, so the lede sits on the island's
-     ground a stack above its lower edge while the column starts level with the panel's top. */
-  .islandCopy {
-    padding-block-end: var(--cta-island-foot);
-  }
-
-  /* No drawing: the head takes the foot's air, so the copy starts on the island's ground. */
-  .islandCopyGround {
-    padding-block-start: var(--cta-island-foot);
-  }
 }

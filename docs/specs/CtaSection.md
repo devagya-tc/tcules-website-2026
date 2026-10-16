@@ -1051,3 +1051,18 @@ of a designer's desk, never cropped, facing the form, above the heading. The own
 - **No copy off the ground.** A heading above the island's edge was "illegal" (owner). Without `art`,
   the copy column takes `--cta-island-foot` at its head as well as its foot (`.islandCopyGround`), so
   every glyph sits on the island. With `art`, only the drawing rises.
+
+### Same day, final (owner): the form inside a blue or ink island
+
+Supersedes the overhang, the halo and the tint island above. Picked from the form-direction mocks:
+- **`island: 'blue' | 'ink'`** (Island admits both, Island.md). The band is paper. The **form sits inside
+  the island** on a paper panel (`.islandPanel`: 16 radius, a `gutter` inset, `text` below 768 —
+  flagged), with no edge and no shadow.
+- **One group, centred.** Drawing (240), heading and lede sit a `block` apart as one group, centred
+  against the form, which is usually the taller ("too much space between the illustration and the
+  copy").
+- **`islandTexture: 'frame'`**: `TextureFrame` frames the form on the island. `bandTexture` is gone.
+- **The form is dressed** (EnquiryForm.md, `dress`). Both dresses on both islands are specimens (§ 1b).
+  Home carries the card on blue.
+- Removed with the overhang: `Island` `overhang`/`ground`/`IslandOnGround`, `--isl-overhang`,
+  `--cta-island-foot`, the raised-panel tokens, `--cta-panel-edge`, `TextureTwoLights`, `TextureHalo`.

@@ -35,10 +35,6 @@
      island read as one more card; at 24 it floats. Every island takes it, since an island is one
      kind of object. Was 8 (docs/specs/Island.md § 17, Q2). */
   --isl-radius: var(--radius-24);
-  /* How far the ground stops short of the box on the block axis in `overhang` mode, so one object
-     inside (the close's form panel) stands proud of the island at its top and foot. A gap-scale
-     step (`column`, 64), applied from 1024 where the island's content sits side by side. */
-  --isl-overhang: var(--gap-column);
 }
 
 /* Phone: the band's own 64 above and below, the container gutter at the sides. */
@@ -64,14 +60,16 @@
   --isl-ink: var(--color-neutral-900); /* 13.06:1 */
 }
 
-/* ── Surface: ink ── declared for self-containment; IslandSurface does not admit it ──
-   Ink is the footer's ground (visual-direction § 1.7); docs/specs/Island.md § 17, Q3. */
+/* ── Surface: ink ── admitted 16 Oct 2026 (owner, the home enquiry close) ──────────
+   Neutral-900, one step off the footer's 950, so the close and the footer a band below do not read
+   as one dark block (docs/specs/Island.md § 17, Q3, amended). */
 [data-surface='ink'] {
-  --isl-ground: var(--color-neutral-950);
+  --isl-ground: var(--color-neutral-900);
   --isl-ink: var(--color-white); /* 17.26:1 */
 }
 
-/* ── Surface: blue ── declared for self-containment; blue is never a ground (§ 4.1) ── */
+/* ── Surface: blue ── admitted 16 Oct 2026 (owner, the home enquiry close): an exception to
+   "blue is never a ground" (§ 4.1) for an island that carries a paper form. */
 [data-surface='blue'] {
   --isl-ground: var(--color-brandeis-500);
   --isl-ink: var(--color-white); /* 6.23:1 */

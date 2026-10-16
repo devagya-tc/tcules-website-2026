@@ -440,3 +440,6 @@ the five placements live with when / never, then the mechanism specimens.
 - **The halo is light blue** (owner, same day). `--tex-ink-soft` on paper is brandeis-400. At 300 the
   feathered field all but vanished. The home island carries no texture now, so `TextureTwoLights` and
   the tint `--tex-ink-soft` stay as provisions with no site placement.
+- **Final (same day): `TextureFrame` replaces `TextureTwoLights` and `TextureHalo`**, both removed. One
+  soft rounded field on the island, framing the form in the end column (right −2%, width 65%, top −24,
+  height 106%, radius 120, blur 88), in `--tex-ink-soft`: white on blue and on ink.

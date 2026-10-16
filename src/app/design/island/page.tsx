@@ -4,13 +4,12 @@ import {
   Button,
   Cluster,
   Island,
-  IslandOnGround,
   Layout,
   Section,
   Texture,
   TextureCorner,
   TextureShape,
-  TextureTwoLights,
+  TextureFrame,
   type IslandSurface,
   type SectionSurface,
 } from '@/components';
@@ -160,20 +159,21 @@ export default function IslandSpecimen() {
         </Island>
       </Band>
 
-      <Band surface="paper">
-        <Caption
-          title="Overhang · the island close"
-          note="overhang (owner, 16 Oct 2026): from 1024 the ground stops 64 (--isl-overhang) short of the box at the top and foot, and the box drops its block inset, so a child that stretches to the row (the Box here; the close's form panel in CtaSection) stands proud of the island at both edges, and IslandOnGround puts the overhang and the inset back on the copy so it stays on the ground. The texture goes in `ground`, which fills and is clipped by the ground, not the box: TextureTwoLights, a soft pool where the tall child crosses the top edge and one in the far foot corner. Below 1024 it is a plain island."
-        />
-        <Island surface="tint" overhang ground={<TextureTwoLights />}>
-          <Layout columns={{ base: 1, lg: [2, 3], xl: [5, 7] }} colGap="section" rowGap="stack">
-            <IslandOnGround>
-              <Contents heading="Copy on the ground, the panel across its edge" />
-            </IslandOnGround>
-            <Box>The tall child: stretched to the island box, 64 proud of the ground at its top and foot</Box>
-          </Layout>
-        </Island>
-      </Band>
+      {(['blue', 'ink'] as const).map((surface) => (
+        <Band key={surface} surface="paper">
+          <Caption
+            title={`paper band · ${surface} island — the enquiry close's ground, with TextureFrame`}
+            note={`${surface} admitted 16 Oct 2026 (owner) for the home enquiry close: an island that carries a paper object. ${surface === 'ink' ? 'Neutral-900, one step off the footer’s 950.' : 'An exception to “blue is never a ground”.'} TextureFrame frames the island's end column, where the close sets its form; the Box stands in for it.`}
+          />
+          <Island surface={surface}>
+            <TextureFrame />
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
+              <Contents heading="Words on the island, the form beside them" />
+              <Box tall>The form&rsquo;s panel</Box>
+            </Layout>
+          </Island>
+        </Band>
+      ))}
     </>
   );
 }

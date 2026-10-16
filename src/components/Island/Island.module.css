@@ -28,38 +28,3 @@
      view and a focus ring is never trapped in a scrollport. */
   overflow: clip;
 }
-
-/* ── Overhang (owner, 16 Oct 2026) ───────────────────────────────────────────────
-   The ground becomes its own layer, so it can stop short of the box: at the box below 1024, and
-   --isl-overhang inside the top and foot from 1024, where the box drops its block inset and its
-   clip so a full-height child stands proud of the ground. The layer takes the island's radius and
-   clip, and isolates, so a Texture in it fills and is cut by the ground rather than the box. */
-.overhang {
-  background: none;
-}
-
-.ground {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--isl-ground);
-  border-radius: var(--isl-radius);
-  isolation: isolate;
-  overflow: clip;
-}
-
-@media (min-width: 1024px) {
-  .overhang {
-    padding-block: 0;
-    overflow: visible;
-  }
-
-  .overhang > .ground {
-    inset-block: var(--isl-overhang);
-  }
-
-  /* IslandOnGround: the island's own padding, moved onto the content that stays on the ground. */
-  .overhang .onGround {
-    padding-block: calc(var(--isl-overhang) + var(--isl-inset-block));
-  }
-}

@@ -848,3 +848,17 @@ script, § 14 the `onBlur` Do, § 15 items 2 and 3):
   message is ever added while someone types or moves between fields.
 - The URL field still normalises its value on blur. That is not validation and shows nothing.
 - The screen reader hears the field's message after a send, not on leaving the field.
+
+## Amendment · 16 Oct 2026 — `dress`: the card and the message (owner, the home close)
+
+"It just looks like a blank box with a few lines." The enquiry set (variant `enquiry` only) takes an
+optional `dress`; behaviour, field names, validation, statuses and the success view are unchanged.
+- **`card`**: the form's own h3 (`title`), VISIBLE labels (`--text-label`, new) over `fill` fields
+  (new Input appearance: a soft well, no rule at rest), "Optional" at the end of the link field's label
+  row, an example in the big field (`prompt`), and a foot under a hairline: the send and one line,
+  "or write to {writeTo} · {note}", which a send's status replaces.
+- **`message`**: a person (`from`: name, role, portrait as a circle) and their one-sentence `note` in a
+  bubble, then a composer: the big field first (`bare` Input, new), email and link as its keyed
+  details, the send in its foot beside "or write to". The composer draws the focus indicator
+  (`:focus-within`), which is why `bare` is never used outside it.
+- Copy is the caller's. New `--enq-*` surface tokens on all four surfaces; the form's floor is 14rem.

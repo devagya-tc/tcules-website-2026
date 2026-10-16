@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 29 roles, consumed as composites
+### Type — 30 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -85,6 +85,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
 | `--text-body-sm` | 14px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-caption` | 13px | 1.45 | sans | regular | **none** | verbatim |
+| `--text-label` | 14px | 1.55 | sans | semibold | `--text-label-tracking` | verbatim |
 | `--text-ui-sm` | 12px | 1.2 | mono | semibold | `--text-ui-sm-tracking` | `--text-mono-case` |
 | `--text-ui` | 13px | 1.2 | mono | semibold | `--text-ui-tracking` | `--text-mono-case` |
 | `--text-ui-lg` | 14px | 1.2 | mono | semibold | `--text-ui-lg-tracking` | `--text-mono-case` |
@@ -97,7 +98,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**20 roles have a tracking companion. 9 have none** — pairing one with a role in that
+**21 roles have a tracking companion. 9 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-quote-sm`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -189,17 +190,17 @@ against the controls beside it — if you are specifying one, say which of these
 - **content-section.css** — `--csec-eyebrow-tracking` 0.12em · `--csec-heading-tracking` -0.015em · `--csec-heading-tracking-md` -0.01em · `--csec-heading-tracking-xl` -0.018em · `--csec-heading-measure` 32ch · `--csec-lead-measure` 56ch · `--csec-body-measure` 75ch
 - **contrast.css** — `--cntr-heading-tracking` -0.005em · `--cntr-item-tracking-primary` 0em · `--cntr-rule-width` 1px · `--cntr-rule-strong-width` 1px
 - **cta-row.css** — `--ctarow-rule-width` 1px · `--ctarow-note-measure` 56ch · `--ctarow-centred-measure` 75ch
-- **cta-section.css** — `--cta-mark-size` 40px · `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-close-heading-tracking` -0.018em · `--cta-open-heading-tracking` -0.018em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-open-heading-measure` 32ch · `--cta-body-measure` 75ch · `--cta-lede-measure` 44ch · `--cta-panel-radius` 8px · `--cta-panel-radius-raised` 16px · `--cta-panel-inset-raised` 48px · `--cta-panel-inset-raised-block` 64px · `--cta-art-inline-size` 260px
+- **cta-section.css** — `--cta-mark-size` 40px · `--cta-eyebrow-tracking` 0.12em · `--cta-heading-tracking` -0.015em · `--cta-close-heading-tracking` -0.018em · `--cta-open-heading-tracking` -0.018em · `--cta-point-tracking` 0em · `--cta-rule-width` 1px · `--cta-marker-tracking` 0.08em · `--cta-heading-measure` 32ch · `--cta-open-heading-measure` 32ch · `--cta-body-measure` 75ch · `--cta-lede-measure` 44ch · `--cta-panel-radius` 8px · `--cta-panel-radius-island` 16px · `--cta-panel-inset-island` 32px · `--cta-art-inline-size` 240px
 - **data-table.css** — `--dtab-rule-width` 1px · `--dtab-fluid-size` 176px · `--dtab-hold-size` 192px · `--dtab-record-key-share` 38% · `--dtab-split-key-size` 152px · `--dtab-fade-size` 48px
 - **engagement-model.css** — `--eng-eyebrow-tracking` 0.12em · `--eng-heading-tracking` -0.015em · `--eng-heading-measure` 32ch · `--eng-lead-measure` 56ch · `--eng-title-tracking` -0.005em · `--eng-body-measure` 56ch · `--eng-axis-tracking` 0.1em · `--eng-line-width` 3px · `--eng-level-width` 1px · `--eng-rule-width` 1px · `--eng-idle-width` 1px · `--eng-node-width` 2px · `--eng-swatch-width` 48px · `--eng-swatch-height` 24px
 - **engagement-options.css** — `--eop-heading-tracking` -0.015em · `--eop-heading-measure` 32ch · `--eop-lead-measure` 56ch · `--eop-title-tracking` -0.005em · `--eop-title-tracking-dense` 0em · `--eop-plate-radius` 8px · `--eop-body-measure` 56ch · `--eop-line-width` 3px · `--eop-region-width` 2px · `--eop-node-width` 2px
-- **enquiry-form.css** — `--enq-form-min-inline` 16rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-hidden-size` 1px
+- **enquiry-form.css** — `--enq-form-min-inline` 14rem · `--enq-form-measure` 667px · `--enq-note-min-inline` 15rem · `--enq-hidden-size` 1px · `--enq-portrait-size` 44px · `--enq-bubble-radius` 16px · `--enq-bubble-radius-origin` 4px · `--enq-composer-radius` 16px · `--enq-cell-inset-block` 16px · `--enq-cell-inset-inline` 24px · `--enq-divider-width` 1px · `--enq-focus-ring-width` 2px
 - **figure.css** — `--fig-min-xs` 192px
 - **footer.css** — `--foot-rule-width` 1px · `--foot-ring-width` 2px · `--foot-ring-offset` 2px · `--foot-band-inset` 48px · `--foot-field-min-inline` 16rem · `--foot-watermark-size` 160px · `--foot-tagline-measure` 56ch · `--foot-title-tracking` -0.005em · `--foot-body-measure` 75ch · `--foot-label-tracking` 0.12em · `--foot-social-tracking` 0.08em · `--foot-meta-key-tracking` 0.1em
 - **gateway.css** — `--gwy-title-tracking` -0.005em · `--gwy-arrow-inset` 12px · `--gwy-marker-reach` 24px · `--gwy-marker-radius` 8px · `--gwy-marker-y` 0px · `--gwy-marker-h` 0px · `--gwy-enter-rise` 8px · `--gwy-rule-width` 1px · `--gwy-ring-width` 2px · `--gwy-ring-radius` 4px
 - **icon.css** — `--icn-size-sm` 14px · `--icn-size-md` 16px · `--icn-size-lg` 18px · `--icn-size-xl` 24px
 - **input.css** — `--inp-height-md` 40px · `--inp-height-touch` 44px · `--inp-padding-x` 12px · `--inp-textarea-padding-y` 12px · `--inp-textarea-min-block` 128px · `--inp-height-lg` 48px · `--inp-textarea-min-block-lg` 160px · `--inp-radius` 8px · `--inp-rule-width` 1px · `--inp-invalid-rule-width` 2px · `--inp-ring-width` 2px · `--inp-ring-offset` 2px · `--inp-line-height-md` 44px · `--inp-line-inset-bottom` 6px · `--inp-line-inset-top` 14px · `--inp-line-textarea-min-block` 68px
-- **island.css** — `--isl-inset-block` 96px · `--isl-inset-inline` 96px · `--isl-radius` 24px · `--isl-overhang` 64px
+- **island.css** — `--isl-inset-block` 96px · `--isl-inset-inline` 96px · `--isl-radius` 24px
 - **layout.css** — `--lay-track-xs` 192px · `--lay-track-sm` 256px · `--lay-track-md` 320px · `--lay-track-lg` 384px · `--lay-scroll-peek` 24px · `--lay-scroll-bleed` 32px
 - **list-card.css** — `--lcrd-title-tracking-md` -0.005em · `--lcrd-title-tracking-sm` 0em · `--lcrd-marker-tracking` 0.08em · `--lcrd-number-baseline-offset-md` 4px · `--lcrd-number-baseline-offset-sm` 0px · `--lcrd-content-min-xs` 192px · `--lcrd-title-min` 256px · `--lcrd-body-min` 256px · `--lcrd-stacked-body-measure` 56ch · `--lcrd-readdown-rail-container` 1240px · `--lcrd-readdown-rail-under` 80px · `--lcrd-thumbnail-inline-md` 160px · `--lcrd-thumbnail-inline-sm` 96px · `--lcrd-marker-icon-size-tile` 1em · `--lcrd-thumbnail-radius` 8px · `--lcrd-hidden-size` 1px · `--lcrd-rule-width` 1px · `--lcrd-box-radius` 8px · `--lcrd-radius` 0px · `--lcrd-ring-width` 2px · `--lcrd-ring-offset` 2px
 - **logo-grid.css** — `--lgrid-cell-height` 128px · `--lgrid-cell-height-m` 88px · `--lgrid-rule-width` 1px · `--lgrid-radius` 8px

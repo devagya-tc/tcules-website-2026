@@ -103,6 +103,10 @@
   --inp-line-invalid-rule: var(--color-danger-600);
   --inp-line-disabled-fg: var(--color-neutral-500); /* 3.16:1 on paper — exempt, see header */
   --inp-line-disabled-rule: var(--color-neutral-200);
+  /* appearance="fill" (owner, 16 Oct 2026): the field as a soft well one step off the ground,
+     no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
+  --inp-fill-bg: var(--color-paper-deep);
+  --inp-fill-bg-focus: var(--color-paper);
 }
 
 [data-surface='tint'] {
@@ -130,6 +134,10 @@
     --color-neutral-500
   ); /* 2.82:1 on deep paper — exempt, see header */
   --inp-line-disabled-rule: var(--color-neutral-300);
+  /* appearance="fill" (owner, 16 Oct 2026): the field as a soft well one step off the ground,
+     no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
+  --inp-fill-bg: var(--color-paper);
+  --inp-fill-bg-focus: var(--color-white);
 }
 
 [data-surface='ink'] {
@@ -157,6 +165,10 @@
     --color-neutral-600
   ); /* 3.48:1 on neutral-950 — exempt, see header */
   --inp-line-disabled-rule: var(--color-neutral-800);
+  /* appearance="fill" (owner, 16 Oct 2026): the field as a soft well one step off the ground,
+     no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
+  --inp-fill-bg: var(--color-neutral-800);
+  --inp-fill-bg-focus: var(--color-neutral-900);
 }
 
 [data-surface='blue'] {
@@ -189,4 +201,8 @@
   --inp-line-invalid-rule: var(--color-danger-300); /* 3.12:1 on brandeis-500 */
   --inp-line-disabled-fg: var(--color-brandeis-300); /* 2.64:1 — exempt, see header */
   --inp-line-disabled-rule: var(--color-brandeis-400);
+  /* appearance="fill" (owner, 16 Oct 2026): the field as a soft well one step off the ground,
+     no rule at rest; on focus it lifts to the ground's brighter step and takes the focus rule. */
+  --inp-fill-bg: var(--color-brandeis-600);
+  --inp-fill-bg-focus: var(--color-brandeis-700);
 }

@@ -62,6 +62,24 @@ const ENQUIRY_FORM_PROPS = {
   scheduleHref: ROUTES.contact,
 } as const;
 
+/** The island close's two form dresses, with the home close's copy (the message's person is a placeholder). */
+const DRESS = {
+  card: {
+    kind: 'card',
+    title: 'Start a project',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    writeTo: 'hello@tcules.com',
+    note: 'We never share your details.',
+  },
+  message: {
+    kind: 'message',
+    from: { name: 'Rushali', role: 'Design lead · Tcules', portrait: '/kit/photos/studio-portrait-rushali.webp' },
+    note: 'Tell us what you’re building. I’ll reply within a working day.',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    writeTo: 'hello@tcules.com',
+  },
+} as const;
+
 /** The island close's drawing, as the home close places it (scripts/enquiry-desk.mjs). */
 const DESK = {
   src: '/illustrations/enquiry/designer-desk.svg',
@@ -217,19 +235,25 @@ export default function CtaSectionSpecimenPage() {
       />
 
       <SpecimenNote
-        title="1b · The island close (home)"
-        note="island='tint' on a split close (home, owner 16 Oct 2026): the copy on a tint island on a paper band, the form's paper panel standing 64 proud of the island's top and foot from 1024 (Island overhang), the designer's desk drawing above the heading, line fields and the submit at its own width; below 1024 the form sits on the island with no panel. bandTexture='halo': a soft light-blue field on the paper band, centred on the panel, so the paper panel stands against texture where it rises out of the island. The island paints over the field and carries no texture of its own. This is what the home close carries. The instance after it has no drawing, points and a contact strip: its copy takes the foot's air at its head too, so nothing sits off the island's ground."
+        title="1b · The island close"
+        note="island='blue' | 'ink' on a split close (home, owner 16 Oct 2026): the desk drawing, heading and lede as one group centred against the form, all on the island; the form on a paper panel inside it, in one of EnquiryForm's two dresses; islandTexture='frame' framing the form. Four instances: card on blue (what home carries), message on blue, card on ink, message on ink. Send any of them empty to see send-only validation. The fifth has no drawing, points and a contact strip: a copy group taller than the form."
       />
+      {(['blue', 'ink'] as const).map((surface) =>
+        (['card', 'message'] as const).map((kind) => (
+          <CtaSection
+            key={`${surface}-${kind}`}
+            island={surface}
+            islandTexture="frame"
+            art={<Media image={DESK} sizes="240px" />}
+            heading="Tell us what you're building"
+            body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" dress={DRESS[kind]} />}
+          />
+        )),
+      )}
       <CtaSection
-        island="tint"
-        bandTexture="halo"
-        art={<Media image={DESK} sizes="260px" />}
-        heading="Tell us what you're building"
-        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
-        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" fields="line" submit="inline" caption="We'll reply within one business day." />}
-      />
-      <CtaSection
-        island="tint"
+        island="ink"
+        islandTexture="frame"
         eyebrow="Next step"
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
@@ -238,7 +262,7 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
           { label: 'Reply', value: 'Within one business day' },
         ]}
-        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fields="line" />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" dress={DRESS.card} />}
       />
       <CtaSection
         arrangement="open"

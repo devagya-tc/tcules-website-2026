@@ -214,3 +214,12 @@ existing primitives and gap steps. No new primitive.
   caller restates it. CtaSection's copy column does not use it: there the drawing rises on purpose.
 - Specimen: `/design/island` § 7 — a tint island on paper with a stretched child and the two-lights
   ground.
+
+## Amendment · 16 Oct 2026, final — blue and ink admitted; overhang removed
+
+- **`IslandSurface` is `paper | tint | blue | ink`.** Blue and ink are owner exceptions for the home
+  enquiry close: an island that carries a paper form. Ink is **neutral-900**, one step off the footer's
+  950 (Q3 amended). `ISLAND_BAND` puts both on paper.
+- **The overhang, `ground` and `IslandOnGround` are removed**: the close now holds its form inside the
+  island. The radius stays 24.
+- Specimen: `/design/island` — blue and ink islands with `TextureFrame`.

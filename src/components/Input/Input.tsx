@@ -20,8 +20,16 @@ type SharedProps = {
    * it is for a short form that sits in a composition rather than being the band's whole argument,
    * where a stack of white boxes on warm paper read as a default template. Same height, same type,
    * same states, so a form can change appearance without changing size.
+   *
+   * `bare` (owner, 16 Oct 2026: EnquiryForm's message dress) is the value alone, with no fill, no
+   * rule and no ring: the field sits inside a container the COMPOSING pattern draws (a message
+   * composer), and that container owns the focus indicator (`:focus-within`). Never use `bare`
+   * outside such a container: on its own it has no visible focus.
+   *
+   * `fill` (same day, the card dress) is a soft well one step off its ground with no rule at rest;
+   * focus lifts it to the brighter step and draws the focus rule, invalid draws the danger rule.
    */
-  appearance?: 'box' | 'line';
+  appearance?: 'box' | 'line' | 'bare' | 'fill';
   /**
    * The control's size step (home round 3, 11 Oct 2026). `md` (default) is 40, the md Button's
    * height, stepping to the 44 touch floor below 768. `lg` is 48 at every width with the value at
@@ -68,6 +76,8 @@ export function Input({
     styles.control,
     as === 'textarea' && styles.textarea,
     appearance === 'line' && styles.line,
+    appearance === 'bare' && styles.bare,
+    appearance === 'fill' && styles.fill,
     scale === 'lg' && styles.lg,
     invalidState && styles.invalid,
     className,

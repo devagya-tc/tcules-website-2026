@@ -81,22 +81,12 @@
      testimonial card take. */
   --cta-panel-radius: var(--radius-8);
 
-  /* The island close (owner, 16 Oct 2026): the split close on a tint island, its form panel rising
-     out of the island at the top and foot. The panel takes 16, a step under the island's 24, and a
-     `stack` inset. Both apply from 1024 only: below it there is no panel (the module says why). */
-  --cta-panel-radius-raised: var(--radius-16);
-  --cta-panel-inset-raised: var(--gap-stack);
-  /* The panel's block inset: a `column` (owner, 16 Oct 2026: "more vertical padding inside the
-     island"). The panel sets the island box's height, so its block air is the island's too. */
-  --cta-panel-inset-raised-block: var(--gap-column);
-  /* The copy column's foot from 1024: the island's overhang (64, `column`, duplicated by value from
-     --isl-overhang on purpose: token rule 6) plus a `stack` of the island's own air, so the lede
-     sits a stack above the island's lower edge while the drawing above it starts level with the
-     panel's top (owner, 16 Oct 2026: more vertical air inside the island). */
-  --cta-island-foot: calc(var(--gap-column) + var(--gap-stack));
-  /* The drawing's width in the island close: the designer's desk at 260 is 301 tall (owner, 16 Oct
-     2026: "make the illustration bigger"; it was 200). A component size. */
-  --cta-art-inline-size: 260px;
+  /* The island close (owner, 16 Oct 2026): the split close on a blue or ink island, the form on a
+     paper panel INSIDE it. The panel takes 16, a step under the island's 24, and a `gutter` inset. */
+  --cta-panel-radius-island: var(--radius-16);
+  --cta-panel-inset-island: var(--gap-gutter);
+  /* The drawing above the heading: the designer's desk at 240 is 278 tall. A component size. */
+  --cta-art-inline-size: 240px;
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
@@ -107,6 +97,16 @@
      ratio set on purpose (token rule 6: a component never reads another component's tokens). */
   --cta-photo-ratio-portrait: 4 / 5;
   --cta-photo-ratio-stacked: 4 / 3;
+}
+
+/* Below 768 the island's own inset is the 32 gutter, and the panel's 32 inside it left the form
+   198 in the 326 phone column, under its floor. The panel's inset drops to `text` there. A step
+   swapped at a breakpoint, which gap-scale rule 4 reserves for owner exceptions: flagged on PR #113
+   for the owner's OK. */
+@media (max-width: 767px) {
+  :root {
+    --cta-panel-inset-island: var(--gap-text);
+  }
 }
 
 :root,
@@ -124,7 +124,6 @@
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
   --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
-  --cta-panel-edge: var(--color-neutral-200); /* paper panel on a paper band: the hairline is its edge where it rises out of the island */
 }
 
 [data-surface='tint'] {
@@ -137,7 +136,6 @@
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
   --cta-panel-ground: var(--color-paper-deep); /* the form panel as a tint surface */
-  --cta-panel-edge: var(--color-neutral-300); /* decoration */
 }
 
 [data-surface='ink'] {
@@ -150,7 +148,6 @@
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
   --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
-  --cta-panel-edge: var(--color-neutral-700); /* declared for self-containment */
 }
 
 [data-surface='blue'] {
@@ -163,5 +160,4 @@
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
   --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
-  --cta-panel-edge: var(--color-brandeis-300); /* declared for self-containment */
 }

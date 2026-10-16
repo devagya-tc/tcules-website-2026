@@ -9,6 +9,7 @@ import {
   DataTable,
   ContentSection,
   EnquiryForm,
+  type EnquiryDress,
   ListCard,
   PageHero,
   Proof,
@@ -385,6 +386,35 @@ const ENQUIRY_DESK = {
 } as const;
 
 /**
+ * The island close's two form dresses (owner, 16 Oct 2026). Their framing words are not in the
+ * corpus: the owner approved them for shipping, and they are logged in docs/content-changes.md for
+ * the content team. The message dress's person is a PLACEHOLDER from the studio photo catalogue
+ * until the owner names who answers enquiries.
+ */
+const ENQUIRY_PROMPT = 'A link, a Figma file, or two lines about the problem.';
+const ENQUIRY_WRITE_TO = 'hello@tcules.com';
+const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
+  card: {
+    kind: 'card',
+    title: 'Start a project',
+    prompt: ENQUIRY_PROMPT,
+    writeTo: ENQUIRY_WRITE_TO,
+    note: 'We never share your details.',
+  },
+  message: {
+    kind: 'message',
+    from: {
+      name: 'Rushali',
+      role: 'Design lead · Tcules',
+      portrait: '/kit/photos/studio-portrait-rushali.webp',
+    },
+    note: 'Tell us what you’re building. I’ll reply within a working day.',
+    prompt: ENQUIRY_PROMPT,
+    writeTo: ENQUIRY_WRITE_TO,
+  },
+};
+
+/**
  * M2 — the enquiry band: the L close, split (copy | form), `id="enquiry"` so the hero's "#enquiry"
  * lands on it. Fields, submit label and success words come from the page's `conversion` as
  * authored; the lead is the band's one paragraph. Hidden context names the page and its family so
@@ -396,19 +426,19 @@ export function EnquiryBand({
   page,
   band,
   surface,
-  island = false,
+  island,
 }: {
   page: CorpusPage;
   band: CorpusBand;
 } & (
-  | { surface: SectionSurface; island?: false }
+  | { surface: SectionSurface; island?: never }
   | {
       /**
-       * The island close (home, owner 16 Oct 2026): the copy and the desk drawing on a tint island
-       * on a paper band, the form's panel rising out of it, line fields, the submit at its own
-       * width. It takes no `surface`: the island carries the close's tint and the band goes paper.
+       * The island close (home, owner 16 Oct 2026): the desk drawing, heading and lede beside the
+       * form, all on a blue or ink island on a paper band, the form on a paper panel in one of its
+       * two dresses, the island's texture framing it. It takes no `surface`: the band goes paper.
        */
-      island: true;
+      island: { surface: 'blue' | 'ink'; dress: 'card' | 'message' };
       surface?: never;
     }
 )) {
@@ -419,12 +449,12 @@ export function EnquiryBand({
       <CtaSection
         id={band.id}
         data-band="L"
-        island="tint"
-        bandTexture="halo"
-        art={<Media image={ENQUIRY_DESK} sizes="260px" />}
+        island={island.surface}
+        islandTexture="frame"
+        art={<Media image={ENQUIRY_DESK} sizes="240px" />}
         heading={band.headingText}
         body={body}
-        form={corpusEnquiryForm(page, band, { fields: 'line', submit: 'inline' })}
+        form={corpusEnquiryForm(page, band, { dress: ENQUIRY_DRESS[island.dress] })}
       />
     );
   }
@@ -450,8 +480,8 @@ export function EnquiryBand({
 export function corpusEnquiryForm(
   page: CorpusPage,
   band?: CorpusBand,
-  /** The island close's treatment: line fields, the submit at its own width. Default: lg boxes, full submit. */
-  treatment: { fields?: 'line' | 'box'; submit?: 'inline' | 'full' } = {},
+  /** The island close's treatment: a dress for the form. Default: lg boxes, the full submit. */
+  treatment: { dress?: EnquiryDress } = {},
 ) {
   const conversion = page.conversion;
   /* The band's own "After sending:" line ("We'll reply within one business day.") is the caption
@@ -468,8 +498,8 @@ export function corpusEnquiryForm(
       /* The form is the band's primary object (home round 3): lg fields, the submit across the
          panel, so the one solid on the band is the widest thing in it. */
       fieldScale="lg"
-      fields={treatment.fields}
-      submit={treatment.submit ?? 'full'}
+      dress={treatment.dress}
+      submit={treatment.dress ? 'inline' : 'full'}
       caption={after}
       success={
         conversion?.onSuccess

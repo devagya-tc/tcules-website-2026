@@ -214,61 +214,25 @@ export function TextureCounterweight() {
   );
 }
 
-export type TextureTwoLightsProps = {
-  /**
-   * Where the raised object's start edge sits, as a percentage of the field's width: the top light
-   * gathers where that edge crosses the field's top. Default 50, the island close's form panel in
-   * its [5, 7] split.
-   */
-  edge?: number;
-};
-
 /**
- * TextureTwoLights — the `two lights` placement (owner, 16 Oct 2026, the enquiry close; study 09A).
- * Two soft pools on an island's ground, on a diagonal across a raised panel: one where the panel
- * rises out of the island's TOP edge, at its start side, and one in the island's FOOT corner at the
- * END, past the panel. So the texture gathers at the overlap, the one event in the band, and the two
- * lights balance each other across it. (Both at the panel's start edge was tried: they merged into
- * one vertical band.)
+ * TextureFrame — the `frame` placement (owner, 16 Oct 2026, the home enquiry close). One soft
+ * rounded field on an island's ground, set around the form panel in the island's end column at an
+ * even distance on every side, so the form sits in a frame of the island's own texture.
  *
- *   ellipse, left edge−16%, width 30%, top −150, height 300, blur 170 (the top light)
- *   ellipse, right −8%, width 30%, bottom −130, height 260, blur 180   (the foot light)
+ *   rect, right −2%, width 65%, top −24, height 106%, radius 120, blur 88
  *
- * Each pool is centred on or past the field's edge, so part of it is outside and clipped: what shows
- * is a half-glow rising from the edge. Widths are percentages and heights px. `edge` is fixed (50,
- * the close's [5, 7] split from 1280); from 1024 to 1279 the [2, 3] split puts the panel's edge near
- * 45%, so there the top light sits just inside the panel's top corner rather than on its edge — the
- * panel covers part of it, and it still reads as gathering at the overlap. Soft, the one exception
- * to the hard placements: through a feathered mask the grid never shows a silhouette, so it is
- * drawn in --tex-ink-soft, the full ink on tint, where the hard placements keep the quiet neutral.
+ * Fitted to the island close: the panel fills the end 7 of a [5, 7] split inside the island's 96
+ * inset, so a field 120 wider than the panel on every side is about 65% of the island and starts 24
+ * past its end and top edges. Percentages track the split as it reflows; the field is clipped by the
+ * island at its radius. Soft, so it is drawn in --tex-ink-soft: white on blue and on ink.
  *
- * Its rule is the others': never behind a glyph. The top light sits between the drawing and the
- * panel, and the foot light is past the panel, at the far end of the island from the words.
+ * Its rule is the others': never behind a glyph. The copy column is the island's other 5, outside
+ * the field but for its feather.
  */
-export function TextureTwoLights({ edge = 50 }: TextureTwoLightsProps) {
+export function TextureFrame() {
   return (
     <Texture className={styles.soft}>
-      <TextureShape kind="ellipse" left={`${edge - 16}%`} width="30%" top={-150} height={300} blur={170} />
-      <TextureShape kind="ellipse" right="-8%" width="30%" bottom={-130} height={260} blur={180} />
-    </Texture>
-  );
-}
-
-/**
- * TextureHalo — the `halo` placement (owner, 16 Oct 2026, study 11A, built to stop the island
- * close's paper panel merging with its paper band). One soft ellipse on the BAND, centred on the
- * form panel, so the panel stands against texture wherever it rises out of the island. The island
- * paints over the band's field, so inside the island the halo is hidden: it shows above and below
- * the island around the panel, and at the island's sides.
- *
- *   ellipse, centre at 67% across and mid-height, width 60%, height 760, blur 200
- *
- * 67% is the panel's centre in the close's [5, 7] split at 1440. Soft, so --tex-ink-soft.
- */
-export function TextureHalo() {
-  return (
-    <Texture className={styles.soft}>
-      <TextureShape kind="ellipse" left="37%" width="60%" height={760} blur={200} />
+      <TextureShape right="-2%" width="65%" top={-24} height="106%" radius={120} blur={88} />
     </Texture>
   );
 }

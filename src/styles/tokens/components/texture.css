@@ -65,9 +65,9 @@
    blue's strength (700, 1.38:1 at the grid's 21% peak) was tried and read as too apparent —
    the grid stopped being texture and became pattern. 400 sits at 1.13:1: present when looked
    for, gone at a glance. 300 (1.07:1) is the quieter alternative; the specimen prints both.
-   --tex-ink-soft is the ink of a SOFT placement (TextureTwoLights, owner 16 Oct 2026): seen
-   through a feathered mask the grid never reaches its peak over an edge, and at 400 its pools
-   vanished, so a soft field on tint takes the full ink. Hard placements keep 400.          */
+   --tex-ink-soft is the ink of a SOFT placement (owner, 16 Oct 2026): seen through a feathered
+   mask the grid never reaches its peak over an edge, and at 400 a soft field vanished, so on tint
+   it takes the full ink. Hard placements keep 400.                                         */
 [data-surface="tint"]{
 --tex-ink:var(--color-neutral-400);
 --tex-ink-soft:var(--color-neutral-900);
@@ -77,7 +77,8 @@
    Declared for self-containment, not placeable (limit 3). Held at 500 as shipped.      */
 [data-surface="ink"]{
 --tex-ink:var(--color-brandeis-500);
---tex-ink-soft:var(--color-brandeis-500);
+/* TextureFrame on the ink island (owner, 16 Oct 2026): white, a light grain on the dark ground. */
+--tex-ink-soft:var(--color-white);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
