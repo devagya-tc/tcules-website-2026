@@ -1013,10 +1013,10 @@ of a designer's desk, never cropped, facing the form, above the heading. The own
 - **`islandTexture?: 'two-lights'`** — `TextureTwoLights` on the island's ground (Texture.md). Island
   only. This is the first texture a close carries, by owner decision; § 1.7's "the close carries no
   texture" is amended for this close.
-- **Tracks.** `{ lg: [2, 3], xl: [6, 5] }` at `section`. Both tracks stretch, so the panel is always the
+- **Tracks.** `{ lg: [2, 3], xl: [5, 7] }` at `section` (the form in the larger track; [6, 5] read as "the form itself feels too small", owner). Both tracks stretch, so the panel is always the
   island box's full height and stands proud at both edges whichever column is taller. The copy
   column's foot is `--cta-island-foot` (the overhang plus a `block`), so the lede sits a block above
-  the island's lower edge. At [6, 5] or [1, 1] from 1024 the optional field's cue was cut short.
+  the island's lower edge. At [1, 1] from 1024 the optional field's cue was cut short.
 - **The raised panel** (`.formPanelRaised`, from 1024): paper, `--cta-panel-radius-raised` (16) under
   the island's 24, a hairline `--cta-panel-edge` (a paper panel on a paper band disappears where it
   rises out of the island; this is the panel's one edge, still no shadow), and a `stack` inset. Below

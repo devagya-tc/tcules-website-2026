@@ -217,8 +217,8 @@ export function TextureCounterweight() {
 export type TextureTwoLightsProps = {
   /**
    * Where the raised object's start edge sits, as a percentage of the field's width: the top light
-   * gathers where that edge crosses the field's top. Default 57, the island close's form panel in
-   * its [6, 5] split.
+   * gathers where that edge crosses the field's top. Default 50, the island close's form panel in
+   * its [5, 7] split.
    */
   edge?: number;
 };
@@ -235,8 +235,8 @@ export type TextureTwoLightsProps = {
  *   ellipse, right −8%, width 30%, bottom −130, height 260, blur 180   (the foot light)
  *
  * Each pool is centred on or past the field's edge, so part of it is outside and clipped: what shows
- * is a half-glow rising from the edge. Widths are percentages and heights px. `edge` is fixed (57,
- * the close's [6, 5] split from 1280); from 1024 to 1279 the [2, 3] split puts the panel's edge near
+ * is a half-glow rising from the edge. Widths are percentages and heights px. `edge` is fixed (50,
+ * the close's [5, 7] split from 1280); from 1024 to 1279 the [2, 3] split puts the panel's edge near
  * 45%, so there the top light sits just inside the panel's top corner rather than on its edge — the
  * panel covers part of it, and it still reads as gathering at the overlap. Soft, the one exception
  * to the hard placements: through a feathered mask the grid never shows a silhouette, so it is
@@ -245,7 +245,7 @@ export type TextureTwoLightsProps = {
  * Its rule is the others': never behind a glyph. The top light sits between the drawing and the
  * panel, and the foot light is past the panel, at the far end of the island from the words.
  */
-export function TextureTwoLights({ edge = 57 }: TextureTwoLightsProps) {
+export function TextureTwoLights({ edge = 50 }: TextureTwoLightsProps) {
   return (
     <Texture className={styles.soft}>
       <TextureShape kind="ellipse" left={`${edge - 16}%`} width="30%" top={-150} height={300} blur={170} />

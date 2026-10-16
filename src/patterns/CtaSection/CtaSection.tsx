@@ -994,8 +994,9 @@ export function CtaSection(props: CtaSectionProps) {
   /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
      The copy on a tint island, the form's paper panel standing across the island's top and foot
      edges (Island `overhang`), and the drawing above the heading, starting level with the panel's
-     top. [6, 5] at `section` from 1280 (a split: copy and drawing beside a form), the panel in the
-     5; [2, 3] from 1024, where the 5 (and an even split) left the optional field's cue cut short. The drawing sits a
+     top. [5, 7] at `section` from 1280 (a split: copy and drawing beside a form), the panel in the
+     7, the larger track, as the split close gives its form (owner, 16 Oct 2026: at [6, 5] "the form
+     itself feels too small"); [2, 3] from 1024. The drawing sits a
      `block` above the heading, as a head's lead-in rather than a block of its own. Both
      tracks STRETCH to the row: the panel is always the island box's full height, so it stands 64
      proud at the top and the foot whichever column is taller, and the copy column carries the
@@ -1019,7 +1020,7 @@ export function CtaSection(props: CtaSectionProps) {
           overhang
           ground={props.islandTexture === 'two-lights' ? <TextureTwoLights /> : undefined}
         >
-          <Layout columns={{ base: 1, lg: [2, 3], xl: [6, 5] }} colGap="section" rowGap="stack">
+          <Layout columns={{ base: 1, lg: [2, 3], xl: [5, 7] }} colGap="section" rowGap="stack">
             <div className={styles.islandCopy}>
               <Layout rowGap="block">
                 {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}

@@ -418,7 +418,7 @@ the five placements live with when / never, then the mechanism specimens.
 
 ## Amendment · 16 Oct 2026 — `TextureTwoLights`, and texture on tint (owner, the home close)
 
-- **`TextureTwoLights({ edge = 57 })`** — study 09A as built: two soft ellipses on an island's ground,
+- **`TextureTwoLights({ edge = 50 })`** — study 09A as built: two soft ellipses on an island's ground,
   on a diagonal across the raised form panel. The top light is centred where the panel's start edge
   crosses the island's top (left edge−16%, width 30%, top −150, height 300, blur 170); the foot light is
   in the island's far foot corner, past the panel (right −8%, width 30%, bottom −130, height 260, blur
