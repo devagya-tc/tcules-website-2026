@@ -142,8 +142,7 @@ None at the usage layer. The component layer is `--rsn-*`.
 ## 17 · Open questions
 
 1. Which arrangement goes on home, and which on service pages? Not blocking; the pattern ships all three.
-2. Content brief for the content team: a title (≤ 5 words) and a sentence (~14 words) per reason,
-   three or six reasons. Not blocking.
+2. Content brief for the content team: `docs/content-proposals.md` P48 (three or six reasons; a title of five words or fewer and a sentence of about 14 words each). Not blocking.
 
 ## Appendix — self-audit
 

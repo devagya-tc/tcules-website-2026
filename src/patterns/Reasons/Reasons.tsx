@@ -122,6 +122,7 @@ export function Reasons({
       as="ul"
       className={cx(
         arrangement === 'boxed' && styles.cells,
+        arrangement === 'boxed' && shown.length === 3 && styles.three,
         arrangement === 'beside' && styles.ruled,
       )}
       columns={
