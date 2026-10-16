@@ -251,23 +251,18 @@
 }
 
 /* A clickable title wraps as running text does (pretty, not balance), so its first line stays long
-   and a narrow tile does not set four short lines. The hover is an underline in the title's own
-   ink, drawn in by its colour: present at rest, transparent, so nothing shifts when it shows. */
+   and a narrow tile does not set four short lines. The hover is the title taking the accent ink,
+   the kit's linked-card cue (BlockCard, ListCard) — never an underline (owner, 16 Oct 2026). */
 .title {
   color: var(--tsr-title-ink);
   text-wrap: var(--text-running-wrap);
   overflow-wrap: anywhere;
-  text-decoration-line: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: var(--tsr-title-underline-width);
-  text-underline-offset: var(--tsr-title-underline-offset);
-  text-decoration-skip-ink: auto;
-  transition: text-decoration-color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
+  transition: color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
 }
 
 .link:hover .title,
 .link:focus-visible .title {
-  text-decoration-color: var(--tsr-title-underline-ink);
+  color: var(--tsr-title-ink-hover);
 }
 
 /* A tile's and a list row's title is held to three lines and balanced (beauty round 4, 16 Oct 2026):

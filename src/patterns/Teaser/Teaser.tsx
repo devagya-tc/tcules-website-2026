@@ -138,7 +138,7 @@ const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']
 
 /**
  * TIER 2 — Teaser, one linked piece held without an edge (insights hub and format pages, 16 Oct
- * 2026). The whole item is one link; on hover and focus its title is underlined and its picture
+ * 2026). The whole item is one link; on hover and focus its title takes the accent and its picture
  * leans in. Proximity binds it: 16 from picture to copy, 8 inside the copy. The set around it owns
  * the generous distance between items. It draws no rule, no box and no stand-in.
  */

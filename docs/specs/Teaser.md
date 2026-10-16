@@ -52,7 +52,7 @@ body-sm · body-sm.
 
 ## 5 · States
 
-Rest; hover and focus-visible (the title underlines in `--tsr-title-underline-ink`, drawn in by colour;
+Rest; hover and focus-visible (the title takes the accent, `--tsr-title-ink-hover` — no underline, owner 16 Oct 2026;
 the picture scales to 1.02 inside its fixed box); focus ring on the anchor. No pressed, selected or
 disabled state (beauty round, 16 Oct 2026: the title no longer turns blue — the blue is the page's
 action).
@@ -62,7 +62,7 @@ action).
 | Token | paper | tint | ink | blue |
 |---|---|---|---|---|
 | title-ink | neutral-900 | neutral-900 | white | white |
-| title-underline-ink (hover) | neutral-900 | neutral-900 | white | white |
+| title-ink-hover (hover) | brandeis-500 | brandeis-600 | brandeis-300 | brandeis-100 |
 | body-ink | neutral-700 | neutral-700 | neutral-300 | brandeis-50 |
 | meta-ink | neutral-600 | neutral-700 | neutral-400 | brandeis-100 |
 | date-ink | neutral-900 | neutral-900 | white | white |

@@ -7,7 +7,7 @@
    Naming: --tsr-{part}-{role}-{state}, with a size suffix where the type steps with the placement
    (--tsr-title-text-xl | -lg | -md | -sm)
      parts: title | body | meta | label | date | index | marker | media | play | ring
-     states: hover, on the title's underline only (the cover zoom is geometry).
+     states: hover, on the title's ink only (the cover zoom is geometry).
 
    Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -80,8 +80,8 @@
   /* A slight radius and no stroke: the photograph's own edge is the shape. */
   --tsr-media-radius: var(--radius-4);
   --tsr-media-zoom: 1.02;
-  /* One motion for the whole hover (beauty round 4): the picture leans in and the title's underline
-     draws in over the same 240, on the one decelerating curve, so the item answers as one thing. */
+  /* One motion for the whole hover (beauty round 4): the picture leans in and the title's ink
+     turns over the same 240, on the one decelerating curve, so the item answers as one thing. */
   --tsr-media-zoom-duration: var(--duration-medium);
   --tsr-media-zoom-easing: var(--easing-standard);
   /* A row's thumbnail: a fixed track at the row's end, so every row's copy starts on one edge
@@ -112,10 +112,7 @@
   --tsr-play-glyph-sm: var(--space-14);
   --tsr-play-inset-sm: var(--space-12);
 
-  /* The hover underline: a hairline under the title, set clear of the descenders — an offset in
-     em so it scales with the title, and skip-ink so descenders break it rather than sit on it. */
-  --tsr-title-underline-width: var(--border-width-hairline);
-  --tsr-title-underline-offset: 0.18em;
+  /* The title's hover: its ink moves to the accent, over the picture's lean. */
   --tsr-title-ink-duration: var(--duration-medium);
   --tsr-title-ink-easing: var(--easing-standard);
   --tsr-ring-width: var(--focus-ring-width);
@@ -131,7 +128,7 @@
   --tsr-date-ink: var(--color-brandeis-500); /* the accent: large numerals */
   --tsr-label-ink: var(--color-neutral-900);
   --tsr-index-ink: var(--color-neutral-600); /* 4.92:1 */
-  --tsr-title-underline-ink: var(--color-neutral-900);
+  --tsr-title-ink-hover: var(--color-brandeis-500);
   --tsr-media-ground: var(--color-paper-deep);
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
@@ -146,7 +143,7 @@
   --tsr-date-ink: var(--color-brandeis-600);
   --tsr-label-ink: var(--color-neutral-900);
   --tsr-index-ink: var(--color-neutral-700); /* 7.27:1 */
-  --tsr-title-underline-ink: var(--color-neutral-900);
+  --tsr-title-ink-hover: var(--color-brandeis-600);
   --tsr-media-ground: var(--color-neutral-100);
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
@@ -160,7 +157,7 @@
   --tsr-date-ink: var(--color-brandeis-300);
   --tsr-label-ink: var(--color-white);
   --tsr-index-ink: var(--color-neutral-400);
-  --tsr-title-underline-ink: var(--color-white);
+  --tsr-title-ink-hover: var(--color-brandeis-300);
   --tsr-media-ground: var(--color-neutral-900);
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-neutral-900);
@@ -175,7 +172,7 @@
   --tsr-date-ink: var(--color-white);
   --tsr-label-ink: var(--color-white);
   --tsr-index-ink: var(--color-brandeis-100);
-  --tsr-title-underline-ink: var(--color-white);
+  --tsr-title-ink-hover: var(--color-brandeis-100);
   --tsr-media-ground: var(--color-brandeis-600);
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-brandeis-700);
