@@ -759,8 +759,14 @@ export default function ListCardSpecimenPage() {
             note="Owner, 7 Oct 2026; edge removed 9 Oct 2026. No edge on any side; 24 inside on every side, which is where the ground under the pointer sits when linked, at the 8 radius. Boxed tiles sit a gutter apart both ways. Clickable, so the set runs the full column under its head — never beside a head or a photograph."
           >
             <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
-              {[...BOXED, ...LINKED.slice(0, 3)].map((tile) => (
-                <ListCard key={tile.title} form="tile" frame="box" titleAs="h3" {...tile} />
+              {[...BOXED, ...LINKED.slice(0, 3)].map((tile, index) => (
+                <ListCard
+                  key={`${index}-${tile.title}`}
+                  form="tile"
+                  frame="box"
+                  titleAs="h3"
+                  {...tile}
+                />
               ))}
             </Layout>
           </Specimen>

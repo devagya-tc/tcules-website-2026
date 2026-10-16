@@ -76,6 +76,9 @@
   --bcrd-body-text-sm: var(--text-body-sm);
   --bcrd-eyebrow-text: var(--text-eyebrow);
   --bcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* How many lines a pinned detail value holds before it grows (a component size, in lines of its
+     own type): two, so the labels and ctas of a vertical set share lines whatever each role's length. */
+  --bcrd-detail-lines-min: 2lh;
 
   /* ONE ratio, at every width and in every arrangement: the site's standard image ratio, 16:9
      (owner, home round 3, 11 Oct 2026: "i wouldn't want random image ratios on the cards ever").

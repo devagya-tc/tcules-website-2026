@@ -149,7 +149,7 @@
 /* A vertical card with a cta: the value holds two lines, so the labels and ctas of a set share lines
    whatever each role's length. A role past two lines still grows; it only stops being aligned. */
 .detailPinned {
-  min-block-size: 2lh;
+  min-block-size: var(--bcrd-detail-lines-min);
 }
 
 /* The text-only card's top edge (§ 3.1): a hairline the width of the card, standing in for the top
