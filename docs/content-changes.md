@@ -27,6 +27,9 @@ title, half the cards name it and half don't. A description longer than one line
 on the card and repeated the title.
 
 - **Categories** no longer show on the card once the client is filled in: one label line per card.
+- **"Our role"** does not show on a featured card (owner, 16 Oct 2026). The `_pages/case-studies.md`
+  line "**Our role:** … [Read the … case](…)" still supplies the card's link and cta wording; the role
+  itself is stated on the case page, in its "At a glance" table. The CMS needs no role field on the card.
 
 **Worked example.** `/design/case-study-index` shows the live index with this copy applied to every
 entry (`src/content/sources/fixtures/ideal/case-study-listing.ts`). That copy is illustrative, and the
