@@ -280,3 +280,18 @@
   border-radius: var(--cta-panel-radius);
 }
 
+
+/* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────
+   The form's panel inside the island: paper, the 16 radius under the island's 24, a `block` inset.
+   No edge and no shadow: paper on blue or ink needs neither. */
+.islandPanel {
+  min-inline-size: 0;
+  padding: var(--cta-panel-inset-island);
+  background: var(--cta-panel-ground);
+  border-radius: var(--cta-panel-radius-island);
+}
+
+/* The drawing: a component size, never cropped (Media renders an illustration whole). */
+.art {
+  inline-size: min(100%, var(--cta-art-inline-size));
+}

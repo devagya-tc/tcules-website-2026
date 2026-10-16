@@ -81,6 +81,14 @@
      testimonial card take. */
   --cta-panel-radius: var(--radius-8);
 
+  /* The island close (owner, 16 Oct 2026): the split close on a blue or ink island, the form on a
+     paper panel INSIDE it. The panel takes 16, a step under the island's 24, and a `block` inset
+     (was `gutter`; owner, 16 Oct 2026: the close fits one laptop screen, 828 tall at 1440). */
+  --cta-panel-radius-island: var(--radius-16);
+  --cta-panel-inset-island: var(--gap-block);
+  /* The drawing above the heading: the designer's desk at 240 is 278 tall. A component size. */
+  --cta-art-inline-size: 240px;
+
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
      short of the actions at 1024–1279 (§ 3.2: head on the photo's top edge, actions on its foot).
@@ -90,6 +98,16 @@
      ratio set on purpose (token rule 6: a component never reads another component's tokens). */
   --cta-photo-ratio-portrait: 4 / 5;
   --cta-photo-ratio-stacked: 4 / 3;
+}
+
+/* Below 768 the island's own inset is the 32 gutter, and the panel's 24 inside it left the form
+   214 in the 326 phone column, under its floor. The panel's inset drops to `text` there. A step
+   swapped at a breakpoint, which gap-scale rule 4 reserves for owner exceptions: flagged on PR #113
+   for the owner's OK. */
+@media (max-width: 767px) {
+  :root {
+    --cta-panel-inset-island: var(--gap-text);
+  }
 }
 
 :root,

@@ -14,6 +14,7 @@ import {
   type IslandSurface,
   type MediaImage,
   type SectionSurface,
+  TextureFrame,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
@@ -215,7 +216,21 @@ type CtaSplitProps = {
    * between the lede and the strip at 1470 — the dead column § 3.2 warns about.
    */
   contact?: readonly CtaContact[];
-  island?: never;
+  /**
+   * The island close (owner, 16 Oct 2026, the home enquiry close): the copy and the form on a
+   * floating island of this surface, the form on a paper panel inside it. Blue and ink are the
+   * close's grounds (Island.md amendment); the band takes the other ground unless `surface` says
+   * otherwise (`ISLAND_BAND`, paper for both). This lifts 13 Oct's ruling that a split has no island:
+   * the panel is the island's one object, not a box in a box.
+   */
+  island?: IslandSurface;
+  /**
+   * The island close's drawing, above the heading: an illustration the caller composes (a `Media`
+   * of kind `illustration`), at --cta-art-inline-size and never cropped. Island only.
+   */
+  art?: ReactNode;
+  /** The island's texture. `frame`: `TextureFrame`, a soft field framing the form. Island only. */
+  islandTexture?: 'frame';
 };
 
 type CtaOpenProps = {
@@ -242,6 +257,8 @@ type CtaOpenProps = {
    * would outweigh the close the page ends on.
    */
   island?: IslandSurface;
+  art?: never;
+  islandTexture?: never;
 };
 
 type CtaOfferWithFormProps = {
@@ -252,6 +269,8 @@ type CtaOfferWithFormProps = {
   media?: never;
   contact?: never;
   island?: never;
+  art?: never;
+  islandTexture?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -274,6 +293,8 @@ type CtaOfferWithActionsProps = {
   media?: CtaMedia;
   contact?: never;
   island?: never;
+  art?: never;
+  islandTexture?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -966,6 +987,41 @@ export function CtaSection(props: CtaSectionProps) {
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
   const hasForm = isValidElement(props.form);
+
+  /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
+     The copy and the form on a blue or ink island, the form on a paper panel inside it. [5, 7] at
+     `section` from 1024 (a split: words and drawing beside a form), the form in the larger track.
+     The drawing, heading and lede are ONE group, a `block` apart, centred against the form: the
+     form is usually the taller, and the group never spreads to fill it (owner: "too much space
+     between the illustration and the copy"). Below 1024 it stacks: the group, then the form. */
+  if (props.island && hasForm) {
+    const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
+    const islandSurface = islandSurfaceOn(band, props.island);
+    return (
+      <Section
+        surface={band}
+        id={props.id}
+        data-band={props['data-band']}
+        aria-labelledby={headingId}
+        data-arrangement="split"
+      >
+        <Island surface={islandSurface}>
+          {props.islandTexture === 'frame' ? <TextureFrame /> : null}
+          <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
+            <Layout rowGap="block">
+              {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
+              {lede({ scale: 'offer' })}
+              <CtaPoints shape="stack" markers={markers} points={points} />
+              {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+            </Layout>
+            <div className={styles.islandPanel} data-surface="paper">
+              {props.form}
+            </div>
+          </Layout>
+        </Island>
+      </Section>
+    );
+  }
 
   return (
     <Section

@@ -9,13 +9,27 @@
      control-box minimum overflowed every track narrower than it, the Input specimen's 213px
      tracks first). Every variant fills its track; the one measure (667, the copy track of a
      [5, 7] split at 1470) is opted into by the centred standalone placement. */
-  --enq-form-min-inline: 16rem;
+  /* 14rem since 16 Oct 2026: the island close sets the form on a panel inside the island, and in
+     the 326 phone column the island's 32 and the panel's 16 leave it 230. Fields hold at 224. */
+  --enq-form-min-inline: 14rem;
   --enq-form-measure: 667px; /* width="measure": the copy track of a [5, 7] split at 1470 */
   --enq-note-min-inline: 15rem; /* the caption beside the submit, or under it */
   /* The visually-hidden label's clip box (r7-form: the placeholder is the visible cue). */
   --enq-hidden-size: 1px;
   --enq-transition-duration: var(--duration-fast);
   --enq-transition-easing: var(--easing-standard);
+
+  /* The dressed forms (owner, 16 Oct 2026: the home close's `card` and `message`). The portrait is
+     a component size; the radii are the floating family's 16 (the island close's panel), with the
+     bubble's first corner at 4, the corner the note is spoken from. Insets are gap steps. */
+  --enq-portrait-size: 44px;
+  --enq-bubble-radius: var(--radius-16);
+  --enq-bubble-radius-origin: var(--radius-4);
+  --enq-composer-radius: var(--radius-16);
+  --enq-cell-inset-block: var(--gap-text);
+  --enq-cell-inset-inline: var(--gap-block);
+  --enq-divider-width: var(--border-width-hairline);
+  --enq-focus-ring-width: var(--border-width-2);
 }
 
 :root,
@@ -29,6 +43,17 @@
   --enq-caption-ink: var(--color-neutral-600);
   --enq-accent-ink: var(--color-brandeis-500); /* 6.17:1: marks, active label, numerals */
   --enq-index-ink: var(--color-neutral-600); /* 4.92:1 — step numerals: auxiliary, so neutral (owner, 7 Oct 2026) */
+  /* The dressed forms. */
+  --enq-title-ink: var(--color-neutral-900);
+  --enq-label-ink: var(--color-neutral-900);
+  --enq-label-aside-ink: var(--color-neutral-600);
+  --enq-key-ink: var(--color-neutral-600);
+  --enq-from-role-ink: var(--color-neutral-600);
+  --enq-bubble-ground: var(--color-paper-deep);
+  --enq-bubble-ink: var(--color-neutral-800);
+  --enq-composer-edge: var(--color-neutral-300);
+  --enq-composer-edge-focus: var(--color-brandeis-500);
+  --enq-divider: var(--color-neutral-200);
 }
 
 [data-surface='tint'] {
@@ -41,6 +66,17 @@
   --enq-caption-ink: var(--color-neutral-700);
   --enq-accent-ink: var(--color-brandeis-500); /* 5.51:1 */
   --enq-index-ink: var(--color-neutral-700); /* 7.27:1 */
+  /* The dressed forms. */
+  --enq-title-ink: var(--color-neutral-900);
+  --enq-label-ink: var(--color-neutral-900);
+  --enq-label-aside-ink: var(--color-neutral-700);
+  --enq-key-ink: var(--color-neutral-700);
+  --enq-from-role-ink: var(--color-neutral-700);
+  --enq-bubble-ground: var(--color-paper);
+  --enq-bubble-ink: var(--color-neutral-800);
+  --enq-composer-edge: var(--color-neutral-400);
+  --enq-composer-edge-focus: var(--color-brandeis-500);
+  --enq-divider: var(--color-neutral-300);
 }
 
 [data-surface='ink'] {
@@ -53,6 +89,17 @@
   --enq-caption-ink: var(--color-neutral-400);
   --enq-accent-ink: var(--color-brandeis-300); /* 7.32:1 */
   --enq-index-ink: var(--color-neutral-400); /* 8.05:1 */
+  /* The dressed forms. */
+  --enq-title-ink: var(--color-white);
+  --enq-label-ink: var(--color-white);
+  --enq-label-aside-ink: var(--color-neutral-400);
+  --enq-key-ink: var(--color-neutral-400);
+  --enq-from-role-ink: var(--color-neutral-400);
+  --enq-bubble-ground: var(--color-neutral-800);
+  --enq-bubble-ink: var(--color-neutral-100);
+  --enq-composer-edge: var(--color-neutral-700);
+  --enq-composer-edge-focus: var(--color-brandeis-300);
+  --enq-divider: var(--color-neutral-700);
 }
 
 [data-surface='blue'] {
@@ -64,4 +111,15 @@
   --enq-caption-ink: var(--color-brandeis-100);
   --enq-accent-ink: var(--color-white);
   --enq-index-ink: var(--color-brandeis-100); /* 4.91:1 */
+  /* The dressed forms. */
+  --enq-title-ink: var(--color-white);
+  --enq-label-ink: var(--color-white);
+  --enq-label-aside-ink: var(--color-brandeis-100);
+  --enq-key-ink: var(--color-brandeis-100);
+  --enq-from-role-ink: var(--color-brandeis-100);
+  --enq-bubble-ground: var(--color-brandeis-600);
+  --enq-bubble-ink: var(--color-brandeis-50);
+  --enq-composer-edge: var(--color-brandeis-300);
+  --enq-composer-edge-focus: var(--color-white);
+  --enq-divider: var(--color-brandeis-300);
 }

@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Prose, Section } from '@/components';
+import { Cluster, Icon, Layout, Media, Prose, Section } from '@/components';
 import {
   CtaSection,
   EnquiryForm,
@@ -60,6 +60,32 @@ const ENQUIRY_FORM_PROPS = {
   action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
   context: FORM_CONTEXT,
   scheduleHref: ROUTES.contact,
+} as const;
+
+/** The island close's two form dresses, with the home close's copy (the message's person is a placeholder). */
+const DRESS = {
+  card: {
+    kind: 'card',
+    title: 'Start a project',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    reply: 'We reply in 1 business day',
+  },
+  message: {
+    kind: 'message',
+    from: { name: 'Rushali', role: 'Design lead · Tcules', portrait: '/kit/photos/studio-portrait-rushali.webp' },
+    note: 'Tell us what you’re building. I’ll reply within a working day.',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    writeTo: 'hello@tcules.com',
+  },
+} as const;
+
+/** The island close's drawing, as the home close places it (scripts/enquiry-desk.mjs). */
+const DESK = {
+  src: '/illustrations/enquiry/designer-desk.svg',
+  alt: '',
+  width: 396,
+  height: 459,
+  kind: 'illustration',
 } as const;
 
 const AUDIT_FORM_PROPS = {
@@ -205,6 +231,37 @@ export default function CtaSectionSpecimenPage() {
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
+      />
+
+      <SpecimenNote
+        title="1b · The island close"
+        note="island='blue' | 'ink' on a split close (home, owner 16 Oct 2026): the desk drawing, heading and lede as one group centred against the form, all on the island; the form on a paper panel inside it, in one of EnquiryForm's two dresses; islandTexture='frame' framing the form. Four instances: card on blue (what home carries), message on blue, card on ink, message on ink. Send any of them empty to see send-only validation. The fifth has no drawing, points and a contact strip: a copy group taller than the form."
+      />
+      {(['blue', 'ink'] as const).map((surface) =>
+        (['card', 'message'] as const).map((kind) => (
+          <CtaSection
+            key={`${surface}-${kind}`}
+            island={surface}
+            islandTexture="frame"
+            art={<Media image={DESK} sizes="240px" />}
+            heading="Tell us what you're building"
+            body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS[kind]} />}
+          />
+        )),
+      )}
+      <CtaSection
+        island="ink"
+        islandTexture="frame"
+        eyebrow="Next step"
+        heading="Tell us what you are trying to ship"
+        body={SPLIT_BODY}
+        points={STANDARD_POINTS}
+        contact={[
+          { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
+          { label: 'Reply', value: 'Within one business day' },
+        ]}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
       />
       <CtaSection
         arrangement="open"

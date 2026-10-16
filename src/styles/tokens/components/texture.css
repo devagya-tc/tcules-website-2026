@@ -53,6 +53,10 @@
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{
 --tex-ink:var(--color-brandeis-500);
+/* The soft placements on paper (TextureHalo) are drawn in a LIGHT blue (owner, 16 Oct 2026: "make
+   the bg texture light blue"): 400, so at the grid's 21% peak, feathered, the halo reads as a pale
+   blue field rather than the hard placements' measured 500 (300 all but vanished). */
+--tex-ink-soft:var(--color-brandeis-400);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -60,15 +64,22 @@
    secondary ground; a blue haze over it reads as a tint on a tint, and a neutral matched to
    blue's strength (700, 1.38:1 at the grid's 21% peak) was tried and read as too apparent —
    the grid stopped being texture and became pattern. 400 sits at 1.13:1: present when looked
-   for, gone at a glance. 300 (1.07:1) is the quieter alternative; the specimen prints both. */
+   for, gone at a glance. 300 (1.07:1) is the quieter alternative; the specimen prints both.
+   --tex-ink-soft is the ink of a SOFT placement (owner, 16 Oct 2026): seen through a feathered
+   mask the grid never reaches its peak over an edge, and at 400 a soft field vanished, so on tint
+   it takes the full ink. Hard placements keep 400.                                         */
 [data-surface="tint"]{
 --tex-ink:var(--color-neutral-400);
+--tex-ink-soft:var(--color-neutral-900);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
    Declared for self-containment, not placeable (limit 3). Held at 500 as shipped.      */
 [data-surface="ink"]{
 --tex-ink:var(--color-brandeis-500);
+/* TextureFrame on the ink island (owner, 16 Oct 2026): a mid grey, a quiet grain on the dark
+   ground (white read harsh). */
+--tex-ink-soft:var(--color-neutral-500);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -76,4 +87,7 @@
    this ground and would draw nothing.                                                  */
 [data-surface="blue"]{
 --tex-ink:var(--color-white);
+/* TextureFrame on the blue island (owner, 16 Oct 2026): a light blue, 200, a tone of the ground
+   rather than white on it (white read harsh). */
+--tex-ink-soft:var(--color-brandeis-200);
 }

@@ -3,17 +3,19 @@ import type { ReactNode } from 'react';
 import styles from './Island.module.css';
 
 /**
- * The grounds an island may take. Paper and tint only, and the type is the mechanism:
+ * The grounds an island may take, and the type is the mechanism:
  *
  *   paper  the bright island — on a tint band (or the ink band), the brightest object in it.
  *   tint   the warm island — on a paper band (or the ink band), one step deeper than its surround.
- *
- * Not `blue`: blue is never a ground, no band, card fill or panel (visual-direction § 4.1). Not
- * `ink`: ink is the footer's ground (§ 1.7), and an ink island in the page's last band would sit on
- * the footer's colour a band's air above it (docs/specs/Island.md § 17, Q3). Both surfaces stay
- * DECLARED in tokens/components/island.css, so the layer is self-contained if either is admitted.
+ *   blue   the brand island — on a paper band, with a paper object on it (owner, 16 Oct 2026, the
+ *          home enquiry close). An owner exception to "blue is never a ground" (visual-direction
+ *          § 4.1), for an island that carries a paper form: the island is the band's one strong
+ *          ground and the form the brightest thing on it.
+ *   ink    the dark island — on a paper band, with a paper object on it (owner, 16 Oct 2026, the
+ *          same close). Neutral-900, one step off the footer's 950, so the close and the footer a
+ *          band below do not read as one dark block (Island.md § 17, Q3, amended).
  */
-export type IslandSurface = 'paper' | 'tint';
+export type IslandSurface = 'paper' | 'tint' | 'blue' | 'ink';
 
 export type IslandProps = {
   /**
@@ -66,6 +68,8 @@ type BandGround = 'paper' | 'tint' | 'ink' | 'blue';
 export const ISLAND_BAND: Record<IslandSurface, BandGround> = {
   paper: 'tint',
   tint: 'paper',
+  blue: 'paper',
+  ink: 'paper',
 };
 
 /**

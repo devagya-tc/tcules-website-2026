@@ -9,12 +9,13 @@ import {
   Texture,
   TextureCorner,
   TextureShape,
+  TextureFrame,
   type IslandSurface,
   type SectionSurface,
 } from '@/components';
 import { ROUTES } from '@/lib/routes';
 
-import { specimenStyles as s } from '../_specimen/Specimen';
+import { Box, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Island — the proving ground. A bounded ground inside a band, with the band's ground around it on
@@ -157,6 +158,22 @@ export default function IslandSpecimen() {
           <Contents heading="Atmosphere from past the edge" />
         </Island>
       </Band>
+
+      {(['blue', 'ink'] as const).map((surface) => (
+        <Band key={surface} surface="paper">
+          <Caption
+            title={`paper band · ${surface} island — the enquiry close's ground, with TextureFrame`}
+            note={`${surface} admitted 16 Oct 2026 (owner) for the home enquiry close: an island that carries a paper object. ${surface === 'ink' ? 'Neutral-900, one step off the footer’s 950.' : 'An exception to “blue is never a ground”.'} TextureFrame frames the island's end column, where the close sets its form; the Box stands in for it.`}
+          />
+          <Island surface={surface}>
+            <TextureFrame />
+            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
+              <Contents heading="Words on the island, the form beside them" />
+              <Box tall>The form&rsquo;s panel</Box>
+            </Layout>
+          </Island>
+        </Band>
+      ))}
     </>
   );
 }

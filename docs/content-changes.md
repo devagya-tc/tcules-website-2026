@@ -721,3 +721,21 @@ close is now one short lead, one note and one next step. Every service shares th
   hero · B · F · C-icon · J · H · G · L.
 - **Statement.** "How we work" is centred with `texture="corner-pair"`. The template now gives any
   centred statement that wins the corner its bottom-start partner (`Bands.tsx`).
+
+## Home enquiry close: the form's framing words (16 Oct 2026, owner)
+
+The island close's form dresses add words the corpus does not author. The owner approved them for
+shipping; the content team should confirm or replace them. They live in
+`src/templates/CorpusPage/blocks.tsx` (`ENQUIRY_DRESS`).
+
+| Where | Added copy |
+|---|---|
+| card dress, heading | Start a project |
+| both dresses, example in "What are you working on?" | A link, a Figma file, or two lines about the problem. |
+| message dress, foot | or write to hello@tcules.com |
+| card dress, beside the send | We reply in 1 business day |
+| message dress, the note | Tell us what you’re building. I’ll reply within a working day. |
+| message dress, the person | Rushali · Design lead · Tcules (PLACEHOLDER: the owner will name who answers enquiries) |
+
+The page's own after-line ("We'll reply within one business day.") is not shown by the card dress;
+the success view still uses the page's `on_success` words.

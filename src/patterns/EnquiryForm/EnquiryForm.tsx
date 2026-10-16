@@ -83,6 +83,46 @@ type SharedProps = {
 /** One step in the success view's "what happens next". */
 export type EnquiryNextStep = { label: string; detail?: string };
 
+/**
+ * How the enquiry set is DRESSED (owner, 16 Oct 2026, the home close: "it just looks like a blank
+ * box with a few lines instead of feeling like a well rounded form"). The behaviour is the same
+ * form's — the same fields, names, send-only validation, statuses and success view — and only its
+ * presentation changes. Absent, the plain set: hidden labels, the noun as the cue.
+ *
+ *   card     a structured card: the form's own heading, visible labels over filled fields, an
+ *            example in the big field, and a foot under a hairline: the send with the reply promise
+ *            beside it, led by a check, and optionally a line under ("or write to …", a note). The
+ *            status of a send replaces the promise, in the same live region.
+ *   message  the reply to a note: a person's portrait, name and role with their one-line note in a
+ *            bubble, then a composer — the big field first, email and link as its details, and
+ *            the send in its foot beside "or write to …".
+ *
+ * All copy is the CALLER's, as `caption` and `success` are.
+ */
+export type EnquiryDress =
+  | {
+      kind: 'card';
+      /** The form's own heading, an h3 under the band's h2: "Start a project". */
+      title: string;
+      /** The example in the big field: "A link, a Figma file, or two lines about the problem." */
+      prompt?: string;
+      /** The address offered in the foot as "or write to …", linked as mailto. */
+      writeTo?: string;
+      /** A closing clause after it: "We never share your details." */
+      note?: string;
+      /** The promise beside the send, led by a check: "We reply in 1 business day". */
+      reply?: string;
+    }
+  | {
+      kind: 'message';
+      /** The person written to. Their name, role and a square portrait (rendered as a circle). */
+      from: { name: string; role: string; portrait: string };
+      /** Their note, the first message in the thread: one sentence. */
+      note: string;
+      prompt?: string;
+      writeTo?: string;
+    };
+
 /* "See available times" lives in the form's own action row, beside the submit, so the two asks
    read as one group rather than as a form with a stray link under it. Amended 29 Sep 2026
    (tracker 2.17): it used to be CtaSection's, rendered a --gap-stack below the form.
@@ -99,6 +139,8 @@ type EnquiryVariantProps = SharedProps & {
   urlLabel?: EnquiryUrlLabel;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: string;
+  /** The enquiry set's dress. See `EnquiryDress`. Enquiry only: the other sets keep their shape. */
+  dress?: EnquiryDress;
 };
 
 type AuditVariantProps = SharedProps & {
@@ -106,6 +148,7 @@ type AuditVariantProps = SharedProps & {
   urlLabel?: AuditUrlLabel;
   context: EnquiryContextBase & { intent: string };
   scheduleHref: string;
+  dress?: never;
 };
 
 type ContactVariantProps = SharedProps & {
@@ -113,6 +156,7 @@ type ContactVariantProps = SharedProps & {
   urlLabel?: never;
   context?: never;
   scheduleHref?: string;
+  dress?: never;
 };
 
 /* The compact form (kit cmp-form, 6 Oct 2026): name, email, the one free-text question and the
@@ -131,6 +175,7 @@ type CompactVariantProps = SharedProps & {
   urlLabel?: never;
   context: EnquiryContextBase & { intent?: never };
   scheduleHref?: never;
+  dress?: never;
 };
 
 export type EnquiryFormProps =
@@ -186,7 +231,7 @@ function normaliseUrl(value: string): string {
  *   optional  said inside the cue, in the cue's own voice: "Website (optional)".
  *   hint      a visible row above the control, only when the field has something to explain.
  *   validates the field can fail. Its message row is ALWAYS mounted and is a polite live region,
- *             so a blur error is announced as it appears; it is empty and takes no height until
+ *             so an error from a send is announced as it appears; it is empty and takes no height until
  *             there is a message, which keeps the form compact. The control points at it with
  *             aria-describedby, so a return visit to the field reads the error with its name.
  *
@@ -196,6 +241,11 @@ function normaliseUrl(value: string): string {
 type FieldGroupProps = {
   id: string;
   label: string;
+  /**
+   * The card dress: the label is VISIBLE over the control, with "Optional" set at the row's end for
+   * an optional field (still read as part of the label by a screen reader).
+   */
+  visibleLabel?: boolean;
   optional?: boolean;
   hint?: { id: string; text: string };
   /** Present when the field validates: the id of its message row, and the message. */
@@ -206,6 +256,7 @@ type FieldGroupProps = {
 function FieldGroup({
   id,
   label,
+  visibleLabel = false,
   optional = false,
   hint,
   validation,
@@ -215,12 +266,27 @@ function FieldGroup({
   return (
     /* The control and its message group at `tight`, but ONLY while there is a message: an empty
        message row is mounted (it is the live region) and must cost nothing, so with no message the
-       group states no row gap and the empty row is zero tall. */
-    <Layout rowGap={message ? 'tight' : undefined}>
-      <label className={styles.hidden} htmlFor={id}>
-        {label}
-        {optional ? ' (optional)' : null}
-      </label>
+       group states no row gap and the empty row is zero tall. A visible label always opens a
+       `tight` above its control. */
+    <Layout rowGap={message || visibleLabel ? 'tight' : undefined}>
+      {visibleLabel ? (
+        <Cluster justify="between" align="baseline" colGap="text">
+          <label className={styles.labelVisible} htmlFor={id}>
+            {label}
+            {optional ? <span className={styles.hidden}> (optional)</span> : null}
+          </label>
+          {optional ? (
+            <span className={styles.labelAside} aria-hidden="true">
+              Optional
+            </span>
+          ) : null}
+        </Cluster>
+      ) : (
+        <label className={styles.hidden} htmlFor={id}>
+          {label}
+          {optional ? ' (optional)' : null}
+        </label>
+      )}
       {hint ? (
         <p className={styles.hint} id={hint.id}>
           {hint.text}
@@ -241,7 +307,7 @@ function FieldGroup({
   );
 }
 
-/** A field's message for its current value: empty, malformed, or none. Blur and submit share it. */
+/** A field's message for its current value: empty, malformed, or none. Submit sets it; editing only clears it. */
 function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
   if (control.value.trim() === '') return spec.empty;
   if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
@@ -260,7 +326,7 @@ type FieldKey = keyof FieldMessages;
 /**
  * One validating field, declared once. Name, email and the free-text question used to be written
  * out per variant — the compact branch was a near-verbatim copy of contact's Name and Email blocks
- * and their blur validators — so a change to one could drift from the other. Each variant is now a
+ * and their validators — so a change to one could drift from the other. Each variant is now a
  * LIST of these, and one renderer turns every entry into the same FieldGroup + Input.
  *
  * `name` is the posted field name, which differs by variant (contact posts `clientEmail`, the
@@ -273,7 +339,7 @@ type FieldSpec = {
   type?: 'text' | 'email' | 'tel';
   as?: 'textarea';
   autoComplete?: string;
-  /** The message on an empty blur. */
+  /** The message when a send finds the field empty. */
   empty: string;
 };
 
@@ -326,8 +392,11 @@ const FIELD = {
 
 /**
  * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set, the
- * five-field contact set and the three-field compact set. Validation is deliberately blur-only;
- * submission keeps uncontrolled values mounted on failure and replaces the form on success.
+ * five-field contact set and the three-field compact set. Validation runs on SUBMIT only (owner,
+ * 16 Oct 2026: "errors must not show until a person clicks submit. we don't show errors on focus
+ * change"). After a send has flagged a field, editing it only ever CLEARS its message, once the
+ * value is valid; nothing new appears while someone types or moves between fields. Submission keeps
+ * uncontrolled values mounted on failure and replaces the form on success.
  *
  * A pattern in its own right, not CtaSection's part: it fills whatever track it is placed in, down
  * to its own floor (`--enq-form-min-inline`), so it reads the same in CtaSection's form column, in
@@ -432,41 +501,76 @@ export function EnquiryForm(props: EnquiryFormProps) {
         : [[FIELD.email('email')], [FIELD.work], 'url'];
 
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
-  function renderField(spec: FieldSpec) {
+  function renderField(
+    spec: FieldSpec,
+    dressed: { visibleLabel?: boolean; placeholder?: string; look?: 'box' | 'line' | 'bare' | 'fill' } = {},
+  ) {
     const id = idFor(spec.key);
     const messageId = idFor(`${spec.key}-msg`);
     const shared = {
       id,
       name: spec.name,
       autoComplete: spec.autoComplete,
-      /* The visible cue (r7-form): the label's own words, since the label is hidden. */
-      placeholder: spec.label,
+      /* The visible cue (r7-form): the label's own words, since the label is hidden. A dress
+         passes its own example instead. */
+      placeholder: dressed.placeholder ?? spec.label,
       required: true,
       disabled: submitting,
-      appearance,
+      appearance: dressed.look ?? appearance,
       scale: props.fieldScale ?? 'md',
       invalid: Boolean(messages[spec.key]),
       'aria-describedby': messageId,
     } as const;
-    const validate = (control: HTMLInputElement | HTMLTextAreaElement) =>
-      setMessage(spec.key, messageFor(spec, control));
+    /* Never ADDS a message: only a send does. Once a send has flagged this field, its message
+       clears the moment the value becomes valid. */
+    const clearIfFixed = (control: HTMLInputElement | HTMLTextAreaElement) => {
+      if (messages[spec.key] && !messageFor(spec, control)) setMessage(spec.key, '');
+    };
 
     return (
       <FieldGroup
         key={spec.key}
         id={id}
         label={spec.label}
+        visibleLabel={dressed.visibleLabel}
         validation={{ id: messageId, message: messages[spec.key] }}
       >
         {spec.as === 'textarea' ? (
-          <Input {...shared} as="textarea" onBlur={(event) => validate(event.currentTarget)} />
+          <Input
+            {...shared}
+            as="textarea"
+            rows={dressed.look === 'bare' ? 4 : undefined}
+            onInput={(event) => clearIfFixed(event.currentTarget)}
+          />
         ) : (
           <Input
             {...shared}
             type={spec.type ?? 'text'}
-            onBlur={(event) => validate(event.currentTarget)}
+            onInput={(event) => clearIfFixed(event.currentTarget)}
           />
         )}
+      </FieldGroup>
+    );
+  }
+
+  /** The optional link field in a dress: the same control and normalising as the plain set's. */
+  function renderDressedUrl(look: 'fill' | 'bare', visibleLabel: boolean, placeholder: string) {
+    return (
+      <FieldGroup key="url" id={urlId} label={urlLabel} optional visibleLabel={visibleLabel}>
+        <Input
+          id={urlId}
+          type="url"
+          inputMode="url"
+          name="url"
+          autoComplete="url"
+          placeholder={placeholder}
+          appearance={look}
+          scale={props.fieldScale ?? 'md'}
+          disabled={submitting}
+          onBlur={(event) => {
+            event.currentTarget.value = normaliseUrl(event.currentTarget.value);
+          }}
+        />
       </FieldGroup>
     );
   }
@@ -499,7 +603,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
        name over email (stacked in a narrow track) are the same distance apart as every other row. */
     return (
       <Layout key={first.key} columns="fit" minTrack="xs" colGap="text" rowGap="text">
-        {row.map(renderField)}
+        {row.map((spec) => renderField(spec))}
       </Layout>
     );
   }
@@ -678,6 +782,170 @@ export function EnquiryForm(props: EnquiryFormProps) {
       </Layout>
     );
 
+  /* The context that makes a submission attributable: hidden, not focusable, not announced. */
+  const hiddenContext =
+    props.variant === 'contact' ? null : (
+      <>
+        <input type="hidden" name="origin_route" value={props.context.originRoute} />
+        <input type="hidden" name="placement" value={props.context.placement} />
+        <input type="hidden" name="family" value={props.context.family} />
+        <input type="hidden" name="service_or_audit" value={props.context.serviceOrAudit} />
+        <input type="hidden" name="referrer" value={props.context.referrer} />
+        <input type="hidden" name="campaign" value={props.context.campaign} />
+        {props.variant === 'audit' ? (
+          <input type="hidden" name="intent" value={props.context.intent} />
+        ) : null}
+      </>
+    );
+
+  /* ── The dressed forms (see EnquiryDress) ─────────────────────────────────────────────────── */
+  const dress = props.variant === undefined || props.variant === 'enquiry' ? props.dress : undefined;
+  if (dress) {
+    const formAttrs = {
+      className: cx(styles.form, bounds),
+      action: props.action,
+      method: 'post',
+      noValidate: true,
+      'aria-label': 'Send an enquiry',
+      'aria-busy': submitting || undefined,
+      onSubmit: handleSubmit,
+    } as const;
+    /* The foot's one line: "or write to …" and the note at rest; the status of a send replaces it,
+       in the same live region the plain set uses. */
+    const restLine = (
+      <>
+        {dress.writeTo ? (
+          <>
+            or write to <a href={`mailto:${dress.writeTo}`}>{dress.writeTo}</a>
+          </>
+        ) : null}
+        {dress.kind === 'card' && dress.note ? (dress.writeTo ? ` · ${dress.note}` : dress.note) : null}
+      </>
+    );
+    const line = (
+      <p
+        className={cx(styles.dressLine, error && styles.statusError)}
+        id={statusId}
+        role="status"
+        aria-live="polite"
+      >
+        {status || restLine}
+      </p>
+    );
+    const email = FIELD.email('email');
+
+    if (dress.kind === 'card') {
+      /* The promise beside the send, and the live region a send's status takes over. */
+      const reply = (
+        /* A div, not a p: the promise is a Cluster (a div), which a paragraph cannot contain. */
+        <div
+          className={cx(styles.dressReply, error && styles.statusError)}
+          id={statusId}
+          role="status"
+          aria-live="polite"
+        >
+          {status ? (
+            status
+          ) : dress.reply ? (
+            <Cluster nowrap colGap="tight" align="center">
+              <span className={styles.dressReplyMark}>
+                <Icon name="check-circle" />
+              </span>
+              <span>{dress.reply}</span>
+            </Cluster>
+          ) : null}
+        </div>
+      );
+      const after = dress.writeTo || dress.note;
+      return (
+        <form {...formAttrs}>
+          <Layout rowGap="block">
+            <h3 className={styles.dressTitle}>{dress.title}</h3>
+            <Layout rowGap="text">
+              {renderField(email, { visibleLabel: true, placeholder: 'you@company.com', look: 'fill' })}
+              {renderField(FIELD.work, {
+                visibleLabel: true,
+                placeholder: dress.prompt ?? FIELD.work.label,
+                look: 'fill',
+              })}
+              {renderDressedUrl('fill', true, 'https://')}
+            </Layout>
+            <div className={styles.dressFoot}>
+              <Layout rowGap="text">
+                <Cluster colGap="block" rowGap="text" align="center">
+                  {submitButton}
+                  {scheduleLink}
+                  {reply}
+                </Cluster>
+                {after ? <p className={styles.dressLine}>{restLine}</p> : null}
+              </Layout>
+            </div>
+          </Layout>
+          {hiddenContext}
+        </form>
+      );
+    }
+
+    return (
+      <form {...formAttrs}>
+        <Layout rowGap="block">
+          <Cluster nowrap colGap="text" align="start">
+            {/* Decorative: the name beside it says who this is. */}
+            <img
+              className={styles.portrait}
+              src={dress.from.portrait}
+              alt=""
+              width={88}
+              height={88}
+              loading="lazy"
+              decoding="async"
+            />
+            <Layout rowGap="tight">
+              <Cluster colGap="tight" align="baseline">
+                <span className={styles.fromName}>{dress.from.name}</span>
+                <span className={styles.fromRole}>{dress.from.role}</span>
+              </Cluster>
+              <p className={styles.bubble}>{dress.note}</p>
+            </Layout>
+          </Cluster>
+          <div className={styles.composer}>
+            <div className={styles.composerMain}>
+              {renderField(FIELD.work, {
+                placeholder: dress.prompt ? `${FIELD.work.label} ${dress.prompt}` : FIELD.work.label,
+                look: 'bare',
+              })}
+            </div>
+            <Layout columns={{ base: 1, md: 2 }}>
+              <div className={styles.composerCell}>
+                <Layout rowGap="inline">
+                  <span className={styles.composerKey} aria-hidden="true">
+                    Your email
+                  </span>
+                  {renderField(email, { placeholder: 'you@company.com', look: 'bare' })}
+                </Layout>
+              </div>
+              <div className={styles.composerCell}>
+                <Layout rowGap="inline">
+                  <span className={styles.composerKey} aria-hidden="true">
+                    Link · optional
+                  </span>
+                  {renderDressedUrl('bare', false, 'https://')}
+                </Layout>
+              </div>
+            </Layout>
+            <div className={styles.composerFoot}>
+              <Cluster justify="between" align="center" colGap="block" rowGap="text">
+                {line}
+                {submitButton}
+              </Cluster>
+            </div>
+          </div>
+        </Layout>
+        {hiddenContext}
+      </form>
+    );
+  }
+
   return (
     <form
       className={cx(styles.form, bounds)}
@@ -703,19 +971,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         {actions}
       </Layout>
 
-      {props.variant === 'contact' ? null : (
-        <>
-          <input type="hidden" name="origin_route" value={props.context.originRoute} />
-          <input type="hidden" name="placement" value={props.context.placement} />
-          <input type="hidden" name="family" value={props.context.family} />
-          <input type="hidden" name="service_or_audit" value={props.context.serviceOrAudit} />
-          <input type="hidden" name="referrer" value={props.context.referrer} />
-          <input type="hidden" name="campaign" value={props.context.campaign} />
-          {props.variant === 'audit' ? (
-            <input type="hidden" name="intent" value={props.context.intent} />
-          ) : null}
-        </>
-      )}
+      {hiddenContext}
     </form>
   );
 }

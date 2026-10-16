@@ -103,7 +103,7 @@ The air *around* the island is Section's (its band padding and its gutter). The 
 
 (b) Sizes — none; it fills the column.
 (c) Optical corrections — none.
-Radius `--isl-radius: var(--radius-8)` (the system box radius: photographs, form panel, boxed card).
+Radius `--isl-radius: var(--radius-24)` (was 8, the system box radius; 24 since 16 Oct 2026, see the amendment below).
 No border, no shadow (`--shadow-none` by omission), no z-layer; it is `position: relative; isolation:
 isolate; overflow: clip` so a `Texture` fills the island and clips at its radius.
 
@@ -195,3 +195,36 @@ existing primitives and gap steps. No new primitive.
 - Arrangement: 0 `display` declarations. Literal colours: 0. Restated type: 0.
 - Cross-component reads: 0 (Section's grounds duplicated by value).
 - `data-surface` written by a primitive: yes — the argued exception; Island is a surface (§ 1).
+
+## Amendment · 16 Oct 2026 — radius 24, `overhang`, `ground`, `IslandOnGround` (owner, the home close)
+
+- **`--isl-radius` is 24** (`--radius-24`, new). At 8, the radius of every photograph and panel, the
+  island read as one more card; at 24 it floats. Every island takes it: an island is one kind of
+  object. Closes Q2.
+- **`overhang?: boolean`.** From 1024 the ground stops `--isl-overhang` (64, `column`) short of the box at
+  the top and foot, and the box drops its block inset and its clip, so a child that stretches to the
+  row stands proud of the island at both edges. The ground becomes its own element (absolute, the
+  island's radius, isolated, clipped). Below 1024 the island is a plain island. Built for CtaSection's
+  island close, whose form panel rises out of the island.
+- **`ground?: ReactNode`.** A layer on the ground, under the content: a Texture, which then fills and is
+  clipped by the ground rather than the taller box. Hidden from assistive tech with the ground.
+- **`IslandOnGround`.** In overhang mode every child starts at the box's top, in the overhang. Content
+  that must stay on the ground wraps in `IslandOnGround`, which puts the overhang and the island's own
+  block inset back as its padding (from 1024; nothing below). The island owns that geometry, so no
+  caller restates it. CtaSection's copy column does not use it: there the drawing rises on purpose.
+- Specimen: `/design/island` § 7 — a tint island on paper with a stretched child and the two-lights
+  ground.
+
+## Amendment · 16 Oct 2026, final — blue and ink admitted; overhang removed
+
+- **`IslandSurface` is `paper | tint | blue | ink`.** Blue and ink are owner exceptions for the home
+  enquiry close: an island that carries a paper form. Ink is **neutral-900**, one step off the footer's
+  950 (Q3 amended). `ISLAND_BAND` puts both on paper.
+- **The overhang, `ground` and `IslandOnGround` are removed**: the close now holds its form inside the
+  island. The radius stays 24.
+- Specimen: `/design/island` — blue and ink islands with `TextureFrame`.
+- **Block inset 64 at every width** (same day, owner: the home close fits one laptop screen). The
+  inline inset keeps 96 from 768.
+- **Inset 48 on every side from 768** (same day, owner: "padding 48px all around inside the island"),
+  replacing 96 and the morning's 64 block inset. Below 768: 48 block, 32 inline (48 left the island
+  close's form under its floor).

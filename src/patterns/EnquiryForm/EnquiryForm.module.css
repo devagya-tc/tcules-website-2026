@@ -175,3 +175,128 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* ── The dressed forms (owner, 16 Oct 2026; see EnquiryDress) ─────────────────────────
+   Type and ink only, plus the composer's own box. Every colour is an --enq-* surface token, so a
+   dressed form reads on paper, tint, ink and blue as the plain set does. */
+.dressTitle {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  color: var(--enq-title-ink);
+}
+
+.labelVisible {
+  font: var(--text-label);
+  letter-spacing: var(--text-label-tracking);
+  color: var(--enq-label-ink);
+}
+
+.labelAside {
+  font: var(--text-body-sm);
+  color: var(--enq-label-aside-ink);
+}
+
+/* The card's foot: a hairline across the form, then the send with its promise. The inset is the
+   foot's own from the hairline, not outer spacing. */
+.dressFoot {
+  padding-block-start: var(--gap-text);
+  border-block-start: var(--enq-divider-width) solid var(--enq-divider);
+}
+
+.dressLine {
+  font: var(--text-caption);
+  color: var(--enq-caption-ink);
+}
+
+.dressLine a {
+  color: inherit;
+}
+
+/* The promise beside the send: body-sm in the caption ink, its check in the accent. */
+.dressReply {
+  font: var(--text-body-sm);
+  color: var(--enq-caption-ink);
+}
+
+.dressReplyMark {
+  display: inline-flex;
+  color: var(--enq-accent-ink);
+}
+
+/* A send's status takes the promise's place; an error keeps the error ink (this rule follows
+   .dressReply, so it must restate .statusError's colour to win). */
+.dressReply.statusError {
+  color: var(--enq-status-ink-error);
+}
+
+/* The message: the person, then the composer. */
+.portrait {
+  display: block;
+  inline-size: var(--enq-portrait-size);
+  block-size: var(--enq-portrait-size);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background: var(--enq-bubble-ground);
+}
+
+.fromName {
+  font: var(--text-label);
+  letter-spacing: var(--text-label-tracking);
+  color: var(--enq-label-ink);
+}
+
+.fromRole,
+.composerKey {
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--enq-from-role-ink);
+}
+
+.composerKey {
+  color: var(--enq-key-ink);
+}
+
+.bubble {
+  padding: var(--enq-cell-inset-block) var(--enq-cell-inset-inline);
+  border-radius: var(--enq-bubble-radius-origin) var(--enq-bubble-radius) var(--enq-bubble-radius)
+    var(--enq-bubble-radius);
+  background: var(--enq-bubble-ground);
+  font: var(--text-body);
+  color: var(--enq-bubble-ink);
+}
+
+/* The composer draws the box its bare fields sit in, and owns their focus indicator: the edge turns
+   the accent and doubles while any field inside has focus. */
+.composer {
+  border: var(--enq-divider-width) solid var(--enq-composer-edge);
+  border-radius: var(--enq-composer-radius);
+  overflow: clip;
+  transition: border-color var(--enq-transition-duration) var(--enq-transition-easing);
+}
+
+.composer:focus-within {
+  border-color: var(--enq-composer-edge-focus);
+  box-shadow: 0 0 0 calc(var(--enq-focus-ring-width) - var(--enq-divider-width))
+    var(--enq-composer-edge-focus);
+}
+
+.composerMain,
+.composerCell {
+  padding: var(--enq-cell-inset-block) var(--enq-cell-inset-inline);
+}
+
+.composerCell {
+  border-block-start: var(--enq-divider-width) solid var(--enq-divider);
+}
+
+@media (min-width: 768px) {
+  .composerCell + .composerCell {
+    border-inline-start: var(--enq-divider-width) solid var(--enq-divider);
+  }
+}
+
+.composerFoot {
+  padding: var(--gap-tight) var(--gap-tight) var(--gap-tight) var(--enq-cell-inset-inline);
+  border-block-start: var(--enq-divider-width) solid var(--enq-divider);
+}

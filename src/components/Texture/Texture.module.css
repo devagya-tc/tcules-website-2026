@@ -17,10 +17,27 @@
   fill: currentColor;
 }
 
+/* A soft placement's ink (TextureTwoLights): the full ink on tint, where the hard placements keep
+   their quiet neutral. --tex-ink-soft, per surface, in tokens/components/texture.css. */
+.soft {
+  color: var(--tex-ink-soft);
+}
+
 /* TextureCounterweight's field: an in-flow block whose width is its column and whose height is
    --tex-counterweight-block-size. Positioned, so the Texture inside fills IT rather than the band.
    Sizing only; it states no distance. */
 .counterweight {
   position: relative;
   block-size: var(--tex-counterweight-block-size);
+}
+
+/* TextureFrame: fitted to the island close's side-by-side split, so drawn from 1024 only. */
+.frame {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .frame {
+    display: block;
+  }
 }

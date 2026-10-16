@@ -415,3 +415,36 @@ Approved as drawn: the end-edge corner fade (Statement `head-half`), the seam st
 `/design/texture` is now the documented page: purpose, rules (rhythm not decoration; one signature
 per band; air and edges only; paper only, peridot never; not with an illustration hero; contrast),
 the five placements live with when / never, then the mechanism specimens.
+
+## Amendment · 16 Oct 2026 — `TextureTwoLights`, and texture on tint (owner, the home close)
+
+- **`TextureTwoLights({ edge = 50 })`** — study 09A as built: two soft ellipses on an island's ground,
+  on a diagonal across the raised form panel. The top light is centred where the panel's start edge
+  crosses the island's top (left edge−16%, width 30%, top −150, height 300, blur 170); the foot light is
+  in the island's far foot corner, past the panel (right −8%, width 30%, bottom −130, height 260, blur
+  180). Widths are percentages so they track the split; heights are px. Both at the panel's start edge
+  was tried and merged into one vertical band.
+- **Soft, by owner choice.** The hard placements stay hard; this one is feathered because it was picked
+  from the soft studies (09) over the hard ones.
+- **Texture on tint.** The first placement on a tint ground, so the rule "paper only" now reads "paper,
+  and the tint island of the home close". A new per-surface `--tex-ink-soft` is the soft placement's
+  ink (`.soft` in Texture.module.css): neutral-900 on tint, the same as `--tex-ink` on every other
+  surface. Through a feathered mask the grid never reaches its 21% peak over an edge, and at the hard
+  placements' 400 the pools vanished; the approved mock drew them in ink. `--tex-ink` on tint stays
+  400, so the hard placements are unchanged.
+- Specimen: `/design/island` § 7 (on the overhang island) and the home close itself.
+- **`TextureHalo`** (same day). One soft ellipse on the BAND, centred on the island close's form panel
+  (left 37%, width 60%, height 760, blur 200, vertically centred). The island paints over it, so it
+  shows only where the panel rises out of the island and at the island's sides. `--tex-ink-soft` on
+  paper is neutral-900, because the approved study 11A drew it in ink. `--tex-ink` on paper stays blue.
+- **The halo is light blue** (owner, same day). `--tex-ink-soft` on paper is brandeis-400. At 300 the
+  feathered field all but vanished. The home island carries no texture now, so `TextureTwoLights` and
+  the tint `--tex-ink-soft` stay as provisions with no site placement.
+- **Final (same day): `TextureFrame` replaces `TextureTwoLights` and `TextureHalo`**, both removed. One
+  soft rounded field on the island, framing the form in the end column (right −2%, width 65%, top −24,
+  height 106%, radius 120, blur 88), in `--tex-ink-soft`: white on blue and on ink.
+- **Frame, softened (same day, owner: "right behind the form and smaller … it feels harsh").** The field
+  now reaches about 40 past the panel on every side (right 56, width 51%, top 24, height 92%, radius 56,
+  blur 40), and `--tex-ink-soft` is brandeis-200 on blue and neutral-500 on ink (white read harsh).
+- **Refitted to the 48 island inset** (right 8, width 56%, top 8, height 97%), and drawn from 1024 only:
+  below it the form stacks under the words and the field would sit behind the heading.

@@ -212,3 +212,60 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* ── appearance="bare" ─────────────────────────────────────────────────────────────
+   The value alone, inside a container the composing pattern draws (a message composer). No fill,
+   no rule, no ring: the container's :focus-within is the focus indicator, so `bare` is never placed
+   on its own. Inks are the line field's, chosen against the surface the value sits on. After the
+   base, invalid and disabled rules so it wins every property it restates. */
+.control.bare,
+.control.bare:not(:disabled, .invalid):hover,
+.control.bare.invalid {
+  block-size: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--inp-line-fg);
+}
+
+.control.bare:focus-visible {
+  box-shadow: none;
+}
+
+.control.bare::placeholder {
+  color: var(--inp-line-placeholder-fg);
+}
+
+.control.bare.textarea {
+  min-block-size: 0;
+  resize: none;
+}
+
+/* ── appearance="fill" ─────────────────────────────────────────────────────────────
+   A soft well, one step off its ground, with no rule at rest: the card dress's fields. Focus lifts
+   the well to the ground's brighter step and draws the line field's focus rule all round; the
+   standard ring still marks keyboard focus. Invalid keeps the danger rule. */
+.control.fill {
+  border-color: transparent;
+  background: var(--inp-fill-bg);
+}
+
+.control.fill:not(:disabled, .invalid):hover {
+  border-color: transparent;
+}
+
+.control.fill:focus {
+  background: var(--inp-fill-bg-focus);
+  border-color: var(--inp-line-rule-focus);
+}
+
+.control.fill.invalid {
+  border-color: var(--inp-standard-invalid-rule);
+}
+
+/* A fill textarea is a compact well: three lines (--inp-fill-textarea-min-block), still growable. */
+.control.fill.textarea {
+  min-block-size: var(--inp-fill-textarea-min-block);
+}
