@@ -56,7 +56,7 @@
   /* Beside an h4 or h3 title the thumbnail grows, so the picture is not a speck against the words. */
   --tsr-thumb-inline-lg: 15rem;
   /* On a phone, where the copy needs the width. */
-  --tsr-thumb-inline-phone: 6rem;
+  --tsr-thumb-inline-sm: 6rem;
   /* A row's standfirst: two lines, a taste of the piece. */
   --tsr-row-body-lines: 2;
   /* A small tile's standfirst (md, sm): three lines. */
@@ -82,12 +82,12 @@
 
 :root,
 [data-surface='paper'] {
-  --tsr-title-ink: var(--color-neutral-900);
-  --tsr-title-ink-hover: var(--color-brandeis-500);
-  --tsr-title-ink-pressed: var(--color-brandeis-700);
-  --tsr-body-ink: var(--color-neutral-700);
-  --tsr-meta-ink: var(--color-neutral-600);
-  --tsr-date-ink: var(--color-brandeis-500);
+  --tsr-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --tsr-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
+  --tsr-title-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
+  --tsr-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --tsr-meta-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
+  --tsr-date-ink: var(--color-brandeis-500); /* 6.17:1 — a numeral carries the accent */
   --tsr-media-rule-ink: var(--color-neutral-200);
   --tsr-media-ground: var(--color-paper-deep);
   --tsr-play-ground: var(--color-paper);
@@ -95,12 +95,13 @@
   --tsr-ring-color: var(--color-brandeis-500);
 }
 
+/* Tint: the quiet ink steps to 700 — 600 is 4.39:1 on paper-deep. */
 [data-surface='tint'] {
-  --tsr-title-ink: var(--color-neutral-900);
-  --tsr-title-ink-hover: var(--color-brandeis-500);
-  --tsr-title-ink-pressed: var(--color-brandeis-700);
-  --tsr-body-ink: var(--color-neutral-700);
-  --tsr-meta-ink: var(--color-neutral-700);
+  --tsr-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --tsr-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
+  --tsr-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
+  --tsr-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --tsr-meta-ink: var(--color-neutral-700); /* 7.27:1 */
   --tsr-date-ink: var(--color-brandeis-500);
   --tsr-media-rule-ink: var(--color-neutral-300);
   --tsr-media-ground: var(--color-neutral-100);
@@ -123,9 +124,11 @@
   --tsr-ring-color: var(--color-brandeis-300);
 }
 
+/* Blue: blue cannot go bluer, so the title's hover is the lightest Brandeis step (as BlockCard's);
+   a pictured item's zoom carries most of the cue here. */
 [data-surface='blue'] {
-  --tsr-title-ink: var(--color-white);
-  --tsr-title-ink-hover: var(--color-brandeis-50);
+  --tsr-title-ink: var(--color-white); /* 6.23:1 */
+  --tsr-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --tsr-title-ink-pressed: var(--color-brandeis-100);
   --tsr-body-ink: var(--color-brandeis-50);
   --tsr-meta-ink: var(--color-brandeis-100);

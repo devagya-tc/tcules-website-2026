@@ -182,27 +182,63 @@ export default function TeaserSpecimen() {
 
       {SURFACES.map((surface) => (
         <Section key={surface} surface={surface} aria-label={`Teaser on ${surface}`}>
-          <Specimen title={`on ${surface}`} note="Byte-identical markup on every ground.">
-            <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
-              <Teaser
-                title="Building trust and transparency in AI-first interfaces"
-                meta={['Article', '11 min read']}
-                media={PHOTO}
-                play
-                href={HREF}
-              />
-              <Teaser
-                title="Lessons from designing the UX for AI products"
-                date={{ day: '2', label: 'May 2025' }}
-                meta="London"
-                href={HREF}
-              />
-              <Teaser
-                title="How do you audit a design system?"
-                meta={['Guide', '10 min read']}
-                body="Twenty questions, in the order that finds the expensive answers first."
-                href={HREF}
-              />
+          <Specimen
+            title={`on ${surface}`}
+            note="Byte-identical markup on every ground: beside, a dated row, a list row, and a trio of picture, date and words."
+          >
+            <Layout rowGap="column">
+              <ul>
+                <Teaser
+                  arrangement="beside"
+                  size="xl"
+                  title="9 UX Design tips to boost your Ecommerce conversion rates"
+                  meta={['Article', '11 min read']}
+                  media={PHOTO_2}
+                  href={HREF}
+                />
+              </ul>
+              <Layout as="ul" columns={{ lg: 2 }} colGap="column" rowGap="stack">
+                <Teaser
+                  arrangement="row"
+                  size="lg"
+                  date={{ day: '11', label: 'Mar 2023', dateTime: '2023-03-11' }}
+                  meta="Ahmedabad"
+                  title="Design Systems for everyone — from basics to advanced"
+                  body="The first design systems meetup in Ahmedabad, from basics to advanced."
+                  media={PHOTO}
+                  href={HREF}
+                />
+                <Teaser
+                  arrangement="row"
+                  size="sm"
+                  meta={['Video', '7 min']}
+                  title="Mastering design decisions: insights for founders, PMs and designers"
+                  media={PHOTO_2}
+                  play
+                  href={HREF}
+                />
+              </Layout>
+              <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+                <Teaser
+                  title="Building trust and transparency in AI-first interfaces"
+                  meta={['Article', '11 min read']}
+                  media={PHOTO}
+                  play
+                  href={HREF}
+                />
+                <Teaser
+                  title="Lessons from designing the UX for AI products"
+                  date={{ day: '2', label: 'May 2025' }}
+                  meta="London"
+                  href={HREF}
+                />
+                <Teaser
+                  title="How do you audit a design system?"
+                  meta={['Guide', '10 min read']}
+                  body="Twenty questions, in the order that finds the expensive answers first."
+                  href={HREF}
+                />
+              </Layout>
             </Layout>
           </Specimen>
         </Section>

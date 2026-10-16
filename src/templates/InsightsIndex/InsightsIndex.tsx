@@ -482,6 +482,8 @@ function TopicShape({ items, turn }: { items: readonly InsightsIndexItem[]; turn
     );
   }
   if (shape === 1) {
+    /* The lead and the rows are pieces of one set, not two regions of different kind: the set's
+       gutter, not a split. */
     return (
       <Layout columns={{ lg: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
         <ul>

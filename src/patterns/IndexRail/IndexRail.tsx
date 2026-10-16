@@ -105,6 +105,7 @@ export function IndexRail({
 
   if (!active) return null;
 
+  /* Without a param there is no URL for a mode; the switch then needs script, and says so by `#`. */
   const hrefFor = (id: string) => (param ? (id === first ? '?' : `?${param}=${id}`) : '#');
 
   const choose = (id: string) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -139,7 +140,13 @@ export function IndexRail({
                   href={hrefFor(m.id)}
                   className={styles.mode}
                   aria-current={m.id === active.id ? 'true' : undefined}
-                  aria-controls={views ? `${uid}-panel-${m.id}` : `${uid}-list`}
+                  aria-controls={
+                    views
+                      ? `${uid}-panel-${m.id}`
+                      : active.items.length > 0
+                        ? `${uid}-list`
+                        : undefined
+                  }
                   onClick={choose(m.id)}
                 >
                   {m.label}

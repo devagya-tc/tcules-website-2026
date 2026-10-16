@@ -13,34 +13,110 @@
 
 ## 1 · Identity
 
-One linked piece — an article, a guide, a video, an event — as it is listed on a curated page. The whole
-item is one anchor; the title takes the accent on hover and focus and the picture leans in.
+One linked piece — an article, a guide, a video, an event — as a curated page lists it. The whole item
+is one anchor; the title takes the accent on hover and focus and the picture leans in.
 
 **Why not BlockCard or ListCard.** BlockCard draws a hairline over every text-only card and has no row
 with an end thumbnail; ListCard rules every row. The owner's 16 Oct rulings ask for neither: an item is
-bound by proximity (16 from picture to copy, 8 inside the copy, the set's 32/64 between items) and
-anchored by what heads it. Teaser is that object, and only that object.
+bound by proximity and anchored by what heads it. Teaser is that object and only that object.
 
-## 2 · Props
+## 2 · Anatomy
+
+`li` (or `div`) › `a` › Layout: [picture box (16:9, hairline, radius 8, zoom span, optional play chip)]
++ copy Layout (`tight`): [date (numeral over month)] · [meta line] · title · [body].
+
+## 3 · Props / API
 
 | Prop | Type | Notes |
 |---|---|---|
 | `title`, `href` | string | required |
-| `meta` | `string \| string[]` | the mono label line; as parts it is joined with " · ", and a compact or row item keeps only the first part below 768 |
+| `meta` | `string \| string[]` | mono label line; parts joined " · "; a compact or row item keeps the first part below 768 |
 | `body` | string | sans; clamped to 3 lines at `md`/`sm`, 2 on a row |
-| `media` | `{ type: 'image', image }` \| `{ type: 'sketch', name }` | the piece's OWN picture. Absent → typographic. No stand-in, no texture |
-| `date` | `{ day, label, dateTime? }` | a date anchor (numeral over month) at the copy's head — events |
-| `play` | boolean | a play chip on the picture; never on a row thumbnail or a phone's compact row |
-| `arrangement` | `stack` (default) \| `beside` \| `row` | picture above / beside (two equal halves) / copy then an end thumbnail |
-| `size` | `xl` \| `lg` \| `md` (default) \| `sm` | title h3 / h4 / h5 / h6; body steps with it |
-| `compact` | boolean | a stack that becomes a row below 768 (secondary pieces only) |
-| `titleAs` | `h2` \| `h3` \| `h4` | heading element; the scale is `size`'s |
-| `as` | `li` (default) \| `div` | |
+| `media` | `{ type: 'image', image }` \| `{ type: 'sketch', name }` | the piece's OWN picture; absent → typographic |
+| `date` | `{ day, label, dateTime? }` | the date anchor at the copy's head (events) |
+| `play` | boolean | play chip; never on a row thumbnail or a phone's compact row |
+| `arrangement` | `stack` (default) · `beside` · `row` | |
+| `size` | `xl` · `lg` · `md` (default) · `sm` | |
+| `compact` | boolean | stack only: a row below 768 |
+| `titleAs` | `h2` · `h3` · `h4` | the element; the scale is `size`'s |
+| `as` | `li` (default) · `div` | |
 | `sizes` | string | the picture's `sizes`; the caller knows the track |
 
-## 3 · Rules
+## 4 · Variants × sizes
 
-1. One image ratio, 16:9, in a hairline box at the photograph radius (BlockCard's ruling, kept).
-2. No margin, no ground at rest, no rule between items. The set owns every distance between items.
-3. A set's pieces start on one top edge: a picture's top or a meta line's.
-4. Every surface block in `teaser.css` declares every surface-dependent token.
+`stack` at every size; `beside` at `xl`/`lg` (a section's feature); `row` at `lg` (dated events, thumb
+15rem) and `sm` (lists, thumb 9rem). Title roles: xl h3 · lg h4 · md h5 · sm h6; body body-lg · body ·
+body-sm · body-sm.
+
+## 5 · States
+
+Rest; hover and focus-visible (title → `--tsr-title-ink-hover`, picture scales to 1.03 inside its fixed
+box); pressed (`--tsr-title-ink-pressed`); focus ring on the anchor. No selected or disabled state.
+
+## 6 · Per-surface colour
+
+| Token | paper | tint | ink | blue |
+|---|---|---|---|---|
+| title-ink | neutral-900 | neutral-900 | white | white |
+| title-ink-hover | brandeis-500 | brandeis-500 | brandeis-300 | brandeis-50 |
+| title-ink-pressed | brandeis-700 | brandeis-700 | brandeis-100 | brandeis-100 |
+| body-ink | neutral-700 | neutral-700 | neutral-300 | brandeis-50 |
+| meta-ink | neutral-600 | neutral-700 | neutral-400 | brandeis-100 |
+| date-ink | brandeis-500 | brandeis-500 | brandeis-300 | white |
+| media-rule-ink | neutral-200 | neutral-300 | neutral-700 | brandeis-300 |
+| media-ground | paper-deep | neutral-100 | neutral-900 | brandeis-600 |
+| play-ground / play-ink | paper / neutral-900 | paper / neutral-900 | white / neutral-900 | white / brandeis-700 |
+| ring-color | brandeis-500 | brandeis-500 | brandeis-300 | white |
+
+## 7 · Geometry & spacing
+
+Picture to copy `text` (16); inside the copy `tight` (8); `beside` splits at `column` (64); `row` copy to
+thumbnail `block` (24). The item sets no outer spacing: the set's Layout owns 32 / 64 between items.
+
+## 8 · Typography
+
+Titles in the serif title roles; meta and the date label in the mono eyebrow role, uppercase by
+`--text-mono-case`; the day numeral in the stat role; body in sans. Never the serif for body copy.
+
+## 9 · Responsive
+
+`beside` stacks below md. `compact` stacks become rows below 768. Thumbnails drop to 6rem below 768,
+where meta keeps its first part and compact rows drop the play chip. Title roles step themselves.
+
+## 10 · Composition
+
+Sets are Layouts the caller writes (rows of 2 or 3, a tall lead with minis, lists). A set's pieces share
+one top edge — a picture's or a meta line's. Never mix Teaser with BlockCard in one set.
+
+## 11 · Accessibility
+
+One anchor per item; its accessible name is the meta line, title and body. The picture is decorative
+(`aria-hidden`, alt cleared) because the words beside it carry the meaning. The date is a `<time>`.
+
+## 12 · Content edge cases
+
+Long and unbroken titles wrap (`overflow-wrap: anywhere`, balanced). No body: the title alone. No
+picture: typographic, anchored by the meta line or the date. An event with no date: "—" over "Date TBC".
+
+## 13 · Motion
+
+The zoom (slow step) and the title's ink (fast step); both off under reduced motion.
+
+## 14 · Do's and Don'ts
+
+- Do give an item its own picture or none. Don't pass a stand-in photograph or texture.
+- Do let the set own the distance. Don't add a margin or a rule between items.
+- Do vary the arrangement across a page. Don't run one Teaser shape down a whole page.
+
+## 15 · Specimen plan
+
+`/design/teaser`: beside xl; a stack trio (picture, scene, none) with compact; the watched mosaic with
+play; dated and list rows; and on all four surfaces a beside, a dated row, a list row and a trio.
+
+## 16 · New token requests
+
+None outside `--tsr-*`.
+
+## 17 · Open questions
+
+None blocking. A photograph-grade treatment (`--media-photo-grade`) applies through Media unchanged.

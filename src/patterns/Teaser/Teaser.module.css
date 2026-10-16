@@ -1,5 +1,5 @@
 /* Teaser — one linked piece held without an edge. Layout owns every arrangement (the stack, the
-   3 : 2 beside, the row with its end thumbnail); this module owns the picture's ruled 16:9 box and
+   beside in two equal halves, the row with its end thumbnail, the date's two lines); this module owns the picture's ruled 16:9 box and
    its zoom, the play mark's position on it, the type roles per size and the link states. Every
    value is a --tsr-* token. No margin, no ground at rest, no rule between items. */
 
@@ -83,7 +83,7 @@
   .thumb,
   .sizeXl .thumb,
   .sizeLg .thumb {
-    inline-size: var(--tsr-thumb-inline-phone);
+    inline-size: var(--tsr-thumb-inline-sm);
   }
 }
 
@@ -128,9 +128,8 @@
   text-transform: var(--text-mono-case);
 }
 
-/* The date anchor: the day numeral over its month. A two-line label block, stacked by the grid. */
+/* The date anchor: the day numeral over its month (Layout stacks the two, flush). */
 .date {
-  display: grid;
   color: var(--tsr-date-ink);
 }
 

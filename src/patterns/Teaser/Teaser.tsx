@@ -16,8 +16,7 @@ export type TeaserImage = Omit<MediaImage, 'width' | 'height'> & {
  * stand-in and no texture: an item without a picture of its own is typographic (owner, 16 Oct 2026).
  */
 export type TeaserMedia =
-  | { type: 'image'; image: TeaserImage }
-  | { type: 'sketch'; name: ArticleSceneName };
+  { type: 'image'; image: TeaserImage } | { type: 'sketch'; name: ArticleSceneName };
 
 /**
  * How the item arranges. A placement decision, never a CMS field.
@@ -78,9 +77,17 @@ const SIZE_CLASS: Record<TeaserSize, string | undefined> = {
 
 const FILL_BOX = { width: 16, height: 9 } as const;
 
+/**
+ * The record Media receives. The cover is DECORATIVE inside the item (alt cleared): the item is one
+ * link, and its accessible name is its meta line and title — a cover's alt read first would bury
+ * them. The meaning is in the words beside it.
+ */
 function mediaRecord(image: TeaserImage): MediaImage {
-  if (image.width && image.height) return { ...image, width: image.width, height: image.height };
-  return { ...image, ...FILL_BOX, sources: undefined, placeholderSize: true };
+  const decorative = { ...image, alt: '' };
+  if (image.width && image.height) {
+    return { ...decorative, width: image.width, height: image.height };
+  }
+  return { ...decorative, ...FILL_BOX, sources: undefined, placeholderSize: true };
 }
 
 const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']);
@@ -109,7 +116,7 @@ export function Teaser({
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
     media && (media.type === 'sketch' || hasImage) ? (
-      <span className={styles.media} aria-hidden={media.type === 'sketch' ? true : undefined}>
+      <span className={styles.media} aria-hidden="true">
         <span className={styles.zoom}>
           {media.type === 'image' ? (
             <Media
@@ -138,18 +145,18 @@ export function Teaser({
   const copy = (
     <Layout rowGap="tight">
       {date ? (
-        <span className={styles.date}>
+        <Layout rowGap="none" className={styles.date}>
           <time className={styles.day} dateTime={date.dateTime}>
             {date.day}
           </time>
           <span className={styles.dateLabel}>{date.label}</span>
-        </span>
+        </Layout>
       ) : null}
       {metaParts.length > 0 ? (
         <p className={styles.meta}>
           {metaParts[0]}
-          {metaParts.slice(1).map((part) => (
-            <span key={part} className={styles.metaMore}>
+          {metaParts.slice(1).map((part, index) => (
+            <span key={index} className={styles.metaMore}>
               {` · ${part}`}
             </span>
           ))}
@@ -165,7 +172,8 @@ export function Teaser({
     inner = copy;
   } else if (arrangement === 'beside') {
     inner = (
-      <Layout columns={{ md: [1, 1] }} colGap="gutter" rowGap="text" align="center">
+      /* Copy beside its picture is a split, so the column step — BlockCard's beside, the same. */
+      <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="text" align="center">
         {picture}
         {copy}
       </Layout>
@@ -177,7 +185,7 @@ export function Teaser({
         <span className={styles.thumb}>{picture}</span>
       </Layout>
     );
-  } else if (compact) {
+  } else if (compact && arrangement === 'stack') {
     /* One Layout, two arrangements: below md the picture takes the auto track at the row's END
        (reverse mirrors the template, so the weight travels with it); from md the single-track stack. */
     inner = (
@@ -207,7 +215,7 @@ export function Teaser({
         styles.root,
         SIZE_CLASS[size],
         arrangement === 'row' && styles.row,
-        compact && styles.compact,
+        compact && arrangement === 'stack' && styles.compact,
       )}
     >
       <a className={styles.link} href={href}>
