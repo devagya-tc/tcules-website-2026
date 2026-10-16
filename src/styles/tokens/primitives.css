@@ -683,6 +683,16 @@
   --ratio-portrait: 1 / 1;
 }
 
+/* ── Size · panel ────────────────────────────────────────────────────────────
+   How wide a dropdown panel opens over the page when its content does not set it: a disclosure of
+   filter chips, which wrap to whatever room they get and so have no width of their own. 560 holds
+   three or four chips a line at the Tag's one size, so a group reads as a short block rather than
+   one long strip. The caller still clamps it to the viewport. Not the nav's plate widths: those are
+   measured from the nav's own labels and belong to nav.css. */
+:root {
+  --size-panel-sm: 560px;
+}
+
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
    panels are square. --radius-full is the pill — status, and the footer's

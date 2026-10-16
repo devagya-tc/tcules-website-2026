@@ -10,7 +10,7 @@ import {
   formatRow,
   formatTitle,
   kindsIn,
-  standIns,
+  standInsFor,
   toItem,
   type FormatHref,
 } from './shared';
@@ -26,16 +26,16 @@ import {
 export function insightsIndexProps(page: InsightsPage, hrefOf: FormatHref): InsightsIndexProps {
   const resources = page.resources.items;
   const kinds = kindsIn(page);
+  const standIns = standInsFor(page);
 
   return {
-    standIns: standIns(),
     breadcrumbs: [
       { label: 'Home', href: ROUTES.home },
       { label: 'Insights', href: ROUTES.insights },
     ],
     hero: { title: page.hero.heading, lede: page.hero.description },
     formatRow: formatRow(page, 'all', hrefOf),
-    items: resources.map(toItem),
+    items: resources.map((item) => toItem(item, standIns)),
     featuredId: resources.find((item) => item.featured)?.documentId,
     formats: kinds.map((kind) => ({
       kind,

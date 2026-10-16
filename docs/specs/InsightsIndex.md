@@ -377,8 +377,8 @@ Each at 1440 and 390 (`npm run shots -- insights-index`), plus the live `/insigh
 
 ## 16 · New token requests
 
-`src/styles/tokens/components/insights-index.css` (§ 6, plus the panel and ring-room tokens and
-`--iix-hidden-size`), and in `list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`,
+`src/styles/tokens/components/insights-index.css` (§ 6, plus the panel and ring-room tokens; `--iix-hidden-size`
+was retired on 16 Oct 2026 for the `VisuallyHidden` primitive), and in `list-card.css`: `--lcrd-eyebrow-text`, `--lcrd-eyebrow-tracking`,
 `--lcrd-eyebrow-ink` (per surface, BlockCard's eyebrow values, duplicated on purpose: tokens rule 6),
 `--lcrd-date-day-text`, `--lcrd-date-day-tracking`, `--lcrd-date-inline`, `--lcrd-date-ink` (per
 surface).

@@ -48,6 +48,11 @@ export function sparse(page: InsightsPage): InsightsPage {
   };
 }
 
+/** The full fixture with no close: the Lab is the page's last band, above the ink footer. */
+export function noClose(page: InsightsPage): InsightsPage {
+  return { ...page, closing: undefined };
+}
+
 /** No items at all: the hub before anything is published. */
 export function empty(page: InsightsPage): InsightsPage {
   return {

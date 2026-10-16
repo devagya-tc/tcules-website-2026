@@ -15,7 +15,7 @@ import {
   formatLead,
   formatRow,
   formatTitle,
-  standIns,
+  standInsFor,
   toItem,
   type FormatHref,
   type Query,
@@ -74,7 +74,9 @@ export function formatIndexProps(
     : undefined;
   const lede = corpus?.hero.lede.map(inlineToText).find((paragraph) => paragraph.trim());
 
+  const standIns = standInsFor(page);
   const archive = archiveOf(page, resources, query, path, {
+    standIns,
     id: ARCHIVE_ID,
     heading: `All ${name.toLowerCase()}`,
     noun: name.toLowerCase(),
@@ -83,7 +85,6 @@ export function formatIndexProps(
 
   return {
     kind,
-    standIns: standIns(),
     breadcrumbs: [
       { label: 'Home', href: ROUTES.home },
       { label: 'Insights', href: ROUTES.insights },
@@ -95,7 +96,7 @@ export function formatIndexProps(
     },
     formatRow: formatRow(page, kind, hrefOf),
     /* The latest stands above the archive only while nothing is held (see `archiveOf`). */
-    latest: latest && archive.above ? toItem(latest) : undefined,
+    latest: latest && archive.above ? toItem(latest, standIns) : undefined,
     archive,
     closing: closingOf(page),
   };

@@ -1,12 +1,6 @@
 import { Section } from '@/components';
 import { heroTrail } from '@/lib/trail';
-import {
-  Breadcrumbs,
-  CtaSection,
-  PageHero,
-  type BlockCardImage,
-  type BreadcrumbItem,
-} from '@/patterns';
+import { Breadcrumbs, CtaSection, PageHero, type BreadcrumbItem } from '@/patterns';
 
 import {
   Archive,
@@ -14,7 +8,6 @@ import {
   LeadCard,
   allOwnImages,
   isCovered,
-  standInPool,
   type InsightsIndexArchive,
   type InsightsIndexClosing,
   type InsightsIndexFilterOption,
@@ -38,8 +31,6 @@ export type InsightsFormatIndexProps = {
   archive: InsightsIndexArchive;
   /** The hub's close, rendered only with its action. */
   closing?: InsightsIndexClosing;
-  /** Catalogue photographs for missing covers (visual-direction § 5.7). See InsightsIndex. */
-  standIns?: readonly BlockCardImage[];
 };
 
 /** Whether a format shows its latest item at full column above the archive. */
@@ -65,9 +56,7 @@ export function InsightsFormatIndex({
   latest,
   archive,
   closing,
-  standIns = [],
 }: InsightsFormatIndexProps) {
-  const standIn = standInPool(standIns);
   const lede = hero.lede?.trim();
   const showLatest = latest !== undefined && hasLatest(kind);
   /* Cover tiles for the covered kinds, and for guides when every guide has an image of its own;
@@ -92,12 +81,12 @@ export function InsightsFormatIndex({
       {showLatest ? (
         <Section surface="paper" aria-label="Latest">
           {/* Directly under the h1 with no band heading between, so its title is an h2. */}
-          <LeadCard item={latest} standIn={standIn} titleAs="h2" />
+          <LeadCard item={latest} titleAs="h2" />
         </Section>
       ) : null}
 
       <div data-fold-exempt="Index list: the format's whole archive, read by scrolling (visual-direction § 1.3).">
-        <Archive archive={archive} kind={kind} covered={covered} standIn={standIn} />
+        <Archive archive={archive} kind={kind} covered={covered} />
       </div>
 
       {closing?.action ? (

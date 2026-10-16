@@ -11,7 +11,6 @@ import {
   ListCard,
   PageHero,
   TableOfContents,
-  type BlockCardImage,
   type BreadcrumbItem,
   type HeroAction,
 } from '@/patterns';
@@ -30,7 +29,7 @@ import {
   lengthOf,
   line,
   parse,
-  standInPool,
+  standInOf,
   type InsightsIndexClosing,
   type InsightsIndexCollection,
   type InsightsIndexFilterOption,
@@ -62,12 +61,6 @@ export type InsightsIndexProps = {
   lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: InsightsIndexClosing;
-  /**
-   * Catalogue photographs for missing covers that no generated graphic suits (visual-direction
-   * § 5.7: never labelled, replaced when the real cover exists). Taken in order down the page.
-   * Absent or empty, the fallback is the card's own texture field.
-   */
-  standIns?: readonly BlockCardImage[];
 };
 
 /** The front page's curated mix beside the lead. */
@@ -114,7 +107,8 @@ const byRecord = (items: InsightsIndexItem[]) =>
 const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
 
 /** The fold rule's exception for the railed run (visual-direction § 1.3). */
-const FOLD_EXEMPT = 'Index list: read by scrolling beside its outline (visual-direction § 1.3).';
+const FOLD_EXEMPT =
+  'Index list: read by scrolling beside its outline (visual-direction § 1.3).';
 
 /**
  * InsightsIndex — the insights hub (docs/specs/InsightsIndex.md; the listings redesign, 15 Oct 2026,
@@ -127,7 +121,8 @@ const FOLD_EXEMPT = 'Index list: read by scrolling beside its outline (visual-di
  *                    OWN shape, so the run never repeats one rectangle, each with "All 42 …" out to
  *                    the format's own page, where its whole archive lives
  *   D  collections   "start with your problem": reading lists by topic, each with its service
- *   E  lab           the other organisation's offer, the page's one dark (ink) band
+ *   E  lab           the other organisation's offer, the page's one dark (ink) band — on tint
+ *                    as the last band when there is no close, never ink on the ink footer
  *   F  close         the ask, on tint, only with an action
  *
  * The live /insights and /design/insights-index render this one composition: the route passes what
@@ -143,9 +138,7 @@ export function InsightsIndex({
   collections = [],
   lab,
   closing,
-  standIns = [],
 }: InsightsIndexProps) {
-  const standIn = standInPool(standIns);
   const { lead, mix } = frontPage(items, featuredId);
   const onFront = new Set([lead, ...mix].filter(Boolean).map((item) => item!.id));
 
@@ -165,7 +158,14 @@ export function InsightsIndex({
       },
     ];
   });
-  const groups = alternate(present, standIns.length > 0);
+  const groups = alternate(present);
+  /* The Lab is the page's one dark band only while the close stands between it and the footer
+     (critique 16 Oct 2026: with no close, ink met the ink footer and the two read as one slab). With
+     no close the Lab IS the page's last ask, so it takes the close's ground: the order no longer
+     depends on whether the content carries an action. Two tinted bands cannot meet: the close is
+     absent exactly when the Lab is tint, and the band above the Lab is always paper. */
+  const closes = closing?.action !== undefined;
+  const labSurface = closes ? 'ink' : 'tint';
   const railed = groups.length >= 2;
   const lede = hero.lede?.trim();
 
@@ -204,7 +204,7 @@ export function InsightsIndex({
                   ? line(LABEL[item.kind].one, dateOf(item.publishedAt), lengthOf(item))
                   : line(LABEL[item.kind].one, dateOf(item.publishedAt)),
               href: item.href,
-              media: index === 0 ? (coverOf(item) ?? standIn(item)) : undefined,
+              media: index === 0 ? (coverOf(item) ?? standInOf(item)) : undefined,
             }))}
           />
         </Section>
@@ -258,12 +258,7 @@ export function InsightsIndex({
                       ) : undefined
                     }
                   >
-                    <FormatShape
-                      kind={group.kind}
-                      items={group.items}
-                      title={group.title}
-                      standIn={standIn}
-                    />
+                    <FormatShape kind={group.kind} items={group.items} title={group.title} />
                   </IndexGroup>
                 ))}
               </Layout>
@@ -284,7 +279,7 @@ export function InsightsIndex({
             heading={lab.heading}
             headingId="lab-heading"
             lead={lab.body?.trim() ? lab.body : undefined}
-            surface="ink"
+            surface={labSurface}
             arrangement="beside"
             actions={<CtaRow rule={false} actions={[lab.action]} />}
           >
@@ -293,7 +288,7 @@ export function InsightsIndex({
         ) : (
           <CtaSection
             arrangement="offer"
-            surface="ink"
+            surface={labSurface}
             heading={lab.heading}
             body={lab.body?.trim() ? [lab.body] : undefined}
             actions={[lab.action]}
@@ -301,7 +296,7 @@ export function InsightsIndex({
         )
       ) : null}
 
-      {closing?.action ? (
+      {closes && closing?.action ? (
         <CtaSection
           arrangement="open"
           surface="tint"

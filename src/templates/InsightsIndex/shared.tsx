@@ -1,6 +1,14 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout, Tag, type IconName } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  Layout,
+  Tag,
+  VisuallyHidden,
+  type IconName,
+} from '@/components';
 import {
   INSIGHT_FORMAT_LABEL,
   INSIGHT_FORMAT_ORDER,
@@ -52,6 +60,12 @@ export type InsightsIndexItem = {
    * scene can never stand as a cover.
    */
   scene?: ArticleSceneName;
+  /**
+   * A catalogue photograph standing in for the missing cover (visual-direction § 5.7), assigned to
+   * THIS item in data, one photograph per item over the family, so an item keeps one stand-in on
+   * every page and no photograph repeats. Never chosen by the template.
+   */
+  standIn?: BlockCardImage;
 };
 
 /** What the page says about one format: its group title, its one sentence, where "All …" goes. */
@@ -178,22 +192,26 @@ export const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
   item.cover?.src.trim() ? { type: 'image', image: item.cover } : undefined;
 
 type CoverMedia = NonNullable<BlockCardSetItem['media']>;
-/**
- * Hands out a cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article
- * where it has one, else the next catalogue photograph, else a texture field. Never a generic scene.
- */
-export type StandIn = (item: InsightsIndexItem) => CoverMedia;
 
-export function standInPool(pool: readonly BlockCardImage[]): StandIn {
-  let next = 0;
-  let recipe = 0;
-  return (item) => {
-    if (item.scene) return { type: 'sketch', name: item.scene };
-    const image = pool.length > 0 ? pool[next++ % pool.length] : undefined;
-    return image
-      ? { type: 'image', image: { ...image, standIn: true } }
-      : { type: 'texture', recipe: (recipe++ % 3) as 0 | 1 | 2 };
-  };
+/** A stable small number from an id, so a texture field belongs to its item, not to render order. */
+function hashOf(id: string) {
+  let hash = 0;
+  for (let i = 0; i < id.length; i += 1) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  return hash;
+}
+
+/**
+ * The cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article where
+ * it has one, else the stand-in photograph the page assigned it in data, else a texture field whose
+ * recipe follows from the item's id. A pure function of the item (critique 16 Oct 2026): the
+ * template never deals photographs out in call order, so an item looks the same on every page and
+ * a photograph cannot repeat once a small pool runs out. Never a generic scene.
+ */
+export function standInOf(item: InsightsIndexItem): CoverMedia {
+  if (item.scene) return { type: 'sketch', name: item.scene };
+  if (item.standIn?.src.trim())
+    return { type: 'image', image: { ...item.standIn, standIn: true } };
+  return { type: 'texture', recipe: (hashOf(item.id) % 3) as 0 | 1 | 2 };
 }
 
 /** The kinds whose items are pictures first: a cover leads the card. */
@@ -238,7 +256,8 @@ export function FormatRow({ options }: { options: readonly InsightsIndexFilterOp
       <Cluster as="ul" colGap="text" nowrap>
         {options.map((option) => (
           <li key={option.id}>
-            <Tag variant="filter" href={option.href} selected={option.selected}>
+            {/* Each link is a page of the family, so the selected one is the page you are on. */}
+            <Tag variant="filter" href={option.href} selected={option.selected} current="page">
               {chip(option)}
             </Tag>
           </li>
@@ -264,12 +283,12 @@ export const CAPACITY: Record<InsightsIndexKind, number> = {
   guide: 6,
 };
 
-/** A group whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
-export function isVisual(
-  group: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
-  hasPool: boolean,
-) {
-  if (group.kind === 'guide') return hasPool || allOwnImages(group.items);
+/** A group whose shape carries an image: the covered shapes, and the catalogue when it has thumbnails. */
+export function isVisual(group: {
+  kind: InsightsIndexKind;
+  items: readonly InsightsIndexItem[];
+}) {
+  if (group.kind === 'guide') return group.items.every((item) => thumbOf(item) !== undefined);
   return isCovered(group.kind);
 }
 
@@ -280,9 +299,9 @@ export function isVisual(
  */
 export function alternate<
   T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
->(groups: readonly T[], hasPool: boolean): T[] {
-  const visual = groups.filter((group) => isVisual(group, hasPool));
-  const text = groups.filter((group) => !isVisual(group, hasPool));
+>(groups: readonly T[]): T[] {
+  const visual = groups.filter((group) => isVisual(group));
+  const text = groups.filter((group) => !isVisual(group));
   const out: T[] = [];
   while (visual.length > 0 || text.length > 0) {
     const v = visual.shift();
@@ -297,28 +316,29 @@ export function FormatShape({
   kind,
   items,
   title,
-  standIn,
 }: {
   kind: InsightsIndexKind;
   items: readonly InsightsIndexItem[];
   title: string;
-  standIn: StandIn;
 }): ReactNode {
   switch (kind) {
     case 'article':
-      return <Lead items={items} standIn={standIn} />;
+      return <Lead items={items} />;
     case 'event':
       return <Ledger items={items} />;
     case 'podcast':
-      return <Episode items={items} standIn={standIn} />;
+      return <Episode items={items} />;
     case 'research':
       return <Reports items={items} />;
     case 'video':
-      return <Rail items={items} label={title} standIn={standIn} />;
+      /* The group is already a region named by its heading ("Videos"); the carousel inside it
+         takes a name of its own, or a screen reader meets two nested regions called the same.
+         Slider's roledescription adds "carousel", so the label names the contents, not the device. */
+      return <Rail items={items} label={`Latest ${title.toLowerCase()}`} />;
     case 'interview':
       return <Voices items={items} />;
     case 'guide':
-      return <Catalogue items={items} standIn={standIn} />;
+      return <Catalogue items={items} />;
   }
 }
 
@@ -339,11 +359,9 @@ export const card = (item: InsightsIndexItem): BlockCardSetItem => ({
  */
 export function LeadCard({
   item,
-  standIn,
   titleAs = 'h3',
 }: {
   item: InsightsIndexItem;
-  standIn: StandIn;
   titleAs?: 'h2' | 'h3';
 }) {
   const podcast = item.kind === 'podcast';
@@ -359,7 +377,7 @@ export function LeadCard({
         eyebrow={
           podcast ? dateOf(item.publishedAt) : line(dateOf(item.publishedAt), lengthOf(item))
         }
-        media={coverOf(item) ?? standIn(item)}
+        media={coverOf(item) ?? standInOf(item)}
         href={item.href}
         {...(podcast
           ? { cue: 'cta' as const, ctaLabel: 'Listen', meta: item.duration }
@@ -373,18 +391,21 @@ export function LeadCard({
  * Articles — the lead: the newest at full column with its cover beside its copy, then a row of three
  * covered cards under it. Size contrast in one group, where four equal tiles read as one rectangle.
  */
-function Lead({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
+function Lead({ items }: { items: readonly InsightsIndexItem[] }) {
   const [first, ...rest] = items;
   if (!first) return null;
   return (
     <Layout rowGap="stack">
-      <LeadCard item={first} standIn={standIn} />
+      <LeadCard item={first} />
       {rest.length > 0 ? (
         <BlockCardSet
           lead="none"
           across={3}
           cue="title"
-          items={rest.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn(item) }))}
+          items={rest.map((item) => ({
+            ...card(item),
+            media: coverOf(item) ?? standInOf(item),
+          }))}
         />
       ) : null}
     </Layout>
@@ -414,18 +435,12 @@ export function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
 }
 
 /** Podcasts — the episode: the newest as one wide card you press play on, earlier ones as rows. */
-function Episode({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
+function Episode({ items }: { items: readonly InsightsIndexItem[] }) {
   const [latest, ...earlier] = items;
   if (!latest) return null;
   return (
     <Layout rowGap="stack">
-      <LeadCard item={latest} standIn={standIn} />
+      <LeadCard item={latest} />
       {earlier.length > 0 ? (
         <Layout as="ul" rowGap="none">
           {earlier.map((item) => (
@@ -468,15 +483,7 @@ function Reports({ items }: { items: readonly InsightsIndexItem[] }) {
 }
 
 /** Videos — the rail: covered cards you scrub through, three in view. */
-function Rail({
-  items,
-  label,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  label: string;
-  standIn: StandIn;
-}) {
+function Rail({ items, label }: { items: readonly InsightsIndexItem[]; label: string }) {
   return (
     <Slider label={label} perView={3}>
       {items.map((item) => (
@@ -487,7 +494,7 @@ function Rail({
           title={item.title}
           body={bodyOf(item)}
           eyebrow={line(dateOf(item.publishedAt), item.duration)}
-          media={coverOf(item) ?? standIn(item)}
+          media={coverOf(item) ?? standInOf(item)}
           href={item.href}
           cue="title"
         />
@@ -509,14 +516,12 @@ function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
   );
 }
 
-/** A row's thumbnail from a cover or a stand-in; a texture field has no thumbnail form. */
-function thumbOf(item: InsightsIndexItem, standIn?: StandIn): ListCardMarker | undefined {
+/** A row's thumbnail from a cover, a drawn scene or a stand-in; a texture field has no thumbnail form. */
+function thumbOf(item: InsightsIndexItem): ListCardMarker | undefined {
   if (item.cover?.src.trim()) {
     return { type: 'thumbnail', image: item.cover };
   }
-  if (item.scene) return { type: 'sketch', name: item.scene };
-  if (!standIn) return undefined;
-  const media = standIn(item);
+  const media = standInOf(item);
   if (media.type === 'sketch') return { type: 'sketch', name: media.name };
   if (media.type === 'image') return { type: 'thumbnail', image: media.image };
   return undefined;
@@ -526,14 +531,8 @@ function thumbOf(item: InsightsIndexItem, standIn?: StandIn): ListCardMarker | u
  * Guides — the catalogue: rows in two columns, with thumbnails when every guide has one and as text
  * when any lacks one (a set is all-image or all-text, never one with holes).
  */
-function Catalogue({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
-  const thumbs = items.map((item) => thumbOf(item, standIn));
+function Catalogue({ items }: { items: readonly InsightsIndexItem[] }) {
+  const thumbs = items.map((item) => thumbOf(item));
   const thumbnails = thumbs.every(Boolean);
   const half = Math.ceil(items.length / 2);
   const indexed = items.map((item, i) => ({
@@ -585,13 +584,11 @@ export function Archive({
   archive,
   kind,
   covered,
-  standIn,
 }: {
   archive: InsightsIndexArchive;
   kind: InsightsIndexKind;
   /** Cover tiles, or rows. The page decides from the kind and whether every item has an image. */
   covered: boolean;
-  standIn: StandIn;
 }) {
   const moreHeld = archive.filters.reduce(
     (sum, group) => sum + group.options.filter((option) => option.selected).length,
@@ -697,7 +694,7 @@ export function Archive({
             <Cluster colGap="text" rowGap="text" align="center">
               <p className={styles.count}>
                 {`${archive.total} of ${archive.all}`}
-                <span className={styles.hidden}> {archive.noun} match.</span>
+                <VisuallyHidden> {archive.noun} match.</VisuallyHidden>
               </p>
               <span className={styles.count}>Showing</span>
               <Cluster as="ul" colGap="text" rowGap="text">
@@ -742,7 +739,7 @@ export function Archive({
                 cue="title"
                 items={archive.items.map((item) => ({
                   ...card(item),
-                  media: coverOf(item) ?? standIn(item),
+                  media: coverOf(item) ?? standInOf(item),
                 }))}
               />
             ) : (

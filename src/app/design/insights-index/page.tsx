@@ -5,7 +5,7 @@ import { ROUTES } from '@/lib/routes';
 import { InsightsIndex } from '@/templates';
 
 import { insightsIndexProps } from '../../_insights/hub';
-import { empty, sparse, specimenFormatHref } from '../../_insights/specimen';
+import { empty, noClose, sparse, specimenFormatHref } from '../../_insights/specimen';
 
 export const metadata: Metadata = {
   title: 'InsightsIndex · stress content | Design',
@@ -18,7 +18,7 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-const STATES = new Set(['sparse', 'empty']);
+const STATES = new Set(['sparse', 'no-close', 'empty']);
 
 /**
  * InsightsIndex over the stress fixture (src/content/sources/fixtures/insights.ts): all seven
@@ -28,8 +28,9 @@ const STATES = new Set(['sparse', 'empty']);
  * (/design/insights-format-index) rather than the live format pages, so the family is judged over
  * one fixture.
  *
- *   ?state=sparse   the live CMS's shape
- *   ?state=empty    nothing published
+ *   ?state=sparse     the live CMS's shape
+ *   ?state=no-close   every format, no close: the Lab is the last band, above the ink footer
+ *   ?state=empty      nothing published
  *
  * A template's specimen is the page itself rather than Specimen blocks: what is judged is the
  * composition down its length, which a row of crops cannot show.
@@ -38,7 +39,13 @@ export default async function InsightsIndexSpecimen({ searchParams }: Props) {
   const [fixture, query] = await Promise.all([getInsightsFixturePage(), searchParams]);
   const state = Array.isArray(query.state) ? query.state[0] : query.state;
   const page =
-    state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
+    state === 'sparse'
+      ? sparse(fixture)
+      : state === 'no-close'
+        ? noClose(fixture)
+        : state === 'empty'
+          ? empty(fixture)
+          : fixture;
   const hub = state && STATES.has(state) ? `${PATH}?state=${state}` : PATH;
 
   return <InsightsIndex {...insightsIndexProps(page, specimenFormatHref(hub))} />;

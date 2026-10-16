@@ -2,6 +2,7 @@ import type { InsightResource, InsightResourceKind, InsightsPage } from '@/conte
 import { INSIGHT_FORMAT_LABEL, INSIGHT_FORMAT_ORDER } from '@/lib/insight-formats';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { blogPath } from '@/lib/routes';
+import type { BlockCardImage } from '@/patterns';
 import type {
   InsightsIndexArchive,
   InsightsIndexFilterGroup,
@@ -15,9 +16,9 @@ import type {
  * insight onto the template's item, the family's format row, the stand-in pool, and the archive's
  * URL-held filters. `_insights` is underscore-prefixed, so Next does not route it.
  *
- * The URL is the state: `?filter-<group>=<option>` per group (one option per group), `?page=<n>` for
- * "Show more". A held option's own link clears its group, which is what makes its `close-circle` a
- * control (Tag's spec). Every link ends in the archive's fragment, so a filter lands the reader on
+ * The URL is the state: `?<group>=<option>` per group, both slugs of their CMS names (one option per
+ * group), `?page=<n>` for "Show more". A held option's own link clears its group, which is what makes
+ * its `close-circle` a control (Tag's spec). Every link ends in the archive's fragment, so a filter lands the reader on
  * the archive rather than the top.
  */
 
@@ -26,8 +27,14 @@ export type Query = Record<string, string | string[] | undefined>;
 /**
  * Stand-in covers for insights that have none yet (visual-direction § 5.7): catalogue photographs of
  * the work itself — whiteboards, sketches, sticky walls — with no legible screen, at masters large
- * enough for a lead. Never labelled; replaced when the real cover exists. The template takes them in
- * order down the page, so neighbours do not repeat.
+ * enough for a lead. Never labelled; replaced when the real cover exists.
+ *
+ * Assigned HERE, in data, the way a drawn `coverScene` is — never by the template in render order
+ * (critique 16 Oct 2026: a round-robin in call order gave one article a different photograph on the
+ * hub than on its format page, and cycled the small pool so one photograph showed twice a screen).
+ * Each photograph goes to ONE insight: the newest coverless insights of the covered kinds, over the
+ * whole family, so the assignment depends on the corpus and not on which page renders it. Once the
+ * pool is used up the rest get no photograph and the template falls back to a texture field.
  */
 const STAND_INS: readonly PhotoId[] = [
   'whiteboard-two-hands',
@@ -38,10 +45,47 @@ const STAND_INS: readonly PhotoId[] = [
   'pair-testing-overhead',
 ];
 
-export const standIns = () => STAND_INS.map((id) => getKitPhoto(id, { standIn: true }));
+/** The kinds whose cards lead with a picture, and so can carry a stand-in. */
+const STAND_IN_KINDS: ReadonlySet<InsightResourceKind> = new Set([
+  'article',
+  'video',
+  'podcast',
+  'guide',
+]);
 
-const FILTER_PREFIX = 'filter-';
+export type StandIns = ReadonlyMap<string, BlockCardImage>;
+
+/** Which insight carries which stand-in photograph, one photograph per insight, over the family. */
+export function standInsFor(page: InsightsPage): StandIns {
+  const map = new Map<string, BlockCardImage>();
+  const needing = page.resources.items.filter(
+    (item) => STAND_IN_KINDS.has(item.kind) && !item.image?.src && !item.coverScene,
+  );
+  needing.slice(0, STAND_INS.length).forEach((item, index) => {
+    map.set(item.documentId, getKitPhoto(STAND_INS[index]!, { standIn: true }));
+  });
+  return map;
+}
+
 const PAGE_KEY = 'page';
+/** Query keys a topic group may not take: the page's own, and the specimen's state. */
+const RESERVED_KEYS: ReadonlySet<string> = new Set([PAGE_KEY, 'state']);
+
+/** A readable URL word from a CMS label: "SaaS & fintech" → "saas-fintech". */
+const slugOf = (label: string) =>
+  label
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+/** `base`, or `base-2`, `base-3` … — the first not yet in `taken`, which it then joins. */
+function unique(base: string, taken: Set<string>) {
+  let name = base;
+  for (let n = 2; taken.has(name) || name === ''; n += 1) name = `${base || 'topic'}-${n}`;
+  taken.add(name);
+  return name;
+}
 /** The archive's page: twelve items, then "Show more". */
 export const PAGE_SIZE = 12;
 /** From how many items an archive offers filters (more than one screen of tiles). */
@@ -58,25 +102,29 @@ export const FORMAT_NAME: Record<InsightResourceKind, string> = Object.fromEntri
 export const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 
-/** `path` may carry a query of its own (the specimen's `?state=`), which every link keeps. */
+/**
+ * `path` may carry a query of its own (the specimen's `?state=`), which every link keeps. `params` is
+ * key → value, already in the URL's words (a group's slug → an option's slug).
+ */
 export function hrefFor(
   path: string,
   fragment: string,
-  selected: ReadonlyMap<string, string>,
+  params: ReadonlyMap<string, string>,
   page = 1,
 ) {
   const [base = path, own] = path.split('?');
   const query = new URLSearchParams(own);
-  [...selected.entries()]
+  [...params.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([group, option]) => query.set(`${FILTER_PREFIX}${group}`, option));
+    .forEach(([key, value]) => query.set(key, value));
   if (page > 1) query.set(PAGE_KEY, String(page));
   const search = query.toString();
   return `${base}${search ? `?${search}` : ''}#${fragment}`;
 }
 
-export function toItem(resource: InsightResource): InsightsIndexItem {
+export function toItem(resource: InsightResource, standIns?: StandIns): InsightsIndexItem {
   const image = resource.image;
+  const standIn = standIns?.get(resource.documentId);
   return {
     id: resource.documentId,
     kind: resource.kind as InsightsIndexKind,
@@ -106,6 +154,7 @@ export function toItem(resource: InsightResource): InsightsIndexItem {
     /* A scene DRAWN for this article, assigned in data (never by keyword): its cover until a real
        one exists. docs/specs/InsightsIndex.md § 12a. */
     ...(resource.coverScene ? { scene: resource.coverScene } : {}),
+    ...(standIn ? { standIn } : {}),
   };
 }
 
@@ -174,22 +223,45 @@ export function archiveOf(
     noun: string;
     /** The item the page shows above the archive (the latest), left out while nothing is held. */
     exclude?: string;
+    /** Which insight carries which stand-in photograph (`standInsFor`). */
+    standIns?: StandIns;
   },
 ): InsightsIndexArchive {
   /* A short archive is read whole: filtering six items is noise, so it takes no filters at all. */
+  /* The URL speaks in words, not CMS ids (critique 16 Oct 2026): a group's key is its label's slug
+     and an option's value its name's slug — `?industry=saas`, a link a reader can read. Matching
+     still runs on the ids; the slugs are only how the state is written down. */
+  const keys = new Set(RESERVED_KEYS);
   const groups = (resources.length > FILTER_FROM ? page.resources.filters : [])
     .filter((group) => group.options.length > 0)
-    .map((group) => ({
-      id: group.id,
-      label: group.label,
-      options: group.options.map((option) => ({ id: option.id, label: option.name })),
-    }));
+    .map((group) => {
+      const values = new Set<string>();
+      return {
+        id: group.id,
+        key: unique(slugOf(group.label), keys),
+        label: group.label,
+        options: group.options.map((option) => ({
+          id: option.id,
+          slug: unique(slugOf(option.name), values),
+          label: option.name,
+        })),
+      };
+    });
 
   const selected = new Map<string, string>();
   for (const group of groups) {
-    const wanted = first(query[`${FILTER_PREFIX}${group.id}`]);
-    if (group.options.some((option) => option.id === wanted)) selected.set(group.id, wanted);
+    const wanted = first(query[group.key]);
+    const option = group.options.find((candidate) => candidate.slug === wanted);
+    if (option) selected.set(group.id, option.id);
   }
+  /* The held state in the URL's words. */
+  const paramsOf = (held: ReadonlyMap<string, string>) =>
+    new Map(
+      groups.flatMap((group) => {
+        const option = group.options.find((candidate) => candidate.id === held.get(group.id));
+        return option ? [[group.key, option.slug] as const] : [];
+      }),
+    );
 
   const passesExcept = (item: InsightResource, except?: string) =>
     [...selected.entries()].every(
@@ -211,7 +283,7 @@ export function archiveOf(
     const next = new Map(selected);
     if (option === undefined || selected.get(group) === option) next.delete(group);
     else next.set(group, option);
-    return hrefFor(path, fields.id, next);
+    return hrefFor(path, fields.id, paramsOf(next));
   };
 
   const built: InsightsIndexFilterGroup[] = groups
@@ -264,7 +336,7 @@ export function archiveOf(
     id: fields.id,
     heading: fields.heading,
     noun: fields.noun,
-    items: visible.map(toItem),
+    items: visible.map((item) => toItem(item, fields.standIns)),
     total: matches.length,
     all: resources.length,
     above: excluding ? 1 : 0,
@@ -272,6 +344,7 @@ export function archiveOf(
     filters: rest,
     held,
     clearHref: selected.size > 0 ? hrefFor(path, fields.id, new Map()) : undefined,
-    moreHref: current < pages ? hrefFor(path, fields.id, selected, current + 1) : undefined,
+    moreHref:
+      current < pages ? hrefFor(path, fields.id, paramsOf(selected), current + 1) : undefined,
   };
 }

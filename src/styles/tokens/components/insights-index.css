@@ -27,9 +27,6 @@
   /* A filter group's name is a label over its chips, not a heading to read. */
   --iix-filter-label-text: var(--text-eyebrow);
   --iix-filter-label-tracking: var(--text-eyebrow-tracking);
-  /* The clipped box that keeps the count's spoken words out of the layout: a technique's own geometry,
-     the 1px every hidden label in the system uses, duplicated by value (tokens rule 6). */
-  --iix-hidden-size: var(--space-1);
   /* The filters' disclosure below 1024 (owner, 13 Oct 2026): a control row in the label voice,
      ruled above and below, its glyph turning when it opens. */
   --iix-toggle-text: var(--text-ui);
@@ -44,7 +41,7 @@
   --iix-ring-room: calc(var(--focus-ring-width) + var(--focus-ring-offset));
   /* "More filters": the control's corner, and the panel it opens — a dropdown over the river. */
   --iix-toggle-radius: var(--radius-4);
-  --iix-panel-inline: 560px;
+  --iix-panel-inline: var(--size-panel-sm);
   --iix-panel-radius: var(--radius-8);
   --iix-panel-shadow: var(--shadow-crop);
   --iix-panel-layer: var(--z-dropdown);
