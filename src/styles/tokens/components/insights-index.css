@@ -1,10 +1,11 @@
 /* ══ Component layer — InsightsIndex (templates) ═════════════════════════════════
    Tier 3. The insights hub and its format pages (16 Oct 2026): what the two templates draw
-   themselves — a curated section's head (its h2 and the line under it), and a format page's count
-   over "Show more". Every piece is a Teaser and draws its own; the rail is IndexRail's.
+   themselves — a curated section's one-line head, an events page's group label, and a format
+   page's count beside "Show more". Every piece is a Teaser and draws its own; the rail is
+   IndexRail's.
 
    Naming: --iix-{part}-{role}
-     parts  section-eyebrow · section-title · section-lead · group-title · rule · count
+     parts  section-title · group-title · count
      roles  text · tracking · ink · scroll-top
 
    Every surface block declares every surface-dependent token. Every band these templates paint is
@@ -12,21 +13,14 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* A curated section's title: the h1 role — a section head by prominence, never display (display
-     is the hero's alone). A clear step above the lead piece's 34px title (beauty round, 16 Oct
-     2026: at h2, 43 against 34 read as two headings fighting). */
-  --iix-section-title-text: var(--text-h1);
-  --iix-section-title-tracking: var(--text-h1-tracking);
-  /* The label over it: the pieces it holds, and in BY TOPIC the group the topic is filed in. */
-  --iix-section-eyebrow-text: var(--text-eyebrow);
-  --iix-section-eyebrow-tracking: var(--text-eyebrow-tracking);
-  /* An events page's group heading ("Upcoming", "Past"): the h4 role. */
-  --iix-group-title-text: var(--text-h4);
-  --iix-group-title-tracking: var(--text-h4-tracking);
-  /* The one rule in an editorial run: above a block of headlines. */
-  --iix-rule-width: var(--border-width-hairline);
-  /* The one line under it: small, support for the title, not a second heading. */
-  --iix-section-lead-text: var(--text-body);
+  /* A curated section's head: the h4 role, one line (beauty round 3, 16 Oct 2026). A signpost, so
+     the lead piece under it (h3, 34) is the largest type in the section: at h1 the head outranked
+     the content and six of them squinted as "heading, stuff, heading, stuff". */
+  --iix-section-title-text: var(--text-h4);
+  --iix-section-title-tracking: var(--text-h4-tracking);
+  /* An events page's group label: the eyebrow, the date column's voice. */
+  --iix-group-title-text: var(--text-eyebrow);
+  --iix-group-title-tracking: var(--text-eyebrow-tracking);
   /* The count beside "Show more": the label voice. */
   --iix-count-text: var(--text-eyebrow);
   --iix-count-tracking: var(--text-eyebrow-tracking);
@@ -39,35 +33,27 @@
 :root,
 [data-surface='paper'] {
   --iix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
-  --iix-section-eyebrow-ink: var(--color-neutral-600);
-  --iix-rule-ink: var(--color-neutral-200);
-  --iix-section-lead-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor */
+  --iix-group-title-ink: var(--color-neutral-600);
   --iix-count-ink: var(--color-neutral-600); /* 4.92:1 */
 }
 
 /* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
 [data-surface='tint'] {
   --iix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
-  --iix-section-eyebrow-ink: var(--color-neutral-700);
-  --iix-rule-ink: var(--color-neutral-300);
-  --iix-section-lead-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-group-title-ink: var(--color-neutral-700);
   --iix-count-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 /* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
 [data-surface='ink'] {
   --iix-section-title-ink: var(--color-white);
-  --iix-section-eyebrow-ink: var(--color-neutral-400);
-  --iix-rule-ink: var(--color-neutral-800);
-  --iix-section-lead-ink: var(--color-neutral-400); /* 8.05:1 */
+  --iix-group-title-ink: var(--color-neutral-400);
   --iix-count-ink: var(--color-neutral-400); /* 8.05:1 */
 }
 
 /* ── Surface: blue ── declared for self-containment ─────────────────────────── */
 [data-surface='blue'] {
   --iix-section-title-ink: var(--color-white); /* 6.23:1 */
-  --iix-section-eyebrow-ink: var(--color-brandeis-100);
-  --iix-rule-ink: var(--color-brandeis-400);
-  --iix-section-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --iix-group-title-ink: var(--color-brandeis-100);
   --iix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
 }

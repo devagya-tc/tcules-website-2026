@@ -1,11 +1,10 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { Button, Icon, Layout } from '@/components';
 import {
   CARD_THREE_TRACKS,
   CARD_TWO_TRACKS,
   FULL_COLUMN,
-  TEASER_THUMBNAIL,
 } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
@@ -195,10 +194,17 @@ export function partition(items: readonly InsightsIndexItem[]) {
 
 /* ── The compositions ────────────────────────────────────────────────────────────
    Each a distinct silhouette, so a column built from them never repeats one rectangle: the COVER (a
-   picture the column's full width, its words under it), the PAIR (two pictures at half), the SCREEN
-   (a wide picture and two beside it), the INDEX (an ordinal list), the SPLIT (a picture beside an
-   index), the DATES (a day numeral heading each row), the GRID (threes) and the TEXT block (two
-   columns of headlines under one rule). The templates choose and order them. */
+   picture the column's full width, its words under it), the FEATURE (a picture beside its words,
+   either side), the PAIR (two pictures at half), the GRID (pictures in threes), the SCREEN (a wide
+   picture and two beside it), the HEADLINES (typographic pieces in a row, their meta line the
+   anchor), the INDEX (a typographic ordinal list), the SPLIT (a picture beside an index) and the
+   DATES (a day numeral heading each row). The templates choose and order them.
+
+   A shape decides its pictures per INSTANCE, never per row: a pictured shape takes only pieces with
+   a picture, and the typographic ones (HEADLINES, INDEX) show none even where a piece has one — so
+   no list carries a thumbnail on some rows and not others (beauty round 3, 16 Oct 2026). Secondary
+   pieces of a pictured set turn `compact` on a phone, so a single column is not a run of identical
+   full-width pictures. */
 
 type Shape = {
   items: readonly InsightsIndexItem[];
@@ -217,8 +223,18 @@ export function Cover({ items, meta, titleAs = 'h3' }: Shape) {
   );
 }
 
-/** The FEATURE: one piece, its picture beside its words, in two halves hung from one top edge. */
-export function Feature({ items, meta, titleAs = 'h3' }: Shape) {
+/**
+ * The FEATURE: one piece, its picture beside its words, hung from one top edge. `flip` sets the
+ * picture at the end (a run of features zigzags); `weight="picture"` gives the picture seven twelfths
+ * — a page's featured lead.
+ */
+export function Feature({
+  items,
+  meta,
+  titleAs = 'h3',
+  flip = false,
+  weight = 'even',
+}: Shape & { flip?: boolean; weight?: 'even' | 'picture' }) {
   const [lead] = items;
   if (!lead) return null;
   return (
@@ -228,40 +244,44 @@ export function Feature({ items, meta, titleAs = 'h3' }: Shape) {
         arrangement="beside"
         size="xl"
         titleAs={titleAs}
+        flip={flip}
+        weight={weight}
         sizes={CARD_TWO_TRACKS}
       />
     </ul>
   );
 }
 
-/** The PAIR: two pieces at the larger step, side by side. */
+/** The PAIR: two pieces at the larger step, side by side (the second a compact row on a phone). */
 export function Pair({ items, meta, titleAs = 'h3' }: Shape) {
   return (
     <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
-      {items.map((item) => (
+      {items.map((item, i) => (
         <Teaser
           key={item.id}
           {...teaserOf(item, meta)}
           size="lg"
           titleAs={titleAs}
           sizes={CARD_TWO_TRACKS}
+          compact={i > 0}
         />
       ))}
     </Layout>
   );
 }
 
-/** The GRID: threes, each a picture over its words (or its words alone). */
+/** The GRID: threes, each a picture over its words; on a phone the first leads and the rest are rows. */
 export function Grid({ items, meta, titleAs = 'h3' }: Shape) {
   return (
     <Layout as="ul" columns={{ md: 2, lg: 3 }} colGap="gutter" rowGap="stack">
-      {items.map((item) => (
+      {items.map((item, i) => (
         <Teaser
           key={item.id}
           {...teaserOf(item, meta)}
           size="md"
           titleAs={titleAs}
           sizes={CARD_THREE_TRACKS}
+          compact={i > 0}
         />
       ))}
     </Layout>
@@ -269,8 +289,60 @@ export function Grid({ items, meta, titleAs = 'h3' }: Shape) {
 }
 
 /**
- * The SCREEN: the newest large, the next two stacked beside it to its height — the watched shape,
- * pictures leading, because a video is one.
+ * The HEADLINES: typographic pieces in one row (two or three across), each anchored by its meta line
+ * — an event's date, a watched piece's running time, a read one's reading time — and carrying its
+ * standfirst: a deliberate run of words, never a picture row with its pictures missing. Pictures
+ * are not shown here even where a piece has one, and every title starts on one line across the row.
+ */
+export function Headlines({ items, meta, titleAs = 'h3' }: Shape) {
+  const across = Math.min(3, Math.max(1, items.length)) as 1 | 2 | 3;
+  return (
+    <Layout as="ul" columns={{ md: across }} colGap="gutter" rowGap="stack">
+      {items.map((item) => (
+        <Teaser
+          key={item.id}
+          {...teaserOf(item, meta)}
+          media={undefined}
+          size="md"
+          titleAs={titleAs}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/**
+ * The SPREAD: one piece with its picture across two thirds, two typographic pieces stacked in the
+ * third beside it — a format page's opening phrase, picture and words sharing one row.
+ */
+export function Spread({ items, meta, titleAs = 'h3' }: Shape) {
+  const [lead, ...rest] = items;
+  if (!lead) return null;
+  return (
+    <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="stack" align="start">
+      <ul>
+        <Teaser {...teaserOf(lead, meta)} size="lg" titleAs={titleAs} sizes={CARD_TWO_TRACKS} />
+      </ul>
+      {rest.length > 0 ? (
+        <Layout as="ul" rowGap="stack">
+          {rest.slice(0, 2).map((item) => (
+            <Teaser
+              key={item.id}
+              {...teaserOf(item, meta)}
+              media={undefined}
+              size="md"
+              titleAs={titleAs}
+            />
+          ))}
+        </Layout>
+      ) : null}
+    </Layout>
+  );
+}
+
+/**
+ * The SCREEN: the newest large, the next two stacked beside it — the watched shape, pictures
+ * leading, because a video is one.
  */
 export function Screen({ items, meta, titleAs = 'h3' }: Shape) {
   const [lead, ...rest] = items;
@@ -289,6 +361,7 @@ export function Screen({ items, meta, titleAs = 'h3' }: Shape) {
               size="sm"
               titleAs={titleAs}
               sizes={CARD_THREE_TRACKS}
+              compact
             />
           ))}
         </Layout>
@@ -298,10 +371,10 @@ export function Screen({ items, meta, titleAs = 'h3' }: Shape) {
 }
 
 /**
- * The INDEX: an ordinal list — the number in the marker column, the title, a line of standfirst, a
- * thumbnail at the row's end where the piece has a picture. A list of one is a row, not a list:
- * it carries no number. The numbers are the anchor, so the list
- * needs no rule between its rows.
+ * The INDEX: a typographic ordinal list — the number in the marker column, the title, a line of
+ * standfirst. No thumbnails: an index is words, and a picture on some rows only jagged its edge. A
+ * list of one is a row, not a list: it carries no number. `across={2}` sets it in two columns (a
+ * format page's long index).
  */
 export function Index({
   items,
@@ -309,18 +382,24 @@ export function Index({
   titleAs = 'h3',
   start = 1,
   size = 'sm',
-}: Shape & { start?: number; size?: TeaserSize }) {
+  across = 1,
+}: Shape & { start?: number; size?: TeaserSize; across?: 1 | 2 }) {
   return (
-    <Layout as="ol" rowGap="gutter">
+    <Layout
+      as="ol"
+      columns={across === 2 ? { md: 2 } : undefined}
+      colGap={across === 2 ? 'column' : undefined}
+      rowGap={across === 2 ? 'stack' : 'gutter'}
+    >
       {items.map((item, i) => (
         <Teaser
           key={item.id}
           {...teaserOf(item, meta)}
+          media={undefined}
           index={items.length > 1 ? String(start + i).padStart(2, '0') : undefined}
           arrangement="row"
           size={size}
           titleAs={titleAs}
-          sizes={TEASER_THUMBNAIL}
         />
       ))}
     </Layout>
@@ -339,7 +418,7 @@ export function Split({ items, meta, titleAs = 'h3' }: Shape) {
   return (
     <Layout columns={{ md: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
       <ul>
-        <Teaser {...teaserOf(lead, meta)} size="lg" titleAs={titleAs} sizes={CARD_TWO_TRACKS} />
+        <Teaser {...teaserOf(lead, meta)} size="xl" titleAs={titleAs} sizes={CARD_TWO_TRACKS} />
       </ul>
       {rest.length > 0 ? <Index items={rest} meta={meta} titleAs={titleAs} /> : null}
     </Layout>
@@ -366,88 +445,78 @@ export function Dates({ items, titleAs = 'h3', size = 'lg' }: Shape & { size?: T
   );
 }
 
-/**
- * The TEXT block: typographic pieces in two columns under one rule — a deliberate list of headlines,
- * so pieces without a picture never stand in a picture row looking as if theirs failed to load.
- */
-export function TextBlock({ items, meta, titleAs = 'h3' }: Shape) {
+/** The SHOWCASE: one event featured, its picture beside the day at its largest, then its words. */
+export function Showcase({ items, titleAs = 'h3' }: Shape) {
+  const [lead] = items;
+  if (!lead) return null;
   return (
-    <div className={styles.textBlock}>
-      <Layout as="ul" columns={{ md: 2 }} colGap="column" rowGap="stack">
-        {items.map((item) => (
-          <Teaser key={item.id} {...teaserOf(item, meta)} size="md" titleAs={titleAs} />
-        ))}
-      </Layout>
-    </div>
+    <ul>
+      <Teaser
+        {...teaserOf(lead)}
+        date={dateMarkerOf(lead)}
+        meta={lead.event?.place}
+        arrangement="beside"
+        weight="picture"
+        size="xl"
+        titleAs={titleAs}
+        sizes={CARD_TWO_TRACKS}
+      />
+    </ul>
   );
 }
 
 /* ── A curated section ────────────────────────────────────────────────────────── */
 
 /**
- * A section's head — one grammar for both views: a small label over the serif title, the one line
- * under it in the same column. The way to everything in it closes the section (`SectionClose`).
+ * A section's head — one line, one grammar for both views (beauty round 3, 16 Oct 2026): the name as
+ * a quiet serif h2 and, on the same baseline at the row's end, the way to all of it ("All 42 articles
+ * →"). No eyebrow and no lead sentence: the head is a signpost, so the first piece under it is the
+ * loudest thing in the section, and the section ends on its last piece rather than on a link.
  */
 export function SectionHead({
   id,
-  eyebrow,
   title,
-  lead,
+  link,
 }: {
   id: string;
-  eyebrow?: string;
   title: string;
-  lead?: string;
+  link?: { label: string; href: string };
 }) {
-  const line = lead?.trim();
   return (
-    <Layout rowGap="text">
-      <Layout rowGap="tight">
-        {eyebrow ? <p className={styles.sectionEyebrow}>{eyebrow}</p> : null}
-        <h2 id={`${id}-heading`} className={styles.sectionTitle}>
-          {title}
-        </h2>
-      </Layout>
-      {line ? <p className={styles.sectionLead}>{line}</p> : null}
+    <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="baseline">
+      <h2 id={`${id}-heading`} className={styles.sectionTitle}>
+        {title}
+      </h2>
+      {link ? (
+        <Button
+          as="a"
+          href={link.href}
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name="arrow-right" />}
+        >
+          {link.label}
+        </Button>
+      ) : null}
     </Layout>
   );
 }
 
-/** The stated close of a section: the way to all of it, under its last items. */
-export function SectionClose({ label, href }: { label: string; href: string }) {
-  return (
-    <Cluster>
-      <Button
-        as="a"
-        href={href}
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name="arrow-right" />}
-      >
-        {label}
-      </Button>
-    </Cluster>
-  );
-}
-
-/** One curated section of a view: a jump target with its head over its shape, and its close. */
+/** One curated section of a view: a jump target with its one-line head over its shape. */
 export function CuratedSection({
   id,
   head,
-  close,
   children,
 }: {
   id: string;
   head: ReactNode;
-  close?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <section id={id} aria-labelledby={`${id}-heading`} className={styles.curated}>
-      <Layout rowGap="stack">
+      <Layout rowGap="gutter">
         {head}
         {children}
-        {close}
       </Layout>
     </section>
   );

@@ -8,14 +8,7 @@
   scroll-margin-block-start: var(--iix-scroll-top);
 }
 
-/* A section's label over its title: the label voice, quiet. */
-.sectionEyebrow {
-  color: var(--iix-section-eyebrow-ink);
-  font: var(--iix-section-eyebrow-text);
-  letter-spacing: var(--iix-section-eyebrow-tracking);
-  text-transform: var(--text-mono-case);
-}
-
+/* A section's one-line head: a quiet serif signpost, below the lead piece's title. */
 .sectionTitle {
   color: var(--iix-section-title-ink);
   font: var(--iix-section-title-text);
@@ -23,25 +16,13 @@
   text-wrap: var(--text-title-wrap);
 }
 
-.sectionLead {
-  max-inline-size: var(--measure-body);
-  color: var(--iix-section-lead-ink);
-  font: var(--iix-section-lead-text);
-  text-wrap: var(--text-running-wrap);
-}
-
-/* An events page's group ("Upcoming", "Past"): a heading in the label's place, not a section title. */
+/* An events page's group ("Next", "Upcoming", "Past"): a label in the date column's voice, not a
+   heading competing with the titles under it. */
 .groupTitle {
-  color: var(--iix-section-title-ink);
+  color: var(--iix-group-title-ink);
   font: var(--iix-group-title-text);
   letter-spacing: var(--iix-group-title-tracking);
-}
-
-/* A block of headlines: the one rule in the run, above it, so the typographic pieces read as a
-   deliberate list. The rule's room is the block's own inset, not a margin. */
-.textBlock {
-  padding-block-start: var(--gap-stack);
-  border-block-start: var(--iix-rule-width) solid var(--iix-rule-ink);
+  text-transform: var(--text-mono-case);
 }
 
 .count {

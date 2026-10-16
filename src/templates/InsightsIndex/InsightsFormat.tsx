@@ -21,10 +21,12 @@ import {
   Feature,
   Grid,
   hasPicture,
+  Headlines,
   Index,
   Pair,
   partition,
-  TextBlock,
+  Showcase,
+  Spread,
   type InsightsIndexItem,
   type InsightsIndexKind,
   type MetaOptions,
@@ -34,8 +36,8 @@ export type InsightsFormatProps = {
   breadcrumbs: readonly BreadcrumbItem[];
   kind: InsightsIndexKind;
   hero: { title: string; lede?: string };
-  /** The rail's picker: every format with content, the current one marked. */
-  formats: readonly { label: string; href: string; current?: boolean }[];
+  /** The rail's picker: every format with content, its count, the current one marked. */
+  formats: readonly { label: string; href: string; current?: boolean; count?: number }[];
   /** Every piece of this format the page shows, newest first: the pages read so far, in order. */
   items: readonly InsightsIndexItem[];
   /** How many a page holds (the first page adds the feature). */
@@ -69,43 +71,60 @@ const SHAPE: Record<InsightsIndexKind, FormatShape> = {
   event: 'dates',
 };
 
-/** A pictured beat every this many: the feature beside its words instead of a pair. */
-const FEATURE_EVERY = 3;
-/** The most headlines one text block holds: three rows of two. */
-const TEXT_BLOCK = 6;
-
 /**
- * The editorial run: pieces placed by what they have. Pictures in pairs at the larger step, with a
- * feature (picture beside words) taking every third pictured beat, so scale changes on purpose; the
- * typographic pieces between them as a block of headlines, never in a picture row.
+ * The editorial run, composed in PHRASES from what the pieces have (beauty round 3, 16 Oct 2026) —
+ * never slots filled in order, so no row is orphaned and no hairline is needed between groups: the
+ * change of shape is the separator, the row seam is the column step.
+ *
+ *   spread     one picture across two thirds, two headlines stacked beside it
+ *   headlines  three typographic pieces in a row (two where only four remain, so none is left alone)
+ *   pair       two pictures at half
+ *
+ * The three turn in that order, each taken only when there are pieces to fill it; what is left at
+ * the end (a lone picture, one or two headlines) closes the run as a feature and a short row.
  */
 function editorial(items: readonly InsightsIndexItem[], meta: MetaOptions): ReactNode[] {
   const { pictured, plain } = partition(items);
   const out: ReactNode[] = [];
-  let beat = 0;
-  while (pictured.length > 0 || plain.length > 0) {
-    if (pictured.length > 0) {
-      beat += 1;
-      const feature = beat % FEATURE_EVERY === 0 || pictured.length === 1;
-      const set = pictured.splice(0, feature ? 1 : 2);
+  let idle = 0;
+  let turn = 0;
+  while (idle < 3 && (pictured.length > 0 || plain.length > 0)) {
+    const key = `r${out.length}`;
+    const phrase = turn % 3;
+    turn += 1;
+    if (phrase === 0 && pictured.length >= 1 && plain.length >= 2) {
       out.push(
-        feature ? (
-          <Feature key={`p${beat}`} items={set} meta={meta} titleAs="h2" />
-        ) : (
-          <Pair key={`p${beat}`} items={set} meta={meta} titleAs="h2" />
-        ),
-      );
-    }
-    if (plain.length > 0) {
-      out.push(
-        <TextBlock
-          key={`t${out.length}`}
-          items={plain.splice(0, TEXT_BLOCK)}
+        <Spread
+          key={key}
+          items={[...pictured.splice(0, 1), ...plain.splice(0, 2)]}
           meta={meta}
           titleAs="h2"
         />,
       );
+    } else if (phrase === 1 && plain.length >= 3) {
+      out.push(
+        <Headlines
+          key={key}
+          items={plain.splice(0, plain.length === 4 ? 2 : 3)}
+          meta={meta}
+          titleAs="h2"
+        />,
+      );
+    } else if (phrase === 2 && pictured.length >= 2) {
+      out.push(<Pair key={key} items={pictured.splice(0, 2)} meta={meta} titleAs="h2" />);
+    } else {
+      idle += 1;
+      continue;
     }
+    idle = 0;
+  }
+  if (pictured.length > 0) {
+    out.push(
+      <Feature key="last-p" items={pictured.splice(0, 1)} meta={meta} titleAs="h2" flip />,
+    );
+  }
+  if (plain.length > 0) {
+    out.push(<Headlines key="last-t" items={plain.splice(0)} meta={meta} titleAs="h2" />);
   }
   return out;
 }
@@ -122,7 +141,7 @@ function body(
     case 'screens':
       return <Grid items={items} meta={meta} titleAs="h2" />;
     case 'index':
-      return <Index items={items} meta={meta} titleAs="h2" size="md" start={start} />;
+      return <Index items={items} meta={meta} titleAs="h2" size="md" start={start} across={2} />;
     case 'editorial':
     default:
       return <Layout rowGap="column">{editorial(items, meta)}</Layout>;
@@ -159,12 +178,10 @@ export function InsightsFormat({
   const meta: MetaOptions = { withDate: datesVary(items) };
   const lede = hero.lede?.trim();
   const newest = dateOf(items[0]?.publishedAt);
-  /* The hero's partner: how many there are and how fresh, a quiet line under the lede — so the
-     one-word title has a reason for its height. Not the eyebrow (a hero with a trail carries none,
-     owner, 11 Oct 2026) and not the record row (40px blue figures outweighed the title). */
-  const facts = [`${total} published`, newest ? `latest ${newest}` : undefined]
-    .filter(Boolean)
-    .join(' · ');
+  /* The hero's record: how many there are and how fresh, in the hero's mono record (its tags, the
+     label voice), never a second sentence under the lede and never a ruled facts strip. Not the
+     eyebrow (a hero with a trail carries none, owner, 11 Oct 2026). */
+  const record = [`${total} published`, ...(newest ? [`Latest ${newest}`] : [])];
 
   let content: ReactNode;
   if (items.length === 0) {
@@ -175,27 +192,48 @@ export function InsightsFormat({
     const dated = byEventDate(items);
     const upcoming = dated.filter((item) => Date.parse(item.event?.startsAt ?? '') >= now);
     const past = dated.filter((item) => !upcoming.includes(item));
+    /* The newest-to-come (else the latest) is the SHOWCASE — its picture large, its day at the
+       largest numeral on the page; the rest are dated rows, the numeral clearly outweighing the
+       title. A group's name is a label in the date column's voice, not a heading competing with
+       the titles. */
+    const [showcase] = [...[...upcoming].reverse(), ...past];
     const groups = [
-      { id: 'upcoming', title: 'Upcoming', items: [...upcoming].reverse() },
-      { id: 'past', title: 'Past', items: past },
+      {
+        id: 'upcoming',
+        title: 'Upcoming',
+        items: [...upcoming].reverse().filter((item) => item !== showcase),
+      },
+      { id: 'past', title: 'Past', items: past.filter((item) => item !== showcase) },
     ].filter((group) => group.items.length > 0);
     content = (
       <Layout rowGap="section">
+        {showcase ? (
+          <section aria-labelledby="events-next">
+            <Layout rowGap="block">
+              <h2 id="events-next" className={styles.groupTitle}>
+                {upcoming.includes(showcase) ? 'Next' : 'Latest'}
+              </h2>
+              <Showcase items={[showcase]} titleAs="h3" />
+            </Layout>
+          </section>
+        ) : null}
         {groups.map((group) => (
           <section key={group.id} aria-labelledby={`events-${group.id}`}>
-            <Layout rowGap="stack">
+            <Layout rowGap="block">
               <h2 id={`events-${group.id}`} className={styles.groupTitle}>
                 {group.title}
               </h2>
-              <Dates items={group.items} titleAs="h3" size="xl" />
+              <Dates items={group.items} titleAs="h3" size="lg" />
             </Layout>
           </section>
         ))}
       </Layout>
     );
   } else {
-    /* The lead: the newest piece with a picture, at the column's full width (a guide's beside its
-       words, so the index under it starts at once). */
+    /* The lead: the newest piece with a picture, featured — beside its words with the picture at
+       seven twelfths (the one 16:9 ratio, so it is large without filling the screen), its meta line
+       and standfirst under the title; a video's at the column's full width, a screen. The hub never
+       shows this piece, so arriving here is a reveal. */
     const lead = items.find(hasPicture);
     const rest = items.filter((item) => item !== lead);
     const pages: InsightsIndexItem[][] = [];
@@ -205,10 +243,15 @@ export function InsightsFormat({
     content = (
       <Layout rowGap="column">
         {lead ? (
-          shape === 'index' ? (
-            <Feature items={[lead]} meta={meta} titleAs="h2" />
+          shape === 'screens' ? (
+            <Cover items={[lead]} meta={{ ...meta, withDate: true }} titleAs="h2" />
           ) : (
-            <Cover items={[lead]} meta={meta} titleAs="h2" />
+            <Feature
+              items={[lead]}
+              meta={{ ...meta, withDate: true }}
+              titleAs="h2"
+              weight="picture"
+            />
           )
         ) : null}
         {pages.map((page, index) => (
@@ -247,7 +290,9 @@ export function InsightsFormat({
           <Breadcrumbs {...t} />
         ))}
         title={hero.title}
-        body={lede ? [lede, facts] : [facts]}
+        titleSize="mark"
+        body={lede ? [lede] : undefined}
+        tags={record}
         texture
         surface="paper"
       />
@@ -255,6 +300,7 @@ export function InsightsFormat({
       <Section surface="paper" aria-label={hero.title}>
         <IndexRail
           ariaLabel="Insights by type"
+          label="Formats"
           modes={[{ id: 'type', label: 'By type', items: formats }]}
         >
           {content}

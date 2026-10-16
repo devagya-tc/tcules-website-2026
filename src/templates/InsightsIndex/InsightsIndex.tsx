@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section } from '@/components';
+import { Layout, Section, type MediaImage } from '@/components';
 import { heroTrail } from '@/lib/trail';
 import {
   Breadcrumbs,
@@ -13,17 +13,17 @@ import {
 
 import {
   byEventDate,
-  Cover,
   CuratedSection,
   Dates,
   datesVary,
+  Feature,
+  Grid,
   hasPicture,
-  Index,
+  Headlines,
   LABEL,
   Pair,
   partition,
   Screen,
-  SectionClose,
   SectionHead,
   Split,
   type InsightsIndexItem,
@@ -57,18 +57,23 @@ export type InsightsIndexProps = {
   /** The view the page opens on: the route reads it from `?view=`. */
   view?: InsightsIndexView;
   /**
-   * The Lab: the other organisation's offer, on tint — the band the page closes on, the hub and every
-   * format page alike. A compact offer (its words and its link): with the commissioned illustration
-   * not yet drawn, the band carries no media slot rather than a placeholder (beauty round, 16 Oct
-   * 2026). ch02 closes every page "on paper or tint before the ink footer".
+   * The Lab: the other organisation's offer, on tint, before the close. Rendered ONLY with its
+   * picture (beauty round 3, 16 Oct 2026): as words alone on tint, after a feed of pictures, it read
+   * as a leftover rectangle and was the page's emptiest band. Until the Lab's illustration is drawn
+   * the band is held back, not shipped empty.
    */
   lab?: InsightsLab;
-  /** Rendered only with its action: a close without an ask is not one. */
+  /** The page's last beat, on paper before the ink footer. Rendered only with its action. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
 };
 
-/** The Lab's offer: the family's close. */
-export type InsightsLab = { heading: string; body?: string; action: HeroAction };
+/** The Lab's offer, with the picture it needs to be shown at all. */
+export type InsightsLab = {
+  heading: string;
+  body?: string;
+  action: HeroAction;
+  image?: MediaImage;
+};
 
 /* ── Decisions the template owns ──────────────────────────────────────────────── */
 
@@ -109,14 +114,16 @@ const topicAnchor = (topic: { id: string; label: string }) => {
  * claude.com/resources): the hero, then directly the curated column with the rail beside it.
  *
  *   A  hero      the trail, the display h1, the lede, the texture
- *   B  curated   the rail (BY TYPE / BY TOPIC, and the shown view's sections) beside the view:
- *                BY TYPE  a section per format, each in its own composition, closed by "All <format>"
- *                BY TOPIC a section per topic, formats mixed, no piece in two sections, the
- *                         compositions turning so no two neighbours match
+ *   B  curated   the rail (CURATE · BY TYPE / BY TOPIC, and the shown view's sections with their
+ *                counts) beside the view; every section opens on a one-line head carrying its
+ *                "All …" link, so it ends on its last piece:
+ *                BY TYPE  a section per format, each in its own composition — articles in threes
+ *                         over a row of headlines, events dated, videos a screen, guides a split
+ *                BY TOPIC a section per topic, formats mixed, no piece in two sections: a feature
+ *                         (alternating sides) or a pair over a row of headlines
  *                Both views are in the HTML; the switch shows one and holds it in `?view=`.
- *   C  lab       the other organisation's offer, on tint — the close (the page ends on tint before
- *                the ink footer)
- *   D  close     the ask, on paper, only with an action
+ *   C  lab       the other organisation's offer, on tint — only with its picture
+ *   D  close     the ask, on paper, before the ink footer
  *
  * There is no in-page filtering and no full feed: everything of a format lives on its own page.
  */
@@ -152,7 +159,7 @@ export function InsightsIndex({
   const lede = hero.lede?.trim();
 
   const typePanel = (
-    <Layout rowGap="section-open">
+    <Layout rowGap="section">
       {byType.map((section) => {
         const id = typeAnchor(section.kind);
         const count = section.items.length;
@@ -163,18 +170,16 @@ export function InsightsIndex({
             head={
               <SectionHead
                 id={id}
-                eyebrow={pieces(count)}
                 title={section.title}
-                lead={section.lead}
+                link={
+                  section.href
+                    ? {
+                        label: `All ${count} ${section.title.toLowerCase()}`,
+                        href: section.href,
+                      }
+                    : undefined
+                }
               />
-            }
-            close={
-              section.href ? (
-                <SectionClose
-                  label={`All ${count} ${section.title.toLowerCase()}`}
-                  href={section.href}
-                />
-              ) : undefined
             }
           >
             <TypeShape kind={section.kind} items={section.items} />
@@ -185,22 +190,16 @@ export function InsightsIndex({
   );
 
   const topicPanel = (
-    <Layout rowGap="section-open">
+    <Layout rowGap="section">
       {byTopic.map((section, index) => {
         const id = topicAnchor(section);
         return (
           <CuratedSection
             key={section.id}
             id={id}
-            head={
-              <SectionHead
-                id={id}
-                eyebrow={[section.group, pieces(section.size)].filter(Boolean).join(' · ')}
-                title={section.label}
-              />
-            }
+            head={<SectionHead id={id} title={section.label} />}
           >
-            <TopicShape items={section.items} shape={topicShapes[index] ?? 'split'} />
+            <TopicShape items={section.items} shape={topicShapes[index] ?? 'feature'} />
           </CuratedSection>
         );
       })}
@@ -214,6 +213,7 @@ export function InsightsIndex({
       items: byType.map((section) => ({
         label: section.title,
         href: `#${typeAnchor(section.kind)}`,
+        count: section.items.length,
       })),
       panel: typePanel,
     },
@@ -225,6 +225,7 @@ export function InsightsIndex({
             items: byTopic.map((section) => ({
               label: section.label,
               href: `#${topicAnchor(section)}`,
+              count: section.size,
             })),
             panel: topicPanel,
           },
@@ -250,6 +251,7 @@ export function InsightsIndex({
         {byType.length > 0 ? (
           <IndexRail
             ariaLabel="Browse insights"
+            label="Curate"
             modes={modes}
             initialMode={view}
             param="view"
@@ -265,8 +267,9 @@ export function InsightsIndex({
 }
 
 /**
- * The family's close, the hub's and every format page's: the Lab's offer on tint, then the ask on
- * paper (only with its action), so the two tinted bands never meet and every page ends alike.
+ * The family's close, the hub's and every format page's: the Lab's offer on tint (only with its
+ * picture), then the ask on paper, so tint never meets the ink footer and every page ends on its
+ * one primary action.
  */
 export function InsightsClose({
   lab,
@@ -277,13 +280,14 @@ export function InsightsClose({
 }) {
   return (
     <>
-      {lab ? (
+      {lab?.image ? (
         <CtaSection
           arrangement="offer"
           surface="tint"
           heading={lab.heading}
           body={lab.body?.trim() ? [lab.body] : undefined}
           actions={[lab.action]}
+          media={{ image: lab.image }}
         />
       ) : null}
       {closing?.action ? (
@@ -299,8 +303,6 @@ export function InsightsClose({
     </>
   );
 }
-
-const pieces = (count: number) => `${count} ${count === 1 ? 'piece' : 'pieces'}`;
 
 /** A set's lead: its newest piece with a picture, else its newest; then the rest in order. */
 function leadOf(items: readonly InsightsIndexItem[]) {
@@ -380,8 +382,8 @@ function TypeShape({
   });
   switch (kind) {
     case 'event':
-      /* Dated rows: the day as a numeral at each row's start, the picture at its end. */
-      return <Dates items={byEventDate(items).slice(0, 3)} />;
+      /* Dated rows: the day as an accent numeral at each row's start, the picture at its end. */
+      return <Dates items={byEventDate(items).slice(0, 3)} size="md" />;
     case 'video':
     case 'podcast': {
       /* The screen: the newest large, two beside it. */
@@ -399,51 +401,44 @@ function TypeShape({
     }
     case 'article':
     default: {
-      /* The cover, then a pair: the column's largest picture, then two at half — the format with the
-         most to show opens the page at its largest. */
-      const { lead, rest } = leadOf(items);
-      if (!lead) return null;
-      if (!hasPicture(lead)) {
-        const shown = items.slice(0, 5);
-        return <Split items={shown} meta={metaFor(shown)} />;
-      }
-      const next = partition(rest).pictured.slice(0, 2);
-      const meta = metaFor([lead, ...next]);
+      /* Threes, then a row of headlines — a different silhouette from the format page's opening, and
+         never its lead: the hub skips the newest pictured piece the format page features, so "All
+         articles" opens on a reveal, not a reprint. */
+      const { pictured, plain } = partition(items);
+      const tiles = pictured.length >= 4 ? pictured.slice(1, 4) : pictured.slice(0, 3);
+      const words = plain.slice(0, 3);
+      const meta = metaFor([...tiles, ...words]);
+      if (tiles.length < 3) return <Headlines items={items.slice(0, 3)} meta={meta} />;
       return (
-        <Layout rowGap="stack">
-          <Cover items={[lead]} meta={meta} />
-          {next.length === 2 ? <Pair items={next} meta={meta} /> : null}
+        <Layout rowGap="column">
+          <Grid items={tiles} meta={meta} />
+          {words.length >= 2 ? <Headlines items={words} meta={meta} /> : null}
         </Layout>
       );
     }
   }
 }
 
-type TopicShapeName = 'split' | 'pair' | 'cover';
+type TopicShapeName = 'feature' | 'feature-flipped' | 'pair';
 
 /**
- * The topic sections' compositions, in turn — the split, the pair, the cover — each section taking
- * the next one its pieces can fill (a pair needs two pictures), and never the one before it.
+ * The topic view's signature, in turn: a FEATURE (the lead's picture beside its words) alternating
+ * its side, with a PAIR every third section where two pictures allow — each over a row of headlines
+ * in which every format keeps its own anchor (an event its date, a watched piece its running time, a
+ * read one its reading time). No neighbour repeats the one before it.
  */
 function turnShapes(sets: readonly (readonly InsightsIndexItem[])[]): TopicShapeName[] {
-  const order: readonly TopicShapeName[] = ['split', 'pair', 'cover'];
   const out: TopicShapeName[] = [];
-  let turn = 0;
-  for (const set of sets) {
+  let side = false;
+  sets.forEach((set, index) => {
     const pictured = set.filter(hasPicture).length;
-    const fits = (shape: TopicShapeName) =>
-      shape === 'pair' ? pictured >= 2 : shape === 'cover' ? pictured >= 1 : true;
-    let shape: TopicShapeName = 'split';
-    for (let step = 0; step < order.length; step += 1) {
-      const candidate = order[(turn + step) % order.length] ?? 'split';
-      if (fits(candidate) && candidate !== out[out.length - 1]) {
-        shape = candidate;
-        turn += step + 1;
-        break;
-      }
+    if (index % 3 === 2 && pictured >= 2) {
+      out.push('pair');
+      return;
     }
-    out.push(shape);
-  }
+    out.push(side ? 'feature-flipped' : 'feature');
+    side = !side;
+  });
   return out;
 }
 
@@ -457,23 +452,22 @@ function TopicShape({
   const meta: MetaOptions = { withKind: true, withDate: datesVary(items) };
   const { pictured, plain } = partition(items);
   if (shape === 'pair') {
+    const two = pictured.slice(0, 2);
+    const rest = items.filter((item) => !two.includes(item));
     return (
-      <Layout rowGap="stack">
-        <Pair items={pictured.slice(0, 2)} meta={meta} />
-        {items.length > 2 ? (
-          <Index items={[...pictured.slice(2), ...plain]} meta={meta} />
-        ) : null}
+      <Layout rowGap="column">
+        <Pair items={two} meta={meta} />
+        {rest.length > 0 ? <Headlines items={rest} meta={meta} /> : null}
       </Layout>
     );
   }
-  if (shape === 'cover') {
-    const [lead, ...rest] = [...pictured, ...plain];
-    return (
-      <Layout rowGap="stack">
-        <Cover items={lead ? [lead] : []} meta={meta} />
-        {rest.length > 0 ? <Index items={rest} meta={meta} /> : null}
-      </Layout>
-    );
-  }
-  return <Split items={items} meta={meta} />;
+  const lead = pictured[0];
+  if (!lead) return <Headlines items={items} meta={meta} />;
+  const rest = [...pictured.slice(1), ...plain];
+  return (
+    <Layout rowGap="column">
+      <Feature items={[lead]} meta={meta} flip={shape === 'feature-flipped'} />
+      {rest.length > 0 ? <Headlines items={rest} meta={meta} /> : null}
+    </Layout>
+  );
 }

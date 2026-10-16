@@ -150,7 +150,12 @@ const formatLine = (page: InsightsPage, kind: InsightResourceKind) =>
 export const formatsWithContent = (page: InsightsPage) =>
   KINDS.filter((kind) => page.resources.items.some((item) => item.kind === kind));
 
-/** The Lab: the family's close, on the hub and on every format page, so they end alike. */
+/**
+ * The Lab's offer. The templates show it only with its picture, and the CMS holds none yet (the
+ * Lab's illustration is to be drawn): the band is held back until then rather than shipped as words
+ * alone on tint (beauty round 3, 16 Oct 2026). Strapi recommendation logged: an image on the
+ * insights page's `secondSection`.
+ */
 const labOf = (page: InsightsPage) =>
   page.lab?.action
     ? {
@@ -160,6 +165,20 @@ const labOf = (page: InsightsPage) =>
       }
     : undefined;
 
+/**
+ * The close: the page's last beat, the ask on paper before the ink footer. The CMS's closing section
+ * today is a newsletter prompt with no link ("Level up your UX knowledge" — Strapi's `fourthSection`
+ * has no link field), and the footer directly under it already carries that newsletter form, so it
+ * would be the same ask twice and an ask with nothing to click. Until the CMS's close carries its own
+ * action, the close is the specimen fixture's authored one: the reader's problem, and the way to
+ * tell us about it. Strapi recommendation logged: a link on `fourthSection`, which retires this.
+ */
+const CLOSE_STAND_IN = {
+  heading: 'Talk to us',
+  body: 'If one of these pieces describes a problem in your own product, tell us about it.',
+  action: { label: 'Tell us about it', href: ROUTES.contact },
+};
+
 const closingOf = (page: InsightsPage) =>
   page.closing?.action
     ? {
@@ -167,7 +186,14 @@ const closingOf = (page: InsightsPage) =>
         body: page.closing.description,
         action: { label: page.closing.action.label, href: page.closing.action.href },
       }
-    : undefined;
+    : CLOSE_STAND_IN;
+
+/**
+ * A topic's name as a heading sets it. The CMS writes the stage "0 to 1" with an arrow glyph
+ * ("0→1") the serif does not carry — it fell back to the sans mid-heading and read as a broken
+ * string. Said in words, the same name.
+ */
+const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
 export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIndexProps {
   return {
@@ -191,7 +217,7 @@ export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIn
       .flatMap((group) =>
         group.options.map((option) => ({
           id: option.id,
-          label: option.name,
+          label: topicName(option.name),
           group: group.label,
         })),
       ),
@@ -237,6 +263,7 @@ export function insightsFormatProps(
       label: formatTitle(page, k),
       href: pathFor(k),
       current: k === kind,
+      count: page.resources.items.filter((item) => item.kind === k).length,
     })),
     items: shown.map(toItem),
     pageSize: PAGE_SIZE,
