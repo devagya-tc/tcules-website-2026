@@ -4,7 +4,7 @@
    words, the stars that client gave, and who they are.
 
    Naming: --tsm-{part}-{role}
-     parts: ground | quote | name | role | rule | avatar | panel
+     parts: ground | quote | name | role | rule | avatar | panel | case
 
    Home round 3 (11 Oct 2026): the quote is SANS (the lead role on the card, body on the supporting
    card, lead-lg in the diptych's panel), the initials monogram is gone (banned: "the current
@@ -45,10 +45,28 @@
   --tsm-avatar-radius: var(--radius-full);
   /* The diptych's panel from 1440: the card ratio, so its edges are the case cover's. */
   --tsm-panel-ratio: var(--ratio-standard);
+  /* TestimonialCase (16 Oct 2026, round 7 of the selected-work card): one case and its client's
+     words as ONE card. Two rows on the card's ground: the 16:9 cover beside the claim (eyebrow,
+     h3, story, link), then the client's words in their own box across the card's full width,
+     centred: stars, quote, then the portrait beside name and role. The cover and the box are both
+     inset in the card, so they take the smaller radius inside the card's 8. */
+  --tsm-case-title-text: var(--text-h3);
+  --tsm-case-title-tracking: var(--text-h3-tracking);
+  --tsm-case-body-text: var(--text-body-lg);
+  --tsm-case-eyebrow-text: var(--text-eyebrow);
+  --tsm-case-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --tsm-case-media-ratio: var(--ratio-standard);
+  --tsm-case-inner-radius: var(--radius-4);
 }
 
 :root,
 [data-surface='paper'] {
+  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --tsm-case-voice-ground: var(--color-paper);
+  --tsm-case-role-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --tsm-case-media-rule: var(--color-neutral-200); /* decoration; 300 read too dark (owner, round 7) */
   --tsm-ground: var(--color-paper-deep);
   --tsm-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper */
@@ -60,6 +78,12 @@
 }
 
 [data-surface='tint'] {
+  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-voice-ground: var(--color-paper-deep);
+  --tsm-case-role-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800); /* 11.81:1 on paper */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper-deep */
@@ -71,6 +95,12 @@
 }
 
 [data-surface='ink'] {
+  --tsm-case-eyebrow-ink: var(--color-neutral-400);
+  --tsm-case-voice-ground: var(--color-neutral-800);
+  --tsm-case-role-ink: var(--color-neutral-300);
+  --tsm-case-title-ink: var(--color-white);
+  --tsm-case-body-ink: var(--color-neutral-300);
+  --tsm-case-media-rule: var(--color-neutral-700); /* decoration */
   --tsm-ground: var(--color-neutral-900);
   --tsm-quote-ink: var(--color-white);
   --tsm-quote-ink-quiet: var(--color-neutral-300);
@@ -82,6 +112,12 @@
 }
 
 [data-surface='blue'] {
+  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-voice-ground: var(--color-paper-deep);
+  --tsm-case-role-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --tsm-case-title-ink: var(--color-neutral-900);
+  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800);
   --tsm-quote-ink-quiet: var(--color-brandeis-50);
