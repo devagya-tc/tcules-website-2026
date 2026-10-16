@@ -391,3 +391,4 @@ export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } 
 
 /* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
 export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';
+export { IndexRail, type IndexRailItem, type IndexRailMode, type IndexRailProps } from './IndexRail';

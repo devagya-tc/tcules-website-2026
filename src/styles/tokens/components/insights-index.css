@@ -62,6 +62,7 @@
   --iix-topic-icon-ink: var(--color-brandeis-500); /* 6.17:1 — icons carry the accent */
   --iix-topic-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --iix-lead-ink: var(--color-neutral-700); /* a format block's lead, beside the rail */
   --iix-filter-label-ink: var(--color-neutral-600); /* 4.92:1 */
   --iix-toggle-ink: var(--color-neutral-900); /* 14.62:1 */
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the control's mark */
@@ -77,6 +78,7 @@
   --iix-topic-icon-ink: var(--color-brandeis-500); /* 5.51:1 */
   --iix-topic-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-lead-ink: var(--color-neutral-700); /* a format block's lead, beside the rail */
   --iix-filter-label-ink: var(--color-neutral-700); /* 7.27:1 */
   --iix-toggle-ink: var(--color-neutral-900); /* 13.06:1 */
   --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 5.51:1 */
@@ -92,6 +94,7 @@
   --iix-topic-icon-ink: var(--color-brandeis-300);
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-neutral-300);
+  --iix-lead-ink: var(--color-neutral-300); /* a format block's lead, beside the rail */
   --iix-filter-label-ink: var(--color-neutral-400); /* 8.05:1 */
   --iix-toggle-ink: var(--color-white);
   --iix-toggle-glyph-ink: var(--color-brandeis-300); /* 7.32:1 */
@@ -107,6 +110,7 @@
   --iix-topic-icon-ink: var(--color-white);
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --iix-lead-ink: var(--color-brandeis-50); /* a format block's lead, beside the rail */
   --iix-filter-label-ink: var(--color-brandeis-100); /* 4.91:1 */
   --iix-toggle-ink: var(--color-white); /* 6.23:1 */
   --iix-toggle-glyph-ink: var(--color-white); /* 6.23:1 */

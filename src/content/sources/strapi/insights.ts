@@ -204,7 +204,9 @@ function readingTime(resource: StrapiInsightsResource): string | undefined {
       (block) => block.__typename === 'ComponentBlogAndCasestudiesIframe',
     )?.title,
   );
-  return /\bmin(ute)?s?\s+read\b/iu.test(detail) ? detail.toLowerCase() : undefined;
+  /* Only the length: some iframe titles carry the date too ("14 Oct '26 · 17 Min Read"), and the
+     page sets the date itself, so the whole title put two dates on one line (16 Oct 2026). */
+  return detail.match(/\b\d+\s*min(ute)?s?\s+read\b/iu)?.[0]?.toLowerCase();
 }
 
 /**

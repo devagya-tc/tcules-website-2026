@@ -21,6 +21,7 @@ import {
   ContentSection,
   CtaRow,
   CtaSection,
+  IndexRail,
   ListCard,
   PageHero,
   Slider,
@@ -398,42 +399,58 @@ export function InsightsIndex({
 
       {collections.length > 0 ? <Collections collections={collections} /> : null}
 
-      {bands.map((band) => {
-        const head = {
-          id: anchorOf(band.kind),
-          heading: band.title,
-          headingId: `${anchorOf(band.kind)}-heading`,
-          lead: band.lead,
-        };
-        const shape = (
-          <FormatShape
-            kind={band.kind}
-            items={band.items}
-            title={band.title}
-            standIn={standIn}
-          />
-        );
-        /* "All …" at the end of the heading's row: the band's way out to the rest of its format. */
-        return band.href ? (
-          <ContentSection
-            key={band.kind}
-            {...head}
-            actionsAt="end"
-            actions={
-              <CtaRow
-                rule={false}
-                actions={[{ label: `All ${band.title.toLowerCase()}`, href: band.href }]}
-              />
-            }
-          >
-            {shape}
-          </ContentSection>
-        ) : (
-          <ContentSection key={band.kind} {...head}>
-            {shape}
-          </ContentSection>
-        );
-      })}
+      {bands.length > 0 ? (
+        /* The formats beside one rail (owner, 16 Oct 2026: "it just lacks that navigation"; the
+           IDEA of claude.com/resources). The rail browses BY TYPE — the format blocks below — or
+           BY TOPIC — the feed, filtered. The blocks keep their shapes; only their frame changed,
+           from full-width bands to blocks in the wide track. */
+        <Section surface="paper" aria-label="Insights by format">
+          <Layout columns={{ lg: [3, 9] }} colGap="section" rowGap="stack" align="start">
+            <IndexRail ariaLabel="Browse insights" modes={railModes(bands, feed)} />
+            <Layout rowGap="section">
+              {bands.map((band) => {
+                const id = anchorOf(band.kind);
+                return (
+                  <section
+                    key={band.kind}
+                    id={id}
+                    aria-labelledby={`${id}-heading`}
+                    className={styles.block}
+                  >
+                    <Layout rowGap="stack">
+                      <Layout rowGap="block">
+                        <Cluster
+                          justify="between"
+                          align="baseline"
+                          colGap="gutter"
+                          rowGap="text"
+                        >
+                          <h2 id={`${id}-heading`}>{band.title}</h2>
+                          {band.href ? (
+                            <CtaRow
+                              rule={false}
+                              actions={[
+                                { label: `All ${band.title.toLowerCase()}`, href: band.href },
+                              ]}
+                            />
+                          ) : null}
+                        </Cluster>
+                        {band.lead ? <p className={styles.blockLead}>{band.lead}</p> : null}
+                      </Layout>
+                      <FormatShape
+                        kind={band.kind}
+                        items={band.items}
+                        title={band.title}
+                        standIn={standIn}
+                      />
+                    </Layout>
+                  </section>
+                );
+              })}
+            </Layout>
+          </Layout>
+        </Section>
+      ) : null}
 
       {lab ? (
         lab.visual ? (
@@ -479,6 +496,27 @@ export function InsightsIndex({
 }
 
 const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
+
+/* The rail's two ways in. BY TYPE jumps to the format blocks on this page; BY TOPIC lands on the feed
+   filtered to one topic — every option of the CMS's groups except industry, which is a reader's
+   sector rather than a subject. A page with no topics gets the one list and no switch. */
+function railModes(
+  bands: readonly { kind: InsightsIndexKind; title: string }[],
+  feed: InsightsIndexFeed,
+) {
+  const byType = {
+    id: 'type',
+    label: 'By type',
+    items: bands.map((band) => ({ label: band.title, href: `#${anchorOf(band.kind)}` })),
+  };
+  const topics = feed.filters
+    .filter((group) => !/industry/i.test(group.label))
+    .flatMap((group) => group.options.filter((option) => !option.selected))
+    .map((option) => ({ label: option.label, href: option.href }));
+  return topics.length > 0
+    ? [byType, { id: 'topic', label: 'By topic', items: topics }]
+    : [byType];
+}
 
 /** A band whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
 function isVisual(
@@ -627,7 +665,9 @@ const card = (item: InsightsIndexItem): BlockCardSetItem => ({
 function Wide({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
   return (
     <BlockCardSet
-      lead={items.length === 3 ? 'wide' : 'none'}
+      /* Beside the rail (16 Oct 2026) the wide lead's [2, 1, 1] left its two companions about 200
+         wide and their titles five lines deep; three equal covers hold their titles to three. */
+      lead="none"
       cue="title"
       items={items.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn(item) }))}
     />
@@ -747,11 +787,12 @@ function Rail({
   standIn: StandIn;
 }) {
   return (
-    <Slider label={label} perView={3}>
+    /* Two in view beside the rail (16 Oct 2026): three left each card 265 wide under a 26px title. */
+    <Slider label={label} perView={2}>
       {items.map((item) => (
         <BlockCard
           key={item.id}
-          tracks={3}
+          tracks={2}
           size="md"
           title={item.title}
           body={bodyOf(item)}

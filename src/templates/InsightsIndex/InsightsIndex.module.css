@@ -168,3 +168,17 @@
     padding-block-start: var(--gap-gutter);
   }
 }
+
+/* A format block beside the rail (16 Oct 2026): it is the rail's jump target, so it clears the
+   sticky nav when jumped to. */
+.block {
+  min-inline-size: 0;
+  scroll-margin-block-start: var(--gap-section);
+}
+
+/* The block's one line of lead, under its heading: support, not a second heading. */
+.blockLead {
+  max-inline-size: var(--measure-body);
+  font: var(--text-body);
+  color: var(--iix-lead-ink);
+}
