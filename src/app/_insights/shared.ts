@@ -1,4 +1,5 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
+import { INSIGHT_FORMAT_LABEL, INSIGHT_FORMAT_ORDER } from '@/lib/insight-formats';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 import { blogPath } from '@/lib/routes';
 import type {
@@ -46,26 +47,13 @@ export const PAGE_SIZE = 12;
 /** From how many items an archive offers filters (more than one screen of tiles). */
 const FILTER_FROM = 6;
 
-/** The kinds in the family's order (the template's FORMAT_ORDER), for the format row. */
-export const KINDS: readonly InsightResourceKind[] = [
-  'article',
-  'event',
-  'podcast',
-  'research',
-  'video',
-  'interview',
-  'guide',
-];
+/** The kinds in the family's order, for the format row: the one list, in lib. */
+export const KINDS = INSIGHT_FORMAT_ORDER;
 
-export const FORMAT_NAME: Record<InsightResourceKind, string> = {
-  article: 'Articles',
-  guide: 'Guides',
-  research: 'Research',
-  podcast: 'Podcasts',
-  video: 'Videos',
-  event: 'Events',
-  interview: 'Interviews',
-};
+/** A format's plural name: the one label, in lib. */
+export const FORMAT_NAME: Record<InsightResourceKind, string> = Object.fromEntries(
+  INSIGHT_FORMAT_ORDER.map((kind) => [kind, INSIGHT_FORMAT_LABEL[kind].many]),
+) as Record<InsightResourceKind, string>;
 
 export const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
@@ -102,7 +90,9 @@ export function toItem(resource: InsightResource): InsightsIndexItem {
           cover: {
             src: image.src,
             alt: image.alt,
-            ...(image.width && image.height ? { width: image.width, height: image.height } : {}),
+            ...(image.width && image.height
+              ? { width: image.width, height: image.height }
+              : {}),
             ...(image.sources ? { sources: image.sources } : {}),
             ...(image.kind ? { kind: image.kind } : {}),
             ...(image.standIn ? { standIn: true } : {}),
@@ -211,7 +201,10 @@ export function archiveOf(
     (item) => passesExcept(item) && !(excluding && item.documentId === fields.exclude),
   );
   const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
-  const current = Math.min(pages, Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1));
+  const current = Math.min(
+    pages,
+    Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1),
+  );
   const visible = matches.slice(0, current * PAGE_SIZE);
 
   const toggle = (group: string, option: string | undefined) => {
@@ -257,7 +250,13 @@ export function archiveOf(
   const held = groups.flatMap((group) => {
     const option = group.options.find((candidate) => candidate.id === selected.get(group.id));
     return option
-      ? [{ id: `${group.id}-${option.id}`, label: option.label, href: toggle(group.id, undefined) }]
+      ? [
+          {
+            id: `${group.id}-${option.id}`,
+            label: option.label,
+            href: toggle(group.id, undefined),
+          },
+        ]
       : [];
   });
 

@@ -15,6 +15,9 @@
  * A path with no page behind it yet is still named here — the nav is the first consumer of a
  * route and it exists before the route does.
  */
+
+import type { InsightFormatKind } from './insight-formats';
+
 export const ROUTES = {
   home: '/',
 
@@ -145,6 +148,8 @@ export const SECTION_INDEXES: readonly string[] = [
   ROUTES.videos,
   ROUTES.events,
   ROUTES.podcasts,
+  ROUTES.research,
+  ROUTES.interviews,
   ROUTES.tools,
   ROUTES.glossary,
 ];
@@ -217,8 +222,10 @@ export const CASE_STUDY_SLUGS = {
   Benchmark: 'legacy-saas-modernisation-information-architecture',
   'Eden AI': 'unifying-workflow-creation-through-intelligent-search',
   Auxentios: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-  'Auxentios Technology': 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-  Scissors: 'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'Auxentios Technology':
+    'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  Scissors:
+    'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
   'GT Tools': 'redesigning-for-a-shopify-website-ux-design',
   ConnectX: 'ai-native-building-energy-product-connectx',
   BuildTwin: 'ai-quality-control-expert-review-buildtwin',
@@ -226,7 +233,8 @@ export const CASE_STUDY_SLUGS = {
   'Omny AI': 'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
   OctiFi: 'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
   Ryzeo: 'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
-  'Gold Image Printing': 'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'Gold Image Printing':
+    'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
   'The Wandering Raven': 'transforming-an-edtech-platform-into-an-engaging-learning-experience',
   'The Chain Hut': 'ux-ui-design-and-development-for-magento-of-a-silver-chain-store',
   'Kirana store payments': 'ux-research-for-kirana-store-payment-app',
@@ -257,8 +265,7 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
     'unifying-workflow-creation-through-intelligent-search',
   'gold-image-printing-web-to-print-erp-modernisation':
     'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
-  'gt-tools-shopify-product-discovery':
-    'redesigning-for-a-shopify-website-ux-design',
+  'gt-tools-shopify-product-discovery': 'redesigning-for-a-shopify-website-ux-design',
   'novus-insights-ai-survey-product-design':
     'saas-ux-ui-case-study-ai-for-market-research-automation',
   'octifi-mobile-lending-product-design':
@@ -278,15 +285,8 @@ export function caseStudyPlaceholderPath(slug: string): string {
   return `${ROUTES.caseStudies}#placeholder-case-${encodeURIComponent(slug)}`;
 }
 
-/** The insights formats, as the site names them. */
-export type InsightFormatKind =
-  | 'article'
-  | 'guide'
-  | 'research'
-  | 'podcast'
-  | 'video'
-  | 'event'
-  | 'interview';
+/** The insights formats: one union, in `insight-formats.ts`. */
+export type { InsightFormatKind } from './insight-formats';
 
 const INSIGHT_FORMAT_ROUTES: Record<InsightFormatKind, string> = {
   article: ROUTES.articles,
@@ -300,8 +300,8 @@ const INSIGHT_FORMAT_ROUTES: Record<InsightFormatKind, string> = {
 
 /**
  * One insights format's own listing ("All 42 articles" → /insights/articles). Typed against the
- * kinds, so the hub and the format pages never write a literal. Research and interviews have a name
- * but no page until they have content (the page 404s on an empty format).
+ * kinds, so the hub and the format pages never write a literal. Every kind has a page under
+ * src/app/insights/; a format with nothing published 404s there, so a page exists only with content.
  */
 export function insightFormatPath(kind: InsightFormatKind): string {
   return INSIGHT_FORMAT_ROUTES[kind];

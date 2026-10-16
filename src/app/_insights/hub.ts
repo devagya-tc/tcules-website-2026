@@ -3,7 +3,7 @@ import type { InsightsPage } from '@/content';
 import { glyphForRoute } from '@/lib/glyphs';
 import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
-import type { InsightsIndexKind, InsightsIndexProps } from '@/templates';
+import type { InsightsIndexProps } from '@/templates';
 
 import {
   formatLead,
@@ -38,7 +38,7 @@ export function insightsIndexProps(page: InsightsPage, hrefOf: FormatHref): Insi
     items: resources.map(toItem),
     featuredId: resources.find((item) => item.featured)?.documentId,
     formats: kinds.map((kind) => ({
-      kind: kind as InsightsIndexKind,
+      kind,
       title: formatTitle(page, kind),
       lead: formatLead(page, kind),
       href: hrefOf(kind),

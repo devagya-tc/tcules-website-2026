@@ -1,3 +1,4 @@
+import type { InsightFormatKind } from '@/lib/insight-formats';
 import type { ArticleSceneName } from '@/lib/sketches';
 import type { SiteFooterProps, SiteNavProps } from '@/patterns';
 
@@ -1254,7 +1255,13 @@ export type IdealAboutPage = {
   };
   testimonials: {
     heading: string;
-    items: Array<{ id: string; quoteHtml: string; name: string; role: string; company: string }>;
+    items: Array<{
+      id: string;
+      quoteHtml: string;
+      name: string;
+      role: string;
+      company: string;
+    }>;
   };
   record: { heading: string; rows: Array<[string, string]> };
   faq: { heading: string; items: Array<{ question: string; answerHtml: string }> };
@@ -1319,14 +1326,7 @@ export type InsightTaxonomy = {
  * four of them today; guides, research and videos are carried by the view model so the page is
  * designed for them before the CMS has them (docs/strapi-changes.md § 20).
  */
-export type InsightResourceKind =
-  | 'article'
-  | 'guide'
-  | 'research'
-  | 'event'
-  | 'interview'
-  | 'podcast'
-  | 'video';
+export type InsightResourceKind = InsightFormatKind;
 
 export type InsightResource = {
   documentId: string;
