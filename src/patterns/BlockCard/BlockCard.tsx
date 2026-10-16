@@ -308,8 +308,9 @@ export type BlockCardProps = {
    */
   meta?: string;
   /**
-   * One labelled fact about the work, set as the card's foot: a hairline, the label in the mono
-   * voice, the value in ink under it ("Our role" / "research and product design"). A case card's
+   * One labelled fact about the work, set as the card's foot with no rule of its own (the card's
+   * separator is the only one): the label in the mono voice, the value in ink under it ("Our role" /
+   * "research and product design"). A case card's
    * role, an article's author, a resource's format. Content, so it is a string pair the caller reads
    * from the record; the card draws the key above its value (never beside it) and decides the rest.
    * It sits above the cta and moves with it to the foot of a stretched card.

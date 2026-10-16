@@ -12,6 +12,7 @@ import type {
 } from '@/lib/corpus-types';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
+import { ROUTES } from '@/lib/routes';
 import {
   CaseStudyIndex,
   corpusEnquiryForm,
@@ -30,10 +31,8 @@ import {
  *
  * `_corpus` is underscore-prefixed, so Next does not route it.
  */
-export const CASE_INDEX_ROUTE = '/case-studies';
-
 export async function caseIndexMetadata(): Promise<Metadata> {
-  const page = await getCorpusPage(CASE_INDEX_ROUTE);
+  const page = await getCorpusPage(ROUTES.caseStudies);
   return page ? corpusMetadata(page) : { title: 'Case studies | Tcules' };
 }
 
@@ -200,7 +199,7 @@ function sectionOf(
 }
 
 export async function CaseIndexRoute() {
-  const page = await getCorpusPage(CASE_INDEX_ROUTE);
+  const page = await getCorpusPage(ROUTES.caseStudies);
   if (!page) notFound();
   const [refs, ratings] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),

@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
 
 import { Layout, Section } from '@/components';
-import { CASE_INDEX_ROUTE } from '@/app/_corpus/case-index';
 import { isCorpusCase } from '@/app/_corpus/case';
 import { isCorpusLongform } from '@/app/_corpus/longform';
 import { isCorpusOffer } from '@/app/_corpus/offer';
 import { isCorpusTool } from '@/app/_corpus/tool';
 import { listCorpusPages } from '@/content';
-import { designCorpusPagePath } from '@/lib/routes';
+import { designCorpusPagePath, ROUTES } from '@/lib/routes';
 import { ListCard } from '@/patterns';
 import { planOffer } from '@/templates';
 
@@ -38,7 +37,7 @@ export default async function CorpusPageIndex() {
   const tools = pages.filter((page) => isCorpusTool(page.route));
   const longform = pages.filter((page) => isCorpusLongform(page.route));
   const about = pages.find((page) => page.route === '/about');
-  const index = pages.find((page) => page.route === CASE_INDEX_ROUTE);
+  const index = pages.find((page) => page.route === ROUTES.caseStudies);
 
   return (
     <Section>

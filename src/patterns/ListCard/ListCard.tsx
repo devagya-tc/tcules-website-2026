@@ -33,9 +33,9 @@ import styles from './ListCard.module.css';
  * with `width` and `height` OPTIONAL (fix round 1, 16 Oct 2026), as on BlockCard: the box is a fixed
  * `--lcrd-thumbnail-ratio` crop, so the two numbers never lay anything out. A record without them is
  * given the box's own 16 × 9 here, once, loses its `sources` (a srcset needs the master's true
- * width) and is flagged `placeholderSize` — rather than every caller inventing a fallback. ListCard owns the box — 160 inline, the shared 3:2 cover crop — and
- * `Media` owns everything inside it: the srcset, the lazy load, the panel. The edge is the box's: a
- * radius and no frame, for every kind (§ 5.3). `alt` is
+ * width) and is flagged `placeholderSize` — rather than every caller inventing a fallback. ListCard owns the box — 160 inline, the shared 16:9 cover crop
+ * (`--ratio-standard`) — and `Media` owns everything inside it: the srcset, the lazy load, the
+ * panel. The edge is the box's: a radius and a hairline edge, for every kind (owner, 13 Oct 2026). `alt` is
  * required by the record even when its right value is `""`, so decoration is chosen, never omitted.
  *
  * Per ch05 § 9 and ruling C1 a thumbnail is for case-study and insight/resource rows only, and it
