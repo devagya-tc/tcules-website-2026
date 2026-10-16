@@ -38,28 +38,42 @@ export type InsightsFormatProps = {
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
 };
 
-/** The grid's turn: a pictured pair, a row of headlines, a pictured trio, a row of headlines. */
-type Beat = 'pair' | 'trio' | 'plain';
-const BEATS: readonly Beat[] = ['pair', 'plain', 'trio', 'plain'];
+/** A beat of the grid: a pictured row of two or three, a lone picture laid beside its words, or a
+    row of headlines. */
+type Beat = 'pair' | 'trio' | 'single' | 'plain';
 
 /**
- * One page's worth of pieces composed into beats, each beat its own shape — a pair of pictures at
- * the larger step, a row of three, a row of headlines — turning so the grid never runs one
- * rectangle down the page. Pictured and typographic pieces each keep their date order.
+ * How a run of pictured pieces splits into rows: twos and threes, turning, and never a row with a
+ * hole in it — a remainder of one borrows from the row before, and a lone piece is laid beside its
+ * words instead of standing in half a row.
+ */
+function rowsOf(n: number, turn = 0): number[] {
+  if (n <= 0) return [];
+  if (n <= 3) return [n];
+  if (n === 4) return [2, 2];
+  const first = turn % 2 === 0 ? 2 : 3;
+  const rest = n - first;
+  return rest === 1
+    ? [first === 2 ? 3 : 2, ...rowsOf(n - (first === 2 ? 3 : 2), turn + 1)]
+    : [first, ...rowsOf(rest, turn + 1)];
+}
+
+/**
+ * One page's worth of pieces composed into beats, each its own shape — a pair of pictures at the
+ * larger step, a row of three, a row of headlines — turning so the grid never runs one rectangle
+ * down the page. Pictured and typographic pieces each keep their date order; a row of headlines
+ * follows every pictured row while there are headlines to give.
  */
 function beats(items: readonly InsightsIndexItem[]) {
   const pictured = items.filter(hasPicture);
   const plain = items.filter((item) => !hasPicture(item));
   const out: { beat: Beat; items: InsightsIndexItem[] }[] = [];
-  let turn = 0;
-  while (pictured.length > 0 || plain.length > 0) {
-    const beat = BEATS[turn++ % BEATS.length]!;
-    const take =
-      beat === 'plain'
-        ? plain.splice(0, 3)
-        : pictured.splice(0, beat === 'pair' ? 2 : 3);
-    if (take.length > 0) out.push({ beat, items: take });
+  for (const size of rowsOf(pictured.length)) {
+    const set = pictured.splice(0, size);
+    out.push({ beat: size === 1 ? 'single' : size === 2 ? 'pair' : 'trio', items: set });
+    if (plain.length > 0) out.push({ beat: 'plain', items: plain.splice(0, 3) });
   }
+  while (plain.length > 0) out.push({ beat: 'plain', items: plain.splice(0, 3) });
   return out;
 }
 
@@ -130,13 +144,33 @@ export function InsightsFormat({
               ) : null}
               {pages.map((page, index) =>
                 page.length > 0 ? (
-                  <div key={index} id={index > 0 ? `page-${index + 1}` : undefined} className={styles.page}>
+                  <div
+                    key={index}
+                    id={index > 0 ? `page-${index + 1}` : undefined}
+                    className={styles.page}
+                  >
                     <Layout rowGap="column">
                       {beats(page).map(({ beat, items: set }, b) =>
                         beat === 'pair' ? (
                           <Pair key={b} items={set} withKind={false} titleAs="h2" />
+                        ) : beat === 'single' && set[0] ? (
+                          <ul key={b}>
+                            <Teaser
+                              {...teaserOf(set[0], false)}
+                              arrangement="beside"
+                              size="lg"
+                              titleAs="h2"
+                              sizes={CARD_TWO_TRACKS}
+                            />
+                          </ul>
                         ) : (
-                          <Layout key={b} as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+                          <Layout
+                            key={b}
+                            as="ul"
+                            columns={{ md: 3 }}
+                            colGap="gutter"
+                            rowGap="column"
+                          >
                             {set.map((item) => (
                               <Teaser
                                 key={item.id}
@@ -154,9 +188,10 @@ export function InsightsFormat({
                   </div>
                 ) : null,
               )}
-              <Cluster colGap="block" rowGap="text" align="center">
-                <p className={styles.count}>{`${items.length} of ${total}`}</p>
-                {moreHref ? (
+              {moreHref ? (
+                /* Where the reader is, then the way on — only while there is more to show. */
+                <Cluster colGap="block" rowGap="text" align="center">
+                  <p className={styles.count}>{`${items.length} of ${total}`}</p>
                   <Button
                     as="a"
                     href={moreHref}
@@ -166,8 +201,8 @@ export function InsightsFormat({
                   >
                     Show more
                   </Button>
-                ) : null}
-              </Cluster>
+                </Cluster>
+              ) : null}
             </Layout>
           )}
         </IndexRail>

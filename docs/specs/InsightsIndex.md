@@ -1,5 +1,20 @@
 # InsightsIndex — template specification
 
+> **Superseded in structure, 16 Oct 2026 (owner).** The hub is now a CURATED page, after the idea of
+> claude.com/resources: the hero, then directly the curated column with IndexRail beside it. The rail's
+> switch (BY TYPE / BY TOPIC, mono capitals) changes the whole view, held in `?view=topic`; both views
+> are server-rendered. BY TYPE is a section per format in its own shape (articles: feature + tiles
+> beside headlines; events: dated rows; videos: a screen and two minis; guides: a pair + headlines),
+> each ending in "All <format>" → the format page. BY TOPIC is a section per CMS topic (industry
+> excluded), formats mixed, no piece in two sections, its shape turning. Removed: the featured lead +
+> headlines, the format jumps under the hero, the topic collections and the whole feed (filters,
+> month river, Show more) — no in-page filtering anywhere. The format pages (`/insights/articles` …)
+> now exist as **InsightsFormat** in the same folder: a big hero, the rail as a format picker, the
+> newest piece with a picture featured large, then a grid of turning beats with a server-rendered
+> Show more (`?page=n`). Every piece is a **Teaser** (tier 2): held without an edge, its own picture
+> or none — never a stand-in. Lab moved from ink to tint (ch02: a page closes on paper or tint before
+> the ink footer). The sections below record the 13 Oct design and are kept for its reasoning.
+
 ## 0 · Front matter
 
 | | |

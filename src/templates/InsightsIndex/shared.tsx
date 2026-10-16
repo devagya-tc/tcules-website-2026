@@ -231,7 +231,10 @@ export function Rows({
   );
 }
 
-/** A section's head: its h2, the line under it, and the way to everything in it. */
+/**
+ * A section's head, split as an editorial head is: the h2 on the left, and on the right its one line
+ * with the way to everything in it, set on the h2's last line. A head with neither stands alone.
+ */
 export function SectionHead({
   id,
   title,
@@ -243,25 +246,32 @@ export function SectionHead({
   lead?: string;
   all?: { label: string; href: string };
 }) {
+  const heading = (
+    <h2 id={`${id}-heading`} className={styles.sectionTitle}>
+      {title}
+    </h2>
+  );
+  const line = lead?.trim();
+  if (!line && !all) return heading;
   return (
-    <Layout rowGap="text">
-      <Cluster justify="between" align="baseline" colGap="gutter" rowGap="text">
-        <h2 id={`${id}-heading`} className={styles.sectionTitle}>
-          {title}
-        </h2>
+    <Layout columns={{ md: [1, 1] }} colGap="gutter" rowGap="text" align="end">
+      {heading}
+      <Layout rowGap="text">
+        {line ? <p className={styles.sectionLead}>{line}</p> : null}
         {all ? (
-          <Button
-            as="a"
-            href={all.href}
-            emphasis="link"
-            tone="primary"
-            icon={<Icon name="arrow-right" />}
-          >
-            {all.label}
-          </Button>
+          <Cluster>
+            <Button
+              as="a"
+              href={all.href}
+              emphasis="link"
+              tone="primary"
+              icon={<Icon name="arrow-right" />}
+            >
+              {all.label}
+            </Button>
+          </Cluster>
         ) : null}
-      </Cluster>
-      {lead?.trim() ? <p className={styles.sectionLead}>{lead}</p> : null}
+      </Layout>
     </Layout>
   );
 }

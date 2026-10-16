@@ -59,6 +59,8 @@
   --tsr-thumb-inline-phone: 6rem;
   /* A row's standfirst: two lines, a taste of the piece. */
   --tsr-row-body-lines: 2;
+  /* A small tile's standfirst (md, sm): three lines. */
+  --tsr-tile-body-lines: 3;
 
   /* The play mark on a watched piece: a round chip in the image's foot-start corner. Optical
      sizes from the ramp: the chip, its glyph, its inset from the corner. */

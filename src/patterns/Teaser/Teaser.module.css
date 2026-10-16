@@ -74,6 +74,11 @@
     display: none;
   }
 
+  /* A compact row's thumbnail is too small to carry the play mark, as a row's is. */
+  .compact .play {
+    display: none;
+  }
+
   .compactPicture,
   .thumb,
   .sizeXl .thumb,
@@ -162,13 +167,21 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* A row is a list entry: its standfirst is a taste, held to two lines, so rows keep one rhythm. */
-.row .body {
+/* A row is a list entry and a small tile one of a set: the standfirst is a taste, held to a few
+   lines, so a set keeps one rhythm however long the CMS's sentence runs. */
+.row .body,
+.sizeMd .body,
+.sizeSm .body {
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tsr-tile-body-lines);
+  line-clamp: var(--tsr-tile-body-lines);
+  overflow: hidden;
+}
+
+.row .body {
   -webkit-line-clamp: var(--tsr-row-body-lines);
   line-clamp: var(--tsr-row-body-lines);
-  overflow: hidden;
 }
 
 .sizeXl .title {

@@ -55,8 +55,11 @@ export type InsightsIndexProps = {
   /** The view the page opens on: the route reads it from `?view=`. */
   view?: InsightsIndexView;
   /**
-   * The Lab: the other organisation's offer, the page's one dark band (ink). `visual` is the image it
-   * carries beside its words — a register placeholder until the commissioned illustration exists.
+   * The Lab: the other organisation's offer, on tint — the band the page closes on. It was ink while
+   * the feed stood between it and the footer; with the feed gone an ink Lab ran straight into the ink
+   * footer as one dark slab, and ch02 closes every page "on paper or tint before the ink footer"
+   * (16 Oct 2026). `visual` is the image it carries beside its words — a register placeholder until
+   * the commissioned illustration exists.
    */
   lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
   /** Rendered only with its action: a close without an ask is not one. */
@@ -86,7 +89,16 @@ const PER_TOPIC = 4;
 const TOPIC_FLOOR = 3;
 
 const typeAnchor = (kind: InsightsIndexKind) => `type-${kind}`;
-const topicAnchor = (id: string) => `topic-${id}`;
+/** A topic's anchor from its label ("Design System" → #topic-design-system): a fragment a reader can
+    read and share. The CMS id stands in where a label has no letters or digits. */
+const topicAnchor = (topic: { id: string; label: string }) => {
+  const slug = topic.label
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `topic-${slug || topic.id}`;
+};
 
 /**
  * InsightsIndex — the insights hub as a CURATED page (owner, 16 Oct 2026; the idea of
@@ -97,8 +109,8 @@ const topicAnchor = (id: string) => `topic-${id}`;
  *                BY TYPE  a section per format, each in its own shape, ending in "All <format>"
  *                BY TOPIC a section per topic, formats mixed, no piece in two sections
  *                Both views are in the HTML; the switch shows one and holds it in `?view=`.
- *   C  lab       the other organisation's offer, on ink
- *   D  close     the ask, on tint, only with an action
+ *   C  lab       the other organisation's offer, on tint (the page closes on tint before the ink footer)
+ *   D  close     the ask, on paper, only with an action
  *
  * There is no in-page filtering and no full feed: everything of a format lives on its own page.
  */
@@ -160,7 +172,7 @@ export function InsightsIndex({
   const topicPanel = (
     <Layout rowGap="section-open">
       {byTopic.map((section, index) => {
-        const id = topicAnchor(section.id);
+        const id = topicAnchor(section);
         return (
           <CuratedSection
             key={section.id}
@@ -191,7 +203,7 @@ export function InsightsIndex({
             label: 'By topic',
             items: byTopic.map((section) => ({
               label: section.label,
-              href: `#${topicAnchor(section.id)}`,
+              href: `#${topicAnchor(section)}`,
             })),
             panel: topicPanel,
           },
@@ -233,7 +245,7 @@ export function InsightsIndex({
             heading={lab.heading}
             headingId="lab-heading"
             lead={lab.body?.trim() ? lab.body : undefined}
-            surface="ink"
+            surface="tint"
             arrangement="beside"
             actions={<CtaRow rule={false} actions={[lab.action]} />}
           >
@@ -242,7 +254,7 @@ export function InsightsIndex({
         ) : (
           <CtaSection
             arrangement="offer"
-            surface="ink"
+            surface="tint"
             heading={lab.heading}
             body={lab.body?.trim() ? [lab.body] : undefined}
             actions={[lab.action]}
@@ -251,9 +263,10 @@ export function InsightsIndex({
       ) : null}
 
       {closing?.action ? (
+        /* Paper, so it never touches the tint Lab: two tinted bands are never adjacent. */
         <CtaSection
           arrangement="open"
-          surface="tint"
+          surface="paper"
           eyebrow={closing.eyebrow || undefined}
           heading={closing.heading}
           body={closing.body?.trim() ? [closing.body] : undefined}
