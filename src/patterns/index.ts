@@ -373,6 +373,9 @@ export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps }
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
 export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
 
+/* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
+export { Reasons, type ReasonsArrangement, type ReasonsItem, type ReasonsProps } from './Reasons';
+
 /* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
 export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
 

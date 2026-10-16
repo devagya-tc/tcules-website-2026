@@ -223,6 +223,11 @@ const SPECIMENS = [
         note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
       },
       {
+        href: '/design/reasons',
+        name: 'Reasons',
+        note: 'why choose us — six argued reasons each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, three reasons, a bare head, tint',
+      },
+      {
         href: '/design/voice-ledger',
         name: 'VoiceLedger',
         note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",
