@@ -86,12 +86,14 @@
      `stack` inset. Both apply from 1024 only: below it there is no panel (the module says why). */
   --cta-panel-radius-raised: var(--radius-16);
   --cta-panel-inset-raised: var(--gap-stack);
+  /* The panel's block inset: a `column` (owner, 16 Oct 2026: "more vertical padding inside the
+     island"). The panel sets the island box's height, so its block air is the island's too. */
+  --cta-panel-inset-raised-block: var(--gap-column);
   /* The copy column's foot from 1024: the island's overhang (64, `column`, duplicated by value from
-     --isl-overhang on purpose: token rule 6) plus a `block` of the island's own air, so the lede
-     sits a block above the island's lower edge while the drawing above it starts level with the
-     panel's top. A block, not a stack: at a stack the copy column outgrew the three-field panel and
-     left it a hollow foot. */
-  --cta-island-foot: calc(var(--gap-column) + var(--gap-block));
+     --isl-overhang on purpose: token rule 6) plus a `stack` of the island's own air, so the lede
+     sits a stack above the island's lower edge while the drawing above it starts level with the
+     panel's top (owner, 16 Oct 2026: more vertical air inside the island). */
+  --cta-island-foot: calc(var(--gap-column) + var(--gap-stack));
   /* The drawing's width in the island close: the designer's desk at 200 is 232 tall, which with the
      h2 and its lede keeps the copy column inside the three-field panel's height, so the panel has
      no hollow foot. A component size. */

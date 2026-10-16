@@ -299,7 +299,7 @@
 
 @media (min-width: 1024px) {
   .formPanelRaised {
-    padding: var(--cta-panel-inset-raised);
+    padding: var(--cta-panel-inset-raised-block) var(--cta-panel-inset-raised);
     background: var(--cta-panel-ground);
     border: var(--border-width-hairline) solid var(--cta-panel-edge);
     border-radius: var(--cta-panel-radius-raised);

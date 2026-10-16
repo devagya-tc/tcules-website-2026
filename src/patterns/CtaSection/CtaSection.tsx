@@ -1000,7 +1000,7 @@ export function CtaSection(props: CtaSectionProps) {
      `block` above the heading, as a head's lead-in rather than a block of its own. Both
      tracks STRETCH to the row: the panel is always the island box's full height, so it stands 64
      proud at the top and the foot whichever column is taller, and the copy column carries the
-     island's foot as its own bottom padding, so the lede sits a block above the island's lower
+     island's foot as its own bottom padding, so the lede sits a stack above the island's lower
      edge. Below 1024 it is an ordinary island: the drawing, the lede, then the form, stacked on the
      island's ground with no panel (the module says why). */
   if (props.island && hasForm) {

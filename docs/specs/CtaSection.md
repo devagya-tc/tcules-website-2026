@@ -1015,11 +1015,12 @@ of a designer's desk, never cropped, facing the form, above the heading. The own
   texture" is amended for this close.
 - **Tracks.** `{ lg: [2, 3], xl: [5, 7] }` at `section` (the form in the larger track; [6, 5] read as "the form itself feels too small", owner). Both tracks stretch, so the panel is always the
   island box's full height and stands proud at both edges whichever column is taller. The copy
-  column's foot is `--cta-island-foot` (the overhang plus a `block`), so the lede sits a block above
+  column's foot is `--cta-island-foot` (the overhang plus a `stack`), so the lede sits a stack above
   the island's lower edge. At [1, 1] from 1024 the optional field's cue was cut short.
 - **The raised panel** (`.formPanelRaised`, from 1024): paper, `--cta-panel-radius-raised` (16) under
   the island's 24, a hairline `--cta-panel-edge` (a paper panel on a paper band disappears where it
-  rises out of the island; this is the panel's one edge, still no shadow), and a `stack` inset. Below
+  rises out of the island; this is the panel's one edge, still no shadow), a `column` block inset
+  and a `stack` inline inset. Below
   1024 there is no panel — nothing rises out of the island there, and a panel inside the island's 32
   phone inset left the form 214 of its 256 floor — so the form sits on the island's ground.
 - **The form** is the caller's: the home close passes `fields="line"` and `submit="inline"` through
