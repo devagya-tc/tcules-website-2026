@@ -647,3 +647,29 @@ proposals below are where that design asks something of the copy.
 - **Problem:** the hero carries "Selected Product Design work: Doodle · Dealpath · Eden AI · Auxentios · Scissors". The page lists those cases in full further down ("More complex products we have made easier to use"), so the line only repeats that list. Set as a line of links under the hero it also read as unfinished (owner, 11 Oct 2026).
 - **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
 - **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
+
+### P47 · `/` · selected-work · the brief for the featured case card (TestimonialCase)
+
+- **Problem:** the featured cases are now ONE card each (owner, 16 Oct 2026): a 16:9 cover beside
+  the claim, with the client's words in a box inside the card under both. The card was designed for
+  the content it should carry, not for the copy as it stands, so this is the brief that content
+  should be written to. Today's copy mostly fits; three things are missing (below).
+- **Proposal:** each featured case supplies these fields.
+
+  | Field | Limit | Notes |
+  |---|---|---|
+  | Eyebrow | ≤ 32 characters | The client, optionally its discipline ("Doodle · Product design"). Today the build takes the name before the title's colon. |
+  | Claim | 4–8 words, ≤ 48 characters | The card's h3, two lines at most beside the cover. No client name: the eyebrow carries it. |
+  | Result | 1–2 sentences, ≤ 35 words | What changed for the client's users. Today's stories (30–32 words) fit. |
+  | Link label | "Read the {client} case" | As now. |
+  | Cover | 16:9 master, ≥ 1360 × 765 | Cropped to 16:9 at every width, with a recorded focal point; ruled with a light hairline. One master per case ends the cropping (docs/image-register.md). |
+  | Quote | ≤ 35 words, ≤ 200 characters | The client's own words, whole. Two lines at 1440, about seven on a phone. Doodle (33 words) and Eden AI (35) fit. |
+  | Speaker | name, role, company | Shown as a portrait beside name over "role, company". |
+  | Rating | out of 5, in halves | Shown as stars only, no numeral. |
+  | Portrait | square, ≥ 192 × 192 | A circle; with none the card shows no portrait (initials are banned). |
+
+  Missing today: **Stephanie Leue's role** (the card shows "Doodle" alone), **a portrait of Samy
+  Melaine**, and **16:9 cover masters** for both cases.
+- **Why:** with every field inside its limit the card holds its shape at 1440 and on a phone, and
+  the quote box stays the card's foot rather than its largest part. Until the gaps are filled the
+  copy renders as written.

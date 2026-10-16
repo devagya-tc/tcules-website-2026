@@ -158,27 +158,38 @@
 }
 
 /* ── TestimonialCase: the case and its client's words as one card ─────────────────
-   The boxed card's ground, inset and radius (`.box`), at the scale of a featured case. */
+   The card's ground and 8 radius; a `text` inset, so the cover and the voice box sit in it like
+   prints on a mat. Two rows, `text` apart, owned by the Layout inside. */
 .caseCard {
   min-inline-size: 0;
-  padding: var(--gap-gutter);
+  padding: var(--gap-text);
   background: var(--tsm-ground);
   border-radius: var(--tsm-radius);
 }
 
-/* The cover: the card ratio, ruled at the placement (Media `edge="placement"`), as every card cover
-   is, so a capture's own edge does not sit inside it as a second line. */
+/* The cover: the card ratio, ruled at the placement (Media `edge="placement"`) in the case's own
+   lighter hairline, so the capture separates from the card's ground. */
 .caseMedia {
   display: block;
   min-inline-size: 0;
   aspect-ratio: var(--tsm-case-media-ratio);
   overflow: hidden;
   border: var(--tsm-rule-width) solid var(--tsm-case-media-rule);
-  border-radius: var(--tsm-case-media-radius);
+  border-radius: var(--tsm-case-inner-radius);
 }
 
+/* The claim's column: its own inset (a `gutter` block, a `text` inline), so the words stand off the
+   card's edge and the cover by more than the mat. Padding inside the part, never a margin. */
 .caseCopy {
   min-inline-size: 0;
+  padding: var(--gap-gutter) var(--gap-text);
+}
+
+.caseEyebrow {
+  font: var(--tsm-case-eyebrow-text);
+  letter-spacing: var(--tsm-case-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--tsm-case-eyebrow-ink);
 }
 
 .caseTitle {
@@ -200,9 +211,23 @@
   color: inherit;
 }
 
-/* The seam between the case and the client: one hairline across the card's inner width. */
-.caseRule {
-  inline-size: 100%;
-  border: 0;
-  border-block-start: var(--tsm-rule-width) solid var(--tsm-rule);
+/* The client's words: their own box across the card's full width, centred, on the voice ground
+   (the card's ground one step apart), at the inner radius. A `gutter` block and `block` inline
+   inset: the box is a container, so the gap scale names its padding; the quote's own measure
+   (.quote, 75ch) keeps the line from running the box's width. */
+.caseVoice {
+  min-inline-size: 0;
+  padding: var(--gap-gutter) var(--gap-block);
+  background: var(--tsm-case-voice-ground);
+  border-radius: var(--tsm-case-inner-radius);
+  text-align: center;
+}
+
+/* The speaker sits as a left-set pair beside the portrait, the pair itself centred by the stack. */
+.caseVoice .attribution {
+  text-align: start;
+}
+
+.caseVoice .role {
+  color: var(--tsm-case-role-ink);
 }

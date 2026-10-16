@@ -495,25 +495,27 @@ export function TestimonialBeside({
 /* ── The case with its client's words, as one card ──────────────────────────────── */
 
 export type TestimonialCaseProps = {
-  /** The case's claim, as authored ("Doodle: meeting times people will actually keep"). */
+  /** A short label above the claim: the client, optionally its discipline ("Doodle · Product design"). */
+  eyebrow?: string;
+  /** The case's claim ("Meeting times people will actually keep"). */
   title: string;
   /** Default `h3`: a case under the band's h2. */
   titleAs?: 'h2' | 'h3' | 'h4';
-  /** The story, plain text. `bodyHtml` wins when both are given. */
+  /** The result, plain text. `bodyHtml` wins when both are given. */
   body?: string;
-  /** The story as trusted, content-seam-sanitised HTML, one paragraph each. */
+  /** The result as trusted, content-seam-sanitised HTML, one paragraph each. */
   bodyHtml?: readonly string[];
   /** The case page. */
   href: string;
   /** "Read the Doodle case". Button sets the label's case, so pass ordinary capitalisation. */
   ctaLabel: string;
-  /** The evidence, framed at the card ratio and cropped at its `focus`. */
+  /** The evidence, framed at the card ratio (16:9) and cropped at its `focus`. */
   image: MediaImage;
-  /** What the client said. Without a valid quote the card is still the case, with no voice row. */
+  /** What the client said. Without a valid quote the card is still the case, with no voice box. */
   item: TestimonialItem;
   /**
-   * The cover and the quote on the END from 1024, the claim and the speaker at the start. Visual
-   * only: the DOM keeps the claim's order, so a phone and a screen reader meet the case first.
+   * The cover on the END from 1024, the claim at the start. Visual only: the DOM keeps the cover
+   * first, so a phone reads cover, claim, voice in every card.
    */
   reverse?: boolean;
   /** Default `italic`: the client's words sit beside the page's own. See `TestimonialVoice`. */
@@ -522,23 +524,26 @@ export type TestimonialCaseProps = {
 
 /**
  * TestimonialCase — a featured case and its client's words as ONE card (owner, 16 Oct 2026: the
- * case + quote diptych "reads as disjointed, and as 3 units instead of one").
+ * case + quote diptych "reads as disjointed, and as 3 units instead of one"; this shape approved
+ * in round 7 of the selected-work card mocks).
  *
- * The references that do this job (Webflow's customer stories, Stripe's "Building together", Figma's
- * featured story) hold the evidence, the claim and the client in one ground. Here, on the boxed
- * card's quiet ground and 8 radius, two rows share ONE pair of tracks, [7, 5] a split apart:
+ *   ┌ the card's ground, a `text` mat ────────────────────────────────┐
+ *   │ [ cover, 16:9, hairline ]   eyebrow · claim (h3) · result        │
+ *   │                             read the case →          (pinned)    │
+ *   │ ┌ the voice box, full width, centred ────────────────────────┐   │
+ *   │ │                ★★★★★                                       │   │
+ *   │ │         “the client's words”                               │   │
+ *   │ │         (portrait) name / role                             │   │
+ *   │ └────────────────────────────────────────────────────────────┘   │
+ *   └──────────────────────────────────────────────────────────────────┘
  *
- *   the case     the cover at the card ratio · the claim, its story and the way to the case, the
- *                action pinned to the cover's foot
- *   ── a hairline across the card ──
- *   the voice    the client's words under the cover · the stars and the speaker under the claim
- *
- * Because both rows use the same tracks, the words sit directly under the work they describe and
- * the speaker under the claim. The three parts read as one object, not three. The claim leads (h3,
- * full ink) and the quote supports (sans, italic voice), inside the case rather than beside it.
- * Below 1024 one column: cover, claim, story, action, rule, words, stars, speaker.
+ * The voice is its own box INSIDE the card (owner, round 7: "put the testimonial inside a box that
+ * stays inside the card"), so it reads as part of the case, and its parts stack as one unit, stars
+ * over words over the speaker, rather than spreading across the box as three items. Stars carry
+ * the rating alone: no numeral. Below 1024 one column: cover, claim, link, voice.
  */
 export function TestimonialCase({
+  eyebrow,
   title,
   titleAs: Title = 'h3',
   body,
@@ -561,20 +566,26 @@ export function TestimonialCase({
     ) : body?.trim() ? (
       <p className={styles.caseBody}>{body}</p>
     ) : null;
-  const tracks = { base: 1, lg: [7, 5] };
-  const flip = reverse ? { lg: true } : undefined;
   const voiced = valid(item);
   const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
   return (
     <article className={styles.caseCard}>
-      <Layout rowGap="gutter">
-        <Layout columns={tracks} reverse={flip} colGap="section" rowGap="block">
+      <Layout rowGap="text">
+        <Layout
+          columns={{ base: 1, lg: [7, 5] }}
+          reverse={reverse ? { lg: true } : undefined}
+          colGap="stack"
+          rowGap="inline"
+        >
           <span className={styles.caseMedia}>
             <Media image={image} sizes={TESTIMONIAL_CASE_COVER} fit="fill" edge="placement" />
           </span>
-          <Layout rowGap="block" pinLast className={styles.caseCopy}>
-            <Title className={styles.caseTitle}>{title}</Title>
-            {story}
+          <Layout rowGap="gutter" pinLast className={styles.caseCopy}>
+            <Layout rowGap="text">
+              {filled(eyebrow) ? <span className={styles.caseEyebrow}>{eyebrow}</span> : null}
+              <Title className={styles.caseTitle}>{title}</Title>
+              {story}
+            </Layout>
             <Cluster>
               <Button
                 as="a"
@@ -589,38 +600,26 @@ export function TestimonialCase({
           </Layout>
         </Layout>
         {voiced ? (
-          <>
-            <hr className={styles.caseRule} />
-            <Layout
-              as="figure"
-              columns={tracks}
-              reverse={flip}
-              colGap="section"
-              rowGap="block"
-              align="start"
-            >
-              <blockquote
-                className={cx(styles.quote, styles.quotePanel, voice === 'italic' && styles.italic)}
-              >
-                <Prose
-                  html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
-                  className={styles.quoteProse}
-                />
-              </blockquote>
-              <Layout as="figcaption" rowGap="text">
-                {typeof item.rating === 'number' ? (
-                  <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
-                ) : null}
-                <Cluster nowrap colGap="text" align="center" className={styles.attribution}>
-                  {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
-                  <Layout rowGap="inline" className={styles.who}>
-                    <span className={styles.name}>{item.name}</span>
-                    <span className={styles.role}>{role}</span>
-                  </Layout>
-                </Cluster>
-              </Layout>
-            </Layout>
-          </>
+          <Layout as="figure" rowGap="text" justifyItems="center" className={styles.caseVoice}>
+            {typeof item.rating === 'number' ? (
+              <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
+            ) : null}
+            <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
+              <Prose
+                html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
+                className={styles.quoteProse}
+              />
+            </blockquote>
+            <figcaption>
+              <Cluster nowrap colGap="text" align="center" className={styles.attribution}>
+                {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
+                <Layout rowGap="inline" className={styles.who}>
+                  <span className={styles.name}>{item.name}</span>
+                  <span className={styles.role}>{role}</span>
+                </Layout>
+              </Cluster>
+            </figcaption>
+          </Layout>
         ) : null}
       </Layout>
     </article>
