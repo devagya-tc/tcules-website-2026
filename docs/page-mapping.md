@@ -233,7 +233,8 @@ healthtech) need nothing more.
   Every other action is a link button.
 - **Texture** (paper only, at most 3, never adjacent): the end-fade on a no-media hero; `horizon` at
   the foot of the paper band directly above a tint proof band, never above ruled rows or a logo
-  grid. Closes carry none (§ 1.7: "the close carries no texture for now").
+  grid. Closes carry none (§ 1.7: "the close carries no texture for now"), with one exception
+  (owner, 16 Oct 2026): home's island close carries `two-lights` on its tint island.
 - **Sliders:** `autoplay` only on a testimonial slider (M5). Every other slider (home's case
   slides, About's service cards) is still and steps on its controls.
 - **Media sides** alternate between consecutive media bands. No photograph appears twice on one

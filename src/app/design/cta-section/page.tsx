@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Prose, Section } from '@/components';
+import { Cluster, Icon, Layout, Media, Prose, Section } from '@/components';
 import {
   CtaSection,
   EnquiryForm,
@@ -60,6 +60,15 @@ const ENQUIRY_FORM_PROPS = {
   action: `${ENDPOINTS.enquiryDesign}?outcome=success`,
   context: FORM_CONTEXT,
   scheduleHref: ROUTES.contact,
+} as const;
+
+/** The island close's drawing, as the home close places it (scripts/enquiry-desk.mjs). */
+const DESK = {
+  src: '/illustrations/enquiry/designer-desk.svg',
+  alt: '',
+  width: 396,
+  height: 459,
+  kind: 'illustration',
 } as const;
 
 const AUDIT_FORM_PROPS = {
@@ -205,6 +214,31 @@ export default function CtaSectionSpecimenPage() {
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
+      />
+
+      <SpecimenNote
+        title="1b · The island close"
+        note="island='tint' on a split close (home, owner 16 Oct 2026): the copy on a tint island on a paper band, the form's paper panel standing 64 proud of the island's top and foot from 1024 (Island overhang), the designer's desk drawing above the heading, the two-lights texture on the island's ground, line fields and the submit at its own width. Below 1024 the form sits on the island with no panel. The second instance carries points and a contact strip with no drawing or texture: a copy column taller than the panel, where the panel still stretches to stand proud at both edges."
+      />
+      <CtaSection
+        island="tint"
+        islandTexture="two-lights"
+        art={<Media image={DESK} sizes="200px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" fields="line" submit="inline" caption="We'll reply within one business day." />}
+      />
+      <CtaSection
+        island="tint"
+        eyebrow="Next step"
+        heading="Tell us what you are trying to ship"
+        body={SPLIT_BODY}
+        points={STANDARD_POINTS}
+        contact={[
+          { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
+          { label: 'Reply', value: 'Within one business day' },
+        ]}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fields="line" />}
       />
       <CtaSection
         arrangement="open"

@@ -61,6 +61,7 @@ export { Layout, type LayoutProps } from './Layout';
    gutter and owns no column. */
 export {
   Island,
+  IslandOnGround,
   ISLAND_BAND,
   islandSurfaceOn,
   type IslandProps,
@@ -110,6 +111,7 @@ export {
   TextureCounterweight,
   TextureHorizon,
   TextureShape,
+  TextureTwoLights,
   type TextureClosingProps,
   type TextureClosingSide,
   type TextureCornerAt,
@@ -117,6 +119,7 @@ export {
   type TextureLength,
   type TextureProps,
   type TextureShapeProps,
+  type TextureTwoLightsProps,
 } from './Texture';
 export { ClientMark, type ClientMarkProps } from './ClientMark';
 

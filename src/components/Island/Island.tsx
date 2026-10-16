@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { cx } from '@/lib/cx';
+
 import styles from './Island.module.css';
 
 /**
@@ -23,6 +25,22 @@ export type IslandProps = {
    * a paper band draws nothing. The primitive cannot see its band, so the patterns enforce that.
    */
   surface: IslandSurface;
+  /**
+   * The ground stops short of the box by --isl-overhang (64) at the top and foot, from 1024 (owner,
+   * 16 Oct 2026, the enquiry close). The box keeps its full height and drops its block inset, so a
+   * child as tall as the box — the close's form panel — stands proud of the island at both edges
+   * while its siblings sit on the ground. Below 1024 the content stacks and the island is a plain
+   * island again: ground to the box, the block inset back.
+   */
+  overhang?: boolean;
+  /**
+   * A decorative layer painted on the island's ground, under the content: a Texture, which fills
+   * and is clipped by the ground, radius included. In `overhang` mode the ground is its own
+   * element, so a texture placed in `children` would fill the taller box instead; this is where it
+   * goes. Hidden from assistive tech in both modes. Without `overhang` its wrapper is unpositioned,
+   * so a Texture in it fills the island box as before.
+   */
+  ground?: ReactNode;
   children: ReactNode;
 };
 
@@ -43,12 +61,30 @@ export type IslandProps = {
  * `className`, by design — its ground, inset and radius are the whole component, and a class that
  * moved any of them would be rule 5 (never override a surface from outside) one level down.
  */
-export function Island({ surface, children }: IslandProps) {
+export function Island({ surface, overhang = false, ground, children }: IslandProps) {
   return (
-    <div className={styles.island} data-surface={surface}>
+    <div className={cx(styles.island, overhang && styles.overhang)} data-surface={surface}>
+      {overhang ? (
+        <div className={styles.ground} aria-hidden="true">
+          {ground}
+        </div>
+      ) : ground ? (
+        <div aria-hidden="true">{ground}</div>
+      ) : null}
       {children}
     </div>
   );
+}
+
+/**
+ * Content that must sit ON the ground of an `overhang` island. The overhang island drops its block
+ * inset so a full-height child can stand proud of the ground; every other child would then start in
+ * the overhang, off the ground. This wrapper puts the overhang and the island's own block inset
+ * back as its padding, from 1024 (below it the island has its inset again and this adds nothing).
+ * Inside an island without `overhang` it is a plain wrapper.
+ */
+export function IslandOnGround({ children }: { children: ReactNode }) {
+  return <div className={styles.onGround}>{children}</div>;
 }
 
 /**

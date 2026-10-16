@@ -14,6 +14,7 @@ import {
   type IslandSurface,
   type MediaImage,
   type SectionSurface,
+  TextureTwoLights,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import { coverSizes, MEDIA_SPLIT } from '@/lib/image-sizes';
@@ -215,7 +216,24 @@ type CtaSplitProps = {
    * between the lede and the strip at 1470 — the dead column § 3.2 warns about.
    */
   contact?: readonly CtaContact[];
-  island?: never;
+  /**
+   * The island close (owner, 16 Oct 2026, the home enquiry close): the copy on a floating island of
+   * this surface, and the form's panel rising out of it — 64 above the island's top edge and below
+   * its foot from 1024 (`Island` overhang), so the form is the one object that breaks the box.
+   * The band takes the other light ground unless `surface` says otherwise, as `open`'s island does.
+   *
+   * This lifts `open`'s old ruling that a split close has no island ("a box holding a box is the
+   * card reflex twice"): here the panel is not held by the island, it stands across its edge.
+   */
+  island?: IslandSurface;
+  /**
+   * The island close's drawing, above the heading: an illustration the caller composes (a `Media`
+   * of kind `illustration`), set at --cta-art-inline-size and never cropped. From 1024 it starts
+   * level with the panel's top, so it rises out of the island beside the form. Island only.
+   */
+  art?: ReactNode;
+  /** The island's ground texture. `two-lights`: `TextureTwoLights`. Island only. */
+  islandTexture?: 'two-lights';
 };
 
 type CtaOpenProps = {
@@ -242,6 +260,8 @@ type CtaOpenProps = {
    * would outweigh the close the page ends on.
    */
   island?: IslandSurface;
+  art?: never;
+  islandTexture?: never;
 };
 
 type CtaOfferWithFormProps = {
@@ -252,6 +272,8 @@ type CtaOfferWithFormProps = {
   media?: never;
   contact?: never;
   island?: never;
+  art?: never;
+  islandTexture?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -274,6 +296,8 @@ type CtaOfferWithActionsProps = {
   media?: CtaMedia;
   contact?: never;
   island?: never;
+  art?: never;
+  islandTexture?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -966,6 +990,55 @@ export function CtaSection(props: CtaSectionProps) {
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
   const hasForm = isValidElement(props.form);
+
+  /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
+     The copy on a tint island, the form's paper panel standing across the island's top and foot
+     edges (Island `overhang`), and the drawing above the heading, starting level with the panel's
+     top. [6, 5] at `section` from 1280 (a split: copy and drawing beside a form), the panel in the
+     5; [2, 3] from 1024, where the 5 (and an even split) left the optional field's cue cut short. The drawing sits a
+     `block` above the heading, as a head's lead-in rather than a block of its own. Both
+     tracks STRETCH to the row: the panel is always the island box's full height, so it stands 64
+     proud at the top and the foot whichever column is taller, and the copy column carries the
+     island's foot as its own bottom padding, so the lede sits a block above the island's lower
+     edge. Below 1024 it is an ordinary island: the drawing, the lede, then the form, stacked on the
+     island's ground with no panel (the module says why). */
+  if (props.island && hasForm) {
+    const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
+    const islandSurface = islandSurfaceOn(band, props.island);
+    return (
+      <Section
+        surface={band}
+        id={props.id}
+        data-band={props['data-band']}
+        aria-labelledby={headingId}
+        data-arrangement="split"
+        data-island={islandSurface}
+      >
+        <Island
+          surface={islandSurface}
+          overhang
+          ground={props.islandTexture === 'two-lights' ? <TextureTwoLights /> : undefined}
+        >
+          <Layout columns={{ base: 1, lg: [2, 3], xl: [6, 5] }} colGap="section" rowGap="stack">
+            <div className={styles.islandCopy}>
+              <Layout rowGap="block">
+                {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
+                {lede({ scale: 'offer' })}
+                <CtaPoints shape="stack" markers={markers} points={points} />
+                {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+              </Layout>
+            </div>
+            <div
+              className={cx(styles.formPanel, styles.formPanelRaised)}
+              data-surface={PANEL_SURFACE[islandSurface]}
+            >
+              {props.form}
+            </div>
+          </Layout>
+        </Island>
+      </Section>
+    );
+  }
 
   return (
     <Section

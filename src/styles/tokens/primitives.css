@@ -686,11 +686,15 @@
 /* ── Radius ───────────────────────────────────────────────────────────────────
    Small and purposeful. 0 is a real choice, not an absence: grid cells and code
    panels are square. --radius-full is the pill — status, and the footer's
-   rating badge.                                                               */
+   rating badge. 16 and 24 are the floating objects (owner, 16 Oct 2026): the
+   island at 24, and the form panel that rises out of it at 16, so the two read
+   as one family a step apart rather than as cards.                           */
 :root {
   --radius-0: 0px;
   --radius-4: 4px;
   --radius-8: 8px;
+  --radius-16: 16px;
+  --radius-24: 24px;
   --radius-full: 999px;
 }
 

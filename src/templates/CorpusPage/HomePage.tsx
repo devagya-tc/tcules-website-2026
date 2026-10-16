@@ -118,7 +118,7 @@ export function HomePage({ page, ratings, avatars, borrowedQuotes = [] }: HomePa
       />
       {formBeforeFaq(page.bands).map((b) => {
         if (isFormBand(b))
-          return <EnquiryBand key={b.id} page={page} band={b} surface="tint" />;
+          return <EnquiryBand key={b.id} page={page} band={b} island />;
         if (isFaqBand(b)) {
           return (
             <ContentSection key={b.id} {...head(b)} data-band="D-faq" align="center">

@@ -4,17 +4,19 @@ import {
   Button,
   Cluster,
   Island,
+  IslandOnGround,
   Layout,
   Section,
   Texture,
   TextureCorner,
   TextureShape,
+  TextureTwoLights,
   type IslandSurface,
   type SectionSurface,
 } from '@/components';
 import { ROUTES } from '@/lib/routes';
 
-import { specimenStyles as s } from '../_specimen/Specimen';
+import { Box, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Island — the proving ground. A bounded ground inside a band, with the band's ground around it on
@@ -155,6 +157,21 @@ export default function IslandSpecimen() {
             <TextureShape top={-200} right={-120} width="34%" height={296} blur={160} />
           </Texture>
           <Contents heading="Atmosphere from past the edge" />
+        </Island>
+      </Band>
+
+      <Band surface="paper">
+        <Caption
+          title="Overhang · the island close"
+          note="overhang (owner, 16 Oct 2026): from 1024 the ground stops 64 (--isl-overhang) short of the box at the top and foot, and the box drops its block inset, so a child that stretches to the row (the Box here; the close's form panel in CtaSection) stands proud of the island at both edges, and IslandOnGround puts the overhang and the inset back on the copy so it stays on the ground. The texture goes in `ground`, which fills and is clipped by the ground, not the box: TextureTwoLights, a soft pool where the tall child crosses the top edge and one in the far foot corner. Below 1024 it is a plain island."
+        />
+        <Island surface="tint" overhang ground={<TextureTwoLights />}>
+          <Layout columns={{ base: 1, lg: [2, 3], xl: [6, 5] }} colGap="section" rowGap="stack">
+            <IslandOnGround>
+              <Contents heading="Copy on the ground, the panel across its edge" />
+            </IslandOnGround>
+            <Box>The tall child: stretched to the island box, 64 proud of the ground at its top and foot</Box>
+          </Layout>
         </Island>
       </Band>
     </>

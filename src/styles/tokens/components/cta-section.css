@@ -81,6 +81,22 @@
      testimonial card take. */
   --cta-panel-radius: var(--radius-8);
 
+  /* The island close (owner, 16 Oct 2026): the split close on a tint island, its form panel rising
+     out of the island at the top and foot. The panel takes 16, a step under the island's 24, and a
+     `stack` inset. Both apply from 1024 only: below it there is no panel (the module says why). */
+  --cta-panel-radius-raised: var(--radius-16);
+  --cta-panel-inset-raised: var(--gap-stack);
+  /* The copy column's foot from 1024: the island's overhang (64, `column`, duplicated by value from
+     --isl-overhang on purpose: token rule 6) plus a `block` of the island's own air, so the lede
+     sits a block above the island's lower edge while the drawing above it starts level with the
+     panel's top. A block, not a stack: at a stack the copy column outgrew the three-field panel and
+     left it a hollow foot. */
+  --cta-island-foot: calc(var(--gap-column) + var(--gap-block));
+  /* The drawing's width in the island close: the designer's desk at 200 is 232 tall, which with the
+     h2 and its lede keeps the copy column inside the three-field panel's height, so the panel has
+     no hollow foot. A component size. */
+  --cta-art-inline-size: 200px;
+
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
      short of the actions at 1024–1279 (§ 3.2: head on the photo's top edge, actions on its foot).
@@ -107,6 +123,7 @@
   --cta-number-ink: var(--color-neutral-600); /* 4.92:1 — point numerals: auxiliary to the ask, so neutral (owner, 7 Oct 2026); glyphs keep --cta-marker-ink */
   --cta-rule-ink: var(--color-neutral-300); /* decoration */
   --cta-panel-ground: var(--color-paper); /* the form panel as a paper surface */
+  --cta-panel-edge: var(--color-neutral-200); /* paper panel on a paper band: the hairline is its edge where it rises out of the island */
 }
 
 [data-surface='tint'] {
@@ -119,6 +136,7 @@
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
   --cta-panel-ground: var(--color-paper-deep); /* the form panel as a tint surface */
+  --cta-panel-edge: var(--color-neutral-300); /* decoration */
 }
 
 [data-surface='ink'] {
@@ -131,6 +149,7 @@
   --cta-number-ink: var(--color-neutral-400); /* 8.05:1 */
   --cta-rule-ink: var(--color-neutral-700); /* decoration */
   --cta-panel-ground: var(--color-neutral-900); /* declared for self-containment; no panel is ink */
+  --cta-panel-edge: var(--color-neutral-700); /* declared for self-containment */
 }
 
 [data-surface='blue'] {
@@ -143,4 +162,5 @@
   --cta-number-ink: var(--color-brandeis-100); /* 4.91:1 */
   --cta-rule-ink: var(--color-brandeis-300); /* decoration */
   --cta-panel-ground: var(--color-brandeis-600); /* declared for self-containment; no panel is blue */
+  --cta-panel-edge: var(--color-brandeis-300); /* declared for self-containment */
 }
