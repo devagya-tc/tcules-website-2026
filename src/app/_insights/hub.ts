@@ -100,7 +100,21 @@ function tidyExcerpt(text: string | undefined): string | undefined {
 /** A watched piece's length: the CMS files a video's running time as "13 min read". */
 const watchedLength = (value: string | undefined) => value?.replace(/\s*read$/i, '').trim();
 
-function toItem(resource: InsightResource): InsightsIndexItem {
+/**
+ * Each piece's SUBJECT: the name of the first topic it is filed under (industry excluded, it is a
+ * reader's sector), from the CMS's own filter groups — what its meta line says in a single-format
+ * set, where "11 min read" stamped on every row said nothing (beauty round 4).
+ */
+function subjectsOf(page: InsightsPage): Map<string, string> {
+  const names = new Map<string, string>();
+  for (const group of page.resources.filters) {
+    if (/industry/i.test(group.label)) continue;
+    for (const option of group.options) names.set(option.id, topicName(option.name));
+  }
+  return names;
+}
+
+function toItem(resource: InsightResource, subjects?: Map<string, string>): InsightsIndexItem {
   const image = resource.image;
   const watched = resource.kind === 'video' || resource.kind === 'podcast';
   const own = image?.src && !image.standIn && !GENERIC_COVER.test(image.src);
@@ -137,6 +151,10 @@ function toItem(resource: InsightResource): InsightsIndexItem {
        real cover exists. docs/specs/InsightsIndex.md § 12a. */
     ...(resource.coverScene ? { scene: resource.coverScene } : {}),
     topics: resource.filterIds,
+    ...(() => {
+      const subject = resource.filterIds.map((id) => subjects?.get(id)).find(Boolean);
+      return subject ? { subject } : {};
+    })(),
   };
 }
 
@@ -179,14 +197,17 @@ const CLOSE_STAND_IN = {
   action: { label: 'Tell us about it', href: ROUTES.contact },
 };
 
-const closingOf = (page: InsightsPage) =>
-  page.closing?.action
+const closingOf = (page: InsightsPage, origin: string, placement: string) => ({
+  ...(page.closing?.action
     ? {
         heading: page.closing.heading,
         body: page.closing.description,
         action: { label: page.closing.action.label, href: page.closing.action.href },
       }
-    : CLOSE_STAND_IN;
+    : CLOSE_STAND_IN),
+  origin,
+  placement,
+});
 
 /**
  * A topic's name as a heading sets it. The CMS writes the stage "0 to 1" with an arrow glyph
@@ -202,7 +223,10 @@ export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIn
       { label: 'Insights', href: ROUTES.insights },
     ],
     hero: { title: page.hero.heading, lede: page.hero.description },
-    items: page.resources.items.map(toItem),
+    items: (() => {
+      const subjects = subjectsOf(page);
+      return page.resources.items.map((item) => toItem(item, subjects));
+    })(),
     view: first(query[VIEW_KEY]) === 'topic' ? 'topic' : 'type',
     formats: formatsWithContent(page).map((kind) => ({
       kind: kind as InsightsIndexKind,
@@ -222,7 +246,7 @@ export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIn
         })),
       ),
     lab: labOf(page),
-    closing: closingOf(page),
+    closing: closingOf(page, ROUTES.insights, 'insights-hub'),
   };
 }
 
@@ -265,13 +289,16 @@ export function insightsFormatProps(
       current: k === kind,
       count: page.resources.items.filter((item) => item.kind === k).length,
     })),
-    items: shown.map(toItem),
+    items: (() => {
+      const subjects = subjectsOf(page);
+      return shown.map((item) => toItem(item, subjects));
+    })(),
     pageSize: PAGE_SIZE,
     total: all.length,
     moreHref:
       shown.length < all.length ? `${base}?${more.toString()}#page-${current + 1}` : undefined,
     today: new Date().toISOString(),
     lab: labOf(page),
-    closing: closingOf(page),
+    closing: closingOf(page, FORMAT_ROUTE[kind], `insights-${FORMAT_NAME[kind].toLowerCase()}`),
   };
 }
