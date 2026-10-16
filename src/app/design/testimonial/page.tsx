@@ -1,4 +1,10 @@
-import { BlockCard, TestimonialBeside, TestimonialCard, TestimonialWall } from '@/patterns';
+import {
+  BlockCard,
+  TestimonialBeside,
+  TestimonialCard,
+  TestimonialCase,
+  TestimonialWall,
+} from '@/patterns';
 import { Layout, Section, type SectionSurface } from '@/components';
 import type { TestimonialAvatar, TestimonialItem } from '@/patterns';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -97,6 +103,16 @@ function Work() {
     </ul>
   );
 }
+
+/* A case for TestimonialCase: stress copy and a kit photograph standing in for a product capture. */
+const CASE = {
+  eyebrow: 'Northwind · Product design',
+  title: 'One way into the workflow builder',
+  body: 'Users could start from a template, ask the AI for help or start from scratch, and each felt like a separate path. We brought all three into one starting point.',
+  href: '#',
+  ctaLabel: 'Read the Northwind case',
+  image: getKitPhoto('team-laptops-table', { alt: 'The Northwind team reviewing the builder' }),
+};
 
 export default function TestimonialSpecimen() {
   return (
@@ -234,6 +250,30 @@ export default function TestimonialSpecimen() {
         </Layout>
       </Section>
 
+      <Section>
+        <Layout rowGap="stack">
+          <h2>5a · The case and its words as one card</h2>
+          <Specimen
+            title="TestimonialCase"
+            note="home's selected work (16 Oct 2026, round 7): one card on the boxed card's ground with a text mat. The 16:9 cover (hairlined) beside the eyebrow, claim and result on [7, 5], the action pinned to the foot; under both, the client's words in their own full-width box, centred: stars, quote, portrait with name and role. One column below 1024."
+          >
+            <TestimonialCase {...CASE} item={A} />
+          </Specimen>
+          <Specimen
+            title="TestimonialCase · reverse · no avatar"
+            note="the second card of a run mirrors the first from 1024; the DOM keeps the cover first. No photograph: no avatar"
+          >
+            <TestimonialCase {...CASE} item={D} reverse />
+          </Specimen>
+          <Specimen
+            title="TestimonialCase · long quote"
+            note="stress: a long quote; the voice box grows and the quote holds its measure, nothing clips"
+          >
+            <TestimonialCase {...CASE} item={B} />
+          </Specimen>
+        </Layout>
+      </Section>
+
       {SURFACES.map((surface, index) => (
         <Section key={surface} surface={surface}>
           <Layout rowGap="stack">
@@ -243,6 +283,12 @@ export default function TestimonialSpecimen() {
                 <TestimonialCard item={A} />
                 <TestimonialCard item={C} size="sm" frame="none" />
               </Layout>
+            </Specimen>
+            <Specimen
+              title={`${surface} · TestimonialCase`}
+              note="the card's ground and inks on this surface"
+            >
+              <TestimonialCase {...CASE} item={A} />
             </Specimen>
           </Layout>
         </Section>

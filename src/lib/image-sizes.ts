@@ -169,6 +169,18 @@ export const CARD_THREE_TRACKS =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + 2 * GUTTER}px) / 3), ${FLUID_COLUMN}`;
 
 /**
+ * TestimonialCase's cover: 7 of [7, 5] from 1024 (`lg`), a `stack` (48) apart, inside the card's
+ * `text` (16) mat on both sides. (1240 − 32 − 48) × 7/12 = 677 at the cap;
+ * (100vw − 64 − 32 − 48) × 7/12 from 1024; below it the card's full inner column.
+ */
+const CASE_MAT = 16; // --gap-text, the card's inset
+const CASE_SEAM = 48; // --gap-stack, cover to claim
+export const TESTIMONIAL_CASE_COVER =
+  `(min-width: ${CAP}px) ${Math.round(((CONTAINER - 2 * CASE_MAT - CASE_SEAM) * 7) / 12)}px, ` +
+  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + 2 * CASE_MAT + CASE_SEAM}px) * 7 / 12), ` +
+  `calc(100vw - ${2 * GUTTER + 2 * CASE_MAT}px)`;
+
+/**
  * ListCard's thumbnail: a fixed 160 box at every width — --lcrd-thumbnail-inline-md
  * (tokens/components/list-card.css). A 2× screen asks for 320, which is the ladder's smallest rung.
  */
