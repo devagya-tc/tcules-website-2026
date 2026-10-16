@@ -52,7 +52,7 @@ export default function TeaserSpecimen() {
 
           <Specimen
             title="beside · xl — a section's one featured piece"
-            note="Two equal halves from md: the picture, then meta and an h3-scale title. Long insight titles stay at three or four lines."
+            note="Two equal halves from md, the copy hung from the picture's top edge: meta and image start on one line. Hover: the title underlines and the picture leans in."
           >
             <ul>
               <Teaser
@@ -98,7 +98,7 @@ export default function TeaserSpecimen() {
 
           <Specimen
             title="stack · lg with play, sm minis — the watched shape"
-            note="The play mark sits in the picture's foot-start corner; it steps down on the md and sm sizes and is never drawn on a row's thumbnail."
+            note="The play mark sits in the picture's top-end corner, clear of a thumbnail's burned-in lower third; it steps down on the md and sm sizes and is never drawn on a row's thumbnail."
           >
             <Layout columns={{ md: [2, 1] }} colGap="gutter" rowGap="gutter" align="start">
               <ul>
@@ -135,8 +135,8 @@ export default function TeaserSpecimen() {
           </Specimen>
 
           <Specimen
-            title="row · lg with a date — events; row · sm — a list"
-            note="Copy first, the picture at the row's end so every row starts on one edge; a row with none simply runs on. Standfirsts hold two lines."
+            title="row · lg with a date — events; row · sm with an index — a list"
+            note="The marker (a date, an ordinal) in a fixed column at the start, the copy, the picture at the row's end, so every row's copy starts on one edge. A dated row lays its picture full width above the date below 768. label leads a mixed set's meta in the title's ink."
           >
             <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="stack">
               <Layout as="ul" rowGap="stack">
@@ -162,7 +162,9 @@ export default function TeaserSpecimen() {
                 <Teaser
                   arrangement="row"
                   size="sm"
-                  meta={['Guide', '11 min read']}
+                  index="01"
+                  label="Guide"
+                  meta="11 min read"
                   title="Marketing automation software design best practices"
                   media={PHOTO}
                   href={HREF}
@@ -170,7 +172,9 @@ export default function TeaserSpecimen() {
                 <Teaser
                   arrangement="row"
                   size="sm"
-                  meta={['Article', '12 min read']}
+                  index="02"
+                  label="Article"
+                  meta="12 min read"
                   title="What product designers can learn from filmmaking"
                   href={HREF}
                 />

@@ -1,5 +1,4 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
-import { placeholderImage } from '@/lib/placeholders';
 import { blogPath, ROUTES } from '@/lib/routes';
 import type {
   InsightsFormatProps,
@@ -74,8 +73,38 @@ const FORMAT_LINE: Record<InsightResourceKind, string> = {
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 
+/**
+ * The CMS's GENERIC covers: the brand's abstract leaf graphic, uploaded as the "cover" of pieces that
+ * had none of their own (Blog_13, Blog_14, Blog_15). It is a stand-in, not the piece's picture, and
+ * set beside its siblings it read as a repeated texture in the most prominent places (beauty round,
+ * 16 Oct 2026) — so a piece carrying one is typographic, as the brief rules for a piece without a
+ * picture. A curation rule, here once, never per template. Strapi recommendation logged: a `generic`
+ * flag on the media record would retire this list.
+ */
+const GENERIC_COVER = /\/Blog_1[345]_[0-9a-f]+\.[a-z]+$/i;
+
+/**
+ * A standfirst the CMS cut at its field limit mid-word ("…integration issues, and mor"): a long
+ * excerpt with no closing punctuation loses its broken last word and ends on an ellipsis. A short
+ * line without a full stop is left alone — it is a fragment by choice, not a cut.
+ */
+const CUT_AT = 140;
+function tidyExcerpt(text: string | undefined): string | undefined {
+  const trimmed = text?.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.length < CUT_AT || /[.!?…"”')\]]$/.test(trimmed)) return trimmed;
+  const cut = trimmed.replace(/\s+\S*$/, '').replace(/[,;:\s]+$/, '');
+  return `${cut}…`;
+}
+
+/** A watched piece's length: the CMS files a video's running time as "13 min read". */
+const watchedLength = (value: string | undefined) => value?.replace(/\s*read$/i, '').trim();
+
 function toItem(resource: InsightResource): InsightsIndexItem {
   const image = resource.image;
+  const watched = resource.kind === 'video' || resource.kind === 'podcast';
+  const own = image?.src && !image.standIn && !GENERIC_COVER.test(image.src);
+  const duration = resource.duration ?? (watched ? watchedLength(resource.readingTime) : undefined);
   return {
     id: resource.documentId,
     kind: resource.kind as InsightsIndexKind,
@@ -83,9 +112,10 @@ function toItem(resource: InsightResource): InsightsIndexItem {
     /* Every insight slug carries its family's segment where it has one ("podcasts/…",
        "guides/…"), so one builder serves every format and the route tree resolves it. */
     href: blogPath(resource.slug),
-    description: resource.description,
-    /* Only the item's OWN cover: a catalogue stand-in is not its picture (owner, 16 Oct 2026). */
-    ...(image?.src && !image.standIn
+    description: tidyExcerpt(resource.description),
+    /* Only the item's OWN cover: a catalogue stand-in or the generic leaf graphic is not its picture
+       (owner, 16 Oct 2026). */
+    ...(image && own
       ? {
           cover: {
             src: image.src,
@@ -99,8 +129,8 @@ function toItem(resource: InsightResource): InsightsIndexItem {
         }
       : {}),
     ...(resource.publishedAt ? { publishedAt: resource.publishedAt } : {}),
-    ...(resource.readingTime ? { readingTime: resource.readingTime } : {}),
-    ...(resource.duration ? { duration: resource.duration } : {}),
+    ...(resource.readingTime && !watched ? { readingTime: resource.readingTime } : {}),
+    ...(duration ? { duration } : {}),
     ...(resource.event ? { event: resource.event } : {}),
     /* A scene DRAWN for this article, assigned in data (never by keyword): its own picture until a
        real cover exists. docs/specs/InsightsIndex.md § 12a. */
@@ -118,6 +148,16 @@ const formatLine = (page: InsightsPage, kind: InsightResourceKind) =>
 /** The formats that have something published, in picker order. */
 export const formatsWithContent = (page: InsightsPage) =>
   KINDS.filter((kind) => page.resources.items.some((item) => item.kind === kind));
+
+/** The Lab: the family's close, on the hub and on every format page, so they end alike. */
+const labOf = (page: InsightsPage) =>
+  page.lab?.action
+    ? {
+        heading: page.lab.heading,
+        body: page.lab.description,
+        action: { label: page.lab.action.label, href: page.lab.action.href },
+      }
+    : undefined;
 
 const closingOf = (page: InsightsPage) =>
   page.closing?.action
@@ -147,16 +187,10 @@ export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIn
        is a reader's sector rather than a subject. */
     topics: page.resources.filters
       .filter((group) => !/industry/i.test(group.label))
-      .flatMap((group) => group.options.map((option) => ({ id: option.id, label: option.name }))),
-    lab: page.lab?.action
-      ? {
-          heading: page.lab.heading,
-          body: page.lab.description,
-          action: { label: page.lab.action.label, href: page.lab.action.href },
-          /* The Lab illustration, commissioned later: its register placeholder holds the slot. */
-          visual: placeholderImage(ROUTES.insights, 'lab'),
-        }
-      : undefined,
+      .flatMap((group) =>
+        group.options.map((option) => ({ id: option.id, label: option.name, group: group.label })),
+      ),
+    lab: labOf(page),
     closing: closingOf(page),
   };
 }
@@ -204,6 +238,8 @@ export function insightsFormatProps(
     total: all.length,
     moreHref:
       shown.length < all.length ? `${base}?${more.toString()}#page-${current + 1}` : undefined,
+    today: new Date().toISOString(),
+    lab: labOf(page),
     closing: closingOf(page),
   };
 }

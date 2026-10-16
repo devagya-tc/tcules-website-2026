@@ -1,6 +1,6 @@
 /* Teaser — one linked piece held without an edge. Layout owns every arrangement (the stack, the
-   beside in two equal halves, the row with its end thumbnail, the date's two lines); this module owns the picture's ruled 16:9 box and
-   its zoom, the play mark's position on it, the type roles per size and the link states. Every
+   beside in two equal halves, the row with its marker and end thumbnail, the date's two lines); this
+   module owns the picture's unruled 16:9 box and its zoom, the marker column's width, the play mark's position on it, the type roles per size and the link states. Every
    value is a --tsr-* token. No margin, no ground at rest, no rule between items. */
 
 .root {
@@ -25,15 +25,16 @@
   outline-offset: var(--tsr-ring-offset);
 }
 
-/* The picture's box: the one ratio, a hairline and the photograph radius. The ground shows only
-   while an image loads. Positioned, so the play mark sits on it. */
+/* The picture's box: the one ratio and a slight radius — no stroke: the photograph's own edge is
+   the shape (beauty round, 16 Oct 2026: a hairline on every picture drew a box per item). The tone
+   ground holds a contained image's margins and the box while an image loads, so a cover whose own
+   ground is near paper still reads as a shape. Positioned, so the play mark sits on it. */
 .media {
   display: block;
   position: relative;
   inline-size: 100%;
   aspect-ratio: var(--tsr-media-ratio);
   overflow: hidden;
-  border: var(--tsr-media-rule-width) solid var(--tsr-media-rule-ink);
   border-radius: var(--tsr-media-radius);
   background-color: var(--tsr-media-ground);
 }
@@ -61,6 +62,32 @@
   inline-size: var(--tsr-thumb-inline-lg);
 }
 
+/* A dated row's picture: full width above the date on a phone, the large thumbnail from md. */
+@media (max-width: 767px) {
+  .row .datedThumb {
+    inline-size: 100%;
+  }
+}
+
+/* A row's marker column: a fixed width, so every row's copy starts on one edge whatever its date
+   or ordinal says. */
+.markerDate {
+  display: block;
+  inline-size: var(--tsr-marker-date-inline);
+}
+
+.markerIndex {
+  display: block;
+  inline-size: var(--tsr-marker-index-inline);
+}
+
+.index {
+  color: var(--tsr-index-ink);
+  font: var(--tsr-index-text);
+  letter-spacing: var(--tsr-index-tracking);
+  text-transform: var(--text-mono-case);
+}
+
 /* A compact tile's picture: the stack's full width from md, the row's thumbnail below it. */
 .compactPicture {
   display: block;
@@ -80,19 +107,20 @@
   }
 
   .compactPicture,
-  .thumb,
-  .sizeXl .thumb,
-  .sizeLg .thumb {
+  .thumb:not(.datedThumb),
+  .sizeXl .thumb:not(.datedThumb),
+  .sizeLg .thumb:not(.datedThumb) {
     inline-size: var(--tsr-thumb-inline-sm);
   }
 }
 
-/* The play mark: a round chip in the picture's foot-start corner. Painted and positioned on the
-   box, not arranged; the glyph is centred in its own chip by the chip's grid. */
+/* The play mark: a round chip in the picture's top-end corner — clear of the lower third, where a
+   video thumbnail burns in its title. Painted and positioned on the box, not arranged; the glyph is
+   centred in its own chip by the chip's grid. */
 .play {
   position: absolute;
-  inset-block-end: var(--tsr-play-inset);
-  inset-inline-start: var(--tsr-play-inset);
+  inset-block-start: var(--tsr-play-inset);
+  inset-inline-end: var(--tsr-play-inset);
   display: grid;
   place-items: center;
   inline-size: var(--tsr-play-size);
@@ -109,8 +137,8 @@
 
 .sizeMd .play,
 .sizeSm .play {
-  inset-block-end: var(--tsr-play-inset-sm);
-  inset-inline-start: var(--tsr-play-inset-sm);
+  inset-block-start: var(--tsr-play-inset-sm);
+  inset-inline-end: var(--tsr-play-inset-sm);
   inline-size: var(--tsr-play-size-sm);
   block-size: var(--tsr-play-size-sm);
 }
@@ -126,6 +154,11 @@
   font: var(--tsr-meta-text);
   letter-spacing: var(--tsr-meta-tracking);
   text-transform: var(--text-mono-case);
+}
+
+/* The format, where a set mixes them: the meta line's lead fact, in the title's ink. */
+.label {
+  color: var(--tsr-label-ink);
 }
 
 /* The date anchor: the day numeral over its month (Layout stacks the two, flush). */
@@ -145,20 +178,23 @@
   text-transform: var(--text-mono-case);
 }
 
+/* A clickable title wraps as running text does (pretty, not balance), so its first line stays long
+   and a narrow tile does not set four short lines. The hover is an underline in the title's own
+   ink, drawn in by its colour: present at rest, transparent, so nothing shifts when it shows. */
 .title {
   color: var(--tsr-title-ink);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: var(--text-running-wrap);
   overflow-wrap: anywhere;
-  transition: color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: var(--tsr-title-underline-width);
+  text-underline-offset: var(--tsr-title-underline-offset);
+  transition: text-decoration-color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
 }
 
 .link:hover .title,
 .link:focus-visible .title {
-  color: var(--tsr-title-ink-hover);
-}
-
-.link:active .title {
-  color: var(--tsr-title-ink-pressed);
+  text-decoration-color: var(--tsr-title-underline-ink);
 }
 
 .body {

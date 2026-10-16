@@ -36,9 +36,7 @@ export type IndexRailProps = {
    * with script it swaps the view in place and rewrites the URL without a reload.
    */
   param?: string;
-  /** The small label over the list. Pass authored case; mono uppercases it. */
-  label?: string;
-  /** The nav's accessible name. */
+  /** The nav's accessible name. The rail shows no label of its own: the list is self-evident. */
   ariaLabel: string;
   /** The content column, when the modes carry no panels (a picker of pages beside one listing). */
   children?: ReactNode;
@@ -51,7 +49,9 @@ const isHash = (href: string) => href.startsWith('#');
  * TIER 2 — IndexRail, a curated listing page's rail beside its content (insights hub and format
  * pages, 16 Oct 2026; the IDEA of claude.com/resources).
  *
- * It owns the page's two tracks: the sticky rail (3 of 12) and the content column (9 of 12).
+ * A SLIM INDEX, not a peer column (beauty round, 16 Oct 2026): from 1024 the rail takes one sixth of
+ * the content column and the content the rest, so the feed owns the page. The rail and the content
+ * are regions of different kind, so the seam between them is the split step.
  *
  *   views   two modes each carrying a `panel`: the switch changes the whole curated column, the
  *           list under it names the shown view's sections and marks the one in view. Both panels
@@ -60,14 +60,14 @@ const isHash = (href: string) => href.startsWith('#');
  *           content passed as `children`.
  *
  * The switch is two links (`aria-current` on the shown view), not tabs: the lists are links and the
- * views are whole page sections with their own headings. Below 1024 the rail sits above the content,
- * and an in-page jump list is dropped there: the switch alone heads the view.
+ * views are whole page sections with their own headings. Below 1024 the rail is one row above the
+ * content — the switch, or the picker's formats, in a line that scrolls sideways when it must — and
+ * an in-page jump list is dropped there: the switch alone heads the view.
  */
 export function IndexRail({
   modes,
   initialMode,
   param,
-  label = 'Jump to',
   ariaLabel,
   children,
   className,
@@ -82,6 +82,9 @@ export function IndexRail({
   const active = modes.find((m) => m.id === mode) ?? modes[0];
   const views = modes.some((m) => m.panel !== undefined);
 
+  /* Scrollspy. The section in view is the last one whose top has passed a line a fifth of the way
+     down the screen — and, once the curated area's foot is on screen, the last section: a short last
+     section never reaches the line before the rail unsticks, and the marker must match the screen. */
   useEffect(() => {
     const ids = (active?.items ?? [])
       .map((item) => (isHash(item.href) ? item.href.slice(1) : ''))
@@ -90,17 +93,32 @@ export function IndexRail({
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el != null);
     if (targets.length === 0) return;
-    const seen = new Map<string, boolean>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
-        const hit = ids.find((id) => seen.get(id));
-        if (hit) setCurrent(hit);
-      },
-      { rootMargin: '-20% 0px -60% 0px' },
-    );
-    targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.2;
+      const foot = rootRef.current?.getBoundingClientRect().bottom ?? Infinity;
+      let hit = '';
+      if (foot <= window.innerHeight) {
+        hit = targets[targets.length - 1]?.id ?? '';
+      } else {
+        for (const target of targets) {
+          if (target.getBoundingClientRect().top <= line) hit = target.id;
+        }
+      }
+      setCurrent(hit);
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(measure);
+    };
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [active]);
 
   if (!active) return null;
@@ -121,19 +139,27 @@ export function IndexRail({
       url.hash = '';
       window.history.replaceState(window.history.state, '', url);
     }
-    /* A reader deep in one view lands at the head of the other, not somewhere in its middle. */
-    const top = rootRef.current?.getBoundingClientRect().top ?? 0;
-    if (top < 0) rootRef.current?.scrollIntoView({ block: 'start' });
+    /* A reader in one view lands at the head of the other, the rail and its first heading lined up
+       under the site nav — never mid-hero, and never somewhere in the other view's middle. The
+       frame's scroll margin is the nav's clearance. */
+    const frame = rootRef.current;
+    if (frame) {
+      const margin = Number.parseFloat(getComputedStyle(frame).scrollMarginBlockStart) || 0;
+      if (frame.getBoundingClientRect().top < margin) frame.scrollIntoView({ block: 'start' });
+    }
   };
 
   const inPage = active.items.length > 0 && active.items.every((item) => isHash(item.href));
+  const count = active.items.length;
 
   const rail = (
     <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
       <Layout rowGap="stack">
         {modes.length > 1 ? (
-          <div role="group" aria-label="View">
-            <Layout columns={{ base: 2 }} colGap="none" className={styles.switch}>
+          <div role="group" aria-label="View" className={styles.row}>
+            {/* Two labels, the shown one in ink and underlined: editorial chrome, not a control
+                track. Content-sized tracks, so each underline is exactly its label's width. */}
+            <Layout columns={{ base: ['auto', 'auto'] }} colGap="block" justify="start">
               {modes.map((m) => (
                 <a
                   key={m.id}
@@ -155,12 +181,16 @@ export function IndexRail({
             </Layout>
           </div>
         ) : null}
-        {active.items.length > 0 ? (
-          <Layout rowGap="block" className={cx(inPage && styles.jumps)}>
-            <p className={styles.label}>{label}</p>
+        {count > 0 ? (
+          <div className={cx(styles.row, inPage && styles.jumps)}>
+            {/* One list, two arrangements: a column beside the content from 1024, a single line of
+                content-sized labels above it below 1024 (the row scrolls sideways when it must). */}
             <Layout
               as="ul"
+              columns={{ base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }}
+              colGap="block"
               rowGap="text"
+              justify="start"
               id={`${uid}-list`}
               key={active.id}
               className={styles.list}
@@ -180,7 +210,7 @@ export function IndexRail({
                 );
               })}
             </Layout>
-          </Layout>
+          </div>
         ) : null}
       </Layout>
     </nav>
@@ -188,12 +218,17 @@ export function IndexRail({
 
   return (
     <div ref={rootRef} className={styles.frame}>
-      <Layout columns={{ lg: [3, 9] }} colGap="section" rowGap="stack" align="start">
+      <Layout columns={{ lg: [1, 5] }} colGap="section" rowGap="stack" align="start">
         {rail}
         <div className={styles.content}>
           {views
             ? modes.map((m) => (
-                <div key={m.id} id={`${uid}-panel-${m.id}`} hidden={m.id !== active.id}>
+                <div
+                  key={m.id}
+                  id={`${uid}-panel-${m.id}`}
+                  hidden={m.id !== active.id}
+                  className={styles.panel}
+                >
                   {m.panel}
                 </div>
               ))

@@ -1,11 +1,12 @@
 /* ══ Component layer — IndexRail ══════════════════════════════════════════════════
-   Tier 2. The listing page's navigation (insights hub, 16 Oct 2026): a sticky rail with a
-   two-way switch (By topic / By type) over one jump list set in the title serif, after the IDEA of
-   claude.com/resources. A designed object, not a list of links: no counts, no rule between items.
+   Tier 2. The listing page's navigation (insights hub, 16 Oct 2026): a slim sticky index with a
+   two-way switch (BY TYPE / BY TOPIC) over one jump list, after the IDEA of claude.com/resources.
+   Chrome set in type (beauty round, 16 Oct 2026): the switch is two mono labels with a rule under
+   the shown one, the list is the small sans, and the only other mark is the current item's bar.
 
    Naming: --irl-{part}-{role}-{state}
-     parts: switch (the segmented ground) | thumb (the current mode's chip) | mode (a mode's label)
-            | label (the "Jump to" mono label) | item (a jump link) | rule | ring
+     parts: mode (a switch label, and its rule) | item (a jump link) | marker (the current item's
+            bar) | ring
 
    Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -13,24 +14,17 @@
 :root {
   /* Where the rail sticks: clear of the site nav. A component size, set by the nav's height. */
   --irl-sticky-top: 112px;
-  --irl-switch-radius: var(--radius-8);
-  --irl-thumb-radius: var(--radius-4);
-  /* The switch's own inset around its chips: optical, so the chips sit inside the ground. */
-  --irl-switch-inset: var(--space-4);
-  /* A mode chip's block inset: a control's own padding (button.css's argument), from the ramp. */
-  --irl-mode-inset: var(--space-8);
   --irl-mode-text: var(--text-ui-sm);
   --irl-mode-tracking: var(--text-ui-sm-tracking);
-  --irl-label-text: var(--text-eyebrow);
-  --irl-label-tracking: var(--text-eyebrow-tracking);
-  /* The jump links: the title serif at the h6 size. A designed list with presence, not chrome. */
-  --irl-item-text: var(--text-h6);
-  --irl-item-tracking: var(--text-h6-tracking);
-  /* The current item's marker: a short blue bar in the side bearing before the label. Optical. */
-  --irl-marker-width: var(--space-12);
-  --irl-marker-gap: var(--space-12);
-  --irl-marker-height: var(--border-width-2);
-  --irl-rule-width: var(--border-width-hairline);
+  /* The rule under the shown view's label, and its room from the label. Optical, from the ramp. */
+  --irl-mode-rule-width: var(--border-width-2);
+  --irl-mode-rule-gap: var(--space-8);
+  /* The jump links: the small sans — an index, never a second set of headings. */
+  --irl-item-text: var(--text-body-sm);
+  /* The current item's bar at its start edge, and the label's inset that makes its room: inside
+     the rail column, so nothing crosses the content edge. Optical, from the ramp. */
+  --irl-marker-width: var(--border-width-2);
+  --irl-item-inset: var(--space-12);
   --irl-ring-width: var(--focus-ring-width);
   --irl-duration: var(--duration-fast);
   --irl-easing: var(--easing-standard);
@@ -38,57 +32,45 @@
 
 :root,
 [data-surface='paper'] {
-  --irl-switch-ground: var(--color-paper-deep);
-  --irl-thumb-ground: var(--color-paper);
-  --irl-mode-ink: var(--color-neutral-600);
+  --irl-mode-ink: var(--color-neutral-600); /* 4.92:1 */
   --irl-mode-ink-current: var(--color-neutral-900);
-  --irl-label-ink: var(--color-neutral-600);
-  --irl-item-ink: var(--color-neutral-700);
+  --irl-mode-rule-ink: var(--color-neutral-900);
+  --irl-item-ink: var(--color-neutral-600); /* 4.92:1 */
   --irl-item-ink-hover: var(--color-neutral-900);
   --irl-item-ink-current: var(--color-neutral-900);
-  --irl-marker-ink: var(--color-brandeis-500);
-  --irl-rule-ink: var(--color-neutral-200);
+  --irl-marker-ink: var(--color-neutral-900);
   --irl-ring-color: var(--color-brandeis-500);
 }
 
 [data-surface='tint'] {
-  --irl-switch-ground: var(--color-neutral-100);
-  --irl-thumb-ground: var(--color-paper);
   --irl-mode-ink: var(--color-neutral-700);
   --irl-mode-ink-current: var(--color-neutral-900);
-  --irl-label-ink: var(--color-neutral-700);
-  --irl-item-ink: var(--color-neutral-800);
+  --irl-mode-rule-ink: var(--color-neutral-900);
+  --irl-item-ink: var(--color-neutral-700);
   --irl-item-ink-hover: var(--color-neutral-900);
   --irl-item-ink-current: var(--color-neutral-900);
-  --irl-marker-ink: var(--color-brandeis-500);
-  --irl-rule-ink: var(--color-neutral-300);
+  --irl-marker-ink: var(--color-neutral-900);
   --irl-ring-color: var(--color-brandeis-500);
 }
 
 [data-surface='ink'] {
-  --irl-switch-ground: var(--color-neutral-900);
-  --irl-thumb-ground: var(--color-neutral-800);
   --irl-mode-ink: var(--color-neutral-400);
   --irl-mode-ink-current: var(--color-white);
-  --irl-label-ink: var(--color-neutral-400);
-  --irl-item-ink: var(--color-neutral-300);
+  --irl-mode-rule-ink: var(--color-white);
+  --irl-item-ink: var(--color-neutral-400);
   --irl-item-ink-hover: var(--color-white);
   --irl-item-ink-current: var(--color-white);
-  --irl-marker-ink: var(--color-brandeis-300);
-  --irl-rule-ink: var(--color-neutral-800);
+  --irl-marker-ink: var(--color-white);
   --irl-ring-color: var(--color-brandeis-300);
 }
 
 [data-surface='blue'] {
-  --irl-switch-ground: var(--color-brandeis-600);
-  --irl-thumb-ground: var(--color-brandeis-700);
   --irl-mode-ink: var(--color-brandeis-100);
   --irl-mode-ink-current: var(--color-white);
-  --irl-label-ink: var(--color-brandeis-100);
-  --irl-item-ink: var(--color-brandeis-50);
+  --irl-mode-rule-ink: var(--color-white);
+  --irl-item-ink: var(--color-brandeis-100);
   --irl-item-ink-hover: var(--color-white);
   --irl-item-ink-current: var(--color-white);
   --irl-marker-ink: var(--color-white);
-  --irl-rule-ink: var(--color-brandeis-400);
   --irl-ring-color: var(--color-white);
 }

@@ -22,10 +22,13 @@ export type TeaserMedia =
  * How the item arranges. A placement decision, never a CMS field.
  *
  *   stack   the picture above the copy: a tile in a row, a lead in a mosaic.
- *   beside  the picture beside the copy, in two equal halves: a section's one featured piece. Equal,
- *           because insight titles run long: at 3 : 2 an 80-character title stood six lines deep.
- *   row     the copy, then the picture as a small thumbnail at the row's END, so every row in a list
- *           starts its copy on one edge whether or not it has a picture.
+ *   beside  the picture beside the copy, in two equal halves, the copy hung from the picture's TOP
+ *           edge so the meta line and the image start on one line (beauty round, 16 Oct 2026).
+ *           Equal, because insight titles run long: at 3 : 2 an 80-character title stood six lines deep.
+ *   row     a list entry: an optional marker (a date or an ordinal) in a fixed column at the START,
+ *           the copy, then the picture as a thumbnail at the row's END — so every row's copy starts on
+ *           one edge whether or not it has a picture. A dated row lays its picture full width above
+ *           the copy on a phone, where a thumbnail beside a date and the copy left the copy 130px.
  */
 export type TeaserArrangement = 'stack' | 'beside' | 'row';
 
@@ -39,6 +42,11 @@ export type TeaserProps = {
   title: string;
   href: string;
   /**
+   * The format, where the set mixes formats ("Video", "Guide"): it leads the meta line in the
+   * title's ink, so the format is read first and the rest of the line stays quiet. Authored case.
+   */
+  label?: string;
+  /**
    * The quiet line over the title — "Video · 13 min". Authored case; mono uppercases it. As parts,
    * the item joins them with " · " and a compact row keeps only the first on a phone.
    */
@@ -46,8 +54,13 @@ export type TeaserProps = {
   /** The standfirst. Blank renders none. */
   body?: string;
   media?: TeaserMedia;
-  /** A date heads the copy in place of the meta line's position (the meta line follows it). */
+  /**
+   * A date anchor: the day as a numeral over its month. In a row it takes the marker column at the
+   * row's start; elsewhere it heads the copy, the meta line following it.
+   */
   date?: TeaserDate;
+  /** An ordinal ("01") in a row's marker column: an indexed list. Ignored outside a row, or with a date. */
+  index?: string;
   /**
    * A play mark on the picture: the piece is watched, not read. Ignored without a picture, and on a
    * row, whose thumbnail is too small to carry a mark.
@@ -94,17 +107,19 @@ const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']
 
 /**
  * TIER 2 — Teaser, one linked piece held without an edge (insights hub and format pages, 16 Oct
- * 2026). The whole item is one link; its title takes the accent on hover and focus and its picture
+ * 2026). The whole item is one link; on hover and focus its title is underlined and its picture
  * leans in. Proximity binds it: 16 from picture to copy, 8 inside the copy. The set around it owns
  * the generous distance between items. It draws no rule, no box and no stand-in.
  */
 export function Teaser({
   title,
   href,
+  label,
   meta,
   body,
   media,
   date,
+  index,
   play = false,
   arrangement = 'stack',
   size = 'md',
@@ -142,24 +157,34 @@ export function Teaser({
   );
   const bodyText = body?.trim() ? body : undefined;
 
+  const row = arrangement === 'row';
+  const dateBlock = date ? (
+    <Layout rowGap="none" className={styles.date}>
+      <time className={styles.day} dateTime={date.dateTime}>
+        {date.day}
+      </time>
+      <span className={styles.dateLabel}>{date.label}</span>
+    </Layout>
+  ) : null;
+  /* The row's marker column: a date, else an ordinal. */
+  const marker = row ? (dateBlock ?? (index ? <span className={styles.index}>{index}</span> : null)) : null;
+
   const copy = (
     <Layout rowGap="tight">
-      {date ? (
-        <Layout rowGap="none" className={styles.date}>
-          <time className={styles.day} dateTime={date.dateTime}>
-            {date.day}
-          </time>
-          <span className={styles.dateLabel}>{date.label}</span>
-        </Layout>
-      ) : null}
-      {metaParts.length > 0 ? (
+      {!row ? dateBlock : null}
+      {label || metaParts.length > 0 ? (
         <p className={styles.meta}>
-          {metaParts[0]}
-          {metaParts.slice(1).map((part, index) => (
-            <span key={index} className={styles.metaMore}>
-              {` · ${part}`}
-            </span>
-          ))}
+          {label ? <span className={styles.label}>{label}</span> : null}
+          {metaParts.map((part, i) =>
+            /* The first fact always shows; the rest drop on a phone's narrow row. */
+            i === 0 && !label ? (
+              <span key={i}>{part}</span>
+            ) : (
+              <span key={i} className={styles.metaMore}>
+                {` · ${part}`}
+              </span>
+            ),
+          )}
         </p>
       ) : null}
       <Title className={styles.title}>{title}</Title>
@@ -167,21 +192,49 @@ export function Teaser({
     </Layout>
   );
 
+  /* A row's copy beside its marker, in the marker's fixed column, so every row's copy starts on one
+     edge whatever its date or ordinal says. */
+  const marked = marker ? (
+    <Layout columns={{ base: ['auto', 1] }} colGap="block" align="start">
+      <span className={date ? styles.markerDate : styles.markerIndex}>{marker}</span>
+      {copy}
+    </Layout>
+  ) : (
+    copy
+  );
+
   let inner;
   if (!picture) {
-    inner = copy;
+    inner = marked;
   } else if (arrangement === 'beside') {
     inner = (
-      /* Copy beside its picture is a split, so the column step — BlockCard's beside, the same. */
-      <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="text" align="center">
+      /* Copy beside its picture is a split, so the column step — BlockCard's beside, the same. Hung
+         from the picture's top edge: the meta line and the image start on one line. */
+      <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="text" align="start">
         {picture}
         {copy}
       </Layout>
     );
-  } else if (arrangement === 'row') {
+  } else if (row && date) {
+    /* A dated row: from md the picture at the row's end (the source puts it first so a phone's
+       single column shows it above the date; reverse mirrors it to the end from md, the auto track
+       travelling with it). */
+    inner = (
+      <Layout
+        columns={{ base: 1, md: ['auto', 1] }}
+        reverse={{ md: true }}
+        colGap="column"
+        rowGap="text"
+        align="start"
+      >
+        <span className={cx(styles.thumb, styles.datedThumb)}>{picture}</span>
+        {marked}
+      </Layout>
+    );
+  } else if (row) {
     inner = (
       <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="start">
-        {copy}
+        {marked}
         <span className={styles.thumb}>{picture}</span>
       </Layout>
     );
@@ -214,7 +267,7 @@ export function Teaser({
       className={cx(
         styles.root,
         SIZE_CLASS[size],
-        arrangement === 'row' && styles.row,
+        row && styles.row,
         compact && arrangement === 'stack' && styles.compact,
       )}
     >

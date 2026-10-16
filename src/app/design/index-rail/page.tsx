@@ -97,11 +97,10 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
       <Section aria-label="Picker">
         <Specimen
           title="picker — a format page's formats, the current one marked"
-          note="aria-current=page on the current item: the blue bar and full ink."
+          note="aria-current=page on the current item: the ink bar and full ink."
         >
           <IndexRail
             ariaLabel="Formats"
-            label="Browse by type"
             modes={[
               {
                 id: 'type',

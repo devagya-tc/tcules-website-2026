@@ -6,8 +6,8 @@
 
    Naming: --tsr-{part}-{role}-{state}, with a size suffix where the type steps with the placement
    (--tsr-title-text-xl | -lg | -md | -sm)
-     parts: title | body | meta | date | media | play | ring
-     states: hover and pressed, on the title only (the cover zoom is geometry).
+     parts: title | body | meta | label | date | index | marker | media | play | ring
+     states: hover, on the title's underline only (the cover zoom is geometry).
 
    Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
@@ -32,12 +32,23 @@
   --tsr-title-tracking-sm: var(--text-h6-tracking);
   --tsr-body-text-sm: var(--text-body-sm);
 
-  /* The meta line: the label voice, the item's anchor when it has no image. */
-  --tsr-meta-text: var(--text-eyebrow);
-  --tsr-meta-tracking: var(--text-eyebrow-tracking);
+  /* The meta line: the label voice at its smallest step, so the title under it clearly leads
+     (beauty round, 16 Oct 2026: at the eyebrow step a stack of identical meta lines weighed nearly
+     what the 22px titles did). Its ink is the AA floor, so it lightens by size, not by colour. */
+  --tsr-meta-text: var(--text-micro);
+  --tsr-meta-tracking: var(--text-micro-tracking);
+
+  /* An indexed list's ordinal ("01"), in the row's marker column: the index role, a quiet mark. */
+  --tsr-index-text: var(--text-index);
+  --tsr-index-tracking: var(--text-index-tracking);
+  /* A row's marker column: fixed, so every row's copy starts on one edge. Component sizes — the
+     date's fits a two-digit day at the stat step and "MAR 2023" under it; the ordinal's, "01". */
+  --tsr-marker-date-inline: 5.5rem;
+  --tsr-marker-index-inline: 2.5rem;
 
   /* The date anchor (an event): the day as a numeral in the stat role, the month under it in the
-     label voice. A numeral is the strongest head a typographic item can have. */
+     label voice. A numeral is the strongest head a typographic item can have — so it is set in the
+     title's ink, not the accent: the blue is the page's action (beauty round, 16 Oct 2026). */
   --tsr-date-day-text: var(--text-stat);
   --tsr-date-day-tracking: var(--text-stat-tracking);
   --tsr-date-label-text: var(--text-eyebrow);
@@ -45,9 +56,9 @@
 
   /* One image ratio for every placement (owner, 11 Oct 2026: never random ratios on cards). */
   --tsr-media-ratio: var(--ratio-standard);
-  --tsr-media-radius: var(--radius-8);
-  --tsr-media-rule-width: var(--border-width-hairline);
-  --tsr-media-zoom: 1.03;
+  /* A slight radius and no stroke: the photograph's own edge is the shape. */
+  --tsr-media-radius: var(--radius-4);
+  --tsr-media-zoom: 1.02;
   --tsr-media-zoom-duration: var(--duration-slow);
   --tsr-media-zoom-easing: var(--easing-standard);
   /* A row's thumbnail: a fixed track at the row's end, so every row's copy starts on one edge
@@ -73,6 +84,10 @@
   --tsr-play-glyph-sm: var(--space-14);
   --tsr-play-inset-sm: var(--space-12);
 
+  /* The hover underline: a hairline under the title, set clear of the descenders. Optical, from
+     the ramp. */
+  --tsr-title-underline-width: var(--border-width-hairline);
+  --tsr-title-underline-offset: var(--space-4);
   --tsr-title-ink-duration: var(--duration-fast);
   --tsr-title-ink-easing: var(--easing-standard);
   --tsr-ring-width: var(--focus-ring-width);
@@ -83,12 +98,12 @@
 :root,
 [data-surface='paper'] {
   --tsr-title-ink: var(--color-neutral-900); /* 14.62:1 */
-  --tsr-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
-  --tsr-title-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --tsr-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --tsr-meta-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
-  --tsr-date-ink: var(--color-brandeis-500); /* 6.17:1 — a numeral carries the accent */
-  --tsr-media-rule-ink: var(--color-neutral-200);
+  --tsr-date-ink: var(--color-neutral-900); /* 14.62:1 — the title's ink */
+  --tsr-label-ink: var(--color-neutral-900);
+  --tsr-index-ink: var(--color-neutral-600); /* 4.92:1 */
+  --tsr-title-underline-ink: var(--color-neutral-900);
   --tsr-media-ground: var(--color-paper-deep);
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
@@ -98,12 +113,12 @@
 /* Tint: the quiet ink steps to 700 — 600 is 4.39:1 on paper-deep. */
 [data-surface='tint'] {
   --tsr-title-ink: var(--color-neutral-900); /* 13.06:1 */
-  --tsr-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
-  --tsr-title-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --tsr-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --tsr-meta-ink: var(--color-neutral-700); /* 7.27:1 */
-  --tsr-date-ink: var(--color-brandeis-500);
-  --tsr-media-rule-ink: var(--color-neutral-300);
+  --tsr-date-ink: var(--color-neutral-900);
+  --tsr-label-ink: var(--color-neutral-900);
+  --tsr-index-ink: var(--color-neutral-700); /* 7.27:1 */
+  --tsr-title-underline-ink: var(--color-neutral-900);
   --tsr-media-ground: var(--color-neutral-100);
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
@@ -112,28 +127,27 @@
 
 [data-surface='ink'] {
   --tsr-title-ink: var(--color-white);
-  --tsr-title-ink-hover: var(--color-brandeis-300);
-  --tsr-title-ink-pressed: var(--color-brandeis-100);
   --tsr-body-ink: var(--color-neutral-300);
   --tsr-meta-ink: var(--color-neutral-400);
-  --tsr-date-ink: var(--color-brandeis-300);
-  --tsr-media-rule-ink: var(--color-neutral-700);
+  --tsr-date-ink: var(--color-white);
+  --tsr-label-ink: var(--color-white);
+  --tsr-index-ink: var(--color-neutral-400);
+  --tsr-title-underline-ink: var(--color-white);
   --tsr-media-ground: var(--color-neutral-900);
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-300);
 }
 
-/* Blue: blue cannot go bluer, so the title's hover is the lightest Brandeis step (as BlockCard's);
-   a pictured item's zoom carries most of the cue here. */
+/* Blue: declared for self-containment; every ink lifts to white or the lightest Brandeis steps. */
 [data-surface='blue'] {
   --tsr-title-ink: var(--color-white); /* 6.23:1 */
-  --tsr-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
-  --tsr-title-ink-pressed: var(--color-brandeis-100);
   --tsr-body-ink: var(--color-brandeis-50);
   --tsr-meta-ink: var(--color-brandeis-100);
   --tsr-date-ink: var(--color-white);
-  --tsr-media-rule-ink: var(--color-brandeis-300);
+  --tsr-label-ink: var(--color-white);
+  --tsr-index-ink: var(--color-brandeis-100);
+  --tsr-title-underline-ink: var(--color-white);
   --tsr-media-ground: var(--color-brandeis-600);
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-brandeis-700);

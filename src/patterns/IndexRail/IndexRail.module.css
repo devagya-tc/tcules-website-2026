@@ -1,6 +1,6 @@
-/* IndexRail — Layout arranges the rail beside the content, the switch, the label and the list; this
-   module owns the stick, the switch's ground and chips, the jump links' type and the current
-   marker. Every value is --irl-*. */
+/* IndexRail — Layout arranges the rail beside the content, the switch's two labels and the list (a
+   column from 1024, one line below); this module owns the stick, the sideways scroll of that line,
+   the labels' type, the current marks and the view's crossfade. Every value is --irl-*. */
 
 /* The rail and its content: a jump target when a reader switches view deep in the page. */
 .frame {
@@ -17,28 +17,27 @@
   min-inline-size: 0;
 }
 
-/* The segmented switch: one warm ground, the current mode a paper chip on it (Layout gives the two
-   equal halves). */
-.switch {
-  padding: var(--irl-switch-inset);
-  border-radius: var(--irl-switch-radius);
-  background-color: var(--irl-switch-ground);
+/* A view arriving fades in, so switching reads as one column changing, not a page jumping. */
+.panel:not([hidden]) {
+  animation: irl-enter var(--irl-duration) var(--irl-easing);
 }
 
+/* The switch: two mono labels, the shown one in ink over a short rule its own width. No track, no
+   chip — the rail's chrome is type, as the page's is. */
 .mode {
   display: block;
-  padding-block: var(--irl-mode-inset);
-  border-radius: var(--irl-thumb-radius);
+  padding-block-end: var(--irl-mode-rule-gap);
+  border-block-end: var(--irl-mode-rule-width) solid transparent;
   color: var(--irl-mode-ink);
   font: var(--irl-mode-text);
   letter-spacing: var(--irl-mode-tracking);
   /* Mono is the label voice, and the label voice is uppercase (owner, 16 Oct 2026: BY TYPE /
      BY TOPIC). Presentation only: the strings keep their authored case. */
   text-transform: var(--text-mono-case);
-  text-align: center;
+  white-space: nowrap;
   text-decoration: none;
   transition:
-    background-color var(--irl-duration) var(--irl-easing),
+    border-color var(--irl-duration) var(--irl-easing),
     color var(--irl-duration) var(--irl-easing);
 }
 
@@ -48,7 +47,7 @@
 }
 
 .mode[aria-current='true'] {
-  background-color: var(--irl-thumb-ground);
+  border-block-end-color: var(--irl-mode-rule-ink);
   color: var(--irl-mode-ink-current);
 }
 
@@ -58,28 +57,20 @@
   outline-offset: var(--irl-ring-width);
 }
 
-/* "Jump to": the one rule in the rail, under its label. */
-.label {
-  padding-block-end: var(--gap-text);
-  border-block-end: var(--irl-rule-width) solid var(--irl-rule-ink);
-  color: var(--irl-label-ink);
-  font: var(--irl-label-text);
-  letter-spacing: var(--irl-label-tracking);
-  text-transform: var(--text-mono-case);
-}
-
 .list {
   animation: irl-enter var(--irl-duration) var(--irl-easing);
 }
 
-/* The jump link. The marker sits in the side bearing before the label (paint, not layout): the
-   label keeps its place and only the bar and the ink change. */
+/* The jump link: the small sans, so it never competes with the serif section titles it points at.
+   The current one takes the ink and a bar at its own start edge, inside the rail column (the label
+   is inset by the bar's room, so nothing crosses the content edge). */
 .item {
   display: block;
   position: relative;
+  padding-inline-start: var(--irl-item-inset);
   color: var(--irl-item-ink);
   font: var(--irl-item-text);
-  letter-spacing: var(--irl-item-tracking);
+  white-space: nowrap;
   text-decoration: none;
   transition: color var(--irl-duration) var(--irl-easing);
 }
@@ -87,13 +78,11 @@
 .item::before {
   content: '';
   position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: calc((var(--irl-marker-width) + var(--irl-marker-gap)) * -1);
+  inset-block: 0;
+  inset-inline-start: 0;
   inline-size: var(--irl-marker-width);
-  block-size: var(--irl-marker-height);
   background-color: var(--irl-marker-ink);
-  transform: scaleX(0);
-  transform-origin: right;
+  transform: scaleY(0);
   transition: transform var(--irl-duration) var(--irl-easing);
 }
 
@@ -107,7 +96,7 @@
 }
 
 .item[aria-current]::before {
-  transform: scaleX(1);
+  transform: scaleY(1);
 }
 
 @keyframes irl-enter {
@@ -119,16 +108,49 @@
   }
 }
 
-/* Below 1024 the rail is not beside anything to stick to: it sits above the shelves. */
+/* From 1024 a jump label may wrap in its narrow column; below, it is one label in a line. */
+@media (min-width: 1024px) {
+  .item {
+    white-space: normal;
+  }
+}
+
+/* Below 1024 the rail is not beside anything to stick to: it is one line above the content, and
+   that line scrolls sideways when its labels outrun the width (a scroll container, not an
+   arrangement — Layout lays the labels out). */
 @media (max-width: 1023px) {
   .root {
     position: static;
+  }
+
+  .row {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .row::-webkit-scrollbar {
+    display: none;
   }
 
   /* An in-page jump list over a phone's single column only pushes the view down: the switch alone
      heads it there. A picker of pages stays: it is the way to the other formats. */
   .jumps {
     display: none;
+  }
+
+  /* In the line, the current page's mark is the switch's: a rule under the label. */
+  .item {
+    padding-inline-start: 0;
+    padding-block-end: var(--irl-mode-rule-gap);
+    border-block-end: var(--irl-mode-rule-width) solid transparent;
+  }
+
+  .item::before {
+    display: none;
+  }
+
+  .item[aria-current] {
+    border-block-end-color: var(--irl-mode-rule-ink);
   }
 }
 
@@ -139,7 +161,8 @@
     transition: none;
   }
 
-  .list {
+  .list,
+  .panel:not([hidden]) {
     animation: none;
   }
 }

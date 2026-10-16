@@ -22,7 +22,7 @@ bound by proximity and anchored by what heads it. Teaser is that object and only
 
 ## 2 · Anatomy
 
-`li` (or `div`) › `a` › Layout: [picture box (16:9, hairline, radius 8, zoom span, optional play chip)]
+`li` (or `div`) › `a` › Layout: [picture box (16:9, no stroke, radius 4, zoom span, optional play chip)]
 + copy Layout (`tight`): [date (numeral over month)] · [meta line] · title · [body].
 
 ## 3 · Props / API
@@ -33,7 +33,9 @@ bound by proximity and anchored by what heads it. Teaser is that object and only
 | `meta` | `string \| string[]` | mono label line; parts joined " · "; a compact or row item keeps the first part below 768 |
 | `body` | string | sans; clamped to 3 lines at `md`/`sm`, 2 on a row |
 | `media` | `{ type: 'image', image }` \| `{ type: 'sketch', name }` | the piece's OWN picture; absent → typographic |
-| `date` | `{ day, label, dateTime? }` | the date anchor at the copy's head (events) |
+| `label` | string | the format, where the set mixes formats: leads the meta line in the title's ink |
+| `date` | `{ day, label, dateTime? }` | the date anchor: a row's marker column, else the copy's head (events) |
+| `index` | string | an ordinal ("01") in a row's marker column: an indexed list |
 | `play` | boolean | play chip; never on a row thumbnail or a phone's compact row |
 | `arrangement` | `stack` (default) · `beside` · `row` | |
 | `size` | `xl` · `lg` · `md` (default) · `sm` | |
@@ -50,33 +52,39 @@ body-sm · body-sm.
 
 ## 5 · States
 
-Rest; hover and focus-visible (title → `--tsr-title-ink-hover`, picture scales to 1.03 inside its fixed
-box); pressed (`--tsr-title-ink-pressed`); focus ring on the anchor. No selected or disabled state.
+Rest; hover and focus-visible (the title underlines in `--tsr-title-underline-ink`, drawn in by colour;
+the picture scales to 1.02 inside its fixed box); focus ring on the anchor. No pressed, selected or
+disabled state (beauty round, 16 Oct 2026: the title no longer turns blue — the blue is the page's
+action).
 
 ## 6 · Per-surface colour
 
 | Token | paper | tint | ink | blue |
 |---|---|---|---|---|
 | title-ink | neutral-900 | neutral-900 | white | white |
-| title-ink-hover | brandeis-500 | brandeis-500 | brandeis-300 | brandeis-50 |
-| title-ink-pressed | brandeis-700 | brandeis-700 | brandeis-100 | brandeis-100 |
+| title-underline-ink (hover) | neutral-900 | neutral-900 | white | white |
 | body-ink | neutral-700 | neutral-700 | neutral-300 | brandeis-50 |
 | meta-ink | neutral-600 | neutral-700 | neutral-400 | brandeis-100 |
-| date-ink | brandeis-500 | brandeis-500 | brandeis-300 | white |
-| media-rule-ink | neutral-200 | neutral-300 | neutral-700 | brandeis-300 |
+| date-ink | neutral-900 | neutral-900 | white | white |
+| label-ink | neutral-900 | neutral-900 | white | white |
+| index-ink | neutral-600 | neutral-700 | neutral-400 | brandeis-100 |
 | media-ground | paper-deep | neutral-100 | neutral-900 | brandeis-600 |
 | play-ground / play-ink | paper / neutral-900 | paper / neutral-900 | white / neutral-900 | white / brandeis-700 |
 | ring-color | brandeis-500 | brandeis-500 | brandeis-300 | white |
 
 ## 7 · Geometry & spacing
 
-Picture to copy `text` (16); inside the copy `tight` (8); `beside` splits at `column` (64); `row` copy to
-thumbnail `block` (24). The item sets no outer spacing: the set's Layout owns 32 / 64 between items.
+Picture to copy `text` (16); inside the copy `tight` (8); `beside` splits at `column` (64), the copy
+top-aligned to the picture; `row` marker to copy and copy to thumbnail `block` (24), the marker column a
+fixed width (`--tsr-marker-date-inline` / `--tsr-marker-index-inline`); a dated row's picture sits at
+`column` from its copy and full width above it below 768. No stroke on the picture: its own edge, a 4px
+radius and the tone ground. The item sets no outer spacing: the set's Layout owns 32 / 64 between items.
 
 ## 8 · Typography
 
-Titles in the serif title roles; meta and the date label in the mono eyebrow role, uppercase by
-`--text-mono-case`; the day numeral in the stat role; body in sans. Never the serif for body copy.
+Titles in the serif title roles, wrapped `pretty`; meta in the mono micro role and the date label in
+the eyebrow role, uppercase by `--text-mono-case`; a mixed set's `label` leads the meta in the title's
+ink; the day numeral in the stat role, in ink; an ordinal in the index role; body in sans. Never the serif for body copy.
 
 ## 9 · Responsive
 

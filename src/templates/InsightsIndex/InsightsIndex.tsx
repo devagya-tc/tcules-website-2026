@@ -1,32 +1,34 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Media, Section, type MediaImage } from '@/components';
-import { CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
+import { Layout, Section } from '@/components';
 import { heroTrail } from '@/lib/trail';
 import {
   Breadcrumbs,
-  ContentSection,
-  CtaRow,
   CtaSection,
   IndexRail,
   PageHero,
-  Teaser,
   type BreadcrumbItem,
   type HeroAction,
 } from '@/patterns';
 
 import {
+  byEventDate,
+  Cover,
   CuratedSection,
-  dateMarkerOf,
+  Dates,
+  datesVary,
   hasPicture,
+  Index,
   LABEL,
   Pair,
-  Rows,
+  partition,
+  Screen,
+  SectionClose,
   SectionHead,
-  teaserOf,
-  Trio,
+  Split,
   type InsightsIndexItem,
   type InsightsIndexKind,
+  type MetaOptions,
 } from './shared';
 
 /** What the page says about one format: its section title, its one line, its own page. */
@@ -38,8 +40,8 @@ export type InsightsIndexFormat = {
   href?: string;
 };
 
-/** One topic from the CMS taxonomy the BY TOPIC view curates by. */
-export type InsightsIndexTopic = { id: string; label: string };
+/** One topic from the CMS taxonomy the BY TOPIC view curates by, and the group it is filed in. */
+export type InsightsIndexTopic = { id: string; label: string; group?: string };
 
 /** The two ways the hub is curated. */
 export type InsightsIndexView = 'type' | 'topic';
@@ -55,23 +57,25 @@ export type InsightsIndexProps = {
   /** The view the page opens on: the route reads it from `?view=`. */
   view?: InsightsIndexView;
   /**
-   * The Lab: the other organisation's offer, on tint — the band the page closes on. It was ink while
-   * the feed stood between it and the footer; with the feed gone an ink Lab ran straight into the ink
-   * footer as one dark slab, and ch02 closes every page "on paper or tint before the ink footer"
-   * (16 Oct 2026). `visual` is the image it carries beside its words — a register placeholder until
-   * the commissioned illustration exists.
+   * The Lab: the other organisation's offer, on tint — the band the page closes on, the hub and every
+   * format page alike. A compact offer (its words and its link): with the commissioned illustration
+   * not yet drawn, the band carries no media slot rather than a placeholder (beauty round, 16 Oct
+   * 2026). ch02 closes every page "on paper or tint before the ink footer".
    */
-  lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
+  lab?: InsightsLab;
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
 };
 
+/** The Lab's offer: the family's close. */
+export type InsightsLab = { heading: string; body?: string; action: HeroAction };
+
 /* ── Decisions the template owns ──────────────────────────────────────────────── */
 
 /**
- * BY TYPE, in page order. A picture-led shape and a typographic one take turns — articles' feature,
- * events' dated rows, videos' screen and playlist, guides' shelf — so the column never repeats one
- * rectangle and two text-heavy sections never meet.
+ * BY TYPE, in page order, each format in its own composition (beauty round, 16 Oct 2026) — articles'
+ * cover and pair, events' dated rows, videos' screen, guides' split — so no two neighbours share a
+ * silhouette and the column reads as an edit, not one section stamped four times.
  */
 const TYPE_ORDER: readonly InsightsIndexKind[] = [
   'article',
@@ -106,10 +110,12 @@ const topicAnchor = (topic: { id: string; label: string }) => {
  *
  *   A  hero      the trail, the display h1, the lede, the texture
  *   B  curated   the rail (BY TYPE / BY TOPIC, and the shown view's sections) beside the view:
- *                BY TYPE  a section per format, each in its own shape, ending in "All <format>"
- *                BY TOPIC a section per topic, formats mixed, no piece in two sections
+ *                BY TYPE  a section per format, each in its own composition, closed by "All <format>"
+ *                BY TOPIC a section per topic, formats mixed, no piece in two sections, the
+ *                         compositions turning so no two neighbours match
  *                Both views are in the HTML; the switch shows one and holds it in `?view=`.
- *   C  lab       the other organisation's offer, on tint (the page closes on tint before the ink footer)
+ *   C  lab       the other organisation's offer, on tint — the close (the page ends on tint before
+ *                the ink footer)
  *   D  close     the ask, on paper, only with an action
  *
  * There is no in-page filtering and no full feed: everything of a format lives on its own page.
@@ -138,13 +144,18 @@ export function InsightsIndex({
       },
     ];
   });
-  const byTopic = curateTopics(items, topics);
+  /* The type view's first lead: the topic view must not open on the same piece, or switching looks
+     as if nothing happened. */
+  const typeLead = byType[0] ? leadOf(byType[0].items).lead : undefined;
+  const byTopic = curateTopics(items, topics, typeLead?.id);
+  const topicShapes = turnShapes(byTopic.map((section) => section.items));
   const lede = hero.lede?.trim();
 
   const typePanel = (
     <Layout rowGap="section-open">
       {byType.map((section) => {
         const id = typeAnchor(section.kind);
+        const count = section.items.length;
         return (
           <CuratedSection
             key={section.kind}
@@ -152,14 +163,18 @@ export function InsightsIndex({
             head={
               <SectionHead
                 id={id}
+                eyebrow={pieces(count)}
                 title={section.title}
                 lead={section.lead}
-                all={
-                  section.href
-                    ? { label: `All ${section.title.toLowerCase()}`, href: section.href }
-                    : undefined
-                }
               />
+            }
+            close={
+              section.href ? (
+                <SectionClose
+                  label={`All ${count} ${section.title.toLowerCase()}`}
+                  href={section.href}
+                />
+              ) : undefined
             }
           >
             <TypeShape kind={section.kind} items={section.items} />
@@ -177,9 +192,15 @@ export function InsightsIndex({
           <CuratedSection
             key={section.id}
             id={id}
-            head={<SectionHead id={id} title={section.label} />}
+            head={
+              <SectionHead
+                id={id}
+                eyebrow={[section.group, pieces(section.size)].filter(Boolean).join(' · ')}
+                title={section.label}
+              />
+            }
           >
-            <TopicShape items={section.items} turn={index} />
+            <TopicShape items={section.items} shape={topicShapes[index] ?? 'split'} />
           </CuratedSection>
         );
       })}
@@ -238,32 +259,34 @@ export function InsightsIndex({
         )}
       </Section>
 
-      {lab ? (
-        lab.visual ? (
-          <ContentSection
-            id="lab"
-            heading={lab.heading}
-            headingId="lab-heading"
-            lead={lab.body?.trim() ? lab.body : undefined}
-            surface="tint"
-            arrangement="beside"
-            actions={<CtaRow rule={false} actions={[lab.action]} />}
-          >
-            <Media image={lab.visual} sizes={FULL_COLUMN} />
-          </ContentSection>
-        ) : (
-          <CtaSection
-            arrangement="offer"
-            surface="tint"
-            heading={lab.heading}
-            body={lab.body?.trim() ? [lab.body] : undefined}
-            actions={[lab.action]}
-          />
-        )
-      ) : null}
+      <InsightsClose lab={lab} closing={closing} />
+    </>
+  );
+}
 
+/**
+ * The family's close, the hub's and every format page's: the Lab's offer on tint, then the ask on
+ * paper (only with its action), so the two tinted bands never meet and every page ends alike.
+ */
+export function InsightsClose({
+  lab,
+  closing,
+}: {
+  lab?: InsightsLab;
+  closing?: InsightsIndexProps['closing'];
+}) {
+  return (
+    <>
+      {lab ? (
+        <CtaSection
+          arrangement="offer"
+          surface="tint"
+          heading={lab.heading}
+          body={lab.body?.trim() ? [lab.body] : undefined}
+          actions={[lab.action]}
+        />
+      ) : null}
       {closing?.action ? (
-        /* Paper, so it never touches the tint Lab: two tinted bands are never adjacent. */
         <CtaSection
           arrangement="open"
           surface="paper"
@@ -277,29 +300,46 @@ export function InsightsIndex({
   );
 }
 
+const pieces = (count: number) => `${count} ${count === 1 ? 'piece' : 'pieces'}`;
+
+/** A set's lead: its newest piece with a picture, else its newest; then the rest in order. */
+function leadOf(items: readonly InsightsIndexItem[]) {
+  const lead = items.find(hasPicture) ?? items[0];
+  return { lead, rest: items.filter((item) => item !== lead) };
+}
+
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
 
 /**
  * The topic sections: the largest topics first, each taking a few pieces nobody has taken yet — the
- * newest piece with a picture as its lead, then one of each other format before any repeats, so a
- * section reads as the topic's range, not its four newest articles. A piece sits in one section
- * only; a topic left with too few to say anything is dropped.
+ * newest piece with a picture as its lead (never the type view's lead in the first section), then
+ * one of each other format before any repeats, so a section reads as the topic's range, not its four
+ * newest articles. A piece sits in one section only; a topic left with too few is dropped.
  */
 function curateTopics(
   items: readonly InsightsIndexItem[],
   topics: readonly InsightsIndexTopic[],
+  avoidLead?: string,
 ) {
   const members = (id: string) => items.filter((item) => item.topics?.includes(id));
   const ordered = [...topics]
     .map((topic) => ({ ...topic, size: members(topic.id).length }))
     .sort((a, b) => b.size - a.size);
   const used = new Set<string>();
-  const sections: { id: string; label: string; items: InsightsIndexItem[] }[] = [];
+  const sections: {
+    id: string;
+    label: string;
+    group?: string;
+    size: number;
+    items: InsightsIndexItem[];
+  }[] = [];
   for (const topic of ordered) {
     const free = members(topic.id).filter((item) => !used.has(item.id));
     if (free.length < TOPIC_FLOOR) continue;
     const picked: InsightsIndexItem[] = [];
-    const lead = free.find(hasPicture);
+    const lead =
+      free.find((item) => hasPicture(item) && (sections.length > 0 || item.id !== avoidLead)) ??
+      free.find(hasPicture);
     if (lead) picked.push(lead);
     const kinds = new Set(picked.map((item) => item.kind));
     for (const item of free) {
@@ -314,73 +354,18 @@ function curateTopics(
       if (!picked.includes(item)) picked.push(item);
     }
     picked.forEach((item) => used.add(item.id));
-    sections.push({ id: topic.id, label: topic.label, items: picked });
+    sections.push({
+      id: topic.id,
+      label: topic.label,
+      group: topic.group,
+      size: topic.size,
+      items: picked,
+    });
   }
   return sections;
 }
 
-/* ── The shapes ───────────────────────────────────────────────────────────────── */
-
-/** Split a set into the pieces with a picture and the typographic ones, each in date order. */
-function partition(items: readonly InsightsIndexItem[]) {
-  return {
-    pictured: items.filter(hasPicture),
-    plain: items.filter((item) => !hasPicture(item)),
-  };
-}
-
-/** A set's lead: its newest piece with a picture, else its newest; then the rest in order. */
-function leadOf(items: readonly InsightsIndexItem[]) {
-  const lead = items.find(hasPicture) ?? items[0];
-  return { lead, rest: items.filter((item) => item !== lead) };
-}
-
-/** The FEATURE: one piece with its picture large beside its words. */
-function Feature({ item, withKind }: { item: InsightsIndexItem; withKind: boolean }) {
-  return (
-    <ul>
-      <Teaser
-        {...teaserOf(item, withKind)}
-        arrangement="beside"
-        size="xl"
-        sizes={CARD_TWO_TRACKS}
-      />
-    </ul>
-  );
-}
-
-/**
- * The MIX under a feature: pictured tiles beside a column of headlines, so a row of three reads as
- * two objects and a reading list, not three equal boxes.
- */
-function Mix({
-  pictured,
-  plain,
-  withKind,
-}: {
-  pictured: readonly InsightsIndexItem[];
-  plain: readonly InsightsIndexItem[];
-  withKind: boolean;
-}) {
-  if (pictured.length === 0) return <Trio items={plain.slice(0, 3)} withKind={withKind} />;
-  if (plain.length === 0) return <Trio items={pictured.slice(0, 3)} withKind={withKind} />;
-  const tiles = pictured.slice(0, 2);
-  const headlines = plain.slice(0, tiles.length === 2 ? 2 : 3);
-  return (
-    <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
-      {tiles.map((item) => (
-        <Teaser key={item.id} {...teaserOf(item, withKind)} size="md" compact />
-      ))}
-      <li>
-        <Layout as="ul" rowGap="gutter">
-          {headlines.map((item) => (
-            <Teaser key={item.id} {...teaserOf(item, withKind)} size="md" />
-          ))}
-        </Layout>
-      </li>
-    </Layout>
-  );
-}
+/* ── The compositions per section ─────────────────────────────────────────────── */
 
 function TypeShape({
   kind,
@@ -389,110 +374,106 @@ function TypeShape({
   kind: InsightsIndexKind;
   items: readonly InsightsIndexItem[];
 }): ReactNode {
+  /* The meta line is worded for the pieces SHOWN: their dates appear only if they tell them apart. */
+  const metaFor = (shown: readonly InsightsIndexItem[]): MetaOptions => ({
+    withDate: datesVary(shown),
+  });
   switch (kind) {
     case 'event':
-      /* Events — dated rows: the day as a numeral heads each, the place under the title, the
-         event's picture at the row's end. The date is what a reader scans an events list for. */
-      return (
-        <Layout as="ul" rowGap="stack">
-          {items.slice(0, 3).map((item) => (
-            <Teaser
-              key={item.id}
-              {...teaserOf(item, false)}
-              date={dateMarkerOf(item)}
-              meta={item.event?.place}
-              arrangement="row"
-              size="lg"
-            />
-          ))}
-        </Layout>
-      );
+      /* Dated rows: the day as a numeral at each row's start, the picture at its end. */
+      return <Dates items={byEventDate(items).slice(0, 3)} />;
     case 'video':
     case 'podcast': {
-      /* Watched and listened — the screen and the next two: the newest large with its play mark,
-         two smaller beside it, stacked to its height. Pictures lead, because a video is one. */
-      const { lead, rest } = leadOf(items);
-      if (!lead) return null;
-      const next = [...rest.filter(hasPicture), ...rest.filter((item) => !hasPicture(item))];
-      return (
-        <Layout columns={{ md: [2, 1] }} colGap="gutter" rowGap="gutter" align="start">
-          <ul>
-            <Teaser {...teaserOf(lead, false)} size="lg" sizes={CARD_TWO_TRACKS} />
-          </ul>
-          {next.length > 0 ? (
-            <Layout as="ul" rowGap="gutter">
-              {next.slice(0, 2).map((item) => (
-                <Teaser key={item.id} {...teaserOf(item, false)} size="sm" compact />
-              ))}
-            </Layout>
-          ) : null}
-        </Layout>
-      );
+      /* The screen: the newest large, two beside it. */
+      const { pictured, plain } = partition(items);
+      const shown = [...pictured, ...plain].slice(0, 3);
+      return <Screen items={shown} meta={metaFor(shown)} />;
     }
     case 'guide':
     case 'research':
     case 'interview': {
-      /* The shelf: two pictured ones at the larger step, the rest as a row of headlines under them —
-         a different weight from the articles' feature, so the two never read as one shape twice. */
+      /* The split: one with its picture beside an index of the typographic ones. */
       const { pictured, plain } = partition(items);
-      const pair = pictured.slice(0, 2);
-      const headlines = [...plain, ...pictured.slice(2)].slice(0, 3);
-      return (
-        <Layout rowGap="column">
-          {pair.length > 0 ? <Pair items={pair} withKind={false} /> : null}
-          {headlines.length > 0 ? <Trio items={headlines} withKind={false} /> : null}
-        </Layout>
-      );
+      const shown = [...pictured.slice(0, 1), ...plain.slice(0, 4)];
+      return <Split items={shown} meta={metaFor(shown)} />;
     }
     case 'article':
     default: {
-      /* Articles — the feature, then the mix. */
+      /* The cover, then a pair: the column's largest picture, then two at half — the format with the
+         most to show opens the page at its largest. */
       const { lead, rest } = leadOf(items);
       if (!lead) return null;
-      const more = partition(rest);
+      if (!hasPicture(lead)) {
+        const shown = items.slice(0, 5);
+        return <Split items={shown} meta={metaFor(shown)} />;
+      }
+      const next = partition(rest).pictured.slice(0, 2);
+      const meta = metaFor([lead, ...next]);
       return (
-        <Layout rowGap="column">
-          {hasPicture(lead) ? (
-            <Feature item={lead} withKind={false} />
-          ) : (
-            <Trio items={[lead]} withKind={false} />
-          )}
-          <Mix pictured={more.pictured} plain={more.plain} withKind={false} />
+        <Layout rowGap="stack">
+          <Cover items={[lead]} meta={meta} />
+          {next.length === 2 ? <Pair items={next} meta={meta} /> : null}
         </Layout>
       );
     }
   }
 }
 
+type TopicShapeName = 'split' | 'pair' | 'cover';
+
 /**
- * A topic section's shape, turning through three so neighbouring topics never repeat one: the
- * feature over a row, a pictured lead beside a list, and pairs at the larger step.
+ * The topic sections' compositions, in turn — the split, the pair, the cover — each section taking
+ * the next one its pieces can fill (a pair needs two pictures), and never the one before it.
  */
-function TopicShape({ items, turn }: { items: readonly InsightsIndexItem[]; turn: number }) {
-  const [lead, ...rest] = items;
-  if (!lead) return null;
-  const pictured = hasPicture(lead);
-  const shape = pictured ? turn % 3 : 2;
-  if (shape === 0) {
+function turnShapes(sets: readonly (readonly InsightsIndexItem[])[]): TopicShapeName[] {
+  const order: readonly TopicShapeName[] = ['split', 'pair', 'cover'];
+  const out: TopicShapeName[] = [];
+  let turn = 0;
+  for (const set of sets) {
+    const pictured = set.filter(hasPicture).length;
+    const fits = (shape: TopicShapeName) =>
+      shape === 'pair' ? pictured >= 2 : shape === 'cover' ? pictured >= 1 : true;
+    let shape: TopicShapeName = 'split';
+    for (let step = 0; step < order.length; step += 1) {
+      const candidate = order[(turn + step) % order.length] ?? 'split';
+      if (fits(candidate) && candidate !== out[out.length - 1]) {
+        shape = candidate;
+        turn += step + 1;
+        break;
+      }
+    }
+    out.push(shape);
+  }
+  return out;
+}
+
+function TopicShape({
+  items,
+  shape,
+}: {
+  items: readonly InsightsIndexItem[];
+  shape: TopicShapeName;
+}) {
+  const meta: MetaOptions = { withKind: true, withDate: datesVary(items) };
+  const { pictured, plain } = partition(items);
+  if (shape === 'pair') {
     return (
-      <Layout rowGap="column">
-        <Feature item={lead} withKind />
-        <Trio items={rest} withKind />
+      <Layout rowGap="stack">
+        <Pair items={pictured.slice(0, 2)} meta={meta} />
+        {items.length > 2 ? (
+          <Index items={[...pictured.slice(2), ...plain]} meta={meta} />
+        ) : null}
       </Layout>
     );
   }
-  if (shape === 1) {
-    /* The lead and the rows are pieces of one set, not two regions of different kind: the set's
-       gutter, not a split. */
+  if (shape === 'cover') {
+    const [lead, ...rest] = [...pictured, ...plain];
     return (
-      <Layout columns={{ lg: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
-        <ul>
-          <Teaser {...teaserOf(lead, true)} size="lg" sizes={CARD_TWO_TRACKS} />
-        </ul>
-        <Rows items={rest} withKind />
+      <Layout rowGap="stack">
+        <Cover items={lead ? [lead] : []} meta={meta} />
+        {rest.length > 0 ? <Index items={rest} meta={meta} /> : null}
       </Layout>
     );
   }
-  /* Pairs at the larger step: pictures in the first row, words under them, never a column of each. */
-  return <Pair items={[...items.filter(hasPicture), ...items.filter((item) => !hasPicture(item))]} withKind />;
+  return <Split items={items} meta={meta} />;
 }
