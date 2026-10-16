@@ -112,6 +112,8 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [ ] **2.17** ★ Visual overhaul: review every shipped component's specimen at 1440 and 390 against CLAUDE.md
       § Design quality and the brand chapters, and propose per component what to change. The owner approves each
       proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
+- [x] **2.18** Reasons: the "why Tcules" band (15 Oct queue). Six argued reasons, each with an isometric drawing of
+      its claim; `open`, `boxed` and `beside`, all one fold at 1440 (owner picks, 16 Oct 2026, mocks rounds 1–4). (#PR)
 
 ## Phase 3 — Slice 1: `/services/product-design`
 
