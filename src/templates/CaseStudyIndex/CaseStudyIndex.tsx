@@ -295,9 +295,9 @@ const countOf = (n: number) => `${n} ${n === 1 ? 'case' : 'cases'}`;
 
 /**
  * C · the situations: one IndexGroup per group in the column beside a sticky outline of them (the
- * claude.com/resources "Jump to", 15 Oct 2026; TableOfContents, in LongformShell's [1, 4] shell). The
- * 96 between groups is the air between categories, and each group's head draws the hairline that
- * marks the seam. One group: no outline, the column is the whole band.
+ * claude.com/resources "Jump to", 15 Oct 2026; TableOfContents, in LongformShell's [1, 4] shell).
+ * Groups are peer blocks inside one band, so the stack between them is `column` (64), the row seam
+ * of a borderless set; each group's head draws the hairline and its 24 of air (IndexGroup.md § 7). One group: no outline, the column is the whole band.
  */
 function Situations({ sections }: { sections: readonly CaseStudyIndexSection[] }) {
   if (sections.length === 0) return null;
@@ -318,7 +318,7 @@ function Situations({ sections }: { sections: readonly CaseStudyIndexSection[] }
             }))}
           />
         ) : null}
-        <Layout rowGap="section">
+        <Layout rowGap="column">
           {sections.map((section) => (
             <IndexGroup
               key={section.id}
@@ -395,18 +395,7 @@ function GroupBody({ section }: { section: CaseStudyIndexSection }) {
             titleAs="h3"
             title={item.title}
             href={item.href}
-            marker={
-              item.cover
-                ? {
-                    type: 'thumbnail',
-                    image: {
-                      ...item.cover,
-                      width: item.cover.width ?? 1600,
-                      height: item.cover.height ?? 900,
-                    },
-                  }
-                : undefined
-            }
+            marker={item.cover ? { type: 'thumbnail', image: item.cover } : undefined}
             {...bodyOf(item)}
           />
         ))}

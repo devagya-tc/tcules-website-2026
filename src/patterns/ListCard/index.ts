@@ -2,6 +2,7 @@ export { ListCard } from './ListCard';
 export type {
   ListCardProps,
   ListCardMarker,
+  ListCardThumbnailImage,
   ListCardArrangement,
   ListCardForm,
   ListCardFrame,

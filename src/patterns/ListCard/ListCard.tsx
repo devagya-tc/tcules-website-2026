@@ -29,8 +29,11 @@ import styles from './ListCard.module.css';
  * `<ol>`: the numeral is aria-hidden because the list announces position, so in a `<ul>` the order
  * would be visual only. The caller's `Layout as="ol"` owns that — see the component comment.
  *
- * `thumbnail` takes `Media`'s own `MediaImage` record, whole and untouched, exactly as a page
- * received it from `@/content`. ListCard owns the box — 160 inline, the shared 3:2 cover crop — and
+ * `thumbnail` takes `Media`'s own `MediaImage` record exactly as a page received it from `@/content`,
+ * with `width` and `height` OPTIONAL (fix round 1, 16 Oct 2026), as on BlockCard: the box is a fixed
+ * `--lcrd-thumbnail-ratio` crop, so the two numbers never lay anything out. A record without them is
+ * given the box's own 16 × 9 here, once, loses its `sources` (a srcset needs the master's true
+ * width) and is flagged `placeholderSize` — rather than every caller inventing a fallback. ListCard owns the box — 160 inline, the shared 3:2 cover crop — and
  * `Media` owns everything inside it: the srcset, the lazy load, the panel. The edge is the box's: a
  * radius and no frame, for every kind (§ 5.3). `alt` is
  * required by the record even when its right value is `""`, so decoration is chosen, never omitted.
@@ -39,12 +42,17 @@ import styles from './ListCard.module.css';
  * carries one cut-out part or one illustration shape. That is a supply rule, not a type: the
  * pattern cannot tell a case study from a glossary term, so the route decides whether to pass one.
  */
+export type ListCardThumbnailImage = Omit<MediaImage, 'width' | 'height'> & {
+  width?: number;
+  height?: number;
+};
+
 export type ListCardMarker =
   /** `tone` (owner, 7 Oct 2026): `accent` (default) sets the numeral blue; `neutral` sets it in a
       quiet grey, for a set whose band already carries its accent elsewhere. */
   | { type: 'number'; value: number; tone?: ListCardNumberTone }
   | { type: 'icon'; name: IconName }
-  | { type: 'thumbnail'; image: MediaImage }
+  | { type: 'thumbnail'; image: ListCardThumbnailImage }
   /** `sketch` (13 Oct 2026, the insights hub): a DRAWN thumbnail — the scene drawn for this article
       (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in data.
       Decorative (the Sketch is aria-hidden). */
@@ -210,6 +218,17 @@ function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`ListCard: ${message}`);
 }
 
+/** The box's own proportions (`--lcrd-thumbnail-ratio`, 16 / 9), for a record that arrived without its own. */
+const THUMBNAIL_BOX = { width: 16, height: 9 } as const;
+
+/** The record `Media` receives: the caller's, with the box's proportions where it had none. */
+function thumbnailRecord(image: ListCardThumbnailImage): MediaImage {
+  if (image.width && image.height) {
+    return { ...image, width: image.width, height: image.height };
+  }
+  return { ...image, ...THUMBNAIL_BOX, sources: undefined, placeholderSize: true };
+}
+
 /** The marker slot. Blank thumbnail sources collapse rather than leaving a broken-image frame. */
 function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }) {
   if (marker.type === 'number') {
@@ -291,7 +310,7 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
   return (
     <span className={cx(styles.marker, styles.thumbnail)}>
       <Media
-        image={marker.image}
+        image={thumbnailRecord(marker.image)}
         sizes={LIST_CARD_THUMBNAIL}
         fit="fill"
         edge="placement"
