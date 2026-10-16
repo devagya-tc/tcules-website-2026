@@ -16,6 +16,9 @@
  *   - every media binding that claims to be bound has a URL
  *   - no run list contains a raw markdown delimiter that the parser should have consumed
  *   - the first-level pass covers 96 files
+ *   - noted (not failed): an index's hero lede (a `*_collection` or `*_hub`) that states a count of listed items ("Twelve articles"). An
+ *     index derives its count from the source, so an authored number drifts from the format row and
+ *     the archive's count line on the same screen (critique 16 Oct 2026; content-proposals P48)
  */
 import { readdirSync, readFileSync } from 'node:fs';
 
@@ -42,6 +45,13 @@ const rawMarkdown = (runs) =>
         ? rawMarkdown(r.children)
         : false,
   );
+/* A count of the things a listing lists, in words or digits: "Twelve articles", "8 guides". */
+const COUNTED =
+  /\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|twenty|thirty|forty|fifty)\s+(?:[a-z-]+\s+)?(?:articles|guides|videos|events|podcasts|episodes|interviews|reports|case studies|cases)\b/i;
+
+/* The page types that list a family: collections and hubs. */
+const INDEX_TYPES = /(?:_collection|_hub)$/;
+
 const checkRuns = (page, where, runs) => {
   if (rawMarkdown(runs)) note(page, `${where}: raw markdown left in a text run`);
 };
@@ -183,6 +193,15 @@ for (const page of pages) {
     );
   checkRuns(page, 'hero title', page.hero.title);
   page.hero.lede.forEach((l) => checkRuns(page, 'hero lede', l));
+  /* Only on an index, whose count the page derives: a case's "eight interviews" is method, not a
+     listing. */
+  for (const l of INDEX_TYPES.test(page.pageType ?? '') ? page.hero.lede : []) {
+    const counted = runText(l).match(COUNTED);
+    if (counted)
+      warnings.push(
+        `${page.file}  hero lede states a count ("${counted[0]}"); the index derives its count from the source, so check it agrees or drop the number (content-proposals P48)`,
+      );
+  }
   for (const m of page.composition.mediaBindings)
     if (m.status === 'BOUND_EXISTING_PUBLIC_ASSET' && !m.bound)
       note(page, `media binding ${m.id} is marked bound but has no usable asset_uri`);

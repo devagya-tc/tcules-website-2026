@@ -671,3 +671,19 @@ proposals below are where that design asks something of the copy.
   over value, no rule) at the foot of each card. If this lands, the card takes `tags` in place of
   `detail` for cases, and `detail` is kept only for the long-form uses it fits (an article's author, a
   resource's format).
+
+### P48 · `/insights/articles`, `/insights/guides` · hero · the lede states a count the page contradicts
+
+- **Problem:** the lede says "Twelve articles from Tcules designers and the product people we
+  interview." The format row directly under it says "Articles 42" and the archive says "42 articles ·
+  newest first" (live Strapi, 16 Oct 2026). `/insights/guides` has the same fault: "Eight practical
+  guides", with 10 live. The page contradicts itself above the fold, and any number authored into the
+  copy will drift again as soon as something is published.
+- **Done in the build:** nothing. The lede renders verbatim, because the narrative is fixed.
+  `npm run corpus:check` now notes any index lede (`*_collection`, `*_hub`) that states a count of
+  listed items, so the next one is caught when it is written.
+- **Proposal:** take the number out. Articles: "Articles from Tcules designers and the product people
+  we interview. They cover AI inside products, …" (the rest unchanged). Guides: "Practical guides …"
+  in the same way. The page already gives the live count twice: in the format row and in the archive's
+  count line.
+- **Why:** a listing's count is derived from the source, so it belongs to the page and not to the copy.
