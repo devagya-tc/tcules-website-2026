@@ -27,8 +27,8 @@ export type TeaserMedia =
  *           Equal, because insight titles run long: at 3 : 2 an 80-character title stood six lines deep.
  *   row     a list entry: an optional marker (a date or an ordinal) in a fixed column at the START,
  *           the copy, then the picture as a thumbnail at the row's END — so every row's copy starts on
- *           one edge whether or not it has a picture. A dated row lays its picture full width above
- *           the copy on a phone, where a thumbnail beside a date and the copy left the copy 130px.
+ *           one edge whether or not it has a picture. A marked row lays its picture full width above
+ *           the copy on a phone, where a thumbnail beside a marker and the copy left the copy 140px.
  */
 export type TeaserArrangement = 'stack' | 'beside' | 'row';
 
@@ -167,7 +167,9 @@ export function Teaser({
     </Layout>
   ) : null;
   /* The row's marker column: a date, else an ordinal. */
-  const marker = row ? (dateBlock ?? (index ? <span className={styles.index}>{index}</span> : null)) : null;
+  const marker = row
+    ? (dateBlock ?? (index ? <span className={styles.index}>{index}</span> : null))
+    : null;
 
   const copy = (
     <Layout rowGap="tight">
@@ -215,10 +217,11 @@ export function Teaser({
         {copy}
       </Layout>
     );
-  } else if (row && date) {
-    /* A dated row: from md the picture at the row's end (the source puts it first so a phone's
-       single column shows it above the date; reverse mirrors it to the end from md, the auto track
-       travelling with it). */
+  } else if (row && marker) {
+    /* A marked row (a date, an ordinal): from md the picture at the row's end; on a phone above the
+       marker and the copy, full width — beside a marker and a thumbnail the copy was left 140px.
+       The source puts the picture first so a phone's single column shows it on top; reverse mirrors
+       it to the end from md, the auto track travelling with it. */
     inner = (
       <Layout
         columns={{ base: 1, md: ['auto', 1] }}
@@ -227,7 +230,7 @@ export function Teaser({
         rowGap="text"
         align="start"
       >
-        <span className={cx(styles.thumb, styles.datedThumb)}>{picture}</span>
+        <span className={cx(styles.thumb, styles.markedThumb)}>{picture}</span>
         {marked}
       </Layout>
     );

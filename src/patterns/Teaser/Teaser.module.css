@@ -62,9 +62,9 @@
   inline-size: var(--tsr-thumb-inline-lg);
 }
 
-/* A dated row's picture: full width above the date on a phone, the large thumbnail from md. */
+/* A marked row's picture: full width above the marker on a phone, the thumbnail from md. */
 @media (max-width: 767px) {
-  .row .datedThumb {
+  .row .markedThumb {
     inline-size: 100%;
   }
 }
@@ -107,9 +107,9 @@
   }
 
   .compactPicture,
-  .thumb:not(.datedThumb),
-  .sizeXl .thumb:not(.datedThumb),
-  .sizeLg .thumb:not(.datedThumb) {
+  .thumb:not(.markedThumb),
+  .sizeXl .thumb:not(.markedThumb),
+  .sizeLg .thumb:not(.markedThumb) {
     inline-size: var(--tsr-thumb-inline-sm);
   }
 }

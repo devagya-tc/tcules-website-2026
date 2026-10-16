@@ -104,7 +104,8 @@ function toItem(resource: InsightResource): InsightsIndexItem {
   const image = resource.image;
   const watched = resource.kind === 'video' || resource.kind === 'podcast';
   const own = image?.src && !image.standIn && !GENERIC_COVER.test(image.src);
-  const duration = resource.duration ?? (watched ? watchedLength(resource.readingTime) : undefined);
+  const duration =
+    resource.duration ?? (watched ? watchedLength(resource.readingTime) : undefined);
   return {
     id: resource.documentId,
     kind: resource.kind as InsightsIndexKind,
@@ -188,7 +189,11 @@ export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIn
     topics: page.resources.filters
       .filter((group) => !/industry/i.test(group.label))
       .flatMap((group) =>
-        group.options.map((option) => ({ id: option.id, label: option.name, group: group.label })),
+        group.options.map((option) => ({
+          id: option.id,
+          label: option.name,
+          group: group.label,
+        })),
       ),
     lab: labOf(page),
     closing: closingOf(page),

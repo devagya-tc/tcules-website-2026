@@ -253,7 +253,10 @@ export function InsightsFormat({
       />
 
       <Section surface="paper" aria-label={hero.title}>
-        <IndexRail ariaLabel="Insights by type" modes={[{ id: 'type', label: 'By type', items: formats }]}>
+        <IndexRail
+          ariaLabel="Insights by type"
+          modes={[{ id: 'type', label: 'By type', items: formats }]}
+        >
           {content}
         </IndexRail>
       </Section>

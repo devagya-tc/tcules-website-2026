@@ -129,17 +129,23 @@ export type MetaOptions = {
 };
 
 /**
- * The meta line: what the section does not already say. A watched piece's running time ("Watch · 7
- * min"), a read piece's reading time, an event's date and place (never its publish date), and the
- * publish date only where it tells pieces apart.
+ * The meta line: what the section does not already say. A watched or heard piece's running time
+ * ("Watch · 7 min", "Listen · 48 min"), a read piece's reading time, an event's date and place
+ * (never its publish date), and the publish date only where it tells pieces apart.
  */
-export function metaOf(item: InsightsIndexItem, { withDate = false }: MetaOptions = {}) {
+export function metaOf(
+  item: InsightsIndexItem,
+  { withKind = false, withDate = false }: MetaOptions = {},
+) {
   if (item.kind === 'event') {
     return line(dateOf(item.event?.startsAt) ?? 'Date TBC', item.event?.place);
   }
+  /* Where the format leads the line, it keeps to one fact more, so a narrow row holds one line. */
+  if (withKind) return line(item.duration ?? item.readingTime);
   const date = withDate ? dateOf(item.publishedAt) : undefined;
   if (WATCHED.has(item.kind)) {
-    return line(item.duration ? `Watch · ${item.duration}` : 'Watch', date);
+    const verb = item.kind === 'podcast' ? 'Listen' : 'Watch';
+    return line(item.duration ? `${verb} · ${item.duration}` : verb, date);
   }
   return line(item.readingTime, date);
 }
@@ -148,7 +154,11 @@ export function metaOf(item: InsightsIndexItem, { withDate = false }: MetaOption
 export function dateMarkerOf(item: InsightsIndexItem): TeaserProps['date'] {
   const date = parse(item.event?.startsAt);
   return date && item.event
-    ? { day: DAY_OF_MONTH.format(date), label: MONTH_YEAR.format(date), dateTime: item.event.startsAt }
+    ? {
+        day: DAY_OF_MONTH.format(date),
+        label: MONTH_YEAR.format(date),
+        dateTime: item.event.startsAt,
+      }
     : { day: '—', label: 'Date TBC' };
 }
 
@@ -171,7 +181,8 @@ export function teaserOf(
 /** Events by when they happen, the latest first (the CMS orders them by when they were filed). */
 export const byEventDate = (items: readonly InsightsIndexItem[]) =>
   [...items].sort(
-    (a, b) => (Date.parse(b.event?.startsAt ?? '') || 0) - (Date.parse(a.event?.startsAt ?? '') || 0),
+    (a, b) =>
+      (Date.parse(b.event?.startsAt ?? '') || 0) - (Date.parse(a.event?.startsAt ?? '') || 0),
   );
 
 /** Split a set into the pieces with a picture and the typographic ones, each in date order. */
@@ -316,12 +327,15 @@ export function Index({
   );
 }
 
-/** The SPLIT: one piece with its picture, beside an index of the rest. */
+/** The SPLIT: one piece with its picture, beside an index of the rest (the index alone without one). */
 export function Split({ items, meta, titleAs = 'h3' }: Shape) {
   const { pictured, plain } = partition(items);
-  const lead = pictured[0] ?? items[0];
-  if (!lead) return null;
-  const rest = [...pictured.slice(1), ...plain].filter((item) => item !== lead);
+  const lead = pictured[0];
+  /* Without a picture to lead, a lone typographic piece beside the index would leave a hole under
+     it: the set is the index alone. */
+  if (!lead)
+    return items.length > 0 ? <Index items={items} meta={meta} titleAs={titleAs} /> : null;
+  const rest = [...pictured.slice(1), ...plain];
   return (
     <Layout columns={{ md: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
       <ul>

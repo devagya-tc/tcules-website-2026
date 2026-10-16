@@ -82,7 +82,7 @@ export function IndexRail({
   const active = modes.find((m) => m.id === mode) ?? modes[0];
   const views = modes.some((m) => m.panel !== undefined);
 
-  /* Scrollspy. The section in view is the last one whose top has passed a line a fifth of the way
+  /* Scrollspy. The section in view is the last one whose top has passed a line a third of the way
      down the screen — and, once the curated area's foot is on screen, the last section: a short last
      section never reaches the line before the rail unsticks, and the marker must match the screen. */
   useEffect(() => {
@@ -96,12 +96,14 @@ export function IndexRail({
     let frame = 0;
     const measure = () => {
       frame = 0;
-      const line = window.innerHeight * 0.2;
-      const foot = rootRef.current?.getBoundingClientRect().bottom ?? Infinity;
+      const line = window.innerHeight * 0.3;
+      const box = rootRef.current?.getBoundingClientRect();
       let hit = '';
-      if (foot <= window.innerHeight) {
+      if (box && box.bottom <= window.innerHeight) {
         hit = targets[targets.length - 1]?.id ?? '';
-      } else {
+      } else if (box && box.top <= line) {
+        /* Inside the curated area, the first section is current until the next one reaches the line. */
+        hit = targets[0]?.id ?? '';
         for (const target of targets) {
           if (target.getBoundingClientRect().top <= line) hit = target.id;
         }
