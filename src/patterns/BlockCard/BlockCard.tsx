@@ -8,10 +8,12 @@ import {
   Layout,
   Media,
   type MediaImage,
+  Sketch,
   Texture,
   TextureShape,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import type { ArticleSceneName } from '@/lib/sketches';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 
 import styles from './BlockCard.module.css';
@@ -58,7 +60,14 @@ export type BlockCardImage = Omit<MediaImage, 'width' | 'height'> & {
 export type BlockCardTextureRecipe = 0 | 1 | 2;
 export type BlockCardMedia =
   | { type: 'image'; image: BlockCardImage }
-  | { type: 'texture'; recipe?: BlockCardTextureRecipe };
+  | { type: 'texture'; recipe?: BlockCardTextureRecipe }
+  /**
+   * `sketch` (13 Oct 2026, the insights hub): a DRAWN cover — the Sketch scene drawn for this one
+   * article from its own argument, on its dot-field plate inside the same ruled 16:9 box. Typed to
+   * the article scenes: a service scene is never a cover (owner). The caller assigns it, item by
+   * item, in data. Decorative like every cover; no type is drawn on it.
+   */
+  | { type: 'sketch'; name: ArticleSceneName };
 
 /**
  * The title's element. `h2` exists for one case: a set that IS the page's list, directly under the
@@ -382,6 +391,20 @@ function TextureMedia({
 }
 
 /**
+ * The generated cover: a Sketch scene filling the ruled 16:9 box. The plate is the Sketch's own
+ * (dot field, radius) and the drawing is 16:9 like the box, so nothing is cropped.
+ */
+function SketchMedia({ name }: { name: ArticleSceneName }) {
+  return (
+    <span className={styles.imageMedia} aria-hidden="true">
+      <span className={styles.imageZoom}>
+        <Sketch name={name} />
+      </span>
+    </span>
+  );
+}
+
+/**
  * BlockCard — one borderless card, built to docs/specs/BlockCard.md.
  *
  * The root is always an <li>. A non-blank href changes the frame element and, on a card with no
@@ -452,6 +475,8 @@ export function BlockCard({
   ) : media?.type === 'texture' ? (
     /* The card's icon, if any, moves onto the texture: one head object, never two. */
     <TextureMedia recipe={media.recipe} icon={icon} />
+  ) : media?.type === 'sketch' ? (
+    <SketchMedia name={media.name} />
   ) : null;
 
   /* The icon heads a card with no cover; a cover wins, because a card has one head object. */

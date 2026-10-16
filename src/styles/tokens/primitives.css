@@ -164,17 +164,19 @@
    purpose: they are free to move independently.                                */
 :root {
   --font-size-display: 67px;
+  /* A hero whose title is ONE WORD — a format page's "Articles" (beauty round 3, 16 Oct 2026): the
+     word set as the band's graphic, twice display's size. Hero-only, like display; never a heading. */
+  --font-size-mark: 136px;
   --font-size-h1: 54px;
   --font-size-h2: 43px;
   --font-size-h3: 34px;
   --font-size-h4: 28px;
-  --font-size-h5: 22px;
-  /* The ladder's own next step down, not a value picked by eye: 22 / 1.25 = 17.6. It exists because
-     the system could express a serif title at 22 and a sans body at 18, and nothing in between —
-     so a small card's title had to choose between the wrong size and the wrong voice. It also gives
-     <h6> a role at last; reset.css has always counted it as a heading while globals.css styled
-     five. */
-  --font-size-h6: 18px;
+  /* h5 and h6 are in the SANS (owner, 16 Oct 2026), and Public Sans' taller x-height sets a size
+     much larger than Newsreader at the same number: "public sans 22px looks as big as newsreader
+     28px". So the two sans steps are optical, not arithmetic: h5 at 18 (the size the owner liked on
+     the video tiles), h6 at 16, each about the visual weight its serif step had at 22 and 18. */
+  --font-size-h5: 18px;
+  --font-size-h6: 16px;
   /* A client's name typeset in place of its logo (LogoGrid, home round 1, 10 Oct 2026): the h5 size
      in the sans, so a typeset wordmark sits near a drawn mark's cap height (ClientMark caps at 40
      tall, a wordmark's x-height runs ~16 of it). Stated on its own, not as h5's: a logo stand-in and
@@ -233,6 +235,8 @@
   /* Breakpoint cuts. Titles step down; text and chrome hold at every width. */
   --font-size-display-t: 54px;
   --font-size-display-m: 43px;
+  --font-size-mark-t: 104px;
+  --font-size-mark-m: 64px;
   --font-size-h1-t: 43px;
   --font-size-h1-m: 34px;
   --font-size-h2-t: 34px;
@@ -241,7 +245,7 @@
   --font-size-h3-m: 25px;
   --font-size-h4-t: 25px;
   --font-size-h4-m: 22px;
-  --font-size-h5-m: 20px;
+  --font-size-h5-m: 17px;
   --font-size-wordmark-m: 18px;
   --font-size-quote-m: 22px;
   --font-size-quote-lg-t: 28px;
@@ -276,6 +280,7 @@
    ladder's suffixes. A role with no variant holds at every width.               */
 :root {
   --line-height-display: 1.04;
+  --line-height-mark: 0.96; /* one word: the line is the word's own height, no leading to share */
   --line-height-h1: 1.06;
   --line-height-h2: 1.1;
   --line-height-h3: 1.16;
@@ -313,6 +318,8 @@
    at 1 on every width, so it has no -m step even though its SIZE has one. */
   --line-height-display-t: 1.06;
   --line-height-display-m: 1.08;
+  --line-height-mark-t: 0.98;
+  --line-height-mark-m: 1;
   --line-height-h1-t: 1.08;
   --line-height-h1-m: 1.12;
   --line-height-h2-t: 1.14;
@@ -343,6 +350,8 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --letter-spacing-display: -0.02em;
+  /* At 136 the serif's side bearings open the word up: one step tighter than display. */
+  --letter-spacing-mark: -0.035em;
   --letter-spacing-h1: -0.018em;
   --letter-spacing-title: -0.015em;
   --letter-spacing-title-tight: -0.01em;
@@ -392,6 +401,9 @@
   --text-display: var(--font-weight-regular) var(--font-size-display)/var(--line-height-display)
     var(--font-family-display);
   --text-display-tracking: var(--letter-spacing-display);
+  --text-mark: var(--font-weight-regular) var(--font-size-mark)/var(--line-height-mark)
+    var(--font-family-display);
+  --text-mark-tracking: var(--letter-spacing-mark);
   --text-h1: var(--font-weight-regular) var(--font-size-h1)/var(--line-height-h1)
     var(--font-family-display);
   --text-h1-tracking: var(--letter-spacing-h1);
@@ -404,15 +416,19 @@
   --text-h4: var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4)
     var(--font-family-display);
   --text-h4-tracking: var(--letter-spacing-title-fine);
+  /* h5 and h6 are set in the SANS (owner, 16 Oct 2026: "for fonts smaller than 28px we should use
+     Public Sans"). The rule is by role, not by width: the roles always under 28 (h5 22/20, h6 18)
+     take the sans everywhere, while h1–h4 keep the serif at every width even where a breakpoint
+     steps them under 28 — a heading never changes typeface as the screen narrows. Same weight as
+     the serif titles; what makes them titles is the role, not the face. */
   --text-h5: var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5)
-    var(--font-family-display);
+    var(--font-family-sans);
   --text-h5-tracking: var(--letter-spacing-none);
-  /* Same weight and family as every title role — what makes it a title is the voice, not the size.
-     Tracking is none, as h5's is: only h4 and above are large enough for the negative correction to
+  /* Tracking is none, as h5's is: only h4 and above are large enough for the negative correction to
      be doing anything. NO BREAKPOINT STEP, and that is deliberate — h5 has an `-m` because 22 is
      too big on a phone, while 18 already sits at body scale and has nowhere to go. */
   --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
-    var(--font-family-display);
+    var(--font-family-sans);
   --text-h6-tracking: var(--letter-spacing-none);
   /* A typeset wordmark (LogoGrid): the sans at semibold, tracked tight as a logotype is. It is a mark,
      not a label, so it takes no mono case and no opened tracking. */
@@ -444,9 +460,10 @@
      BREAKPOINT STEP, deliberately, as h6 has none: it already IS the phone size, so a phone column
      and a desktop tile, being the same measure, set the same quote. Chosen by measure, never by how
      important the quote is. Italic in the composite like every quote role; no tracking companion,
-     as the 28 reading quote has none. */
+     as the 28 reading quote has none. In the SANS italic (owner, 16 Oct 2026: under 28px is Public
+     Sans); the larger quote roles keep the serif. */
   --text-quote-sm: italic var(--font-weight-regular)
-    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
+    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-sans);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
@@ -513,6 +530,8 @@
   :root {
     --text-display: var(--font-weight-regular)
       var(--font-size-display-t)/var(--line-height-display-t) var(--font-family-display);
+    --text-mark: var(--font-weight-regular) var(--font-size-mark-t)/var(--line-height-mark-t)
+      var(--font-family-display);
     --text-h1: var(--font-weight-regular) var(--font-size-h1-t)/var(--line-height-h1-t)
       var(--font-family-display);
     --text-h2: var(--font-weight-medium) var(--font-size-h2-t)/var(--line-height-h2-t)
@@ -538,6 +557,8 @@
   :root {
     --text-display: var(--font-weight-regular)
       var(--font-size-display-m)/var(--line-height-display-m) var(--font-family-display);
+    --text-mark: var(--font-weight-regular) var(--font-size-mark-m)/var(--line-height-mark-m)
+      var(--font-family-display);
     --text-h1: var(--font-weight-regular) var(--font-size-h1-m)/var(--line-height-h1-m)
       var(--font-family-display);
     --text-h2: var(--font-weight-medium) var(--font-size-h2-m)/var(--line-height-h2-m)
@@ -547,7 +568,7 @@
     --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
       var(--font-family-display);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
-      var(--font-family-display);
+      var(--font-family-sans);
     --text-wordmark: var(--font-weight-semibold)
       var(--font-size-wordmark-m)/var(--line-height-wordmark) var(--font-family-sans);
     --text-quote: italic var(--font-weight-regular)

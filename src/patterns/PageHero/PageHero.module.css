@@ -137,6 +137,14 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* A one-word title at the mark scale: the word is the band's graphic. Its measure is released —
+   one word never wraps inside a measure meant for a sentence. */
+.titleMark {
+  max-inline-size: none;
+  font: var(--hero-title-text-mark);
+  letter-spacing: var(--hero-title-tracking-mark);
+}
+
 /* ── The copy · two roles, two measures ───────────────────────────────────
    The lead at 20 and the paragraphs beneath it at 16, which gives the copy an internal hierarchy
    that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs
@@ -373,6 +381,11 @@
   display: none;
 }
 
+/* Below 1024 the corner field instead: the band keeps its texture on a phone (beauty round 3). */
+.fadeCorner {
+  display: block;
+}
+
 /* ── breakpoint switches ─────────────────────────────────────────────────────────
      legend  the numbered cut's legend shows where the <picture> serves the cut: below 1440.
              KEEP IN STEP with CUT_QUERY in PageHero.tsx, the <source> media query Media renders:
@@ -386,6 +399,10 @@
 @media (min-width: 1024px) {
   .fade {
     display: block;
+  }
+
+  .fadeCorner {
+    display: none;
   }
 }
 

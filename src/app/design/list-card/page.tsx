@@ -331,6 +331,13 @@ function SurfaceRows() {
         href={EXTERNAL_HREF}
         external
       />
+      <ListCard
+        eyebrow="Ahmedabad · Meetup"
+        title="An eyebrow over a dated row"
+        body="The eyebrow's quiet ink and the date marker's accent ink, read from this surface's own block."
+        marker={{ type: 'date', dateTime: '2026-11-14', day: '14', label: 'Nov 2026' }}
+        href={ROUTES.events}
+      />
     </Rows>
   );
 }
@@ -489,6 +496,68 @@ export default function ListCardSpecimenPage() {
                 </Rows>
               ))}
             </Layout>
+          </Specimen>
+          <Specimen
+            title="eyebrow · a row that says what kind of thing it is"
+            note="13 Oct 2026, the insights feed. BlockCard's eyebrow voice: mono, quiet ink, a text (16) above the title. In a split it travels with the title, in the title's track. Blank renders nothing."
+          >
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              <Rows>
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  eyebrow="Podcast · 7 Oct 2026 · 48 min"
+                  title="Build AI for the user’s work, not for AI’s sake"
+                  body="Samy Melaine of Eden AI on making the choice between many models simpler."
+                  href={ROUTES.insights}
+                />
+                <ListCard
+                  size="sm"
+                  arrangement="stacked"
+                  eyebrow="Article · 8 Oct 2026 · 11 min read · markerPosition end"
+                  title="CPQ UX: designing configure-price-quote software sales teams will use"
+                  marker={thumb(CUT_OUT)}
+                  markerPosition="end"
+                  href={ROUTES.insights}
+                />
+              </Rows>
+              <Rows>
+                <ListCard
+                  eyebrow="Guide · 12 min read · sketch marker"
+                  title="Improve commerce by finding the broken evidence path"
+                  marker={{ type: 'sketch', name: 'prototype-to-production' }}
+                  body="Trace where shoppers lose confidence between discovery and delivery, and measure the whole path."
+                />
+              </Rows>
+            </Layout>
+          </Specimen>
+          <Specimen
+            title="date marker · a ledger of events"
+            note="13 Oct 2026. The day at the stat role in the accent, month and year under it in the label voice, in a fixed 96 column so every row's copy starts on one edge. A real <time> when it has a dateTime; without one (a date not yet set) it renders as text and keeps the column."
+          >
+            <Rows>
+              <ListCard
+                titleAs="h3"
+                eyebrow="Ahmedabad"
+                title="Design systems for everyone, from basics to advanced"
+                body="Our meetup on design systems, from auto-layout and design tokens to composable systems."
+                href={ROUTES.events}
+                marker={{ type: 'date', dateTime: '2026-11-14', day: '14', label: 'Nov 2026' }}
+              />
+              <ListCard
+                titleAs="h3"
+                eyebrow="San Mateo, California"
+                title="Lessons from designing the UX for AI products, at SaaStr Annual"
+                href={ROUTES.events}
+                marker={{ type: 'date', dateTime: '2026-09-09', day: '9', label: 'Sept 2026' }}
+              />
+              <ListCard
+                titleAs="h3"
+                title="Design systems meetup: tokens, theming and the second product"
+                href={ROUTES.events}
+                marker={{ type: 'date', day: '—', label: 'Date TBC' }}
+              />
+            </Rows>
           </Specimen>
         </Layout>
       </Section>
@@ -1188,7 +1257,7 @@ export default function ListCardSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Nested surfaces</h2>
             <p>
-              The tint panel below resolves all eleven ListCard colour tokens from itself; no
+              The tint panel below resolves all fifteen ListCard colour tokens from itself; no
               ink value may leak through an omitted declaration.
             </p>
           </Layout>

@@ -1,0 +1,368 @@
+/* Teaser — one linked piece held without an edge. Layout owns every arrangement (the stack, the
+   beside in two equal halves, the row with its marker and end thumbnail, the date's two lines); this
+   module owns the picture's unruled 16:9 box and its zoom, the marker column's width, the play mark's position on it, the type roles per size and the link states. Every
+   value is a --tsr-* token. No margin, no ground at rest, no rule between items. */
+
+.root {
+  min-inline-size: 0;
+}
+
+/* The one anchor. A sizing declaration: it holds exactly one Layout. */
+.link {
+  display: block;
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--tsr-ring-radius);
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: var(--tsr-ring-width) solid var(--tsr-ring-color);
+  outline-offset: var(--tsr-ring-offset);
+}
+
+/* The picture's box: the one ratio and a slight radius — no stroke: the photograph's own edge is
+   the shape (beauty round, 16 Oct 2026: a hairline on every picture drew a box per item). The tone
+   ground holds a contained image's margins and the box while an image loads, so a cover whose own
+   ground is near paper still reads as a shape. Positioned, so the play mark sits on it. */
+.media {
+  display: block;
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: var(--tsr-media-ratio);
+  overflow: hidden;
+  /* The picture's hairline (owner, 16 Oct 2026: "all cards with images are missing the hairline"):
+     the edge of the image, so a cover whose own ground is near paper still has a shape. */
+  border: var(--tsr-media-rule-width) solid var(--tsr-media-rule-ink);
+  border-radius: var(--tsr-media-radius);
+  background-color: var(--tsr-media-ground);
+  /* Its own stacking context, so a graphic's multiply blends with this ground and nothing behind. */
+  isolation: isolate;
+}
+
+/* A graphic on white (an event's card): its white takes the box's pale ground, so the graphic has
+   an edge on paper. Never set on a photograph (Teaser's `graphic`). */
+.graphic .zoom {
+  mix-blend-mode: multiply;
+}
+
+.zoom {
+  display: block;
+  block-size: 100%;
+  transition: transform var(--tsr-media-zoom-duration) var(--tsr-media-zoom-easing);
+}
+
+.link:hover .zoom,
+.link:focus-visible .zoom {
+  transform: scale(var(--tsr-media-zoom));
+}
+
+/* A row's thumbnail: the auto track's width — larger beside a larger title, so the picture keeps
+   its weight against the copy. */
+.thumb {
+  display: block;
+  inline-size: var(--tsr-thumb-inline);
+}
+
+.sizeXl .thumb,
+.sizeLg .thumb {
+  inline-size: var(--tsr-thumb-inline-lg);
+}
+
+/* A marked row's picture: full width above the marker on a phone, the thumbnail from md. */
+@media (max-width: 767px) {
+  .row .markedThumb {
+    inline-size: 100%;
+  }
+}
+
+/* A row's marker column: a fixed width, so every row's copy starts on one edge whatever its date
+   or ordinal says. */
+.markerDate {
+  display: block;
+  inline-size: var(--tsr-marker-date-inline);
+}
+
+.markerIndex {
+  display: block;
+  inline-size: var(--tsr-marker-index-inline);
+}
+
+/* A ledger row's meta column (`metaAside`): from md, at a fixed width, so every title down the list
+   starts on one edge. Below md it is not drawn and the meta line over the title stands in. */
+.markerAside {
+  display: none;
+  inline-size: var(--tsr-marker-aside-inline);
+}
+
+@media (min-width: 768px) {
+  .markerAside {
+    display: grid;
+  }
+
+  .metaInline {
+    display: none;
+  }
+}
+
+/* A row's title and standfirst read at a measure, not across a wide column. */
+.row .title,
+.row .body {
+  max-inline-size: var(--tsr-row-measure);
+}
+
+.index {
+  color: var(--tsr-index-ink);
+  font: var(--tsr-index-text);
+  letter-spacing: var(--tsr-index-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* Beside a larger title the ordinal grows to a numeral that anchors its row (a guide index), in a
+   wider marker column. */
+.sizeXl .index,
+.sizeLg .index,
+.sizeMd .index {
+  font: var(--tsr-index-text-lg);
+  letter-spacing: var(--tsr-index-tracking-lg);
+}
+
+.sizeXl .markerIndex,
+.sizeLg .markerIndex,
+.sizeMd .markerIndex {
+  inline-size: var(--tsr-marker-index-inline-lg);
+}
+
+/* A compact tile's picture: the stack's full width from md, the row's thumbnail below it. */
+.compactPicture {
+  display: block;
+}
+
+/* On a phone the copy needs the width: every row's thumbnail drops to the small size, and a compact
+   row's meta line keeps its first fact only, so it never wraps beside the thumbnail. */
+@media (max-width: 767px) {
+  .compact .metaMore,
+  .row .metaMore {
+    display: none;
+  }
+
+  /* A compact row's thumbnail is too small to carry the play mark, as a row's is. */
+  .compact .play {
+    display: none;
+  }
+
+  .compactPicture,
+  .thumb:not(.markedThumb),
+  .sizeXl .thumb:not(.markedThumb),
+  .sizeLg .thumb:not(.markedThumb) {
+    inline-size: var(--tsr-thumb-inline-sm);
+  }
+}
+
+/* The play mark: a round chip in the picture's top-end corner — clear of the lower third, where a
+   video thumbnail burns in its title. Painted and positioned on the box, not arranged; the glyph is
+   centred in its own chip by the chip's grid. */
+.play {
+  position: absolute;
+  inset-block-start: var(--tsr-play-inset);
+  inset-inline-end: var(--tsr-play-inset);
+  display: grid;
+  place-items: center;
+  inline-size: var(--tsr-play-size);
+  block-size: var(--tsr-play-size);
+  border-radius: var(--tsr-play-radius);
+  background-color: var(--tsr-play-ground);
+  color: var(--tsr-play-ink);
+}
+
+.play > svg {
+  inline-size: var(--tsr-play-glyph);
+  block-size: var(--tsr-play-glyph);
+}
+
+.sizeMd .play,
+.sizeSm .play {
+  inset-block-start: var(--tsr-play-inset-sm);
+  inset-inline-end: var(--tsr-play-inset-sm);
+  inline-size: var(--tsr-play-size-sm);
+  block-size: var(--tsr-play-size-sm);
+}
+
+.sizeMd .play > svg,
+.sizeSm .play > svg {
+  inline-size: var(--tsr-play-glyph-sm);
+  block-size: var(--tsr-play-glyph-sm);
+}
+
+.meta {
+  color: var(--tsr-meta-ink);
+  font: var(--tsr-meta-text);
+  letter-spacing: var(--tsr-meta-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* The format, where a set mixes them: the meta line's lead fact, in the title's ink. */
+.label {
+  color: var(--tsr-label-ink);
+}
+
+/* The date anchor: the day numeral over its month (Layout stacks the two, flush). */
+.date {
+  color: var(--tsr-date-ink);
+}
+
+.day {
+  font: var(--tsr-date-day-text);
+  letter-spacing: var(--tsr-date-day-tracking);
+  /* Lining, tabular figures: "02" and "11" take one width, so every title beside them starts on
+     one edge. */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* The day steps up with the row, so the numeral always clearly outweighs the title beside it; a
+   featured event (beside, xl) sets it at its largest — the date is that item's picture-sized anchor.
+   From md: on a phone the copy needs the width, and the stat step already outweighs the title. */
+@media (min-width: 768px) {
+  .row.sizeXl .day,
+  .row.sizeLg .day,
+  .row.sizeMd .day {
+    font: var(--tsr-date-day-text-lg);
+    letter-spacing: var(--tsr-date-day-tracking-lg);
+  }
+
+  .row.sizeXl .markerDate,
+  .row.sizeLg .markerDate,
+  .row.sizeMd .markerDate {
+    inline-size: var(--tsr-marker-date-inline-lg);
+  }
+}
+
+.beside.sizeXl .day {
+  font: var(--tsr-date-day-text-xl);
+  letter-spacing: var(--tsr-date-day-tracking-xl);
+}
+
+.dateLabel {
+  color: var(--tsr-meta-ink);
+  font: var(--tsr-date-label-text);
+  letter-spacing: var(--tsr-date-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* A clickable title wraps as running text does (pretty, not balance), so its first line stays long
+   and a narrow tile does not set four short lines. The hover is the title taking the accent ink,
+   the kit's linked-card cue (BlockCard, ListCard) — never an underline (owner, 16 Oct 2026). */
+.title {
+  color: var(--tsr-title-ink);
+  text-wrap: var(--text-running-wrap);
+  overflow-wrap: anywhere;
+  transition: color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
+}
+
+.link:hover .title,
+.link:focus-visible .title {
+  color: var(--tsr-title-ink-hover);
+}
+
+/* A tile's and a list row's title is held to three lines and balanced (beauty round 4, 16 Oct 2026):
+   an 80-character title in a 300 measure set four ragged lines, the short ones beside it leaving
+   holes under them. Balanced, a set's titles end near one depth; past three lines the title ends on
+   an ellipsis — the link's accessible name is still the whole title. */
+.sizeMd .title,
+.sizeSm .title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tsr-title-lines);
+  line-clamp: var(--tsr-title-lines);
+  overflow: hidden;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  text-wrap: var(--tsr-title-wrap-tile);
+}
+
+.body {
+  color: var(--tsr-body-ink);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* A row is a list entry and a small tile one of a set: the standfirst is a taste, held to a few
+   lines, so a set keeps one rhythm however long the CMS's sentence runs. */
+.row .body,
+.sizeMd .body,
+.sizeSm .body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tsr-tile-body-lines);
+  line-clamp: var(--tsr-tile-body-lines);
+  overflow: hidden;
+}
+
+.row .body {
+  -webkit-line-clamp: var(--tsr-row-body-lines);
+  line-clamp: var(--tsr-row-body-lines);
+}
+
+.sizeXl .title {
+  /* A lead at the column's full width (a cinema) holds its title to a title's measure, not 900px. */
+  max-inline-size: var(--tsr-title-measure-xl);
+  font: var(--tsr-title-text-xl);
+  letter-spacing: var(--tsr-title-tracking-xl);
+}
+
+.sizeXl .body {
+  max-inline-size: var(--tsr-body-measure-xl);
+}
+
+/* A small or middle tile's meta line keeps to its first fact, so it is one line in a narrow track
+   (a list row, wide, keeps them all). */
+.sizeSm:not(.row) .metaMore,
+.sizeMd:not(.row) .metaMore {
+  display: none;
+}
+
+.sizeXl .body {
+  font: var(--tsr-body-text-xl);
+}
+
+.sizeLg .title {
+  font: var(--tsr-title-text-lg);
+  letter-spacing: var(--tsr-title-tracking-lg);
+}
+
+.sizeLg .body {
+  font: var(--tsr-body-text-lg);
+}
+
+.sizeMd .title {
+  font: var(--tsr-title-text-md);
+  letter-spacing: var(--tsr-title-tracking-md);
+}
+
+.sizeMd .body {
+  font: var(--tsr-body-text-md);
+}
+
+.sizeSm .title {
+  font: var(--tsr-title-text-sm);
+  letter-spacing: var(--tsr-title-tracking-sm);
+}
+
+.sizeSm .body {
+  font: var(--tsr-body-text-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom,
+  .title {
+    transition: none;
+  }
+
+  .link:hover .zoom,
+  .link:focus-visible .zoom {
+    transform: none;
+  }
+}

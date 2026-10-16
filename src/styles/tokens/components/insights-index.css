@@ -1,0 +1,66 @@
+/* ══ Component layer — InsightsIndex (templates) ═════════════════════════════════
+   Tier 3. The insights hub and its format pages (16 Oct 2026): what the two templates draw
+   themselves — a curated section's one-line head, an events page's group label, and a format
+   page's count beside "Show more". Every piece is a Teaser and draws its own; the rail is
+   IndexRail's.
+
+   Naming: --iix-{part}-{role}
+     parts  section-title · group-title · count
+     roles  text · tracking · ink · scroll-top
+
+   Every surface block declares every surface-dependent token. Every band these templates paint is
+   paper; the other three are declared for self-containment (tokens rule 2).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* A curated section's head: the h2 role, as every section head on the site (owner, 16 Oct 2026:
+     the h4 head was "too small. foundationally incorrect"). Section heads take h1/h2 by prominence. */
+  --iix-section-title-text: var(--text-h2);
+  --iix-section-title-tracking: var(--text-h2-tracking);
+  /* An events page's group label: the eyebrow, the date column's voice. */
+  --iix-group-title-text: var(--text-eyebrow);
+  --iix-group-title-tracking: var(--text-eyebrow-tracking);
+  /* The count beside "Show more": the label voice. */
+  --iix-count-text: var(--text-eyebrow);
+  --iix-count-tracking: var(--text-eyebrow-tracking);
+  /* A section is a jump target from the rail: it clears the sticky site nav when jumped to. The
+     rail's own stick height, duplicated by value (tokens rule 6). */
+  --iix-scroll-top: 112px;
+}
+
+/* Below 1024 a jumped-to section clears the compact nav (65) AND the rail's one-line bar under it
+   (about 46), with a step of air, so its head never slides under the bar (beauty round 4). */
+@media (max-width: 1023px) {
+  :root {
+    --iix-scroll-top: 128px;
+  }
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --iix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --iix-group-title-ink: var(--color-neutral-600);
+  --iix-count-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+/* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
+[data-surface='tint'] {
+  --iix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --iix-group-title-ink: var(--color-neutral-700);
+  --iix-count-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --iix-section-title-ink: var(--color-white);
+  --iix-group-title-ink: var(--color-neutral-400);
+  --iix-count-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment ─────────────────────────── */
+[data-surface='blue'] {
+  --iix-section-title-ink: var(--color-white); /* 6.23:1 */
+  --iix-group-title-ink: var(--color-brandeis-100);
+  --iix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

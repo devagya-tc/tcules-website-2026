@@ -352,11 +352,13 @@ export {
 export {
   TestimonialBeside,
   TestimonialCard,
+  TestimonialCase,
   TestimonialWall,
   type TestimonialAvatar,
   type TestimonialBesideArrangement,
   type TestimonialBesideProps,
   type TestimonialCardProps,
+  type TestimonialCaseProps,
   type TestimonialFrame,
   type TestimonialVoice,
   type TestimonialItem,
@@ -371,6 +373,9 @@ export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps }
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
 export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
+
+/* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
+export { Reasons, type ReasonsArrangement, type ReasonsItem, type ReasonsProps } from './Reasons';
 
 /* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
 export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
@@ -393,3 +398,19 @@ export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } 
 
 /* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
 export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';
+
+/* IndexRail — a curated listing page's rail beside its content: a BY TYPE / BY TOPIC switch that
+   changes the whole view (held in the URL), or a picker of sibling pages (insights, 16 Oct 2026). */
+export { IndexRail, type IndexRailItem, type IndexRailMode, type IndexRailProps } from './IndexRail';
+
+/* Teaser — one linked piece held without an edge: picture or date or meta line at its head, in a
+   stack, beside, or as a row with an end thumbnail (insights hub and format pages, 16 Oct 2026). */
+export {
+  Teaser,
+  type TeaserArrangement,
+  type TeaserDate,
+  type TeaserImage,
+  type TeaserMedia,
+  type TeaserProps,
+  type TeaserSize,
+} from './Teaser';

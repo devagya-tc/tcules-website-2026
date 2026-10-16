@@ -647,3 +647,74 @@ proposals below are where that design asks something of the copy.
 - **Problem:** the hero carries "Selected Product Design work: Doodle · Dealpath · Eden AI · Auxentios · Scissors". The page lists those cases in full further down ("More complex products we have made easier to use"), so the line only repeats that list. Set as a line of links under the hero it also read as unfinished (owner, 11 Oct 2026).
 - **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
 - **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
+
+### P47 · `/` · selected-work · the brief for the featured case card (TestimonialCase)
+
+- **Problem:** the featured cases are now ONE card each (owner, 16 Oct 2026): a 16:9 cover beside
+  the claim, with the client's words in a box inside the card under both. The card was designed for
+  the content it should carry, not for the copy as it stands, so this is the brief that content
+  should be written to. Today's copy mostly fits; three things are missing (below).
+- **Proposal:** each featured case supplies these fields.
+
+  | Field | Limit | Notes |
+  |---|---|---|
+  | Eyebrow | ≤ 32 characters | The client, optionally its discipline ("Doodle · Product design"). Today the build takes the name before the title's colon. |
+  | Claim | 4–8 words, ≤ 48 characters | The card's h3, two lines at most beside the cover. No client name: the eyebrow carries it. |
+  | Result | 1–2 sentences, ≤ 35 words | What changed for the client's users. Today's stories (30–32 words) fit. |
+  | Link label | "Read the {client} case" | As now. |
+  | Cover | 16:9 master, ≥ 1360 × 765 | Cropped to 16:9 at every width, with a recorded focal point; ruled with a light hairline. One master per case ends the cropping (docs/image-register.md). |
+  | Quote | ≤ 35 words, ≤ 200 characters | The client's own words, whole. Two lines at 1440, about seven on a phone. Doodle (33 words) and Eden AI (35) fit. |
+  | Speaker | name, role, company | Shown as a portrait beside name over "role, company". |
+  | Rating | out of 5, in halves | Shown as stars only, no numeral. |
+  | Portrait | square, ≥ 192 × 192 | A circle; with none the card shows no portrait (initials are banned). |
+
+  Missing today: **Stephanie Leue's role** (the card shows "Doodle" alone), **a portrait of Samy
+  Melaine**, and **16:9 cover masters** for both cases.
+- **Why:** with every field inside its limit the card holds its shape at 1440 and on a phone, and
+  the quote box stays the card's foot rather than its largest part. Until the gaps are filled the
+  copy renders as written.
+
+### P48 · `/` (and any page that argues "why us") · why-tcules · six reasons, written for the Reasons band
+
+- **Supersedes P7** for this band. The owner set the current "why Tcules" copy aside (16 Oct 2026),
+  and the band is now designed first, against ideal content: the `Reasons` pattern (`/design/reasons`,
+  #115), with three arrangements (open, boxed, beside), each one fold at 1440.
+- **Problem:** the current band is 211 words of four reasons with three quotes. It needs two bands
+  and puts testimonials next to the testimonial band (P7). The new band holds every reason on one
+  screen only if each reason is short and the same shape.
+- **Proposal:** write the band as follows.
+  - **Count:** three or six reasons. Six is the designed shape, three also fills whole rows. Four
+    or five leave a gap.
+  - **Heading:** one short claim (about 6 words, e.g. "A studio built for what ships."). It may have
+    an optional second clause that carries the gloss, which the design sets lighter in the same
+    line (about 6–12 words, e.g. "Six reasons teams stay."). Together they read as one sentence,
+    under about 100 characters.
+  - **Eyebrow (optional):** two or three words ("Why Tcules").
+  - **Per reason:**
+    - **Title:** five words or fewer, in the buyer's words, a claim rather than a label ("Senior
+      people, start to finish", not "Seniority").
+    - **Sentence:** one sentence of about 14 words (20 at most) that argues the title. It says what
+      the buyer gets, not what we do internally.
+  - **No proof inside the band:** no quotes, ratings, logos or figures. Each reason gets a drawing of
+    its claim, made by design from the sentence, so write each reason as something that can be
+    pictured (people carried through phases, a design matching its code, screens by Friday).
+    Testimonials stay in the testimonial band.
+  - **Optional action:** one way to go deeper ("How we work"), two or three words, with its
+    destination.
+  - **Distinct reasons:** six reasons that don't overlap. If two share a picture, they are one
+    reason.
+- **Why:** the reasons become the band's primary object, readable in a five-second scan and in full,
+  on one screen. The quotes go back to one place on the page. While the content team writes the
+  real reasons, the specimen's placeholder set shows the target lengths:
+
+  | Title | Sentence |
+  |---|---|
+  | Senior people, start to finish | The people in the pitch are the people on your product, through to launch day. |
+  | Design that ships as code | Components and tokens your engineers can use, matching the file to the pixel. |
+  | Real screens in week one | Decisions start in the first five days, on screens you can click. |
+  | Judged on the number | We agree the metric that matters first, and track it after launch. |
+  | AI that people trust | AI features designed around what people check, accept and correct. |
+  | A system your team keeps | A documented design system, so the product holds its shape after we leave. |
+
+  These are placeholders, not proposed copy: the claims (week-one screens, metric tracking) need
+  the content team's sign-off before anything like them ships.

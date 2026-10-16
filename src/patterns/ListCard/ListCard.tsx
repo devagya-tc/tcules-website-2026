@@ -8,8 +8,10 @@ import {
   Media,
   type IconName,
   type MediaImage,
+  Sketch,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import type { ArticleSceneName } from '@/lib/sketches';
 import { LIST_CARD_THUMBNAIL } from '@/lib/image-sizes';
 
 import styles from './ListCard.module.css';
@@ -42,7 +44,18 @@ export type ListCardMarker =
       quiet grey, for a set whose band already carries its accent elsewhere. */
   | { type: 'number'; value: number; tone?: ListCardNumberTone }
   | { type: 'icon'; name: IconName }
-  | { type: 'thumbnail'; image: MediaImage };
+  | { type: 'thumbnail'; image: MediaImage }
+  /** `sketch` (13 Oct 2026, the insights hub): a DRAWN thumbnail — the scene drawn for this article
+      (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in data.
+      Decorative (the Sketch is aria-hidden). */
+  | { type: 'sketch'; name: ArticleSceneName }
+  /** `date` (13 Oct 2026, the insights hub's events): the day large in the stat voice, in the
+      accent, and the month and year under it in the label voice — a row that IS a date first. A
+      real `<time>`, not aria-hidden: the date is content, unlike an ordinal. The caller formats
+      both strings ("14", "Nov 2026") and passes the ISO value for `dateTime`. Without `dateTime`
+      (a date not yet set: "—", "Date TBC") it renders as text, not a `<time>`, so a ledger
+      with one undated row keeps every row's copy on one edge. */
+  | { type: 'date'; dateTime?: string; day: string; label: string };
 
 export type ListCardNumberTone = 'accent' | 'neutral';
 
@@ -126,6 +139,16 @@ export type ListCardProps = ListCardFormProps & {
   /** Primary label. Whitespace-only values render nothing and warn in development. */
   title: string;
   /**
+   * One quiet label above the title — what KIND of thing the item is and when ("Podcast · 25 Aug
+   * 2026", "12 min read"). BlockCard's eyebrow voice: mono, uppercase in presentation only, the
+   * quiet-label ink, never blue (the words stay ink; blue is for marks). Set a `text` (16) above the
+   * title, the step BlockCard's head group uses, so a row and a card under one heading share one
+   * rhythm. In a split row it travels with the title, in the title's track. Added for the insights
+   * feed (InsightsIndex, 13 Oct 2026), where a row of mixed formats has nowhere else to say which
+   * format it is. A plain string: the caller composes the line. Whitespace-only omits it and warns.
+   */
+  eyebrow?: string;
+  /**
    * One explanatory paragraph. Optional (1 Oct 2026): an item can be its name alone — a checklist
    * line, a deliverable that needs no gloss. Absent renders no paragraph and no seam; a value that
    * is present but whitespace-only is a CMS fault, so it is omitted with a warning.
@@ -165,6 +188,16 @@ export type ListCardProps = ListCardFormProps & {
    * without a destination. Pass ordinary capitalisation; Button sets the case.
    */
   ctaLabel?: string;
+  /**
+   * Which end of a ROW the marker stands at (13 Oct 2026, the insights archive). `start` (default)
+   * leads with it. `end` sets an image marker (`thumbnail`, `sketch`) after the copy, so a list where
+   * only SOME rows carry an image keeps every title and eyebrow on one edge — the archive-index
+   * pattern (docs/research/resources-listing.md). Visual and DOM order agree: the copy first. Ignored
+   * on a tile, whose marker always heads it, and for a number, icon or date marker, which index the
+   * row and must lead it. Below 768 an end image is not shown: it is supplementary (the copy leads
+   * the row), and beside a 326 phone column it squeezed the copy to ~200px.
+   */
+  markerPosition?: 'start' | 'end';
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -196,6 +229,32 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
         )}
       >
         {value}
+      </span>
+    );
+  }
+
+  if (marker.type === 'date') {
+    /* A fixed-width column (--lcrd-date-inline), so a ledger of dates keeps every row's copy on one
+       edge whether the day is "1" or "30". Day over label at `tight` (8): a stat and its unit. */
+    const face = (
+      <Layout as="span" rowGap="tight">
+        <span className={styles.dateDay}>{marker.day}</span>
+        <span className={styles.dateLabel}>{marker.label}</span>
+      </Layout>
+    );
+    return marker.dateTime ? (
+      <time className={cx(styles.marker, styles.date)} dateTime={marker.dateTime}>
+        {face}
+      </time>
+    ) : (
+      <span className={cx(styles.marker, styles.date)}>{face}</span>
+    );
+  }
+
+  if (marker.type === 'sketch') {
+    return (
+      <span className={cx(styles.marker, styles.thumbnail)}>
+        <Sketch name={marker.name} />
       </span>
     );
   }
@@ -267,6 +326,7 @@ function Marker({ marker, form }: { marker: ListCardMarker; form: ListCardForm }
  */
 export function ListCard({
   title,
+  eyebrow,
   body,
   bodyHtml,
   marker,
@@ -278,6 +338,7 @@ export function ListCard({
   href,
   external = false,
   ctaLabel,
+  markerPosition = 'start',
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -358,6 +419,22 @@ export function ListCard({
     </Title>
   );
 
+  if (eyebrow !== undefined && eyebrow.trim().length === 0) {
+    warn(`eyebrow is blank for ${JSON.stringify(title)}; omitting the label.`);
+  }
+  /* The head: the title, or the eyebrow over it at `text` (16) — one group, so a split row keeps the
+     label in the title's track. `extra` is the split's sizing class, which belongs to whatever sits
+     in the title's track: the title alone, or the group. */
+  const headNode = (extra?: string) =>
+    eyebrow?.trim() ? (
+      <Layout rowGap="text" className={extra}>
+        <span className={styles.eyebrow}>{eyebrow}</span>
+        {titleNode(styles.title)}
+      </Layout>
+    ) : (
+      titleNode(cx(styles.title, extra))
+    );
+
   /* The tile: marker, then the title over its body, then — when there is one — the action at the
      foot, pinned there so every action in a grid row sits on one line however long its body runs.
 
@@ -377,7 +454,7 @@ export function ListCard({
      BlockCard's. */
   const tileCopy = (
     <Layout rowGap="text" className={styles.content}>
-      {titleNode(styles.title)}
+      {headNode()}
       {bodyNode(styles.body)}
     </Layout>
   );
@@ -396,7 +473,9 @@ export function ListCard({
         <div
           className={cx(
             styles.tileCopy,
-            marker.type === 'thumbnail' ? styles.tileCopyBelow : styles.tileCopyBeside,
+            marker.type === 'thumbnail' || marker.type === 'sketch'
+              ? styles.tileCopyBelow
+              : styles.tileCopyBeside,
           )}
         >
           {tileCopy}
@@ -420,19 +499,24 @@ export function ListCard({
      inside Cluster. */
   const rowCopy = isSplit ? (
     <Cluster colGap="block" rowGap="text" align="start" className={styles.content}>
-      {titleNode(cx(styles.title, styles.splitTitle))}
+      {headNode(styles.splitTitle)}
       {bodyNode(cx(styles.body, styles.splitBody))}
     </Cluster>
   ) : (
     <Layout rowGap="text" className={styles.content}>
-      {titleNode(styles.title)}
+      {headNode()}
       {bodyNode(styles.body)}
     </Layout>
   );
 
+  const trailing =
+    markerPosition === 'end' &&
+    marker !== undefined &&
+    (marker.type === 'thumbnail' || marker.type === 'sketch');
+  const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
-      {marker ? <Marker marker={marker} form={form} /> : null}
+      {trailing ? null : markerNode}
       <div className={styles.core}>
         {action ? (
           <Layout rowGap="block">
@@ -443,6 +527,7 @@ export function ListCard({
           rowCopy
         )}
       </div>
+      {trailing ? markerNode : null}
     </Cluster>
   );
 
@@ -456,6 +541,7 @@ export function ListCard({
         isTile && styles.tile,
         boxed && styles.boxed,
         action !== null && styles.withAction,
+        trailing && styles.markerEnd,
       )}
     >
       {destination ? (

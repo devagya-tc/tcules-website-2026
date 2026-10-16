@@ -10,7 +10,7 @@ import {
   CtaRow,
   Gateway,
   LogoGrid,
-  TestimonialBeside,
+  TestimonialCase,
   TestimonialCard,
   type BlockCardSetItem,
   type GatewayItem,
@@ -298,9 +298,7 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
            "similar design here on the homepage with some visual element in the content area"). */
         ...(sketchForRoute(target.href)
           ? {
-              visual: (
-                <Sketch name={sketchForRoute(target.href)!} />
-              ),
+              visual: <Sketch name={sketchForRoute(target.href)!} />,
             }
           : {}),
       },
@@ -346,15 +344,12 @@ const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
  * Featured, then listed (owner, home round 2: "2 rows for the case studies with quotes, and then the
  * other case studies listed in a 2-col layout").
  *
- *   1. The two cases whose clients spoke (Doodle, Eden AI) each take a featured row, now a DIPTYCH
- *      (owner, home round 3, 11 Oct 2026: the quote card beside the case "feels randomly floaty"):
- *      the case card in one half — its 16:9 cover, the title, its paragraph and its link — and in
- *      the other half the client's rated words on a quiet panel, top-aligned, the speaker and their
- *      avatar pinned inside its foot (round 4: "avatar inside the card please"). From 1440 the panel
- *      is the cover's 16:9, so its top and foot are the cover's; at 1024–1439 it stretches to the
- *      row (TestimonialBeside states why). Attached by shared edges, never embedded ("if a
- *      quote is embedded in the case it might as well be in the testimonial section"). The second
- *      row mirrors the first.
+ *   1. The two cases whose clients spoke (Doodle, Eden AI) are each ONE card (TestimonialCase,
+ *      16 Oct 2026, the shape approved in round 7). The round-3 diptych, a case card beside a quote
+ *      panel, read as "disjointed, and as 3 units instead of one". Now the cover and the claim share
+ *      a ground with the client's words, boxed inside the card under both. The client's name before
+ *      the title's colon becomes the card's eyebrow, the rest its claim. The two cards are a set, a
+ *      `gutter` apart, and the second mirrors the first.
  *   2. The cases without a quote (Dealpath, Benchmark Gensuite) follow as a lighter pair, two across,
  *      one type step down, at the same 16:9 (there is no other card crop since round 3).
  *
@@ -369,7 +364,8 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
   const lastLines = linkLines(cases.at(-1));
   const closing = lastLines.length > 1 ? lastLines.at(-1) : undefined;
 
-  const card = (item: ItemBlock, index: number, featured: boolean) => {
+  /* What a case card and a featured case both read from one authored item. */
+  const parts = (item: ItemBlock, index: number) => {
     const lines = linkLines(item);
     const link = index === cases.length - 1 && closing ? lines.at(-2) : lines.at(-1);
     /* The client's name before the colon names the artefact: a title's other words can name
@@ -378,26 +374,29 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
     const binding = bindingNamed(page, item.headingText.split(':')[0] ?? item.headingText);
     const focus = binding ? COVER_FOCUS[binding.id] : undefined;
     const paragraphs = paragraphRuns(item.blocks);
+    const story =
+      paragraphs.length === 1 && paragraphs[0]
+        ? bodyOf(paragraphs[0])
+        : { bodyHtml: paragraphs.map((runs) => `<p>${plain(runs)}</p>`) };
+    const image = binding
+      ? { ...corpusImage(binding), ...(focus ? { focus } : {}) }
+      : undefined;
+    return { link, story, image };
+  };
+
+  const card = (item: ItemBlock, index: number) => {
+    const { link, story, image } = parts(item, index);
     return (
       <BlockCard
         key={item.headingText}
-        size={featured ? 'lg' : 'md'}
+        size="md"
         titleAs="h3"
         title={item.headingText}
-        {...(paragraphs.length === 1 && paragraphs[0]
-          ? bodyOf(paragraphs[0])
-          : { bodyHtml: paragraphs.map((runs) => `<p>${plain(runs)}</p>`) })}
+        {...story}
         href={link?.href}
         ctaLabel={link?.labelText}
         cue="cta"
-        media={
-          binding
-            ? {
-                type: 'image',
-                image: { ...corpusImage(binding), ...(focus ? { focus } : {}) },
-              }
-            : undefined
-        }
+        media={image ? { type: 'image', image } : undefined}
       />
     );
   };
@@ -406,20 +405,43 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
   const featured = indexed.filter((entry) => entry.quote);
   const listed = indexed.filter((entry) => !entry.quote);
 
+  /* "Doodle: meeting times people will actually keep" → eyebrow "Doodle", claim "Meeting times
+     people will actually keep". Presentation of the authored words, not a rewrite: only the claim's
+     first letter is raised. A title with no colon stays whole, with no eyebrow. */
+  const claimOf = (heading: string) => {
+    const at = heading.indexOf(':');
+    if (at < 1) return { title: heading };
+    const rest = heading.slice(at + 1).trim();
+    return {
+      eyebrow: heading.slice(0, at).trim(),
+      title: rest.charAt(0).toUpperCase() + rest.slice(1),
+    };
+  };
+
   const body = (
     <Layout rowGap="section">
-      {featured.map(({ item, index, quote }, row) => (
-        <TestimonialBeside
-          key={item.headingText}
-          arrangement="diptych"
-          work={<ul>{card(item, index, true)}</ul>}
-          item={testimonialItem(quote!, ratings, avatars)}
-          reverse={row % 2 === 1}
-        />
-      ))}
+      <Layout rowGap="gutter">
+        {featured.map(({ item, index, quote }, row) => {
+          const { link, story, image } = parts(item, index);
+          /* A featured case without its link or cover falls back to the plain card. */
+          if (!link || !image) return <ul key={item.headingText}>{card(item, index)}</ul>;
+          return (
+            <TestimonialCase
+              key={item.headingText}
+              {...claimOf(item.headingText)}
+              {...story}
+              href={link.href}
+              ctaLabel={link.labelText}
+              image={image}
+              item={testimonialItem(quote!, ratings, avatars)}
+              reverse={row % 2 === 1}
+            />
+          );
+        })}
+      </Layout>
       {listed.length > 0 ? (
         <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
-          {listed.map(({ item, index }) => card(item, index, false))}
+          {listed.map(({ item, index }) => card(item, index))}
         </Layout>
       ) : null}
     </Layout>

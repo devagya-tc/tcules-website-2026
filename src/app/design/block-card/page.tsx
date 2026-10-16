@@ -808,8 +808,8 @@ export default function BlockCardSpecimenPage() {
             articles, videos, podcasts. The image goes through <code>Media</code> with{' '}
             <code>fit=&quot;fill&quot;</code> inside the card&rsquo;s own ratio box: 16:9 (
             <code>--ratio-standard</code>), the one card ratio, in every set and arrangement
-            (home round 3). The box draws
-            one hairline round every kind; Media draws none of its own inside a card.
+            (home round 3). The box draws one hairline round every kind; Media draws none of its
+            own inside a card.
           </BandHead>
           <Specimen
             title="3 case studies · three from lg"
@@ -878,6 +878,37 @@ export default function BlockCardSpecimenPage() {
               lead="none"
               standIns="texture"
               cue="download"
+            />
+          </Specimen>
+          <Specimen
+            title='media type "sketch" · a generated cover'
+            note="13 Oct 2026, the insights hub: an article with no cover takes the Sketch scene DRAWN for it from its own argument, on its dot-field plate inside the same ruled 16:9 box — never a service scene (owner, revised). The caller assigns it item by item, in data. No type on it."
+          >
+            <BlockCardSet
+              lead="none"
+              items={[
+                {
+                  id: 'sketch-1',
+                  title: 'Accepting AI-generated front-end code: what review is for now',
+                  eyebrow: '26 Sept 2026 · 14 min read',
+                  media: { type: 'sketch', name: 'code-review' },
+                  href: ROUTES.insights,
+                },
+                {
+                  id: 'sketch-2',
+                  title: 'Vibe-coded app security checklist: 25 checks before real users arrive',
+                  eyebrow: '15 Sept 2026 · 10 min read',
+                  media: { type: 'sketch', name: 'security-checklist' },
+                  href: ROUTES.insights,
+                },
+                {
+                  id: 'sketch-3',
+                  title: 'I vibe-coded an app. Now what? The path from prototype to production',
+                  eyebrow: '28 Aug 2026 · 9 min read',
+                  media: { type: 'sketch', name: 'prototype-to-production' },
+                  href: ROUTES.insights,
+                },
+              ]}
             />
           </Specimen>
           <Specimen
@@ -2007,11 +2038,11 @@ export default function BlockCardSpecimenPage() {
       <Section>
         <Layout rowGap="stack">
           <BandHead title="23 · One crop, and the phone pair (home rounds 1 and 3)">
-            The set no longer states a crop: every cover is 16:9 (home round 3, 11 Oct 2026), so a
-            linked pair of contained drawings is 16:9 too.{' '}
-            <code>phone=&quot;pair&quot;</code>: two across below 768, never a scroll row, for a
-            set of short covered cards whose title is their whole content — eight sectors
-            stacked ran ~2900 tall at 390 and a scroll row hid seven of them.
+            The set no longer states a crop: every cover is 16:9 (home round 3, 11 Oct 2026), so
+            a linked pair of contained drawings is 16:9 too. <code>phone=&quot;pair&quot;</code>
+            : two across below 768, never a scroll row, for a set of short covered cards whose
+            title is their whole content — eight sectors stacked ran ~2900 tall at 390 and a
+            scroll row hid seven of them.
           </BandHead>
           <Specimen
             title={'Linked covered pair · size="lg"'}

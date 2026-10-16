@@ -209,7 +209,8 @@ function peerGrid(
 }
 
 const hasCover = (item: BlockCardSetItem) =>
-  item.media?.type === 'texture' || Boolean(item.media?.image.src.trim());
+  item.media !== undefined &&
+  (item.media.type !== 'image' || Boolean(item.media.image.src.trim()));
 
 /**
  * The peers' type step (§ 7.2), decided by TRACK WIDTH, not by count (cmp-feature, 6 Oct 2026).

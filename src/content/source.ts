@@ -4,6 +4,7 @@ import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-list
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { BORROWED_QUOTES } from './sources/fixtures/borrowed-quotes';
+import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
@@ -44,6 +45,7 @@ import type {
   GlossaryContentSource,
   HowWeWorkContentSource,
   InsightsContentSource,
+  InsightsPage,
   MatterDesignSystemContentSource,
   PodcastContentSource,
   PrivacyPolicyContentSource,
@@ -147,6 +149,13 @@ export const getGlossaryPage = glossariesSource.getGlossaryPage.bind(glossariesS
 export const getHowWeWorkPage =
   howWeWorkPagesSource.getHowWeWorkPage.bind(howWeWorkPagesSource);
 export const getInsightsPage = insightsPagesSource.getInsightsPage.bind(insightsPagesSource);
+/**
+ * The insights hub as DESIGNED, with stress content (sources/fixtures/insights.ts) — for the
+ * InsightsIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
+ */
+export async function getInsightsFixturePage(): Promise<InsightsPage> {
+  return INSIGHTS_FIXTURE;
+}
 export const getMatterDesignSystemPage =
   matterDesignSystemsSource.getMatterDesignSystemPage.bind(matterDesignSystemsSource);
 export const getPodcastPage = podcastsSource.getPodcastPage.bind(podcastsSource);
@@ -315,6 +324,7 @@ export type {
   InsightTaxonomy,
   InsightResourceKind,
   InsightResource,
+  InsightCollection,
   InsightsContentSource,
   MatterDesignSystemPage,
   MatterDesignSystemSection,

@@ -5,7 +5,7 @@
    Naming: --lcrd-{part}-{role}-{state}, with a size suffix where the type steps with the set
    (--lcrd-title-text-md | -sm)
      variants: neutral (the number's quiet tone only)
-     parts: title | body | marker | number | ground | link | rule | box | ring | thumbnail | content
+     parts: title | eyebrow | body | marker | number | ground | link | rule | box | ring | thumbnail | content
      (title and body also carry the split's -min geometry)
      states: rest (no suffix) | hover | pressed
 
@@ -90,6 +90,17 @@
      large and gives its weight back through colour instead — see --lcrd-number-ink. --text-index is
      the 20px mono role added for exactly this gap; see primitives.css, where the mono ramp ran
      11, 12, 13, 14 and then jumped straight to stat's 40. */
+  /* The eyebrow (13 Oct 2026): BlockCard's label role, duplicated by value on purpose — a row and a
+     card under one heading say "Podcast · 25 Aug 2026" in one voice. */
+  --lcrd-eyebrow-text: var(--text-eyebrow);
+  --lcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
+  /* The date marker (13 Oct 2026): the day at the stat role, a numeral that IS the row's information
+     (an event's date), so it takes the accent and the stat size where the ordinal takes the quieter
+     index role. The column is component geometry: "30" at the 40px stat role is ~48 wide and
+     "SEP 2026" at the eyebrow role ~70, so 96 holds both with the label on one line. */
+  --lcrd-date-day-text: var(--text-stat);
+  --lcrd-date-day-tracking: var(--text-stat-tracking);
+  --lcrd-date-inline: 96px;
   --lcrd-marker-text: var(--text-index);
   --lcrd-marker-tracking: var(--text-index-tracking);
 
@@ -170,6 +181,8 @@
      2026) — the photograph radius every image box now takes, so a row's 160px thumbnail and the
      card photos above it on one page have one corner. On the box, not the image: the box clips. */
   --lcrd-thumbnail-radius: var(--radius-8);
+  /* The thumbnail's hairline (owner, 13 Oct 2026): BlockCard's --bcrd-media-rule-width by value. */
+  --lcrd-thumbnail-rule-width: var(--border-width-hairline);
 
   /* The clipped box that keeps an external row's "opens in a new tab" hint out of the layout while
      leaving it in the accessibility tree. Not an optical correction and not a layout distance — a
@@ -225,12 +238,15 @@
 [data-surface='paper'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --lcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
+  --lcrd-date-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark (fdn-blue) */
   --lcrd-number-ink: var(--color-brandeis-500); /* 6.17:1 — numerals carry the accent */
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.92:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 6.17:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 10.07:1 */
   --lcrd-rule-ink: var(--color-neutral-300); /* decoration */
+  --lcrd-thumbnail-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --lcrd-ground-hover: var(--color-paper-deep); /* a boxed linked tile only */
   --lcrd-ground-pressed: var(--color-neutral-100);
   --lcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
@@ -243,12 +259,15 @@
 [data-surface='tint'] {
   --lcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --lcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — 600 would be 4.39:1 */
+  --lcrd-date-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-number-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.39:1 */
   --lcrd-link-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-700); /* 8.99:1 */
   --lcrd-rule-ink: var(--color-neutral-400); /* decoration */
+  --lcrd-thumbnail-rule-ink: var(--color-neutral-400); /* 1.90:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-100);
   --lcrd-ground-pressed: var(--color-neutral-200);
   --lcrd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
@@ -263,12 +282,15 @@
 [data-surface='ink'] {
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --lcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
+  --lcrd-date-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-marker-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --lcrd-number-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-neutral-number-ink: var(--color-neutral-500); /* 5.41:1 */
   --lcrd-link-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 15.44:1 */
   --lcrd-rule-ink: var(--color-neutral-700); /* decoration */
+  --lcrd-thumbnail-rule-ink: var(--color-neutral-700); /* 2.10:1 — decoration */
   --lcrd-ground-hover: var(--color-neutral-900);
   --lcrd-ground-pressed: var(--color-neutral-800);
   --lcrd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
@@ -281,12 +303,15 @@
 [data-surface='blue'] {
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --lcrd-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --lcrd-date-ink: var(--color-white); /* 6.23:1 */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
   --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */
   --lcrd-link-ink: var(--color-brandeis-100); /* 4.91:1 */
   --lcrd-link-ink-pressed: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-rule-ink: var(--color-brandeis-300); /* decoration */
+  --lcrd-thumbnail-rule-ink: var(--color-brandeis-300); /* 2.64:1 — decoration */
   --lcrd-ground-hover: var(--color-brandeis-600);
   --lcrd-ground-pressed: var(--color-brandeis-700);
   --lcrd-ring-color: var(--color-white); /* 6.23:1 against gap */

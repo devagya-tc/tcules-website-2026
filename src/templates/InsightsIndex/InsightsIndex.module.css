@@ -1,0 +1,33 @@
+/* InsightsIndex and InsightsFormat — the marks the insights templates draw themselves. Layout,
+   Cluster and IndexRail own every arrangement; every value is an --iix-* token. */
+
+/* A curated section: the rail's jump target, so it clears the sticky nav when jumped to. */
+.curated,
+.page {
+  min-inline-size: 0;
+  scroll-margin-block-start: var(--iix-scroll-top);
+}
+
+/* A section's one-line head: a quiet serif signpost, below the lead piece's title. */
+.sectionTitle {
+  color: var(--iix-section-title-ink);
+  font: var(--iix-section-title-text);
+  letter-spacing: var(--iix-section-title-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* An events page's group ("Next", "Upcoming", "Past"): a label in the date column's voice, not a
+   heading competing with the titles under it. */
+.groupTitle {
+  color: var(--iix-group-title-ink);
+  font: var(--iix-group-title-text);
+  letter-spacing: var(--iix-group-title-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.count {
+  color: var(--iix-count-ink);
+  font: var(--iix-count-text);
+  letter-spacing: var(--iix-count-tracking);
+  text-transform: var(--text-mono-case);
+}

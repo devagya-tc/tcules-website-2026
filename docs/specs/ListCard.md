@@ -17,6 +17,34 @@
 | **Implements**      | `docs/briefs/11-list-card.md`                                                                                          |
 | **Implemented at**  | `src/patterns/ListCard/` · `src/styles/tokens/components/list-card.css` · specimen `src/app/design/list-card/page.tsx` |
 
+> **Amendment · 13 Oct 2026 · the insights hub (docs/specs/InsightsIndex.md).** Two additions, both
+> built in this tier because the hub needed them and a row had nowhere else to put them:
+>
+> 1. **`eyebrow?: string`** — one quiet mono label above the title ("Podcast · 25 Aug 2026"),
+>    BlockCard's eyebrow voice and values (`--lcrd-eyebrow-text`, `-tracking`, and `-ink` per surface:
+>    neutral-600 4.92:1 · neutral-700 7.27:1 · neutral-400 8.05:1 · brandeis-100 4.91:1), a `text` (16)
+>    above the title. In a split row it travels with the title in the title's track. Blank warns and
+>    renders nothing.
+> 2. **`marker: { type: 'date'; dateTime?: string; day: string; label: string }`** — the day at the
+>    stat role in the accent (`--lcrd-date-day-text`, `--lcrd-date-ink`: brandeis-500 · brandeis-500 ·
+>    brandeis-300 · white), month and year under it at `tight` in the eyebrow's voice, in a fixed
+>    `--lcrd-date-inline` (96) column. A `<time>` with `dateTime`; without one, text. The caller formats
+>    both strings. Specimen: `/design/list-card`, the eyebrow and date-marker blocks.
+> 4. **The thumbnail has an outline** (owner, 13 Oct 2026, superseding "a radius and no frame"): one
+>    hairline round the thumbnail box, as every card image has, so a light photograph or a sketch plate
+>    separates from the ground. `--lcrd-thumbnail-rule-width` (hairline) and `--lcrd-thumbnail-rule-ink`
+>    per surface — neutral-300 · neutral-400 · neutral-700 · brandeis-300, decoration — BlockCard's
+>    cover-rule values duplicated on purpose. Specimen: every thumbnail row, including the four-surface
+>    proof.
+> 5. **`markerPosition?: 'start' | 'end'`** (13 Oct 2026, the insights archive). `end` sets an image
+>    marker (`thumbnail`, `sketch`) after the copy, so a list where only some rows carry an image keeps
+>    every eyebrow and title on one edge (docs/research/resources-listing.md, Figma's "The latest").
+>    Rows only; number, icon and date markers always lead. Below 768 an end image is not shown: it is
+>    supplementary and would squeeze the copy to ~200px. Specimen: the eyebrow block's first row.
+> 3. **`marker: { type: 'sketch'; name: ArticleSceneName }`** — a DRAWN thumbnail: the scene drawn for
+>    that article (never a service scene), in the thumbnail's own 16:9 box, assigned item by item in
+>    data. Decorative. Specimen: the eyebrow block's guide row.
+
 > **Amendment · 7 Oct 2026 · owner review (supersedes every mention of the arrow cue below).** No
 > arrow after a linked item's title and no arrow at a row's end: the whole item is the link, and its
 > title is the hover and focus signal. Visible actions are opt-in (`ctaLabel`). Tiles may be boxed

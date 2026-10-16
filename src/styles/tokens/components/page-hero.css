@@ -119,6 +119,9 @@
    a home-page hero that nothing built, and every hero is the page's one title. */
 --hero-title-text:var(--text-display);
 --hero-title-tracking:var(--text-display-tracking);
+/* The one-word title (`titleSize="mark"`): the mark role, twice display (136 · 104 · 64). */
+--hero-title-text-mark:var(--text-mark);
+--hero-title-tracking-mark:var(--text-mark-tracking);
 /* The lead, two sizes (r7-hero, owner 7 Oct 2026: the 20px lead was too large). The default is
    --text-lead, 18, two px over the 16 paragraphs below it, which is enough for the lead to read as
    the lead because it is also the shorter line (--hero-lead-measure). `-lg` is the opt-in for a

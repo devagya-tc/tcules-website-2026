@@ -1,0 +1,151 @@
+/* ══ Component layer — IndexRail ══════════════════════════════════════════════════
+   Tier 2. The listing page's navigation (insights hub, 16 Oct 2026): a slim sticky index with a
+   two-way switch (BY TYPE / BY TOPIC) over one jump list, after the IDEA of claude.com/resources.
+   Chrome set in type: a mono label heads the rail, the switch is two mono labels with a rule that
+   slides to the shown one, each entry is a mono count and a small sans label, and the only other
+   mark is the current entry's blue tick (beauty round 3, 16 Oct 2026: a typeset index, not a menu).
+   Below 1024 the rail is a bar stuck under the site nav, on the surface's own ground.
+
+   Naming: --irl-{part}-{role}-{state}
+     parts: label (the rail's heading) | mode (a switch label, and its rule) | item (an entry) |
+            count (an entry's figure) | marker (the current entry's tick) | bar (the phone bar) |
+            ring
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Where the rail sticks: clear of the site nav. A component size, set by the nav's height. */
+  --irl-sticky-top: 112px;
+  /* Below 1024 the bar sticks flush under the compact nav bar (its 64 and its 1px rule). */
+  --irl-sticky-top-compact: 65px;
+  /* Over the content that scrolls under the phone bar, under the site nav. */
+  --irl-z: var(--z-raised);
+  /* The rail's heading: the label voice at its smallest. */
+  --irl-label-text: var(--text-micro);
+  --irl-label-tracking: var(--text-micro-tracking);
+  /* An entry's figure: the micro mono, tabular, at the entry's end on the name's baseline. */
+  --irl-count-text: var(--text-micro);
+  --irl-count-tracking: var(--text-micro-tracking);
+  /* The phone bar's own air above and below its one line. Optical, from the ramp. */
+  --irl-bar-inset: var(--space-12);
+  /* A picker's line on a phone: the end fade's run, and the scroll room that lets the last entry
+     clear it. The mask's opaque stop is a mask value, not a colour on screen. */
+  --irl-fade-size: var(--space-32);
+  --irl-fade-solid: black;
+  /* A view's jump list, opened under the phone bar: its air, and the soft shadow under its foot
+     that lifts it off the content it covers. Optical, from the ramp. */
+  --irl-pop-inset: var(--space-16);
+  --irl-pop-shadow-y: var(--space-8);
+  --irl-pop-shadow-blur: var(--space-12);
+  /* How far the bar's ground spreads past the column to the screen's edges: any length wider than
+     the gutter (a border image's outset, so it is ink and never scrolls). */
+  --irl-bar-bleed: 100vmax;
+  --irl-mode-text: var(--text-ui-sm);
+  --irl-mode-tracking: var(--text-ui-sm-tracking);
+  /* The rule under the shown view's label, and its room from the label. Optical, from the ramp. */
+  --irl-mode-rule-width: var(--border-width-2);
+  --irl-mode-rule-gap: var(--space-8);
+  /* The jump links: the title serif at the h6 size, with air between them (owner, 16 Oct 2026:
+     claude.com's rail, "see the space here"). No counts. */
+  --irl-item-text: var(--text-h6);
+  --irl-item-tracking: var(--text-h6-tracking);
+  /* The segmented switch: its ground's inset around the chip, the chip's own block inset, radii.
+     A control's own padding, from the ramp (button.css's argument). */
+  --irl-switch-inset: var(--space-4);
+  --irl-switch-radius: var(--radius-8);
+  --irl-thumb-radius: var(--radius-4);
+  --irl-mode-inset: var(--space-8);
+  --irl-rule-width: var(--border-width-hairline);
+  /* The current item's bar at its start edge, and the label's inset that makes its room: inside
+     the rail column, so nothing crosses the content edge. Optical, from the ramp. */
+  --irl-marker-width: var(--border-width-2);
+  --irl-item-inset: var(--space-12);
+  --irl-ring-width: var(--focus-ring-width);
+  --irl-ring-offset: var(--space-4);
+  --irl-ring-radius: var(--radius-4);
+  --irl-duration: var(--duration-fast);
+  /* The switch's rule sliding between labels, and the arriving view's rise (8, an optical
+     distance from the ramp) — a re-sort, not a page change. */
+  --irl-slide-duration: var(--duration-medium);
+  --irl-enter-duration: var(--duration-medium);
+  --irl-enter-rise: var(--space-8);
+  /* The sliding rule's place and width under the shown label: measured by the switch at run time
+     and set on its own element; zero until then (the labels draw their own rules meanwhile). */
+  --irl-indicator-x: 0;
+  --irl-indicator-w: 0;
+  --irl-easing: var(--easing-standard);
+}
+
+:root,
+[data-surface='paper'] {
+  --irl-mode-ink: var(--color-neutral-600); /* 4.92:1 */
+  --irl-mode-ink-current: var(--color-neutral-900);
+  --irl-mode-rule-ink: var(--color-neutral-900);
+  --irl-item-ink: var(--color-neutral-600); /* 4.92:1 */
+  --irl-item-ink-hover: var(--color-neutral-900);
+  --irl-item-ink-current: var(--color-neutral-900);
+  --irl-marker-ink: var(--color-brandeis-500);
+  --irl-ring-color: var(--color-brandeis-500);
+  --irl-label-ink: var(--color-neutral-600);
+  --irl-count-ink: var(--color-neutral-600);
+  --irl-bar-ground: var(--color-paper);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  --irl-switch-ground: var(--color-paper-deep);
+  --irl-thumb-ground: var(--color-paper);
+  --irl-rule-ink: var(--color-neutral-200);
+}
+
+[data-surface='tint'] {
+  --irl-mode-ink: var(--color-neutral-700);
+  --irl-mode-ink-current: var(--color-neutral-900);
+  --irl-mode-rule-ink: var(--color-neutral-900);
+  --irl-item-ink: var(--color-neutral-700);
+  --irl-item-ink-hover: var(--color-neutral-900);
+  --irl-item-ink-current: var(--color-neutral-900);
+  --irl-marker-ink: var(--color-brandeis-600);
+  --irl-ring-color: var(--color-brandeis-500);
+  --irl-label-ink: var(--color-neutral-700);
+  --irl-count-ink: var(--color-neutral-700);
+  --irl-bar-ground: var(--color-paper-deep);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
+  --irl-switch-ground: var(--color-neutral-100);
+  --irl-thumb-ground: var(--color-paper);
+  --irl-rule-ink: var(--color-neutral-300);
+}
+
+[data-surface='ink'] {
+  --irl-mode-ink: var(--color-neutral-400);
+  --irl-mode-ink-current: var(--color-white);
+  --irl-mode-rule-ink: var(--color-white);
+  --irl-item-ink: var(--color-neutral-400);
+  --irl-item-ink-hover: var(--color-white);
+  --irl-item-ink-current: var(--color-white);
+  --irl-marker-ink: var(--color-brandeis-300);
+  --irl-ring-color: var(--color-brandeis-300);
+  --irl-label-ink: var(--color-neutral-400);
+  --irl-count-ink: var(--color-neutral-400);
+  --irl-bar-ground: var(--color-neutral-950);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-black) 40%, transparent);
+  --irl-switch-ground: var(--color-neutral-900);
+  --irl-thumb-ground: var(--color-neutral-800);
+  --irl-rule-ink: var(--color-neutral-800);
+}
+
+[data-surface='blue'] {
+  --irl-mode-ink: var(--color-brandeis-100);
+  --irl-mode-ink-current: var(--color-white);
+  --irl-mode-rule-ink: var(--color-white);
+  --irl-item-ink: var(--color-brandeis-100);
+  --irl-item-ink-hover: var(--color-white);
+  --irl-item-ink-current: var(--color-white);
+  --irl-marker-ink: var(--color-white);
+  --irl-ring-color: var(--color-white);
+  --irl-label-ink: var(--color-brandeis-100);
+  --irl-count-ink: var(--color-brandeis-100);
+  --irl-bar-ground: var(--color-brandeis-500);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-brandeis-700) 40%, transparent);
+  --irl-switch-ground: var(--color-brandeis-600);
+  --irl-thumb-ground: var(--color-brandeis-700);
+  --irl-rule-ink: var(--color-brandeis-400);
+}
