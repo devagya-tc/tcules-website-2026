@@ -22,6 +22,10 @@
   --tsr-title-text-xl: var(--text-h3);
   --tsr-title-tracking-xl: var(--text-h3-tracking);
   --tsr-body-text-xl: var(--text-body-lg);
+  /* The featured step's measures: at a cinema's full width a title and its standfirst still read
+     as a title and a paragraph (beauty round 4). */
+  --tsr-title-measure-xl: var(--measure-title);
+  --tsr-body-measure-xl: var(--measure-lead);
   --tsr-title-text-lg: var(--text-h4);
   --tsr-title-tracking-lg: var(--text-h4-tracking);
   --tsr-body-text-lg: var(--text-body);
@@ -45,6 +49,11 @@
      date's fits a two-digit day at the stat step and "MAR 2023" under it; the ordinal's, "01". */
   --tsr-marker-date-inline: 5.5rem;
   --tsr-marker-index-inline: 2.5rem;
+  /* A ledger row's meta column: wide enough for the longest topic name in the label voice
+     ("MODERNISE & REPLATFORM" wraps to two lines, never three). */
+  --tsr-marker-aside-inline: 11rem;
+  /* A row's title and standfirst measure: a line, not the column's width. */
+  --tsr-row-measure: var(--measure-lead);
   /* Beside a larger title (md and up) the ordinal is a numeral in the stat role — a guide index's
      anchor — and its column widens to hold "09". */
   --tsr-index-text-lg: var(--text-stat);
@@ -71,7 +80,9 @@
   /* A slight radius and no stroke: the photograph's own edge is the shape. */
   --tsr-media-radius: var(--radius-4);
   --tsr-media-zoom: 1.02;
-  --tsr-media-zoom-duration: var(--duration-slow);
+  /* One motion for the whole hover (beauty round 4): the picture leans in and the title's underline
+     draws in over the same 240, on the one decelerating curve, so the item answers as one thing. */
+  --tsr-media-zoom-duration: var(--duration-medium);
   --tsr-media-zoom-easing: var(--easing-standard);
   /* A row's thumbnail: a fixed track at the row's end, so every row's copy starts on one edge
      whether or not it has an image. A component size. */
@@ -80,10 +91,15 @@
   --tsr-thumb-inline-lg: 15rem;
   /* On a phone, where the copy needs the width. */
   --tsr-thumb-inline-sm: 6rem;
+  /* A tile's or a list row's title (md, sm): three lines at most, balanced, so a set's titles end
+     near one depth (beauty round 4, 16 Oct 2026). */
+  --tsr-title-lines: 3;
+  --tsr-title-wrap-tile: var(--text-title-wrap);
   /* A row's standfirst: two lines, a taste of the piece. */
   --tsr-row-body-lines: 2;
-  /* A small tile's standfirst (md, sm): three lines. */
-  --tsr-tile-body-lines: 3;
+  /* A small tile's standfirst (md, sm): two lines — a second, sans texture under the serif title,
+     not a paragraph (beauty round 4). */
+  --tsr-tile-body-lines: 2;
 
   /* The play mark on a watched piece: a round chip in the image's foot-start corner. Optical
      sizes from the ramp: the chip, its glyph, its inset from the corner. */
@@ -100,7 +116,7 @@
      em so it scales with the title, and skip-ink so descenders break it rather than sit on it. */
   --tsr-title-underline-width: var(--border-width-hairline);
   --tsr-title-underline-offset: 0.18em;
-  --tsr-title-ink-duration: var(--duration-fast);
+  --tsr-title-ink-duration: var(--duration-medium);
   --tsr-title-ink-easing: var(--easing-standard);
   --tsr-ring-width: var(--focus-ring-width);
   --tsr-ring-offset: var(--focus-ring-offset);

@@ -952,6 +952,32 @@ export default async function PageHeroSpecimenPage() {
         note="The eyebrow equals the section crumb once plurals are folded ('Case study' and 'Case studies' normalise alike), so it is the crumb read twice, 32px apart. In development PageHero logs a warning naming it, and the band still renders so the fault shows on the page. On a live route eyebrowBesideTrail drops it before PageHero sees it, and reports the drop once per server process. The fix is to add what the trail cannot say, as the block above does."
       />
 
+      {/* ── 9b · masthead · a listing's opening ─────────────────────────────────── */}
+      <PageHero
+        trail={heroTrail(TRAIL, 'Insights from building products at the edge of design', crumbs)}
+        title="Insights from building products at the edge of design"
+        body={[PARAS[0]]}
+        arrangement="masthead"
+        texture
+      />
+      <Note
+        title="9b · masthead — a listing's opening, the lede on the title's last baseline"
+        note="The title alone in two thirds from 1024, the lede (and a record) in the third, both halves on the title's last baseline: the band's end half, where the texture runs, carries the words that frame it, and the band is a title's height, so the list under it starts inside the first screen. Below 1024 it renders exactly as stacked."
+      />
+      <PageHero
+        trail={heroTrail(TRAIL, 'Articles', crumbs)}
+        title="Articles"
+        titleSize="mark"
+        body={['Essays and field notes from building complex products.']}
+        record={['42 published', 'Latest 15 Oct 2026']}
+        arrangement="masthead"
+        texture
+      />
+      <Note
+        title="9b · masthead · mark title + record — a format page"
+        note="One word at the mark scale, the lede and its record (one mono line, the facts joined by a middle dot, no pixels) on its baseline across the texture."
+      />
+
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}
       <PageHero title={LONG_TITLE} body={paragraphs(2)} />
       <Note

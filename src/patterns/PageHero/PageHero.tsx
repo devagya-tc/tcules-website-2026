@@ -215,11 +215,20 @@ export type { HeroTrail };
  *            on the lead's last baseline (the Quantum split header), then the media at the full
  *            column below, in a named `shape` (panorama 4:1, wide 2:1 by default, tall 16:9).
  *
+ *   masthead a LISTING's opening (beauty round 4, 16 Oct 2026, the insights hub and its format pages,
+ *            after claude.com/resources): the title alone in 2 of 3 from 1024 (its measure, so a
+ *            long title keeps the lines it has stacked), the lede and the `record` in the third, set on the title's LAST BASELINE — so the band's end half,
+ *            where the texture runs, carries the words that frame it instead of empty paper, and the
+ *            band is a title's height rather than a title plus a lede: the list under it starts
+ *            inside the first screen. No media and no ask (a listing's ask is its list). Below 1024
+ *            it stacks and renders exactly as `stacked`.
+ *
  * `beside` with no media renders `stacked`: there is nothing to put beside the copy, and a
  * template that sets `beside` for a family must still render the member that has no image. That is
  * the no-visual state, which is the common one, and it is not an error.
  */
-export type HeroArrangement = 'stacked' | 'beside' | 'wide' | 'centred' | 'display';
+export type HeroArrangement =
+  'stacked' | 'beside' | 'wide' | 'centred' | 'display' | 'masthead';
 
 /**
  * One line above the hero, for a launch or an opening (showcase pages only, visual-direction § 2.5).
@@ -422,6 +431,13 @@ type PageHeroBaseProps = {
    */
   tags?: readonly string[];
   /**
+   * A listing's record as ONE mono line directly under the lede (beauty round 4, 16 Oct 2026): its
+   * facts joined by a middle dot, no pixels — "42 published · Latest 15 Oct 2026". For a page whose
+   * hero introduces a list; the facts are read with the lede, not as a footnote after the actions.
+   * Authored case; mono uppercases it. Blank entries are dropped; absent renders nothing.
+   */
+  record?: readonly string[];
+  /**
    * The studio's record as figures, INSIDE the hero (owner, home round 3, 11 Oct 2026: "could the
    * facts/figures section be integrated into the hero so it doesn't take one entire section?").
    * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `text`
@@ -621,6 +637,7 @@ export function PageHero({
   arrangement = 'stacked',
   surface = 'paper',
   tags = [],
+  record = [],
   stats = [],
   texture = false,
   announcement,
@@ -640,18 +657,20 @@ export function PageHero({
     label: fact.label,
     value: fact.value,
   }));
-  pairs.push(...credits.map((credit, index) => ({
-    /* The role is not unique — a podcast can carry two guest groups — so the index is part of
+  pairs.push(
+    ...credits.map((credit, index) => ({
+      /* The role is not unique — a podcast can carry two guest groups — so the index is part of
        the key. These rows never reorder: they are frontmatter in array order. */
-    id: `${credit.role}-${index}`,
-    label: CREDIT_LABELS[credit.role],
-    value: (
-      <>
-        <span className={styles.name}>{joinPeople(credit.people)}</span>
-        {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
-      </>
-    ),
-  })));
+      id: `${credit.role}-${index}`,
+      label: CREDIT_LABELS[credit.role],
+      value: (
+        <>
+          <span className={styles.name}>{joinPeople(credit.people)}</span>
+          {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
+        </>
+      ),
+    })),
+  );
 
   if (dates?.published) {
     pairs.push({
@@ -686,6 +705,7 @@ export function PageHero({
   const wide = split && arrangement === 'wide';
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
+  const masthead = arrangement === 'masthead';
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
@@ -806,15 +826,21 @@ export function PageHero({
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
+  const recordParts = record.map((part) => part.trim()).filter(Boolean);
+  const recordNode =
+    recordParts.length === 0 ? null : <p className={styles.tag}>{recordParts.join(' · ')}</p>;
   const copyNode =
-    lead === undefined ? null : (
+    lead === undefined && recordNode === null ? null : (
       <Layout rowGap="text">
-        <p className={cx(styles.lead, leadSize === 'lg' && styles.leadLg)}>{lead}</p>
+        {lead !== undefined ? (
+          <p className={cx(styles.lead, leadSize === 'lg' && styles.leadLg)}>{lead}</p>
+        ) : null}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}
           </p>
         ))}
+        {recordNode}
       </Layout>
     );
 
@@ -947,12 +973,7 @@ export function PageHero({
   }
   const statsNode =
     shownStats.length === 0 ? null : (
-      <Layout
-        as="ul"
-        columns={{ base: shownStats.length }}
-        colGap="gutter"
-        rowGap="block"
-      >
+      <Layout as="ul" columns={{ base: shownStats.length }} colGap="gutter" rowGap="block">
         {shownStats.map((stat) => (
           <Stat
             key={`${stat.value}-${stat.label}`}
@@ -1099,7 +1120,27 @@ export function PageHero({
     );
 
   let top: ReactNode;
-  if (display) {
+  if (masthead) {
+    /* ── masthead · the title, and the lede on its last baseline ─────────────────────────
+       A [2, 1] split: the title alone in the 2 (wide enough for its own measure, so it sets the lines
+       it would stacked), the lede and the record in the 1, both halves sharing the title's last baseline (`align="baseline"`).
+       Media and actions are not a masthead's (see `HeroArrangement`); a byline or tags would follow
+       the lede in its column. */
+    top = withTrail(
+      <Layout columns={{ lg: [2, 1] }} colGap="section" rowGap="block" align="baseline">
+        <Layout rowGap="block">
+          {eyebrowNode}
+          {titleNode}
+        </Layout>
+        <Layout rowGap="block">
+          {copyNode}
+          {labelsNode}
+          {bylineNode}
+          {tagsNode}
+        </Layout>
+      </Layout>,
+    );
+  } else if (display) {
     /* ── display · title-led, the media a panorama below ─────────────────────────────────
        The Quantum split header (references.md, crop 6): the eyebrow, the title and the lead in 3 of
        5 from 1024, and the ask in the other 2, flush with the column's end edge (and so with the
@@ -1116,7 +1157,7 @@ export function PageHero({
             {titleNode}
             {copyNode}
             {labelsNode}
-        {labelsNode}
+            {labelsNode}
           </Layout>
           {/* The figures are their own block, a `stack` under the ask (home round 4), as in the
               split stack below; the byline, extras, actions and tags keep this column's `block`. */}
@@ -1203,15 +1244,17 @@ export function PageHero({
           ? 'hero-centred'
           : display
             ? 'hero-display'
-            : split
-              ? isIllustration
-                ? 'hero-illustration'
-                : wide
-                  ? 'hero-wide'
-                  : 'hero-media'
-              : media === undefined
-                ? 'hero-text'
-                : 'hero-stacked'
+            : masthead
+              ? 'hero-masthead'
+              : split
+                ? isIllustration
+                  ? 'hero-illustration'
+                  : wide
+                    ? 'hero-wide'
+                    : 'hero-media'
+                : media === undefined
+                  ? 'hero-text'
+                  : 'hero-stacked'
       }
     >
       {faded ? (
@@ -1223,7 +1266,7 @@ export function PageHero({
             <TextureShape
               top="-50%"
               right={-120}
-              width={titleSize === 'mark' ? '48%' : '30%'}
+              width={titleSize === 'mark' ? '62%' : '30%'}
               height="200%"
               blur={160}
             />

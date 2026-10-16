@@ -29,6 +29,14 @@
   --iix-scroll-top: 112px;
 }
 
+/* Below 1024 a jumped-to section clears the compact nav (65) AND the rail's one-line bar under it
+   (about 46), with a step of air, so its head never slides under the bar (beauty round 4). */
+@media (max-width: 1023px) {
+  :root {
+    --iix-scroll-top: 128px;
+  }
+}
+
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {

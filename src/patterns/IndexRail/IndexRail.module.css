@@ -1,7 +1,9 @@
-/* IndexRail — Layout arranges the rail beside the content, the label over the switch and the list,
-   the switch's two labels and the list (a column from 1024, one line below); this module owns the
-   stick, the phone bar's ground and sideways scroll, the labels' type, the count's column, the
-   current marks, the sliding rule and the arriving view's rise. Every value is --irl-*. */
+/* IndexRail — Layout arranges the rail beside the content, the label over the bar (the switch, the
+   phone's toggle and the list), the switch's two labels, the toggle's label and chevron, the list
+   (a column from 1024, a picker's line below) and each entry's name and count; this module owns the
+   stick, the phone bar's ground, the picker line's scroll and fade, the opened list's place under
+   the bar, the labels' type, the current marks, the sliding rule and the arriving view's rise.
+   Every value is --irl-*. */
 
 /* The rail and its content: a jump target when a reader switches view deep in the page. */
 .frame {
@@ -19,6 +21,11 @@
   min-inline-size: 0;
 }
 
+/* The bar: the positioning context for a phone's opened list (it arranges nothing). */
+.bar {
+  position: relative;
+}
+
 /* The rail's heading: the label voice at its smallest, quiet. */
 .label {
   color: var(--irl-label-ink);
@@ -27,8 +34,8 @@
   text-transform: var(--text-mono-case);
 }
 
-/* A view arriving after a switch rises into place, so switching reads as the same shelf re-sorted,
-   not a page jumping. Never on page load: the class is set by the switch. */
+/* A view arriving after a switch rises into place and fades in, so switching reads as the same
+   shelf re-sorted, not a page jumping. Never on page load: the class is set by the switch. */
 .panel.entering:not([hidden]),
 .list.entering {
   animation: irl-enter var(--irl-enter-duration) var(--irl-easing);
@@ -89,15 +96,45 @@
     inline-size var(--irl-slide-duration) var(--irl-easing);
 }
 
+/* The phone's toggle: the section in view, in the entries' sans, with a chevron. From 1024 the
+   list is always shown and the toggle is not drawn. */
+.toggle {
+  display: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--irl-ring-radius);
+  background: none;
+  color: var(--irl-item-ink-current);
+  font: var(--irl-item-text);
+  cursor: pointer;
+}
+
+.toggleLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toggleMark {
+  display: block;
+  color: var(--irl-item-ink);
+  transition: transform var(--irl-duration) var(--irl-easing);
+}
+
+.toggle[aria-expanded='true'] .toggleMark {
+  transform: rotate(180deg);
+}
+
 /* Focus: the system ring, offset and rounded, never the browser's box hugging the label. */
 .mode:focus-visible,
-.item:focus-visible {
+.item:focus-visible,
+.toggle:focus-visible {
   outline: var(--irl-ring-width) solid var(--irl-ring-color);
   outline-offset: var(--irl-ring-offset);
 }
 
-/* The jump link: a mono count, then the small sans label — an index, never a second set of
-   headings. The current one takes the ink and a blue tick at its own start edge, inside the rail
+/* The jump link: the small sans name, its figure at the row's end — an index, never a second set
+   of headings. The current one takes the ink and a blue tick at its own start edge, inside the rail
    column (the entry is inset by the tick's room, so nothing crosses the content edge). */
 .item {
   display: block;
@@ -106,25 +143,19 @@
   border-radius: var(--irl-ring-radius);
   color: var(--irl-item-ink);
   font: var(--irl-item-text);
-  white-space: nowrap;
   text-decoration: none;
   transition: color var(--irl-duration) var(--irl-easing);
 }
 
-/* An entry with a count hangs its label: a wrapped second line starts under the label, not under
-   the figure (the indent is the count's own column). */
-.item:has(.count) {
-  padding-inline-start: calc(var(--irl-item-inset) + var(--irl-count-inline));
-  text-indent: calc(-1 * var(--irl-count-inline));
+.name {
+  min-inline-size: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* The count's fixed column, so every label starts on one edge whatever the figure. A sizing
-   declaration on an inline box, not an arrangement. */
+/* The figure: tabular mono at the row's end, on the name's baseline. */
 .count {
-  display: inline-block;
-  min-inline-size: var(--irl-count-inline);
-  /* text-indent inherits into an inline-block: the hanging indent is the entry's, not the figure's. */
-  text-indent: 0;
   color: var(--irl-count-ink);
   font: var(--irl-count-text);
   letter-spacing: var(--irl-count-tracking);
@@ -171,29 +202,33 @@
   }
 }
 
-/* From 1024 a jump label may wrap in its narrow column; below, it is one label in a line. */
+/* From 1024 a name that outruns the rail wraps rather than clipping. */
 @media (min-width: 1024px) {
-  .item {
+  .name {
     white-space: normal;
   }
 }
 
-/* Below 1024 the rail is a slim bar stuck under the site nav: the switch, then the list in one
-   line that scrolls sideways when its labels outrun the width (a scroll container, not an
-   arrangement — Layout lays the labels out). Its ground runs edge to edge behind the content
-   column's gutters (a painted spread, clipped to the bar's own height), so items scroll under it
-   cleanly. The rail's label is a column heading and stays with the column. */
+/* Below 1024 the rail is a slim bar of one line, stuck under the site nav, its ground running edge
+   to edge behind the column's gutters so items scroll under it cleanly. The spread is a filled
+   border image pushed out sideways only (ink, not layout: no scroll, nothing clipped), so the
+   opened list can hang below the bar. The rail's label is a column heading and stays with the
+   column. */
 @media (max-width: 1023px) {
   .root {
     inset-block-start: var(--irl-sticky-top-compact);
     padding-block: var(--irl-bar-inset);
-    background-color: var(--irl-bar-ground);
-    box-shadow: 0 0 0 var(--irl-bar-bleed) var(--irl-bar-ground);
-    clip-path: inset(0 calc(-1 * var(--irl-bar-bleed)));
+    border-image: linear-gradient(var(--irl-bar-ground), var(--irl-bar-ground)) fill 0 / 0 / 0
+      var(--irl-bar-bleed);
   }
 
   .label {
     display: none;
+  }
+
+  .toggle {
+    display: block;
+    min-inline-size: 0;
   }
 
   .row {
@@ -205,20 +240,56 @@
     display: none;
   }
 
-  /* In the line, the current entry's mark is the switch's: a rule under the label. */
-  .item,
-  .item:has(.count) {
-    padding-inline-start: 0;
-    text-indent: 0;
-    padding-block-end: var(--irl-mode-rule-gap);
-    border-block-end: var(--irl-mode-rule-width) solid transparent;
+  /* A picker's line: an end fade says it scrolls, and the last entry can scroll clear of it. */
+  .line:not(.pop) {
+    mask-image: linear-gradient(
+      to right,
+      var(--irl-fade-solid) calc(100% - var(--irl-fade-size)),
+      transparent
+    );
+    scroll-padding-inline: var(--irl-fade-size);
+    padding-inline-end: var(--irl-fade-size);
   }
 
-  .item::before {
+  /* A view's list, shut: not drawn. Open: a panel under the bar on the bar's own ground, one entry
+     per line with its count at the end. */
+  .pop {
     display: none;
   }
 
-  .item[aria-current] {
+  .pop[data-open] {
+    display: block;
+    position: absolute;
+    /* Under the bar: the bar's own inset below the row it hangs from. */
+    inset-block-start: calc(100% + var(--irl-bar-inset));
+    inset-inline: 0;
+    padding-block: var(--irl-pop-inset);
+    border-image: linear-gradient(var(--irl-bar-ground), var(--irl-bar-ground)) fill 0 / 0 / 0
+      var(--irl-bar-bleed);
+    filter: drop-shadow(
+      0 var(--irl-pop-shadow-y) var(--irl-pop-shadow-blur) var(--irl-pop-shadow-ink)
+    );
+    overflow: visible;
+  }
+
+  /* In a picker's line the current entry's mark is the switch's: a rule under the label, and the
+     count is dropped — the line holds names, the figures are the rail's from 1024. */
+  .line:not(.pop) .item {
+    padding-inline-start: 0;
+    padding-block-end: var(--irl-mode-rule-gap);
+    border-block-end: var(--irl-mode-rule-width) solid transparent;
+    white-space: nowrap;
+  }
+
+  .line:not(.pop) .count {
+    display: none;
+  }
+
+  .line:not(.pop) .item::before {
+    display: none;
+  }
+
+  .line:not(.pop) .item[aria-current] {
     border-block-end-color: var(--irl-marker-ink);
   }
 }
@@ -227,6 +298,7 @@
   .mode,
   .item,
   .item::before,
+  .toggleMark,
   .switch[data-measured] .indicator {
     transition: none;
   }

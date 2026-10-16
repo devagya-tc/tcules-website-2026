@@ -37,6 +37,14 @@
   overflow: hidden;
   border-radius: var(--tsr-media-radius);
   background-color: var(--tsr-media-ground);
+  /* Its own stacking context, so a graphic's multiply blends with this ground and nothing behind. */
+  isolation: isolate;
+}
+
+/* A graphic on white (an event's card): its white takes the box's pale ground, so the graphic has
+   an edge on paper. Never set on a photograph (Teaser's `graphic`). */
+.graphic .zoom {
+  mix-blend-mode: multiply;
 }
 
 .zoom {
@@ -79,6 +87,29 @@
 .markerIndex {
   display: block;
   inline-size: var(--tsr-marker-index-inline);
+}
+
+/* A ledger row's meta column (`metaAside`): from md, at a fixed width, so every title down the list
+   starts on one edge. Below md it is not drawn and the meta line over the title stands in. */
+.markerAside {
+  display: none;
+  inline-size: var(--tsr-marker-aside-inline);
+}
+
+@media (min-width: 768px) {
+  .markerAside {
+    display: grid;
+  }
+
+  .metaInline {
+    display: none;
+  }
+}
+
+/* A row's title and standfirst read at a measure, not across a wide column. */
+.row .title,
+.row .body {
+  max-inline-size: var(--tsr-row-measure);
 }
 
 .index {
@@ -184,6 +215,9 @@
 .day {
   font: var(--tsr-date-day-text);
   letter-spacing: var(--tsr-date-day-tracking);
+  /* Lining, tabular figures: "02" and "11" take one width, so every title beside them starts on
+     one edge. */
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* The day steps up with the row, so the numeral always clearly outweighs the title beside it; a
@@ -236,6 +270,22 @@
   text-decoration-color: var(--tsr-title-underline-ink);
 }
 
+/* A tile's and a list row's title is held to three lines and balanced (beauty round 4, 16 Oct 2026):
+   an 80-character title in a 300 measure set four ragged lines, the short ones beside it leaving
+   holes under them. Balanced, a set's titles end near one depth; past three lines the title ends on
+   an ellipsis — the link's accessible name is still the whole title. */
+.sizeMd .title,
+.sizeSm .title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tsr-title-lines);
+  line-clamp: var(--tsr-title-lines);
+  overflow: hidden;
+  overflow-wrap: break-word;
+  hyphens: manual;
+  text-wrap: var(--tsr-title-wrap-tile);
+}
+
 .body {
   color: var(--tsr-body-ink);
   text-wrap: var(--text-running-wrap);
@@ -259,8 +309,21 @@
 }
 
 .sizeXl .title {
+  /* A lead at the column's full width (a cinema) holds its title to a title's measure, not 900px. */
+  max-inline-size: var(--tsr-title-measure-xl);
   font: var(--tsr-title-text-xl);
   letter-spacing: var(--tsr-title-tracking-xl);
+}
+
+.sizeXl .body {
+  max-inline-size: var(--tsr-body-measure-xl);
+}
+
+/* A small or middle tile's meta line keeps to its first fact, so it is one line in a narrow track
+   (a list row, wide, keeps them all). */
+.sizeSm:not(.row) .metaMore,
+.sizeMd:not(.row) .metaMore {
+  display: none;
 }
 
 .sizeXl .body {

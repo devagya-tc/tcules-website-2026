@@ -91,6 +91,25 @@ export type TeaserProps = {
    * where the picture is the larger of the two at the one 16:9 ratio. Ignored elsewhere.
    */
   weight?: 'even' | 'picture';
+  /**
+   * `row` only: reserve the thumbnail track even when this piece has no picture, so every row of a
+   * list ends its copy on one edge (beauty round 4, 16 Oct 2026). The caller sets it on every row of
+   * a list in which ANY row has a picture; the reserved track draws nothing — no box, no stand-in.
+   */
+  slot?: boolean;
+  /**
+   * The picture is a GRAPHIC on a white ground (an event's card): its white takes the picture box's
+   * own pale ground, so the graphic keeps an edge on paper instead of dissolving into it. Never for
+   * a photograph — photographs share one tone layer and are never treated locally.
+   */
+  graphic?: boolean;
+  /**
+   * `row` only, and only without a date or an ordinal: from 768 the meta line leaves the copy for a
+   * fixed column at the row's START, its facts one per line — an archive's ledger, where the title
+   * then starts on one edge down the list and reads at a measure rather than across the column
+   * (beauty round 4). On a phone the line stays over the title.
+   */
+  metaAside?: boolean;
 };
 
 const SIZE_CLASS: Record<TeaserSize, string | undefined> = {
@@ -141,6 +160,9 @@ export function Teaser({
   compact = false,
   flip = false,
   weight = 'even',
+  slot = false,
+  graphic = false,
+  metaAside = false,
 }: TeaserProps) {
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
@@ -172,6 +194,8 @@ export function Teaser({
   const bodyText = body?.trim() ? body : undefined;
 
   const row = arrangement === 'row';
+  const asideMeta =
+    row && metaAside && !date && !index && (Boolean(label) || metaParts.length > 0);
   const dateBlock = date ? (
     <Layout rowGap="none" className={styles.date}>
       <time className={styles.day} dateTime={date.dateTime}>
@@ -189,7 +213,7 @@ export function Teaser({
     <Layout rowGap="tight">
       {!row ? dateBlock : null}
       {label || metaParts.length > 0 ? (
-        <p className={styles.meta}>
+        <p className={cx(styles.meta, asideMeta && styles.metaInline)}>
           {label ? <span className={styles.label}>{label}</span> : null}
           {metaParts.map((part, i) =>
             /* The first fact always shows; the rest drop on a phone's narrow row. */
@@ -220,7 +244,45 @@ export function Teaser({
   );
 
   let inner;
-  if (!picture) {
+  if (asideMeta) {
+    /* The ledger row: the meta's facts in a fixed column at the start (from md), the copy at its
+       measure, the thumbnail's track at the end where the list holds one. Below md the column is
+       not drawn and the meta line is over the title, as in every other row. */
+    const facts = [...(label ? [label] : []), ...metaParts];
+    const thumb = picture || slot;
+    inner = (
+      <Layout
+        columns={
+          thumb ? { base: [1, 'auto'], md: ['auto', 1, 'auto'] } : { base: 1, md: ['auto', 1] }
+        }
+        colGap="gutter"
+        align="start"
+      >
+        <Layout rowGap="inline" className={styles.markerAside}>
+          {facts.map((fact, i) => (
+            <span key={i} className={cx(styles.meta, i === 0 && label && styles.label)}>
+              {fact}
+            </span>
+          ))}
+        </Layout>
+        {copy}
+        {thumb ? (
+          <span className={styles.thumb} aria-hidden={picture ? undefined : 'true'}>
+            {picture}
+          </span>
+        ) : null}
+      </Layout>
+    );
+  } else if (!picture && row && slot) {
+    /* A row of a list in which other rows have pictures: the thumbnail's track is held, empty, so
+       this row's copy ends on the same edge as theirs. */
+    inner = (
+      <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="start">
+        {marked}
+        <span className={styles.thumb} aria-hidden="true" />
+      </Layout>
+    );
+  } else if (!picture) {
     inner = marked;
   } else if (arrangement === 'beside') {
     inner = (
@@ -297,6 +359,7 @@ export function Teaser({
         row && styles.row,
         arrangement === 'beside' && styles.beside,
         compact && arrangement === 'stack' && styles.compact,
+        graphic && styles.graphic,
       )}
     >
       <a className={styles.link} href={href}>

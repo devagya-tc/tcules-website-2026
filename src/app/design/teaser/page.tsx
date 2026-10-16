@@ -184,6 +184,101 @@ export default function TeaserSpecimen() {
         </Layout>
       </Section>
 
+      <Section aria-label="Teaser · beauty round 4">
+        <Layout rowGap="stack">
+          <Specimen
+            title="row · md · metaAside + slot — a ledger"
+            note="From md the meta's facts take a fixed column at the row's start and the title reads at a measure; the list holds the thumbnail's track on every row because one row has a picture, so every row's copy ends on one edge. The reserved track draws nothing. Below md the meta line is over the title."
+          >
+            <Layout as="ul" rowGap="stack">
+              <Teaser
+                arrangement="row"
+                size="md"
+                meta={['Design System', '17 min read']}
+                title="When Figma and Storybook drift apart, which tools actually help?"
+                href={HREF}
+                metaAside
+                slot
+              />
+              <Teaser
+                arrangement="row"
+                size="md"
+                meta={['Modernise & Replatform', '11 min read']}
+                title={LONG}
+                body="A long title at the row measure, with two lines of standfirst under it."
+                media={SCENE}
+                href={HREF}
+                metaAside
+                slot
+              />
+              <Teaser
+                arrangement="row"
+                size="md"
+                label="Guide"
+                meta={['10 min read']}
+                title="How do you audit a design system?"
+                href={HREF}
+                metaAside
+                slot
+              />
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="row · lg · date + graphic — an event card on white"
+            note="`graphic`: the picture's white takes the box's pale ground (multiply), so a card drawn on white keeps an edge on paper. The day is zero-padded and tabular, so titles start on one edge."
+          >
+            <Layout as="ul" rowGap="stack">
+              <Teaser
+                arrangement="row"
+                size="lg"
+                date={{ day: '02', label: 'May 2025', dateTime: '2025-05-02' }}
+                meta="London"
+                title="Lessons from designing the UX for AI products"
+                media={PHOTO}
+                graphic
+                href={HREF}
+                sizes={CARD_THREE_TRACKS}
+              />
+              <Teaser
+                arrangement="row"
+                size="lg"
+                date={{ day: '11', label: 'Mar 2023', dateTime: '2023-03-11' }}
+                meta="Ahmedabad"
+                title="Design Systems for everyone — from basics to advanced"
+                media={PHOTO_2}
+                graphic
+                href={HREF}
+                sizes={CARD_THREE_TRACKS}
+              />
+            </Layout>
+          </Specimen>
+
+          <Specimen
+            title="stack · sm — the title held to three balanced lines"
+            note="A tile's title (md, sm) balances and stops at three lines on an ellipsis; its meta keeps to its first fact. The accessible name is still the whole title."
+          >
+            <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">
+              <Teaser
+                size="sm"
+                meta={['High Fidelity Prototypes', '14 min read']}
+                title={`${LONG}, and a further clause to run it past three lines`}
+                media={PHOTO}
+                href={HREF}
+              />
+              <Teaser size="sm" meta="Design System" title="Short title" media={SCENE} href={HREF} />
+              <Teaser
+                size="sm"
+                meta="Information Design"
+                title="Design systems for SaaS: what to build, in what order"
+                media={PHOTO_2}
+                href={HREF}
+              />
+            </Layout>
+          </Specimen>
+        </Layout>
+      </Section>
+
       {SURFACES.map((surface) => (
         <Section key={surface} surface={surface} aria-label={`Teaser on ${surface}`}>
           <Specimen

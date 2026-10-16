@@ -24,14 +24,22 @@
   /* The rail's heading: the label voice at its smallest. */
   --irl-label-text: var(--text-micro);
   --irl-label-tracking: var(--text-micro-tracking);
-  /* An entry's figure: the micro mono, in a fixed column wide enough for "42" and its space. */
+  /* An entry's figure: the micro mono, tabular, at the entry's end on the name's baseline. */
   --irl-count-text: var(--text-micro);
   --irl-count-tracking: var(--text-micro-tracking);
-  --irl-count-inline: 2rem;
-  /* The phone bar's own air above and below its two lines. Optical, from the ramp. */
+  /* The phone bar's own air above and below its one line. Optical, from the ramp. */
   --irl-bar-inset: var(--space-12);
+  /* A picker's line on a phone: the end fade's run, and the scroll room that lets the last entry
+     clear it. The mask's opaque stop is a mask value, not a colour on screen. */
+  --irl-fade-size: var(--space-32);
+  --irl-fade-solid: black;
+  /* A view's jump list, opened under the phone bar: its air, and the soft shadow under its foot
+     that lifts it off the content it covers. Optical, from the ramp. */
+  --irl-pop-inset: var(--space-16);
+  --irl-pop-shadow-y: var(--space-8);
+  --irl-pop-shadow-blur: var(--space-12);
   /* How far the bar's ground spreads past the column to the screen's edges: any length wider than
-     the gutter; clipped to the bar's height. */
+     the gutter (a border image's outset, so it is ink and never scrolls). */
   --irl-bar-bleed: 100vmax;
   --irl-mode-text: var(--text-ui-sm);
   --irl-mode-tracking: var(--text-ui-sm-tracking);
@@ -73,6 +81,7 @@
   --irl-label-ink: var(--color-neutral-600);
   --irl-count-ink: var(--color-neutral-600);
   --irl-bar-ground: var(--color-paper);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
 }
 
 [data-surface='tint'] {
@@ -87,6 +96,7 @@
   --irl-label-ink: var(--color-neutral-700);
   --irl-count-ink: var(--color-neutral-700);
   --irl-bar-ground: var(--color-paper-deep);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
 }
 
 [data-surface='ink'] {
@@ -101,6 +111,7 @@
   --irl-label-ink: var(--color-neutral-400);
   --irl-count-ink: var(--color-neutral-400);
   --irl-bar-ground: var(--color-neutral-950);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-black) 40%, transparent);
 }
 
 [data-surface='blue'] {
@@ -115,4 +126,5 @@
   --irl-label-ink: var(--color-brandeis-100);
   --irl-count-ink: var(--color-brandeis-100);
   --irl-bar-ground: var(--color-brandeis-500);
+  --irl-pop-shadow-ink: color-mix(in srgb, var(--color-brandeis-700) 40%, transparent);
 }

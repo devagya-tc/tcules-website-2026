@@ -11,7 +11,7 @@ import {
   useState,
 } from 'react';
 
-import { Layout } from '@/components';
+import { Icon, Layout } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './IndexRail.module.css';
@@ -19,8 +19,8 @@ import styles from './IndexRail.module.css';
 /**
  * One destination in a list: an in-page section (`#id`) or another page. `current` marks the page
  * the reader is on (a picker of pages); an in-page item is marked by scrolling, not by the caller.
- * `count` is how many pieces it holds, set as a mono figure before the label, so the list reads as
- * a typeset index rather than a menu.
+ * `count` is how many pieces it holds, set as a tabular mono figure at the entry's end on the label's
+ * baseline — an index's page number — so the list reads as a typeset index rather than a menu.
  */
 export type IndexRailItem = { label: string; href: string; current?: boolean; count?: number };
 
@@ -70,8 +70,9 @@ const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayout
  * pages, 16 Oct 2026; the IDEA of claude.com/resources).
  *
  * A TYPESET INDEX, not a sidebar (beauty round 3, 16 Oct 2026): from 1024 the rail is one sixth of
- * the column (about 200 at 1440) at the column step from the content, headed by one mono label,
- * its entries a mono count and a sans label, the current one in ink with a blue tick at its start.
+ * the column (about 235 at 1440, wide enough that a topic's name keeps to one line) at the column
+ * step from the content, headed by one mono label, its entries a sans label with its tabular mono
+ * count at the row's end, the current one in ink with a blue tick at its start.
  * Its top edge is the content's top edge: the label sits on the line of the first section's head.
  *
  *   views   two modes each carrying a `panel`: the switch changes the whole curated column, the
@@ -82,9 +83,10 @@ const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayout
  *           content passed as `children`.
  *
  * The switch is two links (`aria-current` on the shown view), not tabs: the lists are links and the
- * views are whole page sections with their own headings. Below 1024 the rail is a slim bar that
- * sticks under the site nav — the switch, then the list in one line that scrolls sideways — so the
- * two views keep their presence the whole way down a phone's single column.
+ * views are whole page sections with their own headings. Below 1024 the rail is a slim bar of ONE
+ * line that sticks under the site nav (beauty round 4): with views, the switch and, at the row's
+ * end, the section in view as a button that opens the jump list under the bar; a picker, its pages
+ * in one line that scrolls sideways under an end fade, opening with the current page in view.
  */
 export function IndexRail({
   modes,
@@ -108,6 +110,9 @@ export function IndexRail({
      own rule (the server's and a script-less page's rendering). */
   const [indicator, setIndicator] = useState<{ x: number; w: number } | null>(null);
   const [current, setCurrent] = useState('');
+  /* The phone bar's jump list, open or shut (views only). */
+  const [open, setOpen] = useState(false);
+  const lineRef = useRef<HTMLDivElement>(null);
   const active = modes.find((m) => m.id === mode) ?? modes[0];
   const views = modes.some((m) => m.panel !== undefined);
 
@@ -166,6 +171,32 @@ export function IndexRail({
     };
   }, [active]);
 
+  /* The opened list shuts on Escape and on a press outside the rail. */
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    const onPress = (event: PointerEvent) => {
+      if (!rootRef.current?.querySelector('nav')?.contains(event.target as Node))
+        setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onPress);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('pointerdown', onPress);
+    };
+  }, [open]);
+
+  /* A picker's line on a phone opens with the current page's entry in view, never cut at the edge. */
+  useEffect(() => {
+    const line = lineRef.current;
+    const marked = line?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!line || !marked || line.scrollWidth <= line.clientWidth) return;
+    line.scrollLeft = marked.offsetLeft - (line.clientWidth - marked.offsetWidth) / 2;
+  }, [mode]);
+
   if (!active) return null;
 
   /* Without a param there is no URL for a mode; the switch then needs script, and says so by `#`. */
@@ -178,6 +209,7 @@ export function IndexRail({
     setMode(id);
     setSwitched(true);
     setCurrent('');
+    setOpen(false);
     if (param) {
       const url = new URL(window.location.href);
       if (id === first) url.searchParams.delete(param);
@@ -196,12 +228,23 @@ export function IndexRail({
   };
 
   const count = active.items.length;
+  /* The phone bar's one line when the modes are VIEWS: the switch, and at the row's end the section
+     in view as a button that opens the jump list (beauty round 4). A picker keeps its list as the
+     bar's scrolling line. */
+  const collapsible = views && modes.length > 1;
+  const here = active.items.find((item) => item.href === `#${current}`) ?? active.items[0];
 
   const rail = (
     <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
       <Layout rowGap="text">
         {label ? <p className={styles.label}>{label}</p> : null}
-        <Layout rowGap="block">
+        <Layout
+          columns={collapsible ? { base: [1, 'auto'], lg: 1 } : undefined}
+          colGap="block"
+          rowGap="block"
+          align="center"
+          className={styles.bar}
+        >
           {modes.length > 1 ? (
             <div
               role="group"
@@ -243,13 +286,39 @@ export function IndexRail({
               <span className={styles.indicator} aria-hidden="true" />
             </div>
           ) : null}
+          {collapsible && count > 0 ? (
+            /* Below 1024 only: the section in view, opening the list. */
+            <button
+              type="button"
+              className={styles.toggle}
+              aria-expanded={open}
+              aria-controls={`${uid}-list`}
+              onClick={() => setOpen((was) => !was)}
+            >
+              <Layout columns={{ base: ['auto', 'auto'] }} colGap="tight" align="center">
+                <span className={styles.toggleLabel}>{here?.label}</span>
+                <span className={styles.toggleMark} aria-hidden="true">
+                  <Icon name="alt-arrow-down" size="sm" />
+                </span>
+              </Layout>
+            </button>
+          ) : null}
           {count > 0 ? (
-            <div className={styles.row}>
-              {/* One list, two arrangements: a column beside the content from 1024, a single line of
-                  content-sized labels in the phone's bar (the line scrolls sideways when it must). */}
+            <div
+              ref={lineRef}
+              className={cx(styles.row, styles.line, collapsible && styles.pop)}
+              data-open={open ? '' : undefined}
+            >
+              {/* One list, two arrangements: a column beside the content from 1024; below it a picker's
+                  single line of content-sized labels (scrolling sideways when it must), or a view's
+                  list opened from the bar. */}
               <Layout
                 as="ul"
-                columns={{ base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }}
+                columns={
+                  collapsible
+                    ? undefined
+                    : { base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }
+                }
                 colGap="block"
                 rowGap="text"
                 justify="start"
@@ -258,18 +327,25 @@ export function IndexRail({
                 className={cx(styles.list, switched && styles.entering)}
               >
                 {active.items.map((item) => {
-                  const here = item.current || item.href === `#${current}`;
+                  const isHere = item.current || item.href === `#${current}`;
                   return (
                     <li key={item.href}>
                       <a
                         href={item.href}
                         className={styles.item}
-                        aria-current={item.current ? 'page' : here ? 'location' : undefined}
+                        aria-current={item.current ? 'page' : isHere ? 'location' : undefined}
+                        onClick={() => setOpen(false)}
                       >
-                        {item.count !== undefined ? (
-                          <span className={styles.count}>{item.count}</span>
-                        ) : null}
-                        {item.label}
+                        {/* The name, then its figure at the row's end on the name's baseline: an
+                            index's page number, never a bullet before the label. */}
+                        <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="baseline">
+                          <span className={styles.name}>{item.label}</span>
+                          {item.count !== undefined ? (
+                            <span className={styles.count}>{item.count}</span>
+                          ) : (
+                            <span />
+                          )}
+                        </Layout>
                       </a>
                     </li>
                   );
@@ -284,7 +360,7 @@ export function IndexRail({
 
   return (
     <div ref={rootRef} className={styles.frame}>
-      <Layout columns={{ lg: [1, 5] }} colGap="column" rowGap="stack" align="start">
+      <Layout columns={{ lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
         {rail}
         <div className={styles.content}>
           {views
