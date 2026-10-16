@@ -273,7 +273,6 @@ export function InsightsIndex({
         {byType.length > 0 ? (
           <IndexRail
             ariaLabel="Browse insights"
-            label="Curate"
             modes={modes}
             initialMode={view}
             param="view"

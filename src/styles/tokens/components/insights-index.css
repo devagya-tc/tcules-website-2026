@@ -13,11 +13,10 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* A curated section's head: the h4 role, one line (beauty round 3, 16 Oct 2026). A signpost, so
-     the lead piece under it (h3, 34) is the largest type in the section: at h1 the head outranked
-     the content and six of them squinted as "heading, stuff, heading, stuff". */
-  --iix-section-title-text: var(--text-h4);
-  --iix-section-title-tracking: var(--text-h4-tracking);
+  /* A curated section's head: the h2 role, as every section head on the site (owner, 16 Oct 2026:
+     the h4 head was "too small. foundationally incorrect"). Section heads take h1/h2 by prominence. */
+  --iix-section-title-text: var(--text-h2);
+  --iix-section-title-tracking: var(--text-h2-tracking);
   /* An events page's group label: the eyebrow, the date column's voice. */
   --iix-group-title-text: var(--text-eyebrow);
   --iix-group-title-tracking: var(--text-eyebrow-tracking);

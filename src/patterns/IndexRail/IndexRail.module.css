@@ -28,6 +28,8 @@
 
 /* The rail's heading: the label voice at its smallest, quiet. */
 .label {
+  padding-block-end: var(--gap-text);
+  border-block-end: var(--irl-rule-width) solid var(--irl-rule-ink);
   color: var(--irl-label-ink);
   font: var(--irl-label-text);
   letter-spacing: var(--irl-label-tracking);
@@ -41,17 +43,22 @@
   animation: irl-enter var(--irl-enter-duration) var(--irl-easing);
 }
 
-/* The switch: a positioning context for the sliding rule (it arranges nothing). */
+/* The switch (owner, 16 Oct 2026: claude.com's segmented control): one warm ground, the shown view
+   a paper chip on it that slides between the halves. A positioning context for the chip. */
 .switch {
   position: relative;
+  isolation: isolate;
+  padding: var(--irl-switch-inset);
+  border-radius: var(--irl-switch-radius);
+  background-color: var(--irl-switch-ground);
 }
 
 /* The switch's labels: mono, the shown one in ink over a rule its own width. No track, no chip. */
 .mode {
   display: block;
-  padding-block-end: var(--irl-mode-rule-gap);
-  border-block-end: var(--irl-mode-rule-width) solid transparent;
-  border-radius: var(--irl-ring-radius);
+  padding-block: var(--irl-mode-inset);
+  border-radius: var(--irl-thumb-radius);
+  text-align: center;
   color: var(--irl-mode-ink);
   font: var(--irl-mode-text);
   letter-spacing: var(--irl-mode-tracking);
@@ -69,13 +76,13 @@
 }
 
 .mode[aria-current='true'] {
-  border-block-end-color: var(--irl-mode-rule-ink);
+  background-color: var(--irl-thumb-ground);
   color: var(--irl-mode-ink-current);
 }
 
-/* Once measured, the labels' own rules give way to one rule that slides between them. */
+/* Once measured, the labels' own chips give way to one chip that slides between them. */
 .switch[data-measured] .mode[aria-current='true'] {
-  border-block-end-color: transparent;
+  background-color: transparent;
 }
 
 .indicator {
@@ -85,11 +92,12 @@
 .switch[data-measured] .indicator {
   display: block;
   position: absolute;
-  inset-block-end: 0;
+  z-index: -1;
+  inset-block: var(--irl-switch-inset);
   inset-inline-start: 0;
   inline-size: var(--irl-indicator-w);
-  block-size: var(--irl-mode-rule-width);
-  background-color: var(--irl-mode-rule-ink);
+  border-radius: var(--irl-thumb-radius);
+  background-color: var(--irl-thumb-ground);
   transform: translateX(var(--irl-indicator-x));
   transition:
     transform var(--irl-slide-duration) var(--irl-easing),
@@ -143,6 +151,7 @@
   border-radius: var(--irl-ring-radius);
   color: var(--irl-item-ink);
   font: var(--irl-item-text);
+  letter-spacing: var(--irl-item-tracking);
   text-decoration: none;
   transition: color var(--irl-duration) var(--irl-easing);
 }

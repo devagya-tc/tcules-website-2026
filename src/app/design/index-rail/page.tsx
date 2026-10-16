@@ -69,7 +69,6 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
         >
           <IndexRail
             ariaLabel="Browse"
-            label="Curate"
             param="view"
             initialMode={view}
             modes={[
@@ -103,7 +102,6 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
         >
           <IndexRail
             ariaLabel="Formats"
-            label="Formats"
             modes={[
               {
                 id: 'type',

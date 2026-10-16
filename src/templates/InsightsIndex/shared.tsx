@@ -409,9 +409,9 @@ export function Headlines({ items, meta, titleAs = 'h3' }: Shape) {
 }
 
 /**
- * The INDEX: one piece with its picture beside a numbered list of the rest — the hub's short index.
- * The list's rows carry a piece's thumbnail where it has one, in a track every row holds. A list of
- * one is a row, not a list: it carries no number.
+ * The INDEX: one piece with its picture beside a list of the rest — the hub's short index. The
+ * list's rows carry a piece's thumbnail where it has one, in a track every row holds. No numerals
+ * (owner, 16 Oct 2026: the 01–04 column made it "messy").
  */
 export function Index({ items, meta, titleAs = 'h3' }: Shape) {
   const { pictured, plain } = partition(items);
@@ -419,13 +419,12 @@ export function Index({ items, meta, titleAs = 'h3' }: Shape) {
   const rest = lead ? items.filter((item) => item !== lead) : [...plain];
   const slot = rest.some(hasPicture);
   const list = (
-    <Layout as="ol" rowGap="gutter">
-      {rest.map((item, i) => (
+    <Layout as="ul" rowGap="gutter">
+      {rest.map((item) => (
         <Teaser
           key={item.id}
           {...teaserOf(item, meta)}
           body={undefined}
-          index={rest.length > 1 ? String(i + 1).padStart(2, '0') : undefined}
           arrangement="row"
           size="md"
           titleAs={titleAs}

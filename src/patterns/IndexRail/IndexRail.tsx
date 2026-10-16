@@ -48,9 +48,8 @@ export type IndexRailProps = {
    */
   param?: string;
   /**
-   * The rail's one label, over everything in it ("Curate", "Formats"): the small mono word that
-   * makes the column read as an index with a heading. Authored case; mono uppercases it. From 1024
-   * only — in a phone's bar the switch speaks for itself.
+   * The small label over the list ("Jump to"), the rail's one rule under it. Authored case; mono
+   * uppercases it. From 1024 only — in a phone's bar the switch speaks for itself.
    */
   label?: string;
   /** The nav's accessible name. */
@@ -92,7 +91,7 @@ export function IndexRail({
   modes,
   initialMode,
   param,
-  label,
+  label = 'Jump to',
   ariaLabel,
   children,
   className,
@@ -237,7 +236,6 @@ export function IndexRail({
   const rail = (
     <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
       <Layout rowGap="text">
-        {label ? <p className={styles.label}>{label}</p> : null}
         <Layout
           columns={collapsible ? { base: [1, 'auto'], lg: 1 } : undefined}
           colGap="block"
@@ -263,7 +261,7 @@ export function IndexRail({
             >
               {/* Two labels, the shown one in ink over a rule that slides between them. Content-sized
                   tracks, so the rule is exactly its label's width. */}
-              <Layout columns={{ base: ['auto', 'auto'] }} colGap="block" justify="start">
+              <Layout columns={2} colGap="none">
                 {modes.map((m) => (
                   <a
                     key={m.id}
@@ -309,47 +307,44 @@ export function IndexRail({
               className={cx(styles.row, styles.line, collapsible && styles.pop)}
               data-open={open ? '' : undefined}
             >
-              {/* One list, two arrangements: a column beside the content from 1024; below it a picker's
+              {/* "Jump to" over the list, the rail's one rule under it (owner, 16 Oct 2026: after
+                  claude.com/resources). From 1024 only. */}
+              <Layout rowGap="block">
+                {label ? <p className={styles.label}>{label}</p> : null}
+                {/* One list, two arrangements: a column beside the content from 1024; below it a picker's
                   single line of content-sized labels (scrolling sideways when it must), or a view's
                   list opened from the bar. */}
-              <Layout
-                as="ul"
-                columns={
-                  collapsible
-                    ? undefined
-                    : { base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }
-                }
-                colGap="block"
-                rowGap="text"
-                justify="start"
-                id={`${uid}-list`}
-                key={active.id}
-                className={cx(styles.list, switched && styles.entering)}
-              >
-                {active.items.map((item) => {
-                  const isHere = item.current || item.href === `#${current}`;
-                  return (
-                    <li key={item.href}>
-                      <a
-                        href={item.href}
-                        className={styles.item}
-                        aria-current={item.current ? 'page' : isHere ? 'location' : undefined}
-                        onClick={() => setOpen(false)}
-                      >
-                        {/* The name, then its figure at the row's end on the name's baseline: an
-                            index's page number, never a bullet before the label. */}
-                        <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="baseline">
+                <Layout
+                  as="ul"
+                  columns={
+                    collapsible
+                      ? undefined
+                      : { base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }
+                  }
+                  colGap="block"
+                  rowGap="text"
+                  justify="start"
+                  id={`${uid}-list`}
+                  key={active.id}
+                  className={cx(styles.list, switched && styles.entering)}
+                >
+                  {active.items.map((item) => {
+                    const isHere = item.current || item.href === `#${current}`;
+                    return (
+                      <li key={item.href}>
+                        <a
+                          href={item.href}
+                          className={styles.item}
+                          aria-current={item.current ? 'page' : isHere ? 'location' : undefined}
+                          onClick={() => setOpen(false)}
+                        >
+                          {/* The name alone: no count (owner, 16 Oct 2026: "remove the numbers"). */}
                           <span className={styles.name}>{item.label}</span>
-                          {item.count !== undefined ? (
-                            <span className={styles.count}>{item.count}</span>
-                          ) : (
-                            <span />
-                          )}
-                        </Layout>
-                      </a>
-                    </li>
-                  );
-                })}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </Layout>
               </Layout>
             </div>
           ) : null}
