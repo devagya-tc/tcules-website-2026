@@ -113,6 +113,16 @@ const SPECIMENS = [
         note: 'the ancestor trail — depth ladder, collapse, 4 surfaces, its own band',
       },
       {
+        href: '/design/index-rail',
+        name: 'IndexRail',
+        note: 'a curated listing page’s rail beside its content — views (BY TYPE / BY TOPIC switching the whole column, held in ?view=) and a picker of sibling pages',
+      },
+      {
+        href: '/design/teaser',
+        name: 'Teaser',
+        note: 'one linked piece without an edge — stack, beside and row; four title steps; cover, drawn scene or typographic; date anchor, play mark, compact phone row; 4 surfaces',
+      },
+      {
         href: '/design/table-of-contents',
         name: 'TableOfContents',
         note: 'the outline of a long-form document — sticky rail, live mark, 2 arrangements, 4 surfaces',
@@ -295,7 +305,7 @@ const SPECIMENS = [
       {
         href: '/design/insights-index',
         name: 'InsightsIndex',
-        note: 'the insights hub — front page (lead + mix), topic collections, a band per format each its own shape, the Lab, and the URL-driven feed — over the stress fixture; ?state=sparse is the live CMS’s shape, ?state=empty no items; filters work',
+        note: 'the insights hub as a curated page — BY TYPE (a section per format, each its own shape) or BY TOPIC (formats mixed), switched in the rail and held in ?view= — and InsightsFormat, a format’s own page (?format=article …: hero, picker, feature, turning grid, Show more); ?state=sparse is the live CMS’s shape, ?state=empty no items',
       },
       {
         href: '/design/case-story',

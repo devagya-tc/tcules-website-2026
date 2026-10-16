@@ -174,6 +174,9 @@ export const CARD_THREE_TRACKS =
  */
 export const LIST_CARD_THUMBNAIL = '160px';
 
+/** A Teaser row's end thumbnail: its fixed track (--tsr-thumb-inline, 9rem). */
+export const TEASER_THUMBNAIL = '144px';
+
 /**
  * Proof's quote portrait: a fixed 64 square at every width — --proof-portrait-size
  * (tokens/components/proof.css). Ruling P1 makes it small and beside the name, so it never takes a

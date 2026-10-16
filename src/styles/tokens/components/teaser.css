@@ -1,0 +1,136 @@
+/* ══ Component layer — Teaser ════════════════════════════════════════════════════
+   Tier 2. One linked piece of writing, video or event, held WITHOUT AN EDGE (owner, 16 Oct 2026,
+   the insights hub): proximity binds it — tight inside the item, generous between items — and an
+   anchor at its head carries it: its own image, a date, or a strong meta line. No box, no rule
+   between items, no stand-in picture for an item that has none: that item is typographic.
+
+   Naming: --tsr-{part}-{role}-{state}, with a size suffix where the type steps with the placement
+   (--tsr-title-text-xl | -lg | -md | -sm)
+     parts: title | body | meta | date | media | play | ring
+     states: hover and pressed, on the title only (the cover zoom is geometry).
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The title steps with the placement; the item cannot see its track, so the caller says.
+       xl  h3 + body-lg   the one featured piece of a section or a format page
+       lg  h4 + body      a lead in a pair, a video beside its playlist
+       md  h5 + body-sm   a tile in a row of three, a headline
+       sm  h6 + body-sm   a row in a list, a playlist entry
+     Every title role re-declares itself at 1023 and 767, so no step needs a breakpoint here. */
+  --tsr-title-text-xl: var(--text-h3);
+  --tsr-title-tracking-xl: var(--text-h3-tracking);
+  --tsr-body-text-xl: var(--text-body-lg);
+  --tsr-title-text-lg: var(--text-h4);
+  --tsr-title-tracking-lg: var(--text-h4-tracking);
+  --tsr-body-text-lg: var(--text-body);
+  --tsr-title-text-md: var(--text-h5);
+  --tsr-title-tracking-md: var(--text-h5-tracking);
+  --tsr-body-text-md: var(--text-body-sm);
+  --tsr-title-text-sm: var(--text-h6);
+  --tsr-title-tracking-sm: var(--text-h6-tracking);
+  --tsr-body-text-sm: var(--text-body-sm);
+
+  /* The meta line: the label voice, the item's anchor when it has no image. */
+  --tsr-meta-text: var(--text-eyebrow);
+  --tsr-meta-tracking: var(--text-eyebrow-tracking);
+
+  /* The date anchor (an event): the day as a numeral in the stat role, the month under it in the
+     label voice. A numeral is the strongest head a typographic item can have. */
+  --tsr-date-day-text: var(--text-stat);
+  --tsr-date-day-tracking: var(--text-stat-tracking);
+  --tsr-date-label-text: var(--text-eyebrow);
+  --tsr-date-label-tracking: var(--text-eyebrow-tracking);
+
+  /* One image ratio for every placement (owner, 11 Oct 2026: never random ratios on cards). */
+  --tsr-media-ratio: var(--ratio-standard);
+  --tsr-media-radius: var(--radius-8);
+  --tsr-media-rule-width: var(--border-width-hairline);
+  --tsr-media-zoom: 1.03;
+  --tsr-media-zoom-duration: var(--duration-slow);
+  --tsr-media-zoom-easing: var(--easing-standard);
+  /* A row's thumbnail: a fixed track at the row's end, so every row's copy starts on one edge
+     whether or not it has an image. A component size. */
+  --tsr-thumb-inline: 9rem;
+  /* Beside an h4 or h3 title the thumbnail grows, so the picture is not a speck against the words. */
+  --tsr-thumb-inline-lg: 15rem;
+  /* On a phone, where the copy needs the width. */
+  --tsr-thumb-inline-phone: 6rem;
+  /* A row's standfirst: two lines, a taste of the piece. */
+  --tsr-row-body-lines: 2;
+
+  /* The play mark on a watched piece: a round chip in the image's foot-start corner. Optical
+     sizes from the ramp: the chip, its glyph, its inset from the corner. */
+  --tsr-play-size: var(--space-48);
+  --tsr-play-glyph: var(--space-20);
+  --tsr-play-inset: var(--space-16);
+  --tsr-play-radius: var(--radius-full);
+  /* On a small picture (a tile in a row, a mini in a mosaic) the mark steps down with it. */
+  --tsr-play-size-sm: var(--space-32);
+  --tsr-play-glyph-sm: var(--space-14);
+  --tsr-play-inset-sm: var(--space-12);
+
+  --tsr-title-ink-duration: var(--duration-fast);
+  --tsr-title-ink-easing: var(--easing-standard);
+  --tsr-ring-width: var(--focus-ring-width);
+  --tsr-ring-offset: var(--focus-ring-offset);
+  --tsr-ring-radius: var(--radius-4);
+}
+
+:root,
+[data-surface='paper'] {
+  --tsr-title-ink: var(--color-neutral-900);
+  --tsr-title-ink-hover: var(--color-brandeis-500);
+  --tsr-title-ink-pressed: var(--color-brandeis-700);
+  --tsr-body-ink: var(--color-neutral-700);
+  --tsr-meta-ink: var(--color-neutral-600);
+  --tsr-date-ink: var(--color-brandeis-500);
+  --tsr-media-rule-ink: var(--color-neutral-200);
+  --tsr-media-ground: var(--color-paper-deep);
+  --tsr-play-ground: var(--color-paper);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='tint'] {
+  --tsr-title-ink: var(--color-neutral-900);
+  --tsr-title-ink-hover: var(--color-brandeis-500);
+  --tsr-title-ink-pressed: var(--color-brandeis-700);
+  --tsr-body-ink: var(--color-neutral-700);
+  --tsr-meta-ink: var(--color-neutral-700);
+  --tsr-date-ink: var(--color-brandeis-500);
+  --tsr-media-rule-ink: var(--color-neutral-300);
+  --tsr-media-ground: var(--color-neutral-100);
+  --tsr-play-ground: var(--color-paper);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='ink'] {
+  --tsr-title-ink: var(--color-white);
+  --tsr-title-ink-hover: var(--color-brandeis-300);
+  --tsr-title-ink-pressed: var(--color-brandeis-100);
+  --tsr-body-ink: var(--color-neutral-300);
+  --tsr-meta-ink: var(--color-neutral-400);
+  --tsr-date-ink: var(--color-brandeis-300);
+  --tsr-media-rule-ink: var(--color-neutral-700);
+  --tsr-media-ground: var(--color-neutral-900);
+  --tsr-play-ground: var(--color-white);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-300);
+}
+
+[data-surface='blue'] {
+  --tsr-title-ink: var(--color-white);
+  --tsr-title-ink-hover: var(--color-brandeis-50);
+  --tsr-title-ink-pressed: var(--color-brandeis-100);
+  --tsr-body-ink: var(--color-brandeis-50);
+  --tsr-meta-ink: var(--color-brandeis-100);
+  --tsr-date-ink: var(--color-white);
+  --tsr-media-rule-ink: var(--color-brandeis-300);
+  --tsr-media-ground: var(--color-brandeis-600);
+  --tsr-play-ground: var(--color-white);
+  --tsr-play-ink: var(--color-brandeis-700);
+  --tsr-ring-color: var(--color-white);
+}

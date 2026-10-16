@@ -1,0 +1,220 @@
+/* Teaser — one linked piece held without an edge. Layout owns every arrangement (the stack, the
+   3 : 2 beside, the row with its end thumbnail); this module owns the picture's ruled 16:9 box and
+   its zoom, the play mark's position on it, the type roles per size and the link states. Every
+   value is a --tsr-* token. No margin, no ground at rest, no rule between items. */
+
+.root {
+  min-inline-size: 0;
+}
+
+/* The one anchor. A sizing declaration: it holds exactly one Layout. */
+.link {
+  display: block;
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--tsr-ring-radius);
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+.link:focus-visible {
+  outline: var(--tsr-ring-width) solid var(--tsr-ring-color);
+  outline-offset: var(--tsr-ring-offset);
+}
+
+/* The picture's box: the one ratio, a hairline and the photograph radius. The ground shows only
+   while an image loads. Positioned, so the play mark sits on it. */
+.media {
+  display: block;
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: var(--tsr-media-ratio);
+  overflow: hidden;
+  border: var(--tsr-media-rule-width) solid var(--tsr-media-rule-ink);
+  border-radius: var(--tsr-media-radius);
+  background-color: var(--tsr-media-ground);
+}
+
+.zoom {
+  display: block;
+  block-size: 100%;
+  transition: transform var(--tsr-media-zoom-duration) var(--tsr-media-zoom-easing);
+}
+
+.link:hover .zoom,
+.link:focus-visible .zoom {
+  transform: scale(var(--tsr-media-zoom));
+}
+
+/* A row's thumbnail: the auto track's width — larger beside a larger title, so the picture keeps
+   its weight against the copy. */
+.thumb {
+  display: block;
+  inline-size: var(--tsr-thumb-inline);
+}
+
+.sizeXl .thumb,
+.sizeLg .thumb {
+  inline-size: var(--tsr-thumb-inline-lg);
+}
+
+/* A compact tile's picture: the stack's full width from md, the row's thumbnail below it. */
+.compactPicture {
+  display: block;
+}
+
+/* On a phone the copy needs the width: every row's thumbnail drops to the small size, and a compact
+   row's meta line keeps its first fact only, so it never wraps beside the thumbnail. */
+@media (max-width: 767px) {
+  .compact .metaMore,
+  .row .metaMore {
+    display: none;
+  }
+
+  .compactPicture,
+  .thumb,
+  .sizeXl .thumb,
+  .sizeLg .thumb {
+    inline-size: var(--tsr-thumb-inline-phone);
+  }
+}
+
+/* The play mark: a round chip in the picture's foot-start corner. Painted and positioned on the
+   box, not arranged; the glyph is centred in its own chip by the chip's grid. */
+.play {
+  position: absolute;
+  inset-block-end: var(--tsr-play-inset);
+  inset-inline-start: var(--tsr-play-inset);
+  display: grid;
+  place-items: center;
+  inline-size: var(--tsr-play-size);
+  block-size: var(--tsr-play-size);
+  border-radius: var(--tsr-play-radius);
+  background-color: var(--tsr-play-ground);
+  color: var(--tsr-play-ink);
+}
+
+.play > svg {
+  inline-size: var(--tsr-play-glyph);
+  block-size: var(--tsr-play-glyph);
+}
+
+.sizeMd .play,
+.sizeSm .play {
+  inset-block-end: var(--tsr-play-inset-sm);
+  inset-inline-start: var(--tsr-play-inset-sm);
+  inline-size: var(--tsr-play-size-sm);
+  block-size: var(--tsr-play-size-sm);
+}
+
+.sizeMd .play > svg,
+.sizeSm .play > svg {
+  inline-size: var(--tsr-play-glyph-sm);
+  block-size: var(--tsr-play-glyph-sm);
+}
+
+.meta {
+  color: var(--tsr-meta-ink);
+  font: var(--tsr-meta-text);
+  letter-spacing: var(--tsr-meta-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* The date anchor: the day numeral over its month. A two-line label block, stacked by the grid. */
+.date {
+  display: grid;
+  color: var(--tsr-date-ink);
+}
+
+.day {
+  font: var(--tsr-date-day-text);
+  letter-spacing: var(--tsr-date-day-tracking);
+}
+
+.dateLabel {
+  color: var(--tsr-meta-ink);
+  font: var(--tsr-date-label-text);
+  letter-spacing: var(--tsr-date-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.title {
+  color: var(--tsr-title-ink);
+  text-wrap: var(--text-title-wrap);
+  overflow-wrap: anywhere;
+  transition: color var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
+}
+
+.link:hover .title,
+.link:focus-visible .title {
+  color: var(--tsr-title-ink-hover);
+}
+
+.link:active .title {
+  color: var(--tsr-title-ink-pressed);
+}
+
+.body {
+  color: var(--tsr-body-ink);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* A row is a list entry: its standfirst is a taste, held to two lines, so rows keep one rhythm. */
+.row .body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tsr-row-body-lines);
+  line-clamp: var(--tsr-row-body-lines);
+  overflow: hidden;
+}
+
+.sizeXl .title {
+  font: var(--tsr-title-text-xl);
+  letter-spacing: var(--tsr-title-tracking-xl);
+}
+
+.sizeXl .body {
+  font: var(--tsr-body-text-xl);
+}
+
+.sizeLg .title {
+  font: var(--tsr-title-text-lg);
+  letter-spacing: var(--tsr-title-tracking-lg);
+}
+
+.sizeLg .body {
+  font: var(--tsr-body-text-lg);
+}
+
+.sizeMd .title {
+  font: var(--tsr-title-text-md);
+  letter-spacing: var(--tsr-title-tracking-md);
+}
+
+.sizeMd .body {
+  font: var(--tsr-body-text-md);
+}
+
+.sizeSm .title {
+  font: var(--tsr-title-text-sm);
+  letter-spacing: var(--tsr-title-tracking-sm);
+}
+
+.sizeSm .body {
+  font: var(--tsr-body-text-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom,
+  .title {
+    transition: none;
+  }
+
+  .link:hover .zoom,
+  .link:focus-visible .zoom {
+    transform: none;
+  }
+}

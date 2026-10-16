@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 
-import { getInsightsFixturePage, type InsightsPage } from '@/content';
+import { getInsightsFixturePage, type InsightResourceKind, type InsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { InsightsIndex } from '@/templates';
+import { InsightsFormat, InsightsIndex } from '@/templates';
 
-import { insightsIndexProps } from '../../_insights/hub';
+import { formatsWithContent, insightsFormatProps, insightsIndexProps } from '../../_insights/hub';
 
 export const metadata: Metadata = {
   title: 'InsightsIndex · stress content | Design',
@@ -51,14 +51,15 @@ function empty(page: InsightsPage): InsightsPage {
 }
 
 /**
- * InsightsIndex over the stress fixture (src/content/sources/fixtures/insights.ts): all seven
- * formats, more items than any band shows, the longest titles and an unbroken one, missing covers
- * and descriptions, an event without a date. The same mapping as the live /insights
- * (src/app/_insights/hub.ts), pointed at this path, so every filter, "All …" and "Show more" link
- * works here as it does there.
+ * InsightsIndex and InsightsFormat over the stress fixture (src/content/sources/fixtures/insights.ts):
+ * all seven formats, more items than any section shows, the longest titles and an unbroken one,
+ * missing covers and descriptions, an event without a date. The same mapping as the live /insights
+ * and /insights/<format> (src/app/_insights/hub.ts).
  *
- *   ?state=sparse   the live CMS's shape
- *   ?state=empty    nothing published
+ *   ?view=topic           the hub's BY TOPIC view
+ *   ?state=sparse         the live CMS's shape
+ *   ?state=empty          nothing published
+ *   ?format=article …     a format page (InsightsFormat); its picker and "Show more" stay here
  *
  * A template's specimen is the page itself rather than Specimen blocks: what is judged is the
  * composition down its length, which a row of crops cannot show.
@@ -68,7 +69,15 @@ export default async function InsightsIndexSpecimen({ searchParams }: Props) {
   const state = Array.isArray(query.state) ? query.state[0] : query.state;
   const page =
     state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
-  const path = state === 'sparse' || state === 'empty' ? `${PATH}?state=${state}` : PATH;
+  const format = (Array.isArray(query.format) ? query.format[0] : query.format) as
+    | InsightResourceKind
+    | undefined;
 
-  return <InsightsIndex {...insightsIndexProps(page, query, path)} />;
+  if (format && formatsWithContent(page).includes(format)) {
+    const pathFor = (kind: InsightResourceKind) =>
+      `${PATH}?${new URLSearchParams({ ...(state ? { state } : {}), format: kind }).toString()}`;
+    return <InsightsFormat {...insightsFormatProps(page, format, query, pathFor)} />;
+  }
+
+  return <InsightsIndex {...insightsIndexProps(page, query)} />;
 }

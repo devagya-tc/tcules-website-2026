@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = page.seo?.description || page.hero.description;
   const canonical = page.seo?.canonical;
   const image =
-    page.resources.items.find((item) => item.image)?.image ??
+    page.resources.items.find((item) => item.image && !item.image.standIn)?.image ??
     page.formatCards.find((card) => card.image)?.image;
 
   return {
@@ -52,14 +52,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The insights hub: a front page over an archive (InsightsIndex, docs/specs/InsightsIndex.md). The
- * route reads the CMS and the URL; `insightsIndexProps` maps both onto the template, and the
- * specimen at /design/insights-index runs the same mapping over the stress fixture.
+ * The insights hub: a curated page, BY TYPE or BY TOPIC (InsightsIndex). The route reads the CMS and
+ * the URL (`?view=topic`); `insightsIndexProps` maps both onto the template, and the specimen at
+ * /design/insights-index runs the same mapping over the stress fixture.
  */
 export default async function InsightsPage({ searchParams }: InsightsPageProps) {
   const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
 
   if (!page) notFound();
 
-  return <InsightsIndex {...insightsIndexProps(page, query, ROUTES.insights)} />;
+  return <InsightsIndex {...insightsIndexProps(page, query)} />;
 }

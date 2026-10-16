@@ -392,3 +392,15 @@ export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } 
 /* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
 export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';
 export { IndexRail, type IndexRailItem, type IndexRailMode, type IndexRailProps } from './IndexRail';
+
+/* Teaser — one linked piece held without an edge: picture or date or meta line at its head, in a
+   stack, beside, or as a row with an end thumbnail (insights hub and format pages, 16 Oct 2026). */
+export {
+  Teaser,
+  type TeaserArrangement,
+  type TeaserDate,
+  type TeaserImage,
+  type TeaserMedia,
+  type TeaserProps,
+  type TeaserSize,
+} from './Teaser';

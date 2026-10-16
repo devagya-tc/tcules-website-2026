@@ -1,5 +1,15 @@
-/* IndexRail — Layout arranges the switch, the label and the list; this module owns the stick, the
-   switch's ground and chips, the jump links' type and the current marker. Every value is --irl-*. */
+/* IndexRail — Layout arranges the rail beside the content, the switch, the label and the list; this
+   module owns the stick, the switch's ground and chips, the jump links' type and the current
+   marker. Every value is --irl-*. */
+
+/* The rail and its content: a jump target when a reader switches view deep in the page. */
+.frame {
+  scroll-margin-block-start: var(--irl-sticky-top);
+}
+
+.content {
+  min-inline-size: 0;
+}
 
 .root {
   position: sticky;
@@ -16,20 +26,28 @@
 }
 
 .mode {
+  display: block;
   padding-block: var(--irl-mode-inset);
-  border: 0;
   border-radius: var(--irl-thumb-radius);
-  background: transparent;
   color: var(--irl-mode-ink);
   font: var(--irl-mode-text);
   letter-spacing: var(--irl-mode-tracking);
-  cursor: pointer;
+  /* Mono is the label voice, and the label voice is uppercase (owner, 16 Oct 2026: BY TYPE /
+     BY TOPIC). Presentation only: the strings keep their authored case. */
+  text-transform: var(--text-mono-case);
+  text-align: center;
+  text-decoration: none;
   transition:
     background-color var(--irl-duration) var(--irl-easing),
     color var(--irl-duration) var(--irl-easing);
 }
 
-.mode[aria-pressed='true'] {
+.mode:hover {
+  color: var(--irl-mode-ink-current);
+  text-decoration: none;
+}
+
+.mode[aria-current='true'] {
   background-color: var(--irl-thumb-ground);
   color: var(--irl-mode-ink-current);
 }
@@ -84,11 +102,11 @@
   text-decoration: none;
 }
 
-.item[aria-current='location'] {
+.item[aria-current] {
   color: var(--irl-item-ink-current);
 }
 
-.item[aria-current='location']::before {
+.item[aria-current]::before {
   transform: scaleX(1);
 }
 
@@ -105,6 +123,12 @@
 @media (max-width: 1023px) {
   .root {
     position: static;
+  }
+
+  /* An in-page jump list over a phone's single column only pushes the view down: the switch alone
+     heads it there. A picker of pages stays: it is the way to the other formats. */
+  .jumps {
+    display: none;
   }
 }
 

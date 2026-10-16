@@ -16,16 +16,15 @@ export type {
   CaseStudyIndexProps,
   CaseStudyIndexSection,
 } from './CaseStudyIndex';
-export { InsightsIndex } from './InsightsIndex';
+export { InsightsFormat, InsightsIndex } from './InsightsIndex';
 export type {
-  InsightsIndexCollection,
-  InsightsIndexFeed,
-  InsightsIndexFilterGroup,
-  InsightsIndexFilterOption,
+  InsightsFormatProps,
   InsightsIndexFormat,
   InsightsIndexItem,
   InsightsIndexKind,
   InsightsIndexProps,
+  InsightsIndexTopic,
+  InsightsIndexView,
 } from './InsightsIndex';
 export { CaseStory } from './CaseStory';
 export type {

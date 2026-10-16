@@ -1,316 +1,120 @@
 import type { ReactNode } from 'react';
 
-import {
-  Button,
-  Cluster,
-  Icon,
-  Layout,
-  Media,
-  Section,
-  Tag,
-  type MediaImage,
-  type IconName,
-} from '@/components';
-import type { ArticleSceneName } from '@/lib/sketches';
-import { FULL_COLUMN } from '@/lib/image-sizes';
+import { Layout, Media, Section, type MediaImage } from '@/components';
+import { CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import { heroTrail } from '@/lib/trail';
 import {
-  BlockCard,
-  BlockCardSet,
   Breadcrumbs,
   ContentSection,
   CtaRow,
   CtaSection,
   IndexRail,
-  ListCard,
   PageHero,
-  Slider,
-  type BlockCardImage,
-  type BlockCardSetItem,
+  Teaser,
   type BreadcrumbItem,
   type HeroAction,
-  type ListCardMarker,
 } from '@/patterns';
 
-import styles from './InsightsIndex.module.css';
+import {
+  CuratedSection,
+  dateMarkerOf,
+  hasPicture,
+  LABEL,
+  Pair,
+  Rows,
+  SectionHead,
+  teaserOf,
+  Trio,
+  type InsightsIndexItem,
+  type InsightsIndexKind,
+} from './shared';
 
-/* ── The template's own shapes ────────────────────────────────────────────────────
-   A template may not import @/content, so the page maps the view model onto these and the
-   template never learns whether the CMS or the specimen's fixture answered. */
-
-/** The seven formats. The template decides each one's shape and position from this. */
-export type InsightsIndexKind =
-  'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview';
-
-export type InsightsIndexItem = {
-  id: string;
-  kind: InsightsIndexKind;
-  title: string;
-  href: string;
-  /** The standfirst. Absent or blank renders the title alone. */
-  description?: string;
-  cover?: BlockCardImage;
-  /** ISO 8601. Orders nothing here (the page passes items newest first); it is shown. */
-  publishedAt?: string;
-  /** "11 min read". */
-  readingTime?: string;
-  /** "48 min". */
-  duration?: string;
-  /** When and where an event happens. `startsAt` is ISO 8601. */
-  event?: { startsAt: string; place?: string };
-  /**
-   * The scene DRAWN for this article from its own argument (owner, 13 Oct 2026), assigned to it on
-   * purpose in data: its cover until a real one exists. Typed to the article scenes, so a service
-   * scene can never stand as a cover.
-   */
-  scene?: ArticleSceneName;
-};
-
-/** What the page says about one format: its band title, its one sentence, where "All …" goes. */
+/** What the page says about one format: its section title, its one line, its own page. */
 export type InsightsIndexFormat = {
   kind: InsightsIndexKind;
   title?: string;
   lead?: string;
-  href: string;
+  /** The format's page (/insights/articles …), where "All articles" goes. */
+  href?: string;
 };
 
-export type InsightsIndexCollection = {
-  id: string;
-  title: string;
-  description: string;
-  /** The glyph heading the column. Absent on any collection, the set renders without glyphs. */
-  icon?: IconName;
-  items: readonly { id: string; title: string; href: string }[];
-  related?: HeroAction;
-};
+/** One topic from the CMS taxonomy the BY TOPIC view curates by. */
+export type InsightsIndexTopic = { id: string; label: string };
 
-export type InsightsIndexFilterOption = {
-  id: string;
-  label: string;
-  /** How many pieces choosing it would show, given the other held filters. */
-  count?: number;
-  /** The URL with this option applied — or, when `selected`, with its group cleared. */
-  href: string;
-  selected: boolean;
-};
-
-export type InsightsIndexFilterGroup = {
-  id: string;
-  label: string;
-  options: readonly InsightsIndexFilterOption[];
-};
-
-export type InsightsIndexFeed = {
-  /** The band's id: the fragment every filter and "Show more" href ends in. */
-  id: string;
-  heading: string;
-  lead?: string;
-  /** The rows on screen: already filtered and paged by the page. */
-  items: readonly InsightsIndexItem[];
-  /** How many items match the held filters (all of them, with none held). */
-  total: number;
-  /** How many items exist. */
-  all: number;
-  /** FORMAT, the primary filter: "All" first, then each format, one line (owner, 13 Oct 2026). */
-  formats: readonly InsightsIndexFilterOption[];
-  /** The other groups, behind "More filters": only options with results, no one-option groups. */
-  filters: readonly InsightsIndexFilterGroup[];
-  /** What is held, each with the link that removes it. Empty when nothing is. */
-  held: readonly { id: string; label: string; href: string }[];
-  /** Clears every filter. Present only while one is held. */
-  clearHref?: string;
-  /** The next page. Present only while more match than are shown. */
-  moreHref?: string;
-};
+/** The two ways the hub is curated. */
+export type InsightsIndexView = 'type' | 'topic';
 
 export type InsightsIndexProps = {
   breadcrumbs: readonly BreadcrumbItem[];
   hero: { title: string; lede?: string; eyebrow?: string };
   /** Every resource, newest first. */
   items: readonly InsightsIndexItem[];
-  /** The editor's lead story. Absent, the newest item with a cover, else the newest. */
-  featuredId?: string;
   formats?: readonly InsightsIndexFormat[];
-  collections?: readonly InsightsIndexCollection[];
+  /** The topics, industry excluded (a reader's sector, not a subject). */
+  topics?: readonly InsightsIndexTopic[];
+  /** The view the page opens on: the route reads it from `?view=`. */
+  view?: InsightsIndexView;
   /**
-   * The Lab: the other organisation's offer, the page's one dark band (owner, 13 Oct 2026: ink, not
-   * blue). `visual` is the image it carries beside its words — the commissioned Lab illustration,
-   * a register placeholder until it exists (owner, 13 Oct 2026). The page passes the record.
+   * The Lab: the other organisation's offer, the page's one dark band (ink). `visual` is the image it
+   * carries beside its words — a register placeholder until the commissioned illustration exists.
    */
   lab?: { heading: string; body?: string; action: HeroAction; visual?: MediaImage };
-  feed: InsightsIndexFeed;
   /** Rendered only with its action: a close without an ask is not one. */
   closing?: { eyebrow?: string; heading: string; body?: string; action?: HeroAction };
-  /**
-   * Catalogue photographs for missing covers that no generated graphic suits (visual-direction
-   * § 5.7: never labelled, replaced when the real cover exists). Taken in order down the page.
-   * Absent or empty, the fallback is the card's own texture field.
-   */
-  standIns?: readonly BlockCardImage[];
 };
 
 /* ── Decisions the template owns ──────────────────────────────────────────────── */
 
 /**
- * The formats in page order, each with its shape (docs/specs/InsightsIndex.md § 2). The order
- * alternates covered and text shapes, so two text bands never meet, and a format's shape follows
- * what the format IS rather than how many it has.
+ * BY TYPE, in page order. A picture-led shape and a typographic one take turns — articles' feature,
+ * events' dated rows, videos' screen and playlist, guides' shelf — so the column never repeats one
+ * rectangle and two text-heavy sections never meet.
  */
-const FORMAT_ORDER: readonly InsightsIndexKind[] = [
+const TYPE_ORDER: readonly InsightsIndexKind[] = [
   'article',
   'event',
+  'video',
+  'guide',
   'podcast',
   'research',
-  'video',
   'interview',
-  'guide',
 ];
 
-const LABEL: Record<InsightsIndexKind, { one: string; many: string }> = {
-  article: { one: 'Article', many: 'Articles' },
-  guide: { one: 'Guide', many: 'Guides' },
-  research: { one: 'Research', many: 'Research' },
-  podcast: { one: 'Podcast', many: 'Podcasts' },
-  video: { one: 'Video', many: 'Videos' },
-  event: { one: 'Event', many: 'Events' },
-  interview: { one: 'Interview', many: 'Interviews' },
-};
+/** How many a topic section holds: a few, so the view reads as picked, not filtered. */
+const PER_TOPIC = 4;
+/** A topic with fewer pieces than this left to give is not a section. */
+const TOPIC_FLOOR = 3;
 
-/** How many a format's band shows at most. The feed below holds the rest. */
-const CAPACITY: Record<InsightsIndexKind, number> = {
-  article: 3,
-  event: 4,
-  podcast: 4,
-  research: 3,
-  video: 8,
-  interview: 3,
-  guide: 6,
-};
-
-/** The front page's curated mix beside the lead. */
-const MIX = 4;
-
-const DAY = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-const DAY_OF_MONTH = new Intl.DateTimeFormat('en-GB', { day: 'numeric', timeZone: 'UTC' });
-const MONTH_YEAR = new Intl.DateTimeFormat('en-GB', {
-  month: 'short',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-
-function parse(iso: string | undefined): Date | undefined {
-  if (!iso) return undefined;
-  const date = new Date(iso);
-  return Number.isNaN(date.valueOf()) ? undefined : date;
-}
-
-const dateOf = (iso: string | undefined) => {
-  const date = parse(iso);
-  return date ? DAY.format(date) : undefined;
-};
-
-/** A label line from its parts, blanks dropped: "Podcast · 7 Oct 2026". */
-const line = (...parts: (string | undefined)[]) =>
-  parts.filter((part): part is string => Boolean(part?.trim())).join(' · ') || undefined;
-
-/** The length of the thing: reading time for the read formats, duration for the watched ones. */
-const lengthOf = (item: InsightsIndexItem) => item.duration ?? item.readingTime;
-
-const bodyOf = (item: InsightsIndexItem) =>
-  item.description?.trim() ? item.description : undefined;
-
-const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
-  item.cover?.src.trim() ? { type: 'image', image: item.cover } : undefined;
-
-type CoverMedia = NonNullable<BlockCardSetItem['media']>;
-/**
- * Hands out a cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article
- * where it has one, else the next catalogue photograph, else a texture field. Never a generic scene.
- */
-type StandIn = (item: InsightsIndexItem) => CoverMedia;
-
-function standInPool(pool: readonly BlockCardImage[]): StandIn {
-  let next = 0;
-  let recipe = 0;
-  return (item) => {
-    if (item.scene) return { type: 'sketch', name: item.scene };
-    const image = pool.length > 0 ? pool[next++ % pool.length] : undefined;
-    return image
-      ? { type: 'image', image: { ...image, standIn: true } }
-      : { type: 'texture', recipe: (recipe++ % 3) as 0 | 1 | 2 };
-  };
-}
+const typeAnchor = (kind: InsightsIndexKind) => `type-${kind}`;
+const topicAnchor = (id: string) => `topic-${id}`;
 
 /**
- * The front page: the lead, then up to four more — one per format before any format repeats, in
- * date order, so the mix reads as the hub's range rather than its four newest articles.
- */
-function frontPage(items: readonly InsightsIndexItem[], featuredId: string | undefined) {
-  const lead =
-    items.find((item) => item.id === featuredId) ??
-    items.find((item) => coverOf(item) !== undefined) ??
-    items[0];
-  if (!lead) return { lead: undefined, mix: [] as InsightsIndexItem[] };
-
-  const rest = items.filter((item) => item.id !== lead.id);
-  const mix: InsightsIndexItem[] = [];
-  const kinds = new Set<InsightsIndexKind>([lead.kind]);
-  for (const item of rest) {
-    if (mix.length === MIX) break;
-    if (!kinds.has(item.kind)) {
-      kinds.add(item.kind);
-      mix.push(item);
-    }
-  }
-  for (const item of rest) {
-    if (mix.length === MIX) break;
-    if (!mix.includes(item)) mix.push(item);
-  }
-  return { lead, mix };
-}
-
-/* ── The template ─────────────────────────────────────────────────────────────── */
-
-/**
- * InsightsIndex — the insights hub as a front page over an archive (owner, 13 Oct 2026; reference:
- * The Verge's home page). docs/specs/InsightsIndex.md.
+ * InsightsIndex — the insights hub as a CURATED page (owner, 16 Oct 2026; the idea of
+ * claude.com/resources): the hero, then directly the curated column with the rail beside it.
  *
- *   A  masthead       the trail, the h1, the lede, and a jump to every format on the page
- *   B  front page     one lead story with its cover, and a curated mix beside it
- *   C  collections    "start with your problem": reading lists by topic, each with its service
- *   D  format bands   one per format, each its OWN shape, so the page never repeats one rectangle
- *   E  lab            the other organisation's offer, the page's one reserved (blue) band
- *   F  feed           everything, newest first, with the filters beside it, held in the URL
- *   G  close          the ask, on tint, only with an action
+ *   A  hero      the trail, the display h1, the lede, the texture
+ *   B  curated   the rail (BY TYPE / BY TOPIC, and the shown view's sections) beside the view:
+ *                BY TYPE  a section per format, each in its own shape, ending in "All <format>"
+ *                BY TOPIC a section per topic, formats mixed, no piece in two sections
+ *                Both views are in the HTML; the switch shows one and holds it in `?view=`.
+ *   C  lab       the other organisation's offer, on ink
+ *   D  close     the ask, on tint, only with an action
  *
- * The live /insights and /design/insights-index render this one composition: the route passes what
- * the CMS holds, the specimen passes the stress fixture.
+ * There is no in-page filtering and no full feed: everything of a format lives on its own page.
  */
 export function InsightsIndex({
   breadcrumbs,
   hero,
   items,
-  featuredId,
   formats = [],
-  collections = [],
+  topics = [],
+  view = 'type',
   lab,
-  feed,
   closing,
-  standIns = [],
 }: InsightsIndexProps) {
-  const standIn = standInPool(standIns);
-  const { lead, mix } = frontPage(items, featuredId);
-  const onFront = new Set([lead, ...mix].filter(Boolean).map((item) => item!.id));
-
-  const present = FORMAT_ORDER.flatMap((kind) => {
+  const byType = TYPE_ORDER.flatMap((kind) => {
     const all = items.filter((item) => item.kind === kind);
     if (all.length === 0) return [];
-    const fresh = all.filter((item) => !onFront.has(item.id));
     const format = formats.find((candidate) => candidate.kind === kind);
     return [
       {
@@ -318,43 +122,82 @@ export function InsightsIndex({
         title: format?.title?.trim() || LABEL[kind].many,
         lead: format?.lead,
         href: format?.href,
-        count: all.length,
-        /* Items already on the front page step aside when the band has others to show. */
-        items: (fresh.length > 0 ? fresh : all).slice(0, CAPACITY[kind]),
+        items: all,
       },
     ];
   });
-  const bands = alternate(present, standIns.length > 0);
-
+  const byTopic = curateTopics(items, topics);
   const lede = hero.lede?.trim();
-  const jumps =
-    bands.length >= 2 ? (
-      <nav aria-label="Formats on this page">
-        <Cluster as="ul" colGap="block" rowGap="text">
-          {bands.map((band) => (
-            <li key={band.kind}>
-              <Button
-                as="a"
-                href={`#${anchorOf(band.kind)}`}
-                emphasis="link"
-                tone="neutral"
-                icon={<Icon name="alt-arrow-down" />}
-              >
-                {/* The count joins the label inside the Button's one label run, after an en space:
-                    a typographic space in the text, not a box with spacing of its own (a Cluster
-                    here broke the Button's inline row and dropped its glyph to a second line). */}
-                {band.title}
-                <span className={styles.jumpCount}>
-                  <span className={styles.hidden}>,</span>
-                  {'\u2002'}
-                  {band.count}
-                </span>
-              </Button>
-            </li>
-          ))}
-        </Cluster>
-      </nav>
-    ) : null;
+
+  const typePanel = (
+    <Layout rowGap="section-open">
+      {byType.map((section) => {
+        const id = typeAnchor(section.kind);
+        return (
+          <CuratedSection
+            key={section.kind}
+            id={id}
+            head={
+              <SectionHead
+                id={id}
+                title={section.title}
+                lead={section.lead}
+                all={
+                  section.href
+                    ? { label: `All ${section.title.toLowerCase()}`, href: section.href }
+                    : undefined
+                }
+              />
+            }
+          >
+            <TypeShape kind={section.kind} items={section.items} />
+          </CuratedSection>
+        );
+      })}
+    </Layout>
+  );
+
+  const topicPanel = (
+    <Layout rowGap="section-open">
+      {byTopic.map((section, index) => {
+        const id = topicAnchor(section.id);
+        return (
+          <CuratedSection
+            key={section.id}
+            id={id}
+            head={<SectionHead id={id} title={section.label} />}
+          >
+            <TopicShape items={section.items} turn={index} />
+          </CuratedSection>
+        );
+      })}
+    </Layout>
+  );
+
+  const modes = [
+    {
+      id: 'type',
+      label: 'By type',
+      items: byType.map((section) => ({
+        label: section.title,
+        href: `#${typeAnchor(section.kind)}`,
+      })),
+      panel: typePanel,
+    },
+    ...(byTopic.length > 0
+      ? [
+          {
+            id: 'topic',
+            label: 'By topic',
+            items: byTopic.map((section) => ({
+              label: section.label,
+              href: `#${topicAnchor(section.id)}`,
+            })),
+            panel: topicPanel,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <>
@@ -368,95 +211,23 @@ export function InsightsIndex({
         body={lede ? [lede] : undefined}
         texture
         surface="paper"
-      >
-        {jumps}
-      </PageHero>
+      />
 
-      {lead ? (
-        <Section surface="paper" aria-label="Featured">
-          {/* The set sits directly under the h1 with no band heading between, so its titles are the
-              page's h2s (the case index's reason). The mix are HEADLINES — format, date, title, no
-              standfirst — so four of them stand as tall as the lead's cover and copy, the way a
-              front page's rail of headlines balances its lead story. */}
-          <BlockCardSet
-            lead="beside"
-            cue="title"
-            titleAs="h2"
-            items={[lead, ...mix].map((item, index) => ({
-              id: item.id,
-              title: item.title,
-              body: index === 0 ? bodyOf(item) : undefined,
-              eyebrow:
-                index === 0
-                  ? line(LABEL[item.kind].one, dateOf(item.publishedAt), lengthOf(item))
-                  : line(LABEL[item.kind].one, dateOf(item.publishedAt)),
-              href: item.href,
-              media: index === 0 ? (coverOf(item) ?? standIn(item)) : undefined,
-            }))}
+      <Section surface="paper" aria-label="Insights">
+        {byType.length > 0 ? (
+          <IndexRail
+            ariaLabel="Browse insights"
+            modes={modes}
+            initialMode={view}
+            param="view"
           />
-        </Section>
-      ) : null}
-
-      {collections.length > 0 ? <Collections collections={collections} /> : null}
-
-      {bands.length > 0 ? (
-        /* The formats beside one rail (owner, 16 Oct 2026: "it just lacks that navigation"; the
-           IDEA of claude.com/resources). The rail browses BY TYPE — the format blocks below — or
-           BY TOPIC — the feed, filtered. The blocks keep their shapes; only their frame changed,
-           from full-width bands to blocks in the wide track. */
-        <Section surface="paper" aria-label="Insights by format">
-          <Layout columns={{ lg: [3, 9] }} colGap="section" rowGap="stack" align="start">
-            <IndexRail ariaLabel="Browse insights" modes={railModes(bands, feed)} />
-            <Layout rowGap="section">
-              {bands.map((band) => {
-                const id = anchorOf(band.kind);
-                return (
-                  <section
-                    key={band.kind}
-                    id={id}
-                    aria-labelledby={`${id}-heading`}
-                    className={styles.block}
-                  >
-                    <Layout rowGap="stack">
-                      <Layout rowGap="block">
-                        <Cluster
-                          justify="between"
-                          align="baseline"
-                          colGap="gutter"
-                          rowGap="text"
-                        >
-                          <h2 id={`${id}-heading`}>{band.title}</h2>
-                          {band.href ? (
-                            <CtaRow
-                              rule={false}
-                              actions={[
-                                { label: `All ${band.title.toLowerCase()}`, href: band.href },
-                              ]}
-                            />
-                          ) : null}
-                        </Cluster>
-                        {band.lead ? <p className={styles.blockLead}>{band.lead}</p> : null}
-                      </Layout>
-                      <FormatShape
-                        kind={band.kind}
-                        items={band.items}
-                        title={band.title}
-                        standIn={standIn}
-                      />
-                    </Layout>
-                  </section>
-                );
-              })}
-            </Layout>
-          </Layout>
-        </Section>
-      ) : null}
+        ) : (
+          <p>Nothing has been published yet.</p>
+        )}
+      </Section>
 
       {lab ? (
         lab.visual ? (
-          /* The Lab on ink (owner, 13 Oct 2026), its words in the head track and its illustration
-             filling the two-thirds track at 16:9: a band with one thing to show, not an empty slab
-             of colour. A register placeholder holds the slot until the illustration is drawn. */
           <ContentSection
             id="lab"
             heading={lab.heading}
@@ -479,8 +250,6 @@ export function InsightsIndex({
         )
       ) : null}
 
-      <Feed feed={feed} />
-
       {closing?.action ? (
         <CtaSection
           arrangement="open"
@@ -495,679 +264,220 @@ export function InsightsIndex({
   );
 }
 
-const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
-
-/* The rail's two ways in. BY TYPE jumps to the format blocks on this page; BY TOPIC lands on the feed
-   filtered to one topic — every option of the CMS's groups except industry, which is a reader's
-   sector rather than a subject. A page with no topics gets the one list and no switch. */
-function railModes(
-  bands: readonly { kind: InsightsIndexKind; title: string }[],
-  feed: InsightsIndexFeed,
-) {
-  const byType = {
-    id: 'type',
-    label: 'By type',
-    items: bands.map((band) => ({ label: band.title, href: `#${anchorOf(band.kind)}` })),
-  };
-  const topics = feed.filters
-    .filter((group) => !/industry/i.test(group.label))
-    .flatMap((group) => group.options.filter((option) => !option.selected))
-    .map((option) => ({ label: option.label, href: option.href }));
-  return topics.length > 0
-    ? [byType, { id: 'topic', label: 'By topic', items: topics }]
-    : [byType];
-}
-
-/** A band whose shape carries an image: the covered shapes, and the catalogue when it has covers. */
-function isVisual(
-  band: { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
-  hasPool: boolean,
-) {
-  if (band.kind === 'guide')
-    return (
-      hasPool ||
-      band.items.every((item) => coverOf(item) !== undefined || item.scene !== undefined)
-    );
-  return band.kind === 'article' || band.kind === 'podcast' || band.kind === 'video';
-}
+/* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
 
 /**
- * The bands in FORMAT_ORDER, re-dealt so a covered band and a text band take turns (CLAUDE.md:
- * never two text-heavy bands back to back) whichever formats are present and whichever have covers.
- * Each kind keeps its place within its own group; a surplus of text bands can only go at the end,
- * which the specimen's sparse state shows does not happen with the CMS's formats.
+ * The topic sections: the largest topics first, each taking a few pieces nobody has taken yet — the
+ * newest piece with a picture as its lead, then one of each other format before any repeats, so a
+ * section reads as the topic's range, not its four newest articles. A piece sits in one section
+ * only; a topic left with too few to say anything is dropped.
  */
-function alternate<T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }>(
-  bands: readonly T[],
-  hasPool: boolean,
-): T[] {
-  const visual = bands.filter((band) => isVisual(band, hasPool));
-  const text = bands.filter((band) => !isVisual(band, hasPool));
-  const out: T[] = [];
-  while (visual.length > 0 || text.length > 0) {
-    const v = visual.shift();
-    if (v) out.push(v);
-    const t = text.shift();
-    if (t) out.push(t);
+function curateTopics(
+  items: readonly InsightsIndexItem[],
+  topics: readonly InsightsIndexTopic[],
+) {
+  const members = (id: string) => items.filter((item) => item.topics?.includes(id));
+  const ordered = [...topics]
+    .map((topic) => ({ ...topic, size: members(topic.id).length }))
+    .sort((a, b) => b.size - a.size);
+  const used = new Set<string>();
+  const sections: { id: string; label: string; items: InsightsIndexItem[] }[] = [];
+  for (const topic of ordered) {
+    const free = members(topic.id).filter((item) => !used.has(item.id));
+    if (free.length < TOPIC_FLOOR) continue;
+    const picked: InsightsIndexItem[] = [];
+    const lead = free.find(hasPicture);
+    if (lead) picked.push(lead);
+    const kinds = new Set(picked.map((item) => item.kind));
+    for (const item of free) {
+      if (picked.length === PER_TOPIC) break;
+      if (!picked.includes(item) && !kinds.has(item.kind)) {
+        kinds.add(item.kind);
+        picked.push(item);
+      }
+    }
+    for (const item of free) {
+      if (picked.length === PER_TOPIC) break;
+      if (!picked.includes(item)) picked.push(item);
+    }
+    picked.forEach((item) => used.add(item.id));
+    sections.push({ id: topic.id, label: topic.label, items: picked });
   }
-  return out;
+  return sections;
 }
 
-/* ── C · collections ──────────────────────────────────────────────────────────── */
+/* ── The shapes ───────────────────────────────────────────────────────────────── */
 
-/**
- * Reading lists by problem, four across: each a glyph, a title and its sentence, then its pieces as
- * rows, then the service that answers the same problem. A set is all-glyph or no-glyph.
- */
-function Collections({ collections }: { collections: readonly InsightsIndexCollection[] }) {
-  const glyphs = collections.every((collection) => collection.icon !== undefined);
+/** Split a set into the pieces with a picture and the typographic ones, each in date order. */
+function partition(items: readonly InsightsIndexItem[]) {
+  return {
+    pictured: items.filter(hasPicture),
+    plain: items.filter((item) => !hasPicture(item)),
+  };
+}
+
+/** A set's lead: its newest piece with a picture, else its newest; then the rest in order. */
+function leadOf(items: readonly InsightsIndexItem[]) {
+  const lead = items.find(hasPicture) ?? items[0];
+  return { lead, rest: items.filter((item) => item !== lead) };
+}
+
+/** The FEATURE: one piece with its picture large beside its words. */
+function Feature({ item, withKind }: { item: InsightsIndexItem; withKind: boolean }) {
   return (
-    <ContentSection
-      id="start-with-your-problem"
-      heading="Start with your problem"
-      headingId="start-with-your-problem-heading"
-      surface="paper"
-    >
-      <Layout
-        as="ul"
-        columns={{ base: 1, md: 2, lg: collections.length >= 4 ? 4 : collections.length }}
-        colGap="gutter"
-        rowGap="stack"
-      >
-        {collections.map((collection) => (
-          <li key={collection.id}>
-            <Layout rowGap="block">
-              <Layout rowGap="text">
-                {glyphs && collection.icon ? (
-                  <span className={styles.topicIcon}>
-                    <Icon name={collection.icon} />
-                  </span>
-                ) : null}
-                <h3 className={styles.topicTitle}>{collection.title}</h3>
-                <p className={styles.topicBody}>{collection.description}</p>
-              </Layout>
-              {collection.items.length > 0 ? (
-                <Layout as="ul" rowGap="none">
-                  {collection.items.map((piece) => (
-                    <ListCard
-                      key={piece.id}
-                      arrangement="stacked"
-                      size="sm"
-                      title={piece.title}
-                      href={piece.href}
-                    />
-                  ))}
-                </Layout>
-              ) : null}
-              {collection.related ? (
-                <Cluster>
-                  <Button
-                    as="a"
-                    href={collection.related.href}
-                    emphasis="link"
-                    tone="primary"
-                    icon={<Icon name="arrow-right" />}
-                  >
-                    {collection.related.label}
-                  </Button>
-                </Cluster>
-              ) : null}
-            </Layout>
-          </li>
-        ))}
-      </Layout>
-    </ContentSection>
+    <ul>
+      <Teaser
+        {...teaserOf(item, withKind)}
+        arrangement="beside"
+        size="xl"
+        sizes={CARD_TWO_TRACKS}
+      />
+    </ul>
   );
 }
 
-/* ── D · the format shapes ────────────────────────────────────────────────────── */
+/**
+ * The MIX under a feature: pictured tiles beside a column of headlines, so a row of three reads as
+ * two objects and a reading list, not three equal boxes.
+ */
+function Mix({
+  pictured,
+  plain,
+  withKind,
+}: {
+  pictured: readonly InsightsIndexItem[];
+  plain: readonly InsightsIndexItem[];
+  withKind: boolean;
+}) {
+  if (pictured.length === 0) return <Trio items={plain.slice(0, 3)} withKind={withKind} />;
+  if (plain.length === 0) return <Trio items={pictured.slice(0, 3)} withKind={withKind} />;
+  const tiles = pictured.slice(0, 2);
+  const headlines = plain.slice(0, tiles.length === 2 ? 2 : 3);
+  return (
+    <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+      {tiles.map((item) => (
+        <Teaser key={item.id} {...teaserOf(item, withKind)} size="md" compact />
+      ))}
+      <li>
+        <Layout as="ul" rowGap="gutter">
+          {headlines.map((item) => (
+            <Teaser key={item.id} {...teaserOf(item, withKind)} size="md" />
+          ))}
+        </Layout>
+      </li>
+    </Layout>
+  );
+}
 
-function FormatShape({
+function TypeShape({
   kind,
   items,
-  title,
-  standIn,
 }: {
   kind: InsightsIndexKind;
   items: readonly InsightsIndexItem[];
-  title: string;
-  standIn: StandIn;
 }): ReactNode {
   switch (kind) {
-    case 'article':
-      return <Wide items={items} standIn={standIn} />;
     case 'event':
-      return <Ledger items={items} />;
-    case 'podcast':
-      return <Episode items={items} standIn={standIn} />;
-    case 'research':
-      return <Reports items={items} />;
+      /* Events — dated rows: the day as a numeral heads each, the place under the title, the
+         event's picture at the row's end. The date is what a reader scans an events list for. */
+      return (
+        <Layout as="ul" rowGap="stack">
+          {items.slice(0, 3).map((item) => (
+            <Teaser
+              key={item.id}
+              {...teaserOf(item, false)}
+              date={dateMarkerOf(item)}
+              meta={item.event?.place}
+              arrangement="row"
+              size="lg"
+            />
+          ))}
+        </Layout>
+      );
     case 'video':
-      return <Rail items={items} label={title} standIn={standIn} />;
-    case 'interview':
-      return <Voices items={items} />;
-    case 'guide':
-      return <Catalogue items={items} standIn={standIn} />;
-  }
-}
-
-/** A card record for a set, eyebrowed with what the band does not already say: date, length. */
-const card = (item: InsightsIndexItem): BlockCardSetItem => ({
-  id: item.id,
-  title: item.title,
-  body: bodyOf(item),
-  eyebrow: line(dateOf(item.publishedAt), lengthOf(item)),
-  media: coverOf(item),
-  href: item.href,
-});
-
-/** Articles — the wide row: three covers in [2, 1, 1], so the newest is twice the others. */
-function Wide({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
-  return (
-    <BlockCardSet
-      /* Beside the rail (16 Oct 2026) the wide lead's [2, 1, 1] left its two companions about 200
-         wide and their titles five lines deep; three equal covers hold their titles to three. */
-      lead="none"
-      cue="title"
-      items={items.map((item) => ({ ...card(item), media: coverOf(item) ?? standIn(item) }))}
-    />
-  );
-}
-
-/** Events — the ledger: each row led by its date, the place on the label line. */
-function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout as="ul" rowGap="none">
-      {items.map((item) => {
-        const date = parse(item.event?.startsAt);
-        return (
-          <ListCard
-            key={item.id}
-            titleAs="h3"
-            size={items.length > 3 ? 'sm' : 'md'}
-            eyebrow={item.event?.place}
-            title={item.title}
-            body={bodyOf(item)}
-            href={item.href}
-            /* An event with no date yet keeps the date column, saying so, so every row's copy
-               starts on one edge; the publish date is never passed off as the event's. */
-            marker={
-              date && item.event
-                ? {
-                    type: 'date',
-                    dateTime: item.event.startsAt,
-                    day: DAY_OF_MONTH.format(date),
-                    label: MONTH_YEAR.format(date),
-                  }
-                : { type: 'date', day: '—', label: 'Date TBC' }
-            }
-          />
-        );
-      })}
-    </Layout>
-  );
-}
-
-/** Podcasts — the episode: the newest as one wide card you press play on, earlier ones as rows. */
-function Episode({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
-  const [latest, ...earlier] = items;
-  if (!latest) return null;
-  return (
-    <Layout rowGap="stack">
-      <ul>
-        <BlockCard
-          orientation="horizontal"
-          imageSide="left"
-          size="lg"
-          title={latest.title}
-          body={bodyOf(latest)}
-          eyebrow={dateOf(latest.publishedAt)}
-          media={coverOf(latest) ?? standIn(latest)}
-          href={latest.href}
-          cue="cta"
-          ctaLabel="Listen"
-          meta={latest.duration}
-        />
-      </ul>
-      {earlier.length > 0 ? (
-        <Layout as="ul" rowGap="none">
-          {earlier.map((item) => (
-            <ListCard
-              key={item.id}
-              titleAs="h3"
-              size="sm"
-              eyebrow={line(dateOf(item.publishedAt), item.duration)}
-              title={item.title}
-              body={bodyOf(item)}
-              href={item.href}
-            />
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-}
-
-/** Research — the reports: each a head beside its body, the title at the band's largest card step. */
-function Reports({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout as="ul" rowGap="column">
-      {items.map((item) => (
-        <BlockCard
-          key={item.id}
-          orientation="horizontal"
-          size="md"
-          title={item.title}
-          body={bodyOf(item)}
-          eyebrow={dateOf(item.publishedAt)}
-          href={item.href}
-          cue="cta"
-          ctaLabel="Read the research"
-          meta={item.readingTime}
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/** Videos — the rail: covered cards you scrub through, three in view. */
-function Rail({
-  items,
-  label,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  label: string;
-  standIn: StandIn;
-}) {
-  return (
-    /* Two in view beside the rail (16 Oct 2026): three left each card 265 wide under a 26px title. */
-    <Slider label={label} perView={2}>
-      {items.map((item) => (
-        <BlockCard
-          key={item.id}
-          tracks={2}
-          size="md"
-          title={item.title}
-          body={bodyOf(item)}
-          eyebrow={line(dateOf(item.publishedAt), item.duration)}
-          media={coverOf(item) ?? standIn(item)}
-          href={item.href}
-          cue="title"
-        />
-      ))}
-    </Slider>
-  );
-}
-
-/** Interviews — voices: text tiles, the headline is the conversation. */
-function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <BlockCardSet
-      lead="none"
-      cue="title"
-      standIns={false}
-      items={items.map((item) => ({ ...card(item), media: undefined }))}
-    />
-  );
-}
-
-/**
- * Guides — the catalogue: rows in two columns, with thumbnails when every guide has a cover and as
- * text when any lacks one (a set is all-image or all-text, never one with holes).
- */
-function Catalogue({
-  items,
-  standIn,
-}: {
-  items: readonly InsightsIndexItem[];
-  standIn: StandIn;
-}) {
-  /* Each guide's thumbnail: its cover, else a generated scene or a stand-in photograph (a texture
-     field has no thumbnail form, so it counts as missing). */
-  const thumbs = items.map((item): ListCardMarker | undefined => {
-    if (item.cover?.src.trim()) {
-      return {
-        type: 'thumbnail',
-        image: {
-          ...item.cover,
-          width: item.cover.width ?? 1600,
-          height: item.cover.height ?? 900,
-        },
-      };
-    }
-    const media = standIn(item);
-    if (media.type === 'sketch') return { type: 'sketch', name: media.name };
-    if (media.type === 'image') {
-      const image = media.image;
-      return {
-        type: 'thumbnail',
-        image: { ...image, width: image.width ?? 1600, height: image.height ?? 900 },
-      };
-    }
-    return undefined;
-  });
-  const thumbnails = thumbs.every(Boolean);
-  const half = Math.ceil(items.length / 2);
-  const indexed = items.map((item, i) => ({
-    item,
-    marker: thumbnails ? thumbs[i] : undefined,
-  }));
-  const columns = items.length > 3 ? [indexed.slice(0, half), indexed.slice(half)] : [indexed];
-  return (
-    <Layout columns={{ base: 1, lg: columns.length }} colGap="gutter" rowGap="none">
-      {columns.map((column, index) => (
-        <Layout as="ul" rowGap="none" key={index}>
-          {column.map(({ item, marker }) => (
-            <ListCard
-              key={item.id}
-              titleAs="h3"
-              size="sm"
-              arrangement="stacked"
-              eyebrow={item.readingTime}
-              title={item.title}
-              body={bodyOf(item)}
-              href={item.href}
-              marker={marker}
-            />
-          ))}
-        </Layout>
-      ))}
-    </Layout>
-  );
-}
-
-/* ── F · the feed ─────────────────────────────────────────────────────────────── */
-
-/**
- * Everything, newest first, across the full column (owner, 13 Oct 2026: the chip rail took too much
- * room for what it did). Above the river, ONE compact row at every width: FORMAT, the primary
- * filter, as a single line of options with counts (a sideways scroll on a phone, never a wrap), and
- * every other group behind one native "More filters" disclosure on the same row, opening to a small
- * panel. When something is held, a short summary says so, each item removable, with "Clear all".
- * Every control is a link the page built: the state is the URL, and nothing needs script.
- */
-function Feed({ feed }: { feed: InsightsIndexFeed }) {
-  /* Nothing published: no filters over nothing, just the sentence that says so. */
-  if (feed.all === 0) {
-    return (
-      <ContentSection
-        id={feed.id}
-        heading={feed.heading}
-        headingId={`${feed.id}-heading`}
-        lead={feed.lead}
-      >
-        <p>Nothing has been published yet.</p>
-      </ContentSection>
-    );
-  }
-
-  const moreHeld = feed.filters.reduce(
-    (sum, group) => sum + group.options.filter((option) => option.selected).length,
-    0,
-  );
-  const chip = (option: InsightsIndexFilterOption) =>
-    option.count === undefined ? option.label : `${option.label} ${option.count}`;
-
-  return (
-    <ContentSection
-      id={feed.id}
-      heading={feed.heading}
-      headingId={`${feed.id}-heading`}
-      lead={feed.lead}
-      surface="paper"
-    >
-      <Layout rowGap="stack">
-        <Layout rowGap="text">
-          <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
-            {feed.formats.length > 0 ? (
-              <nav aria-label="Format" className={styles.formats}>
-                {/* Both gaps `text` (16): a Tag is 24 x 24, the AA target floor, so the clearance
-                    comes from the row. One line, never a wrap: it scrolls sideways where it runs
-                    out of room. */}
-                <Cluster as="ul" colGap="text" nowrap>
-                  {feed.formats.map((option) => (
-                    <li key={option.id}>
-                      <Tag variant="filter" href={option.href} selected={option.selected}>
-                        {chip(option)}
-                      </Tag>
-                    </li>
-                  ))}
-                </Cluster>
-              </nav>
-            ) : (
-              <span />
-            )}
-            {feed.filters.length > 0 ? (
-              <details className={styles.more}>
-                <summary className={styles.toggle}>
-                  <Cluster as="span" colGap="tight" align="center" nowrap>
-                    {/* "More" folds away on a phone so the format line keeps the room; the word
-                        "filters" and the count still say what it is. */}
-                    <span>
-                      <span className={styles.moreWord}>More </span>filters
-                    </span>
-                    {moreHeld > 0 ? (
-                      <span className={styles.toggleCount}>{moreHeld}</span>
-                    ) : null}
-                    <span className={styles.toggleGlyph}>
-                      <Icon name="alt-arrow-down" />
-                    </span>
-                  </Cluster>
-                </summary>
-                <div className={styles.panel}>
-                  <Layout rowGap="gutter">
-                    {feed.filters.map((group) => (
-                      <Layout key={group.id} rowGap="text">
-                        <h3 className={styles.filterLabel}>{group.label}</h3>
-                        <Cluster as="ul" colGap="text" rowGap="text">
-                          {group.options.map((option) => (
-                            <li key={option.id}>
-                              <Tag
-                                variant="filter"
-                                href={option.href}
-                                selected={option.selected}
-                                icon={
-                                  option.selected ? (
-                                    <Icon name="close-circle" label="Clear filter" />
-                                  ) : undefined
-                                }
-                              >
-                                {chip(option)}
-                              </Tag>
-                            </li>
-                          ))}
-                        </Cluster>
-                      </Layout>
-                    ))}
-                  </Layout>
-                </div>
-              </details>
-            ) : null}
-          </Layout>
-
-          {feed.held.length > 0 ? (
-            <Cluster colGap="text" rowGap="text" align="center">
-              <p className={styles.feedCount}>
-                {`${feed.total} of ${feed.all}`}
-                <span className={styles.hidden}> pieces match.</span>
-              </p>
-              <span className={styles.feedCount}>Showing</span>
-              <Cluster as="ul" colGap="text" rowGap="text">
-                {feed.held.map((held) => (
-                  <li key={held.id}>
-                    <Tag
-                      variant="filter"
-                      href={held.href}
-                      selected
-                      icon={<Icon name="close-circle" label="Remove filter" />}
-                    >
-                      {held.label}
-                    </Tag>
-                  </li>
-                ))}
-              </Cluster>
-              {feed.clearHref ? (
-                <Button
-                  as="a"
-                  href={feed.clearHref}
-                  emphasis="link"
-                  tone="neutral"
-                  className={styles.keep}
-                >
-                  Clear all
-                </Button>
-              ) : null}
-            </Cluster>
-          ) : (
-            /* Nothing held: the size of the archive and its order, so the reader knows what the
-               format line and "More filters" narrow (NN/g, Vercel, Figma all state a count). */
-            <p className={styles.feedCount}>{`${feed.all} pieces · newest first`}</p>
-          )}
-        </Layout>
-
-        <Layout rowGap="stack">
-          {feed.items.length > 0 ? (
-            <Archive items={feed.items} />
-          ) : (
-            <p>Nothing matches these filters.</p>
-          )}
-          {feed.items.length > 0 ? (
-            /* Where the reader is in the archive, then the way on: the count every good archive
-               gives ("12 of 46"), and "Show more" as a link to the next page, so it works without
-               script and a reader can share the page they reached (IDEO, Pentagram). */
-            <Cluster colGap="block" rowGap="text" align="center">
-              <p
-                className={styles.feedCount}
-              >{`${feed.items.length} of ${feed.total} shown`}</p>
-              {feed.moreHref ? (
-                <Button
-                  as="a"
-                  href={feed.moreHref}
-                  emphasis="link"
-                  tone="primary"
-                  icon={<Icon name="alt-arrow-down" />}
-                >
-                  Show more
-                </Button>
-              ) : null}
-            </Cluster>
+    case 'podcast': {
+      /* Watched and listened — the screen and the next two: the newest large with its play mark,
+         two smaller beside it, stacked to its height. Pictures lead, because a video is one. */
+      const { lead, rest } = leadOf(items);
+      if (!lead) return null;
+      const next = [...rest.filter(hasPicture), ...rest.filter((item) => !hasPicture(item))];
+      return (
+        <Layout columns={{ md: [2, 1] }} colGap="gutter" rowGap="gutter" align="start">
+          <ul>
+            <Teaser {...teaserOf(lead, false)} size="lg" sizes={CARD_TWO_TRACKS} />
+          </ul>
+          {next.length > 0 ? (
+            <Layout as="ul" rowGap="gutter">
+              {next.slice(0, 2).map((item) => (
+                <Teaser key={item.id} {...teaserOf(item, false)} size="sm" compact />
+              ))}
+            </Layout>
           ) : null}
         </Layout>
-      </Layout>
-    </ContentSection>
-  );
-}
-
-/* ── F · the archive ──────────────────────────────────────────────────────────── */
-
-const MONTH = new Intl.DateTimeFormat('en-GB', {
-  month: 'long',
-  year: 'numeric',
-  timeZone: 'UTC',
-});
-const DAY_MONTH = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'short',
-  timeZone: 'UTC',
-});
-
-/** The archive's month blocks, in the order the items arrive (newest first). */
-function months(items: readonly InsightsIndexItem[]) {
-  const groups: { key: string; label: string; items: InsightsIndexItem[] }[] = [];
-  for (const item of items) {
-    const date = parse(item.publishedAt);
-    const key = date ? `${date.getUTCFullYear()}-${date.getUTCMonth()}` : 'undated';
-    const label = date ? MONTH.format(date) : 'Undated';
-    const group = groups.find((candidate) => candidate.key === key);
-    if (group) group.items.push(item);
-    else groups.push({ key, label, items: [item] });
+      );
+    }
+    case 'guide':
+    case 'research':
+    case 'interview': {
+      /* The shelf: two pictured ones at the larger step, the rest as a row of headlines under them —
+         a different weight from the articles' feature, so the two never read as one shape twice. */
+      const { pictured, plain } = partition(items);
+      const pair = pictured.slice(0, 2);
+      const headlines = [...plain, ...pictured.slice(2)].slice(0, 3);
+      return (
+        <Layout rowGap="column">
+          {pair.length > 0 ? <Pair items={pair} withKind={false} /> : null}
+          {headlines.length > 0 ? <Trio items={headlines} withKind={false} /> : null}
+        </Layout>
+      );
+    }
+    case 'article':
+    default: {
+      /* Articles — the feature, then the mix. */
+      const { lead, rest } = leadOf(items);
+      if (!lead) return null;
+      const more = partition(rest);
+      return (
+        <Layout rowGap="column">
+          {hasPicture(lead) ? (
+            <Feature item={lead} withKind={false} />
+          ) : (
+            <Trio items={[lead]} withKind={false} />
+          )}
+          <Mix pictured={more.pictured} plain={more.plain} withKind={false} />
+        </Layout>
+      );
+    }
   }
-  return groups;
-}
-
-/** The row's image: the item's own cover, or the scene drawn for it. Never a stand-in photograph. */
-function ownImage(item: InsightsIndexItem): ListCardMarker | undefined {
-  if (item.cover?.src.trim()) {
-    return {
-      type: 'thumbnail',
-      image: {
-        ...item.cover,
-        width: item.cover.width ?? 1600,
-        height: item.cover.height ?? 900,
-      },
-    };
-  }
-  return item.scene ? { type: 'sketch', name: item.scene } : undefined;
 }
 
 /**
- * The archive (owner, 13 Oct 2026: "collect examples of really well done listing pages",
- * docs/research/resources-listing.md). What the best archives share, applied:
- *   - ONE stream, newest first, every item in ONE anatomy — format · date · length, then the title,
- *     then its line — so the eye learns the row once and scans (NN/g, Vercel, Pentagram, Intercom);
- *     the river's mixed feature / pair / row shapes are gone (the zig-zag The Verge was faulted for);
- *   - a LEDGER of month blocks: the month stands in a left column and holds while its rows scroll by,
- *     the changelog idiom (Linear), so date is a place on the page rather than a line in every row;
- *   - images only where the item has its own — a real cover or the scene drawn for it — set at the
- *     row's END so a row without one keeps the same edge (Figma's "The latest"); never a stand-in;
- *   - the row STACKS its line under its title at the reading measure: a split set the line's start
- *     wherever the row's image left room, so the column of lines zig-zagged; stacked, every row's
- *     eyebrow, title and line share one edge, and the image closes the row at the column's end.
+ * A topic section's shape, turning through three so neighbouring topics never repeat one: the
+ * feature over a row, a pictured lead beside a list, and pairs at the larger step.
  */
-function Archive({ items }: { items: readonly InsightsIndexItem[] }) {
-  return (
-    <Layout rowGap="column">
-      {months(items).map((month) => {
-        const headingId = `archive-${month.key}`;
-        return (
-          <section key={month.key} aria-labelledby={headingId}>
-            <Layout
-              columns={{ base: 1, lg: [1, 4] }}
-              colGap="gutter"
-              rowGap="text"
-              align="start"
-            >
-              <h3 id={headingId} className={styles.month}>
-                {month.label}
-              </h3>
-              <Layout as="ul" rowGap="none">
-                {month.items.map((item) => {
-                  const date = parse(item.publishedAt);
-                  const eyebrow =
-                    item.kind === 'event'
-                      ? line(LABEL.event.one, dateOf(item.event?.startsAt), item.event?.place)
-                      : line(
-                          LABEL[item.kind].one,
-                          date ? DAY_MONTH.format(date) : undefined,
-                          lengthOf(item),
-                        );
-                  return (
-                    <ListCard
-                      key={item.id}
-                      titleAs="h4"
-                      size="sm"
-                      arrangement="stacked"
-                      eyebrow={eyebrow}
-                      title={item.title}
-                      body={bodyOf(item)}
-                      href={item.href}
-                      marker={ownImage(item)}
-                      markerPosition="end"
-                    />
-                  );
-                })}
-              </Layout>
-            </Layout>
-          </section>
-        );
-      })}
-    </Layout>
-  );
+function TopicShape({ items, turn }: { items: readonly InsightsIndexItem[]; turn: number }) {
+  const [lead, ...rest] = items;
+  if (!lead) return null;
+  const pictured = hasPicture(lead);
+  const shape = pictured ? turn % 3 : 2;
+  if (shape === 0) {
+    return (
+      <Layout rowGap="column">
+        <Feature item={lead} withKind />
+        <Trio items={rest} withKind />
+      </Layout>
+    );
+  }
+  if (shape === 1) {
+    return (
+      <Layout columns={{ lg: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
+        <ul>
+          <Teaser {...teaserOf(lead, true)} size="lg" sizes={CARD_TWO_TRACKS} />
+        </ul>
+        <Rows items={rest} withKind />
+      </Layout>
+    );
+  }
+  /* Pairs at the larger step: pictures in the first row, words under them, never a column of each. */
+  return <Pair items={[...items.filter(hasPicture), ...items.filter((item) => !hasPicture(item))]} withKind />;
 }

@@ -151,6 +151,7 @@
 @import 'components/engagement-options.css';
 @import 'components/trace-plates.css';
 @import 'components/index-rail.css';
+@import 'components/teaser.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */
