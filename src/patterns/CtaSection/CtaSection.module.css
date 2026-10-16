@@ -282,7 +282,7 @@
 
 
 /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────
-   The form's panel inside the island: paper, the 16 radius under the island's 24, a `gutter` inset.
+   The form's panel inside the island: paper, the 16 radius under the island's 24, a `block` inset.
    No edge and no shadow: paper on blue or ink needs neither. */
 .islandPanel {
   min-inline-size: 0;

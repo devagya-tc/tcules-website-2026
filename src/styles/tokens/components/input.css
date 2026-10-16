@@ -39,6 +39,9 @@
   --inp-height-lg: 48px;
   --inp-text-lg: var(--text-lead);
   --inp-textarea-min-block-lg: 160px;
+  /* appearance="fill" textarea (owner, 16 Oct 2026: the home close fits one laptop screen): three
+     body lines plus the optical insets, a compact well rather than the box's four lines. */
+  --inp-fill-textarea-min-block: 96px;
   --inp-radius: var(--radius-8);
   --inp-rule-width: var(--border-width-1);
   --inp-invalid-rule-width: var(--border-width-2);

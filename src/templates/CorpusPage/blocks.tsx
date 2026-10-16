@@ -398,8 +398,7 @@ const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
     kind: 'card',
     title: 'Start a project',
     prompt: ENQUIRY_PROMPT,
-    writeTo: ENQUIRY_WRITE_TO,
-    note: 'We never share your details.',
+    reply: 'We reply in 1 business day',
   },
   message: {
     kind: 'message',
@@ -497,8 +496,9 @@ export function corpusEnquiryForm(
       action={ENDPOINTS.enquiry}
       /* The form is the band's primary object (home round 3): lg fields, the submit across the
          panel, so the one solid on the band is the widest thing in it. */
-      fieldScale="lg"
       dress={treatment.dress}
+      /* A dressed form is compact (owner, 16 Oct 2026: the close fits one laptop screen). */
+      fieldScale={treatment.dress ? 'md' : 'lg'}
       submit={treatment.dress ? 'inline' : 'full'}
       caption={after}
       success={

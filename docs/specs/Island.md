@@ -223,3 +223,5 @@ existing primitives and gap steps. No new primitive.
 - **The overhang, `ground` and `IslandOnGround` are removed**: the close now holds its form inside the
   island. The radius stays 24.
 - Specimen: `/design/island` — blue and ink islands with `TextureFrame`.
+- **Block inset 64 at every width** (same day, owner: the home close fits one laptop screen). The
+  inline inset keeps 96 from 768.

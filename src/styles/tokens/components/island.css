@@ -29,7 +29,9 @@
      the 326 phone column left 198 of measure for an h1. Each value is a gap-scale step; this is
      the box's padding answering to the viewport, the exception Section's padding holds (CLAUDE.md
      gap-scale rule 4), granted by the owner on 13 Oct 2026 and recorded beside Section's in that rule. */
-  --isl-inset-block: var(--gap-section);
+  /* The BLOCK inset is a `column` (64) at every width since 16 Oct 2026 (owner: the home close must
+     fit one laptop screen); the inline inset keeps the `section` 96 from 768. */
+  --isl-inset-block: var(--gap-column);
   --isl-inset-inline: var(--gap-section);
   /* 24 (owner, 16 Oct 2026, the enquiry close): at the 8 every photograph and panel takes, the
      island read as one more card; at 24 it floats. Every island takes it, since an island is one

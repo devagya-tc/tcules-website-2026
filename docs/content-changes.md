@@ -732,8 +732,8 @@ shipping; the content team should confirm or replace them. They live in
 |---|---|
 | card dress, heading | Start a project |
 | both dresses, example in "What are you working on?" | A link, a Figma file, or two lines about the problem. |
-| both dresses, foot | or write to hello@tcules.com |
-| card dress, foot | We never share your details. |
+| message dress, foot | or write to hello@tcules.com |
+| card dress, beside the send | We reply in 1 business day |
 | message dress, the note | Tell us what you’re building. I’ll reply within a working day. |
 | message dress, the person | Rushali · Design lead · Tcules (PLACEHOLDER: the owner will name who answers enquiries) |
 

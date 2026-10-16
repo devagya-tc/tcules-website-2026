@@ -68,8 +68,7 @@ const DRESS = {
     kind: 'card',
     title: 'Start a project',
     prompt: 'A link, a Figma file, or two lines about the problem.',
-    writeTo: 'hello@tcules.com',
-    note: 'We never share your details.',
+    reply: 'We reply in 1 business day',
   },
   message: {
     kind: 'message',
@@ -247,7 +246,7 @@ export default function CtaSectionSpecimenPage() {
             art={<Media image={DESK} sizes="240px" />}
             heading="Tell us what you're building"
             body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
-            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" dress={DRESS[kind]} />}
+            form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS[kind]} />}
           />
         )),
       )}
@@ -262,7 +261,7 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
           { label: 'Reply', value: 'Within one business day' },
         ]}
-        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} fieldScale="lg" dress={DRESS.card} />}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
       />
       <CtaSection
         arrangement="open"

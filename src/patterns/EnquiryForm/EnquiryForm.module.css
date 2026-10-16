@@ -196,10 +196,10 @@
   color: var(--enq-label-aside-ink);
 }
 
-/* The card's foot: a hairline across the form, the send and its one line under it. The line is the
-   foot's own inset from the hairline, not outer spacing. */
+/* The card's foot: a hairline across the form, then the send with its promise. The inset is the
+   foot's own from the hairline, not outer spacing. */
 .dressFoot {
-  padding-block-start: var(--gap-block);
+  padding-block-start: var(--gap-text);
   border-block-start: var(--enq-divider-width) solid var(--enq-divider);
 }
 
@@ -210,6 +210,23 @@
 
 .dressLine a {
   color: inherit;
+}
+
+/* The promise beside the send: body-sm in the caption ink, its check in the accent. */
+.dressReply {
+  font: var(--text-body-sm);
+  color: var(--enq-caption-ink);
+}
+
+.dressReplyMark {
+  display: inline-flex;
+  color: var(--enq-accent-ink);
+}
+
+/* A send's status takes the promise's place; an error keeps the error ink (this rule follows
+   .dressReply, so it must restate .statusError's colour to win). */
+.dressReply.statusError {
+  color: var(--enq-status-ink-error);
 }
 
 /* The message: the person, then the composer. */

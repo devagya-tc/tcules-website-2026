@@ -862,3 +862,8 @@ optional `dress`; behaviour, field names, validation, statuses and the success v
   details, the send in its foot beside "or write to". The composer draws the focus indicator
   (`:focus-within`), which is why `bare` is never used outside it.
 - Copy is the caller's. New `--enq-*` surface tokens on all four surfaces; the form's floor is 14rem.
+- **Same day, the fit round** ("make it fit in one macbook air screen"): the dressed forms set `md`
+  fields; a `fill` textarea is three lines (`--inp-fill-textarea-min-block`, 96); the card's fields
+  sit a `text` apart and its foot a `text` under the hairline; the card takes **`reply`**, the promise
+  beside the send led by a check ("We reply in 1 business day"), which a send's status replaces. The
+  home card drops "or write to" and the note.

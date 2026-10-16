@@ -1066,3 +1066,5 @@ Supersedes the overhang, the halo and the tint island above. Picked from the for
   Home carries the card on blue.
 - Removed with the overhang: `Island` `overhang`/`ground`/`IslandOnGround`, `--isl-overhang`,
   `--cta-island-foot`, the raised-panel tokens, `--cta-panel-edge`, `TextureTwoLights`, `TextureHalo`.
+- **Fit round (same day):** the island close is 828 tall at 1440 (one laptop screen): the panel's inset
+  is a `block`, and every island's block inset is a `column` (64; Island.md).

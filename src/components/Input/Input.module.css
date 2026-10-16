@@ -264,3 +264,8 @@
 .control.fill.invalid {
   border-color: var(--inp-standard-invalid-rule);
 }
+
+/* A fill textarea is a compact well: three lines (--inp-fill-textarea-min-block), still growable. */
+.control.fill.textarea {
+  min-block-size: var(--inp-fill-textarea-min-block);
+}

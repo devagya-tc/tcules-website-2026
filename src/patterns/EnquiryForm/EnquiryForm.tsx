@@ -90,8 +90,9 @@ export type EnquiryNextStep = { label: string; detail?: string };
  * presentation changes. Absent, the plain set: hidden labels, the noun as the cue.
  *
  *   card     a structured card: the form's own heading, visible labels over filled fields, an
- *            example in the big field, and a foot under a hairline with the send and one line
- *            ("or write to …", a note), which the status of a send replaces.
+ *            example in the big field, and a foot under a hairline: the send with the reply promise
+ *            beside it, led by a check, and optionally a line under ("or write to …", a note). The
+ *            status of a send replaces the promise, in the same live region.
  *   message  the reply to a note: a person's portrait, name and role with their one-line note in a
  *            bubble, then a composer — the big field first, email and link as its details, and
  *            the send in its foot beside "or write to …".
@@ -109,6 +110,8 @@ export type EnquiryDress =
       writeTo?: string;
       /** A closing clause after it: "We never share your details." */
       note?: string;
+      /** The promise beside the send, led by a check: "We reply in 1 business day". */
+      reply?: string;
     }
   | {
       kind: 'message';
@@ -832,11 +835,33 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const email = FIELD.email('email');
 
     if (dress.kind === 'card') {
+      /* The promise beside the send, and the live region a send's status takes over. */
+      const reply = (
+        /* A div, not a p: the promise is a Cluster (a div), which a paragraph cannot contain. */
+        <div
+          className={cx(styles.dressReply, error && styles.statusError)}
+          id={statusId}
+          role="status"
+          aria-live="polite"
+        >
+          {status ? (
+            status
+          ) : dress.reply ? (
+            <Cluster nowrap colGap="tight" align="center">
+              <span className={styles.dressReplyMark}>
+                <Icon name="check-circle" />
+              </span>
+              <span>{dress.reply}</span>
+            </Cluster>
+          ) : null}
+        </div>
+      );
+      const after = dress.writeTo || dress.note;
       return (
         <form {...formAttrs}>
           <Layout rowGap="block">
             <h3 className={styles.dressTitle}>{dress.title}</h3>
-            <Layout rowGap="block">
+            <Layout rowGap="text">
               {renderField(email, { visibleLabel: true, placeholder: 'you@company.com', look: 'fill' })}
               {renderField(FIELD.work, {
                 visibleLabel: true,
@@ -847,11 +872,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
             </Layout>
             <div className={styles.dressFoot}>
               <Layout rowGap="text">
-                <Cluster colGap="block" rowGap="block" align="center">
+                <Cluster colGap="block" rowGap="text" align="center">
                   {submitButton}
                   {scheduleLink}
+                  {reply}
                 </Cluster>
-                {line}
+                {after ? <p className={styles.dressLine}>{restLine}</p> : null}
               </Layout>
             </div>
           </Layout>
