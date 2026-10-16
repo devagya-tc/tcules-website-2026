@@ -22,9 +22,7 @@ export const kindOfState = (state: string | undefined): InsightFormatKind | unde
 export const specimenFormatHref =
   (hub: string = ROUTES.designInsightsIndex): FormatHref =>
   (kind) =>
-    kind === 'all'
-      ? hub
-      : `${ROUTES.designInsightsFormatIndex}?state=${formatState(kind)}`;
+    kind === 'all' ? hub : `${ROUTES.designInsightsFormatIndex}?state=${formatState(kind)}`;
 
 /**
  * The live CMS's shape today, made from the fixture: articles, events and podcasts only (Strapi's
