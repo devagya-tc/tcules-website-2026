@@ -1071,3 +1071,15 @@ field (end −120, 30% wide, blur 160, full band height) from 1024. A hero with 
 illustration or a video carries no texture; `texture` there is ignored with a development warning.
 The texture row in the props table above and the fix-round rows that describe `foot` / `field` are
 superseded by this amendment. `/design/texture` shows the stepped block under "Never".
+
+## Amendment · 16 Oct 2026 — `density="index"`
+
+`density?: 'standard' | 'index'`, default `standard`. `index` is a listing's opening (/insights, its
+format pages, /case-studies, the 404): the title at the h1 role on the title measure
+(`--hero-title-text-index`, `--hero-title-measure-index`), the lead at body-lg on the body measure
+(`--hero-lead-text-index`, `--hero-lead-measure-index`), and no texture (the end-fade is refused, as on
+a hero with media). It exists so the catalogue reaches the first screen (critique 16 Oct 2026: at 1440
+× 900 the format pages showed no item above the fold under a display title and a decorative field).
+The band's own air is Section's and does not move — one value per width (owner, 7 Oct 2026) — so the
+critique's "shorter first-band air" is not taken; the lead is not clamped either, because clamping
+would hide authored copy. A template sets it for its page type, in code.

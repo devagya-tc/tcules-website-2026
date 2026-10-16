@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getCorpusPage, getInsightsPage, type InsightsPage } from '@/content';
 import type { CorpusPage } from '@/lib/corpus-types';
 import { corpusMetadata } from '@/lib/corpus-metadata';
+import { withoutCountClaims } from '@/lib/count-claims';
 import { inlineToText } from '@/lib/inline';
 import { insightFormatPath, ROUTES, type InsightFormatKind } from '@/lib/routes';
 import { InsightsFormatIndex, hasLatest, type InsightsFormatIndexProps } from '@/templates';
@@ -39,7 +40,7 @@ export const liveFormatHref: FormatHref = (kind) =>
   kind === 'all' ? ROUTES.insights : insightFormatPath(kind);
 
 /**
- * The page's props: the hero from the corpus page when one exists (its title and lede verbatim — the
+ * The page's props: the hero from the corpus page when one exists (its title verbatim and its lede less any count — the
  * narrative is fixed), else the CMS's format card; the latest (featured, else newest) for the
  * kinds the template leads with one (`hasLatest`); the archive of every item of the format; and the
  * hub's close. Null when the format holds nothing.
@@ -52,18 +53,10 @@ export function formatIndexProps(
   path: string,
   hrefOf: FormatHref,
 ): InsightsFormatIndexProps | null {
-  const all = page.resources.items.filter((item) => item.kind === kind);
-  if (all.length === 0) return null;
-  /* Events read by when they happen, newest first — the record's date, never the publish date;
-     an event with no date goes last. Every other format keeps the source's newest-first order. */
-  const resources =
-    kind === 'event'
-      ? [...all].sort(
-          (a, b) =>
-            (b.event ? Date.parse(b.event.startsAt) : -Infinity) -
-            (a.event ? Date.parse(a.event.startsAt) : -Infinity),
-        )
-      : all;
+  /* Newest first by each insight's one date, already resolved and ordered at the seam (an event's
+     when it happens): this page picks no date field. */
+  const resources = page.resources.items.filter((item) => item.kind === kind);
+  if (resources.length === 0) return null;
 
   const name = FORMAT_NAME[kind];
   /* Which formats lead with a latest is the template's decision (`hasLatest`); the page only picks it. */
@@ -72,7 +65,11 @@ export function formatIndexProps(
       resources.find((item) => item.image?.src) ??
       resources[0])
     : undefined;
-  const lede = corpus?.hero.lede.map(inlineToText).find((paragraph) => paragraph.trim());
+  /* The page shows the format's live count twice (the format row, the archive's count line), so the
+     lede never also states an authored one: a sentence-initial count leaves and nothing else changes
+     (content-proposals P48; "Twelve articles from…" over "Articles 42"). */
+  const authored = corpus?.hero.lede.map(inlineToText).find((paragraph) => paragraph.trim());
+  const lede = authored ? withoutCountClaims(authored) : undefined;
 
   const standIns = standInsFor(page);
   const archive = archiveOf(page, resources, query, path, {
@@ -92,7 +89,7 @@ export function formatIndexProps(
     ],
     hero: {
       title: corpus?.hero.titleText || formatTitle(page, kind),
-      lede: lede ?? formatLead(page, kind),
+      lede: lede ?? withoutCountClaims(formatLead(page, kind) ?? ''),
     },
     formatRow: formatRow(page, kind, hrefOf),
     /* The latest stands above the archive only while nothing is held (see `archiveOf`). */

@@ -20,7 +20,11 @@ export const metadata: Metadata = {
  * real arrangement, rail and all, so the rule's top edge can be read against the rail's first row.
  */
 
-const COVERS = ['whiteboard-two-hands', 'hand-sketch-wireframe', 'workshop-sticky-sort'] as const;
+const COVERS = [
+  'whiteboard-two-hands',
+  'hand-sketch-wireframe',
+  'workshop-sticky-sort',
+] as const;
 
 const TILES = COVERS.map((id, index) => ({
   id,
@@ -45,19 +49,57 @@ const ALL = (count: number, noun: string) => (
   <CtaRow rule={false} actions={[{ label: `All ${count} ${noun}`, href: ROUTES.insights }]} />
 );
 
+/** Guide rows, the last one open: inside a group the next group's hairline is the seam. */
 function Rows() {
   return (
     <Layout as="ul" rowGap="none">
-      {ROWS.map((title) => (
+      {ROWS.map((title, index) => (
         <ListCard
           key={title}
           titleAs="h3"
-          size="md"
+          size="sm"
           arrangement="stacked"
           eyebrow="12 min read"
           title={title}
           body="One line on what the guide walks through."
           href={ROUTES.guides}
+          rule={index === ROWS.length - 1 ? 'none' : 'end'}
+        />
+      ))}
+    </Layout>
+  );
+}
+
+const EVENTS = [
+  {
+    title: 'Design systems for everyone, from basics to advanced',
+    day: '11',
+    label: 'Mar 2023',
+    iso: '2023-03-11',
+  },
+  {
+    title: 'When a product designer moves to Bollywood',
+    day: '2',
+    label: 'Dec 2023',
+    iso: '2023-12-02',
+  },
+] as const;
+
+/** Event rows for the Events head: each led by its date, in the title's ink. */
+function EventRows() {
+  return (
+    <Layout as="ul" rowGap="none">
+      {EVENTS.map((event, index) => (
+        <ListCard
+          key={event.title}
+          titleAs="h3"
+          size="sm"
+          eyebrow="Ahmedabad"
+          title={event.title}
+          body="A short write-up of what the session covered."
+          href={ROUTES.events}
+          marker={{ type: 'date', dateTime: event.iso, day: event.day, label: event.label }}
+          rule={index === EVENTS.length - 1 ? 'none' : 'end'}
         />
       ))}
     </Layout>
@@ -76,10 +118,12 @@ export default function IndexGroupSpecimen() {
           <h1>IndexGroup</h1>
           <p className={s.specNote}>
             A category of an index page as a section in the column beside the page&rsquo;s{' '}
-            <code>TableOfContents</code>: a hairline across the column, an <code>h2</code> at the
-            h3 role, a derived fact in the label voice, one sentence, and the way out at the
-            row&rsquo;s end. Items sit a <code>stack</code> (48) under the head; groups sit a{' '}
-            <code>section</code> (96) apart, which the caller&rsquo;s stack owns.
+            <code>TableOfContents</code>: a hairline across the column, an <code>h2</code> at
+            the h3 role, a derived fact in the label voice, one sentence, and the way out at the
+            row&rsquo;s end, on the heading&rsquo;s baseline. Items sit a <code>stack</code>{' '}
+            (48) under the head; groups sit a <code>stack</code> (48) apart, block to block in
+            one section, which the caller&rsquo;s stack owns — the hairline and its 24 of head
+            air make the break. A row list in a group ends without its own rule.
           </p>
         </Layout>
       </Section>
@@ -89,14 +133,19 @@ export default function IndexGroupSpecimen() {
           title="01 · In its shell"
           note="The [1, 4] shell from LongformShell: the rail sticks from 1024, the first group's rule sits on the rail's top edge, and the run varies its shape — cover tiles, then hairline rows."
         >
-          <Layout columns={{ base: 1, lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
+          <Layout
+            columns={{ base: 1, lg: [1, 4] }}
+            colGap="column"
+            rowGap="stack"
+            align="start"
+          >
             <TableOfContents
               items={[
-                { label: 'Articles', href: '#ig-articles-heading' },
-                { label: 'Guides', href: '#ig-guides-heading' },
+                { label: 'Articles', href: '#ig-articles-heading', meta: '42' },
+                { label: 'Guides', href: '#ig-guides-heading', meta: '10' },
               ]}
             />
-            <Layout rowGap="column">
+            <Layout rowGap="stack">
               <IndexGroup
                 id="ig-articles"
                 heading="Articles"
@@ -105,7 +154,14 @@ export default function IndexGroupSpecimen() {
                 lead="Positions on AI inside products, design systems and the everyday design of SaaS."
                 actions={ALL(42, 'articles')}
               >
-                <BlockCardSet lead="none" across={3} cue="title" scroll="never" items={TILES} />
+                <BlockCardSet
+                  lead="none"
+                  across={3}
+                  size="sm"
+                  cue="title"
+                  scroll="never"
+                  items={TILES}
+                />
               </IndexGroup>
               <IndexGroup
                 id="ig-guides"
@@ -124,29 +180,43 @@ export default function IndexGroupSpecimen() {
 
       <Section surface="paper">
         <Layout rowGap="column">
-          <Specimen title="02 · The heading alone" note="No meta, no lead, no actions: the rule and the h2.">
+          <Specimen
+            title="02 · The heading alone"
+            note="No meta, no lead, no actions: the rule and the h2."
+          >
             <IndexGroup id="ig-bare" heading="Designed and built" headingId="ig-bare-heading">
               <Rows />
             </IndexGroup>
           </Specimen>
-          <Specimen title="03 · Meta only" note="The case index's head: a derived count, no invented copy.">
-            <IndexGroup id="ig-meta" heading="New products" headingId="ig-meta-heading" meta="4 cases">
+          <Specimen
+            title="03 · Meta only"
+            note="The case index's head: a derived count, no invented copy."
+          >
+            <IndexGroup
+              id="ig-meta"
+              heading="New products"
+              headingId="ig-meta-heading"
+              meta="4 cases"
+            >
               <Rows />
             </IndexGroup>
           </Specimen>
-          <Specimen title="04 · Lead only" note="The sentence on the lead measure, sans, small body.">
+          <Specimen
+            title="04 · Lead only"
+            note="The sentence on the lead measure, sans, small body — over event rows, each led by its date in the title's ink."
+          >
             <IndexGroup
               id="ig-lead"
               heading="Events"
               headingId="ig-lead-heading"
               lead="Talks and meetups we have hosted, written up so you can take the useful parts."
             >
-              <Rows />
+              <EventRows />
             </IndexGroup>
           </Specimen>
           <Specimen
             title="05 · A long heading against an action"
-            note="The heading wraps on its title measure; the action keeps its own track at the row's end, bottom-aligned, and drops under the head below 768."
+            note="The heading wraps on its title measure (--measure-title); the action keeps its own track at the row's end on the heading's last baseline, and drops under the heading below 768."
           >
             <IndexGroup
               id="ig-long"

@@ -155,6 +155,15 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
       `/insights/{articles,guides,videos,events,podcasts}` (`InsightsFormatIndex`,
       `/design/insights-format-index`), which now hold the archive the hub's feed held; the Strapi
       authored date (strapi-changes § 21). docs/specs/IndexGroup.md, InsightsIndex.md § 2.
+- [x] **6.6** Listings critique, fix round 3 (16 Oct 2026): index-density heroes (PageHero
+      `density="index"`); one date per insight resolved at the seam; a per-format label line; no
+      authored counts beside derived ones; labelled placeholders for missing covers; the hub's
+      outline as its one category nav, with counts; tabs on the format pages; Tag
+      `variant="disclosure"`; ListCard rows stack their picture or date on a phone and the last row in
+      a group drops its rule; groups at `stack`; case cards title-cued; corpus collections on the live
+      hub; an app 404; VisuallyHidden spec. InsightsIndex.md, IndexGroup.md, Tag.md, PageHero.md,
+      ListCard.md, TableOfContents.md, VisuallyHidden.md amendments; content-proposals P48–P50;
+      strapi-changes § 22.
 
 ## Parked (handoff says don't freeze yet)
 

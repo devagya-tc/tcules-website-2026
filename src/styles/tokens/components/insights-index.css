@@ -1,12 +1,14 @@
 /* ══ Component layer — InsightsIndex (templates) ═════════════════════════════════
-   Tier 3. The insights hub and its format pages (docs/specs/InsightsIndex.md, 13 and 15 Oct 2026):
-   what the templates draw themselves — the archive's count lines, the topic collections' head
-   (glyph, title, sentence), the format row's scrolling box and the archive's filter panel. Every
-   card, row, chip and band draws its own.
+   Tier 3. The insights hub and its format pages (docs/specs/InsightsIndex.md, 13, 15 and 16 Oct
+   2026): what the templates draw themselves — the archive's count lines and empty sentence, the
+   topic collections' head (glyph, title, sentence), the format pages' tab row, the topic line's
+   scrolling box and the archive's filter panel. Every card, row, chip and band draws its own; the
+   "More filters" trigger is a Tag (`variant="disclosure"`) since 16 Oct 2026.
 
    Naming: --iix-{part}-{role}
-     parts  count · topic-icon · topic-title · topic-body · filter-label · toggle · panel · ring
-     roles  text · tracking · ink · width · duration · easing
+     parts  count · empty · topic-icon · topic-title · topic-body · filter-label · tab · tab-count ·
+            panel · ring
+     roles  text · tracking · ink · rule · mark · width · inline · radius · shadow · layer · ground
 
    Every surface block declares every surface-dependent token. Every band this template paints is
    paper; the other three are declared for self-containment (tokens rule 2).
@@ -16,6 +18,9 @@
   /* Counts are labels: the mono UI role, uppercase in presentation. */
   --iix-count-text: var(--text-ui);
   --iix-count-tracking: var(--text-ui-tracking);
+  /* The empty state's one sentence (16 Oct 2026): sans at the small body role, stated rather than
+     left to the globals floor, so "nothing matches" is designed like every other line. */
+  --iix-empty-text: var(--text-body-sm);
   /* A topic is a column head one step over its rows (h5): h4, so the head leads its links. */
   --iix-topic-title-text: var(--text-h4);
   --iix-topic-title-tracking: var(--text-h4-tracking);
@@ -27,20 +32,25 @@
   /* A filter group's name is a label over its chips, not a heading to read. */
   --iix-filter-label-text: var(--text-eyebrow);
   --iix-filter-label-tracking: var(--text-eyebrow-tracking);
-  /* The filters' disclosure below 1024 (owner, 13 Oct 2026): a control row in the label voice,
-     ruled above and below, its glyph turning when it opens. */
-  --iix-toggle-text: var(--text-ui);
-  --iix-toggle-tracking: var(--text-ui-tracking);
-  --iix-toggle-rule-width: var(--border-width-hairline);
-  --iix-toggle-duration: var(--duration-fast);
-  --iix-toggle-easing: var(--easing-standard);
+  /* The format pages' tab row (critique 16 Oct 2026): navigation between pages, so it must not look
+     like the topic filters under it. A format is a word, so sans in its authored case; its count is
+     a label, mono. The current page is ink on a mark under it, the others quiet. */
+  --iix-tab-text: var(--text-body-sm);
+  --iix-tab-count-text: var(--text-ui-sm);
+  --iix-tab-count-tracking: var(--text-ui-sm-tracking);
+  --iix-tab-rule-width: var(--border-width-hairline);
+  /* The current tab's mark: two pixels, so it reads as a mark ON the row's hairline. */
+  --iix-tab-mark-width: var(--border-width-2);
+  /* Each tab's block padding: the room between the word and the row's rule, and what lifts a
+     ~20px line box past the 24 target floor. Component geometry, from the gap scale's `tight`. */
+  --iix-tab-padding-block: var(--gap-tight);
   --iix-ring-width: var(--focus-ring-width);
   --iix-ring-offset: var(--focus-ring-offset);
-  /* The format line's room for a chip's focus ring above and below, inside its scrolling box (an
-     overflow box clips what falls outside it): the ring's width plus its offset. */
+  /* A scrolling row's room for a focus ring above and below, inside its box (an overflow box clips
+     what falls outside it): the ring's width plus its offset. */
   --iix-ring-room: calc(var(--focus-ring-width) + var(--focus-ring-offset));
-  /* "More filters": the control's corner, and the panel it opens — a dropdown over the river. */
-  --iix-toggle-radius: var(--radius-4);
+  /* "More filters" opens a panel: a dropdown over the river, edged by a hairline. */
+  --iix-panel-rule-width: var(--border-width-hairline);
   --iix-panel-inline: var(--size-panel-sm);
   --iix-panel-radius: var(--radius-8);
   --iix-panel-shadow: var(--shadow-crop);
@@ -51,55 +61,75 @@
 :root,
 [data-surface='paper'] {
   --iix-count-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor */
+  --iix-empty-ink: var(--color-neutral-700); /* 8.14:1 */
   --iix-topic-icon-ink: var(--color-brandeis-500); /* 6.17:1 — icons carry the accent */
   --iix-topic-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --iix-filter-label-ink: var(--color-neutral-600); /* 4.92:1 */
-  --iix-toggle-ink: var(--color-neutral-900); /* 14.62:1 */
-  --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the control's mark */
-  --iix-toggle-rule-ink: var(--color-neutral-300); /* decoration */
+  --iix-tab-ink: var(--color-neutral-700); /* 8.14:1 */
+  --iix-tab-ink-hover: var(--color-brandeis-600); /* 7.53:1 — a link says so under the pointer */
+  --iix-tab-ink-current: var(--color-neutral-900); /* 14.62:1 */
+  --iix-tab-count-ink: var(--color-neutral-600); /* 4.92:1 */
+  --iix-tab-mark: var(--color-neutral-900); /* the current page: ink, not the accent */
+  --iix-tab-rule: var(--color-neutral-300); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  --iix-panel-rule: var(--color-neutral-300); /* decoration */
   --iix-panel-ground: var(--color-paper);
 }
 
 /* ── Surface: tint ── the quiet label steps to 700: 600 is 4.39:1 on paper-deep ── */
 [data-surface='tint'] {
   --iix-count-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-empty-ink: var(--color-neutral-700); /* 7.27:1 */
   --iix-topic-icon-ink: var(--color-brandeis-500); /* 5.51:1 */
   --iix-topic-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --iix-topic-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --iix-filter-label-ink: var(--color-neutral-700); /* 7.27:1 */
-  --iix-toggle-ink: var(--color-neutral-900); /* 13.06:1 */
-  --iix-toggle-glyph-ink: var(--color-brandeis-500); /* 5.51:1 */
-  --iix-toggle-rule-ink: var(--color-neutral-400); /* decoration */
+  --iix-tab-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-tab-ink-hover: var(--color-brandeis-600); /* 6.72:1 */
+  --iix-tab-ink-current: var(--color-neutral-900); /* 13.06:1 */
+  --iix-tab-count-ink: var(--color-neutral-700); /* 7.27:1 */
+  --iix-tab-mark: var(--color-neutral-900);
+  --iix-tab-rule: var(--color-neutral-400); /* decoration */
   --iix-ring-color: var(--color-brandeis-500); /* 5.51:1 */
+  --iix-panel-rule: var(--color-neutral-400); /* decoration */
   --iix-panel-ground: var(--color-paper-deep);
 }
 
 /* ── Surface: ink ── words lift, the accent lifts to 300 ───────────────────────── */
 [data-surface='ink'] {
   --iix-count-ink: var(--color-neutral-400); /* 8.05:1 */
+  --iix-empty-ink: var(--color-neutral-300); /* 11.07:1 */
   --iix-topic-icon-ink: var(--color-brandeis-300);
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-neutral-300);
   --iix-filter-label-ink: var(--color-neutral-400); /* 8.05:1 */
-  --iix-toggle-ink: var(--color-white);
-  --iix-toggle-glyph-ink: var(--color-brandeis-300); /* 7.32:1 */
-  --iix-toggle-rule-ink: var(--color-neutral-700); /* decoration */
+  --iix-tab-ink: var(--color-neutral-300); /* 11.07:1 */
+  --iix-tab-ink-hover: var(--color-brandeis-200); /* 10.48:1 */
+  --iix-tab-ink-current: var(--color-white); /* 17.26:1 */
+  --iix-tab-count-ink: var(--color-neutral-400); /* 8.05:1 */
+  --iix-tab-mark: var(--color-white);
+  --iix-tab-rule: var(--color-neutral-700); /* decoration */
   --iix-ring-color: var(--color-brandeis-300); /* 7.32:1 */
+  --iix-panel-rule: var(--color-neutral-700); /* decoration */
   --iix-panel-ground: var(--color-neutral-950);
 }
 
 /* ── Surface: blue ── declared for self-containment; this template paints no blue band of its own */
 [data-surface='blue'] {
   --iix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --iix-empty-ink: var(--color-brandeis-50); /* 5.57:1 */
   --iix-topic-icon-ink: var(--color-white);
   --iix-topic-title-ink: var(--color-white);
   --iix-topic-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --iix-filter-label-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --iix-toggle-ink: var(--color-white); /* 6.23:1 */
-  --iix-toggle-glyph-ink: var(--color-white); /* 6.23:1 */
-  --iix-toggle-rule-ink: var(--color-brandeis-300); /* decoration */
+  --iix-tab-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --iix-tab-ink-hover: var(--color-white); /* 6.23:1 */
+  --iix-tab-ink-current: var(--color-white); /* 6.23:1 */
+  --iix-tab-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --iix-tab-mark: var(--color-white);
+  --iix-tab-rule: var(--color-brandeis-300); /* decoration */
   --iix-ring-color: var(--color-white); /* 6.23:1 */
+  --iix-panel-rule: var(--color-brandeis-300); /* decoration */
   --iix-panel-ground: var(--color-brandeis-500);
 }

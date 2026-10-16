@@ -6,8 +6,8 @@ import {
   Archive,
   FormatRow,
   LeadCard,
-  allOwnImages,
   isCovered,
+  pictured,
   type InsightsIndexArchive,
   type InsightsIndexClosing,
   type InsightsIndexFilterOption,
@@ -41,8 +41,8 @@ export const hasLatest = (kind: InsightsIndexKind) => isCovered(kind);
  * listings redesign, 15 Oct 2026; claude.com/resources/articles): the second level under the hub,
  * holding everything the hub previews.
  *
- *   A  hero      the trail (Home / Insights / Articles), the h1 and lede, and the family's format row
- *                with this format selected — the one way between the hub and its formats
+ *   A  hero      the trail (Home / Insights / Articles), the h1 and lede at the index density, and
+ *                the family's tab row with this format current — the one way between the formats
  *   B  latest    the featured or newest item at full column, its cover beside its copy (covered
  *                kinds only)
  *   C  archive   "All articles": the topic filters, then every item, twelve at a time, newest first
@@ -59,9 +59,10 @@ export function InsightsFormatIndex({
 }: InsightsFormatIndexProps) {
   const lede = hero.lede?.trim();
   const showLatest = latest !== undefined && hasLatest(kind);
-  /* Cover tiles for the covered kinds, and for guides when every guide has an image of its own;
-     hairline rows otherwise. The two are never hybridised. */
-  const covered = isCovered(kind) || (kind === 'guide' && allOwnImages(archive.items));
+  /* Cover tiles for the covered kinds, and for guides when the set is pictured (from 80% carrying an
+     image of their own, the rest their assigned stand-in); hairline text rows otherwise, every one
+     without a picture. Decided once, by the set (critique 16 Oct 2026). Never hybridised. */
+  const covered = isCovered(kind) || (kind === 'guide' && pictured(archive.items));
 
   return (
     <>
@@ -72,7 +73,7 @@ export function InsightsFormatIndex({
         ))}
         title={hero.title}
         body={lede ? [lede] : undefined}
-        texture
+        density="index"
         surface="paper"
       >
         {formatRow.length > 1 ? <FormatRow options={formatRow} /> : null}

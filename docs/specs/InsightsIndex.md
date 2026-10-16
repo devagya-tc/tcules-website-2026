@@ -414,3 +414,44 @@ surface).
 - Patterns reused: PageHero, BlockCardSet, BlockCard, ListCard, Slider, ContentSection, CtaRow,
   CtaSection, Breadcrumbs; primitives: Section, Layout, Cluster, Button, Icon, Tag.
 - New patterns: 0. New template: 1. Pattern extended: ListCard (`eyebrow`, `date` marker).
+
+## Amendment · 16 Oct 2026 — critique fix round 3
+
+Supersedes § 2 where they differ.
+
+- **Hero (A), both pages.** PageHero `density="index"`: the h1 role on the title measure, the lead at
+  body-lg on the body measure, no texture, so the featured story (hub) and the latest item (format
+  pages) reach the first screen at 1440 × 900. The hub reads its hero and its "Start with your problem"
+  collections from the corpus (`_pages/insights.md`) when it has the page; the CMS is the fallback
+  (content-proposals P49).
+- **One category navigation per page.** The hub has no format row: its outline (TableOfContents) is
+  its category navigation, each entry with its count (`TocItem.meta`), and each group's "All 42 …"
+  goes to the format page. The format pages keep the row, redrawn as **tabs** on one hairline (sans
+  words, mono counts, the current page in ink on a two-pixel mark), so navigation between pages can
+  no longer be mistaken for the topic filters, which stay Tags.
+- **Dates.** Every item carries ONE date, resolved per format at the seam (`sortDate` / `displayDate`,
+  `src/content/sources/insight-dates.ts`: an event's when it happens, anything else's when it was
+  published) and items arrive in that order. The front page's mix is chosen one-per-format-first and
+  then shown in date order. No template reads `publishedAt` or `event.startsAt` to choose.
+- **Label lines.** One resolver, `metaOf` (shared.tsx): date, then the reading time (articles,
+  guides, research, interviews), the running time (videos, podcasts — nothing when absent, never a
+  reading time) or the place (events). The Strapi mapper maps a reading time only for read formats.
+- **Covers.** A missing cover is the drawn scene, else the stand-in photograph assigned in data, else
+  the register's labelled placeholder (`/insights#cover`) — never a texture field.
+- **Pictures by set.** A text-first format's set (guides) is shown with pictures only from 80% of it
+  carrying its own image (`pictured`); otherwise every row is text. The archive's text rows run two
+  columns from lg.
+- **Type.** Titles in a set step down to the small card step (h5): the articles group's row of three,
+  the video rail, the archive's tiles, the front page's headlines, event and guide rows. Only a lead
+  keeps the large step (h3).
+- **Groups.** Stacked at `stack` (48) (IndexGroup.md § 7); a row list's last row draws no closing
+  rule. The articles group's row of three never scrolls sideways on a phone: the video rail is the
+  hub's one sideways device.
+- **Archive.** Filters from one page of items (12); an option that finds one piece is not offered;
+  the primary line is named for its group ("Filter by industry"); "More filters" is a Tag
+  (`variant="disclosure"`) at the chips' height; with a filter held the summary reads "Showing [SaaS ×]
+  · Clear all" and the count is said once, under the items; the empty sentences take `.empty`
+  (`--iix-empty-*`).
+- **Specimen.** `/design/insights-format-index?state=filtered|empty` write their held query through
+  `heldQuery` (`_insights/shared.ts`), the archive's own URL encoding.
+- **404.** `src/app/not-found.tsx` frames every not-found in the site's chrome.

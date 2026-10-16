@@ -456,6 +456,20 @@ Every cover in `new-products` is a placeholder (no bound asset exists for Auxent
 or OctiFi), so that band renders four labelled panels until the covers land. This is a known cost of
 the image rule, not a builder fault.
 
+**Note · CaseStudyIndex, listings redesign (15–16 Oct 2026), superseding the table where they differ.**
+The hero is PageHero `density="index"` (h1 role, no texture), so "Four to start with" reaches the first
+screen. Band 1 stays full width, now title-cued: the whole card is the link, its title takes the link
+ink under the pointer like every insights card, and "Read the … case" is not drawn as a second action
+inside it; "Our role" renders as the card's labelled detail with its value as a fact ("Research and
+product design", first letter capitalised, no closing stop). Bands 2–5 are IndexGroups beside a sticky
+outline whose entries carry their counts, stacked at `stack` (48): two or four as covers two across,
+three as covers three across, five or more as ONE column of thumbnail rows (the last without its
+closing rule; on a phone the thumbnail goes above the copy at full width), one with a quote as the
+case beside its rated quote. The grouping and its order are the corpus's (content-proposals P50 asks
+the owner about a single axis); a group of one with no quote warns in development.
+`/design/case-study-index?state=stress` shows long titles, a group of one, and every image still to
+come.
+
 ---
 
 ### 4.7 `/tools/design-system-drift-checker` — ToolPage

@@ -882,7 +882,8 @@ export default function ListCardSpecimenPage() {
             <p>
               The thumbnail is <code>Media</code> in <code>fit=&quot;fill&quot;</code>, inside
               ListCard&rsquo;s own 160 × 16:9 box (<code>--ratio-standard</code>), lazy, with{' '}
-              <code>sizes=&quot;160px&quot;</code> from <code>LIST_CARD_THUMBNAIL</code>. The
+              <code>sizes</code> from <code>LIST_CARD_THUMBNAIL</code> (160, and the column below
+              768, where a leading thumbnail goes above the copy at full width). The
               edge is the record&rsquo;s kind, drawn by Media — ListCard never restyles it. Per
               ch05 § 9 and ruling C1 a thumbnail belongs only to case-study and insight/resource
               rows, and carries one cut-out part or one illustration shape. The last two rows

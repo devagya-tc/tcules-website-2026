@@ -140,6 +140,14 @@ filter, gradient, decorative pattern behind text), so the boundary is the *image
 never under body text or a heading, never on ink or blue (reserved), at most one per page, and never as a
 rhythm device between bands. A first placement belongs in the 1.2 comps.
 
+**VisuallyHidden** (added 16 Oct 2026) · *jobs:* words a screen reader needs and the eye does not — "42
+articles match" behind a visible "11 of 42", "(opens in a new tab)" after an external link's title.
+*Today:* nine components hand-wrote the same `clip-path: inset(50%)` recipe, one with a token of its own
+for the box. *Brand fit:* n/a — it paints nothing. **Keep** as the one copy of the recipe
+(`docs/specs/VisuallyHidden.md`): a `span` / `p` / `div`, never focusable content, never a heading, no
+class. ListCard moved onto it on 16 Oct 2026; Slider, EnquiryForm, SiteFooter, Thread, Breadcrumbs,
+RatingBadge and ServicePage's diagrams move as each is next edited.
+
 ### Tier 2 — patterns
 
 **PageHero** · **Rebuild** (the contract gains arrangements and media kinds).

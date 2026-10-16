@@ -115,8 +115,6 @@ export type CaseStudyIndexProps = {
      * team is asked to drop it (proposal P15).
      */
     action?: HeroAction;
-    /** The paper hero's end-fade, for a hero with no media. */
-    texture?: boolean;
   };
   /** The flat set: one grid of every case, straight under the h1. Ignored when `sections` is given. */
   items?: readonly CaseStudyIndexItem[];
@@ -179,7 +177,9 @@ export function CaseStudyIndex({
         title={message || hero.name}
         body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
         actions={hero.action ? [hero.action] : undefined}
-        texture={hero.texture}
+        /* A listing's opening (critique 16 Oct 2026): the h1 role, the lead on the body measure, no
+           texture — so "Four to start with" reaches the first screen. */
+        density="index"
         surface="paper"
       />
 
@@ -262,8 +262,11 @@ const coverOf = (item: CaseStudyIndexItem) =>
 
 /**
  * B · the featured set, full width: the first case leads horizontally and the rest sit under it,
- * each with its body, its "Our role" fact and its "Read the … case" cta (the 13 Oct BlockCard
- * amendment).
+ * each with its body and its "Our role" fact (the 13 Oct BlockCard amendment). Title-cued like every
+ * linked card in the listings (critique 16 Oct 2026): the whole card is the link and its title takes
+ * the link ink under the pointer, the way the insights cards answer. The authored "Read the … case"
+ * line is not drawn as a second, underlined action inside a card that is already one; it is the
+ * link's words in the corpus, and the title names the same case.
  */
 function Featured({ section }: { section: CaseStudyIndexSection }) {
   return (
@@ -275,7 +278,7 @@ function Featured({ section }: { section: CaseStudyIndexSection }) {
     >
       <BlockCardSet
         lead="auto"
-        cue="cta"
+        cue="title"
         scroll="never"
         items={section.items.map((item) => ({
           id: item.id,
@@ -283,7 +286,6 @@ function Featured({ section }: { section: CaseStudyIndexSection }) {
           ...bodyOf(item),
           ...coverOf(item),
           href: item.href,
-          ctaLabel: item.ctaLabel,
         }))}
       />
     </ContentSection>
@@ -295,13 +297,28 @@ const countOf = (n: number) => `${n} ${n === 1 ? 'case' : 'cases'}`;
 
 /**
  * C · the situations: one IndexGroup per group in the column beside a sticky outline of them (the
- * claude.com/resources "Jump to", 15 Oct 2026; TableOfContents, in LongformShell's [1, 4] shell).
- * Groups are peer blocks inside one band, so the stack between them is `column` (64), the row seam
- * of a borderless set; each group's head draws the hairline and its 24 of air (IndexGroup.md § 7). One group: no outline, the column is the whole band.
+ * claude.com/resources "Jump to", 15 Oct 2026; TableOfContents, in LongformShell's [1, 4] shell),
+ * each outline entry with its count. Groups are blocks inside one band, so the stack between them is
+ * `stack` (48), block to block in a section; each group's head draws the hairline and its 24 of air
+ * (IndexGroup.md § 7, 16 Oct 2026). One group: no outline, the column is the whole band.
  */
 function Situations({ sections }: { sections: readonly CaseStudyIndexSection[] }) {
   if (sections.length === 0) return null;
   const railed = sections.length >= 2;
+  /* A group of one case with nothing beside it is a category that has not earned its place in the
+     outline (critique 16 Oct 2026): it is fine as a designed one-case story with its client's words
+     (TestimonialBeside), and a content question otherwise. Said in development, never refused at
+     render: the corpus decides the groups. */
+  if (process.env.NODE_ENV !== 'production') {
+    for (const section of sections) {
+      if (section.items.length === 1 && !section.quote) {
+        console.warn(
+          `CaseStudyIndex: the group "${section.heading}" holds one case and no quote; fold it into ` +
+            "its nearest sibling or give it the client's words (content-proposals P50).",
+        );
+      }
+    }
+  }
   return (
     <Section as="div" surface="paper" data-band="index">
       <Layout
@@ -315,10 +332,11 @@ function Situations({ sections }: { sections: readonly CaseStudyIndexSection[] }
             items={sections.map((section) => ({
               label: section.heading,
               href: `#${section.id}-heading` as const,
+              meta: String(section.items.length),
             }))}
           />
         ) : null}
-        <Layout rowGap="column">
+        <Layout rowGap="stack">
           {sections.map((section) => (
             <IndexGroup
               key={section.id}
@@ -354,8 +372,7 @@ function GroupBody({ section }: { section: CaseStudyIndexSection }) {
               {...bodyOf(item)}
               {...coverOf(item)}
               href={item.href}
-              ctaLabel={item.ctaLabel}
-              cue={item.ctaLabel ? 'cta' : 'title'}
+              cue="title"
               size="lg"
             />
           </ul>
@@ -389,7 +406,7 @@ function GroupBody({ section }: { section: CaseStudyIndexSection }) {
   if (items.length >= 5) {
     return (
       <Layout as="ul" rowGap="none">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <ListCard
             key={item.id}
             titleAs="h3"
@@ -397,6 +414,8 @@ function GroupBody({ section }: { section: CaseStudyIndexSection }) {
             href={item.href}
             marker={item.cover ? { type: 'thumbnail', image: item.cover } : undefined}
             {...bodyOf(item)}
+            /* The next group's hairline is the seam under the last row. */
+            rule={index === items.length - 1 ? 'none' : 'end'}
           />
         ))}
       </Layout>

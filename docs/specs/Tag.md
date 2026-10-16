@@ -656,3 +656,14 @@ COMPLETENESS
     rectangle repeated, and no element in either row is louder than the heading above it — which
     at 24px is the difference this pass was asked for.
 ```
+
+## Amendment · 16 Oct 2026 — `variant="disclosure"`
+
+A third value of `variant`, for the one trigger a filter row needs that is not a query: "More
+filters". The filter chip's box, voice, edge and states, rendered as the `<summary>` of the caller's
+native `<details>` (it must be the details' first child). No `href`, no `selected`, no `current` —
+compile errors, as on the mark. `icon` takes the chevron the caller passes (`alt-arrow-down`); it
+turns half a turn while the `<details>` is open, read from the `[open]` parent in CSS, and sits
+turned without transition under reduced motion. Why a variant and not a template one-off: the insights
+archive drew its own 34px button beside 24px chips (critique 16 Oct 2026); as a Tag it is the chips'
+height by construction and any listing can reuse it. Specimen: `/design/tag`, "The disclosure".

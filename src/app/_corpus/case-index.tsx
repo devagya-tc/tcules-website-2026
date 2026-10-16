@@ -19,6 +19,7 @@ import {
   coverFor,
   testimonialItem,
   type CaseStudyIndexItem,
+  type CaseStudyIndexProps,
   type CaseStudyIndexSection,
 } from '@/templates';
 
@@ -40,6 +41,18 @@ type Paragraph = Extract<CorpusBlock, { type: 'paragraph' }>;
 type Link = Extract<InlineRun, { type: 'link' }>;
 
 const text = inlineToText;
+
+/**
+ * A labelled fact's value as a fact, not a sentence fragment (critique 16 Oct 2026): the corpus
+ * writes "**Our role:** research and product design." as a sentence, so under its label the value
+ * read as a lowercase fragment with a trailing full stop. Its first letter is capitalised and the
+ * closing stop dropped; the words are unchanged (content-proposals P47 asks for tags instead).
+ */
+const asFact = (value: string) =>
+  value
+    .trim()
+    .replace(/\.$/, '')
+    .replace(/^\p{Ll}/u, (letter) => letter.toUpperCase());
 
 /** The first link anywhere in runs (a title that is a link, or holds one). */
 function firstLink(runs: readonly InlineRun[]): Link | undefined {
@@ -119,7 +132,7 @@ function featuredItem(
       if (lifted.runs.every((run) => run.type === 'text')) {
         detail = {
           label: text(inner.label).replace(/:\s*$/, ''),
-          value: text(lifted.runs),
+          value: asFact(text(lifted.runs)),
         };
       } else {
         bodyHtml.push(
@@ -198,9 +211,13 @@ function sectionOf(
   return { id: band.id, heading: band.headingText, items, quote };
 }
 
-export async function CaseIndexRoute() {
+/**
+ * The page's props, read from the corpus — shared by the live route and the specimen's stress state,
+ * which reshapes them, so the two cannot drift. Null when the corpus has no page.
+ */
+export async function caseIndexProps(): Promise<CaseStudyIndexProps | null> {
   const page = await getCorpusPage(ROUTES.caseStudies);
-  if (!page) notFound();
+  if (!page) return null;
   const [refs, ratings] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getTestimonialRatings(page.composition.testimonialIds),
@@ -214,29 +231,30 @@ export async function CaseIndexRoute() {
      are the situations, each a group beside the outline. The band order is the corpus's. */
   const [featuredBand, ...situationBands] = page.bands.filter((band) => band.id !== anchor);
 
-  return (
-    <CaseStudyIndex
-      breadcrumbs={page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }))}
-      hero={{
-        name: page.name,
-        message: page.hero.titleText,
-        eyebrow: page.hero.eyebrow ? text(page.hero.eyebrow) : undefined,
-        lede: page.hero.lede.map(text),
-        action: action ? { label: action.labelText, href: action.href } : undefined,
-        texture: true,
-      }}
-      featured={featuredBand ? sectionOf(page, refs, featuredBand, ratings) : undefined}
-      sections={situationBands.map((band) => sectionOf(page, refs, band, ratings))}
-      closing={
-        closeBand
-          ? {
-              id: closeBand.id,
-              heading: closeBand.headingText,
-              body: lead?.type === 'paragraph' ? text(lead.runs) : undefined,
-              form: corpusEnquiryForm(page),
-            }
-          : undefined
-      }
-    />
-  );
+  return {
+    breadcrumbs: page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url })),
+    hero: {
+      name: page.name,
+      message: page.hero.titleText,
+      eyebrow: page.hero.eyebrow ? text(page.hero.eyebrow) : undefined,
+      lede: page.hero.lede.map(text),
+      action: action ? { label: action.labelText, href: action.href } : undefined,
+    },
+    featured: featuredBand ? sectionOf(page, refs, featuredBand, ratings) : undefined,
+    sections: situationBands.map((band) => sectionOf(page, refs, band, ratings)),
+    closing: closeBand
+      ? {
+          id: closeBand.id,
+          heading: closeBand.headingText,
+          body: lead?.type === 'paragraph' ? text(lead.runs) : undefined,
+          form: corpusEnquiryForm(page),
+        }
+      : undefined,
+  };
+}
+
+export async function CaseIndexRoute() {
+  const props = await caseIndexProps();
+  if (!props) notFound();
+  return <CaseStudyIndex {...props} />;
 }

@@ -95,7 +95,9 @@ function Matrix() {
         <Marks items={['Lab', 'Design systems', 'Research']} />
       </Layout>
       <Layout rowGap="tight">
-        <p className={s.specTitle}>Filter chips — an edge with no ground at rest · rest, then held (filled)</p>
+        <p className={s.specTitle}>
+          Filter chips — an edge with no ground at rest · rest, then held (filled)
+        </p>
         <p className={s.specNote}>
           Hover, pressed and tab focus have no props and are not printed. Point at the first
           chip, hold it down, and tab to it — that is the rest of the specification on this
@@ -161,6 +163,30 @@ export default function TagSpecimenPage() {
               <Tag variant="filter" href={ROUTES.insights} selected icon={CLEAR}>
                 Podcasts
               </Tag>
+            </Cluster>
+          </Specimen>
+
+          <Specimen
+            title="The disclosure — the filter chip as a summary"
+            note='variant="disclosure" (16 Oct 2026): the chip&apos;s box, voice, edge and states as the &lt;summary&gt; of a native &lt;details&gt;, so a "More filters" trigger is the same 24 tall as the chips beside it. No href, no held state; its chevron turns while the panel is open. Open the second to see it turn.'
+          >
+            <Cluster colGap="text" rowGap="text" align="center">
+              <Tag variant="filter" href={ROUTES.insights} selected>
+                All 42
+              </Tag>
+              <Tag variant="filter" href={ROUTES.insights}>
+                SaaS 16
+              </Tag>
+              <details>
+                <Tag variant="disclosure" icon={<Icon name="alt-arrow-down" />}>
+                  More filters
+                </Tag>
+              </details>
+              <details open>
+                <Tag variant="disclosure" icon={<Icon name="alt-arrow-down" />}>
+                  More filters 2
+                </Tag>
+              </details>
             </Cluster>
           </Specimen>
 

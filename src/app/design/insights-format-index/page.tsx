@@ -6,6 +6,7 @@ import { insightFormatPath, ROUTES } from '@/lib/routes';
 import { InsightsFormatIndex } from '@/templates';
 
 import { formatIndexProps } from '../../_insights/format';
+import { heldQuery } from '../../_insights/shared';
 import { kindOfState, sparse, specimenFormatHref } from '../../_insights/specimen';
 
 export const metadata: Metadata = {
@@ -23,7 +24,11 @@ type Props = {
 function firstTopic(page: InsightsPage) {
   for (const group of page.resources.filters) {
     for (const option of group.options) {
-      if (page.resources.items.some((item) => item.kind === 'article' && item.filterIds.includes(option.id)))
+      if (
+        page.resources.items.some(
+          (item) => item.kind === 'article' && item.filterIds.includes(option.id),
+        )
+      )
         return { group: group.id, option: option.id };
     }
   }
@@ -66,8 +71,13 @@ export default async function InsightsFormatIndexSpecimen({ searchParams }: Prop
   let held = query;
   const topic = firstTopic(fixture);
   if ((state === 'filtered' || state === 'empty') && topic) {
+    /* The held topic written through the archive's OWN URL encoding (`heldQuery`), so this state
+       cannot drift from the live URL format again (critique 16 Oct 2026: it wrote the retired
+       `filter-<id>` shape, which nothing read, and rendered exactly the default). The empty state
+       encodes against the fixture that still offers the topic, then strips it from every article. */
+    const articles = fixture.resources.items.filter((item) => item.kind === kind);
+    held = { ...heldQuery(fixture, articles, [topic]), ...query };
     if (state === 'empty') page = withoutTopic(page, topic.option);
-    held = { ...query, [`filter-${topic.group}`]: query[`filter-${topic.group}`] ?? topic.option };
   }
 
   const corpus = await getCorpusPage(insightFormatPath(kind));

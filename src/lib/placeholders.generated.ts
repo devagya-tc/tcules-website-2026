@@ -244,6 +244,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The responsibility map: six roles (sales representative, sales manager, product, pricing, solution and maintenance experts) contributing to one quotation, with where information changes and where a hand-off or exit sits.',
   },
+  '/insights#cover': {
+    src: '/placeholders/insights--cover.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows: "This piece's own cover: a scene drawn from its argument.",
+  },
   '/insights#lab': {
     src: '/placeholders/insights--lab.svg',
     width: 1600,

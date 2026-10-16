@@ -679,11 +679,55 @@ proposals below are where that design asks something of the copy.
   newest first" (live Strapi, 16 Oct 2026). `/insights/guides` has the same fault: "Eight practical
   guides", with 10 live. The page contradicts itself above the fold, and any number authored into the
   copy will drift again as soon as something is published.
-- **Done in the build:** nothing. The lede renders verbatim, because the narrative is fixed.
-  `npm run corpus:check` now notes any index lede (`*_collection`, `*_hub`) that states a count of
-  listed items, so the next one is caught when it is written.
+- **Done in the build:** (16 Oct 2026, superseding "nothing") a page that shows a derived count never
+  also prints an authored one: the format pages render the lede with its sentence-initial count taken
+  out and nothing else changed — "Articles from Tcules designers…", "Practical guides for teams…",
+  "Recorded conversations with people…" (`withoutCountClaims`, `src/lib/count-claims.ts`, applied in
+  `src/app/_insights/format.tsx`). `/insights/podcasts` has the same fault ("Two recorded
+  conversations"), caught by the same rule. `npm run corpus:check` still notes every index lede
+  (`*_collection`, `*_hub`) that states a count, so the copy itself gets corrected and the rule then
+  has nothing to take.
 - **Proposal:** take the number out. Articles: "Articles from Tcules designers and the product people
   we interview. They cover AI inside products, …" (the rest unchanged). Guides: "Practical guides …"
   in the same way. The page already gives the live count twice: in the format row and in the archive's
   count line.
 - **Why:** a listing's count is derived from the source, so it belongs to the page and not to the copy.
+
+### P49 · `/insights` · hero · the CMS lede promises formats the hub does not have
+
+- **Problem:** Strapi's hub description reads "In-depth articles, podcasts & interviews from teams
+  solving complexity-heavy product problems." Live, the hub holds articles, guides, videos and events:
+  no podcasts and no interviews (16 Oct 2026). The lede names two formats a reader cannot find and
+  leaves out the four they can.
+- **Done in the build:** the hub reads its hero from the corpus (`_pages/insights.md`) when the corpus
+  has the page, as the format pages already did: "Product design insights" and "Practical writing on
+  the problems product teams bring us: AI features people can trust, design systems teams use, ageing
+  products and SaaS design. Start with your problem below, or browse everything by format." The CMS
+  copy is the fallback. The corpus's problem bands ("AI inside your product", "Design systems",
+  "Modernising an established product", "SaaS product experience") now populate the hub's "Start with
+  your problem" collections live, as authored, with their related service.
+- **Proposal:** correct the Strapi description to name no formats ("Practical writing on the problems
+  product teams bring us…", the corpus wording), so the fallback cannot drift either.
+- **Why:** a format list in the copy goes stale the day a format is published or retired; the outline
+  beside the groups already lists the formats that exist, with their counts.
+
+### P50 · `/case-studies` · situations · the groups mix three axes
+
+- **Problem (critique 16 Oct 2026):** "New products" and "Established products" are product stage,
+  "AI products" is a product type and "Designed and built" an engagement. A new AI product fits two
+  groups, a buyer cannot predict where their situation lives, and "Designed and built" holds one case
+  beside a testimonial.
+- **Done in the build:** nothing to the grouping. The groups, their order and the hero lede that
+  promises them ("Browse by the situation closest to yours: a new product, an established one, an AI
+  feature, or work we designed and built") are the fixed narrative, and the band order is kept. The
+  outline lists the four with their counts; CaseStudyIndex warns in development when a group holds one
+  case with no quote beside it.
+- **Proposal:** group on ONE axis, product stage — "New products" (Auxentios, Novus Insights, Kirana
+  store payments, OctiFi, The Wandering Raven), "Established products" (Dealpath, Gold Image Printing,
+  Ryzeo, Scissors, The Chain Hut) and "Modernising and extending with AI" (Eden AI, BuildTwin, Omny AI)
+  — and carry the other axes on the item as tags ("AI product UX", "Designed and built"), per P47's
+  one-line tag budget. The lede then reads "…by the situation closest to yours: a new product, an
+  established one, or one you are modernising." A group under two cases folds into its nearest
+  sibling.
+- **Why:** a browse axis works only when every case has exactly one place on it.
+

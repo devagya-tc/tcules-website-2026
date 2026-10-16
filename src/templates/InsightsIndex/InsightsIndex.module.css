@@ -1,5 +1,5 @@
-/* InsightsIndex — the marks the hub template draws itself. Layout and Cluster own every seam; every
-   value is an --iix-* token in tokens/components/insights-index.css. */
+/* InsightsIndex — the marks the hub and format templates draw themselves. Layout and Cluster own every
+   seam; every value is an --iix-* token in tokens/components/insights-index.css. */
 
 /* The archive's count lines: the quiet label voice. */
 .count {
@@ -7,6 +7,12 @@
   font: var(--iix-count-text);
   letter-spacing: var(--iix-count-tracking);
   text-transform: var(--text-mono-case);
+}
+
+/* The empty state's one sentence: a declared voice, not the globals floor (16 Oct 2026). */
+.empty {
+  color: var(--iix-empty-ink);
+  font: var(--iix-empty-text);
 }
 
 /* ── D · a collection's head ── glyph, title, sentence, each on its own row. */
@@ -44,18 +50,63 @@
   text-transform: var(--text-mono-case);
 }
 
-/* ── the format row and the topic line ── a line scrolls sideways where it runs out of room, never wraps:
-   an overflow on the line's own box, not an arrangement. Its scrollbar is hidden: the cut-off chip
-   at the edge says there is more. */
-.formats {
+/* ── a scrolling row ── the format pages' tabs and the archive's topic line scroll sideways where
+   they run out of room, never wrap: an overflow on the row's own box, not an arrangement. Its
+   scrollbar is hidden: the cut-off item at the edge says there is more. The block padding is the
+   focus ring's room inside the clip. */
+.scroller {
   min-inline-size: 0;
   overflow-x: auto;
   scrollbar-width: none;
   padding-block: var(--iix-ring-room);
 }
 
-.formats::-webkit-scrollbar {
+.scroller::-webkit-scrollbar {
   display: none;
+}
+
+/* ── the format pages' tab row (critique 16 Oct 2026) ──────────────────────────────────────────────
+   Navigation between the family's pages, drawn as tabs on one hairline so it cannot be mistaken for
+   the topic filters under it (those are Tags: an edge, mono, a query). The row's rule is the
+   list's own edge; each tab is a word and its count, the current one in ink on a two-pixel mark that
+   sits on that rule. Inline text inside each link — the word, a space, the count — so nothing here
+   arranges anything: the Cluster lays out the tabs. */
+.tabs {
+  border-block-end: var(--iix-tab-rule-width) solid var(--iix-tab-rule);
+}
+
+.tab {
+  display: block;
+  padding-block: var(--iix-tab-padding-block);
+  border-block-end: var(--iix-tab-mark-width) solid transparent;
+  color: var(--iix-tab-ink);
+  font: var(--iix-tab-text);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* Scoped through the list so it outranks globals.css's bare `a:hover` (0,1,1) on specificity rather
+   than on stylesheet order, which is the bundler's (the TableOfContents precedent). */
+.tabs .tab:hover {
+  color: var(--iix-tab-ink-hover);
+  text-decoration: none;
+}
+
+.tabs .tab:focus-visible {
+  outline: var(--iix-ring-width) solid var(--iix-ring-color);
+  outline-offset: var(--iix-ring-offset);
+}
+
+.tabs .tabCurrent {
+  color: var(--iix-tab-ink-current);
+  border-block-end-color: var(--iix-tab-mark);
+}
+
+.tabCount {
+  color: var(--iix-tab-count-ink);
+  font: var(--iix-tab-count-text);
+  letter-spacing: var(--iix-tab-count-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 /* "Clear all" keeps its two words on one line: sized inside the summary's Cluster, not arranged. */
@@ -64,60 +115,11 @@
   white-space: nowrap;
 }
 
-@media (max-width: 767px) {
-  .moreWord {
-    display: none;
-  }
-}
-
-/* "More filters": a native disclosure, its panel dropping below the control over the river, anchored
-   to the row's end edge. Positioned, not arranged: one panel, no siblings to lay out. */
+/* "More filters": a native disclosure whose trigger is a Tag (`variant="disclosure"`), its panel
+   dropping below the trigger over the river, anchored to the row's end edge. Positioned, not
+   arranged: one panel, no siblings to lay out. */
 .more {
   position: relative;
-}
-
-.toggle {
-  display: block;
-  list-style: none;
-  padding-block: var(--gap-tight);
-  padding-inline: var(--gap-text);
-  border: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
-  border-radius: var(--iix-toggle-radius);
-  color: var(--iix-toggle-ink);
-  font: var(--iix-toggle-text);
-  letter-spacing: var(--iix-toggle-tracking);
-  text-transform: var(--text-mono-case);
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.toggle::-webkit-details-marker {
-  display: none;
-}
-
-.toggle:focus-visible {
-  outline: var(--iix-ring-width) solid var(--iix-ring-color);
-  outline-offset: var(--iix-ring-offset);
-}
-
-.toggleCount {
-  color: var(--iix-toggle-glyph-ink);
-}
-
-.toggleGlyph {
-  display: block;
-  color: var(--iix-toggle-glyph-ink);
-  transition: transform var(--iix-toggle-duration) var(--iix-toggle-easing);
-}
-
-.more[open] .toggleGlyph {
-  transform: rotate(180deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .toggleGlyph {
-    transition: none;
-  }
 }
 
 .panel {
@@ -128,7 +130,7 @@
   inline-size: min(var(--iix-panel-inline), calc(100vw - 2 * var(--gap-gutter)));
   padding: var(--gap-gutter);
   background-color: var(--iix-panel-ground);
-  border: var(--iix-toggle-rule-width) solid var(--iix-toggle-rule-ink);
+  border: var(--iix-panel-rule-width) solid var(--iix-panel-rule);
   border-radius: var(--iix-panel-radius);
   box-shadow: var(--iix-panel-shadow);
 }

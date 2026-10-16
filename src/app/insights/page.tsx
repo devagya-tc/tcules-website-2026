@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsPage } from '@/content';
+import { getCorpusPage, getInsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { InsightsIndex } from '@/templates';
 
@@ -50,13 +50,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * The insights hub: every format as a group beside its outline, each linking out to the format's own
- * page (InsightsIndex, docs/specs/InsightsIndex.md). `insightsIndexProps` maps the CMS onto the
- * template; the specimen at /design/insights-index runs the same mapping over the stress fixture.
+ * page (InsightsIndex, docs/specs/InsightsIndex.md). `insightsIndexProps` maps the CMS — and the
+ * corpus's hero and problem bands — onto the template; the specimen at /design/insights-index runs the same mapping over the stress fixture.
  */
 export default async function InsightsPage() {
-  const page = await getInsightsPage(INSIGHTS_SLUG);
+  const [page, corpus] = await Promise.all([
+    getInsightsPage(INSIGHTS_SLUG),
+    getCorpusPage(ROUTES.insights),
+  ]);
 
   if (!page) notFound();
 
-  return <InsightsIndex {...insightsIndexProps(page, liveFormatHref)} />;
+  return <InsightsIndex {...insightsIndexProps(page, liveFormatHref, corpus)} />;
 }

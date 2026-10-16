@@ -1,7 +1,8 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { INSIGHT_FORMAT_LABEL, INSIGHT_FORMAT_ORDER } from '@/lib/insight-formats';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
-import { blogPath } from '@/lib/routes';
+import { placeholderImage } from '@/lib/placeholders';
+import { blogPath, ROUTES } from '@/lib/routes';
 import type { BlockCardImage } from '@/patterns';
 import type {
   InsightsIndexArchive,
@@ -34,7 +35,10 @@ export type Query = Record<string, string | string[] | undefined>;
  * hub than on its format page, and cycled the small pool so one photograph showed twice a screen).
  * Each photograph goes to ONE insight: the newest coverless insights of the covered kinds, over the
  * whole family, so the assignment depends on the corpus and not on which page renders it. Once the
- * pool is used up the rest get no photograph and the template falls back to a texture field.
+ * pool is used up the rest take the register's labelled placeholder — "Image to come", drawn from
+ * docs/image-register.md's `/insights#cover` row — never a decorative texture standing in for a
+ * cover (critique 16 Oct 2026: three identical dot fields in a row read as broken images and echoed
+ * the hero's own texture).
  */
 const STAND_INS: readonly PhotoId[] = [
   'whiteboard-two-hands',
@@ -55,14 +59,20 @@ const STAND_IN_KINDS: ReadonlySet<InsightResourceKind> = new Set([
 
 export type StandIns = ReadonlyMap<string, BlockCardImage>;
 
-/** Which insight carries which stand-in photograph, one photograph per insight, over the family. */
+/**
+ * Which insight carries which stand-in: one photograph per insight over the family while the pool
+ * lasts, then the labelled placeholder. Every coverless insight of a pictured kind gets one, so a
+ * set of covers never has a hole and the template never invents a fill.
+ */
 export function standInsFor(page: InsightsPage): StandIns {
   const map = new Map<string, BlockCardImage>();
   const needing = page.resources.items.filter(
     (item) => STAND_IN_KINDS.has(item.kind) && !item.image?.src && !item.coverScene,
   );
-  needing.slice(0, STAND_INS.length).forEach((item, index) => {
-    map.set(item.documentId, getKitPhoto(STAND_INS[index]!, { standIn: true }));
+  const placeholder = placeholderImage(ROUTES.insights, 'cover');
+  needing.forEach((item, index) => {
+    const photo = STAND_INS[index];
+    map.set(item.documentId, photo ? getKitPhoto(photo, { standIn: true }) : placeholder);
   });
   return map;
 }
@@ -88,8 +98,13 @@ function unique(base: string, taken: Set<string>) {
 }
 /** The archive's page: twelve items, then "Show more". */
 export const PAGE_SIZE = 12;
-/** From how many items an archive offers filters (more than one screen of tiles). */
-const FILTER_FROM = 6;
+/**
+ * From how many items an archive offers filters: one page of the archive (critique 16 Oct 2026). A set
+ * that fits on one page is read whole, and filtering seven videos offered "Growth stage 1".
+ */
+const FILTER_FROM = PAGE_SIZE;
+/** The fewest pieces an option must find to be offered: a facet of one is a link to one item. */
+const OPTION_FROM = 2;
 
 /** The kinds in the family's order, for the format row: the one list, in lib. */
 export const KINDS = INSIGHT_FORMAT_ORDER;
@@ -147,7 +162,8 @@ export function toItem(resource: InsightResource, standIns?: StandIns): Insights
           },
         }
       : {}),
-    ...(resource.publishedAt ? { publishedAt: resource.publishedAt } : {}),
+    /* The insight's one date, resolved per format at the seam (`displayDate`): never chosen here. */
+    ...(resource.displayDate ? { date: resource.displayDate } : {}),
     ...(resource.readingTime ? { readingTime: resource.readingTime } : {}),
     ...(resource.duration ? { duration: resource.duration } : {}),
     ...(resource.event ? { event: resource.event } : {}),
@@ -204,10 +220,58 @@ export function formatRow(
 }
 
 /**
+ * The archive's topic groups in the URL's words (critique 16 Oct 2026): a group's key is its label's
+ * slug and an option's value its name's slug — `?industry=saas`, a link a reader can read. Matching
+ * still runs on the CMS ids; the slugs are only how the state is written down. A short archive is
+ * read whole, so below `FILTER_FROM` items it has no groups at all.
+ *
+ * The ONE encoding: the archive reads the URL through it and `heldQuery` writes one through it, so
+ * the specimen's held states cannot drift from the URL format again.
+ */
+function urlGroups(page: InsightsPage, resources: readonly InsightResource[]) {
+  const keys = new Set(RESERVED_KEYS);
+  return (resources.length >= FILTER_FROM ? page.resources.filters : [])
+    .filter((group) => group.options.length > 0)
+    .map((group) => {
+      const values = new Set<string>();
+      return {
+        id: group.id,
+        key: unique(slugOf(group.label), keys),
+        label: group.label,
+        options: group.options.map((option) => ({
+          id: option.id,
+          slug: unique(slugOf(option.name), values),
+          label: option.name,
+        })),
+      };
+    });
+}
+
+/**
+ * The query that holds the given options (by CMS group and option id) over `resources`, in the
+ * archive's own URL words — for a page that must START filtered (the specimen's `filtered` and
+ * `empty` states). An id the archive does not offer is left out.
+ */
+export function heldQuery(
+  page: InsightsPage,
+  resources: readonly InsightResource[],
+  held: readonly { group: string; option: string }[],
+): Query {
+  const query: Query = {};
+  for (const group of urlGroups(page, resources)) {
+    const wanted = held.find((entry) => entry.group === group.id);
+    const option = group.options.find((candidate) => candidate.id === wanted?.option);
+    if (option) query[group.key] = option.slug;
+  }
+  return query;
+}
+
+/**
  * The archive over `resources`: the CMS's topic groups read from the URL, the matches, the page, and
  * every link — each option's count is against the other held filters, so it says what choosing it
  * would show; only options with results are offered, and a group with one option or none is
- * dropped (owner, 13 Oct 2026). A held option always stays, so it can be cleared.
+ * dropped (owner, 13 Oct 2026); an option that finds a single piece is not offered either. A held
+ * option always stays, so it can be cleared.
  *
  * The first group is the primary line, "All" first; the rest go behind "More filters". The format
  * is not a group: the page is the format.
@@ -227,26 +291,7 @@ export function archiveOf(
     standIns?: StandIns;
   },
 ): InsightsIndexArchive {
-  /* A short archive is read whole: filtering six items is noise, so it takes no filters at all. */
-  /* The URL speaks in words, not CMS ids (critique 16 Oct 2026): a group's key is its label's slug
-     and an option's value its name's slug — `?industry=saas`, a link a reader can read. Matching
-     still runs on the ids; the slugs are only how the state is written down. */
-  const keys = new Set(RESERVED_KEYS);
-  const groups = (resources.length > FILTER_FROM ? page.resources.filters : [])
-    .filter((group) => group.options.length > 0)
-    .map((group) => {
-      const values = new Set<string>();
-      return {
-        id: group.id,
-        key: unique(slugOf(group.label), keys),
-        label: group.label,
-        options: group.options.map((option) => ({
-          id: option.id,
-          slug: unique(slugOf(option.name), values),
-          label: option.name,
-        })),
-      };
-    });
+  const groups = urlGroups(page, resources);
 
   const selected = new Map<string, string>();
   for (const group of groups) {
@@ -300,7 +345,7 @@ export function archiveOf(
             href: toggle(group.id, option.id),
             selected: selected.get(group.id) === option.id,
           }))
-          .filter((option) => option.count > 0 || option.selected),
+          .filter((option) => option.count >= OPTION_FROM || option.selected),
       };
     })
     .filter((group) => group.options.length > 1 || group.options.some((o) => o.selected));
@@ -341,6 +386,7 @@ export function archiveOf(
     all: resources.length,
     above: excluding ? 1 : 0,
     primary,
+    primaryLabel: lead ? `Filter by ${lead.label.toLowerCase()}` : 'Filter',
     filters: rest,
     held,
     clearHref: selected.size > 0 ? hrefFor(path, fields.id, new Map()) : undefined,

@@ -809,3 +809,11 @@ COMPLETENESS
     scrolling in-situ page, a four-band surface ladder, a tall-rail study, a state grid and a
     stress list.
 ```
+
+## Amendment · 16 Oct 2026 — an entry's count (`TocItem.meta`)
+
+`TocItem` gains an optional `meta: string`, rendered at the entry's end in the ordinal's mono voice and
+ink (`.meta`), not shrinking. For an index page's outline, where each entry is a category and its
+count is the one fact a reader wants before jumping (the insights hub, the case index). Never authored
+copy, never a second label; long-form documents pass none and render as before. The one-prop contract
+is unchanged: it is a field of the items, not a prop.

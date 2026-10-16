@@ -18,7 +18,6 @@ import {
 import styles from './InsightsIndex.module.css';
 import {
   CAPACITY,
-  FormatRow,
   FormatShape,
   LABEL,
   alternate,
@@ -26,13 +25,11 @@ import {
   bodyOf,
   coverOf,
   dateOf,
-  lengthOf,
   line,
-  parse,
+  metaOf,
   standInOf,
   type InsightsIndexClosing,
   type InsightsIndexCollection,
-  type InsightsIndexFilterOption,
   type InsightsIndexFormat,
   type InsightsIndexItem,
   type InsightsIndexKind,
@@ -41,12 +38,7 @@ import {
 export type InsightsIndexProps = {
   breadcrumbs: readonly BreadcrumbItem[];
   hero: { title: string; lede?: string; eyebrow?: string };
-  /**
-   * The family's format row in the hero: "All" (selected here), then each format with content and
-   * its count, each linking to that format's own page. See `FormatRow`.
-   */
-  formatRow?: readonly InsightsIndexFilterOption[];
-  /** Every resource, newest first. */
+  /** Every resource, newest first by its one date (resolved at the content seam). */
   items: readonly InsightsIndexItem[];
   /** The editor's lead story. Absent, the newest item with a cover, else the newest. */
   featuredId?: string;
@@ -91,18 +83,12 @@ function frontPage(items: readonly InsightsIndexItem[], featuredId: string | und
     if (mix.length === MIX) break;
     if (!mix.includes(item)) mix.push(item);
   }
+  /* Chosen for range, SHOWN in date order (critique 16 Oct 2026: one-per-format-first left the rail
+     reading 15 Oct, 14 Oct, 13 Oct, then 2025, then 14 Oct again). `items` arrive in their one date's
+     order, so their position is the order. */
+  mix.sort((a, b) => items.indexOf(a) - items.indexOf(b));
   return { lead, mix };
 }
-
-/** Events by when they happen, newest first; everything else in the order given. */
-const byRecord = (items: InsightsIndexItem[]) =>
-  items[0]?.kind === 'event'
-    ? items.sort(
-        (a, b) =>
-          (parse(b.event?.startsAt)?.valueOf() ?? -Infinity) -
-          (parse(a.event?.startsAt)?.valueOf() ?? -Infinity),
-      )
-    : items;
 
 const anchorOf = (kind: InsightsIndexKind) => `format-${kind}`;
 
@@ -115,10 +101,12 @@ const FOLD_EXEMPT =
  * after claude.com/resources: a listing organised by category that makes every section one click
  * away).
  *
- *   A  hero          the trail, the h1, the lede, and the format row — the family's sub-nav
+ *   A  hero          the trail, the h1 and the lede, at the index density, so the featured story
+ *                    reaches the first screen
  *   B  featured      one lead story with its cover, and four headlines beside it, full width
- *   C  formats       one IndexGroup per format beside a sticky "On this page" rail: each group its
- *                    OWN shape, so the run never repeats one rectangle, each with "All 42 …" out to
+ *   C  formats       one IndexGroup per format beside a sticky "On this page" rail that is the
+ *                    hub's one category navigation, each entry with its count: each group its OWN
+ *                    shape, so the run never repeats one rectangle, each with "All 42 …" out to
  *                    the format's own page, where its whole archive lives
  *   D  collections   "start with your problem": reading lists by topic, each with its service
  *   E  lab           the other organisation's offer, the page's one dark (ink) band — on tint
@@ -131,7 +119,6 @@ const FOLD_EXEMPT =
 export function InsightsIndex({
   breadcrumbs,
   hero,
-  formatRow = [],
   items,
   featuredId,
   formats = [],
@@ -143,7 +130,7 @@ export function InsightsIndex({
   const onFront = new Set([lead, ...mix].filter(Boolean).map((item) => item!.id));
 
   const present = kindsPresent(items).flatMap((kind) => {
-    const all = byRecord(items.filter((item) => item.kind === kind));
+    const all = items.filter((item) => item.kind === kind);
     const fresh = all.filter((item) => !onFront.has(item.id));
     const format = formats.find((candidate) => candidate.kind === kind);
     return [
@@ -179,30 +166,30 @@ export function InsightsIndex({
         eyebrow={hero.eyebrow}
         title={hero.title}
         body={lede ? [lede] : undefined}
-        texture
+        density="index"
         surface="paper"
-      >
-        {formatRow.length > 1 ? <FormatRow options={formatRow} /> : null}
-      </PageHero>
+      />
 
       {lead ? (
         <Section surface="paper" aria-label="Featured">
           {/* The set sits directly under the h1 with no band heading between, so its titles are the
-              page's h2s. The mix are HEADLINES — format, date, title, no standfirst — so four of them
-              stand as tall as the lead's cover and copy, the way a front page's rail of headlines
-              balances its lead story. Full width, outside the rail: the page's visual anchor. */}
+              page's h2s. The mix are HEADLINES — format, date, title, no standfirst — at the small
+              step, so the lead (lg) clearly leads them, the way a front page's rail of headlines sits
+              beside its lead story; the rail ends where its headlines end. Full width, outside the
+              outline: the page's visual anchor. */}
           <BlockCardSet
             lead="beside"
             cue="title"
             titleAs="h2"
+            size="sm"
             items={[lead, ...mix].map((item, index) => ({
               id: item.id,
               title: item.title,
               body: index === 0 ? bodyOf(item) : undefined,
               eyebrow:
                 index === 0
-                  ? line(LABEL[item.kind].one, dateOf(item.publishedAt), lengthOf(item))
-                  : line(LABEL[item.kind].one, dateOf(item.publishedAt)),
+                  ? line(LABEL[item.kind].one, metaOf(item))
+                  : line(LABEL[item.kind].one, dateOf(item.date)),
               href: item.href,
               media: index === 0 ? (coverOf(item) ?? standInOf(item)) : undefined,
             }))}
@@ -213,7 +200,7 @@ export function InsightsIndex({
       {items.length === 0 ? (
         /* Nothing published: no outline over nothing, just the sentence that says so. */
         <Section surface="paper">
-          <p>Nothing has been published yet.</p>
+          <p className={styles.empty}>Nothing has been published yet.</p>
         </Section>
       ) : null}
 
@@ -221,7 +208,11 @@ export function InsightsIndex({
         <div data-fold-exempt={FOLD_EXEMPT}>
           <Section as="div" surface="paper" data-band="index">
             {/* The claude "Jump to": the rail stays put while the groups scroll, so every format is
-                one click away from anywhere in the run (TableOfContents; LongformShell's shell). */}
+                one click away from anywhere in the run (TableOfContents; LongformShell's shell).
+                It is the hub's ONE category navigation, each entry with its format's count (critique
+                16 Oct 2026: a row of format chips in the hero listed the same four formats 400px
+                above it). Groups stack at `stack` (48), block to block inside one section; each
+                group's hairline and its 24 of head air make the break (IndexGroup.md § 7). */}
             <Layout
               columns={railed ? { base: 1, lg: [1, 4] } : { base: 1 }}
               colGap="column"
@@ -233,10 +224,11 @@ export function InsightsIndex({
                   items={groups.map((group) => ({
                     label: group.title,
                     href: `#${anchorOf(group.kind)}-heading` as const,
+                    meta: String(group.count),
                   }))}
                 />
               ) : null}
-              <Layout rowGap="column">
+              <Layout rowGap="stack">
                 {groups.map((group) => (
                   <IndexGroup
                     key={group.kind}

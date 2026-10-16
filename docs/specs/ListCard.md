@@ -1315,3 +1315,19 @@ Where earlier sections describe the box, the ground or the 32 tile icon, this am
    `-pressed`, the title's link ink on hover and the focus ring all stay.
 3. **Clickable tiles and rows sit under their head**, full width, never beside a heading or with a
    decorative image. Non-clickable icon tiles beside a photograph (the B band) stay.
+
+## Amendment · 16 Oct 2026 — critique fix round 3
+
+- **`rule?: 'end' | 'none'`** on a row: `none` leaves the closing rule off, for the last row of a list
+  whose container draws the seam below it (an IndexGroup, whose next group opens on its own hairline).
+  The composing route passes it, as it passes `size`. Ignored on a tile.
+- **A leading thumbnail, sketch or date goes above the copy below 768** (`.markerAbove`): the copy
+  takes the whole line and the row's Cluster wraps it under its marker at `block` (24); the thumbnail
+  fills the column at 16:9, the date stays its small key. This retires the 96px phone thumbnail
+  (`--lcrd-thumbnail-inline-sm`, cmp-services fix round 1): beside a 326 column it still left the copy
+  ~200 wide, titles of three or four lines and bodies of six or seven. `LIST_CARD_THUMBNAIL` asks for
+  the column below 768. A trailing (`markerPosition="end"`) image is still not shown on a phone.
+- **The date marker's day** takes the surface's title ink (`--lcrd-date-ink`), never the accent: a
+  blue numeral was the loudest mark in the band, louder than the titles people click.
+- **The external hint** is the `VisuallyHidden` primitive; the module's own clip recipe and
+  `--lcrd-hidden-size` are gone.

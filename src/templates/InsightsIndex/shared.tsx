@@ -9,6 +9,7 @@ import {
   VisuallyHidden,
   type IconName,
 } from '@/components';
+import { cx } from '@/lib/cx';
 import {
   INSIGHT_FORMAT_LABEL,
   INSIGHT_FORMAT_ORDER,
@@ -46,11 +47,15 @@ export type InsightsIndexItem = {
   /** The standfirst. Absent or blank renders the title alone. */
   description?: string;
   cover?: BlockCardImage;
-  /** ISO 8601. Orders nothing here (the page passes items newest first); it is shown. */
-  publishedAt?: string;
-  /** "11 min read". */
+  /**
+   * THE date of the item, ISO 8601 — resolved per format at the content seam (an event's when it
+   * happens, anything else's when it was published) and already the order the page passes items in.
+   * The template shows it and never chooses another (critique 16 Oct 2026).
+   */
+  date?: string;
+  /** "11 min read" — on the formats that are read. */
   readingTime?: string;
-  /** "48 min". */
+  /** "48 min" — on the formats that are watched or heard. */
   duration?: string;
   /** When and where an event happens. `startsAt` is ISO 8601. */
   event?: { startsAt: string; place?: string };
@@ -61,9 +66,10 @@ export type InsightsIndexItem = {
    */
   scene?: ArticleSceneName;
   /**
-   * A catalogue photograph standing in for the missing cover (visual-direction § 5.7), assigned to
-   * THIS item in data, one photograph per item over the family, so an item keeps one stand-in on
-   * every page and no photograph repeats. Never chosen by the template.
+   * What stands in for the missing cover, assigned to THIS item in data, never chosen by the
+   * template: a catalogue photograph (visual-direction § 5.7) while the family's small pool lasts,
+   * one per item so an item keeps one stand-in on every page and none repeats; then the register's
+   * labelled "Image to come" placeholder. Never a decorative texture (critique 16 Oct 2026).
    */
   standIn?: BlockCardImage;
 };
@@ -126,6 +132,11 @@ export type InsightsIndexArchive = {
   above?: number;
   /** The primary filter line: "All" first, then the first topic group's options, with counts. */
   primary: readonly InsightsIndexFilterOption[];
+  /**
+   * The primary line's accessible name, from the group it holds ("Filter by industry"): whatever
+   * group the CMS puts first, the line is named for it, never a fixed word that may name another.
+   */
+  primaryLabel: string;
   /** The other groups, behind "More filters": only options with results, no one-option groups. */
   filters: readonly InsightsIndexFilterGroup[];
   /** What is held, each with the link that removes it. Empty when nothing is. */
@@ -182,8 +193,33 @@ export const dateOf = (iso: string | undefined) => {
 export const line = (...parts: (string | undefined)[]) =>
   parts.filter((part): part is string => Boolean(part?.trim())).join(' · ') || undefined;
 
-/** The length of the thing: reading time for the read formats, duration for the watched ones. */
-export const lengthOf = (item: InsightsIndexItem) => item.duration ?? item.readingTime;
+/**
+ * How long the thing takes, BY FORMAT (critique 16 Oct 2026: a video card said "13 MIN READ"): the
+ * reading time for what is read, the running time for what is watched or heard — nothing when it
+ * has none, never the other one — and nothing for an event, which is dated, not timed.
+ */
+export function lengthOf(item: InsightsIndexItem): string | undefined {
+  switch (item.kind) {
+    case 'video':
+    case 'podcast':
+      return item.duration;
+    case 'event':
+      return undefined;
+    default:
+      return item.readingTime;
+  }
+}
+
+/**
+ * The item's label line, the one resolver every card and row reads, per format: its date, then its
+ * length (articles, guides, research, interviews: the reading time; videos, podcasts: the running
+ * time) or, for an event, its place. `date: false` where something beside the line already says the
+ * date (an event row's date marker). Never assembled in a card.
+ */
+export function metaOf(item: InsightsIndexItem, { date = true }: { date?: boolean } = {}) {
+  const day = date ? dateOf(item.date) : undefined;
+  return item.kind === 'event' ? line(day, item.event?.place) : line(day, lengthOf(item));
+}
 
 export const bodyOf = (item: InsightsIndexItem) =>
   item.description?.trim() ? item.description : undefined;
@@ -193,25 +229,17 @@ export const coverOf = (item: InsightsIndexItem): BlockCardSetItem['media'] =>
 
 type CoverMedia = NonNullable<BlockCardSetItem['media']>;
 
-/** A stable small number from an id, so a texture field belongs to its item, not to render order. */
-function hashOf(id: string) {
-  let hash = 0;
-  for (let i = 0; i < id.length; i += 1) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
-  return hash;
-}
-
 /**
  * The cover for an item that has none (owner, 13 Oct 2026): the scene drawn for that article where
- * it has one, else the stand-in photograph the page assigned it in data, else a texture field whose
- * recipe follows from the item's id. A pure function of the item (critique 16 Oct 2026): the
- * template never deals photographs out in call order, so an item looks the same on every page and
- * a photograph cannot repeat once a small pool runs out. Never a generic scene.
+ * it has one, else whatever the page assigned it in data — a stand-in photograph or the labelled
+ * placeholder. A pure function of the item, so it looks the same on every page. Never a generic
+ * scene and never a texture field: three identical dot fields in a row read as broken images and
+ * repeated the hero's own texture (critique 16 Oct 2026).
  */
-export function standInOf(item: InsightsIndexItem): CoverMedia {
+export function standInOf(item: InsightsIndexItem): CoverMedia | undefined {
   if (item.scene) return { type: 'sketch', name: item.scene };
-  if (item.standIn?.src.trim())
-    return { type: 'image', image: { ...item.standIn, standIn: true } };
-  return { type: 'texture', recipe: (hashOf(item.id) % 3) as 0 | 1 | 2 };
+  if (item.standIn?.src.trim()) return { type: 'image', image: item.standIn };
+  return undefined;
 }
 
 /** The kinds whose items are pictures first: a cover leads the card. */
@@ -222,9 +250,21 @@ export const isCovered = (kind: InsightsIndexKind) => COVERED.has(kind);
 export const kindsPresent = (items: readonly InsightsIndexItem[]) =>
   FORMAT_ORDER.filter((kind) => items.some((item) => item.kind === kind));
 
-/** Whether every item carries an image of its own — a real cover or the scene drawn for it. */
-export const allOwnImages = (items: readonly InsightsIndexItem[]) =>
-  items.length > 0 && items.every((item) => coverOf(item) !== undefined || item.scene);
+/** Whether an item carries an image of its own — a real cover or the scene drawn for it. */
+const ownImage = (item: InsightsIndexItem) =>
+  coverOf(item) !== undefined || Boolean(item.scene);
+
+/** The share of a set that must carry its own image for the set to be shown as pictures. */
+const PICTURED_FROM = 0.8;
+
+/**
+ * Whether a set of a text-first format is shown WITH pictures — decided once, by the set, never item
+ * by item (critique 16 Oct 2026: thumbnails on five of ten guide rows left a ragged right edge and a
+ * list that looked half-loaded). From 80% carrying their own image, the set takes pictures and the
+ * rest show their assigned stand-in or placeholder; below it, every item is a text row.
+ */
+export const pictured = (items: readonly InsightsIndexItem[]) =>
+  items.length > 0 && items.filter(ownImage).length / items.length >= PICTURED_FROM;
 
 /** An event's date marker: the record's date, never the publish date; "Date TBC" without one. */
 export function eventMarker(item: InsightsIndexItem): ListCardMarker {
@@ -242,24 +282,35 @@ export function eventMarker(item: InsightsIndexItem): ListCardMarker {
 /* ── The format row ───────────────────────────────────────────────────────────── */
 
 /**
- * The family's one way between its pages (15 Oct 2026; the claude.com/resources sub-nav, in Tcules'
- * vocabulary): "All", then every format with content and its count, each a link to that format's
- * page, the current one selected. In the hero of the hub and of every format page, so they navigate
- * as one family. One line at every width: it scrolls sideways where it runs out of room, never wraps.
+ * The format pages' one way between the family's pages (15 Oct 2026; the claude.com/resources
+ * sub-nav, in Tcules' vocabulary): "All" back to the hub, then every format with content and its
+ * count, the current one marked. Tabs on one hairline — words in sans, counts in mono, the current
+ * page in ink on a mark — so it reads as navigation and never as the topic filters under it, which
+ * are Tags (critique 16 Oct 2026: chips over chips read as one control). On the format pages only:
+ * the hub's own outline is its category navigation. One line at every width: it scrolls sideways
+ * where it runs out of room, never wraps.
  */
 export function FormatRow({ options }: { options: readonly InsightsIndexFilterOption[] }) {
   if (options.length < 2) return null;
   return (
-    <nav aria-label="Insights formats" className={styles.formats}>
-      {/* Both gaps `text` (16): a Tag is 24 x 24, the AA target floor, so the clearance comes from
-          the row. */}
-      <Cluster as="ul" colGap="text" nowrap>
+    <nav aria-label="Insights formats" className={styles.scroller}>
+      {/* `gutter` (32) between tabs: words, not boxed chips, so the air is the separation. */}
+      <Cluster as="ul" colGap="gutter" nowrap className={styles.tabs}>
         {options.map((option) => (
           <li key={option.id}>
-            {/* Each link is a page of the family, so the selected one is the page you are on. */}
-            <Tag variant="filter" href={option.href} selected={option.selected} current="page">
-              {chip(option)}
-            </Tag>
+            <a
+              href={option.href}
+              aria-current={option.selected ? 'page' : undefined}
+              className={cx(styles.tab, option.selected && styles.tabCurrent)}
+            >
+              {option.label}
+              {option.count === undefined ? null : (
+                <>
+                  {' '}
+                  <span className={styles.tabCount}>{option.count}</span>
+                </>
+              )}
+            </a>
           </li>
         ))}
       </Cluster>
@@ -283,12 +334,12 @@ export const CAPACITY: Record<InsightsIndexKind, number> = {
   guide: 6,
 };
 
-/** A group whose shape carries an image: the covered shapes, and the catalogue when it has thumbnails. */
+/** A group whose shape carries an image: the covered shapes, and the catalogue when it is pictured. */
 export function isVisual(group: {
   kind: InsightsIndexKind;
   items: readonly InsightsIndexItem[];
 }) {
-  if (group.kind === 'guide') return group.items.every((item) => thumbOf(item) !== undefined);
+  if (group.kind === 'guide') return pictured(group.items);
   return isCovered(group.kind);
 }
 
@@ -312,6 +363,12 @@ export function alternate<
   return out;
 }
 
+/**
+ * One format's group on the hub, in the format's own shape. Every shape's titles in a SET step down
+ * to the small card step (h5) and only a lead keeps the large one (h3), so a group has one clear
+ * lead and the set under it reads as its list (critique 16 Oct 2026: 28 against 34, the lead barely
+ * led). A list of rows ends without its closing rule: the next group's hairline is the seam.
+ */
 export function FormatShape({
   kind,
   items,
@@ -325,7 +382,7 @@ export function FormatShape({
     case 'article':
       return <Lead items={items} />;
     case 'event':
-      return <Ledger items={items} />;
+      return <Ledger items={items} open />;
     case 'podcast':
       return <Episode items={items} />;
     case 'research':
@@ -342,13 +399,13 @@ export function FormatShape({
   }
 }
 
-/** A card record for a set, eyebrowed with what the group does not already say: date, length. */
-export const card = (item: InsightsIndexItem): BlockCardSetItem => ({
+/** A cover tile for a set: the cover (or its assigned stand-in), the label line, the title, its line. */
+export const tile = (item: InsightsIndexItem): BlockCardSetItem => ({
   id: item.id,
   title: item.title,
   body: bodyOf(item),
-  eyebrow: line(dateOf(item.publishedAt), lengthOf(item)),
-  media: coverOf(item),
+  eyebrow: metaOf(item),
+  media: coverOf(item) ?? standInOf(item),
   href: item.href,
 });
 
@@ -374,9 +431,7 @@ export function LeadCard({
         titleAs={titleAs}
         title={item.title}
         body={bodyOf(item)}
-        eyebrow={
-          podcast ? dateOf(item.publishedAt) : line(dateOf(item.publishedAt), lengthOf(item))
-        }
+        eyebrow={podcast ? dateOf(item.date) : metaOf(item)}
         media={coverOf(item) ?? standInOf(item)}
         href={item.href}
         {...(podcast
@@ -389,7 +444,9 @@ export function LeadCard({
 
 /**
  * Articles — the lead: the newest at full column with its cover beside its copy, then a row of three
- * covered cards under it. Size contrast in one group, where four equal tiles read as one rectangle.
+ * covered cards under it at the small step. Size contrast in one group, where four equal tiles read
+ * as one rectangle. Stacked on a phone, never a sideways row: the video rail is the hub's one
+ * sideways device, and two scrollers back to back made the groups look alike (critique 16 Oct 2026).
  */
 function Lead({ items }: { items: readonly InsightsIndexItem[] }) {
   const [first, ...rest] = items;
@@ -401,33 +458,42 @@ function Lead({ items }: { items: readonly InsightsIndexItem[] }) {
         <BlockCardSet
           lead="none"
           across={3}
+          size="sm"
+          scroll="never"
           cue="title"
-          items={rest.map((item) => ({
-            ...card(item),
-            media: coverOf(item) ?? standInOf(item),
-          }))}
+          items={rest.map(tile)}
         />
       ) : null}
     </Layout>
   );
 }
 
-/** Events — the ledger: each row led by its date, the place on the label line. */
-export function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
+/**
+ * Events — the ledger: each row led by its date (in the title's ink), the place on the label line.
+ * `open` leaves the last row without its closing rule, for a list whose container draws the seam.
+ */
+export function Ledger({
+  items,
+  open = false,
+}: {
+  items: readonly InsightsIndexItem[];
+  open?: boolean;
+}) {
   return (
     <Layout as="ul" rowGap="none">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <ListCard
           key={item.id}
           titleAs="h3"
-          size="md"
-          eyebrow={item.event?.place}
+          size="sm"
+          eyebrow={metaOf(item, { date: false })}
           title={item.title}
           body={bodyOf(item)}
           href={item.href}
           /* An event with no date yet keeps the date column, saying so, so every row's copy starts
              on one edge; the publish date is never passed off as the event's. */
           marker={eventMarker(item)}
+          rule={open && index === items.length - 1 ? 'none' : 'end'}
         />
       ))}
     </Layout>
@@ -443,15 +509,16 @@ function Episode({ items }: { items: readonly InsightsIndexItem[] }) {
       <LeadCard item={latest} />
       {earlier.length > 0 ? (
         <Layout as="ul" rowGap="none">
-          {earlier.map((item) => (
+          {earlier.map((item, index) => (
             <ListCard
               key={item.id}
               titleAs="h3"
               size="sm"
-              eyebrow={line(dateOf(item.publishedAt), item.duration)}
+              eyebrow={metaOf(item)}
               title={item.title}
               body={bodyOf(item)}
               href={item.href}
+              rule={index === earlier.length - 1 ? 'none' : 'end'}
             />
           ))}
         </Layout>
@@ -471,34 +538,37 @@ function Reports({ items }: { items: readonly InsightsIndexItem[] }) {
           size="md"
           title={item.title}
           body={bodyOf(item)}
-          eyebrow={dateOf(item.publishedAt)}
+          eyebrow={dateOf(item.date)}
           href={item.href}
           cue="cta"
           ctaLabel="Read the research"
-          meta={item.readingTime}
+          meta={lengthOf(item)}
         />
       ))}
     </Layout>
   );
 }
 
-/** Videos — the rail: covered cards you scrub through, three in view. */
+/** Videos — the rail: covered cards you scrub through, three in view, at the small step. */
 function Rail({ items, label }: { items: readonly InsightsIndexItem[]; label: string }) {
   return (
     <Slider label={label} perView={3}>
-      {items.map((item) => (
-        <BlockCard
-          key={item.id}
-          tracks={3}
-          size="md"
-          title={item.title}
-          body={bodyOf(item)}
-          eyebrow={line(dateOf(item.publishedAt), item.duration)}
-          media={coverOf(item) ?? standInOf(item)}
-          href={item.href}
-          cue="title"
-        />
-      ))}
+      {items.map((item) => {
+        const card = tile(item);
+        return (
+          <BlockCard
+            key={card.id}
+            tracks={3}
+            size="sm"
+            title={card.title}
+            body={card.body}
+            eyebrow={card.eyebrow}
+            media={card.media}
+            href={card.href}
+            cue="title"
+          />
+        );
+      })}
     </Slider>
   );
 }
@@ -510,51 +580,49 @@ function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
       lead="none"
       cue="title"
       across={3}
+      size="sm"
       standIns={false}
-      items={items.map((item) => ({ ...card(item), media: undefined }))}
+      items={items.map((item) => ({ ...tile(item), media: undefined }))}
     />
   );
 }
 
-/** A row's thumbnail from a cover, a drawn scene or a stand-in; a texture field has no thumbnail form. */
+/** A row's thumbnail from a cover, a drawn scene or the assigned stand-in. */
 function thumbOf(item: InsightsIndexItem): ListCardMarker | undefined {
-  if (item.cover?.src.trim()) {
-    return { type: 'thumbnail', image: item.cover };
-  }
+  if (item.cover?.src.trim()) return { type: 'thumbnail', image: item.cover };
   const media = standInOf(item);
-  if (media.type === 'sketch') return { type: 'sketch', name: media.name };
-  if (media.type === 'image') return { type: 'thumbnail', image: media.image };
+  if (media?.type === 'sketch') return { type: 'sketch', name: media.name };
+  if (media?.type === 'image') return { type: 'thumbnail', image: media.image };
   return undefined;
 }
 
 /**
- * Guides — the catalogue: rows in two columns, with thumbnails when every guide has one and as text
- * when any lacks one (a set is all-image or all-text, never one with holes).
+ * Guides — the catalogue: rows in two columns, with thumbnails when the set is pictured (`pictured`)
+ * and as text otherwise — a set is all-image or all-text, never one with holes. Each column ends
+ * without its closing rule: the next group's hairline is the seam.
  */
 function Catalogue({ items }: { items: readonly InsightsIndexItem[] }) {
-  const thumbs = items.map((item) => thumbOf(item));
-  const thumbnails = thumbs.every(Boolean);
+  const thumbnails = pictured(items);
   const half = Math.ceil(items.length / 2);
-  const indexed = items.map((item, i) => ({
-    item,
-    marker: thumbnails ? thumbs[i] : undefined,
-  }));
-  const columns = items.length > 3 ? [indexed.slice(0, half), indexed.slice(half)] : [indexed];
+  const columns = items.length > 3 ? [items.slice(0, half), items.slice(half)] : [items];
   return (
     <Layout columns={{ base: 1, lg: columns.length }} colGap="gutter" rowGap="none">
       {columns.map((column, index) => (
         <Layout as="ul" rowGap="none" key={index}>
-          {column.map(({ item, marker }) => (
+          {column.map((item, row) => (
             <ListCard
               key={item.id}
               titleAs="h3"
               size="sm"
               arrangement="stacked"
-              eyebrow={item.readingTime}
+              eyebrow={lengthOf(item)}
               title={item.title}
               body={bodyOf(item)}
               href={item.href}
-              marker={marker}
+              marker={thumbnails ? thumbOf(item) : undefined}
+              /* The last row of the list as a whole: below lg the columns stack into one list,
+                 so only the second column's last row (or the only column's) opens. */
+              rule={row === column.length - 1 && index === columns.length - 1 ? 'none' : 'end'}
             />
           ))}
         </Layout>
@@ -569,16 +637,18 @@ function Catalogue({ items }: { items: readonly InsightsIndexItem[] }) {
  * A format's whole archive, on its own page (15 Oct 2026: the hub's feed moved here, the claude
  * model — the hub previews every category, each category's page holds all of it).
  *
- * Above the items, ONE compact row: the first topic group as a line of options with counts ("All"
- * first; a sideways scroll on a phone, never a wrap), and every other group behind one native "More
- * filters" disclosure on the same row. While something is held, a short summary says so, each item
- * removable, with "Clear all". Every control is a link the page built: the state is the URL, and
- * nothing needs script.
+ * Above the items, ONE compact row: the first topic group as a line of filter Tags with counts
+ * ("All" first; a sideways scroll on a phone, never a wrap), and every other group behind one
+ * "More filters" Tag (`variant="disclosure"`, the chip's own height) on the same row. While
+ * something is held, a short summary says so — "Showing", each held filter removable, "Clear all".
+ * Every control is a link the page built: the state is the URL, and nothing needs script.
  *
  * The items in one anatomy, so the eye learns it once and scans:
- *   covered kinds   borderless cover tiles, three across — cover, date · length, serif title, line
- *   text kinds      hairline rows — events led by their date, the record's date, never the publish
- * Never the two hybridised.
+ *   covered      borderless cover tiles, three across — cover, date · length, serif title, line
+ *   text         hairline rows — events led by their date (the record's date, never the publish
+ *                date) in one column; the rest title and standfirst, two columns from lg, with no
+ *                thumbnail
+ * Never the two hybridised, and never a row set where some rows have a picture and some do not.
  */
 export function Archive({
   archive,
@@ -587,7 +657,7 @@ export function Archive({
 }: {
   archive: InsightsIndexArchive;
   kind: InsightsIndexKind;
-  /** Cover tiles, or rows. The page decides from the kind and whether every item has an image. */
+  /** Cover tiles, or rows. The page decides from the kind and whether the set is pictured. */
   covered: boolean;
 }) {
   const moreHeld = archive.filters.reduce(
@@ -598,7 +668,7 @@ export function Archive({
 
   const topicLine =
     archive.primary.length > 1 ? (
-      <nav aria-label="Topic" className={styles.formats}>
+      <nav aria-label={archive.primaryLabel} className={styles.scroller}>
         <Cluster as="ul" colGap="text" nowrap>
           {archive.primary.map((option) => (
             <li key={option.id}>
@@ -613,19 +683,9 @@ export function Archive({
   const moreFilters =
     archive.filters.length > 0 ? (
       <details className={styles.more}>
-        <summary className={styles.toggle}>
-          <Cluster as="span" colGap="tight" align="center" nowrap>
-            {/* "More" folds away on a phone so the line keeps the room; the word
-                "filters" and the count still say what it is. */}
-            <span>
-              <span className={styles.moreWord}>More </span>filters
-            </span>
-            {moreHeld > 0 ? <span className={styles.toggleCount}>{moreHeld}</span> : null}
-            <span className={styles.toggleGlyph}>
-              <Icon name="alt-arrow-down" />
-            </span>
-          </Cluster>
-        </summary>
+        <Tag variant="disclosure" icon={<Icon name="alt-arrow-down" />}>
+          {moreHeld > 0 ? `More filters ${moreHeld}` : 'More filters'}
+        </Tag>
         <div className={styles.panel}>
           <Layout rowGap="gutter">
             {archive.filters.map((group) => (
@@ -665,6 +725,20 @@ export function Archive({
         </div>
       </details>
     ) : null;
+  const controls =
+    topicLine && moreFilters ? (
+      /* The arrangement follows what is present: the topic line and the disclosure share a row
+         ([1, auto]) only when both exist; alone, the line takes the column and the disclosure sits
+         at its end. One height across the row: both are Tags. */
+      <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
+        {topicLine}
+        {moreFilters}
+      </Layout>
+    ) : moreFilters ? (
+      <Layout justifyItems="end">{moreFilters}</Layout>
+    ) : (
+      topicLine
+    );
 
   return (
     <ContentSection
@@ -676,27 +750,14 @@ export function Archive({
     >
       <Layout rowGap="stack">
         <Layout rowGap="text">
-          {/* The arrangement follows what is present: the topic line and the disclosure share a row
-              ([1, auto]) only when both exist; alone, the line takes the column and the disclosure
-              sits at its end. */}
-          {topicLine && moreFilters ? (
-            <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
-              {topicLine}
-              {moreFilters}
-            </Layout>
-          ) : moreFilters ? (
-            <Layout justifyItems="end">{moreFilters}</Layout>
-          ) : (
-            topicLine
-          )}
+          {controls}
 
           {archive.held.length > 0 ? (
+            /* What is held, read in order: "Showing [SaaS ×] · Clear all". The count is the line
+               under the items, said once (critique 16 Oct 2026: "11 of 16 showing" read backwards
+               and repeated it). */
             <Cluster colGap="text" rowGap="text" align="center">
-              <p className={styles.count}>
-                {`${archive.total} of ${archive.all}`}
-                <VisuallyHidden> {archive.noun} match.</VisuallyHidden>
-              </p>
-              <span className={styles.count}>Showing</span>
+              <p className={styles.count}>Showing</p>
               <Cluster as="ul" colGap="text" rowGap="text">
                 {archive.held.map((held) => (
                   <li key={held.id}>
@@ -735,42 +796,30 @@ export function Archive({
               <BlockCardSet
                 lead="none"
                 across={3}
+                size="sm"
                 scroll="never"
                 cue="title"
-                items={archive.items.map((item) => ({
-                  ...card(item),
-                  media: coverOf(item) ?? standInOf(item),
-                }))}
+                items={archive.items.map(tile)}
               />
+            ) : kind === 'event' ? (
+              <Ledger items={archive.items} />
             ) : (
-              <Layout as="ul" rowGap="none">
-                {archive.items.map((item) =>
-                  kind === 'event' ? (
-                    <ListCard
-                      key={item.id}
-                      titleAs="h3"
-                      size="md"
-                      eyebrow={item.event?.place}
-                      title={item.title}
-                      body={bodyOf(item)}
-                      href={item.href}
-                      marker={eventMarker(item)}
-                    />
-                  ) : (
-                    <ListCard
-                      key={item.id}
-                      titleAs="h3"
-                      size="md"
-                      arrangement="stacked"
-                      eyebrow={line(dateOf(item.publishedAt), lengthOf(item))}
-                      title={item.title}
-                      body={bodyOf(item)}
-                      href={item.href}
-                      marker={thumbOf(item)}
-                      markerPosition="end"
-                    />
-                  ),
-                )}
+              /* Two columns from lg, read across: a text row is a title and a line, and one column
+                 of them at 1240 left most of the band empty to the right of a 500px title (critique
+                 16 Oct 2026). Rows in one grid line their rules up across the pair. */
+              <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="none">
+                {archive.items.map((item) => (
+                  <ListCard
+                    key={item.id}
+                    titleAs="h3"
+                    size="sm"
+                    arrangement="stacked"
+                    eyebrow={metaOf(item)}
+                    title={item.title}
+                    body={bodyOf(item)}
+                    href={item.href}
+                  />
+                ))}
               </Layout>
             )}
             {/* Where the reader is, then the way on: "13 of 42 shown", and "Show more" as a link to
@@ -778,6 +827,9 @@ export function Archive({
             <Cluster colGap="block" rowGap="text" align="center">
               <p className={styles.count}>
                 {`${archive.items.length + above} of ${archive.total + above} shown`}
+                {archive.held.length > 0 ? (
+                  <VisuallyHidden>{` — ${archive.total} of ${archive.all} ${archive.noun} match the filters`}</VisuallyHidden>
+                ) : null}
               </p>
               {archive.moreHref ? (
                 <Button
@@ -794,9 +846,15 @@ export function Archive({
           </Layout>
         ) : (
           <Cluster colGap="block" rowGap="text" align="center">
-            <p>Nothing matches these filters.</p>
+            <p className={styles.empty}>Nothing matches these filters.</p>
             {archive.clearHref ? (
-              <Button as="a" href={archive.clearHref} emphasis="link" tone="primary">
+              <Button
+                as="a"
+                href={archive.clearHref}
+                emphasis="link"
+                tone="primary"
+                className={styles.keep}
+              >
                 Clear all
               </Button>
             ) : null}
