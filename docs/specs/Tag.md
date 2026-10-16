@@ -86,6 +86,7 @@ type TagProps =
 | `children` | `string` | none — required | The label, in the capitalisation somebody authored. A `string` and not a `ReactNode`, which is the enforcement mechanism for section 8: markup in a label is how a case, a weight or a second colour gets smuggled past the stylesheet |
 | `href` | `string` | none — **required when `variant="filter"`** | The destination. It is a query-string rewrite on the same route today; the component neither builds it nor parses it |
 | `selected` | `boolean` | `false` | The held state: the `-pressed` ink, ground and edge, held through hover and focus, plus `aria-current="true"`. Meaningless on `mark`, and a compile error there |
+| `current` | `'true' \| 'page'` | `'true'` | What the held chip is announced as. `'true'` for a filter (the query changed, not the page). `'page'` only where each Tag links to a different page and the held one is the page you are on — the insights format row (amended 16 Oct 2026, critique: "current item" misread a sub-nav). Ignored unless `selected`; a compile error on `mark` |
 | `icon` | `ReactNode` | `undefined` | One glyph after the label. `Button` takes its `icon` the same way and for the same reason — a primitive may not import `Icon` — so the call site passes the node. The one caller passes `<Icon name="close-circle" label="Clear filter" />` on the held chip, beside an `href` that clears that group's parameter, which is what makes the glyph a control rather than a decoration. Legal on `filter` only |
 
 **Deliberately NOT props**

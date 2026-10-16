@@ -28,6 +28,7 @@ type MarkTag = {
   variant?: 'mark';
   href?: never;
   selected?: never;
+  current?: never;
   icon?: never;
 };
 
@@ -50,6 +51,13 @@ type FilterTag = {
    * DESELECTED at the exact moment a reader is deciding whether to clear it.
    */
   selected?: boolean;
+  /**
+   * What the held chip IS, announced as `aria-current`. `'true'` (the default) for a filter state:
+   * the page has not changed, the query has. `'page'` when the link is the page you are on — a row
+   * of Tags used as a sub-nav between pages (the insights format row), where "current page" is the
+   * truth and "current item" would mislead a screen reader. Ignored unless `selected`.
+   */
+  current?: 'true' | 'page';
   /**
    * One glyph, after the label, on the held chip.
    *
@@ -103,7 +111,14 @@ function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Tag: ${message}`);
 }
 
-export function Tag({ variant = 'mark', href, selected, icon, children }: TagProps) {
+export function Tag({
+  variant = 'mark',
+  href,
+  selected,
+  current = 'true',
+  icon,
+  children,
+}: TagProps) {
   /* A blank label renders NOTHING, matching BlockCard's handling of a whitespace title. The
      alternative is a 24 x 24 empty box — and for the filter, a focusable control with no
      accessible name, which is a target a keyboard user can reach and cannot identify. Returning
@@ -129,9 +144,10 @@ export function Tag({ variant = 'mark', href, selected, icon, children }: TagPro
     <a
       href={href}
       /* The held state, announced. `aria-current` and not `aria-pressed`: this is a link, the URL
-         is the state, and `aria-pressed` on an anchor is a role contradiction. `"true"` and not
-         `"page"` — the page has not changed, the query has. */
-      aria-current={selected ? 'true' : undefined}
+         is the state, and `aria-pressed` on an anchor is a role contradiction. `"true"` for a
+         filter (the page has not changed, the query has); `"page"` only where the caller says the
+         link is the page itself (`current`). */
+      aria-current={selected ? current : undefined}
       className={cx(
         styles.tag,
         styles.filter,

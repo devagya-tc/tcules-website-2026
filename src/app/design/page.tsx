@@ -93,6 +93,11 @@ const SPECIMENS = [
         note: 'one review score as five stars — filled, half, empty — glyph passed in, md and sm, 4 surfaces',
       },
       {
+        href: '/design/visually-hidden',
+        name: 'VisuallyHidden',
+        note: 'words for a screen reader that take no room on screen — span inside a line, p on its own, a long phrase that must not overflow',
+      },
+      {
         href: '/design/stat',
         name: 'Stat',
         note: 'one figure, its unit and what it counts — lg and md, start or centred, beside its label below 768, ink numeral, blue mark on the opening rule, 3 surfaces',

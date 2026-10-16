@@ -1,0 +1,14 @@
+/* VisuallyHidden — the clip recipe, once. Every value is a --vhid-* token in
+   tokens/components/visually-hidden.css.
+
+   Absolute so it takes no room in the flow; a one-pixel box, not zero, because some screen readers
+   skip a zero-size node; clipped to nothing so the pixel never paints; no wrap so a long phrase is
+   not read word by word as separate lines. */
+.hidden {
+  position: absolute;
+  inline-size: var(--vhid-size);
+  block-size: var(--vhid-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

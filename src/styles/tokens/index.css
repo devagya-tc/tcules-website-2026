@@ -98,6 +98,7 @@
 @import 'components/section.css';
 @import 'components/island.css';
 @import 'components/layout.css';
+@import 'components/visually-hidden.css';
 @import 'components/icon.css';
 @import 'components/media.css';
 @import 'components/button.css';

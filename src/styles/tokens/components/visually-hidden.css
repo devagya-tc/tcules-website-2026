@@ -1,0 +1,8 @@
+/* VisuallyHidden — --vhid-*. Geometry only: the component paints nothing, so there is no surface
+   block to declare (as layout.css).
+
+   --vhid-size reads the space ramp for a non-distance: the clip box's one pixel, the smallest box a
+   screen reader will not skip. It separates nothing, so it is not a gap-scale step. */
+:root {
+  --vhid-size: var(--space-1);
+}
