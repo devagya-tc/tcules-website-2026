@@ -262,10 +262,34 @@
   padding-inline-end: var(--gap-tight);
 }
 
+/* ── Disclosure · the filter chip as a <summary> ─────────────────────────────────
+   Everything else is the filter's: box, voice, edge, hover, focus ring. What is added is what a
+   summary needs and a link does not — no disclosure triangle in either engine, the pointer — and
+   the one movement in this file: the chevron turns half a turn while the panel is open. Read from
+   the `<details>` the summary belongs to (its parent, by the HTML content model), never from a
+   prop, so an open panel and a turned glyph cannot disagree. */
+.disclosure {
+  list-style: none;
+  cursor: pointer;
+}
+
+.disclosure::-webkit-details-marker {
+  display: none;
+}
+
+.disclosure > svg {
+  transition: transform var(--tag-transition-duration) var(--tag-transition-easing);
+}
+
+[open] > .disclosure > svg {
+  transform: rotate(180deg);
+}
+
 /* Every state still renders — colour and edge arrive at once instead of over 140ms — because the
-   states are paint, not movement. There is nothing to lose. */
+   states are paint, not movement. There is nothing to lose. The chevron simply sits turned. */
 @media (prefers-reduced-motion: reduce) {
-  .filter {
+  .filter,
+  .disclosure > svg {
     transition-duration: var(--duration-instant);
   }
 }

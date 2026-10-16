@@ -178,6 +178,22 @@
   .lead-tall:has(> :last-child:nth-child(4)) > :first-child { grid-row: 1 / span 3; }
   .lead-tall:has(> :last-child:nth-child(5)) > :first-child { grid-row: 1 / span 4; }
   .lead-tall:has(> :last-child:nth-child(6)) > :first-child { grid-row: 1 / span 5; }
+
+  /* Without equalRows the stacked items keep their OWN heights (critique 16 Oct 2026: the
+     spotlight's notes each took a share of the lead's height, so every one stood over 80 to 120 of
+     empty space). The lead spans one row more than the items fill, and that last row is the only
+     flexible one, so it takes whatever height the lead has over them and the stack ends where its
+     content ends. When the stack is the taller side the spare row is empty and adds one row gap. */
+  .lead-tall-packed:has(> :last-child:nth-child(2)) { grid-template-rows: auto 1fr; }
+  .lead-tall-packed:has(> :last-child:nth-child(3)) { grid-template-rows: repeat(2, auto) 1fr; }
+  .lead-tall-packed:has(> :last-child:nth-child(4)) { grid-template-rows: repeat(3, auto) 1fr; }
+  .lead-tall-packed:has(> :last-child:nth-child(5)) { grid-template-rows: repeat(4, auto) 1fr; }
+  .lead-tall-packed:has(> :last-child:nth-child(6)) { grid-template-rows: repeat(5, auto) 1fr; }
+  .lead-tall-packed:has(> :last-child:nth-child(2)) > :first-child { grid-row: 1 / span 2; }
+  .lead-tall-packed:has(> :last-child:nth-child(3)) > :first-child { grid-row: 1 / span 3; }
+  .lead-tall-packed:has(> :last-child:nth-child(4)) > :first-child { grid-row: 1 / span 4; }
+  .lead-tall-packed:has(> :last-child:nth-child(5)) > :first-child { grid-row: 1 / span 5; }
+  .lead-tall-packed:has(> :last-child:nth-child(6)) > :first-child { grid-row: 1 / span 6; }
 }
 
 

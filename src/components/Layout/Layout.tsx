@@ -152,7 +152,8 @@ export type LayoutProps = {
    * 2:1 lead beside a stacked pair, `columns={{ lg: [2, 1] }}`. The span is the container's, as
    * above, and is read from the DOM (`:has`), so it covers up to six children. Below lg it is the
    * ordinary single-track stack: a span there would only open empty rows. With `equalRows` the
-   * stacked rows share the lead's height equally.
+   * stacked rows share the lead's height equally; without it they keep their own heights and end
+   * where their content ends, the lead's surplus falling to one spare row under them (16 Oct 2026).
    */
   lead?: boolean | 'tall';
   /**
@@ -547,6 +548,7 @@ export function Layout({
           equalFrom &&
           styles[equalFrom === 'base' ? 'equal-rows' : `equal-rows-${equalFrom}`],
         leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
+        leads && lead === 'tall' && !equalRows && styles['lead-tall-packed'],
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],

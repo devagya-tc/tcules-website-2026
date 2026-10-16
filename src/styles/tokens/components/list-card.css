@@ -95,8 +95,10 @@
   --lcrd-eyebrow-text: var(--text-eyebrow);
   --lcrd-eyebrow-tracking: var(--text-eyebrow-tracking);
   /* The date marker (13 Oct 2026): the day at the stat role, a numeral that IS the row's information
-     (an event's date), so it takes the accent and the stat size where the ordinal takes the quieter
-     index role. The column is component geometry: "30" at the 40px stat role is ~48 wide and
+     (an event's date), so it takes the stat size where the ordinal takes the quieter index role — in
+     the surface's TITLE ink, never the accent (critique 16 Oct 2026: a blue numeral was the most
+     saturated mark in the band, louder than the titles people click; blue is for links and the one
+     main action). The column is component geometry: "30" at the 40px stat role is ~48 wide and
      "SEP 2026" at the eyebrow role ~70, so 96 holds both with the label on one line. */
   --lcrd-date-day-text: var(--text-stat);
   --lcrd-date-day-tracking: var(--text-stat-tracking);
@@ -167,9 +169,9 @@
      The ratio is the site's one standard image ratio, 16:9 (owner, home round 3): BlockCard's cover
      serves the same asset, so both alias --ratio-standard (primitives.css § Media · ratio). */
   --lcrd-thumbnail-inline-md: 160px;
-  /* A row's thumbnail below md (cmp-services fix round 1): small enough that the copy core keeps its
-     192 minimum beside it in a 326 phone column (326 - 24 - 96 = 206), so the row stays a row. */
-  --lcrd-thumbnail-inline-sm: 96px;
+  /* Below md a leading thumbnail goes ABOVE the copy at the full column (critique 16 Oct 2026),
+     which retired the 96px phone size (cmp-services fix round 1): beside a 326 column it still left
+     the copy ~200 wide, a title of three or four lines and a body of six or seven. */
 
   /* A tile's icon marker: the em of the title beside it (owner, 7 Oct 2026 — the 32 that stood
      alone above the title was far too big; size it to the title, from a token). The marker is set
@@ -183,13 +185,6 @@
   --lcrd-thumbnail-radius: var(--radius-8);
   /* The thumbnail's hairline (owner, 13 Oct 2026): BlockCard's --bcrd-media-rule-width by value. */
   --lcrd-thumbnail-rule-width: var(--border-width-hairline);
-
-  /* The clipped box that keeps an external row's "opens in a new tab" hint out of the layout while
-     leaving it in the accessibility tree. Not an optical correction and not a layout distance — a
-     TECHNIQUE'S OWN GEOMETRY, the same 1px --crumb-hidden-size and SiteFooter's hidden label use,
-     duplicated by value because a component never reads another's tokens. It reaches the space
-     ramp because 1px is not a distance the gap scale has any business naming. */
-  --lcrd-hidden-size: var(--space-1);
 
   /* ── The hover ground ─────────────────────────────────────────────────────────
      Painted by a boxed linked tile only (7 Oct 2026). The row's whole-row ground, Button's
@@ -239,7 +234,7 @@
   --lcrd-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --lcrd-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
-  --lcrd-date-ink: var(--color-brandeis-500); /* 6.17:1 */
+  --lcrd-date-ink: var(--color-neutral-900); /* 14.62:1 — the title's ink, not the accent */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 6.17:1 — the accent mark (fdn-blue) */
   --lcrd-number-ink: var(--color-brandeis-500); /* 6.17:1 — numerals carry the accent */
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.92:1 */
@@ -260,7 +255,7 @@
   --lcrd-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lcrd-body-ink: var(--color-neutral-700); /* 7.27:1 */
   --lcrd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 — 600 would be 4.39:1 */
-  --lcrd-date-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --lcrd-date-ink: var(--color-neutral-900); /* 13.06:1 — the title's ink, not the accent */
   --lcrd-marker-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-number-ink: var(--color-brandeis-500); /* 5.51:1 */
   --lcrd-neutral-number-ink: var(--color-neutral-600); /* 4.39:1 */
@@ -283,7 +278,7 @@
   --lcrd-title-ink: var(--color-white); /* 17.26:1 */
   --lcrd-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --lcrd-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
-  --lcrd-date-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --lcrd-date-ink: var(--color-white); /* 17.26:1 — the title's ink, not the accent */
   --lcrd-marker-ink: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --lcrd-number-ink: var(--color-brandeis-300); /* 7.32:1 */
   --lcrd-neutral-number-ink: var(--color-neutral-500); /* 5.41:1 */
@@ -304,7 +299,7 @@
   --lcrd-title-ink: var(--color-white); /* 6.23:1 */
   --lcrd-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --lcrd-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --lcrd-date-ink: var(--color-white); /* 6.23:1 */
+  --lcrd-date-ink: var(--color-white); /* 6.23:1 — the title's ink */
   --lcrd-marker-ink: var(--color-white); /* 6.23:1 */
   --lcrd-number-ink: var(--color-brandeis-200); /* 3.78:1 — quieter than 100's, clear of 3:1 */
   --lcrd-neutral-number-ink: var(--color-brandeis-200); /* 3.78:1 — no grey reads on blue; equals accent */

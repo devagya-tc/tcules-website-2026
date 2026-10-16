@@ -13,8 +13,8 @@
    Only a boxed, linked tile paints, and only under the pointer: an affordance, not a finish.
    No surrounding edge, except on a boxed tile (`frame="box"`, owner 7 Oct 2026). A row's one
    border is its block-end rule; an open tile's, its block-start rule.
-   No margin. The parent Layout owns the list axis and uses rowGap="none". The one margin below is
-     the visually-hidden hint's clip technique, not outer spacing.
+   No margin. The parent Layout owns the list axis and uses rowGap="none". (The external row's
+     hidden hint is the VisuallyHidden primitive now, so not even a clip margin is left here.)
    No display:grid or display:flex. Layout and Cluster own both axes; flex values below size their
    children inside those primitives and do not arrange siblings by themselves.
    No responsive type or distance override, and no media query on the row. (The two in this file
@@ -267,11 +267,33 @@
 }
 
 /* An end image (`markerPosition="end"`) is supplementary: below 768 it would squeeze the copy beside
-   it to ~200px, so the row is its copy alone there (13 Oct 2026, the insights archive). */
+   it to ~200px, so the row is its copy alone there (13 Oct 2026, the insights archive).
+
+   A LEADING thumbnail, sketch or date is the row's information, so it is not dropped — it goes
+   ABOVE the copy (critique 16 Oct 2026). Beside a 326 phone column a 160 thumbnail or a 96 date
+   column left the title three or four lines and the body six or seven at ~200px. Below 768 the
+   copy takes the whole line, so the row's Cluster wraps it under its marker at the Cluster's own
+   `block` (24); the thumbnail then fills the column at its 16:9 crop, the case's picture rather than
+   a stamp, and the date stays the small key it is. A layout change at a breakpoint, not a distance
+   swapped: every gap is the one the row already states. */
 @media (max-width: 767px) {
   .markerEnd .marker {
     display: none;
   }
+
+  .markerAbove .core {
+    flex-basis: 100%;
+  }
+
+  .markerAbove .thumbnail {
+    inline-size: 100%;
+  }
+}
+
+/* The row whose closing rule its container draws instead (`rule="none"`): the last row of a list in
+   an IndexGroup, where the next group's hairline is the seam (critique 16 Oct 2026). */
+.ruleNone .frame {
+  border-block-end: none;
 }
 
 /* The title breaks only BETWEEN words. `anywhere` stood here and was the mid-word bug ("Produ/ct",
@@ -416,22 +438,6 @@
     0 0 0 calc(var(--lcrd-ring-offset) + var(--lcrd-ring-width)) var(--lcrd-ring-color);
 }
 
-/* Visually hidden, still announced: an external row's "(opens in a new tab)". Not display:none and
-   not visibility:hidden — both remove it from the accessibility tree, which is the opposite of the
-   point. The negative margin is not outer spacing: it pulls the 1px clip box out of the flow so the
-   anchor's box does not grow by a pixel nobody can see. */
-.hint {
-  position: absolute;
-  inline-size: var(--lcrd-hidden-size);
-  block-size: var(--lcrd-hidden-size);
-  margin: calc(-1 * var(--lcrd-hidden-size));
-  padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-
 /* ── Steps: the set mode (Steps.tsx) ─────────────────────────────────────────────
    No inline inset: the numeral sits on the content edge the band's head and the rules share (final
    fix round, 6 Oct 2026 — at 16 the numerals stood at 689 against a head at 673). Every row now has
@@ -569,15 +575,3 @@
   background-color: var(--lcrd-ground-pressed);
 }
 
-/* ── A row's thumbnail on a phone ─────────────────────────────────────────────────────────────
-   Below md a row's thumbnail is --lcrd-thumbnail-inline-sm, so it stays BESIDE the copy rather than
-   wrapping above it (cmp-services fix round 1). At 160 the 326 phone column left the copy 142, under
-   the core's 192 minimum, so the outer Cluster stacked the image over the title and left a 142px
-   void beside every thumbnail: a three-row router ran ~1540 tall and read as a document. At 96 the
-   copy keeps 206. The layout changes at 768; no distance does. Rows only: a tile's thumbnail always
-   sits above its copy, at the track's width for it. */
-@media (max-width: 767.98px) {
-  .root:not(.tile) .thumbnail {
-    inline-size: var(--lcrd-thumbnail-inline-sm);
-  }
-}

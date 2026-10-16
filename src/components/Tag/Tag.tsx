@@ -17,8 +17,15 @@ import styles from './Tag.module.css';
  * the two being read as one treatment at two strengths — and it is what makes it impossible to
  * mistake an inert mark for a SELECTED filter, since a held chip is a reversal to the far end of
  * the ramp and a mark is a tint at 1.12:1.
+ *
+ *   disclosure  the filter chip as the `<summary>` of a native `<details>` (critique 16 Oct 2026): a
+ *           "More filters" trigger in a row of filter chips, the chip's own box, voice, edge and
+ *           states, so the row reads as one control at one height. It opens a panel rather than
+ *           applying a query, so it takes no `href` and no held state; its glyph (a chevron the
+ *           caller passes) turns while the panel is open. The archive's filter row built its own
+ *           34px button for this before, beside 24px chips.
  */
-export type TagVariant = 'mark' | 'filter';
+export type TagVariant = 'mark' | 'filter' | 'disclosure';
 
 /* The inert half. It takes a string and nothing else — no href, because there is no taxonomy
    archive to link to (src/lib/routes.ts: "Insights — formats are index pages, not tags"), and no
@@ -73,7 +80,23 @@ type FilterTag = {
   icon?: ReactNode;
 };
 
-export type TagProps = (MarkTag | FilterTag) & {
+/* The disclosure half: a `<summary>`, so it must be the FIRST child of the caller's `<details>`.
+   No href (it opens, it does not navigate) and no held state (what is held inside it is said by the
+   chips in its panel, and by a count the caller writes into the label). */
+type DisclosureTag = {
+  variant: 'disclosure';
+  href?: never;
+  selected?: never;
+  current?: never;
+  /**
+   * The chevron, after the label: `<Icon name="alt-arrow-down" />`. A node, as on the filter,
+   * because a primitive may not import `Icon`. Presentational only. It turns half a turn while the
+   * `<details>` is open.
+   */
+  icon?: ReactNode;
+};
+
+export type TagProps = (MarkTag | FilterTag | DisclosureTag) & {
   /**
    * The label, in the capitalisation somebody authored — "Product Modernisation Assessment", never
    * PRODUCT MODERNISATION ASSESSMENT in the data. The filter's uppercase is `text-transform` in
@@ -137,6 +160,24 @@ export function Tag({
       <span className={cx(styles.tag, styles.mark)}>
         <span className={styles.label}>{children}</span>
       </span>
+    );
+  }
+
+  /* The disclosure: the filter chip's box as a native summary. The element is the button; its text
+     is its accessible name, and `<details>` announces expanded and collapsed by itself. */
+  if (variant === 'disclosure') {
+    return (
+      <summary
+        className={cx(
+          styles.tag,
+          styles.filter,
+          styles.disclosure,
+          icon !== undefined && styles.hasGlyph,
+        )}
+      >
+        <span className={styles.label}>{children}</span>
+        {icon}
+      </summary>
     );
   }
 

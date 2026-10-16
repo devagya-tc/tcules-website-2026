@@ -12,6 +12,7 @@
 
 /* An h2 at the h3 role: one step under a band's h2, so the item titles under it lead the group. */
 .heading {
+  max-inline-size: var(--igrp-heading-measure);
   color: var(--igrp-heading-ink);
   font: var(--igrp-heading-text);
   letter-spacing: var(--igrp-heading-tracking);

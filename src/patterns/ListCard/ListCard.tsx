@@ -9,6 +9,7 @@ import {
   type IconName,
   type MediaImage,
   Sketch,
+  VisuallyHidden,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import type { ArticleSceneName } from '@/lib/sketches';
@@ -206,6 +207,14 @@ export type ListCardProps = ListCardFormProps & {
    * the row), and beside a 326 phone column it squeezed the copy to ~200px.
    */
   markerPosition?: 'start' | 'end';
+  /**
+   * Whether a ROW draws its closing rule. `end` (default) closes it, so every row ends on the same
+   * line as its neighbour. `none` leaves it open, for the LAST row of a list whose container already
+   * draws the seam below it — an IndexGroup, whose next group opens on its own hairline 48 later
+   * (critique 16 Oct 2026: two rules back to back). A row cannot see its siblings, so the composing
+   * route passes it, as it passes `size`. Ignored on a tile, whose rule opens it.
+   */
+  rule?: 'end' | 'none';
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -358,6 +367,7 @@ export function ListCard({
   external = false,
   ctaLabel,
   markerPosition = 'start',
+  rule = 'end',
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -533,6 +543,12 @@ export function ListCard({
     marker !== undefined &&
     (marker.type === 'thumbnail' || marker.type === 'sketch');
   const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
+  /* A leading picture or date goes above the copy below 768 (see the module). */
+  const above =
+    !isTile &&
+    !trailing &&
+    marker !== undefined &&
+    (marker.type === 'thumbnail' || marker.type === 'sketch' || marker.type === 'date');
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
       {trailing ? null : markerNode}
@@ -561,6 +577,8 @@ export function ListCard({
         boxed && styles.boxed,
         action !== null && styles.withAction,
         trailing && styles.markerEnd,
+        above && styles.markerAbove,
+        !isTile && rule === 'none' && styles.ruleNone,
       )}
     >
       {destination ? (
@@ -576,7 +594,7 @@ export function ListCard({
           {inner}
           {/* The glyph is aria-hidden, so the new tab is said in words, at the END of the
               accessible name so the title is still what a screen reader leads with. */}
-          {leaves ? <span className={styles.hint}> (opens in a new tab)</span> : null}
+          {leaves ? <VisuallyHidden> (opens in a new tab)</VisuallyHidden> : null}
         </a>
       ) : (
         <div className={styles.frame}>{inner}</div>

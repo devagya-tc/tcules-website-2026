@@ -79,7 +79,9 @@ export type BlockCardSetProps = {
   across?: BlockCardSetAcross;
   /**
    * The peers' type step, when the caller knows better than the track width. Absent, the set
-   * decides (`peerSize`): icon cards `sm`, text cards `md`, image cards by their track.
+   * decides (`peerSize`): icon cards `sm`, text cards `md`, image cards by their track. Under
+   * `lead="beside"` it is the notes' step (default `md`); the lead is always `lg`, so `sm` there
+   * gives the lead a clear step over its notes (the insights front page, 16 Oct 2026).
    */
   size?: BlockCardSize;
   /**
@@ -335,7 +337,8 @@ export function BlockCardSet({
       /* [2, 1] from lg with the lead spanning every row (Layout lead="tall"); the companions sit a
          `column` apart down the track, as rows do everywhere in a set, and a `gutter` from the lead.
          No equalRows: it holds at every width, and on a phone it gave each short note the lead's
-         full height. Content-sized rows share whatever height the lead has over them. Below lg,
+         full height. Content-sized rows keep their own heights and the notes end where they end
+         (Layout packs them; critique 16 Oct 2026). Below lg,
          one track: lead first, then the notes. */
       <Layout as="ul" columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column" lead="tall">
         {items.map(({ id, ...card }, index) =>
@@ -359,7 +362,7 @@ export function BlockCardSet({
               linkScope={linkScope}
               titleAs={titleAs}
               index={numbered ? index + 1 : undefined}
-              size="md"
+              size={sizeOverride ?? 'md'}
             />
           ),
         )}

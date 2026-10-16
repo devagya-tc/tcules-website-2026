@@ -169,10 +169,13 @@ export const CARD_THREE_TRACKS =
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + 2 * GUTTER}px) / 3), ${FLUID_COLUMN}`;
 
 /**
- * ListCard's thumbnail: a fixed 160 box at every width — --lcrd-thumbnail-inline-md
- * (tokens/components/list-card.css). A 2× screen asks for 320, which is the ladder's smallest rung.
+ * ListCard's thumbnail: a fixed 160 box from 768 — --lcrd-thumbnail-inline-md
+ * (tokens/components/list-card.css), where a 2× screen asks for 320, the ladder's smallest rung.
+ * Below 768 a LEADING thumbnail goes above the copy at the full column (critique 16 Oct 2026), so
+ * there it asks for the column. A trailing one is not shown on a phone at all, and over-asking for an
+ * image that is never fetched costs nothing.
  */
-export const LIST_CARD_THUMBNAIL = '160px';
+export const LIST_CARD_THUMBNAIL = `(max-width: 767px) ${FLUID_COLUMN}, 160px`;
 
 /**
  * Proof's quote portrait: a fixed 64 square at every width — --proof-portrait-size

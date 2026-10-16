@@ -18,6 +18,9 @@
      generally"), so the card titles under it — what people click — stay the group's largest type. */
   --igrp-heading-text: var(--text-h3);
   --igrp-heading-tracking: var(--text-h3-tracking);
+  /* The title measure every title role takes: a heading that outgrows a rail label still wraps to
+     balanced lines instead of running the column (critique 16 Oct 2026, specimen block 05). */
+  --igrp-heading-measure: var(--measure-title);
   /* The derived count: a label, the mono eyebrow role. */
   --igrp-meta-text: var(--text-eyebrow);
   --igrp-meta-tracking: var(--text-eyebrow-tracking);

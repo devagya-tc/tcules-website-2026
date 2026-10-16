@@ -137,6 +137,15 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* `density="index"`: a listing's opening. The title steps from display to the h1 role on the title
+   measure, so a two-line title takes two lines at 54 instead of three at 67 and the catalogue
+   reaches the first screen (critique 16 Oct 2026). The role re-declares itself at 1023 and 767. */
+.titleIndex {
+  max-inline-size: var(--hero-title-measure-index);
+  font: var(--hero-title-text-index);
+  letter-spacing: var(--hero-title-tracking-index);
+}
+
 /* ── The copy · two roles, two measures ───────────────────────────────────
    The lead at 20 and the paragraphs beneath it at 16, which gives the copy an internal hierarchy
    that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs
@@ -170,6 +179,13 @@
   color: var(--hero-lead-ink);
   font: var(--hero-lead-text);
   text-wrap: var(--text-running-wrap);
+}
+
+/* `density="index"`: the lead at body-lg on the body measure — fewer, longer lines, one size down,
+   so the opening stays a short block above the list it introduces. */
+.leadIndex {
+  max-inline-size: var(--hero-lead-measure-index);
+  font: var(--hero-lead-text-index);
 }
 
 /* `leadSize="lg"`, the opt-in: the font alone moves. The measure is `ch`, so it follows the size. */

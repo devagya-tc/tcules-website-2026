@@ -266,6 +266,19 @@ export type HeroRating = {
 export type HeroLeadSize = 'md' | 'lg';
 
 /**
+ * How much of the first screen the hero takes (critique 16 Oct 2026). `standard` (default) is the
+ * offer page's opening: the title at the display role on the display measure, the lead at its own.
+ * `index` is a LISTING's opening — /insights, its format pages, /case-studies — where the catalogue
+ * is the page and belongs on the first screen (claude.com/resources): the title at the h1 role on
+ * the title measure (display type stays with the offer heroes that argue), the lead at body-lg on
+ * the body measure so it runs in fewer, longer lines, and no texture, because a decorative field
+ * beside a two-line opening is the empty right half the critique named. The band's own air is
+ * Section's, one value per width (owner, 7 Oct 2026), and does not move. A template decides it for
+ * its page type, in code, like `arrangement`.
+ */
+export type HeroDensity = 'standard' | 'index';
+
+/**
  * The line above the title holds ONE thing: a category (`eyebrow`) or a score (`rating`). Typed as a
  * union so both cannot be passed — a score beside a category is two labels competing for 12px, and
  * the score is the one that can never echo the trail.
@@ -337,6 +350,8 @@ type PageHeroBaseProps = {
   rating?: HeroRating;
   /** The lead's size; `md` by default. See `HeroLeadSize`. */
   leadSize?: HeroLeadSize;
+  /** `index` for a listing's opening; `standard` by default. See `HeroDensity`. */
+  density?: HeroDensity;
   /**
    * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
    * above the split.
@@ -602,6 +617,7 @@ export function PageHero({
   eyebrow,
   rating,
   leadSize = 'md',
+  density = 'standard',
   trail,
   credits = [],
   dates,
@@ -697,7 +713,8 @@ export function PageHero({
      2026). The stepped `foot` (under the copy beside a photograph) and `field` (the end third of a
      no-media band) were retired: a hard-edged block reads as an object competing with the copy, not
      as rhythm. A hero with media already has its image; the grid is drawn for paper only (§ 6.2). */
-  const faded = texture && surface === 'paper' && media === undefined;
+  const index = density === 'index';
+  const faded = texture && surface === 'paper' && media === undefined && !index;
   if (process.env.NODE_ENV !== 'production' && texture && !faded) {
     console.warn(
       `PageHero: texture is for a paper hero with no media (the end-fade); a hero with an image ` +
@@ -792,14 +809,22 @@ export function PageHero({
       <span>{shownEyebrow}</span>
     </Cluster>
   ) : null;
-  const titleNode = <h1 className={styles.title}>{title}</h1>;
+  const titleNode = <h1 className={cx(styles.title, index && styles.titleIndex)}>{title}</h1>;
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
   const copyNode =
     lead === undefined ? null : (
       <Layout rowGap="text">
-        <p className={cx(styles.lead, leadSize === 'lg' && styles.leadLg)}>{lead}</p>
+        <p
+          className={cx(
+            styles.lead,
+            leadSize === 'lg' && styles.leadLg,
+            index && styles.leadIndex,
+          )}
+        >
+          {lead}
+        </p>
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}

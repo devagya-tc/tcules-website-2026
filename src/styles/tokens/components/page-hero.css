@@ -185,6 +185,15 @@
 --hero-lead-measure:var(--measure-lead);
 --hero-body-measure:var(--measure-body);
 
+/* `density="index"` (critique 16 Oct 2026): a listing's opening, sized so the catalogue reaches the
+   first screen. The h1 role on the title measure, and the lead at body-lg on the body measure. The
+   band's air is Section's and is not restated. */
+--hero-title-text-index:var(--text-h1);
+--hero-title-tracking-index:var(--text-h1-tracking);
+--hero-title-measure-index:var(--measure-title);
+--hero-lead-text-index:var(--text-body-lg);
+--hero-lead-measure-index:var(--measure-body);
+
 /* ── The media part ──────────────────────────────────────────────────────────
    THE VIDEO FRAME'S, and only the video's, since 28 Sep 2026: a hero image renders
    through Media, whose edge is its kind's and whose tokens are --media-*. These four

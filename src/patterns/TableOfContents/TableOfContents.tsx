@@ -20,7 +20,17 @@ import styles from './TableOfContents.module.css';
  * is that it resolves ids living OUTSIDE its own subtree, which is the strongest possible form of
  * knowing something above itself.
  */
-export type TocItem = { label: string; href: `#${string}` };
+export type TocItem = {
+  label: string;
+  href: `#${string}`;
+  /**
+   * A short derived fact at the entry's end, in the ordinal's mono voice: the number of items an
+   * index group holds ("42"), so an index page's outline is also its count (critique 16 Oct 2026:
+   * the insights hub's outline replaced a row of format chips that carried the counts). Never
+   * authored copy and never a second label; absent on a long-form document.
+   */
+  meta?: string;
+};
 
 /**
  * One prop, and the closed props type is the point rather than an oversight.
@@ -325,6 +335,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   <span className={styles.label}>
                     <span className={styles.labelInk}>{item.label}</span>
                   </span>
+                  {item.meta?.trim() ? <span className={styles.meta}>{item.meta}</span> : null}
                 </a>
               </li>
             ))}

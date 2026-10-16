@@ -225,6 +225,19 @@
   transition: color var(--toc-transition-duration) var(--toc-transition-easing);
 }
 
+/* ── The meta ──────────────────────────────────────────────────────────────────
+   A derived count at the row's end (an index page's outline, 16 Oct 2026). The ordinal's voice and
+   ink, so the row reads ordinal · label · count with the label the only sentence-case thing in it;
+   its own colour, like the ordinal's, so the pointer never repaints it. It does not shrink: the
+   label is the item that gives way. */
+.meta {
+  flex: none;
+  font: var(--toc-ordinal-text);
+  letter-spacing: var(--toc-ordinal-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--toc-ordinal-ink);
+}
+
 /* ── The label ─────────────────────────────────────────────────────────────────
    Two elements, and the split is the same one Button makes for the same reason. `.label` is the
    underline's positioning context and takes the remaining inline space; `.labelInk` is the box
