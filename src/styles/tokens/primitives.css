@@ -171,13 +171,12 @@
   --font-size-h2: 43px;
   --font-size-h3: 34px;
   --font-size-h4: 28px;
-  --font-size-h5: 22px;
-  /* The ladder's own next step down, not a value picked by eye: 22 / 1.25 = 17.6. It exists because
-     the system could express a serif title at 22 and a sans body at 18, and nothing in between —
-     so a small card's title had to choose between the wrong size and the wrong voice. It also gives
-     <h6> a role at last; reset.css has always counted it as a heading while globals.css styled
-     five. */
-  --font-size-h6: 18px;
+  /* h5 and h6 are in the SANS (owner, 16 Oct 2026), and Public Sans' taller x-height sets a size
+     much larger than Newsreader at the same number: "public sans 22px looks as big as newsreader
+     28px". So the two sans steps are optical, not arithmetic: h5 at 18 (the size the owner liked on
+     the video tiles), h6 at 16, each about the visual weight its serif step had at 22 and 18. */
+  --font-size-h5: 18px;
+  --font-size-h6: 16px;
   /* A client's name typeset in place of its logo (LogoGrid, home round 1, 10 Oct 2026): the h5 size
      in the sans, so a typeset wordmark sits near a drawn mark's cap height (ClientMark caps at 40
      tall, a wordmark's x-height runs ~16 of it). Stated on its own, not as h5's: a logo stand-in and
@@ -246,7 +245,7 @@
   --font-size-h3-m: 25px;
   --font-size-h4-t: 25px;
   --font-size-h4-m: 22px;
-  --font-size-h5-m: 20px;
+  --font-size-h5-m: 17px;
   --font-size-wordmark-m: 18px;
   --font-size-quote-m: 22px;
   --font-size-quote-lg-t: 28px;
