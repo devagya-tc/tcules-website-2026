@@ -94,7 +94,11 @@ function itemOf(
   };
 }
 
-/** A `###` case: its paragraph, then its "**Our role:** … [Read the … case](…)" line. */
+/**
+ * A `###` case: its paragraph, then its "**Our role:** … [Read the … case](…)" line. The line gives
+ * the card its link and cta wording only: the role itself is the case page's ("At a glance"), never
+ * the card's (owner, 16 Oct 2026). A second sentence on a card made a set unequal in height.
+ */
 function featuredItem(
   page: CorpusPage,
   refs: Readonly<Record<string, CorpusCaseRef>>,
@@ -110,9 +114,6 @@ function featuredItem(
       const lifted = liftTrailingLink(inner.body);
       href = lifted.link?.href;
       ctaLabel = lifted.link ? text(lifted.link.children) : undefined;
-      bodyHtml.push(
-        `<strong>${inlineToHtml(inner.label)}</strong> ${inlineToHtml(lifted.runs)}`,
-      );
     }
   }
   return itemOf(page, refs, {
