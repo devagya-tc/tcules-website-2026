@@ -834,3 +834,17 @@ COMPLETENESS
     display scale and one lead line) rather than the form's silhouette refilled. The CTA-owned
     scheduling action remains beneath either shape, so there is exactly one next step.
 ```
+
+
+## Amendment · 16 Oct 2026 — errors on send only (owner)
+
+"Errors must not show until a person clicks submit. We don't show errors on focus change." This reverses
+the blur-only rule wherever this spec states it (§ 7 Invalid row, § 11 semantics and the screen-reader
+script, § 14 the `onBlur` Do, § 15 items 2 and 3):
+
+- **Invalid is reached by a send only.** The submit sweep flags every failing field at once, says how
+  many need a look and moves focus to the first, as before. Leaving a field never judges it.
+- **Editing a flagged field only clears its message**, the moment its value is valid (`onInput`). No
+  message is ever added while someone types or moves between fields.
+- The URL field still normalises its value on blur. That is not validation and shows nothing.
+- The screen reader hears the field's message after a send, not on leaving the field.

@@ -186,7 +186,7 @@ function normaliseUrl(value: string): string {
  *   optional  said inside the cue, in the cue's own voice: "Website (optional)".
  *   hint      a visible row above the control, only when the field has something to explain.
  *   validates the field can fail. Its message row is ALWAYS mounted and is a polite live region,
- *             so a blur error is announced as it appears; it is empty and takes no height until
+ *             so an error from a send is announced as it appears; it is empty and takes no height until
  *             there is a message, which keeps the form compact. The control points at it with
  *             aria-describedby, so a return visit to the field reads the error with its name.
  *
@@ -241,7 +241,7 @@ function FieldGroup({
   );
 }
 
-/** A field's message for its current value: empty, malformed, or none. Blur and submit share it. */
+/** A field's message for its current value: empty, malformed, or none. Submit sets it; editing only clears it. */
 function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaElement): string {
   if (control.value.trim() === '') return spec.empty;
   if (control instanceof HTMLInputElement && control.validity.typeMismatch) {
@@ -260,7 +260,7 @@ type FieldKey = keyof FieldMessages;
 /**
  * One validating field, declared once. Name, email and the free-text question used to be written
  * out per variant — the compact branch was a near-verbatim copy of contact's Name and Email blocks
- * and their blur validators — so a change to one could drift from the other. Each variant is now a
+ * and their validators — so a change to one could drift from the other. Each variant is now a
  * LIST of these, and one renderer turns every entry into the same FieldGroup + Input.
  *
  * `name` is the posted field name, which differs by variant (contact posts `clientEmail`, the
@@ -273,7 +273,7 @@ type FieldSpec = {
   type?: 'text' | 'email' | 'tel';
   as?: 'textarea';
   autoComplete?: string;
-  /** The message on an empty blur. */
+  /** The message when a send finds the field empty. */
   empty: string;
 };
 
@@ -326,8 +326,11 @@ const FIELD = {
 
 /**
  * EnquiryForm — the site's shared enquiry behavior for the three-field enquiry/audit set, the
- * five-field contact set and the three-field compact set. Validation is deliberately blur-only;
- * submission keeps uncontrolled values mounted on failure and replaces the form on success.
+ * five-field contact set and the three-field compact set. Validation runs on SUBMIT only (owner,
+ * 16 Oct 2026: "errors must not show until a person clicks submit. we don't show errors on focus
+ * change"). After a send has flagged a field, editing it only ever CLEARS its message, once the
+ * value is valid; nothing new appears while someone types or moves between fields. Submission keeps
+ * uncontrolled values mounted on failure and replaces the form on success.
  *
  * A pattern in its own right, not CtaSection's part: it fills whatever track it is placed in, down
  * to its own floor (`--enq-form-min-inline`), so it reads the same in CtaSection's form column, in
@@ -448,8 +451,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
       invalid: Boolean(messages[spec.key]),
       'aria-describedby': messageId,
     } as const;
-    const validate = (control: HTMLInputElement | HTMLTextAreaElement) =>
-      setMessage(spec.key, messageFor(spec, control));
+    /* Never ADDS a message: only a send does. Once a send has flagged this field, its message
+       clears the moment the value becomes valid. */
+    const clearIfFixed = (control: HTMLInputElement | HTMLTextAreaElement) => {
+      if (messages[spec.key] && !messageFor(spec, control)) setMessage(spec.key, '');
+    };
 
     return (
       <FieldGroup
@@ -459,12 +465,12 @@ export function EnquiryForm(props: EnquiryFormProps) {
         validation={{ id: messageId, message: messages[spec.key] }}
       >
         {spec.as === 'textarea' ? (
-          <Input {...shared} as="textarea" onBlur={(event) => validate(event.currentTarget)} />
+          <Input {...shared} as="textarea" onInput={(event) => clearIfFixed(event.currentTarget)} />
         ) : (
           <Input
             {...shared}
             type={spec.type ?? 'text'}
-            onBlur={(event) => validate(event.currentTarget)}
+            onInput={(event) => clearIfFixed(event.currentTarget)}
           />
         )}
       </FieldGroup>

@@ -99,7 +99,7 @@ export default function EnquiryFormSpecimenPage() {
           <p>
             Shared field sets for enquiries, audits, contact, and the compact three-field ask.
             No visible labels: each placeholder is its field&rsquo;s cue and the label stays,
-            visually hidden. Errors land on blur and on send, and are announced. The renderings
+            visually hidden. Errors land only on send, and are announced; editing a flagged field only clears its error. The renderings
             here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
             photograph, under a centred and a beside head, and in the offer.
           </p>
@@ -167,7 +167,7 @@ export default function EnquiryFormSpecimenPage() {
       <CtaSection
         heading="Reach each state through the real controls"
         body={[
-          'Blur an empty or malformed field, or send with one empty, for Invalid. Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
+          'Send with a field empty or malformed for Invalid (leaving a field never shows an error). Submit the three forms below for pending Success, Error, and delayed Submitting. Point at a field, hold the submit, and Tab through the form for the native hover, pressed, and focus states.',
         ]}
         form={<Enquiry outcome="pending" />}
       />
