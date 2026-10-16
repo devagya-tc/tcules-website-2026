@@ -12,6 +12,9 @@ import type { SketchName } from '@/lib/sketches';
  *   ai-product-ux          a suggestion card with the person's accept, the AI's sparkle beside it
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
+ * And the ARTICLE scenes, each drawn for one insight from its own argument, its cover until a real
+ * one exists (owner, 13 Oct 2026; @/lib/sketches `ArticleSceneName`): code-review,
+ * security-checklist, prototype-to-production.
  */
 export type { SketchName };
 
@@ -37,7 +40,6 @@ export function Sketch({ name }: SketchProps) {
       focusable="false"
       aria-hidden="true"
     >
-
       {name === 'new-product' ? (
         <>
           <rect className={styles.trailFrame} x="50" y="30" width="220" height="120" rx="8" />
@@ -68,7 +70,11 @@ export function Sketch({ name }: SketchProps) {
         <>
           <rect className={styles.frameQuiet} x="30" y="40" width="110" height="100" rx="8" />
           {[58, 70, 82, 94, 106, 118].map((y, i) => (
-            <path key={y} className={styles.copyQuiet} d={`M44,${y} L${i % 2 ? 110 : 126},${y}`} />
+            <path
+              key={y}
+              className={styles.copyQuiet}
+              d={`M44,${y} L${i % 2 ? 110 : 126},${y}`}
+            />
           ))}
           <path className={styles.line} d="M152,90 L170,90" />
           <path className={styles.line} d="M163,83 L170,90 L163,97" />
@@ -88,7 +94,15 @@ export function Sketch({ name }: SketchProps) {
             [84, 84],
             [40, 128],
           ].map(([x, y]) => (
-            <rect key={`${x}-${y}`} className={styles.tile} x={x} y={y} width="34" height="24" rx="5" />
+            <rect
+              key={`${x}-${y}`}
+              className={styles.tile}
+              x={x}
+              y={y}
+              width="34"
+              height="24"
+              rx="5"
+            />
           ))}
           <rect className={styles.solid} x="84" y="128" width="34" height="24" rx="5" />
           <path className={styles.trail} d="M124,140 L176,112" />
@@ -107,7 +121,10 @@ export function Sketch({ name }: SketchProps) {
           <rect className={styles.solid} x="92" y="104" width="64" height="20" rx="10" />
           <path className={styles.tick} d="M114,114 L120,120 L132,108" />
           <rect className={styles.frameQuiet} x="164" y="104" width="64" height="20" rx="10" />
-          <path className={styles.mark} d="M232,22 L236,34 L248,38 L236,42 L232,54 L228,42 L216,38 L228,34 Z" />
+          <path
+            className={styles.mark}
+            d="M232,22 L236,34 L248,38 L236,42 L232,54 L228,42 L216,38 L228,34 Z"
+          />
         </>
       ) : null}
 
@@ -142,6 +159,91 @@ export function Sketch({ name }: SketchProps) {
           <path className={styles.line} d="M210,132 L244,132 L244,90" />
           <circle className={styles.halo} cx="244" cy="76" r="16" />
           <circle className={styles.node} cx="244" cy="76" r="8" />
+        </>
+      ) : null}
+      {name === 'code-review' ? (
+        <>
+          {/* The generated file: a gutter, then indented lines of code. */}
+          <rect className={styles.frame} x="118" y="22" width="172" height="136" rx="8" />
+          <path className={styles.rule} d="M142,22 L142,158" />
+          {(
+            [
+              [40, 154, 232],
+              [52, 166, 258],
+              [64, 166, 220],
+              [110, 178, 246],
+              [122, 166, 236],
+              [134, 154, 210],
+              [146, 166, 250],
+            ] as const
+          ).map(([y, x1, x2]) => (
+            <path key={y} className={styles.copyQuiet} d={`M${x1},${y} L${x2},${y}`} />
+          ))}
+          {/* Ticked through: the lines a reviewer no longer reads one by one. */}
+          {[40, 52, 146].map((y) => (
+            <path key={y} className={styles.line} d={`M124,${y} L128,${y + 4} L136,${y - 4}`} />
+          ))}
+          {/* The two lines that carry the judgement, held under the lens. */}
+          <rect className={styles.region} x="160" y="76" width="112" height="28" rx="4" />
+          <path className={styles.copy} d="M172,84 L256,84" />
+          <path className={styles.copy} d="M172,96 L232,96" />
+          {/* The lens faces left, its handle out towards the copy. */}
+          <circle className={styles.rule} cx="164" cy="90" r="30" />
+          <path className={styles.line} d="M142,111 L112,141" />
+        </>
+      ) : null}
+
+      {name === 'security-checklist' ? (
+        <>
+          {/* The checklist, three checks done and the last still open. */}
+          <rect className={styles.frame} x="30" y="22" width="132" height="136" rx="8" />
+          {[44, 72, 100].map((y) => (
+            <g key={y}>
+              <rect className={styles.solid} x="46" y={y} width="16" height="16" rx="4" />
+              <path className={styles.tick} d={`M50,${y + 8} L53,${y + 11} L58,${y + 5}`} />
+              <path className={styles.copy} d={`M74,${y + 8} L${y === 72 ? 130 : 146},${y + 8}`} />
+            </g>
+          ))}
+          <rect className={styles.tile} x="46" y="128" width="16" height="16" rx="4" />
+          <path className={styles.copyQuiet} d="M74,136 L136,136" />
+          {/* The gate the checks hold shut. */}
+          <rect className={styles.frame} x="186" y="34" width="12" height="112" rx="6" />
+          <circle className={styles.halo} cx="192" cy="90" r="16" />
+          <circle className={styles.node} cx="192" cy="90" r="6" />
+          {/* Real users arriving from the right, walking left towards it. */}
+          {[226, 256, 286].map((x) => (
+            <g key={x}>
+              <circle className={styles.nodeOpen} cx={x} cy="78" r="8" />
+              <path className={styles.rule} d={`M${x - 12},${108} Q${x},${90} ${x + 12},${108}`} />
+            </g>
+          ))}
+          <path className={styles.trail} d="M298,128 L214,128" />
+          <path className={styles.line} d="M222,122 L214,128 L222,134" />
+        </>
+      ) : null}
+
+      {name === 'prototype-to-production' ? (
+        <>
+          {/* The prototype: a rough, dashed sketch of a screen. */}
+          <rect className={styles.trailFrame} x="228" y="24" width="72" height="52" rx="6" />
+          <path className={styles.copyQuiet} d="M240,40 L280,40" />
+          <path className={styles.copyQuiet} d="M240,52 L266,52" />
+          {/* The path it has to travel, through the four questions, leftwards into production. */}
+          <path
+            className={styles.line}
+            d="M264,76 L264,108 Q264,120 252,120 L160,120 Q148,120 148,108 L148,100 Q148,88 136,88 L120,88"
+          />
+          <circle className={styles.nodeOpen} cx="264" cy="96" r="6" />
+          <circle className={styles.nodeOpen} cx="222" cy="120" r="6" />
+          <circle className={styles.nodeOpen} cx="180" cy="120" r="6" />
+          <circle className={styles.nodeOpen} cx="148" cy="104" r="6" />
+          <path className={styles.line} d="M126,82 L118,88 L126,94" />
+          {/* Production: the stored, running system the answers lead to. */}
+          <path className={styles.frame} d="M44,58 L44,128 A34,9 0 0 0 112,128 L112,58" />
+          <ellipse className={styles.region} cx="78" cy="58" rx="34" ry="9" />
+          <path className={styles.rule} d="M44,82 A34,9 0 0 0 112,82" />
+          <path className={styles.rule} d="M44,106 A34,9 0 0 0 112,106" />
+          <circle className={styles.node} cx="96" cy="118" r="4" />
         </>
       ) : null}
     </svg>

@@ -115,6 +115,7 @@ export const ROUTES = {
   designKitHome: '/design/kit/home',
   designKitAbout: '/design/kit/about',
   designKitServicesIndex: '/design/kit/services-index',
+  designInsightsIndex: '/design/insights-index',
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

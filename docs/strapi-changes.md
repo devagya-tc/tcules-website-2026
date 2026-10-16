@@ -283,3 +283,34 @@ docs/content-proposals.md P40), and every card on the site crops to one ratio, 1
 serves every placement and a cover is never re-cut per band.
 
 **Found in.** Home round 3, 11 Oct 2026 (`feat/pages-pass-1`).
+
+## 20. Insights: every format, its facts, curated collections and a lead story
+
+**What.** For the insights hub (`/insights`, `docs/specs/InsightsIndex.md`):
+
+- (a) **Format as a field.** Guides, research and videos live in the blog collection today and say
+  which they are only through the slug's first segment (`guides/…`, `videos/…`), which
+  `sources/strapi/insights.ts` now reads (`blogKind`). Give each entry an explicit `format` enum
+  (article, guide, research, video) — or separate collections, as podcasts and events already are —
+  so a slug edit cannot move an entry between formats. Research has no entries yet.
+- (b) **Facts as fields.** Reading time is the title of the article's iframe block ("10 Min Read")
+  and an event's date is free text in `eventWhereAbout.descTwo` ("May 2, 2025"). Make them
+  `readingTime` (minutes, integer), `duration` (minutes, podcasts and videos) and `startsAt`
+  (datetime) with `location` (text) on events. The mapper parses today's shapes and drops what it
+  cannot read rather than guessing; the description no longer carries either.
+- (c) **Curated collections.** "Start with your problem": a repeatable component on the Resource
+  single type — title, one sentence, 2–3 related resources (relations), one related service link.
+  Mapped onto `InsightCollection`. Absent today, so the band does not render live.
+- (d) **A lead story.** A `featured` boolean (or a single relation on the Resource single type). Until
+  then the lead is the newest item with a cover.
+- (f) **The Lab link.** The Resource single type's `secondSection.link.href` is `/labs`, which is not a
+  route. The mapper rewrites it to `/future-interfaces-lab` (ROUTES.futureInterfacesLab, owner 13 Oct
+  2026); correct the CMS value so the rewrite can go.
+- (e) **Format copy.** A one-sentence `description` on each `cardDetails` entry, so a format band can
+  say what it holds. The format card images are no longer rendered.
+
+**Why.** The hub's front page, format bands and feed are designed for all seven formats and their
+facts; the view model (`InsightResource`, `InsightCollection`, `InsightFormatCard`) already carries
+them, and the specimen (`/design/insights-index`) shows each with stress content.
+
+**Found in.** Insights front page, 13 Oct 2026 (`feat/insights-front-page`).

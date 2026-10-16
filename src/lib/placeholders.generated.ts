@@ -244,6 +244,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'The responsibility map: six roles (sales representative, sales manager, product, pricing, solution and maintenance experts) contributing to one quotation, with where information changes and where a hand-off or exit sits.',
   },
+  '/insights#lab': {
+    src: '/placeholders/insights--lab.svg',
+    width: 1600,
+    height: 900,
+    kind: 'illustration',
+    shows:
+      "Lab illustration: experiments becoming product — a few experiments on the bench, the one that works carried into a product people use, the Future Interfaces Lab's argument. Drawn for an ink band (ch05 illustration rules: faces left toward the copy, the concept from the band's argument, three or more varied layers, exact anchoring, no type). Owner, 13 Oct 2026: commissioned later; a placeholder holds the slot.",
+  },
   '/services/product-design#hero': {
     src: '/placeholders/services-product-design--hero.svg',
     width: 1600,

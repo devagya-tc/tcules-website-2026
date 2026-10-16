@@ -136,6 +136,7 @@
 @import 'components/service-page.css';
 @import 'components/corpus-page.css';
 @import 'components/case-story.css';
+@import 'components/insights-index.css';
 @import 'components/studio-page.css';
 @import 'components/banner.css';
 @import 'components/statement.css';
@@ -151,6 +152,8 @@
 @import 'components/case-spread.css';
 @import 'components/engagement-options.css';
 @import 'components/trace-plates.css';
+@import 'components/index-rail.css';
+@import 'components/teaser.css';
 
 /* Newsreader is a variable optical-size face; without this it renders at the
    wrong optical grade for its size. It belongs to the type system, not a reset. */

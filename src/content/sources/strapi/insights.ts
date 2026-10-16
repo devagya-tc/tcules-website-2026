@@ -21,6 +21,21 @@ import type {
   StrapiInsightsTaxonomy,
 } from './insights-types';
 import { safeContentHref } from './rich-text';
+import { ROUTES } from '../../../lib/routes.ts';
+import { COVER_SCENES } from '../cover-scenes';
+
+/**
+ * The Lab band's link. The CMS sends `/labs`, which is not a route; the Lab lives at
+ * ROUTES.futureInterfacesLab (owner, 13 Oct 2026). Mapped here so no page renders `/labs`
+ * (docs/strapi-changes.md § 20f).
+ */
+function labLink(action: InsightAction | undefined): InsightAction | undefined {
+  if (!action) return undefined;
+  const path = action.href.split(/[?#]/)[0]?.replace(/\/+$/, '');
+  return path === '/labs' || path === '/lab'
+    ? { ...action, href: ROUTES.futureInterfacesLab, external: false }
+    : action;
+}
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const INSIGHTS_SLUG = 'insights';
@@ -169,43 +184,71 @@ function mapFormatCard(
   if (!title) return undefined;
 
   const image = mapImage(card.cardImage, `${title} resources`, graphqlUrl);
+  const kind = formatKind(title);
   return {
     id: value(card.id) || `insights-format-${index + 1}`,
     title,
     ...(image ? { image } : {}),
+    ...(kind ? { kind } : {}),
   };
 }
 
-function displayDate(candidate: string | null | undefined): string {
-  const source = value(candidate);
-  if (!source) return '';
-
-  const date = new Date(source);
-  if (Number.isNaN(date.valueOf())) return source;
-
-  return new Intl.DateTimeFormat('en', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(date);
-}
-
-function resourceDescription(resource: StrapiInsightsResource): string {
-  const description = value(resource.description);
-  const iframeDetail = value(
+/**
+ * The article's reading time. Strapi keeps it as the TITLE of the article's iframe block ("10 Min
+ * Read"); it used to be folded into the description, which put a reading time where a standfirst
+ * belongs. Only a value that says "read" is taken, so an embed's real title never becomes one.
+ */
+function readingTime(resource: StrapiInsightsResource): string | undefined {
+  const detail = value(
     resource.mainSection?.find(
       (block) => block.__typename === 'ComponentBlogAndCasestudiesIframe',
     )?.title,
   );
-  const eventDetails = (resource.eventWhereAbout ?? []).flatMap((detail) =>
-    [value(detail.descOne), value(detail.descTwo)].filter(Boolean),
-  );
-  const authoredDetails = [description, iframeDetail, ...eventDetails].filter(
-    (detail, index, details) => detail && details.indexOf(detail) === index,
-  );
+  /* Only the length: some iframe titles carry the date too ("14 Oct '26 · 17 Min Read"), and the
+     page sets the date itself, so the whole title put two dates on one line (16 Oct 2026). */
+  return detail.match(/\b\d+\s*min(ute)?s?\s+read\b/iu)?.[0]?.toLowerCase();
+}
 
-  return authoredDetails.join(' — ') || displayDate(resource.publishedAt);
+/**
+ * When and where an event happens. Strapi keeps it in `eventWhereAbout`: `descTwo` is the date as
+ * written ("May 2, 2025") and `descOne` the place. A date that does not parse is dropped rather than
+ * guessed, and the page renders the event without its date column.
+ */
+function eventDetails(resource: StrapiInsightsResource): InsightResource['event'] {
+  const detail = resource.eventWhereAbout?.[0];
+  const written = value(detail?.descTwo);
+  const time = written ? Date.parse(`${written} UTC`) : Number.NaN;
+  if (Number.isNaN(time)) return undefined;
+  const place = value(detail?.descOne);
+  return { startsAt: new Date(time).toISOString(), ...(place ? { place } : {}) };
+}
+
+/**
+ * A blog entry's format. Strapi's one blog collection carries guides, research and videos as well as
+ * articles, and says which in the slug's first segment ("guides/saas-onboarding-…", the path the site
+ * routes on). An unprefixed slug, or `articles/`, is an article.
+ */
+function blogKind(slug: string | null | undefined): InsightResourceKind {
+  const first = normaliseSlug(slug).split('/')[0];
+  if (first === 'guides') return 'guide';
+  if (first === 'research') return 'research';
+  if (first === 'videos') return 'video';
+  return 'article';
+}
+
+/** A format card's kind, read from its heading ("Podcasts" → podcast). */
+function formatKind(title: string): InsightResourceKind | undefined {
+  const word = title.trim().toLowerCase();
+  const kinds: Record<string, InsightResourceKind> = {
+    articles: 'article',
+    guides: 'guide',
+    research: 'research',
+    podcasts: 'podcast',
+    videos: 'video',
+    events: 'event',
+    interviews: 'interview',
+  };
+  return kinds[word];
 }
 
 function mapResource(
@@ -228,13 +271,18 @@ function mapResource(
     return mapped ? [mapped] : [];
   });
   const publishedAt = value(resource.publishedAt);
+  const minutes = readingTime(resource);
+  const event = kind === 'event' ? eventDetails(resource) : undefined;
 
   return {
     documentId: value(resource.documentId) || `insights-${kind}-${index + 1}`,
     kind,
     title,
     slug,
-    description: resourceDescription(resource),
+    description: value(resource.description),
+    ...(minutes ? { readingTime: minutes } : {}),
+    ...(!image && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
+    ...(event ? { event } : {}),
     ...(image ? { image } : {}),
     tags,
     categories,
@@ -295,7 +343,7 @@ function mapInsightsPage(
   const heading = displayHeading(rawPage.heading);
   if (!heading) return null;
 
-  const labAction = mapAction(rawPage.secondSection?.link);
+  const labAction = labLink(mapAction(rawPage.secondSection?.link));
   const labHeading = displayHeading(rawPage.secondSection?.heading);
   const lab =
     rawPage.secondSection && labHeading
@@ -318,7 +366,7 @@ function mapInsightsPage(
       : undefined;
   const resources = sortResources([
     ...(payload.data?.blogResources ?? []).flatMap((resource, index) => {
-      const mapped = mapResource(resource, index, 'article', graphqlUrl);
+      const mapped = mapResource(resource, index, blogKind(resource.slug), graphqlUrl);
       return mapped ? [mapped] : [];
     }),
     ...(payload.data?.eventResources ?? []).flatMap((resource, index) => {

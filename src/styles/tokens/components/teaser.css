@@ -1,0 +1,187 @@
+/* ══ Component layer — Teaser ════════════════════════════════════════════════════
+   Tier 2. One linked piece of writing, video or event, held WITHOUT AN EDGE (owner, 16 Oct 2026,
+   the insights hub): proximity binds it — tight inside the item, generous between items — and an
+   anchor at its head carries it: its own image, a date, or a strong meta line. No box, no rule
+   between items, no stand-in picture for an item that has none: that item is typographic.
+
+   Naming: --tsr-{part}-{role}-{state}, with a size suffix where the type steps with the placement
+   (--tsr-title-text-xl | -lg | -md | -sm)
+     parts: title | body | meta | label | date | index | marker | media | play | ring
+     states: hover, on the title's ink only (the cover zoom is geometry).
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The title steps with the placement; the item cannot see its track, so the caller says.
+       xl  h3 + body-lg   the one featured piece of a section or a format page
+       lg  h4 + body      a lead in a pair, a video beside its playlist
+       md  h5 + body-sm   a tile in a row of three, a headline
+       sm  h6 + body-sm   a row in a list, a playlist entry
+     Every title role re-declares itself at 1023 and 767, so no step needs a breakpoint here. */
+  --tsr-title-text-xl: var(--text-h3);
+  --tsr-title-tracking-xl: var(--text-h3-tracking);
+  --tsr-body-text-xl: var(--text-body-lg);
+  /* The featured step's measures: at a cinema's full width a title and its standfirst still read
+     as a title and a paragraph (beauty round 4). */
+  --tsr-title-measure-xl: var(--measure-title);
+  --tsr-body-measure-xl: var(--measure-lead);
+  --tsr-title-text-lg: var(--text-h4);
+  --tsr-title-tracking-lg: var(--text-h4-tracking);
+  --tsr-body-text-lg: var(--text-body);
+  --tsr-title-text-md: var(--text-h5);
+  --tsr-title-tracking-md: var(--text-h5-tracking);
+  --tsr-body-text-md: var(--text-body-sm);
+  /* The small tile's title stays at 18 (owner, 16 Oct 2026: the video tiles' 18px sans "looks good");
+     with the sans h5 now 18, sm and md share the size and differ in arrangement only. */
+  --tsr-title-text-sm: var(--text-h5);
+  --tsr-title-tracking-sm: var(--text-h5-tracking);
+  --tsr-body-text-sm: var(--text-body-sm);
+
+  /* The meta line: the label voice at its smallest step, so the title under it clearly leads
+     (beauty round, 16 Oct 2026: at the eyebrow step a stack of identical meta lines weighed nearly
+     what the 22px titles did). Its ink is the AA floor, so it lightens by size, not by colour. */
+  --tsr-meta-text: var(--text-micro);
+  --tsr-meta-tracking: var(--text-micro-tracking);
+
+  /* An indexed list's ordinal ("01"), in the row's marker column: the index role, a quiet mark. */
+  --tsr-index-text: var(--text-index);
+  --tsr-index-tracking: var(--text-index-tracking);
+  /* A row's marker column: fixed, so every row's copy starts on one edge. Component sizes — the
+     date's fits a two-digit day at the stat step and "MAR 2023" under it; the ordinal's, "01". */
+  --tsr-marker-date-inline: 5.5rem;
+  --tsr-marker-index-inline: 2.5rem;
+  /* A ledger row's meta column: wide enough for the longest topic name in the label voice
+     ("MODERNISE & REPLATFORM" wraps to two lines, never three). */
+  --tsr-marker-aside-inline: 11rem;
+  /* A row's title and standfirst measure: a line, not the column's width. */
+  --tsr-row-measure: var(--measure-lead);
+  /* Beside a larger title (md and up) the ordinal is a numeral in the stat role — a guide index's
+     anchor — and its column widens to hold "09". */
+  --tsr-index-text-lg: var(--text-stat);
+  --tsr-index-tracking-lg: var(--text-stat-tracking);
+  --tsr-marker-index-inline-lg: 4rem;
+
+  /* The date anchor (an event): the day as a numeral in the stat role, the month under it in the
+     label voice, in the surface's accent ink — the date list is the one colour beat in a listing
+     (beauty round 3, 16 Oct 2026). It steps with the row so it always outweighs the title: stat-lg
+     in a row of md and up, stat-xl heading a featured event. */
+  --tsr-date-day-text: var(--text-stat);
+  --tsr-date-day-tracking: var(--text-stat-tracking);
+  --tsr-date-day-text-lg: var(--text-stat-lg);
+  --tsr-date-day-tracking-lg: var(--text-stat-lg-tracking);
+  --tsr-date-day-text-xl: var(--text-stat-xl);
+  --tsr-date-day-tracking-xl: var(--text-stat-xl-tracking);
+  /* The date column beside a stat-lg day: "11" at 54 and "MAR 2023" under it. */
+  --tsr-marker-date-inline-lg: 7rem;
+  --tsr-date-label-text: var(--text-eyebrow);
+  --tsr-date-label-tracking: var(--text-eyebrow-tracking);
+
+  /* One image ratio for every placement (owner, 11 Oct 2026: never random ratios on cards). */
+  --tsr-media-ratio: var(--ratio-standard);
+  /* A slight radius and no stroke: the photograph's own edge is the shape. */
+  --tsr-media-radius: var(--radius-4);
+  --tsr-media-rule-width: var(--border-width-hairline);
+  --tsr-media-zoom: 1.02;
+  /* One motion for the whole hover (beauty round 4): the picture leans in and the title's ink
+     turns over the same 240, on the one decelerating curve, so the item answers as one thing. */
+  --tsr-media-zoom-duration: var(--duration-medium);
+  --tsr-media-zoom-easing: var(--easing-standard);
+  /* A row's thumbnail: a fixed track at the row's end, so every row's copy starts on one edge
+     whether or not it has an image. A component size. */
+  --tsr-thumb-inline: 9rem;
+  /* Beside an h4 or h3 title the thumbnail grows, so the picture is not a speck against the words. */
+  --tsr-thumb-inline-lg: 15rem;
+  /* On a phone, where the copy needs the width. */
+  --tsr-thumb-inline-sm: 6rem;
+  /* A tile's or a list row's title (md, sm): three lines at most, balanced, so a set's titles end
+     near one depth (beauty round 4, 16 Oct 2026). */
+  --tsr-title-lines: 3;
+  --tsr-title-wrap-tile: var(--text-title-wrap);
+  /* A row's standfirst: two lines, a taste of the piece. */
+  --tsr-row-body-lines: 2;
+  /* A small tile's standfirst (md, sm): two lines — a second, sans texture under the serif title,
+     not a paragraph (beauty round 4). */
+  --tsr-tile-body-lines: 2;
+
+  /* The play mark on a watched piece: a round chip in the image's foot-start corner. Optical
+     sizes from the ramp: the chip, its glyph, its inset from the corner. */
+  --tsr-play-size: var(--space-48);
+  --tsr-play-glyph: var(--space-20);
+  --tsr-play-inset: var(--space-16);
+  --tsr-play-radius: var(--radius-full);
+  /* On a small picture (a tile in a row, a mini in a mosaic) the mark steps down with it. */
+  --tsr-play-size-sm: var(--space-32);
+  --tsr-play-glyph-sm: var(--space-14);
+  --tsr-play-inset-sm: var(--space-12);
+
+  /* The title's hover: its ink moves to the accent, over the picture's lean. */
+  --tsr-title-ink-duration: var(--duration-medium);
+  --tsr-title-ink-easing: var(--easing-standard);
+  --tsr-ring-width: var(--focus-ring-width);
+  --tsr-ring-offset: var(--focus-ring-offset);
+  --tsr-ring-radius: var(--radius-4);
+}
+
+:root,
+[data-surface='paper'] {
+  --tsr-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --tsr-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --tsr-meta-ink: var(--color-neutral-600); /* 4.92:1 — the AA floor, do not lighten */
+  --tsr-date-ink: var(--color-brandeis-500); /* the accent: large numerals */
+  --tsr-label-ink: var(--color-neutral-900);
+  --tsr-index-ink: var(--color-neutral-600); /* 4.92:1 */
+  --tsr-title-ink-hover: var(--color-brandeis-500);
+  --tsr-media-ground: var(--color-paper-deep);
+  --tsr-media-rule-ink: var(--color-neutral-200); /* decoration: the picture's edge */
+  --tsr-play-ground: var(--color-paper);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-500);
+}
+
+/* Tint: the quiet ink steps to 700 — 600 is 4.39:1 on paper-deep. */
+[data-surface='tint'] {
+  --tsr-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --tsr-body-ink: var(--color-neutral-700); /* 7.27:1 */
+  --tsr-meta-ink: var(--color-neutral-700); /* 7.27:1 */
+  --tsr-date-ink: var(--color-brandeis-600);
+  --tsr-label-ink: var(--color-neutral-900);
+  --tsr-index-ink: var(--color-neutral-700); /* 7.27:1 */
+  --tsr-title-ink-hover: var(--color-brandeis-600);
+  --tsr-media-ground: var(--color-neutral-100);
+  --tsr-media-rule-ink: var(--color-neutral-300); /* decoration: the picture's edge */
+  --tsr-play-ground: var(--color-paper);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='ink'] {
+  --tsr-title-ink: var(--color-white);
+  --tsr-body-ink: var(--color-neutral-300);
+  --tsr-meta-ink: var(--color-neutral-400);
+  --tsr-date-ink: var(--color-brandeis-300);
+  --tsr-label-ink: var(--color-white);
+  --tsr-index-ink: var(--color-neutral-400);
+  --tsr-title-ink-hover: var(--color-brandeis-300);
+  --tsr-media-ground: var(--color-neutral-900);
+  --tsr-media-rule-ink: var(--color-neutral-700); /* decoration: the picture's edge */
+  --tsr-play-ground: var(--color-white);
+  --tsr-play-ink: var(--color-neutral-900);
+  --tsr-ring-color: var(--color-brandeis-300);
+}
+
+/* Blue: declared for self-containment; every ink lifts to white or the lightest Brandeis steps. */
+[data-surface='blue'] {
+  --tsr-title-ink: var(--color-white); /* 6.23:1 */
+  --tsr-body-ink: var(--color-brandeis-50);
+  --tsr-meta-ink: var(--color-brandeis-100);
+  --tsr-date-ink: var(--color-white);
+  --tsr-label-ink: var(--color-white);
+  --tsr-index-ink: var(--color-brandeis-100);
+  --tsr-title-ink-hover: var(--color-brandeis-100);
+  --tsr-media-ground: var(--color-brandeis-600);
+  --tsr-media-rule-ink: var(--color-brandeis-300); /* decoration: the picture's edge */
+  --tsr-play-ground: var(--color-white);
+  --tsr-play-ink: var(--color-brandeis-700);
+  --tsr-ring-color: var(--color-white);
+}
