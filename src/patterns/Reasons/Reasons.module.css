@@ -55,23 +55,44 @@
   }
 }
 
-/* ── boxed: LogoGrid's closed frame ───────────────────────────────────────────
-   Each cell rules its own block-start and inline-start edge, so neighbours never double a line at
-   any column count, and the grid clips its first hairline-width at the top and start, leaving
-   rules only BETWEEN cells. The frame then draws the whole outer edge with the photograph radius. */
+/* ── boxed: the set in one rounded frame ──────────────────────────────────────
+   The frame draws the outer edge once; inside it a cell rules only an edge it SHARES with a
+   neighbour — its block-start under another cell, its inline-start beside one — so no cell ever
+   draws a line along the frame. Stated per column count rather than drawn everywhere and clipped:
+   a 1px clip lands off the hairline's pixel under browser zoom or on a fractional column edge,
+   and the sliver left beside the frame reads as a doubled rule (owner, 16 Oct 2026).
+
+   Column counts are Reasons.tsx's: six reasons are one across, two from 1024 and three from 1440;
+   three reasons (`.three`) are one across until 1440. Layout's breakpoints: lg 1024, xl 1440. */
 .cells > .item {
   padding: var(--gap-gutter);
-  border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
-  border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
 }
 
-.cells {
-  clip-path: inset(var(--rsn-rule-width) 0 0 var(--rsn-rule-width));
+@media (max-width: 1023.98px) {
+  .cells > .item + .item {
+    border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
 }
 
-/* Inline-start is the right edge in a right-to-left page. */
-.cells:dir(rtl) {
-  clip-path: inset(var(--rsn-rule-width) var(--rsn-rule-width) 0 0);
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+  .three > .item + .item,
+  .cells:not(.three) > .item:nth-child(n + 3) {
+    border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+
+  .cells:not(.three) > .item:nth-child(even) {
+    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+}
+
+@media (min-width: 1440px) {
+  .cells > .item:nth-child(n + 4) {
+    border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+
+  .cells > .item:not(:nth-child(3n + 1)) {
+    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
 }
 
 .frame {
