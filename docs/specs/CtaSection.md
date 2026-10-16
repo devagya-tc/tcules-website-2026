@@ -1068,3 +1068,4 @@ Supersedes the overhang, the halo and the tint island above. Picked from the for
   `--cta-island-foot`, the raised-panel tokens, `--cta-panel-edge`, `TextureTwoLights`, `TextureHalo`.
 - **Fit round (same day):** the island close is 828 tall at 1440 (one laptop screen): the panel's inset
   is a `block`, and every island's block inset is a `column` (64; Island.md).
+- **Island inset 48 all round** (same day): the close is 796 tall at 1440.

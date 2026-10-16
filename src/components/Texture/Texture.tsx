@@ -220,11 +220,12 @@ export function TextureCounterweight() {
  * panel on every side, so the texture reads as the panel's own halo rather than as a region of the
  * island ("it feels harsh … right behind the form and smaller", owner, same day).
  *
- *   rect, right 56, width 51%, top 24, height 92%, radius 56, blur 40
+ *   rect, right 8, width 56%, top 8, height 97%, radius 56, blur 40
  *
- * Fitted to the island close: the panel fills the end 7 of a [5, 7] split inside the island's 96
- * inline and 64 block insets, so a field 40 larger than the panel on every side starts 56 in from
- * the island's end, 24 in from its top, and is about 51% of the island wide. The width tracks the
+ * Fitted to the island close: the panel fills the end 7 of a [5, 7] split inside the island's 48
+ * inset, so a field 40 larger than the panel on every side starts 8 in from the island's end and
+ * top, and is about 56% of the island wide. From 1024 only: below it the form stacks under the words
+ * and a field fitted to the end column would sit behind the heading. The width tracks the
  * split as it reflows. Soft, so it is drawn in --tex-ink-soft: a light blue on blue, a mid grey on
  * ink — white read harsh.
  *
@@ -233,8 +234,8 @@ export function TextureCounterweight() {
  */
 export function TextureFrame() {
   return (
-    <Texture className={styles.soft}>
-      <TextureShape right={56} width="51%" top={24} height="92%" radius={56} blur={40} />
+    <Texture className={cx(styles.soft, styles.frame)}>
+      <TextureShape right={8} width="56%" top={8} height="97%" radius={56} blur={40} />
     </Texture>
   );
 }

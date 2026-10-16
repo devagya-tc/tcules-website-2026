@@ -446,3 +446,5 @@ the five placements live with when / never, then the mechanism specimens.
 - **Frame, softened (same day, owner: "right behind the form and smaller … it feels harsh").** The field
   now reaches about 40 past the panel on every side (right 56, width 51%, top 24, height 92%, radius 56,
   blur 40), and `--tex-ink-soft` is brandeis-200 on blue and neutral-500 on ink (white read harsh).
+- **Refitted to the 48 island inset** (right 8, width 56%, top 8, height 97%), and drawn from 1024 only:
+  below it the form stacks under the words and the field would sit behind the heading.

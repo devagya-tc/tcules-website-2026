@@ -225,3 +225,6 @@ existing primitives and gap steps. No new primitive.
 - Specimen: `/design/island` — blue and ink islands with `TextureFrame`.
 - **Block inset 64 at every width** (same day, owner: the home close fits one laptop screen). The
   inline inset keeps 96 from 768.
+- **Inset 48 on every side from 768** (same day, owner: "padding 48px all around inside the island"),
+  replacing 96 and the morning's 64 block inset. Below 768: 48 block, 32 inline (48 left the island
+  close's form under its floor).

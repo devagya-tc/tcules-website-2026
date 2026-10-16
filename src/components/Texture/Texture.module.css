@@ -30,3 +30,14 @@
   position: relative;
   block-size: var(--tex-counterweight-block-size);
 }
+
+/* TextureFrame: fitted to the island close's side-by-side split, so drawn from 1024 only. */
+.frame {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .frame {
+    display: block;
+  }
+}
