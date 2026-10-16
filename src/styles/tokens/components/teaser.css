@@ -32,8 +32,10 @@
   --tsr-title-text-md: var(--text-h5);
   --tsr-title-tracking-md: var(--text-h5-tracking);
   --tsr-body-text-md: var(--text-body-sm);
-  --tsr-title-text-sm: var(--text-h6);
-  --tsr-title-tracking-sm: var(--text-h6-tracking);
+  /* The small tile's title stays at 18 (owner, 16 Oct 2026: the video tiles' 18px sans "looks good");
+     with the sans h5 now 18, sm and md share the size and differ in arrangement only. */
+  --tsr-title-text-sm: var(--text-h5);
+  --tsr-title-tracking-sm: var(--text-h5-tracking);
   --tsr-body-text-sm: var(--text-body-sm);
 
   /* The meta line: the label voice at its smallest step, so the title under it clearly leads
