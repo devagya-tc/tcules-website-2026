@@ -1,6 +1,11 @@
 import type { ReactNode } from 'react';
 
 import { Button, Cluster, Icon, Layout, Tag, type IconName } from '@/components';
+import {
+  INSIGHT_FORMAT_LABEL,
+  INSIGHT_FORMAT_ORDER,
+  type InsightFormatKind,
+} from '@/lib/insight-formats';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
@@ -22,9 +27,8 @@ import styles from './InsightsIndex.module.css';
    A template may not import @/content, so the page maps the view model onto these and the template
    never learns whether the CMS or the specimen's fixture answered. */
 
-/** The seven formats. The template decides each one's shape and position from this. */
-export type InsightsIndexKind =
-  'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview';
+/** The seven formats (the one union, in lib). The template decides each one's shape and position. */
+export type InsightsIndexKind = InsightFormatKind;
 
 export type InsightsIndexItem = {
   id: string;
@@ -132,25 +136,9 @@ export type InsightsIndexClosing = {
  * The formats in page order. The hub re-deals them (`alternate`) so a covered group and a text group
  * take turns; the format row lists them in this order too, so the family reads the same everywhere.
  */
-export const FORMAT_ORDER: readonly InsightsIndexKind[] = [
-  'article',
-  'event',
-  'podcast',
-  'research',
-  'video',
-  'interview',
-  'guide',
-];
+export const FORMAT_ORDER = INSIGHT_FORMAT_ORDER;
 
-export const LABEL: Record<InsightsIndexKind, { one: string; many: string }> = {
-  article: { one: 'Article', many: 'Articles' },
-  guide: { one: 'Guide', many: 'Guides' },
-  research: { one: 'Research', many: 'Research' },
-  podcast: { one: 'Podcast', many: 'Podcasts' },
-  video: { one: 'Video', many: 'Videos' },
-  event: { one: 'Event', many: 'Events' },
-  interview: { one: 'Interview', many: 'Interviews' },
-};
+export const LABEL = INSIGHT_FORMAT_LABEL;
 
 const DAY = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -290,10 +278,9 @@ export function isVisual(
  * never two text-heavy blocks back to back) whichever formats are present and whichever have covers.
  * Each kind keeps its place within its own run; a surplus of text groups can only go at the end.
  */
-export function alternate<T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] }>(
-  groups: readonly T[],
-  hasPool: boolean,
-): T[] {
+export function alternate<
+  T extends { kind: InsightsIndexKind; items: readonly InsightsIndexItem[] },
+>(groups: readonly T[], hasPool: boolean): T[] {
   const visual = groups.filter((group) => isVisual(group, hasPool));
   const text = groups.filter((group) => !isVisual(group, hasPool));
   const out: T[] = [];
@@ -369,7 +356,9 @@ export function LeadCard({
         titleAs={titleAs}
         title={item.title}
         body={bodyOf(item)}
-        eyebrow={podcast ? dateOf(item.publishedAt) : line(dateOf(item.publishedAt), lengthOf(item))}
+        eyebrow={
+          podcast ? dateOf(item.publishedAt) : line(dateOf(item.publishedAt), lengthOf(item))
+        }
         media={coverOf(item) ?? standIn(item)}
         href={item.href}
         {...(podcast
@@ -425,7 +414,13 @@ export function Ledger({ items }: { items: readonly InsightsIndexItem[] }) {
 }
 
 /** Podcasts — the episode: the newest as one wide card you press play on, earlier ones as rows. */
-function Episode({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
+function Episode({
+  items,
+  standIn,
+}: {
+  items: readonly InsightsIndexItem[];
+  standIn: StandIn;
+}) {
   const [latest, ...earlier] = items;
   if (!latest) return null;
   return (
@@ -517,22 +512,13 @@ function Voices({ items }: { items: readonly InsightsIndexItem[] }) {
 /** A row's thumbnail from a cover or a stand-in; a texture field has no thumbnail form. */
 function thumbOf(item: InsightsIndexItem, standIn?: StandIn): ListCardMarker | undefined {
   if (item.cover?.src.trim()) {
-    return {
-      type: 'thumbnail',
-      image: { ...item.cover, width: item.cover.width ?? 1600, height: item.cover.height ?? 900 },
-    };
+    return { type: 'thumbnail', image: item.cover };
   }
   if (item.scene) return { type: 'sketch', name: item.scene };
   if (!standIn) return undefined;
   const media = standIn(item);
   if (media.type === 'sketch') return { type: 'sketch', name: media.name };
-  if (media.type === 'image') {
-    const image = media.image;
-    return {
-      type: 'thumbnail',
-      image: { ...image, width: image.width ?? 1600, height: image.height ?? 900 },
-    };
-  }
+  if (media.type === 'image') return { type: 'thumbnail', image: media.image };
   return undefined;
 }
 
@@ -540,11 +526,20 @@ function thumbOf(item: InsightsIndexItem, standIn?: StandIn): ListCardMarker | u
  * Guides — the catalogue: rows in two columns, with thumbnails when every guide has one and as text
  * when any lacks one (a set is all-image or all-text, never one with holes).
  */
-function Catalogue({ items, standIn }: { items: readonly InsightsIndexItem[]; standIn: StandIn }) {
+function Catalogue({
+  items,
+  standIn,
+}: {
+  items: readonly InsightsIndexItem[];
+  standIn: StandIn;
+}) {
   const thumbs = items.map((item) => thumbOf(item, standIn));
   const thumbnails = thumbs.every(Boolean);
   const half = Math.ceil(items.length / 2);
-  const indexed = items.map((item, i) => ({ item, marker: thumbnails ? thumbs[i] : undefined }));
+  const indexed = items.map((item, i) => ({
+    item,
+    marker: thumbnails ? thumbs[i] : undefined,
+  }));
   const columns = items.length > 3 ? [indexed.slice(0, half), indexed.slice(half)] : [indexed];
   return (
     <Layout columns={{ base: 1, lg: columns.length }} colGap="gutter" rowGap="none">
@@ -604,6 +599,76 @@ export function Archive({
   );
   const above = archive.above ?? 0;
 
+  const topicLine =
+    archive.primary.length > 1 ? (
+      <nav aria-label="Topic" className={styles.formats}>
+        <Cluster as="ul" colGap="text" nowrap>
+          {archive.primary.map((option) => (
+            <li key={option.id}>
+              <Tag variant="filter" href={option.href} selected={option.selected}>
+                {chip(option)}
+              </Tag>
+            </li>
+          ))}
+        </Cluster>
+      </nav>
+    ) : null;
+  const moreFilters =
+    archive.filters.length > 0 ? (
+      <details className={styles.more}>
+        <summary className={styles.toggle}>
+          <Cluster as="span" colGap="tight" align="center" nowrap>
+            {/* "More" folds away on a phone so the line keeps the room; the word
+                "filters" and the count still say what it is. */}
+            <span>
+              <span className={styles.moreWord}>More </span>filters
+            </span>
+            {moreHeld > 0 ? <span className={styles.toggleCount}>{moreHeld}</span> : null}
+            <span className={styles.toggleGlyph}>
+              <Icon name="alt-arrow-down" />
+            </span>
+          </Cluster>
+        </summary>
+        <div className={styles.panel}>
+          <Layout rowGap="gutter">
+            {archive.filters.map((group) => (
+              /* A control group, not a document section: its name is a label the group points at,
+                 so the heading outline holds only content (h2 "All …" → h3 item titles). */
+              <div
+                key={group.id}
+                role="group"
+                aria-labelledby={`${archive.id}-filter-${group.id}`}
+              >
+                <Layout rowGap="text">
+                  <p id={`${archive.id}-filter-${group.id}`} className={styles.filterLabel}>
+                    {group.label}
+                  </p>
+                  <Cluster as="ul" colGap="text" rowGap="text">
+                    {group.options.map((option) => (
+                      <li key={option.id}>
+                        <Tag
+                          variant="filter"
+                          href={option.href}
+                          selected={option.selected}
+                          icon={
+                            option.selected ? (
+                              <Icon name="close-circle" label="Clear filter" />
+                            ) : undefined
+                          }
+                        >
+                          {chip(option)}
+                        </Tag>
+                      </li>
+                    ))}
+                  </Cluster>
+                </Layout>
+              </div>
+            ))}
+          </Layout>
+        </div>
+      </details>
+    ) : null;
+
   return (
     <ContentSection
       id={archive.id}
@@ -614,69 +679,19 @@ export function Archive({
     >
       <Layout rowGap="stack">
         <Layout rowGap="text">
-          {archive.primary.length > 0 || archive.filters.length > 0 ? (
+          {/* The arrangement follows what is present: the topic line and the disclosure share a row
+              ([1, auto]) only when both exist; alone, the line takes the column and the disclosure
+              sits at its end. */}
+          {topicLine && moreFilters ? (
             <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
-              {archive.primary.length > 1 ? (
-                <nav aria-label="Topic" className={styles.formats}>
-                  <Cluster as="ul" colGap="text" nowrap>
-                    {archive.primary.map((option) => (
-                      <li key={option.id}>
-                        <Tag variant="filter" href={option.href} selected={option.selected}>
-                          {chip(option)}
-                        </Tag>
-                      </li>
-                    ))}
-                  </Cluster>
-                </nav>
-              ) : (
-                <span />
-              )}
-              {archive.filters.length > 0 ? (
-                <details className={styles.more}>
-                  <summary className={styles.toggle}>
-                    <Cluster as="span" colGap="tight" align="center" nowrap>
-                      {/* "More" folds away on a phone so the line keeps the room; the word
-                          "filters" and the count still say what it is. */}
-                      <span>
-                        <span className={styles.moreWord}>More </span>filters
-                      </span>
-                      {moreHeld > 0 ? <span className={styles.toggleCount}>{moreHeld}</span> : null}
-                      <span className={styles.toggleGlyph}>
-                        <Icon name="alt-arrow-down" />
-                      </span>
-                    </Cluster>
-                  </summary>
-                  <div className={styles.panel}>
-                    <Layout rowGap="gutter">
-                      {archive.filters.map((group) => (
-                        <Layout key={group.id} rowGap="text">
-                          <h3 className={styles.filterLabel}>{group.label}</h3>
-                          <Cluster as="ul" colGap="text" rowGap="text">
-                            {group.options.map((option) => (
-                              <li key={option.id}>
-                                <Tag
-                                  variant="filter"
-                                  href={option.href}
-                                  selected={option.selected}
-                                  icon={
-                                    option.selected ? (
-                                      <Icon name="close-circle" label="Clear filter" />
-                                    ) : undefined
-                                  }
-                                >
-                                  {chip(option)}
-                                </Tag>
-                              </li>
-                            ))}
-                          </Cluster>
-                        </Layout>
-                      ))}
-                    </Layout>
-                  </div>
-                </details>
-              ) : null}
+              {topicLine}
+              {moreFilters}
             </Layout>
-          ) : null}
+          ) : moreFilters ? (
+            <Layout justifyItems="end">{moreFilters}</Layout>
+          ) : (
+            topicLine
+          )}
 
           {archive.held.length > 0 ? (
             <Cluster colGap="text" rowGap="text" align="center">

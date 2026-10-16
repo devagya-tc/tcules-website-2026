@@ -16,7 +16,7 @@ export type {
   CaseStudyIndexProps,
   CaseStudyIndexSection,
 } from './CaseStudyIndex';
-export { InsightsIndex, InsightsFormatIndex } from './InsightsIndex';
+export { InsightsIndex, InsightsFormatIndex, hasLatest } from './InsightsIndex';
 export type {
   InsightsFormatIndexProps,
   InsightsIndexArchive,

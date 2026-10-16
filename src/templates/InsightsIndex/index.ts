@@ -1,6 +1,6 @@
 export { InsightsIndex } from './InsightsIndex';
 export type { InsightsIndexProps } from './InsightsIndex';
-export { InsightsFormatIndex } from './InsightsFormatIndex';
+export { InsightsFormatIndex, hasLatest } from './InsightsFormatIndex';
 export type { InsightsFormatIndexProps } from './InsightsFormatIndex';
 export type {
   InsightsIndexArchive,

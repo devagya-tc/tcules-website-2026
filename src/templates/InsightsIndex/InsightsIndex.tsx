@@ -236,7 +236,7 @@ export function InsightsIndex({
                   }))}
                 />
               ) : null}
-              <Layout rowGap="section">
+              <Layout rowGap="column">
                 {groups.map((group) => (
                   <IndexGroup
                     key={group.kind}

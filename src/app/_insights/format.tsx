@@ -6,7 +6,7 @@ import type { CorpusPage } from '@/lib/corpus-types';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { inlineToText } from '@/lib/inline';
 import { insightFormatPath, ROUTES, type InsightFormatKind } from '@/lib/routes';
-import { InsightsFormatIndex, type InsightsFormatIndexProps } from '@/templates';
+import { InsightsFormatIndex, hasLatest, type InsightsFormatIndexProps } from '@/templates';
 
 import { closingOf } from './hub';
 import {
@@ -41,8 +41,8 @@ export const liveFormatHref: FormatHref = (kind) =>
 /**
  * The page's props: the hero from the corpus page when one exists (its title and lede verbatim — the
  * narrative is fixed), else the CMS's format card; the latest (featured, else newest) for the
- * covered kinds; the archive of every item of the format; and the hub's close. Null when the format
- * holds nothing.
+ * kinds the template leads with one (`hasLatest`); the archive of every item of the format; and the
+ * hub's close. Null when the format holds nothing.
  */
 export function formatIndexProps(
   page: InsightsPage,
@@ -66,8 +66,8 @@ export function formatIndexProps(
       : all;
 
   const name = FORMAT_NAME[kind];
-  const covered = kind === 'article' || kind === 'video' || kind === 'podcast';
-  const latest = covered
+  /* Which formats lead with a latest is the template's decision (`hasLatest`); the page only picks it. */
+  const latest = hasLatest(kind)
     ? (resources.find((item) => item.featured) ??
       resources.find((item) => item.image?.src) ??
       resources[0])
@@ -120,7 +120,14 @@ export async function FormatIndexRoute({ kind, searchParams }: RouteProps) {
     searchParams,
   ]);
   if (!page) notFound();
-  const props = formatIndexProps(page, corpus, kind, query, insightFormatPath(kind), liveFormatHref);
+  const props = formatIndexProps(
+    page,
+    corpus,
+    kind,
+    query,
+    insightFormatPath(kind),
+    liveFormatHref,
+  );
   if (!props) notFound();
   return <InsightsFormatIndex {...props} />;
 }
