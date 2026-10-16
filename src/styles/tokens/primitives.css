@@ -404,15 +404,19 @@
   --text-h4: var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4)
     var(--font-family-display);
   --text-h4-tracking: var(--letter-spacing-title-fine);
+  /* h5 and h6 are set in the SANS (owner, 16 Oct 2026: "for fonts smaller than 28px we should use
+     Public Sans"). The rule is by role, not by width: the roles always under 28 (h5 22/20, h6 18)
+     take the sans everywhere, while h1–h4 keep the serif at every width even where a breakpoint
+     steps them under 28 — a heading never changes typeface as the screen narrows. Same weight as
+     the serif titles; what makes them titles is the role, not the face. */
   --text-h5: var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5)
-    var(--font-family-display);
+    var(--font-family-sans);
   --text-h5-tracking: var(--letter-spacing-none);
-  /* Same weight and family as every title role — what makes it a title is the voice, not the size.
-     Tracking is none, as h5's is: only h4 and above are large enough for the negative correction to
+  /* Tracking is none, as h5's is: only h4 and above are large enough for the negative correction to
      be doing anything. NO BREAKPOINT STEP, and that is deliberate — h5 has an `-m` because 22 is
      too big on a phone, while 18 already sits at body scale and has nowhere to go. */
   --text-h6: var(--font-weight-medium) var(--font-size-h6)/var(--line-height-h6)
-    var(--font-family-display);
+    var(--font-family-sans);
   --text-h6-tracking: var(--letter-spacing-none);
   /* A typeset wordmark (LogoGrid): the sans at semibold, tracked tight as a logotype is. It is a mark,
      not a label, so it takes no mono case and no opened tracking. */
@@ -444,9 +448,10 @@
      BREAKPOINT STEP, deliberately, as h6 has none: it already IS the phone size, so a phone column
      and a desktop tile, being the same measure, set the same quote. Chosen by measure, never by how
      important the quote is. Italic in the composite like every quote role; no tracking companion,
-     as the 28 reading quote has none. */
+     as the 28 reading quote has none. In the SANS italic (owner, 16 Oct 2026: under 28px is Public
+     Sans); the larger quote roles keep the serif. */
   --text-quote-sm: italic var(--font-weight-regular)
-    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-display);
+    var(--font-size-quote-m)/var(--line-height-quote-m) var(--font-family-sans);
   --text-lead-lg: var(--font-weight-regular) var(--font-size-lead-lg)/var(--line-height-lead-lg)
     var(--font-family-sans);
   --text-lead: var(--font-weight-regular) var(--font-size-lead)/var(--line-height-lead)
@@ -541,7 +546,7 @@
     --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
       var(--font-family-display);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
-      var(--font-family-display);
+      var(--font-family-sans);
     --text-wordmark: var(--font-weight-semibold)
       var(--font-size-wordmark-m)/var(--line-height-wordmark) var(--font-family-sans);
     --text-quote: italic var(--font-weight-regular)
