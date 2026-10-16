@@ -1012,7 +1012,10 @@ export function CtaSection(props: CtaSectionProps) {
      proud at the top and the foot whichever column is taller, and the copy column carries the
      island's foot as its own bottom padding, so the lede sits a stack above the island's lower
      edge. Below 1024 it is an ordinary island: the drawing, the lede, then the form, stacked on the
-     island's ground with no panel (the module says why). The panel is always paper, the brightest
+     island's ground with no panel (the module says why). WITHOUT a drawing nothing rises from the
+     copy column, so it takes the same air at its head as at its foot and every glyph stays on the
+     island's ground (a heading above the island's edge was "illegal", owner, 16 Oct 2026). The
+     panel is always paper, the brightest
      ground: on a paper island (a tint band) its hairline is what separates it. */
   if (props.island && hasForm) {
     const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
@@ -1033,7 +1036,7 @@ export function CtaSection(props: CtaSectionProps) {
           ground={props.islandTexture === 'two-lights' ? <TextureTwoLights /> : undefined}
         >
           <Layout columns={{ base: 1, lg: [2, 3], xl: [5, 7] }} colGap="section" rowGap="stack">
-            <div className={styles.islandCopy}>
+            <div className={cx(styles.islandCopy, !present(props.art) && styles.islandCopyGround)}>
               <Layout rowGap="block">
                 {present(props.art) ? <div className={styles.art}>{props.art}</div> : null}
                 {lede({ scale: 'offer' })}

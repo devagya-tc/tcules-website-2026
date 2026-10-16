@@ -420,7 +420,6 @@ export function EnquiryBand({
         id={band.id}
         data-band="L"
         island="tint"
-        islandTexture="two-lights"
         bandTexture="halo"
         art={<Media image={ENQUIRY_DESK} sizes="260px" />}
         heading={band.headingText}

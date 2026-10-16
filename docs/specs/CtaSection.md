@@ -1045,3 +1045,9 @@ of a designer's desk, never cropped, facing the form, above the heading. The own
   - `island="paper"` on a tint band (option 3, swapped grounds).
   The panel is now always paper, whatever the island's surface. Specimens: § 1c, § 1d, and § 1e
   without a band texture.
+- **Picked: option 1, the halo, in light blue, and no texture on the island** (owner). The home close
+  drops `islandTexture`; the swapped-ground and no-texture specimens are removed (`island="paper"`
+  still works).
+- **No copy off the ground.** A heading above the island's edge was "illegal" (owner). Without `art`,
+  the copy column takes `--cta-island-foot` at its head as well as its foot (`.islandCopyGround`), so
+  every glyph sits on the island. With `art`, only the drawing rises.

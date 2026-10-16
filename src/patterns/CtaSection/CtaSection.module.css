@@ -315,4 +315,9 @@
   .islandCopy {
     padding-block-end: var(--cta-island-foot);
   }
+
+  /* No drawing: the head takes the foot's air, so the copy starts on the island's ground. */
+  .islandCopyGround {
+    padding-block-start: var(--cta-island-foot);
+  }
 }

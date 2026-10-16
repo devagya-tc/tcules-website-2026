@@ -53,9 +53,10 @@
    The measured value — the Figma render this was taken from is blue on paper.        */
 :root,[data-surface="paper"]{
 --tex-ink:var(--color-brandeis-500);
-/* The soft placements on paper (TextureHalo, TwoLights on a paper island) are drawn in ink, as the
-   approved study 11A was; the hard placements keep the measured blue. */
---tex-ink-soft:var(--color-neutral-900);
+/* The soft placements on paper (TextureHalo) are drawn in a LIGHT blue (owner, 16 Oct 2026: "make
+   the bg texture light blue"): 400, so at the grid's 21% peak, feathered, the halo reads as a pale
+   blue field rather than the hard placements' measured 500 (300 all but vanished). */
+--tex-ink-soft:var(--color-brandeis-400);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────

@@ -437,3 +437,6 @@ the five placements live with when / never, then the mechanism specimens.
   (left 37%, width 60%, height 760, blur 200, vertically centred). The island paints over it, so it
   shows only where the panel rises out of the island and at the island's sides. `--tex-ink-soft` on
   paper is neutral-900, because the approved study 11A drew it in ink. `--tex-ink` on paper stays blue.
+- **The halo is light blue** (owner, same day). `--tex-ink-soft` on paper is brandeis-400. At 300 the
+  feathered field all but vanished. The home island carries no texture now, so `TextureTwoLights` and
+  the tint `--tex-ink-soft` stay as provisions with no site placement.
