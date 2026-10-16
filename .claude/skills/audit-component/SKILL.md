@@ -2,16 +2,37 @@
 name: audit-component
 description: Audit one component, pattern or template against the CLAUDE.md rules and report every violation with file:line. Read-only — it reports, it does not fix.
 when_to_use: Use after building or changing a component, before committing CSS or a new tier folder, or when reviewing a component someone else wrote. Also use when asked whether something follows the token system, the tier rules or the layout-primitive rules.
-argument-hint: <Name> — e.g. Card, SiteNav (or a path under src/)
-allowed-tools: Read, Grep, Glob, Bash(npm run:*), Bash(node scripts/:*), Bash(git status:*), Bash(git diff:*), Bash(grep:*), Bash(rg:*), Bash(ls:*), Bash(sed:*), Bash(find:*)
+argument-hint: <Name> [more names] [/absolute/path/to/worktree] — e.g. Card, "BlockCard ListCard", "PageHero /Users/me/repo-wt"
+allowed-tools: Read, Grep, Glob, Bash(npm run:*), Bash(npm --prefix:*), Bash(node scripts/:*), Bash(git status:*), Bash(git diff:*), Bash(git -C:*), Bash(grep:*), Bash(rg:*), Bash(ls:*), Bash(sed:*), Bash(find:*), Bash(perl:*)
 model: inherit
 context: fork
 ---
 
 # Component acceptance audit
 
-Target: **$1**. If that is empty, audit everything changed in the working tree —
-`git status --porcelain` plus `git diff --name-only`.
+Arguments, verbatim: **$ARGUMENTS**
+
+## Resolve the root and the targets first
+
+Read the whole argument string above. Do not use only its first word: a multi-word request such as
+"BlockCard and TableOfContents" or "PageHero in the worktree /Users/…" has to be read as a sentence.
+
+1. **Root.** If the arguments contain an absolute path to a directory holding a `package.json` and a
+   `src/` (a git worktree of this repo, e.g. `/Users/devagya/tcules-kit-cmp-hero`), that directory
+   is **ROOT**. Otherwise ROOT is the current directory. Every path in this audit is under ROOT, and
+   so is every command: use `npm --prefix ROOT run <script>`, `git -C ROOT …`, and absolute paths
+   for Read, Grep and Glob. Never audit the current directory when the arguments named another root.
+2. **Targets.** Every word or phrase in the arguments that names a folder under
+   `ROOT/src/components/`, `ROOT/src/patterns/` or `ROOT/src/templates/`, or a path under
+   `ROOT/src/`, is a target. Ignore filler words like "and", "in", "the", "worktree" or "audit". Audit
+   each target and give each one its own report block.
+3. **Nothing resolved.** If the arguments are non-empty but name no target under ROOT, **stop**. Do
+   not fall back to the working tree. Report one line, `audit-component: no target resolved from
+   "<arguments>" under <ROOT>. Name a component, pattern or template.`, and end.
+4. **Empty arguments.** Only when the arguments are completely empty, audit everything changed in
+   ROOT's working tree: `git -C ROOT status --porcelain` plus `git -C ROOT diff --name-only`.
+
+In the commands below, `$1` stands for each resolved target in turn, and relative paths are under ROOT.
 
 Read `CLAUDE.md` and `src/styles/tokens/index.css` first; they are the rules being audited against.
 `src/components/Button/**` + `src/styles/tokens/components/button.css` are the reference for what a
@@ -184,7 +205,7 @@ argument, and where it is stated`.
 ## Then run the checks
 
 ```bash
-npm run verify
+npm --prefix ROOT run verify
 ```
 
 Paste real output. Note plainly which of your findings no check covers.
