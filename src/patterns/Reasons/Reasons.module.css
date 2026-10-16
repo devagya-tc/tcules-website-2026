@@ -1,0 +1,103 @@
+/* Reasons — type, ink, the drawing's box and the three ways the set is ruled.
+
+   Section paints the band; Layout owns every seam and every track. Every value is an --rsn-* token
+   (tokens/components/reasons.css) or a gap-scale step. No margins: a cell's padding is the inside of
+   its own rules, and nothing sets its own outer spacing. */
+
+.eyebrow {
+  font: var(--rsn-eyebrow-text);
+  letter-spacing: var(--rsn-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-eyebrow-ink);
+}
+
+.heading {
+  font: var(--rsn-heading-text);
+  letter-spacing: var(--rsn-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-heading-ink);
+}
+
+/* The second clause of the same sentence, stepped back. Its measure is the heading's. */
+.headingTail {
+  color: var(--rsn-heading-tail-ink);
+}
+
+.title {
+  font: var(--rsn-title-text);
+  letter-spacing: var(--rsn-title-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-title-ink);
+  max-inline-size: var(--rsn-title-measure);
+}
+
+.body {
+  font: var(--rsn-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--rsn-body-ink);
+  max-inline-size: var(--rsn-body-measure);
+}
+
+/* The drawing's box beside its words: a fixed size, the figure contained in it (Media `contain`). */
+.figure {
+  inline-size: var(--rsn-figure-width);
+  block-size: var(--rsn-figure-height);
+}
+
+/* `beside` from 768: the drawing heads its words. Its box is shorter and as wide as the drawing's
+   own ratio (the set's figures run 1.05–1.2), so it starts at the column's edge with its words
+   rather than floating in the middle of a 206 track. */
+@media (min-width: 768px) {
+  .figureAbove {
+    inline-size: auto;
+    block-size: var(--rsn-figure-height-sm);
+    aspect-ratio: var(--rsn-figure-ratio);
+  }
+}
+
+/* ── boxed: LogoGrid's closed frame ───────────────────────────────────────────
+   Each cell rules its own block-start and inline-start edge, so neighbours never double a line at
+   any column count, and the grid clips its first hairline-width at the top and start, leaving
+   rules only BETWEEN cells. The frame then draws the whole outer edge with the photograph radius. */
+.cells > .item {
+  padding: var(--gap-gutter);
+  border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+}
+
+.cells {
+  clip-path: inset(var(--rsn-rule-width) 0 0 var(--rsn-rule-width));
+}
+
+/* Inline-start is the right edge in a right-to-left page. */
+.cells:dir(rtl) {
+  clip-path: inset(var(--rsn-rule-width) var(--rsn-rule-width) 0 0);
+}
+
+.frame {
+  border: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  border-radius: var(--rsn-frame-radius);
+  overflow: hidden;
+}
+
+/* ── beside: hairline verticals between columns only ──────────────────────────
+   From 768 the set is three across. Every reason but the first in its row rules its inline-start
+   edge and opens on the `block` inset; every reason but the last closes on it. So the first column
+   starts flush with the band and the last ends flush, and the only lines are the two between.
+   Placement of this unit's own cells inside the Layout it renders, at the breakpoint where it
+   applies (LogoGrid's precedent). Layout's breakpoints: md 768. */
+@media (min-width: 768px) {
+  .ruled > .item {
+    padding-inline: var(--gap-block);
+    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+
+  .ruled > .item:nth-child(3n + 1) {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  .ruled > .item:nth-child(3n) {
+    padding-inline-end: 0;
+  }
+}
