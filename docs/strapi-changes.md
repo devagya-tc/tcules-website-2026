@@ -334,3 +334,22 @@ without one keep `publishedAt`. When the CMS carries a real `date` field, read t
 parse.
 
 **Found in.** Listings redesign, 15 Oct 2026 (`design/listings`).
+
+## 22. Insights: whole standfirsts, and a reading time only on what is read
+
+**Change.** (a) Store each insight's `description` whole — today Strapi truncates summaries at a
+character limit, so the event "Lessons from designing the UX for AI products" ends "…integration
+issues, and mor". Raise the limit, or author a standfirst that fits it. (b) Videos and podcasts carry
+a running time (`duration`, "48 min"), not the "13 Min Read" byline their iframe block copies from the
+article template.
+
+**Mapper (done, `src/content/sources/strapi/insights.ts`).** A `description` that ends without
+terminal punctuation keeps its whole sentences and drops the cut tail ("…in UX improvement."); with no
+whole sentence before the cut, a summary of 160 characters or more is dropped and the card shows its
+title alone, while a short unpunctuated line is kept as authored. A reading time is mapped only for
+articles, guides, research and interviews, so a video card no longer says "13 MIN READ"; nothing is
+turned into a duration. Each insight's one date (an event's when it happens, anything else's when
+it was published) is resolved at the seam for every source (`src/content/sources/insight-dates.ts`),
+so no page picks a date field itself.
+
+**Found in.** Listings critique, 16 Oct 2026 (`design/listings`).

@@ -7,6 +7,7 @@ import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { BORROWED_QUOTES } from './sources/fixtures/borrowed-quotes';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
+import { withInsightDates } from './sources/insight-dates';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
@@ -200,13 +201,20 @@ export const getFutureInterfacesLabPage =
 export const getGlossaryPage = glossariesSource.getGlossaryPage.bind(glossariesSource);
 export const getHowWeWorkPage =
   howWeWorkPagesSource.getHowWeWorkPage.bind(howWeWorkPagesSource);
-export const getInsightsPage = insightsPagesSource.getInsightsPage.bind(insightsPagesSource);
+/**
+ * The insights page, with every item's date resolved per format and the items in that order
+ * (`withInsightDates`): the one place that decides which date an insight has.
+ */
+export async function getInsightsPage(slug: string): Promise<InsightsPage | null> {
+  const page = await insightsPagesSource.getInsightsPage(slug);
+  return page ? withInsightDates(page) : null;
+}
 /**
  * The insights hub as DESIGNED, with stress content (sources/fixtures/insights.ts) — for the
  * InsightsIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
  */
 export async function getInsightsFixturePage(): Promise<InsightsPage> {
-  return INSIGHTS_FIXTURE;
+  return withInsightDates(INSIGHTS_FIXTURE);
 }
 export const getMatterDesignSystemPage =
   matterDesignSystemsSource.getMatterDesignSystemPage.bind(matterDesignSystemsSource);

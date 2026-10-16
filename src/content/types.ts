@@ -1339,8 +1339,18 @@ export type InsightResource = {
   tags: InsightTaxonomy[];
   categories: InsightTaxonomy[];
   filterIds: string[];
+  /** When the entry was published — the authored date where the source states one. Not for display. */
   publishedAt?: string;
-  /** "11 min read", as authored. Articles, guides, research. */
+  /**
+   * THE date of this insight, resolved once per format at the seam (`withInsightDates`, critique 16
+   * Oct 2026): when an event happens (`event.startsAt`), when anything else was published. Every
+   * list orders by `sortDate` and shows `displayDate`; no page or template picks a date field
+   * itself, which is how the hub once showed an event under its sync date while the events page
+   * showed the event's own. Both ISO 8601; absent when the source states no date at all.
+   */
+  sortDate?: string;
+  displayDate?: string;
+  /** "11 min read", as authored. Articles, guides, research. Never on a watched or attended format. */
   readingTime?: string;
   /** "48 min", as authored. Podcasts and videos. */
   duration?: string;

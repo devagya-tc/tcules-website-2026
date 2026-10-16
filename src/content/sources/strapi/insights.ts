@@ -272,6 +272,37 @@ function formatKind(title: string): InsightResourceKind | undefined {
   return kinds[word];
 }
 
+/** The formats that are READ: only these carry a reading time. */
+const READ_KINDS: ReadonlySet<InsightResourceKind> = new Set([
+  'article',
+  'guide',
+  'research',
+  'interview',
+]);
+
+/** A sentence's end: terminal punctuation, optionally inside a closing quote or bracket. */
+const SENTENCE_END = /[.!?…]['"’”)\]]*$/u;
+/** Where a summary that has been cut is long enough to have been cut at a field limit. */
+const CUT_FROM = 160;
+
+/**
+ * The standfirst as a reader may see it (critique 16 Oct 2026). Strapi's summaries were cut at a
+ * character limit upstream, so one ended mid-word: "…integration issues, and mor". A summary that
+ * ends without terminal punctuation keeps its whole sentences and drops the cut tail; with no whole
+ * sentence before the cut, a long one is dropped (the card shows its title alone) and a short one is
+ * kept, because a short unpunctuated line is how some summaries are authored ("The first ever design
+ * systems meetup in Ahmedabad where everything … was covered"), not evidence of a cut.
+ * docs/strapi-changes.md § 22.
+ */
+function standfirst(candidate: string | null | undefined): string {
+  const text = value(candidate);
+  if (!text || SENTENCE_END.test(text)) return text;
+  const ends = [...text.matchAll(/[.!?…]['"’”)\]]*(?=\s)/gu)];
+  const last = ends.at(-1);
+  if (last?.index !== undefined) return text.slice(0, last.index + last[0].length);
+  return text.length >= CUT_FROM ? '' : text;
+}
+
 function mapResource(
   resource: StrapiInsightsResource,
   index: number,
@@ -302,8 +333,11 @@ function mapResource(
     kind,
     title,
     slug,
-    description: value(resource.description),
-    ...(minutes ? { readingTime: minutes } : {}),
+    description: standfirst(resource.description),
+    /* A reading time only on a format that is read: Strapi's videos carry the same "13 Min Read"
+       byline as its articles, and a video card said "13 MIN READ" (critique 16 Oct 2026). Nothing
+       is converted into a duration — a reading time is not a running time. */
+    ...(minutes && READ_KINDS.has(kind) ? { readingTime: minutes } : {}),
     ...(!image && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
     ...(event ? { event } : {}),
     ...(image ? { image } : {}),
