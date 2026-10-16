@@ -1,3 +1,5 @@
+import { insightFormatOfPath, ROUTES } from '@/lib/routes';
+
 import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
@@ -47,6 +49,7 @@ import type {
   InsightsContentSource,
   InsightsPage,
   MatterDesignSystemContentSource,
+  Navigation,
   PodcastContentSource,
   PrivacyPolicyContentSource,
   ServiceContentSource,
@@ -96,7 +99,56 @@ const corpusPagesSource: CorpusContentSource = corpusSource;
 
 export const getPage = source.getPage.bind(source);
 export const listPages = source.listPages.bind(source);
-export const getNavigation = source.getNavigation.bind(source);
+/**
+ * The site chrome, with every insights format that has nothing published taken out of it (critique
+ * 16 Oct 2026: the nav and footer advertised /insights/podcasts, /research and /interviews on every
+ * page while those routes 404). ONE count decides which formats exist — the kinds the insights page
+ * holds — and the format row, the format routes (`notFound()` on an empty kind) and the chrome all
+ * read it, so they cannot disagree. A link the CMS fills later appears with its first item.
+ *
+ * `planned` is no answer here: it renders identically to a live link (SiteNav's types). A group left
+ * with no links goes too. If the CMS cannot answer, the chrome is returned as authored — an outage
+ * is not evidence that a format is empty.
+ */
+export async function getNavigation(): Promise<Navigation> {
+  const navigation = await source.getNavigation();
+  let present: ReadonlySet<string>;
+  try {
+    const insights = await insightsPagesSource.getInsightsPage(ROUTES.insights.slice(1));
+    if (!insights) return navigation;
+    present = new Set(insights.resources.items.map((item) => item.kind));
+  } catch {
+    return navigation;
+  }
+  const listed = (href: string) => {
+    const kind = insightFormatOfPath(href);
+    return kind === undefined || present.has(kind);
+  };
+  return {
+    nav: {
+      ...navigation.nav,
+      items: navigation.nav.items.map((item) =>
+        item.groups
+          ? {
+              ...item,
+              groups: item.groups
+                .map((group) => ({
+                  ...group,
+                  links: group.links.filter((l) => listed(l.href)),
+                }))
+                .filter((group) => group.links.length > 0),
+            }
+          : item,
+      ),
+    },
+    footer: {
+      ...navigation.footer,
+      groups: navigation.footer.groups
+        .map((group) => ({ ...group, links: group.links.filter((l) => listed(l.href)) }))
+        .filter((group) => group.links.length > 0),
+    },
+  };
+}
 export const getAboutPage = aboutPagesSource.getAboutPage.bind(aboutPagesSource);
 export const getAuditPage = auditSource.getAuditPage.bind(auditSource);
 export const getBlogPage = blogsSource.getBlogPage.bind(blogsSource);

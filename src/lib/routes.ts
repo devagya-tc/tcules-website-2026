@@ -307,6 +307,13 @@ export function insightFormatPath(kind: InsightFormatKind): string {
   return INSIGHT_FORMAT_ROUTES[kind];
 }
 
+/** The insights format a path is the listing of ("/insights/podcasts" → podcast), else undefined. */
+export function insightFormatOfPath(path: string): InsightFormatKind | undefined {
+  return (Object.keys(INSIGHT_FORMAT_ROUTES) as InsightFormatKind[]).find(
+    (kind) => INSIGHT_FORMAT_ROUTES[kind] === path,
+  );
+}
+
 /** Build one canonical podcast-detail path from the named insights family. */
 export function podcastPath(slug: string): string {
   return `${ROUTES.podcasts}/${encodeURIComponent(slug)}`;
