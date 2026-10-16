@@ -35,6 +35,9 @@
   inline-size: 100%;
   aspect-ratio: var(--tsr-media-ratio);
   overflow: hidden;
+  /* The picture's hairline (owner, 16 Oct 2026: "all cards with images are missing the hairline"):
+     the edge of the image, so a cover whose own ground is near paper still has a shape. */
+  border: var(--tsr-media-rule-width) solid var(--tsr-media-rule-ink);
   border-radius: var(--tsr-media-radius);
   background-color: var(--tsr-media-ground);
   /* Its own stacking context, so a graphic's multiply blends with this ground and nothing behind. */

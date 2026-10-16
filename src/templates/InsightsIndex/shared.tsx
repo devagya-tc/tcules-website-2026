@@ -252,10 +252,6 @@ export function Lead({ items, meta, titleAs = 'h3' }: Shape) {
   const sidePictures = rest.filter(hasPicture).slice(0, 2);
   const pictured = sidePictures.length === 2;
   const side = pictured ? sidePictures : rest.slice(0, 3);
-  /* A lead with no standfirst ends a paragraph short of its stack: the next typographic piece the
-     set was handed follows it, small, so its column ends with the stack's instead of in paper. */
-  const also =
-    pictured && !hasStandfirst(lead) ? rest.filter((item) => !side.includes(item)) : [];
   return (
     <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="stack">
       <Layout rowGap="gutter">
@@ -267,11 +263,6 @@ export function Lead({ items, meta, titleAs = 'h3' }: Shape) {
             sizes={CARD_TWO_TRACKS}
           />
         </ul>
-        {also.length > 0 ? (
-          <ul>
-            <Teaser {...teaserOf(also[0]!, meta)} size="sm" titleAs={titleAs} />
-          </ul>
-        ) : null}
       </Layout>
       {side.length > 0 ? (
         <Layout as="ul" columns={{ md: side.length, lg: 1 }} colGap="gutter" rowGap="gutter">
@@ -436,7 +427,10 @@ export function Index({ items, meta, titleAs = 'h3' }: Shape) {
   );
   if (!lead) return list;
   return (
-    <Layout columns={{ md: [1, 1] }} colGap="gutter" rowGap="stack" align="start">
+    /* A feature beside a list of balanced titles: balanced wrapping leaves the list's right edge
+       ragged and short, so the pair reads as two regions and takes the column step (owner, 16 Oct
+       2026: "for such layouts, we can have bigger gutter"). */
+    <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="stack" align="start">
       <ul>
         <Teaser {...teaserOf(lead, meta)} size="lg" titleAs={titleAs} sizes={CARD_TWO_TRACKS} />
       </ul>

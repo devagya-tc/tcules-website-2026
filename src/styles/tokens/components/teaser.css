@@ -81,6 +81,7 @@
   --tsr-media-ratio: var(--ratio-standard);
   /* A slight radius and no stroke: the photograph's own edge is the shape. */
   --tsr-media-radius: var(--radius-4);
+  --tsr-media-rule-width: var(--border-width-hairline);
   --tsr-media-zoom: 1.02;
   /* One motion for the whole hover (beauty round 4): the picture leans in and the title's ink
      turns over the same 240, on the one decelerating curve, so the item answers as one thing. */
@@ -132,6 +133,7 @@
   --tsr-index-ink: var(--color-neutral-600); /* 4.92:1 */
   --tsr-title-ink-hover: var(--color-brandeis-500);
   --tsr-media-ground: var(--color-paper-deep);
+  --tsr-media-rule-ink: var(--color-neutral-200); /* decoration: the picture's edge */
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
@@ -147,6 +149,7 @@
   --tsr-index-ink: var(--color-neutral-700); /* 7.27:1 */
   --tsr-title-ink-hover: var(--color-brandeis-600);
   --tsr-media-ground: var(--color-neutral-100);
+  --tsr-media-rule-ink: var(--color-neutral-300); /* decoration: the picture's edge */
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
@@ -161,6 +164,7 @@
   --tsr-index-ink: var(--color-neutral-400);
   --tsr-title-ink-hover: var(--color-brandeis-300);
   --tsr-media-ground: var(--color-neutral-900);
+  --tsr-media-rule-ink: var(--color-neutral-700); /* decoration: the picture's edge */
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-300);
@@ -176,6 +180,7 @@
   --tsr-index-ink: var(--color-brandeis-100);
   --tsr-title-ink-hover: var(--color-brandeis-100);
   --tsr-media-ground: var(--color-brandeis-600);
+  --tsr-media-rule-ink: var(--color-brandeis-300); /* decoration: the picture's edge */
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-brandeis-700);
   --tsr-ring-color: var(--color-white);
