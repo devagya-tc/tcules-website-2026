@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import { cx } from '@/lib/cx';
 
 import styles from './Sketch.module.css';
@@ -27,7 +29,8 @@ export type SketchProps = {
    * `bare`: the drawing alone, cropped to its own drawn edge and set at its own size in drawing
    * units, for a parent that supplies the ground and the scale (Bento, owner 19 Oct 2026). Cropped
    * so its left edge is the drawing's, not the plate's margin: a bare scene set on a title's edge
-   * starts exactly there.
+   * starts exactly there. Its size is its width in drawing units times `--skt-scale` (default 1),
+   * which the parent sets on an ancestor to scale it, per breakpoint if it needs to.
    */
   frame?: 'plate' | 'bare';
   /** `kit` (default) or `light`, the thinner strokes (owner, 19 Oct 2026, home What we do). */
@@ -68,6 +71,8 @@ export function Sketch({ name, frame = 'plate', weight = 'kit' }: SketchProps) {
       viewBox={`${x} ${y} ${w} ${h}`}
       width={bare ? w : undefined}
       height={bare ? h : undefined}
+      /* The bare drawing's width in drawing units, for its own stylesheet to scale (--skt-scale). */
+      style={bare ? ({ '--skt-units': w } as CSSProperties) : undefined}
       focusable="false"
       aria-hidden="true"
     >
