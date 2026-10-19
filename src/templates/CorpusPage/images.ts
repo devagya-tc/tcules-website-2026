@@ -16,7 +16,9 @@ import {
  *   3. a studio photograph the corpus binds elsewhere, only where the page's plan names the reuse;
  *   4. a labelled placeholder with a row in docs/image-register.md.
  *
- * No generation, and no kit catalogue photograph: nothing in the corpus points at one.
+ * No generation, and no kit catalogue photograph: nothing in the corpus points at one. The one
+ * exception is the home page's sector cards, which the owner gave stock photographs by name
+ * (`HOME_SECTOR_PHOTOS`, 19 Oct 2026); that band reads them itself.
  */
 
 export type SlotImage = CorpusImage | PlaceholderImage;
