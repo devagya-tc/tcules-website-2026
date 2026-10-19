@@ -80,8 +80,8 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-quote-lg` | 34px | 1.3 | display | regular | `--text-quote-lg-tracking` | verbatim |
 | `--text-quote-xl` | 43px | 1.25 | display | regular | `--text-quote-xl-tracking` | verbatim |
 | `--text-quote-sm` | 22px | 1.4 | sans | regular | **none** | verbatim |
-| `--text-lead-lg` | 20px | 1.5 | sans | regular | **none** | verbatim |
-| `--text-lead` | 18px | 1.55 | sans | regular | **none** | verbatim |
+| `--text-lead-lg` | 18px | 1.5 | sans | regular | **none** | verbatim |
+| `--text-lead` | 16px | 1.55 | sans | regular | **none** | verbatim |
 | `--text-body-lg` | 16px | 1.6 | sans | regular | **none** | verbatim |
 | `--text-body` | 16px | 1.6 | sans | regular | **none** | verbatim |
 | `--text-body-sm` | 14px | 1.55 | sans | regular | **none** | verbatim |

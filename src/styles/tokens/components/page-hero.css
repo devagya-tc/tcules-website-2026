@@ -122,20 +122,14 @@
 /* The one-word title (`titleSize="mark"`): the mark role, twice display (136 · 104 · 64). */
 --hero-title-text-mark:var(--text-mark);
 --hero-title-tracking-mark:var(--text-mark-tracking);
-/* The lead, two sizes (r7-hero, owner 7 Oct 2026: the 20px lead was too large). The default is
-   --text-lead, 18, two px over the 16 paragraphs below it, which is enough for the lead to read as
-   the lead because it is also the shorter line (--hero-lead-measure). `-lg` is the opt-in for a
-   page written for search (`leadSize="lg"`): --text-lead-lg, 20, falling to 18 on a phone through
-   the role's own re-declaration, so at 390 the two sizes meet. The 9 Oct ruling that moved section
-   copy down a step (lead 20 → 18, body-lg 18 → 16) left the hero at 18 / 20 by re-pointing these
-   two, not by changing them. */
---hero-lead-text:var(--text-lead);
---hero-lead-text-lg:var(--text-lead-lg);
+/* The lead: --text-lead-lg, 18, two px over the 16 paragraphs below it, which is enough for the
+   lead to read as the lead because it is also the shorter line (--hero-lead-measure). The hero is
+   the only band whose lead takes 18 (owner, 19 Oct 2026); every other lead is 16. The 20px opt-in
+   (`leadSize="lg"`) was removed the same day. */
+--hero-lead-text:var(--text-lead-lg);
 /* 16, and the same role the page's Prose body takes. It was --text-body-lg at 18,
    chosen so hero copy stayed a step above body scale; the copy now MEETS body scale
-   instead, and the hierarchy inside the hero is carried by the lead alone — 20 against
-   16 is a wider step than 20 against 18, so the lead reads as a lead more clearly than
-   it did, and the paragraphs beneath it read as the body copy they are. */
+   instead, and the hierarchy inside the hero is carried by the lead alone, 18 against 16. */
 --hero-body-text:var(--text-body);
 --hero-key-text:var(--text-micro);
 --hero-key-tracking:var(--text-micro-tracking);

@@ -70,7 +70,7 @@
   --bcrd-body-text-lg: var(--text-body-lg);
   --bcrd-title-text-md: var(--text-h4);
   --bcrd-title-tracking-md: var(--text-h4-tracking);
-  --bcrd-body-text-md: var(--text-body);
+  --bcrd-body-text-md: var(--text-body-sm);
   --bcrd-title-text-sm: var(--text-h5);
   --bcrd-title-tracking-sm: var(--text-h5-tracking);
   --bcrd-body-text-sm: var(--text-body-sm);

@@ -28,7 +28,7 @@
   --csp-claim-rule-width: var(--border-width-2);
   --csp-story-title-text: var(--text-h5);
   --csp-story-title-tracking: var(--text-h5-tracking);
-  --csp-story-body-text: var(--text-body);
+  --csp-story-body-text: var(--text-body-sm);
   --csp-story-body-measure: var(--measure-lead);
   --csp-rule-width: var(--border-width-hairline);
   --csp-media-ratio: var(--ratio-standard);

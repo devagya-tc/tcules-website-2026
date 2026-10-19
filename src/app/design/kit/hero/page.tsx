@@ -437,30 +437,6 @@ function variations(rating: HeroRating): Variation[] {
         arrangement: 'centred',
       },
     },
-    {
-      id: 'lead-lg',
-      group: 'rating',
-      short: 'Larger lead, opt-in',
-      name: 'The larger lead, opted into by a page written for search',
-      note: 'Compare with 10: the same page, the same words, with leadSize="lg". Every hero above takes the default lead, 18 over 16 paragraphs. A template opts a family into 20 when its lead has to carry the query in its first line, as an expertise or glossary page does; on a phone the two sizes meet at 18.',
-      facts: ['Ends at 590', 'leadSize="lg"', 'Opt-in, never the default'],
-      hero: {
-        trail: heroTrail(
-          [
-            { label: 'Home', href: ROUTES.home },
-            { label: 'Expertise', href: ROUTES.expertise },
-          ],
-          'Products we know from the inside',
-          (trail) => <Breadcrumbs {...trail} />,
-        ),
-        title: 'Products we know from the inside',
-        body: [
-          'Workflow software, AI and developer tools, data products, marketplaces and fintech: the kinds of product where the model of the work decides the interface.',
-        ],
-        leadSize: 'lg',
-        actions: [{ label: 'Book an intro call', href: ROUTES.contact }],
-      },
-    },
   ];
 }
 

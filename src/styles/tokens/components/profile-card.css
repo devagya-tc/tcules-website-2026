@@ -20,7 +20,7 @@
   --pfc-name-tracking: var(--text-h4-tracking);
   --pfc-role-text: var(--text-micro);
   --pfc-role-tracking: var(--text-micro-tracking);
-  --pfc-bio-text: var(--text-body);
+  --pfc-bio-text: var(--text-body-sm);
   --pfc-follow-text: var(--text-lead);
   --pfc-rule-width: var(--border-width-hairline);
 }

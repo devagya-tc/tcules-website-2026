@@ -42,7 +42,7 @@
      body role. */
   --trp-title-text-down: var(--text-h4);
   --trp-title-tracking-down: var(--text-h4-tracking);
-  --trp-body-text-down: var(--text-body);
+  --trp-body-text-down: var(--text-body-sm);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

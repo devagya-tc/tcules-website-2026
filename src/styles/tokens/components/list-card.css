@@ -80,7 +80,7 @@
      larger title. The two now step together, by the same rule, so the inversion cannot return. */
   --lcrd-title-text-md: var(--text-h4);
   --lcrd-title-tracking-md: var(--text-h4-tracking);
-  --lcrd-body-text-md: var(--text-body);
+  --lcrd-body-text-md: var(--text-body-sm);
   --lcrd-title-text-sm: var(--text-h5);
   --lcrd-title-tracking-sm: var(--text-h5-tracking);
   --lcrd-body-text-sm: var(--text-body-sm);

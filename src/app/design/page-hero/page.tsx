@@ -715,10 +715,10 @@ export default async function PageHeroSpecimenPage() {
             title={`3 · ${count} paragraph${count === 1 ? '' : 's'}`}
             note={
               count === 1
-                ? '34 routes. One paragraph renders as a single lead <p> (--text-body-lg, 18, by default; block 23) and copy shows no seam at all.'
+                ? '34 routes. One paragraph renders as a single lead <p> (--text-lead-lg, 18; block 23) and copy shows no seam at all.'
                 : count === 12
                   ? '2× the corpus maximum, and there is no route like it. No cap, no truncation, no warning: the lead role still applies to the first paragraph only, so this renders as a lead and eleven body paragraphs and looks exactly like what it is — a page whose opening should have been a section. That is a review comment on a route, not a behaviour here.'
-                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-body-lg (18, the default since r7-hero; leadSize="lg" opts into --text-lead, 20, block 23) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (a ch measure, so it follows the lead’s size) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
+                  : `Corpus counts: 1 → 34, 2 → 58, 3 → 10, 4 → 25, 5 → 1, 6 → 1. The lead stays at --text-lead-lg (18, block 23) and everything under it at --text-body (16); the measure does NOT narrow as the copy grows, because a hero that tightened its measure at six paragraphs would turn its longest pages into ribbons. Note the lead's line length against the paragraphs below it: the lead takes --measure-lead (a ch measure, so it follows the lead’s size) and the paragraphs --measure-body (68ch, 666px at 16), so the lead is a short, large block and the body a long, small one — two shapes rather than one ragged column. Before 28 Sep both took 68ch and the lead ran 832px.`
             }
           />
         </div>
@@ -1429,20 +1429,14 @@ export default async function PageHeroSpecimenPage() {
           ))
         : null}
 
-      {/* ── 23 · The lead, two sizes ─────────────────────────────────────────────── */}
-      {(['md', 'lg'] as const).map((size) => (
-        <div key={size}>
-          <PageHero title={TITLE} body={paragraphs(3)} leadSize={size} />
-          <Note
-            title={`23 · leadSize="${size}"${size === 'md' ? ' (default)' : ' (opt-in)'}`}
-            note={
-              size === 'md'
-                ? 'The default since 7 Oct 2026 (owner: the lead was too large). --text-body-lg, 18, over --text-body paragraphs at 16: the lead is still the larger, shorter line, so it reads as the lead without shouting over the title.'
-                : 'The opt-in, for a page written for search whose lead must carry the query: --text-lead, 20, re-declared to 18 at 767 by the role itself, so on a phone it meets md. A template chooses it per family, in code; it is never content.'
-            }
-          />
-        </div>
-      ))}
+      {/* ── 23 · The lead ─────────────────────────────────────────────────────── */}
+      <div>
+        <PageHero title={TITLE} body={paragraphs(3)} />
+        <Note
+          title="23 · The lead"
+          note="One size since 19 Oct 2026 (owner: no body text above 16, and the hero lead is the one place 18 is allowed). --text-lead-lg, 18, over --text-body paragraphs at 16: the lead is the larger, shorter line, so it reads as the lead without shouting over the title. The 20px opt-in (leadSize) was removed."
+        />
+      </div>
 
       {/* ── 24 · What this page cannot show ─────────────────────────────────────── */}
       <Section>

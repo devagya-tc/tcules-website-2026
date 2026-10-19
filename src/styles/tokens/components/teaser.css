@@ -28,7 +28,7 @@
   --tsr-body-measure-xl: var(--measure-lead);
   --tsr-title-text-lg: var(--text-h4);
   --tsr-title-tracking-lg: var(--text-h4-tracking);
-  --tsr-body-text-lg: var(--text-body);
+  --tsr-body-text-lg: var(--text-body-sm);
   --tsr-title-text-md: var(--text-h5);
   --tsr-title-tracking-md: var(--text-h5-tracking);
   --tsr-body-text-md: var(--text-body-sm);

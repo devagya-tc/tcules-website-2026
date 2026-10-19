@@ -1071,3 +1071,10 @@ field (end −120, 30% wide, blur 160, full band height) from 1024. A hero with 
 illustration or a video carries no texture; `texture` there is ignored with a development warning.
 The texture row in the props table above and the fix-round rows that describe `foot` / `field` are
 superseded by this amendment. `/design/texture` shows the stepped block under "Never".
+
+### Amendment · 19 Oct 2026 — one lead size, 18
+
+Owner: no body text above 16 anywhere; only the hero lead (and a testimonial's quote) may take 18.
+`leadSize` and `--hero-lead-text-lg` are removed; `--hero-lead-text` reads `--text-lead-lg`, now
+18 / 1.5 at every width (its 767 step is gone). `--text-lead`, the section lead every other band
+takes, is 16. The amendments above that mention `leadSize="lg"` and a 20px lead are history.

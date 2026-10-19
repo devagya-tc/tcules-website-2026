@@ -25,7 +25,7 @@
   --eng-lead-measure: var(--measure-lead);
   --eng-title-text: var(--text-h4);
   --eng-title-tracking: var(--text-h4-tracking);
-  --eng-body-text: var(--text-body);
+  --eng-body-text: var(--text-body-sm);
   --eng-body-measure: var(--measure-lead);
   /* The axis ends' labels: the mono micro voice, a key on a chart rather than a sentence. */
   --eng-axis-text: var(--text-micro);

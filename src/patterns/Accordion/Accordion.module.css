@@ -224,7 +224,7 @@
      two, so the answer attaches to its question rather than to the next one. */
   padding-block: 0 var(--gap-block);
   overflow-wrap: anywhere;
-  font: var(--text-body);
+  font: var(--text-body-sm);
   text-wrap: var(--text-running-wrap);
 }
 
