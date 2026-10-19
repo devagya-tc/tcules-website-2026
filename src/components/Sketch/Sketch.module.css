@@ -17,6 +17,22 @@
   background-size: 6.25% 11.111%;
 }
 
+/* The bare frame: the drawing alone at its own size (its width and height attributes, in drawing
+   units), never wider than its box. No plate, so no ground, no field and no radius. */
+.bare {
+  inline-size: auto;
+  max-inline-size: 100%;
+  border-radius: 0;
+  background: none;
+}
+
+/* The light weight: the same drawing in thinner strokes. */
+.light {
+  --skt-frame-width: var(--skt-frame-width-light);
+  --skt-copy-width: var(--skt-copy-width-light);
+  --skt-line-width: var(--skt-line-width-light);
+}
+
 .frame {
   fill: var(--skt-frame-fill);
   stroke: var(--skt-frame-ink);

@@ -278,7 +278,7 @@ Product Design is at the heart of every project. The services below apply it to 
 
 **[Design Engineering](/services/design-engineering).** Design built and checked in real code.
 
-**[Software Development](/services/software-development).** Our engineers turn the design into working software, with the designers beside them, for a first release or a product you already run. For GT Tools, we redesigned and built the Shopify store their buyers use to find and compare equipment.
+**[Software Development](/services/software-development).** Our engineers turn the design into working software, with the designers beside them.
 
 ## Why teams choose Tcules {#why-tcules}
 

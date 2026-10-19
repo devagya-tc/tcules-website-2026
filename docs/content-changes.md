@@ -754,3 +754,17 @@ shipping; the content team should confirm or replace them. They live in
 
 The page's own after-line ("We'll reply within one business day.") is not shown by the card dress;
 the success view still uses the page's `on_success` words.
+
+## Home "What we do": Software Development's line cut to its opening (19 Oct 2026, owner)
+
+The band is a Bento (six tiles, one or two lines each). The owner asked for Software Development's
+entry to read in one or two lines like the other five, so `_pages/home.md` now carries its opening
+clause only. Cut, not reworded. The content team should confirm it or write a new line of the same
+length.
+
+| | Copy |
+|---|---|
+| Was | Our engineers turn the design into working software, with the designers beside them, for a first release or a product you already run. For GT Tools, we redesigned and built the Shopify store their buyers use to find and compare equipment. |
+| Now | Our engineers turn the design into working software, with the designers beside them. |
+
+The GT Tools example leaves this band. Selected work carries the case proof on home.
