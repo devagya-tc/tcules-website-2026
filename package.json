@@ -22,14 +22,15 @@
     "design:check": "node scripts/design-brief.mjs --check",
     "vocabulary": "node scripts/design-brief.mjs --vocabulary > docs/vocabulary.md",
     "guide:dist": "node scripts/guide-dist.mjs",
-    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check && npm run corpus:check && npm run corpus:assets -- --check && npm run placeholders -- --check",
+    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check && npm run corpus:check && npm run corpus:assets -- --check && npm run placeholders -- --check && npm run decisions -- --check",
     "format": "prettier --write .",
     "texture": "node scripts/texture.mjs",
     "photos:tone": "node scripts/photos-tone.mjs",
     "photos:derive": "node scripts/photos-derive.mjs",
     "photos:check": "node scripts/photos-tone.mjs --check && node scripts/photos-derive.mjs --check",
     "illustrations:phone": "node scripts/illustrations-phone.mjs",
-    "illustrations": "node scripts/illustrations/build.mjs"
+    "illustrations": "node scripts/illustrations/build.mjs",
+    "decisions": "node scripts/decisions.mjs"
   },
   "engines": {
     "node": ">=20.11.1"
