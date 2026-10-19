@@ -18,7 +18,11 @@
                          drawing units (a 204-unit scene is 143 wide at .7).
    --bnt-art-scale-wide  the same in a two-track tile, where the drawing has half the tile (1.3).
    --bnt-art-scale-m     the phone step: one tile across, the drawing at its foot.
-   --bnt-tex-strength    how strongly the pixel grid shows: a share of the grid's measured alphas.  */
+   --bnt-tex-strength    how strongly the pixel grid shows on hover: a share of the grid's measured
+                         alphas.
+   --bnt-tex-strength-rest
+                         the same at rest: 30% lighter than hover, so the texture deepens as the
+                         tile lifts (owner, 19 Oct 2026).                                          */
 :root {
   --bnt-radius: var(--radius-16);
   --bnt-rule-width: var(--border-width-hairline);
@@ -32,6 +36,7 @@
   --bnt-art-scale-wide: 1.3;
   --bnt-art-scale-m: 0.75;
   --bnt-tex-strength: 0.8;
+  --bnt-tex-strength-rest: 0.56;
   /* An optical lift, not a distance between two things: the ramp's 2, so the tile rises off the
      band by a hair rather than travelling. */
   --bnt-lift: var(--space-2);

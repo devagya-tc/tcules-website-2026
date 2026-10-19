@@ -12,7 +12,7 @@ export type ReasonsItem = {
   /** One sentence that argues it, about fourteen words. Plain text. */
   body: string;
   /**
-   * The drawing of the claim: an isometric figure from the ch05 §4a kit, facing left toward its
+   * The drawing of the claim: an isometric figure from the ch05 §4a kit, facing left, set before its
    * words, exported on the band's ground (`.paper.svg` on paper, `.paper-deep.svg` on tint). It
    * illustrates the sentence and carries no data, so it is decorative: `alt` is empty, because the
    * title and body beside it already say everything it shows.
@@ -27,7 +27,7 @@ export type ReasonsItem = {
  *   open    no rules at all: the gap scale alone draws the grid, `column` (64) between columns and
  *           rows — the row seam of a borderless set, and between columns because each reason is a
  *           peer that must read as separate: at `gutter` one reason's drawing ran into the next
- *           one's words. Each drawing sits beside its words, facing them.
+ *           one's words. Each drawing sits before its words, on their left.
  *           The head reads across the top with the action at its end. (Mock S1.)
  *   boxed   LogoGrid's closed frame: the cells are ruled between, the whole set sits in one rounded
  *           box, and each cell holds its words and drawing at the gutter inset. The frame makes six
@@ -77,10 +77,10 @@ const FIGURE_SIZES = '160px';
  * own. `open` uses no line, `beside` divides columns, and `boxed` frames the SET (LogoGrid's
  * device), never a reason.
  *
- * Each item is one Layout: the drawing first in the DOM (it is decorative and hidden, so source
- * order is the words' order), placed visually after its words wherever the two share a row —
- * `reverse` mirrors the `['auto', 1]` tracks, so the drawing's auto track sits at the end. In
- * `beside` from 768 the item is one track and the drawing heads its words.
+ * Each item is one Layout: the drawing first (it is decorative and hidden, so source order is the
+ * words' order) in the `['auto', 1]` tracks' auto track, so wherever the two share a row the
+ * drawing leads and its words follow on the right (owner, 19 Oct 2026). In `beside` from 768 the
+ * item is one track and the drawing heads its words.
  */
 export function Reasons({
   id,
@@ -135,7 +135,6 @@ export function Reasons({
         <li key={`${index}-${item.title}`} className={styles.item}>
           <Layout
             columns={above ? { base: ['auto', 1], md: 1 } : { base: ['auto', 1] }}
-            reverse={above ? { base: true, md: false } : { base: true }}
             colGap="block"
             rowGap="block"
             align="center"
