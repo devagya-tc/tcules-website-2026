@@ -165,7 +165,7 @@ Once it's built, [Implementation QA](/services/design-engineering/implementation
 **Buildable spec: Doodle.** Doodle's own engineers were set to build the scheduling engine and calendar integrations. We worked out how meeting priority and tentative availability should shape a booking and designed the screens around it, so the MVP had a clear specification before that work began. [Read the case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
 > “Collaborative approach led to a clear, well-defined MVP.”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 **Working example: Benchmark Gensuite.** Benchmark's engineers clicked through coded prototypes of the new shared patterns and scope selector, so they could see the behaviour they were being asked to build. [Read the case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 

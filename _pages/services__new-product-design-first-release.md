@@ -169,7 +169,7 @@ We use AI throughout [our own design work](/how-we-work/ai-native-product-design
 **Doodle.** Research showed a free calendar slot was not enough, so we designed the scheduling MVP around meeting type, priority and "maybe" availability as well. [Read the case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback. Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 **Auxentios.** One industrial quoting product for six specialist roles, shaped by eight user interviews. [Read the case](/case-studies/auxentios-cpq-product-mvp-design)
 

@@ -237,7 +237,7 @@ We work in code as well as in Figma, so we can check the product your customers 
 Our research showed that meeting type, priority and "maybe" availability affect whether a time will hold, so we designed the MVP to show how dependable each option is.
 
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback. Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
@@ -330,7 +330,7 @@ What it's like to work with us, from the people who did.
 
 <!-- awaiting client sign-off -->
 > “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 <!-- awaiting client sign-off -->
 > “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  

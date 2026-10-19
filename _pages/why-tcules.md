@@ -149,7 +149,7 @@ Ringier Media Switzerland · JoVE · Doodle · Eden AI · Dealpath · Benchmark 
 Good product design starts below the screens: who the users are, what they're trying to do and what the software takes for granted. At Doodle, research reshaped the MVP for an enterprise scheduling product. At Dealpath, one button assumed every listing should become a brand new deal.
 
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback. Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 [See our Product Design work](/services/product-design)
 

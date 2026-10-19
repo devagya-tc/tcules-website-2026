@@ -186,7 +186,7 @@ On Doodle's scheduling MVP, we were a product team working inside someone else's
 Reuse first, add only what the product needs: the habit we help your product teams build.
 
 > “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 

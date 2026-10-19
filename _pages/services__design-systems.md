@@ -169,7 +169,7 @@ For Doodle's scheduling MVP, standard interactions reused Doodle's existing comp
 
 <!-- awaiting client sign-off -->
 > “Tcules reused our existing components wherever they could, and designed new ones only for the calendar and scheduling work our system didn't cover yet. Everything they added was organised to fit the system we already had.”  
-> **Stephanie Leue, Doodle**
+> **Stephanie Leue, Director of Product, Doodle**
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
