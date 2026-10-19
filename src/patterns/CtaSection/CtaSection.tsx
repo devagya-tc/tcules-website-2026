@@ -252,9 +252,9 @@ type CtaOpenProps = {
    * steps paper → tint → the ink footer, the tint now a floating object rather than a band. An
    * island equal to its band is refused (no edge to read by) and takes the other light ground.
    *
-   * On `open` only, and that is a type. A split close already raises its form on a panel, and a box
-   * holding a box is the card reflex twice; an offer interrupts mid-page, and a floating box there
-   * would outweigh the close the page ends on.
+   * Refused on an offer, and that is a type: an offer interrupts mid-page, and a floating box there
+   * would outweigh the close the page ends on. (It was `open` only until 16 Oct 2026, when the split
+   * close took a blue or ink island for the enquiry close; see `CtaSplitProps.island`.)
    */
   island?: IslandSurface;
   art?: never;

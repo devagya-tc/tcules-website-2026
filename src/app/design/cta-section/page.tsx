@@ -698,8 +698,8 @@ export default function CtaSectionSpecimenPage() {
       />
 
       <SpecimenNote
-        title="16 · The island close (open only)"
-        note="island: the open close on a floating box of its own ground (Island), the band's ground around it on every side. The value is the island's surface; without surface the band takes the other light ground, so island=&quot;tint&quot; keeps the close's tint and drops the band to paper. Four blocks: the flagship (tint island, paper band, points and the solid + ghost pair), the bright island (paper on tint, no points), the proof shape inside an island, and the surface proof on ink. island on split or offer does not compile."
+        title="16 · The island close, open"
+        note="island: the open close on a floating box of its own ground (Island), the band's ground around it on every side. The value is the island's surface; without surface the band takes the other light ground, so island=&quot;tint&quot; keeps the close's tint and drops the band to paper. Four blocks: the flagship (tint island, paper band, points and the solid + ghost pair), the bright island (paper on tint, no points), the proof shape inside an island, and the surface proof on ink. island on offer does not compile; island on split is the enquiry close (§ 1b, since 16 Oct 2026)."
       />
       <CtaSection
         arrangement="open"

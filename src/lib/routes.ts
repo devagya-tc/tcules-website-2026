@@ -105,6 +105,7 @@ export const ROUTES = {
   design: '/design',
   designCtaSection: '/design/cta-section',
   designEnquiryForm: '/design/enquiry-form',
+  designIsland: '/design/island',
   designKitForm: '/design/kit/form',
   designProof: '/design/proof',
   designKitTestimonials: '/design/kit/testimonials',
