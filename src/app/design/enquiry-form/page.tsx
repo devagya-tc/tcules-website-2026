@@ -5,6 +5,13 @@ import { Button, Cluster, Layout, Media, Section } from '@/components';
 import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import {
+  CHOICE_DRESS,
+  CLOSE_BODY,
+  CLOSE_HEADING,
+  DESK,
+  MESSAGE_CHIPS_DRESS,
+} from '../_specimen/enquiry-chips';
 import { Rehearse } from '../_specimen/Rehearse';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
@@ -58,14 +65,6 @@ const DRESS = {
   },
 } as const satisfies Record<'card' | 'message', EnquiryDress>;
 
-/** The island close's drawing, as the home close places it (scripts/enquiry-desk.mjs). */
-const DESK = {
-  src: '/illustrations/enquiry/designer-desk.svg',
-  alt: '',
-  width: 396,
-  height: 459,
-  kind: 'illustration',
-} as const;
 
 const ISLAND_BODY = [
   'A sketch, a prototype or a product with years of history behind it. Start wherever you are.',
@@ -96,7 +95,7 @@ const ISLAND_CASES: readonly IslandCase[] = [
     island: 'blue',
     dress: 'message',
     title: 'Blue island · dress “message” — the first message',
-    note: 'dress={{ kind: “message”, from: { name, role, portrait }, note, prompt?, writeTo? }}. The reply to a note: a person’s portrait (a circle), name and role, their one-sentence note in a bubble, then a composer: the big field first (the bare look; the composer draws the focus), email and link as its keyed details, and the send in its foot beside “or write to …”. Use it where a named person answers enquiries and the close should read as a conversation rather than a form. On no page yet; the person here is a placeholder.',
+    note: 'dress={{ kind: “message”, from: { name, role, portrait }, note, prompt?, writeTo?, needs? }}. The reply to a note: a person’s portrait (a circle), name and role, their one-sentence note in a bubble, then a composer: the big field first (the bare look; the composer draws the focus), name, email and link as its keyed details (name and email required since 19 Oct 2026), and the send in its foot beside “or write to …”. Use it where a named person answers enquiries and the close should read as a conversation rather than a form. On no page yet; the person here is a placeholder.',
   },
   {
     island: 'ink',
@@ -111,6 +110,32 @@ const ISLAND_CASES: readonly IslandCase[] = [
     note: 'The first message on the dark island. Blue or ink is the page’s choice (home passes island={{ surface, dress }} to its close); either dress sits on either island.',
   },
 ];
+
+/* The chip form and the first message with chips (owner, 19 Oct 2026). Copy from the approved
+   mock, via the specimen fixture: the chips and prompts are the caller's. */
+const CHIP_CASES = [
+  {
+    id: 'chips-split-blue',
+    island: 'blue',
+    dress: 'choice',
+    title: 'Chips · split panel — blue island (direction A)',
+    note: 'dress={{ kind: “choice”, needs, stage?, prompt?, reply? }} in CtaSection island="blue" islandTexture="frame" islandArrangement="above" art={desk}. ONE paper panel across the island under a head row (the desk at 132 beside the heading and lede). In the panel, two halves split by a hairline: name and email side by side over “What are you working on?”, whose box stretches so the half ends level with the other; and “What do you need?” (pick any, posts needs), “Where is it today?” (optional, pick one, posts stage) and the optional website. A foot across both: the reply line, which says your picks back (“Product design and AI product UX, for a prototype. We reply within one business day.”) and is the live region a send’s status replaces, and the send at the end. Picking a service sets the message field’s example to that service’s follow-up question. Name, email and the message are required; errors only on send. On a phone: the chips, then the fields, then the send across the panel with the line under it.',
+  },
+  {
+    id: 'chips-split-ink',
+    island: 'ink',
+    dress: 'choice',
+    title: 'Chips · split panel — ink island',
+    note: 'The same form on the dark island. The panel is paper on either island, so the form is identical; the head row takes the island’s white ink.',
+  },
+  {
+    id: 'first-message-chips-blue',
+    island: 'blue',
+    dress: 'message',
+    title: 'First message with chips — blue island (direction C)',
+    note: 'dress={{ kind: “message”, from, note, prompt?, writeTo?, needs }} in the close as it stands (beside: the desk, heading and lede in 5, the panel in 7). Rushali’s note asks; the six services answer as chips under the bubble (set in to the bubble from 768, flush on a phone; pick any, posts needs; the bubble describes the group). Then the composer: the message, then Name · Email · Link (name and email required), and the send beside “or write to”. Picking a service sets the message’s example.',
+  },
+] as const;
 
 function Enquiry({
   outcome = 'success',
@@ -210,16 +235,88 @@ export default function EnquiryFormSpecimenPage() {
             form sits on a paper panel inside the island. Home carries the card on blue. Send any
             of them empty to see send-only validation.
           </p>
-          <Layout rowGap="tight" className={s.spec}>
-            <p className={s.specTitle}>Pending · not built</p>
-            <p className={s.specNote}>
-              A third dress, a choice-led form (pick one option, then the fields), is being
-              explored as a mock. It is not built and has no prop; nothing on this page renders
-              it.
-            </p>
-          </Layout>
+          <p>
+            Two more on 19 Oct 2026, from the approved chip mock: the <strong>chip form</strong>{' '}
+            (<code>dress kind=&quot;choice&quot;</code>, “split panel”) in the close&rsquo;s{' '}
+            <code>islandArrangement=&quot;above&quot;</code>, and the{' '}
+            <strong>first message with chips</strong> (the message dress with{' '}
+            <code>needs</code>) in the close as it stands. Neither is on a page yet; home keeps the
+            card.
+          </p>
         </Layout>
       </Section>
+
+      {/* ── The chip form (owner, 19 Oct 2026) ── */}
+      {CHIP_CASES.map((item) => (
+        <Fragment key={item.id}>
+          <Section id={item.id}>
+            <Layout rowGap="tight" className={s.spec}>
+              <p className={s.specTitle}>{item.title}</p>
+              <p className={s.specNote}>{item.note}</p>
+            </Layout>
+          </Section>
+          {item.dress === 'choice' ? (
+            <CtaSection
+              island={item.island}
+              islandTexture="frame"
+              islandArrangement="above"
+              art={<Media image={DESK} sizes="132px" />}
+              heading={CLOSE_HEADING}
+              body={CLOSE_BODY}
+              form={
+                <EnquiryForm
+                  action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                  context={CONTEXT}
+                  dress={CHOICE_DRESS}
+                />
+              }
+            />
+          ) : (
+            <CtaSection
+              island={item.island}
+              islandTexture="frame"
+              art={<Media image={DESK} sizes="240px" />}
+              heading={CLOSE_HEADING}
+              body={CLOSE_BODY}
+              form={
+                <EnquiryForm
+                  action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                  context={CONTEXT}
+                  dress={MESSAGE_CHIPS_DRESS}
+                />
+              }
+            />
+          )}
+        </Fragment>
+      ))}
+      <Section id="chips-split-invalid">
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Chips · split panel · sent empty</p>
+          <p className={s.specNote}>
+            The same form, sent with nothing filled (rehearsed on load): name, email and the message
+            each get their message under the field, the reply line becomes the count of answers that
+            need a look, in the error ink, and focus moves to Name. The chips are optional and never
+            block a send. Editing a flagged field only clears its message.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandTexture="frame"
+        islandArrangement="above"
+        art={<Media image={DESK} sizes="132px" />}
+        heading={CLOSE_HEADING}
+        body={CLOSE_BODY}
+        form={
+          <Rehearse submit>
+            <EnquiryForm
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+              dress={CHOICE_DRESS}
+            />
+          </Rehearse>
+        }
+      />
       {ISLAND_CASES.map((item) => (
         <Fragment key={`${item.island}-${item.dress ?? 'plain'}`}>
           <Section>

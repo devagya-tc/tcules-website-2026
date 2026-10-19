@@ -1097,3 +1097,24 @@ where the two disagree the code and this note win.
 - **Specimens**: `/design/cta-section` § 1b (both dresses on both islands, plus a stress instance with
   points and a contact strip); `/design/enquiry-form` § "The island close" (the plain set and both
   dresses, with captions); `/design/island` (card on blue, message on ink).
+
+## Amendment · 19 Oct 2026 — `islandArrangement`: the words above the form (owner, approved)
+
+For EnquiryForm's chip dress (EnquiryForm.md, same date), whose two halves need the island's whole
+width, and so the close fits one 1440 × 900 screen.
+
+- **`islandArrangement?: 'beside' | 'above'`** on `split` with `island` (`never` elsewhere). `beside`
+  (default) is the close as above. `above`: a HEAD ROW — the drawing at `--cta-art-inline-size-sm`
+  (132, new) beside the heading and lede from 768 (`['auto', 1]`, a `block` apart: the drawing is the
+  head's own mark, not a region of the band, so it takes the head-to-body step, not a split's
+  `section`; centred on each other), the drawing over the words below 768 — then the paper panel
+  across the island a `stack` under the head row. Points and a contact strip, if passed, follow the
+  lede in the words' column.
+- Every word stays on the island's ground (Island inset 48; 32 inline below 768).
+- **`TextureFrame panel="foot"`** (new prop on the primitive; default `end`): with
+  `islandTexture="frame"` the field spans the island 8 in from either side and rises from 8 above
+  its foot to about 40 above the panel. From 1024 only, as before.
+- Measured (`/design/enquiry-form#chips-split-blue`): the island is 737 tall at 1440 (the band 929
+  with its 96s), 779 at 1024.
+- Specimens: `/design/cta-section` § 1c (desk on blue, no drawing on ink);
+  `/design/enquiry-form` (the chip form on blue and ink, and sent empty).

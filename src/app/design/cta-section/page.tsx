@@ -12,6 +12,7 @@ import {
 import { getKitPhoto } from '@/lib/photos';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import { CHOICE_DRESS } from '../_specimen/enquiry-chips';
 import { Box, specimenStyles as s } from '../_specimen/Specimen';
 
 const STANDARD_POINTS = [
@@ -262,6 +263,28 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Reply', value: 'Within one business day' },
         ]}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+
+      <SpecimenNote
+        title="1c · The island close, words above"
+        note="islandArrangement='above' (19 Oct 2026, the chip form): a head row — the drawing at --cta-art-inline-size-sm (132) beside the heading and lede from 768, a `block` apart and centred on each other; the drawing over the words below — then the paper panel across the whole island a `stack` under it, with TextureFrame's `foot` field behind the panel. For a form too wide for the 7-track (EnquiryForm's chip dress) and so the close fits one 1440 × 900 screen. Every word stays on the island's ground. The default, islandArrangement='beside', is § 1b. Second instance: no drawing, on ink."
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="frame"
+        islandArrangement="above"
+        art={<Media image={DESK} sizes="132px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm action={ENQUIRY_FORM_PROPS.action} context={FORM_CONTEXT} dress={CHOICE_DRESS} />}
+      />
+      <CtaSection
+        island="ink"
+        islandTexture="frame"
+        islandArrangement="above"
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm action={ENQUIRY_FORM_PROPS.action} context={FORM_CONTEXT} dress={CHOICE_DRESS} />}
       />
       <CtaSection
         arrangement="open"

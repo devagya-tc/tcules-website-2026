@@ -295,3 +295,12 @@
 .art {
   inline-size: min(100%, var(--cta-art-inline-size));
 }
+
+/* The drawing in the head row (`islandArrangement="above"`): the small component size beside the
+   heading, never cropped. A definite size, not `min(100%, …)`: the row's `auto` track sizes to its
+   content, and a percentage there resolves against nothing, so the track took the drawing's
+   intrinsic 396 and pushed the words 260 away from it. The max keeps it inside a phone column. */
+.artSmall {
+  inline-size: var(--cta-art-inline-size-sm);
+  max-inline-size: 100%;
+}

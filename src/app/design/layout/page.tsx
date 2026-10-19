@@ -230,6 +230,23 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="columns={2} — the start stack fillLast, beside a taller stack"
+          note="The chip form's split panel (19 Oct 2026): the start stack is stretched to the taller stack beside it, its last row is 1fr and its last child keeps the default stretch, so the accent box GROWS down to where the other half ends and both halves finish on one line. pinLast would sit the box at the foot at its own height instead. At 390 the stacks are their content height and fillLast changes nothing."
+        >
+          <Layout columns={2} colGap="column" rowGap="gutter">
+            <Layout rowGap="text" fillLast>
+              <Box>a pair of fields</Box>
+              <Box accent>the message — fills the rest</Box>
+            </Layout>
+            <Layout rowGap="block">
+              <Box>a group</Box>
+              <Box tall>a taller group</Box>
+              <Box>a field</Box>
+            </Layout>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="columns={3} — the same cards without pinLast"
           note="The control. Each cta follows its own body, so the three sit at three different heights."
         >

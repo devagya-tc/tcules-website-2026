@@ -906,3 +906,54 @@ fields) is being explored as a mock. It has no prop, no type member and no speci
 it. Open questions before it can be specified: what the options are and who authors them (corpus or
 component), whether the choice posts as a field or as context, and whether the fields change with
 the choice. Non-blocking for everything shipped.
+
+## Amendment · 19 Oct 2026 — the chip form (`dress` `choice`) and the first message with chips (owner, approved)
+
+The owner approved the hi-fi chip mock (round 3). Built the same day; this supersedes the "choice
+form pending" note above. Behaviour, posting and send-only validation are the form's own: errors
+appear only on send, focus moves to the first failing field, and editing a flagged field only clears
+it. Both chip groups are optional answers; nothing about a chip ever blocks a send.
+
+**New types.** `EnquiryChoice = { value, label, prompt?, echo? }` and `EnquiryChoiceGroup = {
+question, aside?, options }`, exported. All copy is the CALLER's (the specimen fixture is
+`src/app/design/_specimen/enquiry-chips.ts`, the mock's strings).
+
+**`dress={{ kind: 'choice', needs, stage?, prompt?, reply? }}` — the split panel.**
+- Two halves, `[1, 1]` from 1024 a `gutter` apart, the chip half's own hairline and `gutter` inset
+  after it: 64 between the halves (the `column` step for peers), the rule at the middle.
+- Fields half: Name (`name`, REQUIRED, "Enter your name") and Email (`email`, required) side by side
+  (`fit`, `xs` tracks; they stack where narrow), then "What are you working on?"
+  (`what_are_you_working_on`, required), all with visible labels over `fill` fields. The message
+  STRETCHES (Layout `fillLast` + FieldGroup `fill`) so the half ends level with the chip half.
+- Chip half: `needs` ("What do you need?" · "Pick any", checkboxes, posts one `needs` per checked
+  chip), `stage` ("Where is it today?" · "Optional", radios, posts `stage`), then the optional
+  Website (`url`, normalised on blur as before).
+- Foot under a hairline across both: the reply line at the start, the send (blue solid, its own
+  width) at the end; with `scheduleHref`, its link groups with the send. The reply line says the
+  picks back — "**Product design and AI product UX**, for **a prototype**. We reply within one
+  business day." (picks in option order, `echo ?? label`, the promise `reply ?? caption ?? the form's
+  own`) — and is the polite live region a send's status replaces.
+- Picking a need with a `prompt` makes it the message field's placeholder (the latest pick wins;
+  unpicking falls back to the previous pick, then to `prompt`).
+- Below 1024: the chip half first (it is first in the DOM; `reverse` sets the fields at the start
+  from 1024), closed by its hairline, then the fields, then the send across the panel with the line
+  under it. Desktop tab order therefore runs chips → fields → send (recorded; the form's sequence
+  carries no meaning).
+- Each group is a `<fieldset>` whose visually hidden `<legend>` is "question (aside)"; the visible
+  question and aside are aria-hidden siblings, as a visible label's "Optional" is.
+
+**The message dress (direction C).**
+- Name is now the first cell of the composer's details — Name · Email · Link — and REQUIRED. The
+  details are three across from 768 to 1023 and from 1440 (`[4, 5, 4]`, the email cell widest), one
+  per row between (the island's 7-track, where three would leave each ~85).
+- `needs?: EnquiryChoiceGroup`: one pick-any chip group under the bubble, set in to the bubble's edge
+  from 768 (portrait + `text`), flush on a phone; the bubble describes the group
+  (`aria-describedby`), the question is its hidden legend. Picking a need sets the composer's
+  placeholder as above.
+
+**Chip** is a new tier-1 control (docs/specs/Chip.md). **Decided (owner may override,
+non-blocking):** no budget group; both groups optional; the chip form is on no page yet — home keeps
+its approved card close, and the dresses live in specimens only.
+
+**Specimens.** `/design/enquiry-form`: `#chips-split-blue`, `#chips-split-ink`,
+`#first-message-chips-blue`, `#chips-split-invalid` (sent empty).

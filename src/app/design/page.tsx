@@ -58,6 +58,11 @@ const SPECIMENS = [
         note: 'the image asset — 4 kinds × 4 surfaces, cut-out shadow and panels, srcset, intrinsic vs fill, photograph ratio · focus · radius, stress shapes',
       },
       {
+        href: '/design/chip',
+        name: 'Chip',
+        note: 'one choice in a set — a real checkbox or radio drawn as a pill; edge at rest, blue fill and tick when checked, a lift on hover; rest · checked · disabled on 4 surfaces, long labels wrapping',
+      },
+      {
         href: '/design/tag',
         name: 'Tag',
         note: 'inert mark and filter chip — one box, inverted enclosure, four surfaces, held state',
