@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import {
   Button,
@@ -549,7 +549,12 @@ export type TestimonialCaseProps = {
  * is"), BlockCard's single-anchor contract: one <a> holds the card, the "Read the … case" line is a
  * link Button rendered `as="span"` (one focus stop, no nested anchor), and `data-btn-link-group`
  * hands it the card's hover, focus and press. On hover and focus the cover leans in inside its
- * still, ruled box, as a covered BlockCard's does.
+ * still, ruled box, as a covered BlockCard's does. The anchor is named by its claim and its cue
+ * (`aria-labelledby`), not by everything it holds: the quote and the story stay readable inside it.
+ *
+ * A story or quote with a link of its own cannot sit inside the card's anchor (BlockCard's
+ * `linkScope="cta"`, G3b): the card falls back to a still frame and the cue becomes the one real
+ * link, in the tab order.
  */
 export function TestimonialCase({
   eyebrow,
@@ -577,73 +582,96 @@ export function TestimonialCase({
     ) : null;
   const voiced = valid(item);
   const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
+  const id = useId();
+  const titleId = `${id}-title`;
+  const cueId = `${id}-cue`;
+  const ownLinks = [...paragraphs, voiced ? item.quoteHtml : ''].some((html) =>
+    /<a[\s>]/i.test(html),
+  );
+  const content = (
+    <Layout rowGap="text">
+      <Layout
+        columns={{ base: 1, lg: [7, 5] }}
+        reverse={reverse ? { lg: true } : undefined}
+        colGap="stack"
+        rowGap="inline"
+      >
+        <span className={styles.caseMedia}>
+          <span className={styles.caseZoom}>
+            <Media image={image} sizes={TESTIMONIAL_CASE_COVER} fit="fill" edge="placement" />
+          </span>
+        </span>
+        <Layout rowGap="gutter" pinLast className={styles.caseCopy}>
+          <Layout rowGap="text">
+            {filled(eyebrow) ? <span className={styles.caseEyebrow}>{eyebrow}</span> : null}
+            <Title id={titleId} className={styles.caseTitle}>
+              {title}
+            </Title>
+            {story}
+          </Layout>
+          <Cluster>
+            {ownLinks ? (
+              <Button
+                as="a"
+                href={href}
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                {ctaLabel}
+              </Button>
+            ) : (
+              <Button
+                as="span"
+                id={cueId}
+                emphasis="link"
+                tone="primary"
+                icon={<Icon name="arrow-right" />}
+              >
+                {ctaLabel}
+              </Button>
+            )}
+          </Cluster>
+        </Layout>
+      </Layout>
+      {voiced ? (
+        <Layout as="figure" rowGap="text" justifyItems="center" className={styles.caseVoice}>
+          {typeof item.rating === 'number' ? (
+            <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
+          ) : null}
+          <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
+            <Prose
+              html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
+              className={styles.quoteProse}
+            />
+          </blockquote>
+          <figcaption>
+            <Cluster nowrap colGap="text" align="center" className={styles.attribution}>
+              {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
+              <Layout rowGap="inline" className={styles.who}>
+                <span className={styles.name}>{item.name}</span>
+                <span className={styles.role}>{role}</span>
+              </Layout>
+            </Cluster>
+          </figcaption>
+        </Layout>
+      ) : null}
+    </Layout>
+  );
   return (
     <article className={styles.caseArticle}>
-      <a className={styles.caseCard} href={href} data-btn-link-group>
-        <Layout rowGap="text">
-          <Layout
-            columns={{ base: 1, lg: [7, 5] }}
-            reverse={reverse ? { lg: true } : undefined}
-            colGap="stack"
-            rowGap="inline"
-          >
-            <span className={styles.caseMedia}>
-              <span className={styles.caseZoom}>
-                <Media
-                  image={image}
-                  sizes={TESTIMONIAL_CASE_COVER}
-                  fit="fill"
-                  edge="placement"
-                />
-              </span>
-            </span>
-            <Layout rowGap="gutter" pinLast className={styles.caseCopy}>
-              <Layout rowGap="text">
-                {filled(eyebrow) ? <span className={styles.caseEyebrow}>{eyebrow}</span> : null}
-                <Title className={styles.caseTitle}>{title}</Title>
-                {story}
-              </Layout>
-              <Cluster>
-                <Button
-                  as="span"
-                  emphasis="link"
-                  tone="primary"
-                  icon={<Icon name="arrow-right" />}
-                >
-                  {ctaLabel}
-                </Button>
-              </Cluster>
-            </Layout>
-          </Layout>
-          {voiced ? (
-            <Layout
-              as="figure"
-              rowGap="text"
-              justifyItems="center"
-              className={styles.caseVoice}
-            >
-              {typeof item.rating === 'number' ? (
-                <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
-              ) : null}
-              <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
-                <Prose
-                  html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
-                  className={styles.quoteProse}
-                />
-              </blockquote>
-              <figcaption>
-                <Cluster nowrap colGap="text" align="center" className={styles.attribution}>
-                  {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
-                  <Layout rowGap="inline" className={styles.who}>
-                    <span className={styles.name}>{item.name}</span>
-                    <span className={styles.role}>{role}</span>
-                  </Layout>
-                </Cluster>
-              </figcaption>
-            </Layout>
-          ) : null}
-        </Layout>
-      </a>
+      {ownLinks ? (
+        <div className={styles.caseCard}>{content}</div>
+      ) : (
+        <a
+          className={styles.caseCard}
+          href={href}
+          aria-labelledby={`${titleId} ${cueId}`}
+          data-btn-link-group
+        >
+          {content}
+        </a>
+      )}
     </article>
   );
 }

@@ -100,8 +100,9 @@ const linkLines = (item: ItemBlock | undefined) =>
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
  * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
- * diptychs, then a lighter pair · six icon boxes · six reasons, each beside its drawing · a wall of rated cards on tint · a photo banner · eight sector cards · the form panel
- * on tint · the questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
+ * diptychs, then a lighter pair · six icon boxes · six reasons, each beside its drawing · a wall
+ * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
+ * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
 export function HomePage({ page, ratings, avatars, reasons }: HomePageProps) {
   return (

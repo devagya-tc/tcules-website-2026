@@ -255,9 +255,22 @@ export default function TestimonialSpecimen() {
           <h2>5a · The case and its words as one card</h2>
           <Specimen
             title="TestimonialCase"
-            note="home's selected work (16 Oct 2026, round 7): one card on the boxed card's ground with a text mat. The 16:9 cover (hairlined) beside the eyebrow, claim and result on [7, 5], the action pinned to the foot; under both, the client's words in their own full-width box, centred: stars, quote, portrait with name and role. One column below 1024."
+            note="home's selected work (16 Oct 2026, round 7): one card on the boxed card's ground with a text mat. The 16:9 cover (hairlined) beside the eyebrow, claim and result on [7, 5], the action pinned to the foot; under both, the client's words in their own full-width box, centred: stars, quote, portrait with name and role. One column below 1024. The whole card is the case's link (19 Oct 2026): hover or focus it and the cover leans in and the cue underlines; one tab stop, named by the claim and the cue."
           >
             <TestimonialCase {...CASE} item={A} />
+          </Specimen>
+          <Specimen
+            title="TestimonialCase · a story with its own link"
+            note="stress: a link inside the story cannot sit inside the card's anchor, so the card is a still frame and the cue is the one real link (BlockCard's linkScope cta)"
+          >
+            <TestimonialCase
+              {...CASE}
+              body={undefined}
+              bodyHtml={[
+                'We rebuilt the planner around the <a href="#">object model</a> the research found.',
+              ]}
+              item={A}
+            />
           </Specimen>
           <Specimen
             title="TestimonialCase · reverse · no avatar"

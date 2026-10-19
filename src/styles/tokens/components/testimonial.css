@@ -75,9 +75,8 @@
   --tsm-case-role-ink: var(--color-neutral-700); /* 7.27:1 on paper */
   --tsm-case-title-ink: var(--color-neutral-900);
   --tsm-case-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  --tsm-case-media-rule: var(
-    --color-neutral-200
-  ); /* decoration; 300 read too dark (owner, round 7) */
+  /* decoration; 300 read too dark (owner, round 7) */
+  --tsm-case-media-rule: var(--color-neutral-200);
   --tsm-case-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --tsm-case-ring-gap-color: var(--color-paper);
   --tsm-ground: var(--color-paper-deep);
