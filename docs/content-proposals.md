@@ -670,6 +670,9 @@ proposals below are where that design asks something of the copy.
 
   Missing today: **Stephanie Leue's role** (the card shows "Doodle" alone), **a portrait of Samy
   Melaine**, and **16:9 cover masters** for both cases.
+  Since 19 Oct 2026 the two cards carry the case-study thumbnails /case-studies shows (bindings
+  `home_doodle_cover`, `home_eden_ai_cover` in `_pages/home.md`). They are square 2560 masters, so
+  the 16:9 box keeps 56% of each; a 16:9 master per case still ends the crop.
 - **Why:** with every field inside its limit the card holds its shape at 1440 and on a phone, and
   the quote box stays the card's foot rather than its largest part. Until the gaps are filled the
   copy renders as written.
@@ -718,3 +721,7 @@ proposals below are where that design asks something of the copy.
 
   These are placeholders, not proposed copy: the claims (week-one screens, metric tracking) need
   the content team's sign-off before anything like them ships.
+- **On home since 19 Oct 2026:** the band renders `open` with these six as PLACEHOLDERS
+  (`src/content/sources/fixtures/placeholder-reasons.ts`); the heading and the closing link are the
+  corpus's. The corpus's four reasons and their quotes are no longer shown, so the Primelis quote
+  (Clément Contamine) appears nowhere on home until it joins "What clients say".

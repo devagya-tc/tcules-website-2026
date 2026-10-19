@@ -43,7 +43,7 @@ export {
   listCorpusPages,
   getTestimonialRatings,
   getTestimonialAvatars,
-  getBorrowedQuotes,
+  getPlaceholderReasons,
 } from './source';
 export { getCaseRefs, getCorpusBindings } from './corpus-refs';
 export type {

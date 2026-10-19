@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 
-import { BrandMark, Icon, Layout, RatingBadge, Section, Sketch } from '@/components';
+import { BrandMark, Button, Icon, Layout, RatingBadge, Section, Sketch } from '@/components';
 import {
   Banner,
   BlockCard,
@@ -10,26 +10,24 @@ import {
   CtaRow,
   Gateway,
   LogoGrid,
+  Reasons,
   TestimonialCase,
-  TestimonialCard,
   type BlockCardSetItem,
   type GatewayItem,
   type HeroStat,
   type LogoGridMark,
 } from '@/patterns';
-import { linkCaseMentions } from '@/lib/case-links';
 import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
-  BorrowedQuote,
   CorpusBand,
   CorpusBlock,
   CorpusCaseRef,
   CorpusMediaBinding,
   CorpusPage,
+  PlaceholderReasons,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
-import { renderInline } from '@/lib/inline-render';
 import { placeholderImage } from '@/lib/placeholders';
 import { sketchForRoute } from '@/lib/sketches';
 
@@ -65,10 +63,10 @@ export type HomePageProps = {
    */
   avatars?: AvatarsById;
   /**
-   * Real quotes from other corpus pages for a band item whose source authors none (PLACEHOLDERS:
-   * fixtures/borrowed-quotes.ts, home round 3 — "We can build what we design").
+   * The reasons "Why teams choose Tcules" shows (PLACEHOLDERS: fixtures/placeholder-reasons.ts, P48).
+   * With none the band is not shown: the corpus's four reasons do not fill the Reasons band.
    */
-  borrowedQuotes?: readonly BorrowedQuote[];
+  reasons?: PlaceholderReasons | null;
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
@@ -96,17 +94,17 @@ const linkLines = (item: ItemBlock | undefined) =>
  * never paraphrased (owner, 10 Oct 2026: "we are allowed to design the content"): the hero's record
  * line becomes three figures inside the hero, the client names become the logo wall the Clutch score
  * leads, the situations become a scannable set of decisions, the two quoted cases are featured with
- * their clients' words as each case's twin panel, each reason is its own banner with the client's
- * words in support, and the client voices are a wall of rated cards. The one reorder is shared by
+ * their clients' words as each case's twin panel, the reasons are a set each drawn beside its
+ * claim, and the client voices are a wall of rated cards. The one reorder is shared by
  * every corpus page: the form sits directly above the questions (order.ts).
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
  * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
- * diptychs, then a lighter pair · six icon boxes · a run of four alternating photo banners, one
- * reason each · a wall of rated cards on tint · a photo banner · eight sector cards · the form panel
- * on tint · the questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
+ * diptychs, then a lighter pair · six icon boxes · six reasons, each beside its drawing · a wall
+ * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
+ * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
-export function HomePage({ page, ratings, avatars, borrowedQuotes = [] }: HomePageProps) {
+export function HomePage({ page, ratings, avatars, reasons }: HomePageProps) {
   return (
     <>
       <CorpusHero
@@ -118,12 +116,14 @@ export function HomePage({ page, ratings, avatars, borrowedQuotes = [] }: HomePa
       />
       {formBeforeFaq(page.bands).map((b) => {
         if (isFormBand(b))
-          return <EnquiryBand
+          return (
+            <EnquiryBand
               key={b.id}
               page={page}
               band={b}
               island={{ surface: 'blue', dress: 'card' }}
-            />;
+            />
+          );
         if (isFaqBand(b)) {
           return (
             <ContentSection key={b.id} {...head(b)} data-band="D-faq" align="center">
@@ -144,7 +144,7 @@ export function HomePage({ page, ratings, avatars, borrowedQuotes = [] }: HomePa
             b={b}
             ratings={ratings}
             avatars={avatars}
-            borrowed={borrowedQuotes}
+            reasons={reasons}
           />
         ) : null;
       })}
@@ -157,7 +157,7 @@ type BandProps = {
   b: CorpusBand;
   ratings?: RatingsById;
   avatars?: AvatarsById;
-  borrowed: readonly BorrowedQuote[];
+  reasons?: PlaceholderReasons | null;
 };
 
 /* ── 0 · the studio's record, as three figures in the hero ───────────────────────── */
@@ -325,19 +325,21 @@ function Situations({ b }: BandProps) {
 /* ── 3 · selected work: two cases with their clients' words, then two more ───────── */
 
 /**
- * Where a case cover is cropped (Media `focus`) in the one 16:9 card box (home round 3). The four
- * bound artefacts run from 1.5:1 (Dealpath) to 3.3:1 (Benchmark Gensuite), so every one is cut: the
- * three wide boards lose their sides and Dealpath its foot. Doodle anchors on its start (the map and
- * the tablet), Benchmark on its first panel (at 16:9 the centre of a 3.3:1 board cut both panels in
- * half), Dealpath on its top. Art direction a CMS field would carry as a focal point
- * (docs/strapi-changes.md); here it is the template's, keyed by binding id. Each case needs a 16:9
- * master (docs/image-register.md), which ends the cropping.
+ * Where a case cover is cropped (Media `focus`) in the one 16:9 card box (home round 3). Every
+ * cover is cut. The two featured cases carry their case-study thumbnails, the covers /case-studies
+ * shows (19 Oct 2026). Those are square masters, so each keeps a band 56% of its height: Doodle's
+ * its mark and booking header over the bookable rows, Eden AI's the toolbar and the workflow's nodes. The listed pair carry
+ * wide artefacts, 1.5:1 (Dealpath) and 3.3:1 (Benchmark Gensuite): Benchmark anchors on its first
+ * panel (at 16:9 the centre of the board cut both panels in half), Dealpath on its top. Art
+ * direction a CMS field would carry as a focal point (docs/strapi-changes.md); here it is the
+ * template's, keyed by binding id. Each case needs a 16:9 master (docs/image-register.md), which
+ * ends the cropping.
  */
 const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
-  home_doodle_object_model: { x: 0, y: 0.5 },
+  home_doodle_cover: { x: 0.5, y: 0.15 },
   home_dealpath_workflow: { x: 0.5, y: 0 },
   home_benchmark_scope_selector: { x: 0, y: 0.5 },
-  home_eden_unified_search: { x: 0.5, y: 0.5 },
+  home_eden_ai_cover: { x: 0.5, y: 0.3 },
 };
 
 /**
@@ -503,81 +505,50 @@ function Capabilities({ b }: BandProps) {
   );
 }
 
-/* ── 5 · four reasons: one banner each, the claim leads, the client's words support it ── */
+/* ── 5 · why Tcules: six reasons, each beside its drawing ────────────────────────── */
 
 /**
- * ONE FOLD PER REASON (owner, home round 3, 11 Oct 2026: "it is taller than 1 fold, in which case i
- * feel like each section should be one fold … /design/kit/banner i3 and i4 could be used here? i
- * also particularly don't like the numbering"). Round 2 stacked four claim rows under one head in a
- * single band (1,595 at 1440), so no screen ever held one complete reason.
+ * The Reasons band, `open` (owner, 19 Oct 2026): six short reasons with no rules, each drawing
+ * beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
+ * four screens and put three quotes next to the client-voices band. No proof inside the band: the
+ * quotes stay in "What clients say" (P48).
  *
- * Now a RUN of four beside banners (kit I.3 and I.4), alternating — photograph at the end, then the
- * start — each its own Section, so each reason is one screen: the band's h1 heading opens the
- * first banner (`bandHead`), the closing link ends the last (`footer`). In each, the claim is the h3
- * at the h2 role, its sentence the lead, and the client's words the quiet supporting testimonial
- * under it (TestimonialCard `sm`, unboxed): claim first, proof second (home round 2). The index
- * numerals are gone. The banner rule "never two beside banners within sight" is the owner's to
- * override here: the run IS the band, and the alternation is its rhythm.
- *
- * Every reason has a quote now ("assume all 4 have a quote"): "We can build what we design"
- * authors none, so it takes a REAL testimonial from another corpus page that is not shown elsewhere
- * on home — Trishanya Raju's, from /case-studies, about the work the reason names (The Wandering
- * Raven) — read from that page by the content seam and flagged PLACEHOLDER (P39).
- *
- * Each banner's photograph is a register placeholder (a studio photograph or product shot per
- * reason, 3:2) until the shoot.
+ * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes six; the heading
+ * and the closing link stay the corpus's.
  */
-function WhyTcules({ page, b, ratings, avatars, borrowed }: BandProps) {
-  const reasons = items(b);
+function WhyTcules({ b, reasons }: BandProps) {
+  if (!reasons || reasons.band !== b.id) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`HomePage: "${b.id}" has no reasons to show; the band is not rendered.`);
+    }
+    return null;
+  }
   /* The band's closing link is authored after the last reason, so the parser files it there. */
-  const closing = linkLines(reasons.at(-1))[0];
+  const closing = linkLines(items(b).at(-1))[0];
   return (
-    <>
-      {reasons.map((item, index) => {
-        const quote =
-          quoteIn(item.blocks) ??
-          borrowed.find((entry) => entry.band === b.id && entry.item === item.headingText)
-            ?.quote;
-        const first = index === 0;
-        const last = index === reasons.length - 1;
-        const slug = slugOf(item.headingText);
-        return (
-          <Banner
-            key={item.headingText}
-            form="beside"
-            mediaSide={index % 2 === 0 ? 'end' : 'start'}
-            id={first ? b.id : undefined}
-            bandHead={first ? { heading: b.headingText, headingId: headingIdOf(b) } : undefined}
-            heading={item.headingText}
-            headingAs="h3"
-            headingId={`${b.id}-${slug}`}
-            lead={renderInline(
-              linkCaseMentions(
-                paragraphRuns(item.blocks).flatMap((runs, at) =>
-                  at === 0 ? [...runs] : [{ type: 'text' as const, text: ' ' }, ...runs],
-                ),
-              ),
-            )}
-            support={
-              quote ? (
-                <TestimonialCard
-                  item={testimonialItem(quote, ratings, avatars)}
-                  size="sm"
-                  frame="none"
-                  voice="italic"
-                />
-              ) : undefined
-            }
-            footer={
-              last && closing ? (
-                <CtaRow actions={[{ label: closing.labelText, href: closing.href }]} />
-              ) : undefined
-            }
-            image={{ ...placeholderImage(page.route, b.id, slug), kind: 'photograph' }}
-          />
-        );
-      })}
-    </>
+    <Reasons
+      id={b.id}
+      heading={b.headingText}
+      headingId={headingIdOf(b)}
+      items={reasons.items.map((item) => ({
+        title: item.title,
+        body: item.body,
+        figure: { ...item.figure, alt: '', kind: 'illustration' },
+      }))}
+      action={
+        closing ? (
+          <Button
+            as="a"
+            href={closing.href}
+            emphasis="link"
+            size="md"
+            icon={<Icon name="arrow-right" />}
+          >
+            {closing.labelText}
+          </Button>
+        ) : undefined
+      }
+    />
   );
 }
 

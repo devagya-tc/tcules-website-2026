@@ -35,4 +35,8 @@ export const CORPUS_ASSET_SIZES: Readonly<
     { width: 936, height: 1262 },
   'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186528/Image_2_6b09ca7e30.webp':
     { width: 960, height: 720 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788500386/Thumbnail_case_study_doodle_e1840df53b.webp':
+    { width: 2560, height: 2560 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1788505970/Thumbnail_case_study_eden_AI_258a48e39d.webp':
+    { width: 2560, height: 2560 },
 };
