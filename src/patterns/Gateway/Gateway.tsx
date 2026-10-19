@@ -50,10 +50,15 @@ export type GatewayItem = {
  *   expand  The accordion of situations: ruled rows, the current one open in place with its
  *           sentence and service under its title. Explored alternative: in-flow, so the rows move as
  *           one opens and another closes.
+ *   board   THE HOME BAND since round 11 (owner, 19 Oct 2026). Every situation at once, three across
+ *           on paper: its drawing, its title, its sentence — no ground, no box and no link line, so
+ *           every edge is the column's. Each whole item is the link; hovering it plays its drawing
+ *           (a SituationFigure tells the situation in two states) and takes its title to the accent.
+ *           One fold at 1440: all six visible, nothing hidden behind an interaction.
  *
  * A presentation choice, never a CMS field.
  */
-export type GatewayArrangement = 'select' | 'expand';
+export type GatewayArrangement = 'select' | 'expand' | 'board';
 
 export type GatewayProps = {
   items: readonly GatewayItem[];
@@ -138,6 +143,51 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
 
   const lit = items[active] ?? items[0];
   if (!lit) return null;
+
+  if (arrangement === 'board') {
+    return (
+      <Layout
+        as="ul"
+        columns={{ md: 2, lg: 3 }}
+        colGap="gutter"
+        rowGap="stack"
+        className={cx(styles.root, className)}
+      >
+        {items.map((item) => {
+          /* The link is named by its title and described by its sentence, rather than taking both
+             as one long name from its contents. */
+          const titleId = `${uid}-${item.id}-title`;
+          const descId = `${uid}-${item.id}-desc`;
+          return (
+            <li key={item.id}>
+              <a
+                href={item.href}
+                className={styles.card}
+                aria-labelledby={titleId}
+                aria-describedby={descId}
+              >
+                <Layout rowGap="block">
+                  {item.visual != null ? (
+                    <span className={styles.cardVisual} aria-hidden="true">
+                      {item.visual}
+                    </span>
+                  ) : null}
+                  <Layout rowGap="tight">
+                    <Title id={titleId} className={styles.cardTitle}>
+                      {item.title}
+                    </Title>
+                    <span id={descId} className={styles.cardBody}>
+                      {item.body}
+                    </span>
+                  </Layout>
+                </Layout>
+              </a>
+            </li>
+          );
+        })}
+      </Layout>
+    );
+  }
 
   const linkCue = (label: string) => (
     <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>

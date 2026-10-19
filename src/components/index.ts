@@ -108,6 +108,12 @@ export {
 export { Tag, type TagProps, type TagVariant } from './Tag';
 export { Sketch, type SketchName, type SketchProps } from './Sketch';
 export {
+  SituationFigure,
+  isSituationFigureName,
+  type SituationFigureName,
+  type SituationFigureProps,
+} from './SituationFigure';
+export {
   Texture,
   TextureClosing,
   TextureCorner,

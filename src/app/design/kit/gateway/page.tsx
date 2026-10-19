@@ -2,20 +2,20 @@ import { notFound } from 'next/navigation';
 
 import { Layout, Section } from '@/components';
 import { ContentSection, Gateway } from '@/patterns';
-import { getCorpusPage } from '@/content';
+import { getCorpusPage, getProposedEyebrows } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { gatewayItems } from '@/templates';
+import { gatewayBoardItems, gatewayItems } from '@/templates';
 
 import { Specimen } from '../../_specimen/Specimen';
 import t from '../../_specimen/typeroles.module.css';
 
 /**
- * /design/kit/gateway — the situation selector (home "What do you need next?", round 6, 11 Oct 2026).
+ * /design/kit/gateway — the home gateway ("What do you need next?").
  *
  * On the real corpus band (read from the content seam, so the words and the links are home's own,
- * never restated here). One arrangement: rounds 1–5's cards, lists and grids were withdrawn after the
- * owner rejected them (page-mapping § 22). Shown on paper and on tint, the two grounds a band may
- * take.
+ * never restated here). G.0 is home since round 11 (19 Oct 2026): the `board`, every situation at
+ * once with its SituationFigure. G.1–G.3 are the round 6–7 selector and its explored alternative,
+ * kept as Gateway arrangements.
  */
 /** A caption strip above a band: the direction's name and what to look for. Scaffolding. */
 function Variation({ id, title, note }: { id: string; title: string; note: string }) {
@@ -33,6 +33,8 @@ export default async function KitGatewayPage() {
   const band = page?.bands.find((b) => b.id === 'product-situations');
   if (!band) notFound();
   const items = gatewayItems(band);
+  const board = gatewayBoardItems(band);
+  const eyebrow = (await getProposedEyebrows(ROUTES.home))[band.id];
   const heading = band.headingText;
 
   return (
@@ -53,8 +55,17 @@ export default async function KitGatewayPage() {
       </Section>
 
       <Variation
+        id="board"
+        title="G.0 · Board on paper — home (round 11)"
+        note="Every situation at once, three across (two from 768, one below): its drawing, its title (h4, the sans), its sentence. No ground, no box and no link line; the whole item links. Hover or tab to an item: its drawing plays rest → end as one motion (360ms, the ease curve) and its title takes the accent; leaving plays it back. The head is the proposed eyebrow (P49) over the centred heading. One fold at 1440."
+      />
+      <ContentSection heading={heading} headingId="gw-board" eyebrow={eyebrow} align="center">
+        <Gateway items={board} arrangement="board" />
+      </ContentSection>
+
+      <Variation
         id="paper"
-        title="G.1 · Selector on paper — home"
+        title="G.1 · Selector on paper — the round 6–7 home"
         note="From 1024: every title at full ink. A faint blue marker sits behind the current situation and glides to whichever one the pointer or focus is on, with no delay; the answer (sentence at lead size, the service as the link) glides beside it, level with its title. Run the pointer down the list to browse. Below 1024: every title, sentence and service in one column. Every word is in the HTML at every width."
       />
       <ContentSection heading={heading} headingId="gw-paper">

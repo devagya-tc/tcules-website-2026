@@ -1,6 +1,16 @@
 import type { ComponentType } from 'react';
 
-import { BrandMark, Button, Icon, Layout, RatingBadge, Section, Sketch } from '@/components';
+import {
+  BrandMark,
+  Button,
+  Icon,
+  isSituationFigureName,
+  Layout,
+  RatingBadge,
+  Section,
+  SituationFigure,
+  Sketch,
+} from '@/components';
 import {
   Banner,
   BlockCard,
@@ -26,6 +36,7 @@ import type {
   CorpusMediaBinding,
   CorpusPage,
   PlaceholderReasons,
+  ProposedEyebrows,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
@@ -68,6 +79,8 @@ export type HomePageProps = {
    * With none the band is not shown: the corpus's four reasons do not fill the Reasons band.
    */
   reasons?: PlaceholderReasons | null;
+  /** Eyebrows proposed for bands the corpus authors without one, by band id (PROPOSED, P49). */
+  eyebrows?: ProposedEyebrows;
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
@@ -105,7 +118,7 @@ const linkLines = (item: ItemBlock | undefined) =>
  * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
  * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
-export function HomePage({ page, ratings, avatars, reasons }: HomePageProps) {
+export function HomePage({ page, ratings, avatars, reasons, eyebrows }: HomePageProps) {
   return (
     <>
       <CorpusHero
@@ -146,6 +159,7 @@ export function HomePage({ page, ratings, avatars, reasons }: HomePageProps) {
             ratings={ratings}
             avatars={avatars}
             reasons={reasons}
+            eyebrows={eyebrows}
           />
         ) : null;
       })}
@@ -159,6 +173,7 @@ type BandProps = {
   ratings?: RatingsById;
   avatars?: AvatarsById;
   reasons?: PlaceholderReasons | null;
+  eyebrows?: ProposedEyebrows;
 };
 
 /* ── 0 · the studio's record, as three figures in the hero ───────────────────────── */
@@ -308,17 +323,32 @@ export function gatewayItems(b: CorpusBand): GatewayItem[] {
 }
 
 /**
+ * The band's items for Gateway's `board`: each situation with its own SituationFigure in place of
+ * the service sketch (round 11). Exported so /design/kit/gateway shows the board on the real words.
+ */
+export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
+  return gatewayItems(b).map((item) => {
+    const scene = sketchForRoute(item.href);
+    return {
+      ...item,
+      visual: scene && isSituationFigureName(scene) ? <SituationFigure name={scene} /> : undefined,
+    };
+  });
+}
+
+/**
  * The page's gateway: "which of these is me?" (owner, round 6, 11 Oct 2026: "i may not know if i
  * need product design service or design system service, but i'll probably know if i want to launch
- * a new product"). Rounds 1–5 restyled one shape — illustrated cards, text cards, a list, ruled
- * grids, glyph discs — and the owner rejected each. Round 6 designs for the band's job instead:
- * Gateway's selector, six situations down one column with one lit and its answer beside it
- * (page-mapping § 22).
+ * a new product"). Rounds 1–10 tried a selector, grids, tiles and rows. Round 11 (19 Oct 2026, locked
+ * from a hi-fi mock) is Gateway's `board`: all six at once on paper, three across, each with a
+ * SituationFigure that tells its situation in two states and plays on hover; no link line, the
+ * whole item links. The head is a proposed eyebrow over the centred heading (P49). One fold at 1440.
  */
-function Situations({ b }: BandProps) {
+function Situations({ b, eyebrows }: BandProps) {
+  const items = gatewayBoardItems(b);
   return (
-    <ContentSection {...head(b)} data-band="C-router">
-      <Gateway items={gatewayItems(b)} />
+    <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
+      <Gateway items={items} arrangement="board" />
     </ContentSection>
   );
 }
