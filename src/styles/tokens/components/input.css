@@ -34,10 +34,10 @@
   --inp-padding-x: var(--space-12); /* optical control inset, not layout spacing */
   --inp-textarea-padding-y: var(--space-12); /* optical control inset, not layout spacing */
   --inp-textarea-min-block: 128px;
-  /* The lg step (home round 3): 48, the lg Button's height, at every width; the value at the lead
-     role; a textarea of five lead lines. For a form that is its band's primary object. */
+  /* The lg step (home round 3): 48, the lg Button's height, at every width; the value at body (16,
+     owner 19 Oct 2026: no field text above body); a taller textarea. For a form that is its band's primary object. */
   --inp-height-lg: 48px;
-  --inp-text-lg: var(--text-lead);
+  --inp-text-lg: var(--text-body);
   --inp-textarea-min-block-lg: 160px;
   /* appearance="fill" textarea (owner, 16 Oct 2026: the home close fits one laptop screen): three
      body lines plus the optical insets, a compact well rather than the box's four lines. */
@@ -69,16 +69,6 @@
   /* optical: the inset that sets one --text-body line on its rule in a 44 field (44 - 24 - 6) */
   --inp-line-inset-top: var(--space-14);
   --inp-line-textarea-min-block: 68px; /* two body lines (48) + the 14 and 6 insets */
-}
-
-/* The lg value steps back to the body role on a phone (home round 3): at 18 the enquiry form's
-   longest cue ("Product or company URL (optional)") was cut in the 326 column's panel. A ROLE swap at
-   the type ladder's own 767 breakpoint, as Banner's lead makes — never a distance. The height holds
-   at 48. */
-@media (max-width: 767px) {
-  :root {
-    --inp-text-lg: var(--text-body);
-  }
 }
 
 :root,

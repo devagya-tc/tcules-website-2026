@@ -55,7 +55,7 @@
 .item {
   padding-block: var(--gap-text);
   border-block-end: var(--flow-item-rule-width) solid var(--flow-item-rule-ink);
-  font: var(--text-body);
+  font: var(--text-body-sm);
   text-wrap: var(--text-running-wrap);
   color: var(--flow-item-ink);
 }

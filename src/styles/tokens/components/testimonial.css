@@ -34,10 +34,10 @@
 :root {
   --tsm-radius: var(--radius-8);
   --tsm-rule-width: var(--border-width-hairline);
-  /* The quote's sans roles (home round 3): the card that is the thing, the supporting card, and the
-     diptych's panel, one step each. Upright; the italic is a voice the caller opts into
-     (Testimonial `voice`), not a token. */
-  --tsm-quote-text: var(--text-lead);
+  /* The quote's sans roles (home round 3): the card that is the thing and the diptych's panel at
+     18, the one step above body a quote may take (owner, 19 Oct 2026), the supporting card at 16.
+     Upright; the italic is a voice the caller opts into (Testimonial `voice`), not a token. */
+  --tsm-quote-text: var(--text-lead-lg);
   --tsm-quote-text-sm: var(--text-body);
   --tsm-quote-text-panel: var(--text-lead-lg);
   /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),

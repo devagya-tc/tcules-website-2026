@@ -287,7 +287,6 @@ export type {
   HeroCut,
   HeroCutItem,
   HeroRating,
-  HeroLeadSize,
   HeroStat,
 } from './PageHero';
 

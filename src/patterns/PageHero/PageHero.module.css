@@ -150,8 +150,7 @@
    that scales from one paragraph to six with no prop and no count-driven rule. The paragraphs
    were 18 and are now 16 — the same role the page's Prose body takes. The hero's copy therefore
    MEETS body scale rather than staying a step above it, and the hierarchy inside the band is
-   carried by the lead alone: 20 against 16 is a wider step than 20 against 18, so the lead reads
-   as a lead more clearly than it did.
+   carried by the lead alone, 18 against 16.
 
    Two measures, and since 28 Sep 2026 two TOKENS. The lead takes --hero-lead-measure, which is
    --measure-lead (40ch): about 490px at --text-lead, measured in the browser. The paragraphs keep
@@ -170,7 +169,7 @@
    In `beside` the track is 588 at the widest, so the lead's 490 still binds and the title's
    878 and the paragraphs' 666 go inert against the track.
 
-   Neither role has a tracking companion — --text-lead and --text-body are two of the seven in
+   Neither role has a tracking companion — --text-lead-lg and --text-body are two of the seven in
    the layer that ship none — so there is no letter-spacing to state, and a --hero-lead-tracking
    would name a value that does not exist. */
 .lead {
@@ -178,11 +177,6 @@
   color: var(--hero-lead-ink);
   font: var(--hero-lead-text);
   text-wrap: var(--text-running-wrap);
-}
-
-/* `leadSize="lg"`, the opt-in: the font alone moves. The measure is `ch`, so it follows the size. */
-.leadLg {
-  font: var(--hero-lead-text-lg);
 }
 
 .body {

@@ -22,10 +22,10 @@
   --gwy-title-text: var(--text-h4);
   --gwy-title-tracking: var(--text-h4-tracking);
   /* Below 1024 each sentence sits under its title as support. */
-  --gwy-body-text: var(--text-body);
+  --gwy-body-text: var(--text-body-sm);
   /* From 1024 the current situation's sentence is THE answer, the only paragraph on the band, so
-     it reads at the larger lead size. */
-  --gwy-answer-text: var(--text-lead-lg);
+     it reads at the lead role (16 since 19 Oct 2026), a step above the 14 option bodies. */
+  --gwy-answer-text: var(--text-lead);
   /* The arrow's side bearing after the title's last word, and how far it slides in. Optical, not a
      layout distance (gap rule 1). */
   --gwy-arrow-inset: var(--space-12);

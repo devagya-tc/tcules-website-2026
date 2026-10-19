@@ -266,15 +266,6 @@ export type HeroRating = {
 };
 
 /**
- * The lead's size, `md` (default) or `lg`. r7-hero, owner 7 Oct 2026: the 20px lead was too large;
- * visitor-facing pages take `md`, --text-body-lg at 18, two px above the paragraphs under it. `lg`
- * (--text-lead, 20, and 18 on a phone) is an OPT-IN for a page written for search, whose lead has to
- * carry more of the query in its first line; it is never the default and a template chooses it for a
- * family, in code. A component size, so a t-shirt name (token rule 5).
- */
-export type HeroLeadSize = 'md' | 'lg';
-
-/**
  * The line above the title holds ONE thing: a category (`eyebrow`) or a score (`rating`). Typed as a
  * union so both cannot be passed — a score beside a category is two labels competing for 12px, and
  * the score is the one that can never echo the trail.
@@ -311,15 +302,13 @@ type PageHeroBaseProps = {
    * whole opening — the case-study index — has none, and passed `['']` to satisfy the type, a
    * workaround the filter below made render nothing. Absent and all-blank now mean the same thing.
    *
-   * `body[0]` renders as the lead at --text-lead (20) and `body[1…]` as body copy at --text-body
+   * `body[0]` renders as the lead at --text-lead-lg (18) and `body[1…]` as body copy at --text-body
    * (16). That split gives the copy an internal hierarchy which scales from one paragraph to six
    * without a prop and without a count-driven rule the caller cannot see.
    *
    * The paragraphs were 18 and are now 16, which is the same role the page's Prose body takes: the
    * hero's copy MEETS body scale rather than sitting a step above it, and the whole of the band's
-   * internal hierarchy is now carried by the lead. 20 against 16 is a wider step than 20 against
-   * 18, so a hero with five or six paragraphs reads as a lead followed by body copy more clearly
-   * than it did, rather than as one block of slightly-large text.
+   * internal hierarchy is now carried by the lead, 18 against 16.
    *
    * Empty strings are dropped before the roles are assigned, so a blank entry produces no <p>
    * and no seam around nothing. Depth beyond six is not capped and not warned about — beyond
@@ -351,8 +340,6 @@ type PageHeroBaseProps = {
   eyebrow?: string;
   /** A score in the eyebrow's place. See `HeroRating`. */
   rating?: HeroRating;
-  /** The lead's size; `md` by default. See `HeroLeadSize`. */
-  leadSize?: HeroLeadSize;
   /**
    * The ancestor trail, built by `heroTrail(items, title, (t) => <Breadcrumbs {...t} />)`. Sits 32
    * above the split.
@@ -625,7 +612,6 @@ export function PageHero({
   body,
   eyebrow,
   rating,
-  leadSize = 'md',
   trail,
   credits = [],
   dates,
@@ -833,7 +819,7 @@ export function PageHero({
     lead === undefined && recordNode === null ? null : (
       <Layout rowGap="text">
         {lead !== undefined ? (
-          <p className={cx(styles.lead, leadSize === 'lg' && styles.leadLg)}>{lead}</p>
+          <p className={styles.lead}>{lead}</p>
         ) : null}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>

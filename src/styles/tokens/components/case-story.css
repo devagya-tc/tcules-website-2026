@@ -26,7 +26,7 @@
   /* Steps and peers: h4 two steps under the band's h2, the body role under it. */
   --cst-step-title-text: var(--text-h4);
   --cst-step-title-tracking: var(--text-h4-tracking);
-  --cst-step-body-text: var(--text-body);
+  --cst-step-body-text: var(--text-body-sm);
   --cst-index-text: var(--text-micro);
   --cst-index-tracking: var(--text-micro-tracking);
   --cst-caption-text: var(--text-body-lg);
@@ -40,7 +40,7 @@
      headings, at h3, or it runs to five lines. */
   --cst-closing-text: var(--text-h3);
   --cst-closing-tracking: var(--text-h3-tracking);
-  --cst-closing-body-text: var(--text-lead-lg);
+  --cst-closing-body-text: var(--text-lead);
   --cst-rule-width: var(--border-width-hairline);
   /* The marker column holds still while its chapter scrolls, clear of the sticky nav. */
   --cst-marker-sticky-top: var(--gap-section);
