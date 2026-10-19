@@ -89,6 +89,12 @@ const DESK = {
   kind: 'illustration',
 } as const;
 
+/** The box-of-parts candidates for the island close's drawing (19 Oct 2026, scripts/enquiry-parts.mjs). */
+const PARTS = {
+  rise: { src: '/illustrations/enquiry/parts-box.svg', alt: '', width: 306, height: 402, kind: 'illustration' },
+  hand: { src: '/illustrations/enquiry/parts-box-hand.svg', alt: '', width: 306, height: 402, kind: 'illustration' },
+} as const;
+
 const AUDIT_FORM_PROPS = {
   ...ENQUIRY_FORM_PROPS,
   variant: 'audit',
@@ -263,6 +269,39 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Reply', value: 'Within one business day' },
         ]}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+
+      <SpecimenNote
+        title="1b′ · Drawing candidates: a box of parts"
+        note="Candidates to replace the desk (19 Oct 2026): the visitor brings the pieces, we assemble them. First: the parts rise out of the box and straighten as they climb, the blue button still in the box with its outline waiting on the screen. Second: a hand lifts the blue button out, the other parts already placed. Then the rising version at the 'above' arrangement's 132 and on ink."
+      />
+      {(['rise', 'hand'] as const).map((v) => (
+        <CtaSection
+          key={v}
+          island="blue"
+          islandTexture="frame"
+          art={<Media image={PARTS[v]} sizes="240px" />}
+          heading="Tell us what you're building"
+          body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+          form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+        />
+      ))}
+      <CtaSection
+        island="ink"
+        islandTexture="frame"
+        art={<Media image={PARTS.rise} sizes="240px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.message} />}
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="frame"
+        islandArrangement="above"
+        art={<Media image={PARTS.rise} sizes="132px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm action={ENQUIRY_FORM_PROPS.action} context={FORM_CONTEXT} dress={CHOICE_DRESS} />}
       />
 
       <SpecimenNote
