@@ -29,13 +29,13 @@ const FAMILIES = [
     className: t.familyDisplay,
     token: '--font-family-display',
     name: 'Newsreader',
-    job: 'titles and the pull quote. A variable optical-size face, which is why globals sets font-optical-sizing',
+    job: 'display and the h1–h3 titles, and the pull quote. A variable optical-size face, which is why globals sets font-optical-sizing',
   },
   {
     className: t.familySans,
     token: '--font-family-sans',
     name: 'Public Sans',
-    job: 'everything you read at length — lead, body, caption',
+    job: 'everything you read at length — lead, body, caption — and the h4–h6 titles',
   },
   {
     className: t.familyMono,
@@ -280,7 +280,7 @@ const BREAKPOINTS = [
   { role: 'h1', d: '54 / 1.06', tab: '43 / 1.08', mob: '34 / 1.12' },
   { role: 'h2', d: '43 / 1.1', tab: '34 / 1.14', mob: '28 / 1.18' },
   { role: 'h3', d: '34 / 1.16', tab: '28 / 1.2', mob: '25 / 1.22' },
-  { role: 'h4', d: '28 / 1.2', tab: '25 / 1.22', mob: '22 / 1.26' },
+  { role: 'h4', d: '22 / 1.25', tab: '20 / 1.26', mob: '18 / 1.3' },
   { role: 'h5', d: '22 / 1.28', tab: '22 / 1.28', mob: '20 / 1.3' },
   { role: 'h6', d: '18 / 1.35', tab: '18 / 1.35', mob: '18 / 1.35' },
   { role: 'quote', d: '28 / 1.35', tab: '28 / 1.35', mob: '22 / 1.4' },
@@ -773,15 +773,15 @@ export default function TypographySpecimenPage() {
 
               <h3>Headings, and the sixth step</h3>
               <p>
-                Every level is the display serif. <code>h6</code> is the 18px medium step — the
+                h1 to h3 are the display serif; h4 to h6 are the sans (owner, 19 Oct 2026), sized
+                optically so each keeps the weight its serif step had. <code>h6</code> is the 16px medium step — the
                 same voice a bare <code>h6</code> and a DataTable key column take, so there is one
                 sixth-level heading on the site rather than a label here and a title elsewhere.
               </p>
               <h4>A fourth-level heading</h4>
               <p>
-                Set at 28px, which is the same size as the pull quote below. They share a value
-                and are stated twice in the ladder on purpose: they are free to move
-                independently.
+                Set in the sans at 22px, which reads about as large as the serif pull quote at 28
+                below. The two no longer share a value: h4 moved to the sans and the quote stayed.
               </p>
               <h5>A fifth-level heading</h5>
               <h6>A sixth-level heading</h6>

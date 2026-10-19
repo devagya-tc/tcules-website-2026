@@ -17,7 +17,7 @@
 :root {
   /* The situation is the reason to click (owner, home round 2), so it is the band's largest
      repeated thing — but two steps under the band's h2 heading, not one: at h3 (34 under 43) the
-     six titles competed with the heading (owner, round 8). h4 (28) lets the heading lead and the
+     six titles competed with the heading (owner, round 8). h4 (28, the sans 22 since 19 Oct 2026) lets the heading lead and the
      list read as its answers. */
   --gwy-title-text: var(--text-h4);
   --gwy-title-tracking: var(--text-h4-tracking);

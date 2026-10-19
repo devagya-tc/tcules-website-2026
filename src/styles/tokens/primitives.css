@@ -7,13 +7,13 @@
    · A RAMP is named for its value — --color-brandeis-500, --space-24. The name is
      the fact. Consumers reach these through a usage token, not directly.
    · A LADDER is named for its role — --font-size-h1, --line-height-h2. The type
-     scale was cut per role (67 · 54 · 43 · 34 · 28 · 22 for Newsreader), so the
+     scale was cut per role (67 · 54 · 43 · 34 for Newsreader, 22 · 18 · 16 for the sans), so the
      role IS the value's identity; --font-size-54 or --line-height-114 is a number
      in search of a meaning, and picking one by eye is how a scale drifts.
 
    Size and line height are laddered together, because they are one decision. Where
-   two roles share a value — h4 and quote at 28px, body and code at 1.6 — it is
-   stated twice on purpose: they are free to move independently.
+   two roles share a value — body and code at 1.6, ui-lg and body-sm at 14px — it
+   is stated twice on purpose: they are free to move independently.
 
    Letter-spacing is the exception and stays as it is: tracking corrects an optical
    error at a size, it is not a step on a scale, and one correction genuinely serves
@@ -160,8 +160,8 @@
 /* ── Type · size ladder ───────────────────────────────────────────────────────
    Titles run 1.25 from 22px, text 1.125 from 16px, chrome 1.125 from 13px. Named
    by role because the ladder was cut per role. Where two roles share a value —
-   h4 and quote at 28px, ui-lg and body-sm at 14px — the value is stated twice on
-   purpose: they are free to move independently.                                */
+   ui-lg and body-sm at 14px — the value is stated twice on purpose: they are free
+   to move independently.                                                       */
 :root {
   --font-size-display: 67px;
   /* A hero whose title is ONE WORD — a format page's "Articles" (beauty round 3, 16 Oct 2026): the
@@ -170,11 +170,12 @@
   --font-size-h1: 54px;
   --font-size-h2: 43px;
   --font-size-h3: 34px;
-  --font-size-h4: 28px;
-  /* h5 and h6 are in the SANS (owner, 16 Oct 2026), and Public Sans' taller x-height sets a size
-     much larger than Newsreader at the same number: "public sans 22px looks as big as newsreader
-     28px". So the two sans steps are optical, not arithmetic: h5 at 18 (the size the owner liked on
-     the video tiles), h6 at 16, each about the visual weight its serif step had at 22 and 18. */
+  /* h4, h5 and h6 are in the SANS (h5/h6 owner, 16 Oct 2026; h4 owner, 19 Oct 2026: "only h1 h2
+     h3 and display will remain serif"). Public Sans' taller x-height sets a size much larger than
+     Newsreader at the same number: "public sans 22px looks as big as newsreader 28px". So the sans
+     steps are optical, not arithmetic: h4 at 22 carries the weight the serif h4 had at 28, h5 at 18
+     (the size the owner liked on the video tiles) and h6 at 16 the weight of the serif's 22 and 18. */
+  --font-size-h4: 22px;
   --font-size-h5: 18px;
   --font-size-h6: 16px;
   /* A client's name typeset in place of its logo (LogoGrid, home round 1, 10 Oct 2026): the h5 size
@@ -243,8 +244,10 @@
   --font-size-h2-m: 28px;
   --font-size-h3-t: 28px;
   --font-size-h3-m: 25px;
-  --font-size-h4-t: 25px;
-  --font-size-h4-m: 22px;
+  /* h4's steps are the serif's 25 and 22 at the same optical ratio (22 / 28), and stay one step
+     above h5 at every width: 20 over 18, 18 over 17. */
+  --font-size-h4-t: 20px;
+  --font-size-h4-m: 18px;
   --font-size-h5-m: 17px;
   --font-size-wordmark-m: 18px;
   --font-size-quote-m: 22px;
@@ -272,8 +275,7 @@
 
    The ratios are unchanged from the ramp they replace. Where two roles share one —
    body and code at 1.6, ui / eyebrow / micro at 1.2, body-lg and body-sm at 1.55 —
-   it is stated per role on purpose, exactly as h4 and quote both state 28px: they
-   are free to move independently.
+   it is stated per role on purpose: they are free to move independently.
 
    Titles tighten as they grow and open up as they shrink, so the title roles carry
    -t (tablet, ≤1023) and -m (mobile, ≤767) steps beside the base, matching the size
@@ -284,7 +286,9 @@
   --line-height-h1: 1.06;
   --line-height-h2: 1.1;
   --line-height-h3: 1.16;
-  --line-height-h4: 1.2;
+  /* h4 in the sans: the taller x-height wants more leading than the serif's 1.2 at 28, and it sits
+     just under h5's 1.28 as the larger of the two. */
+  --line-height-h4: 1.25;
   --line-height-h5: 1.28;
   /* Continuing the trend rather than restating h5: the ratios loosen as the size drops
      (1.2 · 1.28 · 1.35), because a shorter line needs proportionally more leading to stay
@@ -326,8 +330,8 @@
   --line-height-h2-m: 1.18;
   --line-height-h3-t: 1.2;
   --line-height-h3-m: 1.22;
-  --line-height-h4-t: 1.22;
-  --line-height-h4-m: 1.26;
+  --line-height-h4-t: 1.26;
+  --line-height-h4-m: 1.3;
   --line-height-h5-m: 1.3;
   --line-height-quote-m: 1.4;
   --line-height-quote-lg-t: 1.35;
@@ -413,14 +417,16 @@
   --text-h3: var(--font-weight-medium) var(--font-size-h3)/var(--line-height-h3)
     var(--font-family-display);
   --text-h3-tracking: var(--letter-spacing-title-tight);
+  /* h4, h5 and h6 are set in the SANS. h5 and h6 since 16 Oct 2026 ("for fonts smaller than 28px
+     we should use Public Sans"); h4 since 19 Oct 2026 ("only h1 h2 h3 and display will remain
+     serif"). The rule is by role, not by width: h4–h6 take the sans everywhere, while display and
+     h1–h3 keep the serif at every width even where a breakpoint steps them under 28 — a heading
+     never changes typeface as the screen narrows. Same weight as the serif titles; what makes
+     them titles is the role, not the face. h4 keeps title-fine, its light negative correction:
+     at 22 the sans is large enough for it to register, where h5 at 18 is not. */
   --text-h4: var(--font-weight-medium) var(--font-size-h4)/var(--line-height-h4)
-    var(--font-family-display);
+    var(--font-family-sans);
   --text-h4-tracking: var(--letter-spacing-title-fine);
-  /* h5 and h6 are set in the SANS (owner, 16 Oct 2026: "for fonts smaller than 28px we should use
-     Public Sans"). The rule is by role, not by width: the roles always under 28 (h5 22/20, h6 18)
-     take the sans everywhere, while h1–h4 keep the serif at every width even where a breakpoint
-     steps them under 28 — a heading never changes typeface as the screen narrows. Same weight as
-     the serif titles; what makes them titles is the role, not the face. */
   --text-h5: var(--font-weight-medium) var(--font-size-h5)/var(--line-height-h5)
     var(--font-family-sans);
   --text-h5-tracking: var(--letter-spacing-none);
@@ -539,7 +545,7 @@
     --text-h3: var(--font-weight-medium) var(--font-size-h3-t)/var(--line-height-h3-t)
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-t)/var(--line-height-h4-t)
-      var(--font-family-display);
+      var(--font-family-sans);
     --text-quote-lg: italic var(--font-weight-regular)
       var(--font-size-quote-lg-t)/var(--line-height-quote-lg-t) var(--font-family-display);
     --text-quote-xl: italic var(--font-weight-regular)
@@ -566,7 +572,7 @@
     --text-h3: var(--font-weight-medium) var(--font-size-h3-m)/var(--line-height-h3-m)
       var(--font-family-display);
     --text-h4: var(--font-weight-medium) var(--font-size-h4-m)/var(--line-height-h4-m)
-      var(--font-family-display);
+      var(--font-family-sans);
     --text-h5: var(--font-weight-medium) var(--font-size-h5-m)/var(--line-height-h5-m)
       var(--font-family-sans);
     --text-wordmark: var(--font-weight-semibold)
