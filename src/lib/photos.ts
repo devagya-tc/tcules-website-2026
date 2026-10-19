@@ -25,9 +25,10 @@
  * a split, a banner, an offer, an aside or a card, it says nothing the copy does not, and it is
  * decorative — `alt=""`. Pass `alt` only where a person is named or the image carries content.
  *
- * A leaf: imports only the generated data beside it.
+ * A leaf: imports only the generated data beside it, and the route names its home table keys on.
  */
 import { PHOTO_CATALOGUE, type PhotoId } from './photo-catalogue';
+import { ROUTES } from './routes';
 
 export type { PhotoId };
 
@@ -280,6 +281,23 @@ export const SERVICE_PHOTO_SLOTS = {
   },
 } as const satisfies Record<string, ServicePhotoSlots>;
 
+/**
+ * The home page's sector cards (owner, 19 Oct 2026), keyed by the sector page each card links to.
+ * Each shows the people the sector serves in a good moment, close and cropped like the tcules.com
+ * hero scroller — never a product shot or a generic industry image. Picked by the owner from free
+ * Unsplash and Pexels shortlists; a sector with no row keeps its register placeholder.
+ */
+export const HOME_SECTOR_PHOTOS: Readonly<Partial<Record<string, PhotoId>>> = {
+  [ROUTES.b2bSaasWorkflow]: 'hand-orange-note-glass',
+  [ROUTES.aiDeveloperTools]: 'hands-laptop-headphones',
+  [ROUTES.dataDecisionProducts]: 'meeting-lead-presenting',
+  [ROUTES.commerce]: 'parcel-at-front-door',
+  [ROUTES.marketplaces]: 'hands-paper-bag-handover',
+  [ROUTES.fintech]: 'older-couple-papers-sofa',
+  [ROUTES.healthtech]: 'hands-held-across-table',
+  [ROUTES.martech]: 'megaphone-pink-ground',
+};
+
 /** The photos a page's own slots take: never also one of its stand-ins (§ 5.1 rule 4). */
 export function slotPhotos(slug: string): ReadonlySet<PhotoId> {
   const slots: ServicePhotoSlots | undefined = Object.hasOwn(SERVICE_PHOTO_SLOTS, slug)
@@ -295,9 +313,10 @@ export function slotPhotos(slug: string): ReadonlySet<PhotoId> {
  * may recur across sibling pages (§ 5.1 rule 4), and only three resolve outside cards.
  */
 export const RESERVED_STOCK: ReadonlySet<PhotoId> = new Set(
-  Object.values(SERVICE_PHOTO_SLOTS)
-    .flatMap((slots): PhotoId[] => Object.values(slots))
-    .filter((id) => !isStudio(id)),
+  [
+    ...Object.values(SERVICE_PHOTO_SLOTS).flatMap((slots): PhotoId[] => Object.values(slots)),
+    ...Object.values(HOME_SECTOR_PHOTOS).filter((id): id is PhotoId => id !== undefined),
+  ].filter((id) => !isStudio(id)),
 );
 
 /* ── Stand-ins (§ 5.7) ────────────────────────────────────────────────────────── */

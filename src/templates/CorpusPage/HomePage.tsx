@@ -28,6 +28,7 @@ import type {
   PlaceholderReasons,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { sketchForRoute } from '@/lib/sketches';
 
@@ -585,18 +586,24 @@ function AiPractice({ page, b }: BandProps) {
 /**
  * Eight sectors as image cards (owner, 10 Oct 2026, note 9), four across from 1024 and two across on a
  * phone — never one per row, never a scroll row (BlockCardSet `phone="pair"`). Each card's picture is
- * its sector's own register slot: no studio photograph depicts a sector, so the set is drawn whole.
+ * its sector's stock photograph (owner, 19 Oct 2026: the people the sector serves, in a good moment),
+ * else its register slot.
  */
 function Expertise({ page, b }: BandProps) {
-  const cards: BlockCardSetItem[] = bandLinks(b).map((link) => ({
-    id: link.href,
-    title: link.labelText,
-    href: link.href,
-    media: {
-      type: 'image',
-      image: placeholderImage(page.route, b.id, slugOf(link.labelText)),
-    },
-  }));
+  const cards: BlockCardSetItem[] = bandLinks(b).map((link) => {
+    const photo = HOME_SECTOR_PHOTOS[link.href];
+    return {
+      id: link.href,
+      title: link.labelText,
+      href: link.href,
+      media: {
+        type: 'image',
+        image: photo
+          ? getKitPhoto(photo)
+          : placeholderImage(page.route, b.id, slugOf(link.labelText)),
+      },
+    };
+  });
   return (
     <ContentSection {...head(b)} data-band="C-image">
       <BlockCardSet items={cards} lead="none" across={4} cue="title" phone="pair" />
