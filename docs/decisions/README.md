@@ -164,6 +164,7 @@ stale index.
 
 *The gap scale and section air.*
 
+- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-13 · [Island's inset is the band's air in miniature](2026-10-13-island-inset-is-band-air.md)
 - 2026-10-11 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md)
 - 2026-10-07 · [Section padding is one value per width: 96, and 64 below 768](2026-10-07-section-padding-one-value-per-width.md)
@@ -319,6 +320,7 @@ stale index.
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
+- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
