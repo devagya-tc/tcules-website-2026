@@ -64,7 +64,7 @@ function Voice({ text }: { text: string }) {
  *
  * The band's job is recognition: a visitor may not know which service they need, but they know
  * what is going wrong, and they say it in these words. So the complaint is the band's large thing,
- * set in the upright serif at h4 (two steps under the band's h2) in the leading 7 of [7, 5] from
+ * set in the upright sans at h4 (two steps under the band's h2) in the leading 7 of [7, 5] from
  * 1024, one row each on a hairline; the answer is the reply beside it, its first line on the
  * complaint's first baseline. The opening quote mark hangs into the margin so the words keep the
  * column's edge. Below 1024 each reply sits under its complaint.

@@ -72,7 +72,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h1` | 54px | 1.06 | display | regular | `--text-h1-tracking` | verbatim |
 | `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` | verbatim |
 | `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` | verbatim |
-| `--text-h4` | 28px | 1.2 | display | medium | `--text-h4-tracking` | verbatim |
+| `--text-h4` | 22px | 1.25 | sans | medium | `--text-h4-tracking` | verbatim |
 | `--text-h5` | 18px | 1.28 | sans | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 16px | 1.35 | sans | medium | `--text-h6-tracking` | verbatim |
 | `--text-wordmark` | 22px | 1.15 | sans | semibold | `--text-wordmark-tracking` | verbatim |

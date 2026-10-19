@@ -43,7 +43,7 @@ export default function VoiceLedgerSpecimen() {
           <h1>VoiceLedger</h1>
           <p className={t.lead}>
             The reader knows what is going wrong before they know which service they need. So the
-            complaint, in their own words, is the band&rsquo;s large thing (upright serif at h4, its
+            complaint, in their own words, is the band&rsquo;s large thing (upright sans at h4, its
             opening quote mark hung into the margin) down one edge on hairlines, and where we start is
             the reply beside it, no arrow, its first line on the complaint&rsquo;s first baseline (Layout{' '}
             <code>align=&quot;first-baseline&quot;</code>). Quote marks and apostrophes are typeset;
