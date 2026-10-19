@@ -320,7 +320,8 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
    - Run `/audit-component <Name>`, an independent read-only pass that reports and does not fix. Fix what
      it reports.
    - Run `npm run shots -- <specimen>`: each specimen block at 1440 and 390, horizontal overflow and page
-     errors. Put the crops in front of the owner.
+     errors. The crops are for Claude's own check; the owner reviews the routes in the browser
+     (owner, 9 Oct 2026; decisions/2026-10-09-no-screenshots-to-owner).
 5. **Approve (owner), then ship (Claude).** On approval Claude opens the PR, and the owner merges.
 6. **Sync.** When a component lands, the owner types `/design-sync`, a command built into Claude Code
    that only the user can start. Claude then pushes the library and `docs/vocabulary.md` into the Claude
@@ -343,6 +344,22 @@ None of it sees a child margin, a hand-rolled arrangement, a restated font size,
 exists but is the wrong step, or whether the composition is any good. Those are the eye's job, the
 screenshots are how the eye gets them without opening a browser, and the squint test below is the
 standard.
+
+## Rulings are logged, or they are lost
+
+Every owner ruling is one file in `docs/decisions/`, and `docs/decisions/README.md` indexes them by area.
+**Read the entries for an area before designing, building or reviewing in it.** A logged ruling is not
+reopened by a spec, a critic or a reference. The owner overturns one with a new entry that `supersedes`
+it, and the old entry is kept.
+
+- **`/decide` logs a ruling in the same PR as the change that applies it**, the way `docs/TRACKER.md` is
+  ticked. A ruling that exists only in a chat, a review note or agent memory is broken by the next session
+  that never saw it, and memory is local to one machine.
+- **A ruling that changes the brand framework is logged `dbf_status: pending`.** `/dbf-update <chapter>`
+  applies a chapter's backlog in one versioned edit. The owner then runs `/design-sync`. Chapters are
+  batched, never edited ruling by ruling (owner, 19 Oct 2026).
+- `npm run decisions -- --check` runs in `verify`. It fails on an invalid entry, a broken `supersedes` or a
+  stale index, and only warns on a pending backlog.
 
 ## The old repo
 
@@ -370,7 +387,8 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   may sit beside items nobody clicks, with those items continuing under the heading in its column.
 - **Two tinted bands are never adjacent**, the close included: where two would meet, one drops to paper.
 - **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
-  inline beside the title. A boxed card has no edge; its inset exists for the hover ground.
+  inline beside the title. No ground exists only on hover, so no card carries an inset for one
+  (owner, 19 Oct 2026; decisions/2026-10-19-no-hover-only-grounds).
 - **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
   followed by a visual one (a photograph, a diagram, marks, covers, an icon set). The ServicePage
   plan warns in development (`textHeavyPairs`, visual-direction § 1.7).

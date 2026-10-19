@@ -1,5 +1,9 @@
 # Phase 2 decisions
 
+> **Migrated to `docs/decisions/` on 19 October 2026.** Each row below is an entry there with
+> `legacy: phase-2 <ID>`, and some have since been superseded (C1, P1, O3, W2). The log is canonical;
+> this file is kept because Phase 2 specs cite it.
+
 **The owner's rulings for tracker Phase 2 (2.1–2.16), taken 28 September 2026.** Every Phase 2 spec cites
 this file for its answers, and a spec may not reopen a question settled here. A new question goes into that
 spec's open-questions list, not into this file. It is added here only once the owner has answered it.
