@@ -223,3 +223,63 @@
     animation: none;
   }
 }
+
+/* ── board (round 11, 19 Oct 2026) ─────────────────────────────────────────────
+   Every situation at once on paper: drawing, title, sentence. No ground and no box, so nothing is
+   inset against nothing (the owner's note on the hover-only ground). The whole item is the link;
+   its drawing plays (SituationFigure) and its title takes the accent, on one length and curve. */
+.card {
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card:hover,
+.card:focus-visible {
+  text-decoration: none;
+}
+
+.card:focus {
+  outline: none;
+}
+
+.card:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--gwy-card-ring-offset) * -1);
+  border-radius: var(--gwy-marker-radius);
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+  pointer-events: none;
+}
+
+/* The drawing's box: one height for every item, the drawing standing on the box's foot at the
+   title's edge. Sizing, not arrangement. */
+.cardVisual {
+  display: block;
+  block-size: var(--gwy-card-visual-height);
+}
+
+.cardTitle {
+  font: var(--gwy-title-text);
+  letter-spacing: var(--gwy-title-tracking);
+  text-wrap: balance;
+  color: var(--gwy-title-ink);
+  transition: color var(--gwy-card-duration) var(--gwy-card-easing);
+}
+
+.card:hover .cardTitle,
+.card:focus-visible .cardTitle {
+  color: var(--gwy-title-ink-hover);
+}
+
+.cardBody {
+  font: var(--gwy-body-text);
+  color: var(--gwy-body-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardTitle {
+    transition-duration: var(--duration-instant);
+  }
+}

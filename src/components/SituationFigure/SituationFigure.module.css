@@ -1,0 +1,47 @@
+/* SituationFigure — the drawing and its one motion. Every value is a --sfig-* token
+   (tokens/components/situation-figure.css). The parts are the generated drawing's own markup, so
+   they are reached as :global(.mv) and :global(.trace) inside the figure's scope. */
+
+.figure {
+  display: block;
+  block-size: 100%;
+  inline-size: auto;
+  max-inline-size: 100%;
+  overflow: visible;
+}
+
+/* A part that moves: from where it is drawn (rest) by its own displacement (end). */
+.figure :global(.mv) {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--sfig-duration) var(--sfig-easing);
+}
+
+/* An outline that draws itself: the mask's stroke is revealed along its own length, so the
+   dashed line it uncovers stays dashed while it draws. */
+.figure :global(.trace) {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--sfig-duration) var(--sfig-easing);
+}
+
+/* End state: when the link the drawing sits in is hovered or focused — the one place a drawing is
+   interactive — or when a specimen asks for it. */
+:global(a:hover) .figure :global(.mv),
+:global(a:focus-visible) .figure :global(.mv),
+.figure[data-state='end'] :global(.mv) {
+  transform: translate(var(--sfig-tx), var(--sfig-ty)) rotate(var(--sfig-rot));
+}
+
+:global(a:hover) .figure :global(.trace),
+:global(a:focus-visible) .figure :global(.trace),
+.figure[data-state='end'] :global(.trace) {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure :global(.mv),
+  .figure :global(.trace) {
+    transition-duration: var(--duration-instant);
+  }
+}

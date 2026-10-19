@@ -725,3 +725,24 @@ proposals below are where that design asks something of the copy.
   (`src/content/sources/fixtures/placeholder-reasons.ts`); the heading and the closing link are the
   corpus's. The corpus's four reasons and their quotes are no longer shown, so the Primelis quote
   (Clément Contamine) appears nowhere on home until it joins "What clients say".
+
+### P49 · `/` · product-situations · an eyebrow for "What do you need next?", and the gateway's links
+
+- **Proposed:** the band carries the eyebrow **"Where to start"** above its heading. The corpus
+  authors no eyebrow on this band.
+- **Why:** the owner asked for the head to be centred with an eyebrow (gateway round 11, 19 Oct 2026)
+  so the band reads as balanced over its three columns. The eyebrow names the band's job, not a
+  location (an eyebrow is never a crumb).
+- **Also changed in the design, no copy change needed:** each situation's service link line
+  ("Product Design →") is no longer shown. Each whole situation is the link to the same page, so
+  the authored link labels are not displayed on home; the destinations are unchanged.
+- **Open for the content team, not applied:** two descriptions run longer than the other four. The
+  band fits one fold at 1440 as authored, so nothing was cut. If the content team wants an even
+  set, these were trimmed in the mock to three lines:
+  - "Make your SaaS product easier to use": *Smoother onboarding, simpler workflows, fewer tickets
+    about the same three screens. We find where people work too hard and fix it.*
+  - "Get every team building from the same system": *One design system across Figma and code, with
+    the support every team needs to adopt it, so your product stops looking like five products.*
+- **On home since this change:** the eyebrow is a PROPOSED value
+  (`src/content/sources/fixtures/proposed-eyebrows.ts`), read through `getProposedEyebrows`; it
+  goes when the content team decides.

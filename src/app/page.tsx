@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import {
   getCorpusPage,
   getPlaceholderReasons,
+  getProposedEyebrows,
   getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
@@ -26,10 +27,20 @@ export default async function Home() {
   const ids = page.composition.testimonialIds;
   /* "Why teams choose Tcules" shows stand-in reasons (PLACEHOLDER, P48) until the content team
      writes the six the Reasons band is built for. */
-  const [ratings, avatars, reasons] = await Promise.all([
+  /* Bands the owner asked to carry an eyebrow the corpus does not author (PROPOSED, P49). */
+  const [ratings, avatars, reasons, eyebrows] = await Promise.all([
     getTestimonialRatings(ids),
     getTestimonialAvatars(ids),
     getPlaceholderReasons(page.route),
+    getProposedEyebrows(page.route),
   ]);
-  return <HomePage page={page} ratings={ratings} avatars={avatars} reasons={reasons} />;
+  return (
+    <HomePage
+      page={page}
+      ratings={ratings}
+      avatars={avatars}
+      reasons={reasons}
+      eyebrows={eyebrows}
+    />
+  );
 }

@@ -44,6 +44,7 @@ export {
   getTestimonialRatings,
   getTestimonialAvatars,
   getPlaceholderReasons,
+  getProposedEyebrows,
 } from './source';
 export { getCaseRefs, getCorpusBindings } from './corpus-refs';
 export type {

@@ -5,6 +5,7 @@ import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
 import { PLACEHOLDER_REASONS, figureOf } from './sources/fixtures/placeholder-reasons';
+import { PROPOSED_EYEBROWS } from './sources/fixtures/proposed-eyebrows';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
@@ -56,6 +57,7 @@ import type {
 } from './types';
 import type {
   PlaceholderReasons,
+  ProposedEyebrows,
   TestimonialAvatarRecord,
   TestimonialRating,
 } from './corpus-types.ts';
@@ -199,6 +201,11 @@ export async function getTestimonialAvatars(
     if (avatar) found[id] = avatar;
   }
   return found;
+}
+
+/** A route's proposed band eyebrows (PROPOSED, fixtures/proposed-eyebrows.ts), keyed by band id. */
+export async function getProposedEyebrows(route: string): Promise<ProposedEyebrows> {
+  return PROPOSED_EYEBROWS[route] ?? {};
 }
 
 /** A route's stand-in reasons (PLACEHOLDER, fixtures/placeholder-reasons.ts), or none. */
