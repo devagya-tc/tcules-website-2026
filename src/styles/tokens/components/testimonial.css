@@ -24,8 +24,10 @@
    differ only on blue, where the boxed card is paper and the unboxed quote is on blue.
 
    The surface register (ground and ink) because the card is a small surface its words sit on; the
-   avatar is a photograph and carries no colour. No state tokens: a testimonial is not
-   a control and nothing in it responds to a pointer.
+   avatar is a photograph and carries no colour. No state tokens on the testimonial itself: a quote
+   is not a control. The one linked part is TestimonialCase, whose whole card is its case's link
+   (19 Oct 2026): its cover leans in on hover and focus, its link's steps are Button's, and its focus
+   ring is the --tsm-case-ring-* pair, BlockCard's values.
 
    Every surface restates every token (index.css, rule 2). */
 
@@ -57,6 +59,13 @@
   --tsm-case-eyebrow-tracking: var(--text-eyebrow-tracking);
   --tsm-case-media-ratio: var(--ratio-standard);
   --tsm-case-inner-radius: var(--radius-4);
+  /* The linked case card's hover and focus: BlockCard's lean-in (1.03, geometry, so one value on
+     every surface) and the focus ring's width and offset. */
+  --tsm-case-media-zoom: 1.03;
+  --tsm-case-media-zoom-duration: var(--duration-slow);
+  --tsm-case-media-zoom-easing: var(--easing-standard);
+  --tsm-case-ring-width: var(--focus-ring-width);
+  --tsm-case-ring-offset: var(--focus-ring-offset);
 }
 
 :root,
@@ -66,7 +75,11 @@
   --tsm-case-role-ink: var(--color-neutral-700); /* 7.27:1 on paper */
   --tsm-case-title-ink: var(--color-neutral-900);
   --tsm-case-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  --tsm-case-media-rule: var(--color-neutral-200); /* decoration; 300 read too dark (owner, round 7) */
+  --tsm-case-media-rule: var(
+    --color-neutral-200
+  ); /* decoration; 300 read too dark (owner, round 7) */
+  --tsm-case-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --tsm-case-ring-gap-color: var(--color-paper);
   --tsm-ground: var(--color-paper-deep);
   --tsm-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper */
@@ -84,6 +97,8 @@
   --tsm-case-title-ink: var(--color-neutral-900);
   --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
   --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
+  --tsm-case-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --tsm-case-ring-gap-color: var(--color-paper-deep);
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800); /* 11.81:1 on paper */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper-deep */
@@ -101,6 +116,8 @@
   --tsm-case-title-ink: var(--color-white);
   --tsm-case-body-ink: var(--color-neutral-300);
   --tsm-case-media-rule: var(--color-neutral-700); /* decoration */
+  --tsm-case-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --tsm-case-ring-gap-color: var(--color-neutral-950);
   --tsm-ground: var(--color-neutral-900);
   --tsm-quote-ink: var(--color-white);
   --tsm-quote-ink-quiet: var(--color-neutral-300);
@@ -118,6 +135,8 @@
   --tsm-case-title-ink: var(--color-neutral-900);
   --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
   --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
+  --tsm-case-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --tsm-case-ring-gap-color: var(--color-brandeis-500);
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800);
   --tsm-quote-ink-quiet: var(--color-brandeis-50);

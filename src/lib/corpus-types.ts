@@ -213,19 +213,20 @@ export type TestimonialAvatarRecord = {
 };
 
 /**
- * A REAL testimonial from another corpus page, shown in a band whose own source authors none
- * (`getBorrowedQuotes`, home round 3: "assume all 4 have a quote"). The quote block is the other
- * page's, verbatim, parsed by the same loader — nothing is retyped. `placeholder` is always true:
- * it stands in until the content team authors this band's own quote (docs/content-proposals.md).
+ * Stand-in reasons for a "why us" band drawn as the Reasons pattern (`getPlaceholderReasons`, owner
+ * 19 Oct 2026). The band is designed for three or six short reasons, each with a drawing of its
+ * claim (docs/content-proposals.md P48); the corpus authors four longer ones with quotes, so the
+ * band shows P48's length-guide set until the content team writes its own. The heading and the
+ * closing link stay the corpus's. `placeholder` is always true.
  */
-export type BorrowedQuote = {
-  /** The band the quote is shown in, by its id. */
+export type PlaceholderReasons = {
+  /** The band the reasons are shown in, by its id. */
   band: string;
-  /** The item (h3) in that band the quote supports, by its heading text. */
-  item: string;
-  /** The route the quote is taken from. */
-  from: string;
-  quote: Extract<CorpusBlock, { type: 'quote' }>;
+  items: readonly {
+    title: string;
+    body: string;
+    /** The drawing, exported on the band's ground; decorative, so it carries no alt. */
+    figure: { src: string; width: number; height: number };
+  }[];
   placeholder: true;
 };
-

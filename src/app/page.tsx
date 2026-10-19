@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import {
-  getBorrowedQuotes,
   getCorpusPage,
+  getPlaceholderReasons,
   getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
@@ -23,20 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const page = await getCorpusPage(ROUTES.home);
   if (!page) notFound();
-  /* A band item whose source authors no quote takes a real one from another corpus page
-     (PLACEHOLDER, home round 3); its testimonial id joins the page's for ratings and avatars. */
-  const borrowedQuotes = await getBorrowedQuotes(page.route);
-  const ids = [
-    ...page.composition.testimonialIds,
-    ...borrowedQuotes.flatMap((entry) =>
-      entry.quote.testimonialId ? [entry.quote.testimonialId] : [],
-    ),
-  ];
-  const [ratings, avatars] = await Promise.all([
+  const ids = page.composition.testimonialIds;
+  /* "Why teams choose Tcules" shows stand-in reasons (PLACEHOLDER, P48) until the content team
+     writes the six the Reasons band is built for. */
+  const [ratings, avatars, reasons] = await Promise.all([
     getTestimonialRatings(ids),
     getTestimonialAvatars(ids),
+    getPlaceholderReasons(page.route),
   ]);
-  return (
-    <HomePage page={page} ratings={ratings} avatars={avatars} borrowedQuotes={borrowedQuotes} />
-  );
+  return <HomePage page={page} ratings={ratings} avatars={avatars} reasons={reasons} />;
 }

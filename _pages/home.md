@@ -89,6 +89,20 @@ page_composition:
     asset_policy: Use approved client logo assets; render names as fallback; never invent a logo asset.
   visual_plan: product_decision_survival_model_plus_inspectable_case_artefacts
   media_bindings:
+  - id: home_doodle_cover
+    role: proof
+    supports_section: flagship-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788500386/Thumbnail_case_study_doodle_e1840df53b.webp
+    source: current public Tcules case study thumbnail (/case-studies)
+    alt_intent: Doodle's booking page, a team calendar with the most bookable meeting slots highlighted
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: home_eden_ai_cover
+    role: proof
+    supports_section: flagship-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788505970/Thumbnail_case_study_eden_AI_258a48e39d.webp
+    source: current public Tcules case study thumbnail (/case-studies)
+    alt_intent: Eden AI workflow builder chaining an input, an AI detection step and if/else logic to an output
+    status: BOUND_EXISTING_PUBLIC_ASSET
   - id: home_doodle_object_model
     role: proof
     supports_section: flagship-work

@@ -159,12 +159,39 @@
 
 /* ── TestimonialCase: the case and its client's words as one card ─────────────────
    The card's ground and 8 radius; a `text` inset, so the cover and the voice box sit in it like
-   prints on a mat. Two rows, `text` apart, owned by the Layout inside. */
+   prints on a mat. Two rows, `text` apart, owned by the Layout inside.
+
+   The card IS the anchor (19 Oct 2026), so it is a block and carries no link colour or underline of
+   its own: `inherit` keeps globals.css's bare-anchor blue off every part, each of which states its
+   own ink, and the link Button inside takes its steps from `data-btn-link-group`. */
+.caseArticle {
+  min-inline-size: 0;
+}
+
 .caseCard {
+  display: block;
   min-inline-size: 0;
   padding: var(--gap-text);
   background: var(--tsm-ground);
   border-radius: var(--tsm-radius);
+  color: inherit;
+  text-decoration: none;
+}
+
+.caseCard:hover {
+  text-decoration: none;
+}
+
+.caseCard:focus {
+  outline: none;
+}
+
+.caseCard:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--tsm-case-ring-offset) var(--tsm-case-ring-gap-color),
+    0 0 0 calc(var(--tsm-case-ring-offset) + var(--tsm-case-ring-width))
+      var(--tsm-case-ring-color);
 }
 
 /* The cover: the card ratio, ruled at the placement (Media `edge="placement"`) in the case's own
@@ -176,6 +203,34 @@
   overflow: hidden;
   border: var(--tsm-rule-width) solid var(--tsm-case-media-rule);
   border-radius: var(--tsm-case-inner-radius);
+}
+
+/* A linked card's hover and keyboard focus: the cover leans in inside its still, ruled box
+   (BlockCard's .imageZoom). Geometry does not press, so the zoom holds on :active. */
+.caseZoom {
+  display: block;
+  block-size: 100%;
+  transition: transform var(--tsm-case-media-zoom-duration) var(--tsm-case-media-zoom-easing);
+}
+
+.caseCard:hover .caseZoom,
+.caseCard:focus-visible .caseZoom,
+.caseCard:active .caseZoom {
+  transform: scale(var(--tsm-case-media-zoom));
+}
+
+/* Reduced motion drops the zoom outright; keyboard focus still has the ring and the link's
+   underline. */
+@media (prefers-reduced-motion: reduce) {
+  .caseZoom {
+    transition: none;
+  }
+
+  .caseCard:hover .caseZoom,
+  .caseCard:focus-visible .caseZoom,
+  .caseCard:active .caseZoom {
+    transform: none;
+  }
 }
 
 /* The claim's column: its own inset (a `gutter` block, a `text` inline), so the words stand off the

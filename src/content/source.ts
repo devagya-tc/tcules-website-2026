@@ -3,8 +3,8 @@ import { idealAbout } from './sources/fixtures/ideal/about';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
-import { BORROWED_QUOTES } from './sources/fixtures/borrowed-quotes';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
+import { PLACEHOLDER_REASONS, figureOf } from './sources/fixtures/placeholder-reasons';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
@@ -55,8 +55,7 @@ import type {
   ToolContentSource,
 } from './types';
 import type {
-  BorrowedQuote,
-  CorpusBlock,
+  PlaceholderReasons,
   TestimonialAvatarRecord,
   TestimonialRating,
 } from './corpus-types.ts';
@@ -202,38 +201,19 @@ export async function getTestimonialAvatars(
   return found;
 }
 
-type QuoteBlock = Extract<CorpusBlock, { type: 'quote' }>;
-
-const quotesIn = (blocks: readonly CorpusBlock[]): QuoteBlock[] =>
-  blocks.flatMap((block) =>
-    block.type === 'quote' ? [block] : block.type === 'item' ? quotesIn(block.blocks) : [],
-  );
-
-/**
- * Real testimonials from other corpus pages, shown in a band of this page whose source authors none
- * (fixtures/borrowed-quotes.ts, owner 11 Oct 2026). Each quote block is read from the page it
- * belongs to, by testimonial id, so the words are that page's own; one whose page or id cannot be
- * found is left out. Every result is `placeholder: true`.
- */
-export async function getBorrowedQuotes(route: string): Promise<BorrowedQuote[]> {
-  const refs = BORROWED_QUOTES[route] ?? [];
-  const found: BorrowedQuote[] = [];
-  for (const ref of refs) {
-    const page = await corpusPagesSource.getCorpusPage(ref.from);
-    const quote = page
-      ? quotesIn(page.bands.flatMap((band) => band.blocks)).find(
-          (block) => block.testimonialId === ref.testimonialId,
-        )
-      : undefined;
-    if (quote) {
-      found.push({ band: ref.band, item: ref.item, from: ref.from, quote, placeholder: true });
-    } else if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        `getBorrowedQuotes: ${ref.testimonialId} not found on ${ref.from}; the quote is left out.`,
-      );
-    }
-  }
-  return found;
+/** A route's stand-in reasons (PLACEHOLDER, fixtures/placeholder-reasons.ts), or none. */
+export async function getPlaceholderReasons(route: string): Promise<PlaceholderReasons | null> {
+  const ref = PLACEHOLDER_REASONS[route];
+  if (!ref) return null;
+  return {
+    band: ref.band,
+    items: ref.items.map((item) => ({
+      title: item.title,
+      body: item.body,
+      figure: figureOf(item.figure),
+    })),
+    placeholder: true,
+  };
 }
 
 export type {
