@@ -237,3 +237,10 @@ export type PlaceholderReasons = {
  * 19 Oct 2026), logged in docs/content-proposals.md for the content team to keep, reword or drop.
  */
 export type ProposedEyebrows = Readonly<Record<string, string>>;
+
+/**
+ * One sector of the case-study index's BY INDUSTRY view (`getCaseIndustries`): its name and the
+ * case routes filed under it, in order. PROPOSED until the case record carries an industry
+ * (docs/content-proposals.md P50).
+ */
+export type CaseIndustry = { label: string; cases: readonly string[] };

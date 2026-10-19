@@ -237,7 +237,7 @@ export function IndexRail({
     <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
       <Layout rowGap="text">
         <Layout
-          columns={collapsible ? { base: [1, 'auto'], lg: 1 } : undefined}
+          columns={collapsible ? { base: ['auto', 1], lg: 1 } : undefined}
           colGap="block"
           rowGap="block"
           align="center"
@@ -260,8 +260,9 @@ export function IndexRail({
               }
             >
               {/* Two labels, the shown one in ink over a rule that slides between them. Content-sized
-                  tracks, so the rule is exactly its label's width. */}
-              <Layout columns={2} colGap="none">
+                  tracks in the phone bar, so the pair never stacks there (a bare `2` starts at md); equal
+                  halves of the rail from 1024. */}
+              <Layout columns={{ base: ['auto', 'auto'], lg: 2 }} colGap="none">
                 {modes.map((m) => (
                   <a
                     key={m.id}
@@ -285,7 +286,9 @@ export function IndexRail({
             </div>
           ) : null}
           {collapsible && count > 0 ? (
-            /* Below 1024 only: the section in view, opening the list. */
+            /* Below 1024 only: the section in view, opening the list. It takes what the switch
+               leaves, so a long section name truncates at the chevron and the switch never wraps
+               (the case index, 19 Oct 2026: "Four to start with" pushed it onto two lines). */
             <button
               type="button"
               className={styles.toggle}
@@ -293,7 +296,7 @@ export function IndexRail({
               aria-controls={`${uid}-list`}
               onClick={() => setOpen((was) => !was)}
             >
-              <Layout columns={{ base: ['auto', 'auto'] }} colGap="tight" align="center">
+              <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="center">
                 <span className={styles.toggleLabel}>{here?.label}</span>
                 <span className={styles.toggleMark} aria-hidden="true">
                   <Icon name="alt-arrow-down" size="sm" />

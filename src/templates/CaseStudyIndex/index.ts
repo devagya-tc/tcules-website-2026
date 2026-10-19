@@ -4,4 +4,5 @@ export type {
   CaseStudyIndexItem,
   CaseStudyIndexProps,
   CaseStudyIndexSection,
+  CaseStudyIndexView,
 } from './CaseStudyIndex';

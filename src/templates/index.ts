@@ -15,6 +15,7 @@ export type {
   CaseStudyIndexItem,
   CaseStudyIndexProps,
   CaseStudyIndexSection,
+  CaseStudyIndexView,
 } from './CaseStudyIndex';
 export { InsightsFormat, InsightsIndex } from './InsightsIndex';
 export type {

@@ -30,6 +30,7 @@ import {
   type LogoGridMark,
 } from '@/patterns';
 import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
+import { splitClaim } from '@/lib/claim';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
@@ -439,19 +440,6 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
   const featured = indexed.filter((entry) => entry.quote);
   const listed = indexed.filter((entry) => !entry.quote);
 
-  /* "Doodle: meeting times people will actually keep" → eyebrow "Doodle", claim "Meeting times
-     people will actually keep". Presentation of the authored words, not a rewrite: only the claim's
-     first letter is raised. A title with no colon stays whole, with no eyebrow. */
-  const claimOf = (heading: string) => {
-    const at = heading.indexOf(':');
-    if (at < 1) return { title: heading };
-    const rest = heading.slice(at + 1).trim();
-    return {
-      eyebrow: heading.slice(0, at).trim(),
-      title: rest.charAt(0).toUpperCase() + rest.slice(1),
-    };
-  };
-
   const body = (
     <Layout rowGap="section">
       <Layout rowGap="gutter">
@@ -462,7 +450,7 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
           return (
             <TestimonialCase
               key={item.headingText}
-              {...claimOf(item.headingText)}
+              {...splitClaim(item.headingText)}
               {...story}
               href={link.href}
               ctaLabel={link.labelText}

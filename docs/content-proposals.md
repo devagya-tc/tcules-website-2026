@@ -746,3 +746,29 @@ proposals below are where that design asks something of the copy.
 - **On home since this change:** the eyebrow is a PROPOSED value
   (`src/content/sources/fixtures/proposed-eyebrows.ts`), read through `getProposedEyebrows`; it
   goes when the content team decides.
+
+### P50 · `/case-studies` · an industry for every case, for the BY INDUSTRY view
+
+- **Proposed:** the case index gets a second view, **By industry**, beside **By type** (the
+  corpus's own bands). Each case is filed under ONE sector:
+
+  | Sector | Cases |
+  |---|---|
+  | B2B SaaS and workflow software | Doodle, Scissors |
+  | AI products and developer tools | Eden AI, Novus Insights |
+  | Commerce | GT Tools, Gold Image Printing, The Chain Hut |
+  | MarTech and SalesTech | Auxentios, Omny AI, Ryzeo |
+  | FinTech | OctiFi, Kirana store payments |
+  | PropTech and field operations | Dealpath, BuildTwin |
+  | Climate and energy | ConnectX, Benchmark Gensuite |
+  | EdTech | The Wandering Raven |
+
+- **Why:** the owner asked for the cases to be browsable by industry as well as by type of work
+  (19 Oct 2026), with the insights hub's rail. The corpus authors no industry for a case (only the
+  Chain Hut page has a `sector`), so the filing is read off the expertise pages: each case sits under
+  a sector whose expertise page already cites it, and a case cited by two sits under the closer one.
+  The content team should confirm or re-file, and name the sectors as they want them read.
+- **On the page since this change:** a PROPOSED value
+  (`src/content/sources/fixtures/case-industries.ts`), read through `getCaseIndustries`. A case the
+  index lists and the file does not name shows under "Other industries". The CMS field that retires
+  the file is `industry` on the case record (docs/strapi-changes.md § 5).
