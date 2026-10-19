@@ -15,6 +15,12 @@
   --skt-frame-width: var(--border-width-2);
   --skt-copy-width: var(--border-width-3);
   --skt-line-width: var(--border-width-3);
+  /* The bare frame's size: one drawing unit at scale 1 is one CSS pixel, and the scale is the
+     parent's to set (Bento sets it per tile size). */
+  --skt-unit: var(--space-1);
+  /* The drawing's width in units: the full 320 here, set per drawing by Sketch on a bare one. */
+  --skt-units: 320;
+  --skt-scale: 1;
   /* The light weight (owner, 19 Oct 2026, home What we do): every stroke one step down the ramp. */
   --skt-frame-width-light: var(--border-width-1);
   --skt-copy-width-light: var(--border-width-2);

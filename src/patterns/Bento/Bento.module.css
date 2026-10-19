@@ -151,24 +151,28 @@
   font: var(--bnt-body-text);
 }
 
-/* The drawing, at the tile's scale of its own drawing units (Sketch `bare` sets its intrinsic size).
-   A single tile holds it at the words' left edge; a wide tile centres it in its half. */
+/* The drawing, at the tile's scale of its own drawing units: the scale is handed to Sketch through
+   --skt-scale, the one value Sketch takes from a parent. A single tile holds the drawing at the
+   words' left edge; a wide tile centres it in its half. */
 .art {
+  --skt-scale: var(--bnt-art-scale);
+
   justify-self: start;
-  zoom: var(--bnt-art-scale);
 }
 
 .wide .art {
+  --skt-scale: var(--bnt-art-scale-wide);
+
   align-self: center;
   justify-self: center;
-  zoom: var(--bnt-art-scale-wide);
 }
 
 @media (max-width: 767.98px) {
   .art,
   .wide .art {
+    --skt-scale: var(--bnt-art-scale-m);
+
     justify-self: start;
-    zoom: var(--bnt-art-scale-m);
   }
 }
 

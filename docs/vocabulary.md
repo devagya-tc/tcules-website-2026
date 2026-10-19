@@ -223,7 +223,7 @@ against the controls beside it — if you are specifying one, say which of these
 - **section.css** — `--sec-padding-y` 96px · `--sec-padding-y-first` 96px · `--sec-padding-y-strip` 24px · `--sec-gutter` 32px · `--sec-rule-width` 1px · `--sec-container` 1240px · `--sec-rail` 180px
 - **service-page.css** — `--svc-mark-size` 12px · `--svc-slice-cell` 24px · `--svc-hidden-size` 1px · `--svc-rule-width` 1px · `--svc-rule-strong-width` 1px · `--svc-meter-width` 96px · `--svc-meter-height` 24px · `--svc-meter-stroke` 2px · `--svc-authority-slot` 12px · `--svc-orbit-stroke` 2px
 - **situation-figure.css** — `--sfig-tx` 0px · `--sfig-ty` 0px
-- **sketch.css** — `--skt-plate-radius` 8px · `--skt-frame-width` 2px · `--skt-copy-width` 3px · `--skt-line-width` 3px · `--skt-frame-width-light` 1px · `--skt-copy-width-light` 2px · `--skt-line-width-light` 2px · `--skt-dot-radius` 1px · `--skt-dot-soft` 1px
+- **sketch.css** — `--skt-plate-radius` 8px · `--skt-frame-width` 2px · `--skt-copy-width` 3px · `--skt-line-width` 3px · `--skt-unit` 1px · `--skt-frame-width-light` 1px · `--skt-copy-width-light` 2px · `--skt-line-width-light` 2px · `--skt-dot-radius` 1px · `--skt-dot-soft` 1px
 - **slider.css** — `--sld-progress-length` 240px · `--sld-progress-thickness` 2px · `--sld-progress-radius` 999px · `--sld-step-length` 56px · `--sld-step-target` 44px · `--sld-ring-width` 2px · `--sld-ring-offset` 2px · `--sld-hidden-size` 1px
 - **star-rating.css** — `--star-size-sm` 14px · `--star-size-md` 18px
 - **stat.css** — `--stat-rule-width` 1px · `--stat-mark-width` 2px · `--stat-mark-length` 32px · `--stat-value-tracking-lg` -0.015em · `--stat-value-tracking-xl` -0.02em · `--stat-value-tracking-md` -0.01em · `--stat-unit-tracking` 0.08em · `--stat-label-measure` 32ch
