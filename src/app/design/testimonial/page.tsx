@@ -45,7 +45,7 @@ const ITEMS: readonly TestimonialItem[] = [
     quoteHtml: '<p>“Clear thinking, quick turnaround, honest about trade-offs.”</p>',
     name: 'Jonas Weber',
     company: 'Fabrikam',
-    rating: 4,
+    rating: 4.5,
     avatar: face('portrait-man-glasses'),
   },
   {
