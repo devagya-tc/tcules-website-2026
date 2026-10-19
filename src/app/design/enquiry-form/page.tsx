@@ -1,9 +1,17 @@
 import Link from 'next/link';
+import { Fragment } from 'react';
 
-import { Button, Cluster, Layout, Section } from '@/components';
-import { CtaSection, EnquiryForm, type EnquiryUrlLabel } from '@/patterns';
+import { Button, Cluster, Layout, Media, Section } from '@/components';
+import { CtaSection, EnquiryForm, type EnquiryDress, type EnquiryUrlLabel } from '@/patterns';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
+import {
+  CHOICE_DRESS,
+  CLOSE_BODY,
+  CLOSE_HEADING,
+  DESK,
+  MESSAGE_CHIPS_DRESS,
+} from '../_specimen/enquiry-chips';
 import { Rehearse } from '../_specimen/Rehearse';
 import { specimenStyles as s } from '../_specimen/Specimen';
 
@@ -32,6 +40,102 @@ const SENT = {
   email: 'maya@northwind.studio',
   what_are_you_working_on: 'A billing redesign for a B2B payments product.',
 };
+
+/* ── The island close ──────────────────────────────────────────────────────────────────────────
+   The dresses as home carries them: the same copy and drawing as /design/cta-section § 1b
+   (src/templates/CorpusPage/blocks.tsx, ENQUIRY_DRESS). The message's person is a placeholder from
+   the studio photo catalogue until the owner names who answers enquiries. */
+const DRESS = {
+  card: {
+    kind: 'card',
+    title: 'Start a project',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    reply: 'We reply in 1 business day',
+  },
+  message: {
+    kind: 'message',
+    from: {
+      name: 'Rushali',
+      role: 'Design lead · Tcules',
+      portrait: '/kit/photos/studio-portrait-rushali.webp',
+    },
+    note: 'Tell us what you’re building. I’ll reply within a working day.',
+    prompt: 'A link, a Figma file, or two lines about the problem.',
+    writeTo: 'hello@tcules.com',
+  },
+} as const satisfies Record<'card' | 'message', EnquiryDress>;
+
+
+const ISLAND_BODY = [
+  'A sketch, a prototype or a product with years of history behind it. Start wherever you are.',
+] as const;
+
+type IslandCase = {
+  island: 'blue' | 'ink';
+  dress?: keyof typeof DRESS;
+  title: string;
+  note: string;
+};
+
+/* Each case is the real close, as home builds it: no scheduling link (the corpus authors none for
+   the home close), the page's own words, the drawing, the frame texture. */
+const ISLAND_CASES: readonly IslandCase[] = [
+  {
+    island: 'blue',
+    title: 'Blue island · no dress, the plain set',
+    note: 'EnquiryForm with no dress: email, what you are working on and the optional link, each label visually hidden with the placeholder as its cue, then the submit and the caption. It is what every other corpus close carries, on its own band. Inside the island it works, but it read as “a blank box with a few lines” (owner, 16 Oct 2026), which is why the island close takes a dress. Props: the enquiry set’s own (action, context, urlLabel, scheduleHref).',
+  },
+  {
+    island: 'blue',
+    dress: 'card',
+    title: 'Blue island · dress “card” — what home carries',
+    note: 'dress={{ kind: “card”, title, prompt?, reply?, writeTo?, note? }}. A structured card: its own h3 (title), VISIBLE labels over filled fields with “Optional” at the end of the link’s label row, the prompt as the example in the big field, and a foot under a hairline: the send with the reply promise beside it, led by a check, and optionally one line under, “or write to {writeTo} · {note}”. A send’s status replaces the promise in the same live region. Use it where the form is the band’s primary object and a visitor should see what each field is for: the home close.',
+  },
+  {
+    island: 'blue',
+    dress: 'message',
+    title: 'Blue island · dress “message” — the first message',
+    note: 'dress={{ kind: “message”, from: { name, role, portrait }, note, prompt?, writeTo?, needs? }}. The reply to a note: a person’s portrait (a circle), name and role, their one-sentence note in a bubble, then a composer: the big field first (the bare look; the composer draws the focus), name, email and link as its keyed details (name and email required since 19 Oct 2026), and the send in its foot beside “or write to …”. Use it where a named person answers enquiries and the close should read as a conversation rather than a form. On no page yet; the person here is a placeholder.',
+  },
+  {
+    island: 'ink',
+    dress: 'card',
+    title: 'Ink island · dress “card”',
+    note: 'The card on the dark island: neutral-900, one step off the footer’s 950, so the close and the footer a band below do not read as one dark block. The panel is paper on either island, so the form is identical; only the copy around it takes the island’s white ink.',
+  },
+  {
+    island: 'ink',
+    dress: 'message',
+    title: 'Ink island · dress “message”',
+    note: 'The first message on the dark island. Blue or ink is the page’s choice (home passes island={{ surface, dress }} to its close); either dress sits on either island.',
+  },
+];
+
+/* The chip form and the first message with chips (owner, 19 Oct 2026). Copy from the approved
+   mock, via the specimen fixture: the chips and prompts are the caller's. */
+const CHIP_CASES = [
+  {
+    id: 'chips-split-blue',
+    island: 'blue',
+    dress: 'choice',
+    title: 'Chips · split panel — blue island (direction A)',
+    note: 'dress={{ kind: “choice”, needs, stage?, prompt?, reply? }} in CtaSection island="blue" islandTexture="frame" islandArrangement="above" art={desk}. ONE paper panel across the island under a head row (the desk at 132 beside the heading and lede). In the panel, two halves split by a hairline: name and email side by side over “What are you working on?”, whose box stretches so the half ends level with the other; and “What do you need?” (pick any, posts needs), “Where is it today?” (optional, pick one, posts stage) and the optional website. A foot across both: the reply line, which says your picks back (“Product design and AI product UX, for a prototype. We reply within one business day.”) and is the live region a send’s status replaces, and the send at the end. Picking a service sets the message field’s example to that service’s follow-up question. Name, email and the message are required; errors only on send. On a phone: the chips, then the fields, then the send across the panel with the line under it.',
+  },
+  {
+    id: 'chips-split-ink',
+    island: 'ink',
+    dress: 'choice',
+    title: 'Chips · split panel — ink island',
+    note: 'The same form on the dark island. The panel is paper on either island, so the form is identical; the head row takes the island’s white ink.',
+  },
+  {
+    id: 'first-message-chips-blue',
+    island: 'blue',
+    dress: 'message',
+    title: 'First message with chips — blue island (direction C)',
+    note: 'dress={{ kind: “message”, from, note, prompt?, writeTo?, needs }} in the close as it stands (beside: the desk, heading and lede in 5, the panel in 7). Rushali’s note asks; the six services answer as chips under the bubble (set in to the bubble from 768, flush on a phone; pick any, posts needs; the bubble describes the group). Then the composer: the message, then Name · Email · Link (name and email required), and the send beside “or write to”. Picking a service sets the message’s example.',
+  },
+] as const;
 
 function Enquiry({
   outcome = 'success',
@@ -98,14 +202,145 @@ export default function EnquiryFormSpecimenPage() {
           <h1>EnquiryForm</h1>
           <p>
             Shared field sets for enquiries, audits, contact, and the compact three-field ask.
-            No visible labels: each placeholder is its field&rsquo;s cue and the label stays,
-            visually hidden. Errors land only on send, and are announced; editing a flagged field only clears its error. The renderings
-            here sit inside CtaSection; the kit&rsquo;s form family shows the form beside a
-            photograph, under a centred and a beside head, and in the offer.
+            The plain sets have no visible labels: each placeholder is its field&rsquo;s cue and
+            the label stays, visually hidden. The enquiry set also takes a <code>dress</code>{' '}
+            (owner, 16 Oct 2026, the home close): <code>card</code>, with its own title and
+            visible labels, and <code>message</code>, the &ldquo;first message&rdquo;: a
+            person&rsquo;s note, then a composer. A dress changes the presentation only; the
+            fields, names, statuses and success view are the same form&rsquo;s. Errors land only
+            on send: the submit sweep flags every failing field, says how many need a look and
+            moves focus to the first. Leaving a field never judges it, and editing a flagged field
+            only clears its error. The renderings here sit inside CtaSection; the kit&rsquo;s form
+            family shows the form beside a photograph, under a centred and a beside head, and in
+            the offer.
           </p>
-          <Link href={ROUTES.designKitForm}>The form family in the UI kit</Link>
+          <Cluster colGap="block" rowGap="tight">
+            <Link href={ROUTES.designKitForm}>The form family in the UI kit</Link>
+            <Link href={ROUTES.designCtaSection}>CtaSection, the island close (§ 1b)</Link>
+            <Link href={ROUTES.designIsland}>Island, the primitive the close floats on</Link>
+          </Cluster>
         </Layout>
       </Section>
+
+      {/* The island close (owner, 16 Oct 2026): the form's variations inside the real close. */}
+      <Section>
+        <Layout rowGap="block">
+          <h2>The island close</h2>
+          <p>
+            Home&rsquo;s enquiry close is CtaSection on a blue or ink island:{' '}
+            <code>island=&quot;blue&quot; | &quot;ink&quot;</code>,{' '}
+            <code>islandTexture=&quot;frame&quot;</code> (TextureFrame around the form) and{' '}
+            <code>art</code>, the designer&rsquo;s desk drawing above the heading. The band is
+            paper; the drawing, heading and lede are one group centred against the form, and the
+            form sits on a paper panel inside the island. Home carries the card on blue. Send any
+            of them empty to see send-only validation.
+          </p>
+          <p>
+            Two more on 19 Oct 2026, from the approved chip mock: the <strong>chip form</strong>{' '}
+            (<code>dress kind=&quot;choice&quot;</code>, “split panel”) in the close&rsquo;s{' '}
+            <code>islandArrangement=&quot;above&quot;</code>, and the{' '}
+            <strong>first message with chips</strong> (the message dress with{' '}
+            <code>needs</code>) in the close as it stands. Neither is on a page yet; home keeps the
+            card.
+          </p>
+        </Layout>
+      </Section>
+
+      {/* ── The chip form (owner, 19 Oct 2026) ── */}
+      {CHIP_CASES.map((item) => (
+        <Fragment key={item.id}>
+          <Section id={item.id}>
+            <Layout rowGap="tight" className={s.spec}>
+              <p className={s.specTitle}>{item.title}</p>
+              <p className={s.specNote}>{item.note}</p>
+            </Layout>
+          </Section>
+          {item.dress === 'choice' ? (
+            <CtaSection
+              island={item.island}
+              islandTexture="frame"
+              islandArrangement="above"
+              art={<Media image={DESK} sizes="132px" />}
+              heading={CLOSE_HEADING}
+              body={CLOSE_BODY}
+              form={
+                <EnquiryForm
+                  action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                  context={CONTEXT}
+                  dress={CHOICE_DRESS}
+                />
+              }
+            />
+          ) : (
+            <CtaSection
+              island={item.island}
+              islandTexture="frame"
+              art={<Media image={DESK} sizes="240px" />}
+              heading={CLOSE_HEADING}
+              body={CLOSE_BODY}
+              form={
+                <EnquiryForm
+                  action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                  context={CONTEXT}
+                  dress={MESSAGE_CHIPS_DRESS}
+                />
+              }
+            />
+          )}
+        </Fragment>
+      ))}
+      <Section id="chips-split-invalid">
+        <Layout rowGap="tight" className={s.spec}>
+          <p className={s.specTitle}>Chips · split panel · sent empty</p>
+          <p className={s.specNote}>
+            The same form, sent with nothing filled (rehearsed on load): name, email and the message
+            each get their message under the field, the reply line becomes the count of answers that
+            need a look, in the error ink, and focus moves to Name. The chips are optional and never
+            block a send. Editing a flagged field only clears its message.
+          </p>
+        </Layout>
+      </Section>
+      <CtaSection
+        island="blue"
+        islandTexture="frame"
+        islandArrangement="above"
+        art={<Media image={DESK} sizes="132px" />}
+        heading={CLOSE_HEADING}
+        body={CLOSE_BODY}
+        form={
+          <Rehearse submit>
+            <EnquiryForm
+              action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+              context={CONTEXT}
+              dress={CHOICE_DRESS}
+            />
+          </Rehearse>
+        }
+      />
+      {ISLAND_CASES.map((item) => (
+        <Fragment key={`${item.island}-${item.dress ?? 'plain'}`}>
+          <Section>
+            <Layout rowGap="tight" className={s.spec}>
+              <p className={s.specTitle}>{item.title}</p>
+              <p className={s.specNote}>{item.note}</p>
+            </Layout>
+          </Section>
+          <CtaSection
+            island={item.island}
+            islandTexture="frame"
+            art={<Media image={DESK} sizes="240px" />}
+            heading="Tell us what you're building"
+            body={ISLAND_BODY}
+            form={
+              <EnquiryForm
+                action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                context={CONTEXT}
+                dress={item.dress ? DRESS[item.dress] : undefined}
+              />
+            }
+          />
+        </Fragment>
+      ))}
 
       <CtaSection
         eyebrow="Variant · enquiry"

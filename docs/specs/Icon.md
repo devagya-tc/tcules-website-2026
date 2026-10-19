@@ -141,3 +141,11 @@ are read by convention, so they take the universal marks: `chrome-menu` (three p
 a `chrome-` prefix so the content area cannot reach for them by accident. SiteNav's toggle uses them.
 Solar's `hamburger-menu` and `close-circle` remain for content use (the filter chip's clear, for one).
 
+
+## Amendment · 19 Oct 2026 — `chrome-check`
+
+`Chip` (docs/specs/Chip.md) shows a plain tick when it is checked. A checkbox's tick is read by
+convention, as the menu and close marks are, and Solar's own check sits inside a circle
+(`check-circle`, the content mark for a done thing). So it takes a house drawing under the `chrome-`
+prefix: one 3-unit stroke drawn as a solid on the 24 box, mitred at its turn, no counter (so the 14px
+the chip sets it at is legal). Content keeps `check-circle`.

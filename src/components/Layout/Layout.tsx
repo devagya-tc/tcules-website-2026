@@ -221,6 +221,16 @@ export type LayoutProps = {
    */
   fillFirst?: boolean;
   /**
+   * The LAST child's row takes a stretched stack's spare height, and the child fills it (19 Oct
+   * 2026, the chip enquiry form) — `fillFirst` at the other end, and `pinLast` without the pin. For a
+   * stack stretched to a taller neighbour whose last item should grow rather than leave a hole under
+   * it: the split panel's message field, which runs down to where the chip half beside it ends so
+   * both halves finish on one line. The template is `pinLast`'s (`auto … auto 1fr`, counted from the
+   * DOM, up to eight children); the last child keeps the default stretch instead of sitting at the
+   * row's end. With no spare height it renders exactly as without the prop. Single-track only.
+   */
+  fillLast?: boolean;
+  /**
    * From lg (1024) every EVEN child drops by the `section` step (96), so a row of cards reads as
    * placed by hand rather than tiled (references.md § 3.4 item 12: "Stagger breaks the grid", kept
    * as a Layout option, cmp-feature fix round 2). The offset is a TRACK, not a margin: the row is
@@ -499,6 +509,7 @@ export function Layout({
   offset,
   pinLast = false,
   fillFirst = false,
+  fillLast = false,
   stagger = false,
   scroll,
   peek = true,
@@ -551,6 +562,7 @@ export function Layout({
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
         fillFirst && styles['fill-first'],
+        fillLast && styles['fill-last'],
         stagger && scroll !== 'always' && styles.stagger,
         scroll && styles[`scroll-${scroll}`],
         scroll && !peek && styles['no-peek'],

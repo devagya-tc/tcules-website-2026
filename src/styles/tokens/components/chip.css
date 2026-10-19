@@ -1,0 +1,109 @@
+/* ══ Component layer — chip ═══════════════════════════════════════════════════════
+   Tier 1 control (19 Oct 2026, the chip enquiry form; docs/specs/Chip.md). One choice in a set: a
+   real checkbox or radio, visually hidden inside its label, drawn as a pill. At rest an EDGE AND NO
+   GROUND, so a row of unpicked chips is a row of outlines; checked, a full FILL in the surface's
+   accent with the label reversed and a tick, so picked and unpicked differ in shape as well as in
+   colour.
+
+   Not Tag's `filter`. A filter chip is a LINK that applies a query, mono uppercase by role; a chip is
+   a form INPUT whose label is a sentence-case answer ("Product design", "A prototype"). A label that
+   must keep its author's case is not a mono label (CLAUDE.md, type rule 8), so the chip is sans.
+
+   Naming: --chip-{part}-{state}. A chip is a CONTROL, so its register is bg / fg (button.css), with
+   `rule` for its edge as Button's outline names it. States: rest (no suffix) · checked · disabled.
+   There is NO hover token: hover is a move (a small lift, `--chip-lift`), never a colour or a
+   ground that appears only under the pointer (owner, 19 Oct 2026). Focus is the ring.
+
+   Every surface block declares every surface-dependent token (CLAUDE.md, tokens rule 2). */
+
+:root {
+  /* The pill's floor: 34, measured by eye in the approved mock against the 48 fields beside it, so
+     a group of six reads as a set of small answers rather than a second row of buttons. A floor,
+     not a height: a long label wraps and the pill grows. 34 clears the 24 target floor (SC 2.5.8)
+     with the caller's `tight` row and column gaps as its spacing. */
+  --chip-height-md: 34px;
+  /* Optical, not a gap step: the pill's own inset, measured against its 34 box. A full round end
+     eats about half the box height of the label's room at each end, so the inset is set where a
+     short label ("New product") reads centred between the curves rather than crowded into them. */
+  --chip-padding-x: var(--space-14);
+  /* Optical: the block inset that only matters once a label wraps to two lines (a phone column);
+     a one-line label is centred in the 34 floor and never reaches it. */
+  --chip-padding-y: var(--space-4);
+  /* The tick to its label — the gap scale's own answer to "icon to label". Opened only when
+     checked: at rest the tick takes no width, so an unpicked label is centred in its pill. */
+  --chip-tick-gap: var(--gap-tight);
+  --chip-tick-size: var(--icon-size-14);
+  --chip-text: var(--text-body-sm);
+  --chip-radius: var(--radius-full);
+  --chip-rule-width: var(--border-width-hairline);
+  /* The hover move: the pill rises 2. Optical, from the ramp — small enough to read as the chip
+     answering the pointer, not as the row shifting. */
+  --chip-lift: calc(-1 * var(--space-2));
+  --chip-transition-duration: var(--duration-medium);
+  --chip-transition-easing: var(--easing-standard);
+  --chip-ring-width: var(--focus-ring-width);
+  --chip-ring-offset: var(--focus-ring-offset);
+}
+
+/* Paper. The rest edge is neutral-300 at 1.54:1, the approved mock's own: the label (11.81:1)
+   identifies the control, and the CHECKED state, which carries the information, is a blue fill at
+   6.17:1 against the ground. Recorded as an open question in Chip.md § 17 (a firmer edge,
+   neutral-500 at 3.16:1, is one token away). */
+:root,
+[data-surface='paper'] {
+  --chip-fg: var(--color-neutral-800); /* 11.81:1 */
+  --chip-rule: var(--color-neutral-300); /* 1.54:1 — see above */
+  --chip-bg-checked: var(--color-brandeis-500); /* 6.17:1 vs the ground */
+  --chip-fg-checked: var(--color-white); /* 6.23:1 on the fill */
+  --chip-rule-checked: var(--color-brandeis-500);
+  --chip-fg-disabled: var(--color-neutral-500); /* disabled: exempt from the floor */
+  --chip-rule-disabled: var(--color-neutral-200);
+  --chip-bg-checked-disabled: var(--color-neutral-200);
+  --chip-fg-checked-disabled: var(--color-neutral-600);
+  --chip-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+}
+
+/* Tint: the edge firms one step so the outline survives the deeper ground (300 nearly vanishes). */
+[data-surface='tint'] {
+  --chip-fg: var(--color-neutral-800); /* 10.54:1 */
+  --chip-rule: var(--color-neutral-400); /* 1.90:1 */
+  --chip-bg-checked: var(--color-brandeis-500); /* 5.51:1 vs the ground */
+  --chip-fg-checked: var(--color-white); /* 6.23:1 on the fill */
+  --chip-rule-checked: var(--color-brandeis-500);
+  --chip-fg-disabled: var(--color-neutral-500);
+  --chip-rule-disabled: var(--color-neutral-300);
+  --chip-bg-checked-disabled: var(--color-neutral-300);
+  --chip-fg-checked-disabled: var(--color-neutral-600);
+  --chip-ring-color: var(--color-brandeis-500); /* 5.51:1 */
+}
+
+/* Ink: the label lifts and the edge firms by going lighter. The checked fill stays the accent blue,
+   the approved mock's ink treatment: 2.77:1 against neutral-950 (2.37:1 on the 900 island), so on
+   ink the white label and the tick carry the checked state as well as the fill. */
+[data-surface='ink'] {
+  --chip-fg: var(--color-neutral-100); /* 14.47:1 */
+  --chip-rule: var(--color-neutral-600); /* 3.48:1 */
+  --chip-bg-checked: var(--color-brandeis-500); /* 2.77:1 — see above */
+  --chip-fg-checked: var(--color-white); /* 6.23:1 on the fill */
+  --chip-rule-checked: var(--color-brandeis-500);
+  --chip-fg-disabled: var(--color-neutral-600);
+  --chip-rule-disabled: var(--color-neutral-800);
+  --chip-bg-checked-disabled: var(--color-neutral-800);
+  --chip-fg-checked-disabled: var(--color-neutral-500);
+  --chip-ring-color: var(--color-brandeis-300); /* 7.32:1 */
+}
+
+/* Blue: every value is a blue or white because the ground is. Checked reverses to a white fill
+   under a deep blue label, as Tag's held chip does here. */
+[data-surface='blue'] {
+  --chip-fg: var(--color-white); /* 6.23:1 */
+  --chip-rule: var(--color-brandeis-300); /* 2.64:1 */
+  --chip-bg-checked: var(--color-white); /* 6.23:1 vs the ground */
+  --chip-fg-checked: var(--color-brandeis-600); /* 7.59:1 on the fill */
+  --chip-rule-checked: var(--color-white);
+  --chip-fg-disabled: var(--color-brandeis-300);
+  --chip-rule-disabled: var(--color-brandeis-400);
+  --chip-bg-checked-disabled: var(--color-brandeis-400);
+  --chip-fg-checked-disabled: var(--color-brandeis-200);
+  --chip-ring-color: var(--color-white); /* 6.23:1 */
+}

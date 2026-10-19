@@ -1,0 +1,114 @@
+/* Chip — built to docs/specs/Chip.md. Every value is a --chip-* token (tokens/components/chip.css),
+   re-declared per surface, so the same markup answers paper, tint, ink and blue.
+
+   The label is the hit area and the pill; the native input sits over it, transparent, so a pointer
+   anywhere on the pill is a pointer on the real control and the browser's own checking, keyboard
+   and form semantics hold. State is read from the input with the sibling combinator
+   (`.input:checked + .face`), never from a class React sets.
+
+   `display: inline-flex` on the label and the face is a CONTROL LAYING OUT ITS OWN INSIDE — the tick
+   and the label in one pill, as Button centres its glyph and label — not an arrangement of
+   siblings. The row of chips is the caller's Cluster. No margin anywhere. */
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  max-inline-size: 100%;
+  cursor: pointer;
+}
+
+/* The real control, over the whole pill. Transparent rather than clipped so the pointer hits it;
+   `margin: 0` resets the UA's checkbox margin inside the box, not outer spacing. */
+.input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+  /* Above the face: the hover lift's transform makes the face its own layer, which would
+     otherwise paint over the input and take the pointer from it. */
+  z-index: 1;
+}
+
+.face {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 0;
+  min-inline-size: 0;
+  min-block-size: var(--chip-height-md);
+  padding: var(--chip-padding-y) var(--chip-padding-x);
+  border: var(--chip-rule-width) solid var(--chip-rule);
+  border-radius: var(--chip-radius);
+  background: none;
+  color: var(--chip-fg);
+  font: var(--chip-text);
+  text-wrap: balance;
+  /* Transform only: the hover is a move, and a fill that faded in would read as a hover ground
+     (owner, 19 Oct 2026). Checking swaps the colours at once; the tick's scale is the motion. */
+  transition: transform var(--chip-transition-duration) var(--chip-transition-easing);
+}
+
+/* The tick takes no width at rest, so an unpicked label is centred in its pill; checked, it opens
+   to its size and scales in. */
+.tick {
+  display: inline-flex;
+  flex: none;
+  inline-size: 0;
+  transform: scale(0);
+  transition: transform var(--chip-transition-duration) var(--chip-transition-easing);
+}
+
+.tick svg {
+  inline-size: var(--chip-tick-size);
+  block-size: var(--chip-tick-size);
+}
+
+.label {
+  min-inline-size: 0;
+}
+
+.chip:hover .input:not(:disabled) + .face {
+  transform: translateY(var(--chip-lift));
+}
+
+.input:checked + .face {
+  column-gap: var(--chip-tick-gap);
+  border-color: var(--chip-rule-checked);
+  background: var(--chip-bg-checked);
+  color: var(--chip-fg-checked);
+}
+
+.input:checked + .face .tick {
+  inline-size: var(--chip-tick-size);
+  transform: scale(1);
+}
+
+.input:focus-visible + .face {
+  outline: var(--chip-ring-width) solid var(--chip-ring-color);
+  outline-offset: var(--chip-ring-offset);
+}
+
+/* Disabled last, so an unavailable chip reads unavailable whether or not it is checked. */
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.input:disabled + .face {
+  border-color: var(--chip-rule-disabled);
+  color: var(--chip-fg-disabled);
+}
+
+.input:disabled:checked + .face {
+  border-color: var(--chip-bg-checked-disabled);
+  background: var(--chip-bg-checked-disabled);
+  color: var(--chip-fg-checked-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .face,
+  .tick {
+    transition-duration: var(--duration-instant);
+  }
+}

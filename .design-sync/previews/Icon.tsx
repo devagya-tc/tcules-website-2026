@@ -19,6 +19,7 @@ const NAMES = [
   'chrome-close',
   'chrome-pause',
   'chrome-play',
+  'chrome-check',
   'play',
   'star',
   'close-circle',

@@ -448,3 +448,11 @@ the five placements live with when / never, then the mechanism specimens.
   blur 40), and `--tex-ink-soft` is brandeis-200 on blue and neutral-500 on ink (white read harsh).
 - **Refitted to the 48 island inset** (right 8, width 56%, top 8, height 97%), and drawn from 1024 only:
   below it the form stacks under the words and the field would sit behind the heading.
+
+## Amendment · 19 Oct 2026 — `TextureFrame panel`
+
+`TextureFrame` takes `panel?: 'end' | 'foot'`. `end` (default) is the 16 Oct field fitted to a form
+in the end 7 of the island close. `foot` is for CtaSection's `islandArrangement="above"`, where the
+panel spans the island under a head row: one rounded field 8 in from either side (`left 1%`, `width
+98%`), `bottom 8`, `height 78%`, radius 56, blur 40, so it reaches about 40 above the panel and the
+head row's words stay outside it but for the feather. From 1024 only, as before.

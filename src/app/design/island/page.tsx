@@ -1,34 +1,36 @@
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import {
   Button,
   Cluster,
   Island,
   Layout,
+  Media,
   Section,
   Texture,
   TextureCorner,
   TextureShape,
-  TextureFrame,
   type IslandSurface,
   type SectionSurface,
 } from '@/components';
-import { ROUTES } from '@/lib/routes';
+import { CtaSection, EnquiryForm, type EnquiryDress } from '@/patterns';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
 
-import { Box, specimenStyles as s } from '../_specimen/Specimen';
+import { specimenStyles as s } from '../_specimen/Specimen';
 
 /**
  * Island — the proving ground. A bounded ground inside a band, with the band's ground around it on
  * every side; the surface is set per instance.
  *
- * Coverage: every admitted pairing of band and island (four — paper and tint islands on the two light
- * bands that are not their own, and on ink), the texture inside a paper island (corner and the
- * head-half field), the inset and radius at 1440 and 390 (the shots), and the refused pairings named
- * rather than rendered — a refused island renders the other light ground and warns, which a specimen
- * would only print as a duplicate of the pairing beside it.
+ * Coverage: every admitted pairing of the general islands (four — paper and tint islands on the two
+ * light bands that are not their own, and on ink), the texture inside a paper island (corner and the
+ * head-half field), the blue and ink islands (16 Oct 2026) as the enquiry close that is their one
+ * placement, the inset and radius at 1440 and 390 (the shots), and the refused pairings named rather
+ * than rendered — a refused island renders the other light ground and warns, which a specimen would
+ * only print as a duplicate of the pairing beside it.
  *
- * The content inside every island is identical on purpose: an eyebrow, an h2, a paragraph and the
- * solid + ghost pair, so the only thing that changes between blocks is the pairing, and the button
+ * The content inside every general island is identical on purpose: an eyebrow, an h2, a paragraph and
+ * the solid + ghost pair, so the only thing that changes between blocks is the pairing, and the button
  * proves that the island's `data-surface` reaches a control two levels down.
  */
 
@@ -58,6 +60,61 @@ const PAIRINGS: readonly Pairing[] = [
     island: 'tint',
     title: 'Tint island on an ink band',
     note: 'Surface proof, the warm ground. No page carries an ink band above the footer; shown to prove self-containment.',
+  },
+];
+
+const FORM_CONTEXT = {
+  originRoute: ROUTES.designIsland,
+  placement: 'component-specimen',
+  family: 'design-system',
+  serviceOrAudit: 'island',
+  referrer: '',
+  campaign: '',
+} as const;
+
+/** The island close's drawing, as the home close places it (scripts/enquiry-desk.mjs). */
+const DESK = {
+  src: '/illustrations/enquiry/designer-desk.svg',
+  alt: '',
+  width: 396,
+  height: 459,
+  kind: 'illustration',
+} as const;
+
+/* The blue and ink islands, as the one placement that uses them renders them: the enquiry close,
+   with the home close's copy (/design/cta-section § 1b). The message's person is a placeholder. */
+const ISLAND_CLOSES: readonly {
+  island: 'blue' | 'ink';
+  dress: EnquiryDress;
+  title: string;
+  note: string;
+}[] = [
+  {
+    island: 'blue',
+    dress: {
+      kind: 'card',
+      title: 'Start a project',
+      prompt: 'A link, a Figma file, or two lines about the problem.',
+      reply: 'We reply in 1 business day',
+    },
+    title: 'paper band · blue island — the enquiry close, with the card dress (what home carries)',
+    note: 'Blue admitted 16 Oct 2026 (owner) for the enquiry close only: an exception to “blue is never a ground”, for an island that carries a paper object. Rendered as CtaSection composes it (island="blue", islandTexture="frame", art): the drawing, heading and lede on the island, TextureFrame framing the form, the form on CtaSection’s paper panel inside the island. The card dress and its siblings are documented at /design/enquiry-form.',
+  },
+  {
+    island: 'ink',
+    dress: {
+      kind: 'message',
+      from: {
+        name: 'Rushali',
+        role: 'Design lead · Tcules',
+        portrait: '/kit/photos/studio-portrait-rushali.webp',
+      },
+      note: 'Tell us what you’re building. I’ll reply within a working day.',
+      prompt: 'A link, a Figma file, or two lines about the problem.',
+      writeTo: 'hello@tcules.com',
+    },
+    title: 'paper band · ink island — the enquiry close, with the message dress (the first message)',
+    note: 'Ink admitted 16 Oct 2026 (owner) for the same close: neutral-900, one step off the footer’s 950, so the close and the footer a band below do not read as one dark block. The same composition as the blue close, here with the message dress.',
   },
 ];
 
@@ -109,16 +166,19 @@ export default function IslandSpecimen() {
         <Layout rowGap="block">
           <h1>Island</h1>
           <p className={s.specNote}>
-            Tier 1, a surface. One bounded ground inside a band — paper or tint, chosen per
-            instance — painted at the system&rsquo;s 8 radius with no edge and no shadow, so the
-            ground step is the box. It declares its own <code>data-surface</code>, so a heading,
-            a button and a texture inside it take the island&rsquo;s tokens. Inset: 96 on every
-            side from 768; below 768, 64 above and below and the 32 gutter at the sides. It
-            stays in Section&rsquo;s column at every width. CtaSection (<code>open</code>) and
-            Statement consume it as <code>island</code>. An island equal to its band is refused
-            — with no edge it would draw nothing, and tint on tint is two tints touching — and
-            renders the other light ground with a development warning. Blue is never a ground,
-            and ink is the footer&rsquo;s; neither is an island surface.
+            Tier 1, a surface. One bounded ground inside a band, chosen per instance from{' '}
+            <code>paper | tint | blue | ink</code>, painted at a 24 radius with no edge and no
+            shadow, so the ground step is the box. It declares its own <code>data-surface</code>,
+            so a heading, a button and a texture inside it take the island&rsquo;s tokens. Inset:
+            48 on every side from 768; below 768, 48 above and below and the 32 gutter at the
+            sides. It stays in Section&rsquo;s column at every width. CtaSection (
+            <code>open</code>, and <code>split</code> for the enquiry close) and Statement consume
+            it as <code>island</code>. An island equal to its band is refused — with no edge it
+            would draw nothing, and tint on tint is two tints touching — and renders the other
+            light ground with a development warning. Paper and tint are the general islands. Blue
+            and ink were admitted on 16 Oct 2026 (owner) for one placement, the enquiry close: an
+            island that carries a paper form, on a paper band. Blue is an exception to &ldquo;blue
+            is never a ground&rdquo;; ink is neutral-900, one step off the footer&rsquo;s 950.
           </p>
         </Layout>
       </Section>
@@ -159,20 +219,31 @@ export default function IslandSpecimen() {
         </Island>
       </Band>
 
-      {(['blue', 'ink'] as const).map((surface) => (
-        <Band key={surface} surface="paper">
-          <Caption
-            title={`paper band · ${surface} island — the enquiry close's ground, with TextureFrame`}
-            note={`${surface} admitted 16 Oct 2026 (owner) for the home enquiry close: an island that carries a paper object. ${surface === 'ink' ? 'Neutral-900, one step off the footer’s 950.' : 'An exception to “blue is never a ground”.'} TextureFrame frames the island's end column, where the close sets its form; the Box stands in for it.`}
+      {/* Blue and ink exist for one placement, the enquiry close, so they are rendered AS that close:
+          CtaSection composes the Island, its TextureFrame, the [5, 7] split and the form's paper
+          panel. A stand-in box would show an island nobody ships. */}
+      {ISLAND_CLOSES.map((close) => (
+        <Fragment key={close.island}>
+          <Band surface="paper">
+            <Caption title={close.title} note={close.note} />
+          </Band>
+          <CtaSection
+            island={close.island}
+            islandTexture="frame"
+            art={<Media image={DESK} sizes="240px" />}
+            heading="Tell us what you're building"
+            body={[
+              'A sketch, a prototype or a product with years of history behind it. Start wherever you are.',
+            ]}
+            form={
+              <EnquiryForm
+                action={`${ENDPOINTS.enquiryDesign}?outcome=success`}
+                context={FORM_CONTEXT}
+                dress={close.dress}
+              />
+            }
           />
-          <Island surface={surface}>
-            <TextureFrame />
-            <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack" align="center">
-              <Contents heading="Words on the island, the form beside them" />
-              <Box tall>The form&rsquo;s panel</Box>
-            </Layout>
-          </Island>
-        </Band>
+        </Fragment>
       ))}
     </>
   );

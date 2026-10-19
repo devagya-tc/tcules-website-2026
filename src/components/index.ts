@@ -83,6 +83,10 @@ export {
   type IconSize,
 } from './Icon';
 export { Input, type InputProps } from './Input';
+/* Chip is a CONTROL like Input: one choice in a set, a real checkbox or radio drawn as a pill
+   (19 Oct 2026). Like Button it takes its glyph (the tick) as a ReactNode; the question a set of
+   chips answers is the pattern's fieldset, and the row is a Cluster's. */
+export { Chip, type ChipProps } from './Chip';
 export { Logo, type LogoProps, type LogoSize, type LogoVariant } from './Logo';
 export { Prose, type ProseProps } from './Prose';
 export {

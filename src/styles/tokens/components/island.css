@@ -22,13 +22,11 @@
 
 /* ── Geometry · identical on every surface ──────────────────────────────────── */
 :root {
-  /* The inset is the island's air against its own edge — the band's air in miniature — so it takes
-     the band's value per width: 96 from 768 (the `section` step, both axes, so the box is inset
-     evenly and a start-aligned sentence sits in a square of air), and below 768 the band's phone 64
-     on the block axis and the container `gutter` (32) on the inline axis, because a 64 side inset in
-     the 326 phone column left 198 of measure for an h1. Each value is a gap-scale step; this is
-     the box's padding answering to the viewport, the exception Section's padding holds (CLAUDE.md
-     gap-scale rule 4), granted by the owner on 13 Oct 2026 and recorded beside Section's in that rule. */
+  /* The inset is the island's air against its own edge — the band's air in miniature. As built on
+     13 Oct 2026 it took the band's value per width (96 from 768; 64 block and the 32 gutter inline
+     below). Each value is a gap-scale step; this is the box's padding answering to the viewport,
+     the exception Section's padding holds (CLAUDE.md gap-scale rule 4), granted by the owner on
+     13 Oct 2026 and recorded beside Section's in that rule. Superseded 16 Oct 2026, below. */
   /* A `stack` (48) on every side from 768 since 16 Oct 2026 (owner: "padding 48px all around inside
      the island"). It replaces the 96 (and the 64 block inset of the same morning). */
   --isl-inset-block: var(--gap-stack);
@@ -39,7 +37,6 @@
   --isl-radius: var(--radius-24);
 }
 
-/* Phone: the band's own 64 above and below, the container gutter at the sides. */
 /* Phone: 48 above and below, as from 768, and the container `gutter` (32) at the sides, because 48
    there left the island close's form under its floor in the 326 phone column. */
 @media (max-width: 767px) {
@@ -69,7 +66,7 @@
    as one dark block (docs/specs/Island.md § 17, Q3, amended). */
 [data-surface='ink'] {
   --isl-ground: var(--color-neutral-900);
-  --isl-ink: var(--color-white); /* 17.26:1 */
+  --isl-ink: var(--color-white); /* 14.75:1 on neutral-900 (17.26:1 was the 950 ground) */
 }
 
 /* ── Surface: blue ── admitted 16 Oct 2026 (owner, the home enquiry close): an exception to

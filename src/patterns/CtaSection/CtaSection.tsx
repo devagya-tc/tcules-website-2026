@@ -231,6 +231,18 @@ type CtaSplitProps = {
   art?: ReactNode;
   /** The island's texture. `frame`: `TextureFrame`, a soft field framing the form. Island only. */
   islandTexture?: 'frame';
+  /**
+   * Where the island close sets its words against the form (19 Oct 2026, the chip form). Island
+   * only.
+   *
+   *   beside  (default) the drawing, heading and lede as one group in 5, the form in 7 — the
+   *           close as home carries it.
+   *   above   a HEAD ROW over the form: the drawing at its small size (--cta-art-inline-size-sm)
+   *           beside the heading and lede, then the panel across the island's whole width. For a
+   *           form too wide for 7 — the chip form's two halves — and so the close fits one laptop
+   *           screen (~760 of island at 1440). Below 768 the drawing sits over the heading.
+   */
+  islandArrangement?: 'beside' | 'above';
 };
 
 type CtaOpenProps = {
@@ -252,13 +264,14 @@ type CtaOpenProps = {
    * steps paper → tint → the ink footer, the tint now a floating object rather than a band. An
    * island equal to its band is refused (no edge to read by) and takes the other light ground.
    *
-   * On `open` only, and that is a type. A split close already raises its form on a panel, and a box
-   * holding a box is the card reflex twice; an offer interrupts mid-page, and a floating box there
-   * would outweigh the close the page ends on.
+   * Refused on an offer, and that is a type: an offer interrupts mid-page, and a floating box there
+   * would outweigh the close the page ends on. (It was `open` only until 16 Oct 2026, when the split
+   * close took a blue or ink island for the enquiry close; see `CtaSplitProps.island`.)
    */
   island?: IslandSurface;
   art?: never;
   islandTexture?: never;
+  islandArrangement?: never;
 };
 
 type CtaOfferWithFormProps = {
@@ -271,6 +284,7 @@ type CtaOfferWithFormProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
+  islandArrangement?: never;
 };
 
 type CtaOfferWithActionsProps = {
@@ -295,6 +309,7 @@ type CtaOfferWithActionsProps = {
   island?: never;
   art?: never;
   islandTexture?: never;
+  islandArrangement?: never;
 };
 
 export type CtaSectionProps = CtaSectionBaseProps &
@@ -997,6 +1012,52 @@ export function CtaSection(props: CtaSectionProps) {
   if (props.island && hasForm) {
     const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
     const islandSurface = islandSurfaceOn(band, props.island);
+    const panel = (
+      <div className={styles.islandPanel} data-surface="paper">
+        {props.form}
+      </div>
+    );
+
+    /* ── Above (19 Oct 2026): the head row, then the panel across the island ──────────────────
+       The head row is the drawing BESIDE the heading and lede from 768 (`['auto', 1]`: the
+       drawing at its own small width, the words taking the rest), centred on each other; the
+       drawing over the words below. The drawing is the head's own mark, not a region of the band,
+       so it sits a `block` from the words (the head-to-body step) rather than a split's `section`.
+       The panel follows a `stack` under the head row: block to block inside the band. Points and
+       a contact strip, when a caller passes them, follow the lede in the words' column as they do
+       beside; the close is built for a heading and a lede, and each of them costs the fit. */
+    if (props.islandArrangement === 'above') {
+      return (
+        <Section
+          surface={band}
+          id={props.id}
+          data-band={props['data-band']}
+          aria-labelledby={headingId}
+          data-arrangement="split"
+        >
+          <Island surface={islandSurface}>
+            {props.islandTexture === 'frame' ? <TextureFrame panel="foot" /> : null}
+            <Layout rowGap="stack">
+              <Layout
+                columns={present(props.art) ? { md: ['auto', 1] } : undefined}
+                colGap={present(props.art) ? 'block' : undefined}
+                rowGap={present(props.art) ? 'block' : undefined}
+                align="center"
+              >
+                {present(props.art) ? <div className={styles.artSmall}>{props.art}</div> : null}
+                <Layout rowGap="block">
+                  {lede({ scale: 'offer' })}
+                  <CtaPoints shape="stack" markers={markers} points={points} />
+                  {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
+                </Layout>
+              </Layout>
+              {panel}
+            </Layout>
+          </Island>
+        </Section>
+      );
+    }
+
     return (
       <Section
         surface={band}
@@ -1014,9 +1075,7 @@ export function CtaSection(props: CtaSectionProps) {
               <CtaPoints shape="stack" markers={markers} points={points} />
               {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
             </Layout>
-            <div className={styles.islandPanel} data-surface="paper">
-              {props.form}
-            </div>
+            {panel}
           </Layout>
         </Island>
       </Section>

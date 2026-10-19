@@ -3,7 +3,7 @@
 import type { FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import { Button, Cluster, Icon, Input, Layout } from '@/components';
+import { Button, Chip, Cluster, Icon, Input, Layout } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EnquiryForm.module.css';
@@ -84,6 +84,28 @@ type SharedProps = {
 export type EnquiryNextStep = { label: string; detail?: string };
 
 /**
+ * One answer in a chip group (19 Oct 2026, the chip form). The CALLER's copy, as every dress's is.
+ *
+ *   value   what posts: `needs=product-design`, `stage=prototype`.
+ *   label   the chip's words, sentence case as authored: "Product design".
+ *   prompt  a need's follow-up question. Picking the chip makes it the message field's example
+ *           ("Where do people get stuck today?"); the most recent pick that has one wins.
+ *   echo    the words the reply line says the pick back with, where they differ from the label:
+ *           a stage "A prototype" echoes as "a prototype" mid-sentence. Absent, the label.
+ */
+export type EnquiryChoice = { value: string; label: string; prompt?: string; echo?: string };
+
+/**
+ * A chip group: the question it answers, a quiet aside after it ("Pick any", "Optional"), and its
+ * answers. Rendered as a `<fieldset>` whose `<legend>` is the question and the aside.
+ */
+export type EnquiryChoiceGroup = {
+  question: string;
+  aside?: string;
+  options: readonly EnquiryChoice[];
+};
+
+/**
  * How the enquiry set is DRESSED (owner, 16 Oct 2026, the home close: "it just looks like a blank
  * box with a few lines instead of feeling like a well rounded form"). The behaviour is the same
  * form's — the same fields, names, send-only validation, statuses and success view — and only its
@@ -94,10 +116,16 @@ export type EnquiryNextStep = { label: string; detail?: string };
  *            beside it, led by a check, and optionally a line under ("or write to …", a note). The
  *            status of a send replaces the promise, in the same live region.
  *   message  the reply to a note: a person's portrait, name and role with their one-line note in a
- *            bubble, then a composer — the big field first, email and link as its details, and
- *            the send in its foot beside "or write to …".
+ *            bubble, then a composer — the big field first, name, email and link as its details,
+ *            and the send in its foot beside "or write to …". With `needs` (19 Oct 2026), the
+ *            note is answered first by a row of chips under the bubble, then the composer.
+ *   choice   the chip form, "split panel" (owner, 19 Oct 2026): two halves under a hairline split —
+ *            name and email side by side over the message (which stretches so the half ends level
+ *            with the other), and the chip groups with the optional link — then a foot across both:
+ *            the reply line saying the picks back as a sentence, and the send at the end.
  *
- * All copy is the CALLER's, as `caption` and `success` are.
+ * All copy is the CALLER's, as `caption` and `success` are. The chip groups post `needs` (one
+ * value per checked chip) and `stage` (the one checked radio); both are optional answers.
  */
 export type EnquiryDress =
   | {
@@ -121,6 +149,22 @@ export type EnquiryDress =
       note: string;
       prompt?: string;
       writeTo?: string;
+      /**
+       * The note answered as chips under the bubble (pick any; posts `needs`). The question is the
+       * group's accessible name; the bubble describes it, so the question is never shown twice.
+       */
+      needs?: EnquiryChoiceGroup;
+    }
+  | {
+      kind: 'choice';
+      /** "What do you need?" · "Pick any": a pick-any group, posts `needs`. */
+      needs: EnquiryChoiceGroup;
+      /** "Where is it today?" · "Optional": a pick-one group, posts `stage`. */
+      stage?: EnquiryChoiceGroup;
+      /** The message field's example before a need with a prompt is picked. */
+      prompt?: string;
+      /** The reply line's promise, after the picks: "We reply within one business day." */
+      reply?: string;
     };
 
 /* "See available times" lives in the form's own action row, beside the submit, so the two asks
@@ -250,6 +294,12 @@ type FieldGroupProps = {
   hint?: { id: string; text: string };
   /** Present when the field validates: the id of its message row, and the message. */
   validation?: { id: string; message: string };
+  /**
+   * The control takes whatever height its group is stretched to (the chip form's message field,
+   * which runs down to where the chip half beside it ends). Visible label only: the label row stays
+   * its own height, the control and its message take the rest, and the control fills it.
+   */
+  fill?: boolean;
   children: ReactNode;
 };
 
@@ -260,9 +310,47 @@ function FieldGroup({
   optional = false,
   hint,
   validation,
+  fill = false,
   children,
 }: FieldGroupProps) {
   const message = validation?.message ?? '';
+  const messageRow = validation ? (
+    <div className={styles.message} id={validation.id} aria-live="polite">
+      {message ? (
+        <Cluster colGap="tight" align="center" nowrap>
+          <Icon name="close-circle" />
+          <span>{message}</span>
+        </Cluster>
+      ) : null}
+    </div>
+  ) : null;
+  const labelRow = (
+    <Cluster justify="between" align="baseline" colGap="text">
+      <label className={styles.labelVisible} htmlFor={id}>
+        {label}
+        {optional ? <span className={styles.hidden}> (optional)</span> : null}
+      </label>
+      {optional ? (
+        <span className={styles.labelAside} aria-hidden="true">
+          Optional
+        </span>
+      ) : null}
+    </Cluster>
+  );
+  if (fill && visibleLabel && !hint) {
+    /* Two nested stretches: the label row and the rest (`fillLast`), then the control and its
+       message, the control's row taking the height (`fillFirst`). The control is a grid item at the
+       default stretch, so it fills its row. */
+    return (
+      <Layout rowGap="tight" fillLast>
+        {labelRow}
+        <Layout rowGap={message ? 'tight' : undefined} fillFirst>
+          {children}
+          {messageRow}
+        </Layout>
+      </Layout>
+    );
+  }
   return (
     /* The control and its message group at `tight`, but ONLY while there is a message: an empty
        message row is mounted (it is the live region) and must cost nothing, so with no message the
@@ -270,17 +358,7 @@ function FieldGroup({
        `tight` above its control. */
     <Layout rowGap={message || visibleLabel ? 'tight' : undefined}>
       {visibleLabel ? (
-        <Cluster justify="between" align="baseline" colGap="text">
-          <label className={styles.labelVisible} htmlFor={id}>
-            {label}
-            {optional ? <span className={styles.hidden}> (optional)</span> : null}
-          </label>
-          {optional ? (
-            <span className={styles.labelAside} aria-hidden="true">
-              Optional
-            </span>
-          ) : null}
-        </Cluster>
+        labelRow
       ) : (
         <label className={styles.hidden} htmlFor={id}>
           {label}
@@ -293,16 +371,7 @@ function FieldGroup({
         </p>
       ) : null}
       {children}
-      {validation ? (
-        <div className={styles.message} id={validation.id} aria-live="polite">
-          {message ? (
-            <Cluster colGap="tight" align="center" nowrap>
-              <Icon name="close-circle" />
-              <span>{message}</span>
-            </Cluster>
-          ) : null}
-        </div>
-      ) : null}
+      {messageRow}
     </Layout>
   );
 }
@@ -314,6 +383,12 @@ function messageFor(spec: FieldSpec, control: HTMLInputElement | HTMLTextAreaEle
     return 'Enter a valid email';
   }
   return '';
+}
+
+/** Picks said back as a list: "A", "A and B", "A, B and C". */
+function listOf(items: readonly string[]): string {
+  if (items.length < 2) return items.join('');
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
 }
 
 /** The reassurance line beside (or under) the submit. One sentence, said once, and kept at the
@@ -413,6 +488,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
   const submittedCallbackFired = useRef(false);
   const [lifecycle, setLifecycle] = useState<Lifecycle>('idle');
   const [messages, setMessages] = useState<FieldMessages>(EMPTY_MESSAGES);
+  /* The chip groups' answers, for what the form SAYS about them (the message field's example, the
+     reply line). The inputs stay uncontrolled: the form posts what the DOM holds. `picked` is in the
+     order the needs were checked, so the latest pick's prompt wins. */
+  const [picked, setPicked] = useState<readonly string[]>([]);
+  const [stageValue, setStageValue] = useState('');
 
   const variant = props.variant ?? 'enquiry';
   const onSubmitted = props.onSubmitted;
@@ -453,7 +533,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
     const form = event.currentTarget;
     const next: FieldMessages = { ...EMPTY_MESSAGES };
     let firstInvalid: HTMLElement | null = null;
-    for (const spec of rows.flatMap((row) => (row === 'url' ? [] : row))) {
+    for (const spec of validated) {
       const control = form.elements.namedItem(spec.name);
       if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement))
         continue;
@@ -500,10 +580,30 @@ export function EnquiryForm(props: EnquiryFormProps) {
         ? [[FIELD.name('name'), FIELD.email('email')], [FIELD.work]]
         : [[FIELD.email('email')], [FIELD.work], 'url'];
 
+  /* The dress, when the enquiry set wears one (see EnquiryDress). */
+  const dress = props.variant === undefined || props.variant === 'enquiry' ? props.dress : undefined;
+
+  /* The required fields a send checks, in the order they render, so focus lands on the FIRST
+     failing field on the page. The plain sets read their rows; the dresses that add a name state
+     their own order: the chip form's name and email come before its message, the composer's
+     message comes before its details. */
+  const validated: readonly FieldSpec[] =
+    dress?.kind === 'choice'
+      ? [FIELD.name('name'), FIELD.email('email'), FIELD.work]
+      : dress?.kind === 'message'
+        ? [FIELD.work, FIELD.name('name'), FIELD.email('email')]
+        : rows.flatMap((row) => (row === 'url' ? [] : row));
+
   /** One validating field, from its spec. The only place a FieldGroup + Input pair is written. */
   function renderField(
     spec: FieldSpec,
-    dressed: { visibleLabel?: boolean; placeholder?: string; look?: 'box' | 'line' | 'bare' | 'fill' } = {},
+    dressed: {
+      visibleLabel?: boolean;
+      placeholder?: string;
+      look?: 'box' | 'line' | 'bare' | 'fill';
+      /** The control fills its stretched group (the chip form's message). */
+      fill?: boolean;
+    } = {},
   ) {
     const id = idFor(spec.key);
     const messageId = idFor(`${spec.key}-msg`);
@@ -533,6 +633,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
         id={id}
         label={spec.label}
         visibleLabel={dressed.visibleLabel}
+        fill={dressed.fill}
         validation={{ id: messageId, message: messages[spec.key] }}
       >
         {spec.as === 'textarea' ? (
@@ -572,6 +673,73 @@ export function EnquiryForm(props: EnquiryFormProps) {
           }}
         />
       </FieldGroup>
+    );
+  }
+
+  /**
+   * A chip group (the chip form, and the message's answers): a `<fieldset>` named by its `<legend>`,
+   * the question and its aside. The legend is visually hidden and the same words are shown above
+   * the chips, aria-hidden, as FieldGroup shows a visible label's "Optional": a rendered legend sits
+   * in the fieldset's border and cannot take a Layout's row gap. `shown: false` drops the visible
+   * question (the message, where the bubble asks it, and `describedBy` points at the bubble).
+   */
+  function renderChoiceGroup(
+    group: EnquiryChoiceGroup,
+    kind: 'needs' | 'stage',
+    { shown = true, describedBy }: { shown?: boolean; describedBy?: string } = {},
+  ) {
+    const type = kind === 'needs' ? 'checkbox' : 'radio';
+    const chips = (
+      <Cluster colGap="tight" rowGap="tight">
+        {group.options.map((option) => (
+          <Chip
+            key={option.value}
+            type={type}
+            name={kind}
+            value={option.value}
+            tick={<Icon name="chrome-check" />}
+            disabled={submitting}
+            onChange={(event) => {
+              const { checked, value } = event.currentTarget;
+              if (kind === 'stage') {
+                if (checked) setStageValue(value);
+                return;
+              }
+              setPicked((current) => {
+                const rest = current.filter((item) => item !== value);
+                return checked ? [...rest, value] : rest;
+              });
+            }}
+          >
+            {option.label}
+          </Chip>
+        ))}
+      </Cluster>
+    );
+    return (
+      <fieldset className={styles.group} aria-describedby={describedBy}>
+        <legend className={styles.hidden}>
+          {group.question}
+          {group.aside ? ` (${group.aside})` : null}
+        </legend>
+        {shown ? (
+          <Layout rowGap="text">
+            <Cluster colGap="tight" rowGap="inline" align="baseline">
+              <span className={styles.labelVisible} aria-hidden="true">
+                {group.question}
+              </span>
+              {group.aside ? (
+                <span className={styles.labelAside} aria-hidden="true">
+                  {group.aside}
+                </span>
+              ) : null}
+            </Cluster>
+            {chips}
+          </Layout>
+        ) : (
+          chips
+        )}
+      </fieldset>
     );
   }
 
@@ -799,8 +967,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
     );
 
   /* ── The dressed forms (see EnquiryDress) ─────────────────────────────────────────────────── */
-  const dress = props.variant === undefined || props.variant === 'enquiry' ? props.dress : undefined;
   if (dress) {
+    const noteId = idFor('note');
     const formAttrs = {
       className: cx(styles.form, bounds),
       action: props.action,
@@ -812,14 +980,15 @@ export function EnquiryForm(props: EnquiryFormProps) {
     } as const;
     /* The foot's one line: "or write to …" and the note at rest; the status of a send replaces it,
        in the same live region the plain set uses. */
+    const writeTo = dress.kind === 'choice' ? undefined : dress.writeTo;
     const restLine = (
       <>
-        {dress.writeTo ? (
+        {writeTo ? (
           <>
-            or write to <a href={`mailto:${dress.writeTo}`}>{dress.writeTo}</a>
+            or write to <a href={`mailto:${writeTo}`}>{writeTo}</a>
           </>
         ) : null}
-        {dress.kind === 'card' && dress.note ? (dress.writeTo ? ` · ${dress.note}` : dress.note) : null}
+        {dress.kind === 'card' && dress.note ? (writeTo ? ` · ${dress.note}` : dress.note) : null}
       </>
     );
     const line = (
@@ -833,6 +1002,113 @@ export function EnquiryForm(props: EnquiryFormProps) {
       </p>
     );
     const email = FIELD.email('email');
+    const name = FIELD.name('name');
+
+    /* The message field's example: the latest picked need's own follow-up question, else the
+       dress's prompt. */
+    const needs = dress.kind === 'card' ? undefined : dress.needs;
+    const pickedPrompt = [...picked]
+      .reverse()
+      .map((value) => needs?.options.find((option) => option.value === value)?.prompt)
+      .find(Boolean);
+
+    if (dress.kind === 'choice') {
+      /* The reply line says the picks back as one sentence — "Product design and AI product UX,
+         for a prototype. We reply within one business day." — then the promise. A send's status
+         replaces the whole line, in the same live region. */
+      const chosen = dress.needs.options
+        .filter((option) => picked.includes(option.value))
+        .map((option) => option.echo ?? option.label);
+      const stage = dress.stage?.options.find((option) => option.value === stageValue);
+      const stageWords = stage ? (stage.echo ?? stage.label) : undefined;
+      const promise = dress.reply ?? (props.caption?.trim() ? props.caption : CAPTION);
+      const echo =
+        chosen.length > 0 || stageWords ? (
+          <>
+            {chosen.length > 0 ? <strong className={styles.echoPick}>{listOf(chosen)}</strong> : null}
+            {stageWords ? (
+              <>
+                {chosen.length > 0 ? ', for ' : 'For '}
+                <strong className={styles.echoPick}>{stageWords}</strong>
+              </>
+            ) : null}
+            {`. ${promise}`}
+          </>
+        ) : (
+          promise
+        );
+
+      /* Two halves under one hairline split, then a foot across both (owner, 19 Oct 2026).
+
+           halves  [1, 1] from 1024, a `gutter` apart, with the chip half's own `gutter` inset after
+                   its hairline: 64 between the two, the `column` step two peer halves of one form
+                   take, with the rule at its middle. The chip half comes first in the DOM, so a
+                   phone reads the chips, then the fields; `reverse` sets the fields at the start
+                   from 1024. The fields half is stretched to the chip half's height and its message
+                   takes the rest (`fillLast`, FieldGroup `fill`), so both halves end on one line.
+           foot    under a hairline: the reply line at the start, the send at its own width at the
+                   end, from 1024; below, the send across the panel and the line under it. */
+      return (
+        <form {...formAttrs}>
+          <Layout rowGap="block">
+            <Layout columns={{ lg: [1, 1] }} reverse={{ lg: true }} colGap="gutter" rowGap="block">
+              <div className={styles.choiceSide}>
+                <Layout rowGap="block">
+                  {renderChoiceGroup(dress.needs, 'needs')}
+                  {dress.stage ? renderChoiceGroup(dress.stage, 'stage') : null}
+                  {renderDressedUrl('fill', true, 'https://')}
+                </Layout>
+              </div>
+              <Layout rowGap="text" fillLast>
+                <Layout columns="fit" minTrack="xs" colGap="text" rowGap="text">
+                  {renderField(name, { visibleLabel: true, placeholder: 'Your name', look: 'fill' })}
+                  {renderField(email, {
+                    visibleLabel: true,
+                    placeholder: 'you@company.com',
+                    look: 'fill',
+                  })}
+                </Layout>
+                {renderField(FIELD.work, {
+                  visibleLabel: true,
+                  placeholder: pickedPrompt ?? dress.prompt ?? FIELD.work.label,
+                  look: 'fill',
+                  fill: true,
+                })}
+              </Layout>
+            </Layout>
+            <div className={styles.dressFoot}>
+              <Layout
+                columns={{ lg: ['auto', 1] }}
+                reverse={{ lg: true }}
+                colGap="block"
+                rowGap="text"
+                align="center"
+              >
+                {/* With a scheduling link the two asks group, as on the card; alone, the send
+                    stretches across the panel below 1024. */}
+                {scheduleLink ? (
+                  <Cluster colGap="block" rowGap="text" align="center">
+                    {submitButton}
+                    {scheduleLink}
+                  </Cluster>
+                ) : (
+                  submitButton
+                )}
+                <p
+                  className={cx(styles.echo, error && styles.statusError)}
+                  id={statusId}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {status || echo}
+                </p>
+              </Layout>
+            </div>
+          </Layout>
+          {hiddenContext}
+        </form>
+      );
+    }
 
     if (dress.kind === 'card') {
       /* The promise beside the send, and the live region a send's status takes over. */
@@ -905,17 +1181,40 @@ export function EnquiryForm(props: EnquiryFormProps) {
                 <span className={styles.fromName}>{dress.from.name}</span>
                 <span className={styles.fromRole}>{dress.from.role}</span>
               </Cluster>
-              <p className={styles.bubble}>{dress.note}</p>
+              <p className={styles.bubble} id={noteId}>
+                {dress.note}
+              </p>
             </Layout>
           </Cluster>
+          {/* The note answered first: the chips under the bubble, set in to the bubble's edge from
+              768 and flush on a phone. The bubble asks the question, so it describes the group. */}
+          {dress.needs ? (
+            <div className={styles.replies}>
+              {renderChoiceGroup(dress.needs, 'needs', { shown: false, describedBy: noteId })}
+            </div>
+          ) : null}
           <div className={styles.composer}>
             <div className={styles.composerMain}>
               {renderField(FIELD.work, {
-                placeholder: dress.prompt ? `${FIELD.work.label} ${dress.prompt}` : FIELD.work.label,
+                placeholder:
+                  pickedPrompt ??
+                  (dress.prompt ? `${FIELD.work.label} ${dress.prompt}` : FIELD.work.label),
                 look: 'bare',
               })}
             </div>
-            <Layout columns={{ base: 1, md: 2 }}>
+            {/* Name · Email · Link (19 Oct 2026: the name is required). Three across where the
+                composer is the full column (768–1023) or the wide panel (1440); one per row in
+                the island’s narrower form track between, where three would leave each ~85. The
+                email cell is the widest (4 : 5 : 4): its cue is the longest. */}
+            <Layout columns={{ base: 1, md: [4, 5, 4], lg: 1, xl: [4, 5, 4] }}>
+              <div className={styles.composerCell}>
+                <Layout rowGap="inline">
+                  <span className={styles.composerKey} aria-hidden="true">
+                    Your name
+                  </span>
+                  {renderField(name, { placeholder: 'Name', look: 'bare' })}
+                </Layout>
+              </div>
               <div className={styles.composerCell}>
                 <Layout rowGap="inline">
                   <span className={styles.composerKey} aria-hidden="true">

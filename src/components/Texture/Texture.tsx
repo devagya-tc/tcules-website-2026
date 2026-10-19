@@ -231,11 +231,21 @@ export function TextureCounterweight() {
  *
  * Its rule is the others': never behind a glyph. The copy column is the island's other 5, outside
  * the field but for its feather.
+ *
+ * `panel="foot"` (19 Oct 2026, the chip form's close): the panel spans the island under a head row
+ * instead of filling its end 7, so the field spans it too: 8 in from either side, rising from 8 above
+ * the island's foot to about 40 above the panel's top edge (the head row is ~22% of a ~760 island at
+ * 1440), and the head row's words stay outside it but for the feather. `end` is the default and the
+ * placement above.
  */
-export function TextureFrame() {
+export function TextureFrame({ panel = 'end' }: { panel?: 'end' | 'foot' }) {
   return (
     <Texture className={cx(styles.soft, styles.frame)}>
-      <TextureShape right={8} width="56%" top={8} height="97%" radius={56} blur={40} />
+      {panel === 'foot' ? (
+        <TextureShape left="1%" width="98%" bottom={8} height="78%" radius={56} blur={40} />
+      ) : (
+        <TextureShape right={8} width="56%" top={8} height="97%" radius={56} blur={40} />
+      )}
     </Texture>
   );
 }

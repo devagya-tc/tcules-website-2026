@@ -88,6 +88,10 @@
   --cta-panel-inset-island: var(--gap-block);
   /* The drawing above the heading: the designer's desk at 240 is 278 tall. A component size. */
   --cta-art-inline-size: 240px;
+  /* The drawing in the head row of `islandArrangement="above"` (19 Oct 2026): 132, the approved
+     mock's, so the desk (153 tall at this width) stands about as tall as a two-line h2 and its
+     lede beside it, and the close fits one laptop screen. */
+  --cta-art-inline-size-sm: 132px;
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105

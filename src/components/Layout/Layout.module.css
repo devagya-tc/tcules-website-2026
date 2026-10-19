@@ -217,15 +217,18 @@
    the system builds; a ninth child falls through to the plain stack, which is a safe failure.
    A 1fr row in a Layout with no spare height is content-sized, so an unstretched stack is
    unchanged. The template is only written here, so it does not inherit into a nested Layout. */
+/* fillLast (19 Oct 2026) shares the template and drops the pin: the last row still takes the spare
+   height, and its child keeps the default stretch, so it GROWS into the row instead of sitting on
+   its foot. */
 .pin-last > :last-child { align-self: end; }
-.pin-last:has(> :last-child:nth-child(1)) { grid-template-rows: 1fr; }
-.pin-last:has(> :last-child:nth-child(2)) { grid-template-rows: auto 1fr; }
-.pin-last:has(> :last-child:nth-child(3)) { grid-template-rows: repeat(2, auto) 1fr; }
-.pin-last:has(> :last-child:nth-child(4)) { grid-template-rows: repeat(3, auto) 1fr; }
-.pin-last:has(> :last-child:nth-child(5)) { grid-template-rows: repeat(4, auto) 1fr; }
-.pin-last:has(> :last-child:nth-child(6)) { grid-template-rows: repeat(5, auto) 1fr; }
-.pin-last:has(> :last-child:nth-child(7)) { grid-template-rows: repeat(6, auto) 1fr; }
-.pin-last:has(> :last-child:nth-child(8)) { grid-template-rows: repeat(7, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(1)) { grid-template-rows: 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(2)) { grid-template-rows: auto 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(3)) { grid-template-rows: repeat(2, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(4)) { grid-template-rows: repeat(3, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(5)) { grid-template-rows: repeat(4, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(6)) { grid-template-rows: repeat(5, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(7)) { grid-template-rows: repeat(6, auto) 1fr; }
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(8)) { grid-template-rows: repeat(7, auto) 1fr; }
 
 /* fillFirst — the mirror of pin-last: the first row takes the spare height of a stretched stack and
    every later row is content-sized (implicit, `auto`). A 1fr row never shrinks below its item's

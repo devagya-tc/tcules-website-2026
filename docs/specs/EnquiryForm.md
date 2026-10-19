@@ -47,7 +47,7 @@
 > 7. **Blue marks** (`--enq-accent-ink`, per surface): a trailing arrow on every submit, a shield mark leading the caption (a danger triangle in the error ink once the line is an error), the label of the focused field, the success check, and the success steps' numerals.
 > 8. **Grouping.** Fields at `text` inside; the actions a `stack` below them. The caption/status is one live line under the actions on the full sets and beside the submit on compact; on compact it asks for `--enq-note-min-inline` (15rem) beside the submit and otherwise wraps under it.
 > 9. **Success.** Reads mark → thanks at `--text-h4` ("Thanks. We have your enquiry.") → "Here is what happens next." → three numbered steps (blue `--text-index` numerals, `--text-h6` labels, `--text-body-sm` clauses) → the scheduling link where there is one. The success rule and `--enq-success-rule`, and the unused `--enq-status-ink`, are deleted.
-> 10. **Fields are declared once.** Each variant is a list of field specs rendered by one function, so the compact and contact Name and Email (and their blur validators) cannot drift.
+> 10. **Fields are declared once.** Each variant is a list of field specs rendered by one function, so the compact and contact Name and Email (and their validators) cannot drift.
 >
 > **Amended 6 Oct 2026 (cmp-form final round).** Supersedes items 6, 8 and 9 where they disagree:
 >
@@ -201,7 +201,7 @@ From the fixed model, and nothing else:
 | Brief state    | How it is built                                                                                                                                                                         | Rule                                                                                                                        |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | **Idle**       | rest                                                                                                                                                                                    | `message` and `status` present and empty                                                                                    |
-| **Invalid**    | `control` at `--inp-standard-invalid-rule` and `--border-width-2`, `aria-invalid="true"`, `message` filled, plus the `close-circle` glyph inside the message                            | **Per field, on blur.** Never on keystroke, never on submit-sweep. A field the visitor has not left yet has not been judged |
+| **Invalid**    | `control` at `--inp-standard-invalid-rule` and `--border-width-2`, `aria-invalid="true"`, `message` filled, plus the `close-circle` glyph inside the message                            | **On send only, by the submit sweep** (owner, 16 Oct 2026; was "per field, on blur"). Never on blur, never on keystroke. The sweep flags every failing field at once, the status line says how many need a look, and focus moves to the first. Editing a flagged field only clears its message once the value is valid |
 | **Submitting** | `submit` **busy, not disabled** (§16 request 3); the three `control`s disabled; `status` filled; `aria-busy="true"` on `form`                                                           | The label and the focus survive because the button survives. Focus is moved to `submit` before the controls disable (§11)   |
 | **Success**    | `form` unmounts; `success` mounts in its place                                                                                                                                          | Replaces the form. Nothing is left to fill in                                                                               |
 | **Error**      | `submit` returns to rest, controls re-enable, `status` filled and its ink moves to `--enq-status-ink-error` (was its rule, `--enq-status-rule-error`; the rule was deleted 29 Sep 2026) | **Keeps every character typed.** The component never re-mounts the controls on failure                                      |
@@ -398,7 +398,7 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 
 ## 11. Accessibility
 
-**Semantics and elements.** A real `<form>` with `noValidate` (validity is per-field on blur, not a browser sweep on submit) and `method="post"`. Every visible control has an always-visible `<label for>`. Native email, telephone, URL and textarea semantics are retained. `Button` renders a native `button type="submit"`. Enquiry/audit context uses `input type="hidden"` — not focusable and not in the accessibility tree. No `fieldset`/`legend`: each closed set has visible labels and the form's own name (below) covers it.
+**Semantics and elements.** A real `<form>` with `noValidate` (the form runs its own sweep on submit, with its own messages and focus move, instead of the browser's bubbles; nothing is judged on blur — 16 Oct 2026) and `method="post"`. Every visible control has an always-visible `<label for>`. Native email, telephone, URL and textarea semantics are retained. `Button` renders a native `button type="submit"`. Enquiry/audit context uses `input type="hidden"` — not focusable and not in the accessibility tree. No `fieldset`/`legend`: each closed set has visible labels and the form's own name (below) covers it.
 
 **Where ids come from.** Every id is generated with React `useId` inside the component and suffixed per part (`{id}-email`, `{id}-email-msg`, `{id}-url-flag`, `{id}-status`). No id is a prop, no id is a literal, and **no idref points outside this component** — including at `CtaSection`'s heading, which does not expose an id. The form's accessible name is an `aria-label` derived from `variant`: "Send an enquiry", "Request a free audit", or "Contact Tcules".
 
@@ -420,7 +420,7 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 
 | Transition           | Focus                                                                                                                                                                                                                           |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| blur → Invalid       | stays where the visitor put it. Validation never steals focus                                                                                                                                                                   |
+| submit → Invalid     | moves to the first failing field; the status line announces how many need a look. Leaving a field never judges it, so a blur moves nothing (16 Oct 2026; was "blur → Invalid: stays where the visitor put it") |
 | submit → Submitting  | moves to `submit` **before** the controls disable. This is why the button is busy and not disabled: a disabled button loses focus to `<body>`, and then Error returns the visitor to the top of the page instead of to the form |
 | Submitting → Error   | stays on `submit`, which is now at rest and still labelled. The status sentence is announced by the live region, not by a focus move                                                                                            |
 | Submitting → Success | moves to the `success` region (`tabIndex={-1}`, focused on mount); the next `Tab` reaches `CtaSection`'s persistent schedule link                                                                                               |
@@ -445,7 +445,7 @@ Restated, because each has already gone wrong somewhere in this codebase: **no h
 
 **Reduced motion.** `@media (prefers-reduced-motion: reduce)` sets the transition duration to `--duration-instant`. Nothing else changes, because nothing moves (§13).
 
-**What a screen reader actually says.** Entering the form: "Send an enquiry, form. Email address, edit text, blank." On blur of an empty email: "That does not look like an email address." On submit: "Sending your enquiry." On success, focus reaches the status region containing: "One reply, within a working day. Thanks — we have your enquiry." The next `Tab` reaches the enclosing CTA's "See available times" link.
+**What a screen reader actually says.** Entering the form: "Send an enquiry, form. Email address, edit text, blank." Leaving an empty email says nothing (16 Oct 2026). On a send with it empty, focus moves to it and the reader hears its name and its message, "Email, invalid entry, Enter your email" (or "Enter a valid email" when malformed), and the status region announces "One answer needs a look before this can send". On a valid send: "Sending your enquiry." On success, focus reaches the status region containing: "One reply, within a working day. Thanks — we have your enquiry." The next `Tab` reaches the enclosing CTA's "See available times" link.
 
 ---
 
@@ -500,7 +500,7 @@ was trimmed with the table above: it named `.label` and `.message`, which neutra
 | Do    | Every surface-dependent `--enq-*` and `--inp-*` token is declared under all four `data-surface` blocks     | Count identical declarations per surface: 7 `--enq-*` plus 19 `--inp-*` = 26 × 4                                                    |
 | Do    | `message` and `status` are in the DOM at Idle, empty (compact: `status` holds the caption)                 | Inspect the Idle specimen column; both elements exist                                                                               |
 | Do    | The submit and the scheduling link are `size="lg"` (48), clearing the touch floor without `extendHitArea` (29 Sep 2026) | Grep EnquiryForm for `size="lg"` on both; `extendHitArea` has zero uses                                                              |
-| Do    | Validation fires on `blur` and on no other event                                                           | Grep for `onBlur`; there must be no `onChange`- or `onSubmit`-driven validity call                                                  |
+| Do    | Validation fires on submit and on no other event (16 Oct 2026; was "on `blur`"); `onInput` may only clear a message | Grep: `onBlur` only normalises the URL; `onInput` calls only `clearIfFixed`; every message is set from the submit handler           |
 | Do    | Focus lands on the submit before the controls disable                                                      | Tab into the textarea, press Enter, and check the focused element in the Submitting column                                          |
 | Do    | Every id is `useId`-derived                                                                                | Grep for `id="` with a literal string: zero hits                                                                                    |
 | Don't | No state uses opacity                                                                                      | `EnquiryForm.module.css` has zero opacity declarations; `Input` uses only `opacity: 1` to defeat user-agent placeholder attenuation |
@@ -519,12 +519,13 @@ was trimmed with the table above: it named `.label` and `.message`, which neutra
 Every band is a real `CtaSection` with this component in `form`, because that is the only place it ships.
 
 1. **Variant ladder.** Separate real `CtaSection` bands render enquiry, audit, and contact. A following contract caption lists the six shared hidden names, audit's seventh `intent`, and the contact variant's direct mutation-field mapping.
-2. **Interactive lifecycle mounts.** The form does not expose a dishonest forced-state prop. Labelled bands point to success, error and three-second pending endpoints; blur reaches Invalid, submission reaches Submitting and the endpoint reaches Error or Success. Hover, pressed and keyboard focus remain native interactions, so the page tells the reviewer to point, hold and Tab. Browser acceptance records each reached DOM state.
-3. **All four surfaces as sibling bands, identical markup.** `paper`, `tint`, `ink`, `blue`, each holds the same enquiry form. Invalid is reached by blurring a field on each band rather than by adding specimen-only state to the production API.
+2. **Interactive lifecycle mounts.** The form does not expose a dishonest forced-state prop. Labelled bands point to success, error and three-second pending endpoints; a send with a field empty or malformed reaches Invalid (a blur never does, 16 Oct 2026), submission reaches Submitting and the endpoint reaches Error or Success. Hover, pressed and keyboard focus remain native interactions, so the page tells the reviewer to point, hold and Tab. Browser acceptance records each reached DOM state.
+3. **All four surfaces as sibling bands, identical markup.** `paper`, `tint`, `ink`, `blue`, each holds the same enquiry form. Invalid is reached by sending with a field empty on each band (a `Rehearse submit` band does it on load) rather than by adding specimen-only state to the production API.
 4. **Nested-surface band.** A `blue` `CtaSection` immediately after an `ink` one, both holding the form, so a leaked value shows up as a mismatch between the two.
 5. **Edge cases.** The audit band renders the 24-character label; the contract caption lists seven hidden fields and empty context values; a 256px illegal parent and a wrapping `Cluster` expose the minimum. Long prefilled native values are rendered on `/design/input`, the primitive that owns scrolling and wrapping, and are pasted through the real form during browser acceptance. The page is also checked at 375px to exercise the 767 rule.
 6. **Two of the component adjacent** — two `CtaSection` bands back to back, with the note that this is a bug the specimen exists to make visible, and a check that no id collides.
 7. **The component in a narrow track** — inside a 256px specimen track to prove the stated minimum, and inside a `Cluster` (a parent that does not size it) to prove it does not collapse.
+8. **The island close** (19 Oct 2026). Every dress inside the real close, CtaSection `island` + `islandTexture="frame"` + the desk `art`, each with a caption naming what it is, when to use it and its props: the plain set, `card` and `message` on blue; `card` and `message` on ink. A plain-text note records the pending choice-led dress (not built).
 
 ---
 
@@ -821,7 +822,7 @@ COMPLETENESS
 [x] Do's and Don'ts are testable — each row names the grep, the specimen column or the diff count
     that decides it.
 [x] The specimen plan renders all three variants × the one size × all four surfaces, reaches Invalid,
-    Submitting, Error and Success through the real blur/submission lifecycle, notes that
+    Submitting, Error and Success through the real submission lifecycle (send-only since 16 Oct), notes that
     hover/pressed/focus must be performed, and includes the nested-surface band, both-adjacent,
     the 256px track and the unsized Cluster parent. Primitive-owned long-value behavior is rendered
     on `/design/input` and repeated during browser acceptance.
@@ -867,3 +868,92 @@ optional `dress`; behaviour, field names, validation, statuses and the success v
   sit a `text` apart and its foot a `text` under the hairline; the card takes **`reply`**, the promise
   beside the send led by a check ("We reply in 1 business day"), which a send's status replaces. The
   home card drops "or write to" and the note.
+
+## Amendment · 19 Oct 2026 — the dresses, documented in full; the choice form pending
+
+No behaviour changed on 19 Oct. This completes the 16 Oct `dress` amendment against the code
+(`EnquiryDress` in `EnquiryForm.tsx`) and corrects the blur-validation lines above in place (§ 0 item
+10, § 5 Invalid row, § 11 semantics, focus table and screen-reader script, § 14, § 15 items 2–3, the
+appendix).
+
+**What a dress is.** A presentation of the enquiry set only (`variant` `enquiry` or omitted; `dress?:
+never` on audit, contact and compact). The fields are the plain set's three — `email` (required),
+`what_are_you_working_on` (required) and the optional `url`, normalised on blur — with the same names,
+hidden context, send-only validation, statuses and success view. All copy is the caller's. Absent, the
+form is the **plain set**: visually hidden labels, the noun as the placeholder cue, the submit (and
+`scheduleHref`'s link when given) in the action row, the caption under it.
+
+| | `card` | `message` — the "first message" |
+|---|---|---|
+| Props | `title` (required), `prompt?`, `reply?`, `writeTo?`, `note?` | `from: { name, role, portrait }` (required), `note` (required), `prompt?`, `writeTo?` |
+| Anatomy | h3 `title` → three `fill` fields at `text` with VISIBLE labels ("Optional" at the end of the link's label row; email cue `you@company.com`, link cue `https://`, `prompt` as the big field's example) → a foot under a hairline: the send, `scheduleHref`'s link if given, and the `reply` promise led by a `check-circle`; under it, when `writeTo` or `note` is set, one line "or write to {writeTo} · {note}" | a 88 portrait as a circle (decorative, `alt=""`), `from.name` and `from.role` on one line, `note` in a bubble → a composer: the big field first (`bare` look, labelled "What are you working on?" + `prompt` as its cue), then "Your email" and "Link · optional" as keyed cells (keys `aria-hidden`; the real labels stay visually hidden), and a foot with "or write to {writeTo}" beside the send |
+| Live region | the `reply` slot: a send's status (sending, the count of answers that need a look, the error) replaces the promise | the "or write to" line: a send's status replaces it |
+| Focus indicator | each field's own | the composer draws it (`:focus-within`), which is why the `bare` look is never used outside it |
+| When to use | the form is the band's primary object and a visitor should see what each field is for: **the home close** (card on blue) | a named person answers enquiries and the close should read as a conversation, not a form. On no page yet; the person in the specimens is a placeholder from the studio photo catalogue |
+
+**Where they live.** Both dresses are made for the island close (CtaSection `island="blue" | "ink"`,
+`islandTexture="frame"`, `art`), on CtaSection's paper panel inside the island; either dress sits on
+either island. Home passes `island={{ surface: 'blue', dress: 'card' }}` to the corpus close
+(`src/templates/CorpusPage/blocks.tsx`, `ENQUIRY_DRESS`). Nothing stops a dress outside the island;
+no placement uses one there.
+
+**Specimens.** `/design/enquiry-form` § "The island close": the plain set, card and message on blue;
+card and message on ink. `/design/cta-section` § 1b: the same four dressed closes plus a stress
+instance. `/design/island`: card on blue, message on ink.
+
+**Open, not built — a third dress, the choice form.** A choice-led form (pick one option, then the
+fields) is being explored as a mock. It has no prop, no type member and no specimen; nothing renders
+it. Open questions before it can be specified: what the options are and who authors them (corpus or
+component), whether the choice posts as a field or as context, and whether the fields change with
+the choice. Non-blocking for everything shipped.
+
+## Amendment · 19 Oct 2026 — the chip form (`dress` `choice`) and the first message with chips (owner, approved)
+
+The owner approved the hi-fi chip mock (round 3). Built the same day; this supersedes the "choice
+form pending" note above. Behaviour, posting and send-only validation are the form's own: errors
+appear only on send, focus moves to the first failing field, and editing a flagged field only clears
+it. Both chip groups are optional answers; nothing about a chip ever blocks a send.
+
+**New types.** `EnquiryChoice = { value, label, prompt?, echo? }` and `EnquiryChoiceGroup = {
+question, aside?, options }`, exported. All copy is the CALLER's (the specimen fixture is
+`src/app/design/_specimen/enquiry-chips.ts`, the mock's strings).
+
+**`dress={{ kind: 'choice', needs, stage?, prompt?, reply? }}` — the split panel.**
+- Two halves, `[1, 1]` from 1024 a `gutter` apart, the chip half's own hairline and `gutter` inset
+  after it: 64 between the halves (the `column` step for peers), the rule at the middle.
+- Fields half: Name (`name`, REQUIRED, "Enter your name") and Email (`email`, required) side by side
+  (`fit`, `xs` tracks; they stack where narrow), then "What are you working on?"
+  (`what_are_you_working_on`, required), all with visible labels over `fill` fields. The message
+  STRETCHES (Layout `fillLast` + FieldGroup `fill`) so the half ends level with the chip half.
+- Chip half: `needs` ("What do you need?" · "Pick any", checkboxes, posts one `needs` per checked
+  chip), `stage` ("Where is it today?" · "Optional", radios, posts `stage`), then the optional
+  Website (`url`, normalised on blur as before).
+- Foot under a hairline across both: the reply line at the start, the send (blue solid, its own
+  width) at the end; with `scheduleHref`, its link groups with the send. The reply line says the
+  picks back — "**Product design and AI product UX**, for **a prototype**. We reply within one
+  business day." (picks in option order, `echo ?? label`, the promise `reply ?? caption ?? the form's
+  own`) — and is the polite live region a send's status replaces.
+- Picking a need with a `prompt` makes it the message field's placeholder (the latest pick wins;
+  unpicking falls back to the previous pick, then to `prompt`).
+- Below 1024: the chip half first (it is first in the DOM; `reverse` sets the fields at the start
+  from 1024), closed by its hairline, then the fields, then the send across the panel with the line
+  under it. Desktop tab order therefore runs chips → fields → send (recorded; the form's sequence
+  carries no meaning).
+- Each group is a `<fieldset>` whose visually hidden `<legend>` is "question (aside)"; the visible
+  question and aside are aria-hidden siblings, as a visible label's "Optional" is.
+
+**The message dress (direction C).**
+- Name is now the first cell of the composer's details — Name · Email · Link — and REQUIRED. The
+  details are three across from 768 to 1023 and from 1440 (`[4, 5, 4]`, the email cell widest), one
+  per row between (the island's 7-track, where three would leave each ~85).
+- `needs?: EnquiryChoiceGroup`: one pick-any chip group under the bubble, set in to the bubble's edge
+  from 768 (portrait + `text`), flush on a phone; the bubble describes the group
+  (`aria-describedby`), the question is its hidden legend. Picking a need sets the composer's
+  placeholder as above.
+
+**Chip** is a new tier-1 control (docs/specs/Chip.md). **Decided (owner may override,
+non-blocking):** no budget group; both groups optional; the chip form is on no page yet — home keeps
+its approved card close, and the dresses live in specimens only.
+
+**Specimens.** `/design/enquiry-form`: `#chips-split-blue`, `#chips-split-ink`,
+`#first-message-chips-blue`, `#chips-split-invalid` (sent empty).

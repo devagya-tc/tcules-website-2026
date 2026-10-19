@@ -290,7 +290,9 @@
   border-block-start: var(--enq-divider-width) solid var(--enq-divider);
 }
 
-@media (min-width: 768px) {
+/* The details sit three across from 768 to 1023 and from 1440 (the Layout's tracks), one per row
+   between: the inline rule only where they are side by side. */
+@media (min-width: 768px) and (max-width: 1023px), (min-width: 1440px) {
   .composerCell + .composerCell {
     border-inline-start: var(--enq-divider-width) solid var(--enq-divider);
   }
@@ -299,4 +301,63 @@
 .composerFoot {
   padding: var(--gap-tight) var(--gap-tight) var(--gap-tight) var(--enq-cell-inset-inline);
   border-block-start: var(--enq-divider-width) solid var(--enq-divider);
+}
+
+/* ── The chip groups (19 Oct 2026; see EnquiryChoiceGroup) ────────────────────────────
+   A fieldset with nothing of the UA's: no edge, no inset, no margin (a reset of the element's own
+   box, not outer spacing), and free to shrink in its track. Its legend is `.hidden`; the visible
+   question is a sibling the Layout spaces. */
+.group {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* The message's chips, set in to the bubble's edge from 768: the portrait's width and the `text`
+   between it and the bubble. The inset is the row's own, so the chips start where the note does;
+   flush on a phone, where the column is too narrow to give 60 away. */
+@media (min-width: 768px) {
+  .replies {
+    padding-inline-start: calc(var(--enq-portrait-size) + var(--gap-text));
+  }
+}
+
+/* The chip form's chip half: its own hairline and the `gutter` after it. Beside the fields from
+   1024 the rule runs down its start edge (the halves' `gutter` before it, this `gutter` after:
+   64, the `column` step, with the rule at the middle); stacked above the fields below 1024 the rule
+   closes it, with a `block` above the rule. The inset is the half's own, not outer spacing. */
+.choiceSide {
+  min-inline-size: 0;
+  padding-block-end: var(--gap-block);
+  border-block-end: var(--enq-divider-width) solid var(--enq-divider);
+}
+
+@media (min-width: 1024px) {
+  .choiceSide {
+    padding-block-end: 0;
+    padding-inline-start: var(--gap-gutter);
+    border-block-end: 0;
+    border-inline-start: var(--enq-divider-width) solid var(--enq-divider);
+  }
+}
+
+/* The reply line: the picks said back, then the promise. A send's status replaces it; an error
+   takes the error ink (.statusError, which this rule precedes in the file and must not outrank). */
+.echo {
+  min-inline-size: 0;
+  color: var(--enq-caption-ink);
+  font: var(--text-body-sm);
+  text-wrap: pretty;
+}
+
+.echo.statusError {
+  color: var(--enq-status-ink-error);
+}
+
+/* A pick in the line: the label role, so it reads as the answer it echoes, in the label ink. */
+.echoPick {
+  color: var(--enq-label-ink);
+  font: var(--text-label);
+  letter-spacing: var(--text-label-tracking);
 }
