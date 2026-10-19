@@ -12,12 +12,26 @@ import type { TestimonialRating } from '../../corpus-types.ts';
  * site launches. docs/content-proposals.md P36 tracks it; `placeholder: true` is how a check finds
  * every one that is left.
  *
+ * FLOOR 4.5 (owner, 19 Oct 2026, superseding "4 to 5"): since every value here is invented, none is
+ * ever shown below 4.5. `rating()` throws on one that is, so the floor cannot drift. It binds the
+ * placeholders only: a real review's published rating is shown as published.
+ *
  * Read only through `getTestimonialRatings` (source.ts). A testimonial with no entry renders with no
  * stars, never a default score.
  */
 const PLACEHOLDER = true;
 
-const rating = (value: number): TestimonialRating => ({ value, placeholder: PLACEHOLDER });
+/** The lowest placeholder score that may be shown (owner, 19 Oct 2026). */
+const PLACEHOLDER_FLOOR = 4.5;
+
+const rating = (value: number): TestimonialRating => {
+  if (PLACEHOLDER && value < PLACEHOLDER_FLOOR) {
+    throw new Error(
+      `testimonial-ratings: placeholder ${value} is below the ${PLACEHOLDER_FLOOR} floor.`,
+    );
+  }
+  return { value, placeholder: PLACEHOLDER };
+};
 
 export const TESTIMONIAL_RATINGS: Readonly<Record<string, TestimonialRating>> = {
   /* Home: selected work */
@@ -29,7 +43,7 @@ export const TESTIMONIAL_RATINGS: Readonly<Record<string, TestimonialRating>> = 
   'DRAFT-PRIMELIS-TEAM': rating(5),
   /* Home: what clients say; /about */
   'CL-RINGIER-COLLAB': rating(5),
-  'UW-JOVE-INTEGRATION': rating(4),
+  'UW-JOVE-INTEGRATION': rating(4.5),
   'DRAFT-KNOVOS-CANDOUR': rating(4.5),
   'DRAFT-CURAMCARE-RESEARCH-BUILD': rating(5),
   'DRAFT-DOODLE-RESEARCH': rating(4.5),
