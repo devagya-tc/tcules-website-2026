@@ -149,7 +149,9 @@ export function Gateway({ items, arrangement = 'select', titleAs = 'h3', classNa
       <Layout
         as="ul"
         columns={{ md: 2, lg: 3 }}
-        colGap="gutter"
+        /* `column` (64), not the card-set gutter: with no box or ground, the space between items
+           is all that separates them (owner, 19 Oct 2026; decisions/2026-10-19-gateway-board-column-gap-64). */
+        colGap="column"
         rowGap="stack"
         className={cx(styles.root, className)}
       >
