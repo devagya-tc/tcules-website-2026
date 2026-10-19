@@ -415,3 +415,7 @@ export {
   type TeaserProps,
   type TeaserSize,
 } from './Teaser';
+
+/* Bento — linked tiles of two sizes on four tracks, each a name, a line and its drawing, over one
+   continuous texture per row (home "What we do", owner 19 Oct 2026). */
+export { Bento, type BentoItem, type BentoProps } from './Bento';

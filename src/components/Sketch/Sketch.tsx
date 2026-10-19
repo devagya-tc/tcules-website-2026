@@ -1,3 +1,5 @@
+import { cx } from '@/lib/cx';
+
 import styles from './Sketch.module.css';
 import type { SketchName } from '@/lib/sketches';
 
@@ -20,10 +22,35 @@ export type { SketchName };
 
 export type SketchProps = {
   name: SketchName;
+  /**
+   * `plate` (default): the drawing on its 16:9 dot-field plate, filling its box's width.
+   * `bare`: the drawing alone, cropped to its own drawn edge and set at its own size in drawing
+   * units, for a parent that supplies the ground and the scale (Bento, owner 19 Oct 2026). Cropped
+   * so its left edge is the drawing's, not the plate's margin: a bare scene set on a title's edge
+   * starts exactly there.
+   */
+  frame?: 'plate' | 'bare';
+  /** `kit` (default) or `light`, the thinner strokes (owner, 19 Oct 2026, home What we do). */
+  weight?: 'kit' | 'light';
 };
 
 const W = 320;
 const H = 180;
+
+/**
+ * Each scene's drawn edge in its 320 × 180 drawing, strokes included (measured from the scenes as
+ * drawn below, at the kit's widest stroke). The bare frame's viewBox. A scene with no entry is
+ * cropped to the full drawing; re-measure when a scene is redrawn.
+ */
+const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number]>> = {
+  'new-product': [48, 28, 224, 124],
+  'product-design': [58, 28, 204, 124],
+  'product-modernisation': [28, 38, 264, 104],
+  'design-systems': [38, 34, 254, 120],
+  'ai-product-ux': [68, 20, 184, 122],
+  'design-engineering': [34, 38, 252, 104],
+  'software-development': [58, 42, 204, 104],
+};
 
 /**
  * Sketch — a small drawing on its plate (16:9, the photograph radius), a stand-in for an illustration
@@ -32,11 +59,15 @@ const H = 180;
  * Decorative: `aria-hidden`, the words beside it carry the meaning. Strokes are non-scaling. The dot
  * field is the plate's CSS background, so a sketch carries no id and any number can share a page.
  */
-export function Sketch({ name }: SketchProps) {
+export function Sketch({ name, frame = 'plate', weight = 'kit' }: SketchProps) {
+  const bare = frame === 'bare';
+  const [x, y, w, h] = (bare && DRAWN[name]) || [0, 0, W, H];
   return (
     <svg
-      className={styles.sketch}
-      viewBox={`0 0 ${W} ${H}`}
+      className={cx(styles.sketch, bare && styles.bare, weight === 'light' && styles.light)}
+      viewBox={`${x} ${y} ${w} ${h}`}
+      width={bare ? w : undefined}
+      height={bare ? h : undefined}
       focusable="false"
       aria-hidden="true"
     >

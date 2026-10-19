@@ -13,6 +13,7 @@ import {
 } from '@/components';
 import {
   Banner,
+  Bento,
   BlockCard,
   BlockCardSet,
   ContentSection,
@@ -22,6 +23,7 @@ import {
   LogoGrid,
   Reasons,
   TestimonialCase,
+  type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
   type HeroStat,
@@ -38,7 +40,6 @@ import type {
   PlaceholderReasons,
   ProposedEyebrows,
 } from '@/lib/corpus-types';
-import { glyphForRoute } from '@/lib/glyphs';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { sketchForRoute } from '@/lib/sketches';
@@ -497,41 +498,48 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
   );
 }
 
-/* ── 4 · what we do: six services as linked icon boxes ───────────────────────────── */
+/* ── 4 · what we do: six services as a bento ─────────────────────────────────────── */
 
 /**
- * The second way into the services, and visibly a different one from the gateway above it (owner,
- * 10 Oct 2026, note 6): the kit home's approved band 5 — a stacked head and its lead over six linked
- * icon cards in borderless boxes, three across, each led by its service's glyph. Pass 1 set them as
- * ruled text rows with no glyph. The label's closing full stop is the run-in's punctuation, not part
- * of the service's name, so the card title drops it.
+ * The second way into the services, and visibly a different one from the gateway's board above it
+ * (owner, 10 Oct 2026, note 6): a Bento (owner, 19 Oct 2026, What we do mocks S3). Six tiles on two
+ * rows of four tracks, each the service's name, its line and its Sketch scene over the row's
+ * texture. The sizes carry the band's own argument — "Product Design is at the heart of every
+ * project" — so Product Design is wide at the start and Software Development wide at the end, the
+ * four that apply it between. The label's closing full stop is the run-in's punctuation, not part of
+ * the service's name, so the tile's title drops it. A service with no scene is left out, with a
+ * warning: a tile without its drawing would be the one hole in the set.
  */
 function Capabilities({ b }: BandProps) {
   const intro = b.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph' && !leadOf(x));
-  const cards: BlockCardSetItem[] = b.blocks.flatMap((block) => {
+  const tiles: BentoItem[] = b.blocks.flatMap((block) => {
     const lead = leadOf(block);
     if (!lead) return [];
     const link = lead.label.find((run) => run.type === 'link');
     const href = link?.type === 'link' ? link.href : undefined;
     const title = labelTitle(lead.label).replace(/\.$/, '');
-    return [
-      {
-        id: title,
-        title,
-        ...bodyOf(lead.body),
-        href,
-        icon: href ? glyphForRoute(href) : undefined,
-      },
-    ];
+    const scene = href ? sketchForRoute(href) : undefined;
+    if (!href || !scene) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`HomePage: "${title}" has no service scene; its tile is not rendered.`);
+      }
+      return [];
+    }
+    return [{ id: href, title, body: plain(lead.body).trim(), href, scene }];
   });
+  /* Six is the shape the diagonal is drawn for: wide, single, single / single, single, wide. Any
+     other count stays four single tiles a row. */
+  const placed: BentoItem[] =
+    tiles.length === 6
+      ? tiles.map((tile, index) => (index === 0 || index === 5 ? { ...tile, span: 2 } : tile))
+      : tiles;
   return (
     <ContentSection
       {...head(b)}
-      data-band="C-icon"
+      data-band="C-bento"
       lead={intro ? plain(intro.runs) : undefined}
     >
-      {/* A router shows every route at once, on a phone too: never a scroll row (BlockCardSet). */}
-      <BlockCardSet items={cards} lead="none" across={3} frame="box" scroll="never" />
+      <Bento items={placed} />
     </ContentSection>
   );
 }

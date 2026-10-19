@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-190 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+195 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -124,6 +124,7 @@ stale index.
 
 *Arrangement, the primitives, page composition.*
 
+- 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
@@ -219,6 +220,7 @@ stale index.
 
 *Photographs, captures, media delivery.*
 
+- 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
 - 2026-10-13 · [Never reuse a graphic as a stand-in](2026-10-13-no-reused-graphics-as-standins.md)
 - 2026-10-11 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md)
 - 2026-10-11 · [Card media is always 16:9](2026-10-11-card-media-always-16-9.md)
@@ -259,6 +261,7 @@ stale index.
 
 *Illustrations, sketches, drawn visuals.*
 
+- 2026-10-19 · [Bento's drawings are the Sketch scenes, bare and in the light weight](2026-10-19-bento-sketches-are-light.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
 - 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
@@ -287,6 +290,7 @@ stale index.
 
 *Glyphs and marks.*
 
+- 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-11 · [No icons in circles](2026-10-11-no-icons-in-circles.md)
 - 2026-10-11 · [Arrows mean clickable](2026-10-11-arrows-mean-clickable.md)
 - 2026-10-09 · [An icon heads its card, sized to the title](2026-10-09-icon-heads-its-card.md)
@@ -301,6 +305,7 @@ stale index.
 
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
 - 2026-10-19 · [Hover is one smooth move, there and back](2026-10-19-hover-is-a-move.md)
+- 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
 - 2026-10-11 · [Selectors mark the current option and never fade the rest](2026-10-11-selectors-mark-never-fade.md)
@@ -309,7 +314,11 @@ stale index.
 
 *Card sets and their variants.*
 
+- 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
+- 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
+- 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
+- 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)

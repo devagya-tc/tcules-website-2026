@@ -243,6 +243,11 @@ const SPECIMENS = [
         note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
       },
       {
+        href: '/design/bento',
+        name: 'Bento',
+        note: 'linked tiles of two sizes on four tracks over one continuous texture per row — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
+      },
+      {
         href: '/design/reasons',
         name: 'Reasons',
         note: 'why choose us — six argued reasons each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, three reasons, a bare head, tint',

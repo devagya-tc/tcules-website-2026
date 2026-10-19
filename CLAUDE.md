@@ -13,7 +13,7 @@ app  →  templates  →  patterns  →  components  →  lib / styles
 |---|---|---|
 | — | `src/app/**` | routes. Composition only; read content, pass props |
 | 3 | `src/templates/**` | whole page-type layouts (article shape, service-page shape) |
-| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `TableOfContents`, `PageHero`, `ContentSection`, `CtaSection`, `CtaRow`, `EnquiryForm`, `ProcessFlow`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Callout`, `DataTable`, `Figure` and the kit's `Slider` today; `Statement`, `Banner`, `Contrast` and `Thread` as they land |
+| 2 | `src/patterns/**` | composed blocks — `SiteNav`, `SiteFooter`, `Breadcrumbs`, `TableOfContents`, `PageHero`, `ContentSection`, `CtaSection`, `CtaRow`, `EnquiryForm`, `ProcessFlow`, `ListCard`, `BlockCard`, `Accordion`, `Proof`, `Callout`, `DataTable`, `Figure`, `Bento` and the kit's `Slider` today; `Statement`, `Banner`, `Contrast` and `Thread` as they land |
 | 1 | `src/components/**` | primitives, controls and marks — `Section`, `Layout`, `Cluster`, `Button`, `Icon`, `Logo`, `Prose` |
 | — | `src/content/**` | the CMS seam. Imported by pages and nothing else |
 | — | `src/lib/**`, `src/styles/**` | leaves. Import nothing above them |
@@ -387,8 +387,9 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   may sit beside items nobody clicks, with those items continuing under the heading in its column.
 - **Two tinted bands are never adjacent**, the close included: where two would meet, one drops to paper.
 - **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
-  inline beside the title. No ground exists only on hover, so no card carries an inset for one
-  (owner, 19 Oct 2026; decisions/2026-10-19-no-hover-only-grounds).
+  inline beside the title. A tile led by its own drawing carries no glyph at all (owner, 19 Oct 2026;
+  decisions/2026-10-19-drawn-tile-carries-no-icon). No ground exists only on hover, so no card
+  carries an inset for one (owner, 19 Oct 2026; decisions/2026-10-19-no-hover-only-grounds).
 - **Never two text-heavy bands back to back.** A band with no photograph and a body of words is
   followed by a visual one (a photograph, a diagram, marks, covers, an icon set). The ServicePage
   plan warns in development (`textHeavyPairs`, visual-direction § 1.7).
