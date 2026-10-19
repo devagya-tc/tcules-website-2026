@@ -43,7 +43,7 @@ often 5–7, and normally ends the page.
 | root       | yes      | `Layout as="div"`      | Owns the zero-gap block axis for one complete disclosure set and its leading rule. |
 | item       | yes      | native `details`       | One question/answer relationship and its block-end rule. It is the only element that owns open state. |
 | trigger    | yes      | `Cluster as="summary"` | The full-width interactive target, and the only inline arrangement in the component. Owns pointer and keyboard states and contains only the question and decorative mark. |
-| question   | yes      | `h3` / `h4`            | One plain-text question, normally ending in a question mark. It is not caller-authored markup and cannot contain a control. A heading element at the h5 composite — see section 8. |
+| question   | yes      | `h3` / `h4`            | One plain-text question, normally ending in a question mark. It is not caller-authored markup and cannot contain a control. A heading element at the h4 composite — see section 8. |
 | mark       | yes      | one `span`, two `Icon` | Decorative disclosure direction. Both chevrons sit in the DOM at all times and `[open]` picks which one shows, so nothing rotates. |
 | answer     | yes      | `Prose`                | One trusted, sanitised rich-text field, normally one or two paragraphs. Prose owns markup rhythm, inline links and colour; Accordion restates the size and nothing else. |
 | rule       | yes      | root/item logical edge | One leading hairline for the set and one block-end hairline per item. Every rule is `--acc-rule-ink` in every state. |
@@ -73,7 +73,7 @@ export type AccordionProps = {
 | Prop         | Exact type                   | Default | What it decides |
 | ------------ | ---------------------------- | ------- | --------------- |
 | `items`      | `readonly AccordionItem[]`   | none    | Ordered disclosures. Zero valid items render nothing; expected production count is 2–8. |
-| `questionAs` | `'h3' \| 'h4'`               | `'h3'`  | Heading level for every question. Semantics only — the question renders at the h5 composite either way. |
+| `questionAs` | `'h3' \| 'h4'`               | `'h3'`  | Heading level for every question. Semantics only — the question renders at the h4 composite either way. |
 | `question`   | `string`                     | none    | Native summary accessible name and visible question text. Whitespace-only values invalidate that item. |
 | `answerHtml` | `string`                     | none    | Trusted, content-seam-sanitised HTML handed directly to `Prose html`. Whitespace-only values invalidate that item. |
 
@@ -242,12 +242,13 @@ existing icon size.
 
 | Part     | Role             | Tracking companion       | Measure |
 | -------- | ---------------- | ------------------------ | ------- |
-| question | `--text-h5`      | `--text-h5-tracking`     | `--measure-body` |
+| question | `--text-h4`      | `--text-h4-tracking`     | `--measure-body` |
 | answer   | owned by `Prose` | owned by `Prose`         | `Prose`'s `--measure-body` |
 
 Question copy is sentence case and retains its authored question mark: “How long does a product
 design engagement take?” It is an `h3` by default (`h4` via `questionAs`) inside the native summary,
-and it takes the h5 composite whichever element it is — the heading is semantics, not a size step.
+and it takes the h4 composite whichever element it is (h5 until 19 Oct 2026; see
+`docs/decisions/2026-10-19-faq-question-h4-head-md.md`) — the heading is semantics, not a size step.
 
 This overturns the original decision, which was that the question should stay a `span` because the
 summary is already a named interactive control. That holds for a single disclosure. It does not

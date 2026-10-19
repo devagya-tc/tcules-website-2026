@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-195 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -61,6 +61,7 @@ stale index.
 - ch03 §2 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md) (2026-10-15)
 - ch03 §2 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md) (2026-10-15)
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
+- ch03 §5 · [An FAQ's questions take h4 at medium weight, under a 34 head](2026-10-19-faq-question-h4-head-md.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
 
 **04 Iconography** — `/dbf-update 04`
@@ -177,6 +178,7 @@ stale index.
 *Roles, sizes, families, case.*
 
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
+- 2026-10-19 · [An FAQ's questions take h4 at medium weight, under a 34 head](2026-10-19-faq-question-h4-head-md.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
 - 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
 - 2026-10-15 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md)
@@ -317,10 +319,10 @@ stale index.
 
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
+- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
-- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
@@ -420,6 +422,7 @@ stale index.
 
 *Contracts of a named component or pattern.*
 
+- 2026-10-19 · [An FAQ's questions take h4 at medium weight, under a 34 head](2026-10-19-faq-question-h4-head-md.md)
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)

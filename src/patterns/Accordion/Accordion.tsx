@@ -4,7 +4,7 @@ import styles from './Accordion.module.css';
 
 /**
  * Heading semantics for the question, without a visual type change — the question renders at the
- * h5 composite whichever element it is. `h3` is right on every audited route, because
+ * h4 composite whichever element it is. `h3` is right on every audited route, because
  * `ContentSection` owns the section's `h2`; `h4` exists for the day a route nests a set under an
  * `h3`. Same shape and same reason as `titleAs` on `BlockCard` and `ListCard`.
  */

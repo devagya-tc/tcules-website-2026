@@ -303,7 +303,13 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
         />
       </ContentSection>
 
-      <ContentSection id="faq" heading={c.faq.heading} headingId="faq-heading" align="center">
+      <ContentSection
+        id="faq"
+        heading={c.faq.heading}
+        headingId="faq-heading"
+        headingSize="md"
+        align="center"
+      >
         <ContentSectionText>
           <Accordion items={c.faq.items} />
         </ContentSectionText>

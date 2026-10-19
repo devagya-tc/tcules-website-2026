@@ -61,6 +61,9 @@ function SectionBandView({ band, ctx }: { band: SectionBand; ctx: Context }) {
     heading: section.heading,
     headingId: section.id,
     lead: section.lead,
+    /* An FAQ's head steps down to the h3 role (34) so its h4 questions are the band's titles
+       (owner, 19 Oct 2026). */
+    headingSize: archetype === 'D-faq' ? ('md' as const) : undefined,
     'data-band': archetype,
     /* The deep-page link (`more`), the band's foot in every arrangement. */
     footer: section.more ? (

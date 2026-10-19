@@ -45,10 +45,15 @@
      often 150–300px, and at 140ms that distance reads as a snap — the jump this replaces. Slow
      (360) made a seven-item FAQ feel heavy to scan. */
   --acc-reveal-duration: var(--duration-medium);
-  /* The question's role (home round 3): the serif h5 (22, medium) over the 16 sans answer — a 1.38
-     size step, a family change and, now, a full ink step. */
-  --acc-question-text: var(--text-h5);
-  --acc-question-tracking: var(--text-h5-tracking);
+  /* The question's role (owner, 19 Oct 2026): the h4 composite — 22 / 20 / 18 down the breakpoints,
+     sans, medium — over the 14 sans answer. The 11 Oct fix out-ranked the answer by face, size and
+     ink; the 16 Oct move of h5 to the sans and the 19 Oct body ceiling took the face and shrank the
+     size step to 18 / 14, and the stakeholder read the pair as too close again. h4 restores a 1.57
+     size step at the same weight (600 read too heavy), and is the item step the 11 Oct ruling
+     already gives titles under an h2. The band's heading drops to ContentSection's `md` (34) in the
+     same change, so the question grows without crowding the head. */
+  --acc-question-text: var(--text-h4);
+  --acc-question-tracking: var(--text-h4-tracking);
 }
 
 /* Paper: the question at full ink, the answer a clear step under it. The mark rests at the accent

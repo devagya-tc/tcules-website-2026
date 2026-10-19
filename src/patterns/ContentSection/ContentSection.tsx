@@ -158,10 +158,12 @@ export type ContentSectionMediaHeight = 'ratio' | 'copy';
  *   xl  the h1 role (54). For the band whose HEADING is its one large thing — it opens an argument
  *       (the media split's head beside its photograph, a feature band's opener). One or two a page.
  *   lg  the section h2 (43), the default. For the band whose CONTENT is its large thing — a set, a
- *       grid, proof, a form, an FAQ. Most bands.
+ *       grid, proof, a form. Most bands.
  *   md  the same `h2` element at the h3 role (34), for a band whose large thing would be out-sized
  *       even by an h2: the S stats band, where a 43 head over 54 mono figures read as a heading over
- *       its captions (final fix round, 6 Oct 2026 — § 3.3 "one large thing per band").
+ *       its captions (final fix round, 6 Oct 2026 — § 3.3 "one large thing per band"); and an FAQ,
+ *       whose 22 questions are the band's titles and read as small under a 43 head (owner, 19 Oct
+ *       2026).
  *
  * `display` (the hero's role, ≈ 67) was a fourth step until round 5 and is retired: display belongs
  * to PageHero alone.
