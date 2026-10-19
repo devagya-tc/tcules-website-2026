@@ -1,0 +1,25 @@
+/* ══ Component layer — SituationFigure ═════════════════════════════════════════
+   Tier 1 mark. One of the home gateway's six isometric drawings (round 11, 19 Oct 2026), each a
+   small story in two states — rest shows the problem, end shows it solved — played when the link
+   it sits in is hovered or focused.
+
+   Naming: --sfig-{part}
+     tx · ty · rot   a moving part's END-state displacement. Declared here at rest (no move) and
+                     restated per part, inline, by the generated drawing
+                     (scripts/illustrations/situations.mjs): the value belongs to the drawing.
+     duration · easing   the one motion every part of a drawing shares: everything starts together,
+                     runs as long and stops together, both ways (owner: "one smooth animation").
+
+   No surface blocks, deliberately: the drawings are exported for the PAPER ground only (their fills
+   are the ground's colour, the kit's occlusion rule), so nothing here varies by surface.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --sfig-tx: 0px;
+  --sfig-ty: 0px;
+  --sfig-rot: 0deg;
+  /* The owner tuned 350ms; the system's `slow` step (360) is the surface-moving duration and the
+     nearest named one, so the drawing takes it rather than a one-off. */
+  --sfig-duration: var(--duration-slow);
+  --sfig-easing: var(--easing-ease);
+}

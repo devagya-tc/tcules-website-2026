@@ -83,6 +83,11 @@ const SPECIMENS = [
         note: 'a small drawing on its 16:9 plate, one scene per service (seven), a stand-in for an illustration in the home and About selectors; 3 surfaces',
       },
       {
+        href: '/design/situation-figure',
+        name: 'SituationFigure',
+        note: 'the home gateway’s six isometric drawings, each a situation in two states (rest the problem, end solved), played as one motion when its link is hovered or focused; rest and end side by side, and live; paper only',
+      },
+      {
         href: '/design/brand-mark',
         name: 'BrandMark',
         note: 'third-party marks (LinkedIn, YouTube, Clutch) at their own proportions, monochrome, 4 surfaces',
@@ -370,7 +375,7 @@ const SPECIMENS = [
       {
         href: '/design/kit/gateway',
         name: 'Gateway',
-        note: 'the situation selector on home’s six situations: titles down one column, one lit, its sentence and service beside it and level with it; every situation in full below 1024; paper and tint',
+        note: 'home’s six situations. G.0 board (home since round 11): all six at once on paper, drawing, title and sentence, the whole item a link that plays its SituationFigure. G.1–G.3: the earlier selector on paper and tint, and the expanding rows',
       },
       {
         href: '/design/kit/facts',

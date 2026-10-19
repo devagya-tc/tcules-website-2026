@@ -230,3 +230,10 @@ export type PlaceholderReasons = {
   }[];
   placeholder: true;
 };
+
+/**
+ * Eyebrows PROPOSED for a page's bands, keyed by band id (`getProposedEyebrows`). The corpus authors
+ * no band eyebrows; these are design additions the owner asked for (home gateway, round 11,
+ * 19 Oct 2026), logged in docs/content-proposals.md for the content team to keep, reword or drop.
+ */
+export type ProposedEyebrows = Readonly<Record<string, string>>;

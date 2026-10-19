@@ -786,6 +786,10 @@
   --duration-medium: 240ms;
   --duration-slow: 360ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  /* CSS's own `ease`, picked by the owner in a live curve editor for the gateway drawings (19 Oct
+     2026): a soft start and a long settle, livelier than standard's flat start. For a drawing that
+     plays a small story on hover — a whole scene moving as one. */
+  --easing-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* ── Elevation ────────────────────────────────────────────────────────────────

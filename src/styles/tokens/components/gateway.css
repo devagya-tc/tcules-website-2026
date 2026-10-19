@@ -4,8 +4,8 @@
    src/patterns/Gateway/Gateway.tsx for the IA.
 
    Naming: --gwy-{part}-{role}
-     parts   title · arrow · body · answer · marker · rule · ring
-     roles   text · tracking · ink · ground
+     parts   title · arrow · body · answer · marker · rule · ring · card
+     roles   text · tracking · ink · ground · height · duration · easing
 
    The words stay ink (§ 4.3). Blue is the accent: the current situation's arrow, the marker's faint
    blue ground (the selection), and the service's link (Button's own tokens).
@@ -49,12 +49,23 @@
   --gwy-rule-width: var(--border-width-hairline);
   --gwy-ring-width: var(--focus-ring-width);
   --gwy-ring-radius: var(--radius-4);
+  /* `board` (round 11, 19 Oct 2026). The drawing's box: one height for all six, so the titles sit
+     on one line across the row. A component size, from the locked mock (owner: "drawings 140"). */
+  --gwy-card-visual-height: 140px;
+  /* The title's turn to the accent runs with its drawing's motion — same length, same curve
+     (SituationFigure's are its own; these are duplicated on purpose, rule 6). */
+  --gwy-card-duration: var(--duration-slow);
+  --gwy-card-easing: var(--easing-ease);
+  /* How far the focus ring stands off the item, so it does not cut the drawing or the title's
+     first glyph. An optical offset, not a layout distance (gap rule 1). */
+  --gwy-card-ring-offset: var(--space-12);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
   --gwy-title-ink: var(--color-neutral-900); /* 14.62:1; 13.9:1 on the marker */
+  --gwy-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 — board: a linked item's title */
   --gwy-arrow-ink: var(--color-brandeis-500); /* 5.6:1 on the marker */
   --gwy-body-ink: var(--color-neutral-700);
   --gwy-answer-ink: var(--color-neutral-800);
@@ -66,6 +77,7 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --gwy-title-ink: var(--color-neutral-900);
+  --gwy-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
   --gwy-arrow-ink: var(--color-brandeis-500);
   --gwy-body-ink: var(--color-neutral-700);
   --gwy-answer-ink: var(--color-neutral-800);
@@ -77,6 +89,7 @@
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --gwy-title-ink: var(--color-white);
+  --gwy-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
   --gwy-arrow-ink: var(--color-brandeis-300);
   --gwy-body-ink: var(--color-neutral-400);
   --gwy-answer-ink: var(--color-neutral-200);
@@ -88,6 +101,7 @@
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
 [data-surface='blue'] {
   --gwy-title-ink: var(--color-white);
+  --gwy-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */
   --gwy-arrow-ink: var(--color-white);
   --gwy-body-ink: var(--color-brandeis-50);
   --gwy-answer-ink: var(--color-white);
