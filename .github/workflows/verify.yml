@@ -1,10 +1,11 @@
 # Run the repo's own checks on every pull request, and on main.
 #
 # Why this exists: the six checks in `npm run verify` are the difference between "it compiles" and
-# "it follows the system", and until now they only ran where someone remembered to type them. Branch
-# protection is not available on this plan, so this workflow cannot BLOCK a merge — it makes the
-# answer visible on the pull request, which is what lets someone who is not the repo owner open one
-# with confidence and get told they are wrong by a machine rather than by a person.
+# "it follows the system", and until now they only ran where someone remembered to type them. It
+# makes the answer visible on the pull request, which is what lets someone who is not the repo owner
+# open one with confidence and get told they are wrong by a machine rather than by a person. `main`
+# is protected (public repo, 20 Oct 2026) but this check is not yet a REQUIRED one, so a red run
+# still does not block a merge.
 #
 # It deliberately does not run `npm run build`, `npm run aria:check` or `npm run format`. The first
 # two need a browser build and belong to the person shipping an interactive component; the third

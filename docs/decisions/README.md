@@ -93,6 +93,7 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-20 · [The repo is public, so main's protection is enforced](2026-10-20-repo-public-main-protected.md) · enforced by `GitHub ruleset "main" (id 25475637); gh api repos/devagya-tc/tcules-website-2026/branches/main --jq .protected`
 - 2026-10-20 · [The design system lives in an artifact, generated from the repo](2026-10-20-ds-artifact-from-repo.md) · enforced by `npm run ds:build and ds:check (/ds-publish)`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)
 - 2026-10-16 · [Critic loops never override the foundations](2026-10-16-critics-never-override-foundations.md)

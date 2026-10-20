@@ -51,18 +51,14 @@ The path from an empty machine to a merged pull request, for someone who is not 
 ## If you change it
 
 Edit the HTML, then republish it to the same URL so the link keeps working. Three facts a reader
-depends on — that a branch protection rule for `main` exists but is **not enforced**, that a GitHub
-Action runs `verify` on every pull request, and that `npm ci` installs a `pre-push` hook refusing
-pushes to `main` — are true of `.github/workflows/verify.yml`, `.githooks/pre-push` and the repo's
-plan as of 2026-08-26. If any of them changes, this guide is wrong in a way nothing will catch.
+depends on — that `main` is **protected and enforced** (pull request required, no force-push, no
+deletion), that a GitHub Action runs `verify` on every pull request, and that `npm ci` installs a
+`pre-push` hook refusing pushes to `main` — are true of `.github/workflows/verify.yml`,
+`.githooks/pre-push` and the repo's settings as of 2026-10-20. If any of them changes, this guide is
+wrong in a way nothing will catch.
 
-The plan fact is the one worth writing down, because it has already been misdiagnosed once.
-Enforcement on a private repository needs a **GitHub Team or Enterprise organization account** — not
-GitHub Pro, whatever `docs.github.com`'s plan comparison says. GitHub's own banner on the add-rule
-screen states the requirement, and every REST call refuses outright with
-`403 "Upgrade to GitHub Pro or make this repository public"` — a string that names what unblocks the
-*endpoint*, not what unblocks *enforcement*, and reading it as the latter is how the wrong answer
-gets reached. A non-admin gets `404` on the same endpoint, which reads as a permissions problem and
-is not one. So the rule in Settings records intent, the hook is the only thing that actually pushes
-back, and the day this repo moves to a Team org both this section and the guide's
-"Get current, then branch" paragraph need rewriting.
+Enforcement works because the repo is **public** (since 2026-10-20). Until then it was a private
+repo on a personal account, where GitHub records a rule and does not enforce it — that needs a Team
+or Enterprise *organization*, not GitHub Pro. If the repo ever goes private again, protection
+silently stops. The one reliable check is `gh api repos/devagya-tc/tcules-website-2026/branches/main
+--jq .protected`: `true` means enforced; the Settings page is not evidence.
