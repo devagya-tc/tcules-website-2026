@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-195 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -93,6 +93,7 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-20 · [The repo is public, so main's protection is enforced](2026-10-20-repo-public-main-protected.md) · enforced by `GitHub ruleset "main" (id 25475637); gh api repos/devagya-tc/tcules-website-2026/branches/main --jq .protected`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)
 - 2026-10-16 · [Critic loops never override the foundations](2026-10-16-critics-never-override-foundations.md)
 - 2026-10-16 · [Design for beauty, not for the shape of the content](2026-10-16-beauty-not-content-shape.md)
@@ -317,10 +318,10 @@ stale index.
 
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
+- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
-- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)

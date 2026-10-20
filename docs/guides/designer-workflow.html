@@ -326,12 +326,9 @@ Repo: devagya-tc/tcules-website-2026  ·  branch: main  ·  it is PRIVATE.
     </div>
 
     <p>
-      Two rules, and they exist because <strong>nothing on the server enforces them.</strong> A
-      branch protection rule for <code>main</code> does now exist in the repository settings, but
-      GitHub does not honour one on a private repository on this plan — that needs a Team or
-      Enterprise <em>organization</em> account. So the rule records the intent and a direct push
-      still sails straight through it. What actually keeps <code>main</code> clean is that people
-      do this:
+      Two rules. GitHub now enforces the first one: <code>main</code> is protected, so a direct
+      push to it is refused and every change goes in through a pull request. The second is on you
+      — nothing on the server checks that your branch started from a current <code>main</code>:
     </p>
     <ul>
       <li><strong>Never commit to <code>main</code>.</strong> Always work on a branch.</li>
