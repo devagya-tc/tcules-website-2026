@@ -8,8 +8,8 @@ argument-hint: the chapter number — 00 · 02 · 03 · 04 · 05 · 10 — or no
 Chapter: **$ARGUMENTS**
 
 The Digital Branding Framework in `docs/brand/` is the copy to edit (its `README.md` says so). It is
-pushed to Claude Design by `/design-sync`, which only the owner can start. Your job ends at a branch that
-is ready for them to sync.
+published to the Design System artifact (under `brand/`) by `/ds-publish`. Your job ends at a branch that
+is ready to merge and sync.
 
 1. **Read the backlog.** Run `npm run decisions` and read the *Brand framework backlog* in
    `docs/decisions/README.md`. If the argument is empty, take every chapter listed there, one commit
@@ -37,4 +37,4 @@ is ready for them to sync.
    entry ids in the body. Push and open the PR (standing permission).
 
 Reply with each chapter's new version, the rulings applied, any you held back and why. End with the
-owner's one task: **type `/design-sync`** once the PR is merged, so Claude Design gets the new chapter.
+next step: **`/ds-publish`** once the PR is merged, so the artifact gets the new chapter.

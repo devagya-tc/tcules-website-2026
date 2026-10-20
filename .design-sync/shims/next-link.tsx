@@ -1,7 +1,7 @@
 /**
- * `next/link` — host-framework shim for the design-sync bundle.
+ * `next/link` — host-framework shim for the Design System artifact bundle (scripts/ds-artifact).
  *
- * SiteNav and SiteFooter navigate, so they import next/link. Claude Design has no Next runtime:
+ * SiteNav and SiteFooter navigate, so they import next/link. The artifact has no Next runtime:
  * pulling the real module in drags Next's client router into the bundle, which reads
  * `process.env.__NEXT_*` at module scope and throws `ReferenceError: process is not defined`
  * before a single export reaches window.Tcules — every component fails, not just the two.
@@ -11,7 +11,7 @@
  * everything else is forwarded, so className, aria-label, onClick and the rest behave exactly as
  * they do in the app.
  *
- * Wired in via `paths` in .design-sync/tsconfig.bundle.json — no component source is touched.
+ * Wired in as an esbuild alias in scripts/ds-artifact/build.mjs — no component source is touched.
  */
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 

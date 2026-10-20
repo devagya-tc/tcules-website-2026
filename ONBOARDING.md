@@ -319,9 +319,9 @@ decision the repo made deliberately.
 Two surfaces, because they are good at different things. **Claude Design** writes the spec; **Claude
 Code** in this repo builds it. The seam between them is a file in `docs/specs/`.
 
-**Before any of that: check whether you need a new component at all.** `.design-sync/` bundles the
-seventeen real components onto `window.Tcules` and pushes them into Claude Design with
-`.design-sync/conventions.md` as their guidelines, so a page can be *composed* from actual shipped
+**Before any of that: check whether you need a new component at all.** `/ds-publish` bundles every
+primitive, pattern and template onto `window.Tcules` and publishes them to the Design System artifact
+with `.design-sync/conventions.md` as its README, so a page can be *composed* from actual shipped
 code rather than from a description of it. That is the default path and it is strictly better where
 it applies — the components in a mockup built that way are the real ones, so their surfaces, states
 and props are correct by construction. The spec workflow below is for the case the library cannot

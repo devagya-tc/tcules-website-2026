@@ -1,5 +1,5 @@
 /**
- * `next/navigation` — host-framework shim for the design-sync bundle. See next-link.tsx for why
+ * `next/navigation` — host-framework shim for the Design System artifact bundle. See next-link.tsx for why
  * the real module cannot be bundled.
  *
  * SiteNav reads exactly one thing from this module: `usePathname()`, which it feeds to
@@ -16,4 +16,9 @@
 export function usePathname(): string {
   const p = (globalThis as { __DS_PATHNAME__?: string }).__DS_PATHNAME__;
   return typeof p === 'string' ? p : '/';
+}
+
+/** A specimen that guards a missing fixture calls notFound(); outside Next it simply throws. */
+export function notFound(): never {
+  throw new Error('notFound()');
 }

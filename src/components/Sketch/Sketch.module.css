@@ -17,10 +17,12 @@
   background-size: 6.25% 11.111%;
 }
 
-/* The bare frame: the drawing alone at its own size (its width and height attributes, in drawing
-   units), never wider than its box. No plate, so no ground, no field and no radius. */
+/* The bare frame: the drawing alone, its width its drawing units times the parent's --skt-scale (the
+   one Sketch token a parent sets, on an ancestor), never wider than its box; the height follows
+   from the drawing's ratio. Sized here rather than by CSS `zoom`, which WebKit and Gecko apply to an
+   SVG's intrinsic size differently. No plate, so no ground, no field and no radius. */
 .bare {
-  inline-size: auto;
+  inline-size: calc(var(--skt-units) * var(--skt-scale) * var(--skt-unit));
   max-inline-size: 100%;
   border-radius: 0;
   background: none;

@@ -1,5 +1,12 @@
 # design-sync notes — tcules-website-2026
 
+> **20 Oct 2026: the Claude Design converter is retired.** The library now goes to the Design System
+> artifact through `scripts/ds-artifact/` (`npm run ds:build`, then `/ds-publish`); its own header says
+> how. The sections below about `resync.mjs`, `componentSrcMap`, `config.json`, `groups/` and the
+> remote anchor describe that converter and are history. What still holds: the lessons about the
+> components themselves (void elements, pseudo-element hit areas, the shims) and the preview files,
+> which remain the fallback card for a unit with no `/design` specimen.
+
 Repo-specific gotchas for future syncs. Read this before re-running.
 
 ## Shape and entry
