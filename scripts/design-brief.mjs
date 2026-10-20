@@ -466,18 +466,14 @@ seam to size.
 }
 
 /**
- * The glyph set is enumerated THREE times outside glyphs.ts, and two of those copies are invisible
- * to every other check:
+ * The glyph set is enumerated TWICE outside glyphs.ts, and one of those copies is invisible to every
+ * other check:
  *
- *   1. the generated brief          — read from glyphs.ts at run time, so it cannot drift
- *   2. .design-sync/config.json     — `dtsPropsFor.Icon` hand-pins the IconName union, because
- *                                     `keyof typeof glyphs` collapses to `unknown` in the extractor
- *   3. .design-sync/previews/Icon.tsx — a NAMES array the preview card maps over
+ *   1. the generated brief            — read from glyphs.ts at run time, so it cannot drift
+ *   2. .design-sync/previews/Icon.tsx — a NAMES array the fallback preview card maps over
  *
- * .design-sync/NOTES.md records that both 2 and 3 "go stale silently — nothing checks them". This is
- * that check. The cost of the drift is specific: the design library that Claude Design composes from
- * would not offer a glyph this repo has, or would offer one it does not, and a designer working from
- * the card would specify against the wrong set.
+ * This is the check on 2. (The Design System artifact's declarations come straight from tsc, so the
+ * converter-era `dtsPropsFor` pin in .design-sync/config.json is gone with the converter.)
  */
 function glyphDrift() {
   const truth = glyphSet().names;
@@ -490,14 +486,6 @@ function glyphDrift() {
     if (missing.length) out.push(`${where}  is missing ${missing.length} glyph(s) that ${GLYPHS} defines: ${missing.join(', ')}`);
     if (extra.length) out.push(`${where}  names ${extra.length} glyph(s) that ${GLYPHS} does not define: ${extra.join(', ')}`);
   };
-
-  const cfgPath = '.design-sync/config.json';
-  if (existsSync(cfgPath)) {
-    const cfg = JSON.parse(read(cfgPath));
-    const pinned = cfg?.dtsPropsFor?.Icon ?? '';
-    const union = pinned.match(/name:\s*([^;]+);/)?.[1] ?? '';
-    if (union) compare(`${cfgPath}  dtsPropsFor.Icon`, [...union.matchAll(/"([a-z0-9-]+)"/g)].map((m) => m[1]));
-  }
 
   const previewPath = '.design-sync/previews/Icon.tsx';
   if (existsSync(previewPath)) {
@@ -513,8 +501,8 @@ function glyphDrift() {
 /**
  * docs/vocabulary.md must equal what --vocabulary prints right now.
  *
- * That file is the ONE copy of the token vocabulary Claude Design reads, as a guidelines document
- * in the project. Nothing checked it until this function existed, and it rotted twice: the footer
+ * That file is the ONE copy of the token vocabulary a designer reads — `/ds-publish` carries it to
+ * the Design System artifact as its `vocabulary.md` section. Nothing checked it until this function existed, and it rotted twice: the footer
  * rebuild added --measure-lede — a whole new usage token — and four --foot-* values without
  * regenerating it, so for a while the vocabulary a designer worked from did not contain a name the
  * repo had. That is the exact failure the generated brief exists to prevent, arriving through the
@@ -525,8 +513,7 @@ function glyphDrift() {
  * the generator, and both need the same fix. The script's own comment used to say briefs-build.mjs
  * wrote and byte-checked it; that script is not in the repo, which is how the drift went unnoticed.
  *
- * The fix is always `npm run vocabulary`, and then pushing the file to the Claude Design project —
- * that second half is still manual and no check can see it.
+ * The fix is always `npm run vocabulary`; the next `/ds-publish` carries it to the artifact.
  */
 function vocabularyDrift() {
   const path = 'docs/vocabulary.md';
@@ -535,7 +522,7 @@ function vocabularyDrift() {
   if (read(path) === expected) return [];
   return [
     `${path} is stale — it no longer matches the token layer. Run \`npm run vocabulary\`, ` +
-      `then push the file to the Claude Design project as its guidelines document.`,
+      `and the next /ds-publish carries it to the Design System artifact.`,
   ];
 }
 
@@ -545,8 +532,8 @@ function check() {
     ...globSync('*.md'),
     /* The command and the skill name tokens too, and an agent reads them before every build. */
     ...globSync('.claude/**/*.md'),
-    /* .design-sync/conventions.md is the OTHER hand-written vocabulary in this repo — it goes to
-       Claude Design as the guidelines header, and it lists the type roles and which of them carry a
+    /* .design-sync/conventions.md is the OTHER hand-written vocabulary in this repo — it is the
+       Design System artifact's README, and it lists the type roles and which of them carry a
        tracking companion. That is precisely the content that went stale on the glyph set, so it is
        checked here rather than trusted. It is accurate today; this is what keeps it so. */
     ...globSync('.design-sync/**/*.md'),

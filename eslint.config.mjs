@@ -129,7 +129,11 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-    'ds-bundle/_vendor/**',
+    'ds-bundle/**',
+    '.ds-sync/**',
+    '.design-sync/out/**',
+    '.design-sync/.cache/**',
+    'dist/**',
   ]),
 ]);
 

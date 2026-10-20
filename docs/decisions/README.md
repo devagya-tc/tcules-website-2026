@@ -32,7 +32,7 @@ Body: the ruling, then **Why**, **The mistake it prevents**, **How to apply**.
 A ruling that changes a chapter of `docs/brand/` is logged `dbf_status: pending` and appears in the
 backlog below. `/dbf-update <chapter>` applies a chapter's whole backlog in one edit, bumps its version
 in the chapter and in `docs/brand/README.md`, and flips those entries to `applied`. The owner then runs
-`/design-sync` to push the chapter to Claude Design. `npm run decisions -- --check` (part of
+`/ds-publish` to carry the chapter to the Design System artifact. `npm run decisions -- --check` (part of
 `npm run verify`) warns while a backlog is open but never fails on one: batching is the point.
 
 `npm run decisions` regenerates everything below the line. Do not edit it by hand: `--check` fails on a
@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-195 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -93,6 +93,7 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-20 · [The design system lives in an artifact, generated from the repo](2026-10-20-ds-artifact-from-repo.md) · enforced by `npm run ds:build and ds:check (/ds-publish)`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)
 - 2026-10-16 · [Critic loops never override the foundations](2026-10-16-critics-never-override-foundations.md)
 - 2026-10-16 · [Design for beauty, not for the shape of the content](2026-10-16-beauty-not-content-shape.md)
@@ -317,10 +318,10 @@ stale index.
 
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
+- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
-- 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
