@@ -34,7 +34,9 @@ yarn-error.log*
 .vscode/*
 !.vscode/extensions.json
 
-# design-sync (claude.ai/design) — staged scripts, build output, machine state
+# design system artifact (scripts/ds-artifact) — build output, publish state, and the retired
+# claude.ai/design converter's staged scripts
+/.design-sync/out/
 /.ds-sync/
 /ds-bundle/
 /dist/

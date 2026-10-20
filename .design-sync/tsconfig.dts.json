@@ -16,6 +16,8 @@
     "../src/components/**/*.tsx",
     "../src/patterns/**/*.ts",
     "../src/patterns/**/*.tsx",
+    "../src/templates/**/*.ts",
+    "../src/templates/**/*.tsx",
     "../src/lib/**/*.ts"
   ]
 }

@@ -24,13 +24,14 @@ were brought over; the rest of that folder (the `bundle-src` and `standalone` va
 keyword and comparison sheets) were working tools for developing the guidelines and are not part of
 the framework.
 
-**This copy is now the one to edit.** Changes are pushed back to Claude Design with the `DesignSync`
-tool, which uploads from disk, so the two stay in step.
+**This copy is now the one to edit.** `/ds-publish` publishes it to the Design System artifact under
+`brand/`; the Claude Design project is retired.
 
 ## Known gaps
 
-Chapter 05 references two images that are not here. Both exist in Claude Design but are larger than
-the 256 KB the sync tool can read: `client-darkroast-mobile.png`, `ui-mock-panel.png`.
+None open. Chapter 05's two images that were too large for the old sync tool,
+`client-darkroast-mobile.png` and `ui-mock-panel.png`, were restored on 20 October 2026 from the
+archived artifact (`devagya-tc/tcules-design-archive`, `project/Digital Branding Framework/`).
 
 (`ill-closed-loop.svg`, `ill-the-cutaway.svg` and `ill-the-seam.svg`, missing at source on 25 September,
 now exist and were pulled on 28 September.)

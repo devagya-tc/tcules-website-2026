@@ -294,9 +294,10 @@ decision. (Changed 28 Sep 2026 from a workflow where the designer pasted a brief
 get a spec. That step was manual, and Claude Design cannot see this repo.)
 
 **Most of the time the answer is that nothing new is needed.**
-- `.design-sync/` pushes the real components into Claude Design as a live library, so a page can be
-  composed out of actual shipped components, correct on every surface and in every state, without anyone
-  describing them.
+- The **Design System artifact** (https://claude.ai/artifact/Ait8sArmESntEWeu5zhryj) carries the real
+  components as a live library — every primitive, pattern and template on `window.Tcules`, each previewed
+  by its own `/design` specimen — so a page can be composed out of actual shipped components, correct on
+  every surface and in every state, without anyone describing them.
 - Reach for the steps below only when the thing genuinely does not exist. Establishing that it already
   does is the more valuable outcome, and the last codebase never reached it, 111 times over.
 
@@ -323,10 +324,15 @@ get a spec. That step was manual, and Claude Design cannot see this repo.)
      errors. The crops are for Claude's own check; the owner reviews the routes in the browser
      (owner, 9 Oct 2026; decisions/2026-10-09-no-screenshots-to-owner).
 5. **Approve (owner), then ship (Claude).** On approval Claude opens the PR, and the owner merges.
-6. **Sync.** When a component lands, the owner types `/design-sync`, a command built into Claude Code
-   that only the user can start. Claude then pushes the library and `docs/vocabulary.md` into the Claude
-   Design project. A renamed token means regenerating the vocabulary (`npm run vocabulary`) in the same
-   sync.
+6. **Sync.** When a component lands, `/ds-publish` regenerates the Design System artifact from `main`:
+   `npm run ds:build` writes the bundle, React 19, the declarations, a README and preview per unit (the
+   preview IS its `/design` specimen), `tokens.json` from the token layer, the conventions README, the
+   vocabulary and the brand chapters; `ds:check` renders every preview headless; Claude publishes only
+   what changed. **The repo is the source of truth** (owner, 20 Oct 2026; decisions/2026-10-20-ds-artifact-from-repo):
+   a generated file edited on the artifact page is overwritten by the next sync. A unit with no specimen
+   ships a floor card, so a missing specimen shows up in the library too. The old Claude Design project
+   and the built-in `/design-sync` are retired; what the artifact held before is archived in the private
+   repo `devagya-tc/tcules-design-archive`.
 
 **Claude Design is optional.** It is for visual exploration when the owner wants it. It is not a step in
 the chain. `docs/briefs/` is the record of what was asked for under the old workflow; `docs/briefs/README.md`
@@ -356,7 +362,7 @@ it, and the old entry is kept.
   ticked. A ruling that exists only in a chat, a review note or agent memory is broken by the next session
   that never saw it, and memory is local to one machine.
 - **A ruling that changes the brand framework is logged `dbf_status: pending`.** `/dbf-update <chapter>`
-  applies a chapter's backlog in one versioned edit. The owner then runs `/design-sync`. Chapters are
+  applies a chapter's backlog in one versioned edit; `/ds-publish` then carries it to the artifact. Chapters are
   batched, never edited ruling by ruling (owner, 19 Oct 2026).
 - `npm run decisions -- --check` runs in `verify`. It fails on an invalid entry, a broken `supersedes` or a
   stale index, and only warns on a pending backlog.
