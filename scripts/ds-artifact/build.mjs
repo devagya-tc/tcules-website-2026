@@ -454,8 +454,8 @@ const plan = {
 write(join(OUT, 'plan.json'), JSON.stringify(plan, null, 1));
 
 /* Each batch as the exact arguments of one Artifact publish call: `file_path` absolute, `files`
-   the rest. The tool serves by extension and has no type for .ts or .vtt, so those carry one. */
-const TYPED = { '.ts': 'text/plain', '.vtt': 'text/vtt' };
+   the rest. The tool serves by extension and has no type for .ts or .vtt, so those go as text/plain. */
+const TYPED = { '.ts': 'text/plain', '.vtt': 'text/plain' }; // the artifact serves no text/vtt
 const typeOf = (p) => Object.entries(TYPED).find(([ext]) => p.endsWith(ext))?.[1];
 const calls = batches.map((b) => {
   const first = b.files.find((p) => !typeOf(p)) ?? b.files[0];
