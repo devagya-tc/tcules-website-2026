@@ -29,11 +29,11 @@ Read `.design-sync/out/plan.json`. Then, with the Artifact tool, in this order:
 1. **Assets.** For each entry in `assets.changed`, upload it: `action: "publish"`, `url` the
    artifact, `asset: true`, `file_paths` the entries' `file` paths (absolute). Keep each returned
    blob id by the asset's `name`.
-2. **Files, batch by batch.** For each `batches[i]`: `url` the artifact, `root` the absolute path
-   of `.design-sync/out`, `file_path` the absolute path of the batch's first file, `files` a map of
-   every other path in the batch to itself (`{"project/x": "project/x"}`). Put the paths in `remove`
-   into the **last** batch as `"project/x": null`, or a call of their own if that pushes it past 200
-   paths.
+2. **Files, call by call.** `.design-sync/out/calls/<n>.json` holds each publish's exact arguments,
+   in order: the changed files first (list form, with a `contentType` where the extension needs one),
+   then the removals (a map of `"project/x": null`). For each, in order: `url` the artifact, `root`
+   the absolute path of `.design-sync/out`, and `file_path` and `files` copied verbatim from the file.
+   The payloads are large; a background agent can run them so they stay out of the main context.
 3. **The index, last.** `read` `project/design-system.json` right before, then change only:
    - `libraries` to `plan.libraries`;
    - `assetGroups.Logos`: `{"name": "Logos", "tile": "l", "order": [names], "files": {name: {"name", "blob", "size", "type"}}}`

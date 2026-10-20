@@ -453,6 +453,23 @@ const plan = {
 };
 write(join(OUT, 'plan.json'), JSON.stringify(plan, null, 1));
 
+/* Each batch as the exact arguments of one Artifact publish call: `file_path` absolute, `files`
+   the rest. The tool serves by extension and has no type for .ts or .vtt, so those carry one. */
+const TYPED = { '.ts': 'text/plain', '.vtt': 'text/vtt' };
+const typeOf = (p) => Object.entries(TYPED).find(([ext]) => p.endsWith(ext))?.[1];
+const calls = batches.map((b) => {
+  const first = b.files.find((p) => !typeOf(p)) ?? b.files[0];
+  /* The list form: each file is served at its own spelling under root. */
+  const files = b.files.filter((p) => p !== first).map((p) => (typeOf(p) ? { path: p, contentType: typeOf(p) } : { path: p }));
+  return { file_path: join(OUT, first), files };
+});
+/* Removals ride on calls of their own, after every file is up, at most 200 paths each. A publish
+   needs a file_path, so each re-sends the README, unchanged. */
+for (let i = 0; i < remove.length; i += 200) {
+  calls.push({ file_path: join(PROJECT, 'README.md'), files: Object.fromEntries(remove.slice(i, i + 200).map((p) => [p, null])) });
+}
+for (const [i, c] of calls.entries()) write(join(OUT, 'calls', `${i}.json`), JSON.stringify(c));
+
 console.log(`${cards.length} cards (${live} live previews, ${floor.length} floor${floor.length ? `: ${floor.join(', ')}` : ''})`);
 console.log(`${plan.counts.files} files · ${changed.length} changed in ${batches.length} batch(es) · ${remove.length} to remove · ${assetsChanged.length} asset(s) to upload`);
 for (const n of notes) console.log(`  note: ${n}`);
