@@ -474,7 +474,7 @@ export function EnquiryBand({
 /**
  * The enquiry form the page's `conversion` describes: fields, submit label and success words as
  * authored, hidden context naming the page and its family. Shared by the template's close and by a
- * route that hands the form to a template which takes it as a slot (CaseStudyIndex).
+ * route that hands the form to a template which takes it as a slot (ListingIndex).
  */
 export function corpusEnquiryForm(
   page: CorpusPage,

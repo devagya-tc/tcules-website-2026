@@ -1,6 +1,5 @@
 import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
-import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
 import { CASE_STAGES } from './sources/fixtures/case-stages';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
@@ -122,15 +121,6 @@ export async function getCaseStory(slug: string): Promise<CaseStory | null> {
   return CASE_STORIES.get(slug) ?? null;
 }
 /**
- * The case-study listing with its IDEAL copy laid over the live entries — for the template's
- * specimen only, never a live route. Real entries, covers and links; the copy the content rules
- * govern, as they say it should read (sources/fixtures/ideal/case-study-listing.ts).
- */
-export async function getIdealCaseStudyListingPage(slug: string) {
-  const page = await getCaseStudyListingPage(slug);
-  return page ? withIdealCaseStudyCopy(page) : null;
-}
-/**
  * The six service lines as DESIGNED — hand-authored stories typed against `@/lib/service-story`,
  * not a reading of Strapi (sources/fixtures/ideal/services). For the ServicePage specimen only,
  * never a live route: the live /services/* pages still read Strapi through serviceSource.
@@ -156,7 +146,7 @@ export const getHowWeWorkPage =
 export const getInsightsPage = insightsPagesSource.getInsightsPage.bind(insightsPagesSource);
 /**
  * The insights hub as DESIGNED, with stress content (sources/fixtures/insights.ts) — for the
- * InsightsIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
+ * ListingIndex specimen only, never a live route: /insights reads Strapi through insightsSource.
  */
 export async function getInsightsFixturePage(): Promise<InsightsPage> {
   return INSIGHTS_FIXTURE;

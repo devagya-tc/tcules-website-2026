@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getInsightsPage, type InsightResourceKind } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { InsightsFormat } from '@/templates';
+import { ListingIndex } from '@/templates';
 
 import { FORMAT_ROUTE, insightsFormatProps } from './hub';
 
@@ -26,7 +26,7 @@ export function formatRoute(kind: InsightResourceKind) {
     }
     const props = insightsFormatProps(page, kind, {});
     const title = `${props.hero.title} | Tcules Insights`;
-    const description = props.hero.lede;
+    const description = props.hero.lede?.[0];
     const image = page.resources.items.find(
       (item) => item.kind === kind && item.image && !item.image.standIn,
     )?.image;
@@ -47,7 +47,7 @@ export function formatRoute(kind: InsightResourceKind) {
   async function FormatPage({ searchParams }: FormatPageProps) {
     const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
     if (!page || !page.resources.items.some((item) => item.kind === kind)) notFound();
-    return <InsightsFormat {...insightsFormatProps(page, kind, query)} />;
+    return <ListingIndex {...insightsFormatProps(page, kind, query)} />;
   }
 
   return { generateMetadata, FormatPage };

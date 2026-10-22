@@ -1,0 +1,33 @@
+/* ListingIndex — the marks the listing template draws itself. Layout, Cluster and IndexRail own
+   every arrangement; every value is an --lix-* token. */
+
+/* A section, or a format page's page: a jump target in the rail's column. IndexRail clears the
+   sticky nav for every id in its content, so the template only keeps the track from overflowing. */
+.section,
+.page {
+  min-inline-size: 0;
+}
+
+/* A section's one-line head: the h3 serif, above its pieces' sans titles (22 Oct 2026). */
+.sectionTitle {
+  color: var(--lix-section-title-ink);
+  font: var(--lix-section-title-text);
+  letter-spacing: var(--lix-section-title-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* An events page's group ("Next", "Upcoming", "Past"): a label in the date column's voice, not a
+   heading competing with the titles under it. */
+.groupTitle {
+  color: var(--lix-group-title-ink);
+  font: var(--lix-group-title-text);
+  letter-spacing: var(--lix-group-title-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.count {
+  color: var(--lix-count-ink);
+  font: var(--lix-count-text);
+  letter-spacing: var(--lix-count-tracking);
+  text-transform: var(--text-mono-case);
+}

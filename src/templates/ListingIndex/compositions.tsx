@@ -1,6 +1,4 @@
-import type { ReactNode } from 'react';
-
-import { Button, Icon, Layout } from '@/components';
+import { Layout } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
@@ -11,21 +9,19 @@ import {
   type TeaserSize,
 } from '@/patterns';
 
-import styles from './InsightsIndex.module.css';
-
-/* ── The shapes both insights templates take ─────────────────────────────────────
+/* ── An insight as a listing places it ──────────────────────────────────────────
    A template may not import @/content, so the route maps the view model onto these and the
-   template never learns whether the CMS or the specimen's fixture answered. The hub
-   (InsightsIndex) and a format page (InsightsFormat) are one family and share them — the same
-   compositions, the hub's smaller, a format page's larger. */
+   template never learns whether the CMS or the specimen's fixture answered. The insights hub and a
+   format page take the same compositions (insights.tsx), the hub's smaller, a format page's larger;
+   ListingIndex places whatever they compose. */
 
 /** The seven formats. The templates decide each one's shape and position from this. */
-export type InsightsIndexKind =
+export type InsightKind =
   'article' | 'guide' | 'research' | 'podcast' | 'video' | 'event' | 'interview';
 
-export type InsightsIndexItem = {
+export type InsightItem = {
   id: string;
-  kind: InsightsIndexKind;
+  kind: InsightKind;
   title: string;
   href: string;
   /** The standfirst. Absent or blank renders the title alone. */
@@ -49,7 +45,7 @@ export type InsightsIndexItem = {
   subject?: string;
 };
 
-export const LABEL: Record<InsightsIndexKind, { one: string; many: string }> = {
+export const LABEL: Record<InsightKind, { one: string; many: string }> = {
   article: { one: 'Article', many: 'Articles' },
   guide: { one: 'Guide', many: 'Guides' },
   research: { one: 'Research', many: 'Research' },
@@ -89,23 +85,26 @@ const line = (...parts: (string | undefined)[]) => {
   return kept.length > 0 ? kept : undefined;
 };
 
-const WATCHED: ReadonlySet<InsightsIndexKind> = new Set(['video', 'podcast']);
+const WATCHED: ReadonlySet<InsightKind> = new Set(['video', 'podcast']);
+
+/** A format a reader watches or listens to rather than reads. */
+export const isWatched = (kind: InsightKind) => WATCHED.has(kind);
 
 /** The item's own picture: its cover, or the scene drawn for it. Nothing else stands in. */
-export function pictureOf(item: InsightsIndexItem): TeaserMedia | undefined {
+export function pictureOf(item: InsightItem): TeaserMedia | undefined {
   if (item.cover?.src.trim()) return { type: 'image', image: item.cover };
   if (item.scene) return { type: 'sketch', name: item.scene };
   return undefined;
 }
 
-export const hasPicture = (item: InsightsIndexItem) => pictureOf(item) !== undefined;
+export const hasPicture = (item: InsightItem) => pictureOf(item) !== undefined;
 
 /** Has a standfirst: a lead's words then run its picture's height (beauty round 4). */
-export const hasStandfirst = (item: InsightsIndexItem) => Boolean(item.description?.trim());
+export const hasStandfirst = (item: InsightItem) => Boolean(item.description?.trim());
 
 /** A set with its best lead first: the first piece with a picture AND a standfirst, else with a
     picture, else the first — the rest in their order. */
-export function leadFirst(items: readonly InsightsIndexItem[]): InsightsIndexItem[] {
+export function leadFirst(items: readonly InsightItem[]): InsightItem[] {
   const lead =
     items.find((item) => hasPicture(item) && hasStandfirst(item)) ??
     items.find(hasPicture) ??
@@ -123,7 +122,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  * every piece with one of two dates) would stack identical date lines down the page, so its meta
  * keeps to what does differ, the length (beauty round, 16 Oct 2026). Asked of the set SHOWN.
  */
-export function datesVary(items: readonly InsightsIndexItem[]) {
+export function datesVary(items: readonly InsightItem[]) {
   const times = items
     .map((item) => parse(item.publishedAt)?.valueOf())
     .filter((time): time is number => time !== undefined);
@@ -147,7 +146,7 @@ export type MetaOptions = {
  * (never its publish date), and the publish date only where it tells pieces apart.
  */
 export function metaOf(
-  item: InsightsIndexItem,
+  item: InsightItem,
   { withKind = false, withSubject = false, withDate = false }: MetaOptions = {},
 ) {
   if (item.kind === 'event') {
@@ -166,7 +165,7 @@ export function metaOf(
 }
 
 /** An event's date anchor: the day as a numeral, its month under it. "Date TBC" without one. */
-export function dateMarkerOf(item: InsightsIndexItem): TeaserProps['date'] {
+export function dateMarkerOf(item: InsightItem): TeaserProps['date'] {
   const date = parse(item.event?.startsAt);
   return date && item.event
     ? {
@@ -180,7 +179,7 @@ export function dateMarkerOf(item: InsightsIndexItem): TeaserProps['date'] {
 
 /** The bits every placement shares: title, link, standfirst, the picture and its play mark. */
 export function teaserOf(
-  item: InsightsIndexItem,
+  item: InsightItem,
   options: MetaOptions = {},
 ): Omit<TeaserProps, 'arrangement' | 'size'> {
   return {
@@ -195,14 +194,14 @@ export function teaserOf(
 }
 
 /** Events by when they happen, the latest first (the CMS orders them by when they were filed). */
-export const byEventDate = (items: readonly InsightsIndexItem[]) =>
+export const byEventDate = (items: readonly InsightItem[]) =>
   [...items].sort(
     (a, b) =>
       (Date.parse(b.event?.startsAt ?? '') || 0) - (Date.parse(a.event?.startsAt ?? '') || 0),
   );
 
 /** Split a set into the pieces with a picture and the typographic ones, each in date order. */
-export function partition(items: readonly InsightsIndexItem[]) {
+export function partition(items: readonly InsightItem[]) {
   return {
     pictured: items.filter(hasPicture),
     plain: items.filter((item) => !hasPicture(item)),
@@ -212,7 +211,7 @@ export function partition(items: readonly InsightsIndexItem[]) {
 /* ── The compositions ────────────────────────────────────────────────────────────
    Beauty round 4 (16 Oct 2026): a small set of FIXED compositions, each a complete rectangle with a
    scale ladder inside it — one large piece, a middle tier, a small tier — and no column that ends
-   in empty paper. The templates assign them per section so no two neighbours match, in both views
+   in empty paper. insights.tsx assigns them per section so no two neighbours match, in both views
    and on the format pages.
 
      LEAD     a 16:9 lead at two thirds, two pictured pieces stacked beside it
@@ -233,7 +232,7 @@ export function partition(items: readonly InsightsIndexItem[]) {
    a run of identical full-width pictures. */
 
 type Shape = {
-  items: readonly InsightsIndexItem[];
+  items: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 };
@@ -500,64 +499,4 @@ export function pictureRun(count: number, first: 2 | 3 = 3): number[] {
     three = !three;
   }
   return parts;
-}
-
-/* ── A curated section ────────────────────────────────────────────────────────── */
-
-/**
- * A section's head — one line, one grammar for both views (beauty round 3, 16 Oct 2026): the name as
- * a quiet serif h2 and, on the same baseline at the row's end, the way to all of it ("All 42 articles
- * →"). No eyebrow and no lead sentence: the head is a signpost, so the first piece under it is the
- * loudest thing in the section, and the section ends on its last piece rather than on a link.
- */
-export function SectionHead({
-  id,
-  title,
-  link,
-}: {
-  id: string;
-  title: string;
-  link?: { label: string; href: string };
-}) {
-  return (
-    <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="baseline">
-      <h2 id={`${id}-heading`} className={styles.sectionTitle}>
-        {title}
-      </h2>
-      {link ? (
-        <Button
-          as="a"
-          href={link.href}
-          emphasis="link"
-          tone="primary"
-          icon={<Icon name="arrow-right" />}
-        >
-          {link.label}
-        </Button>
-      ) : null}
-    </Layout>
-  );
-}
-
-/**
- * One curated section of a view: a jump target with its one-line head over its shape, a `stack`
- * apart (owner, 22 Oct 2026: at `gutter` the head sat too close to its pieces).
- */
-export function CuratedSection({
-  id,
-  head,
-  children,
-}: {
-  id: string;
-  head: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} aria-labelledby={`${id}-heading`} className={styles.curated}>
-      <Layout rowGap="stack">
-        {head}
-        {children}
-      </Layout>
-    </section>
-  );
 }

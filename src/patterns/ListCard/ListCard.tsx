@@ -144,7 +144,7 @@ export type ListCardProps = ListCardFormProps & {
    * quiet-label ink, never blue (the words stay ink; blue is for marks). Set a `text` (16) above the
    * title, the step BlockCard's head group uses, so a row and a card under one heading share one
    * rhythm. In a split row it travels with the title, in the title's track. Added for the insights
-   * feed (InsightsIndex, 13 Oct 2026), where a row of mixed formats has nowhere else to say which
+   * feed (the insights hub, 13 Oct 2026), where a row of mixed formats has nowhere else to say which
    * format it is. A plain string: the caller composes the line. Whitespace-only omits it and warns.
    */
   eyebrow?: string;

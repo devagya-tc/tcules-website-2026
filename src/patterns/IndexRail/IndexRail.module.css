@@ -15,7 +15,7 @@
 }
 
 /* Every jump target in the content clears what sticks above it, so a page using the rail never
-   has to remember to (the case index, 19 Oct 2026; the insights hub sets the same on its own). */
+   has to remember to (the case index, 19 Oct 2026; every listing since, 22 Oct 2026). */
 .content [id] {
   scroll-margin-block-start: var(--irl-target-top);
 }

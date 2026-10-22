@@ -8,7 +8,7 @@ import type {
 } from '../../types';
 
 /**
- * The insights hub as DESIGNED — for the InsightsIndex specimen only, never a live route (the live
+ * The insights hub as DESIGNED — for the ListingIndex specimen only, never a live route (the live
  * /insights reads Strapi through insightsSource).
  *
  * It is stress content as much as it is ideal content (owner: design content-agnostic, against

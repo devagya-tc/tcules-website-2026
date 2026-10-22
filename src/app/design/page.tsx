@@ -328,14 +328,9 @@ const SPECIMENS = [
     tier: 'Templates',
     items: [
       {
-        href: '/design/case-study-index',
-        name: 'CaseStudyIndex',
-        note: 'the case-study index page type, with the live entries and their ideal copy; the grouped form (featured set, covers, thumbnail rows, a story, a form close) is shown at /design/corpus-page/case-studies',
-      },
-      {
-        href: '/design/insights-index',
-        name: 'InsightsIndex',
-        note: 'the insights hub as a curated page — BY TYPE (a section per format, each its own shape) or BY TOPIC (formats mixed), switched in the rail and held in ?view= — and InsightsFormat, a format’s own page (?format=article …: hero, picker, feature, turning grid, Show more); ?state=sparse is the live CMS’s shape, ?state=empty no items',
+        href: '/design/listing-index',
+        name: 'ListingIndex',
+        note: 'the one listing page type: the insights hub (BY TYPE / BY TOPIC in the rail, ?view=topic), a format’s own page (?format=article …: the rail as a picker, Show more) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group shaped by its count) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
       },
       {
         href: '/design/case-story',

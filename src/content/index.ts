@@ -16,7 +16,6 @@ export {
   getBlogPage,
   getCareerPage,
   getCaseStudyListingPage,
-  getIdealCaseStudyListingPage,
   getIdealServiceStory,
   idealServiceSlugs,
   getCaseStudyPage,

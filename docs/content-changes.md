@@ -43,9 +43,10 @@ on the card and repeated the title.
   line "**Our role:** … [Read the … case](…)" still supplies the card's link and cta wording; the role
   itself is stated on the case page, in its "At a glance" table. The CMS needs no role field on the card.
 
-**Worked example.** `/design/case-study-index` shows the live index with this copy applied to every
-entry (`src/content/sources/fixtures/ideal/case-study-listing.ts`). That copy is illustrative, and the
-client names in it were read from titles, slugs and cover filenames, so they need confirming.
+**Worked example.** Retired 22 Oct 2026. `/design/case-study-index` showed the old flat index with
+this copy applied to every entry; the flat index went when /insights and /case-studies became one
+listing template (`decisions/2026-10-22-listings-share-one-structure`), and its ideal-copy fixture with
+it. The rules above still stand for the card's copy.
 
 **Found in.** BlockCard revision, 29 Sep 2026.
 
