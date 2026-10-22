@@ -36,6 +36,11 @@
   letter-spacing: var(--text-h4-tracking);
   text-wrap: var(--text-title-wrap);
 }
+.h5lg {
+  font: var(--text-h5-lg);
+  letter-spacing: var(--text-h5-lg-tracking);
+}
+
 .h5 {
   font: var(--text-h5);
   letter-spacing: var(--text-h5-tracking);

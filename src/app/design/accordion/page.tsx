@@ -220,7 +220,7 @@ export default function AccordionSpecimenPage() {
               Accordion supplies the answer inset and nothing else. Prose owns every other
               decision — type, colour, flow rhythm, links, lists, and the fallbacks for an answer
               that arrives carrying an h4, a blockquote or a table. The 16px the redesign wanted
-              under the 22px question is Prose&rsquo;s own flow size, so there is nothing here to
+              under the 20px question is Prose&rsquo;s own flow size, so there is nothing here to
               restate.
             </p>
           </Layout>

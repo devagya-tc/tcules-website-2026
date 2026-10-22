@@ -60,7 +60,7 @@ hex in the spec — write the token name.
 
 Reach it only for an **optical correction**, with the justification sentence the brief requires.
 
-### Type — 31 roles, consumed as composites
+### Type — 32 roles, consumed as composites
 
 `font: var(--text-h2)` **plus** `letter-spacing: var(--text-h2-tracking)`. Never restate a size, a
 weight, a ratio or a family — all four are inside the composite.
@@ -73,6 +73,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-h2` | 43px | 1.1 | display | medium | `--text-h2-tracking` | verbatim |
 | `--text-h3` | 34px | 1.16 | display | medium | `--text-h3-tracking` | verbatim |
 | `--text-h4` | 22px | 1.25 | sans | medium | `--text-h4-tracking` | verbatim |
+| `--text-h5-lg` | 20px | 1.26 | sans | medium | `--text-h5-lg-tracking` | verbatim |
 | `--text-h5` | 18px | 1.28 | sans | medium | `--text-h5-tracking` | verbatim |
 | `--text-h6` | 16px | 1.35 | sans | medium | `--text-h6-tracking` | verbatim |
 | `--text-wordmark` | 22px | 1.15 | sans | semibold | `--text-wordmark-tracking` | verbatim |
@@ -99,7 +100,7 @@ weight, a ratio or a family — all four are inside the composite.
 | `--text-score` | 105px | 1 | display | regular | `--text-score-tracking` | verbatim |
 | `--text-code` | 14px | 1.6 | mono | regular | **none** | **verbatim — the exemption** |
 
-**22 roles have a tracking companion. 9 have none** — pairing one with a role in that
+**23 roles have a tracking companion. 9 have none** — pairing one with a role in that
 second group names a token that does not exist: `--text-quote`, `--text-quote-sm`, `--text-lead-lg`, `--text-lead`, `--text-body-lg`, `--text-body`, `--text-body-sm`, `--text-caption`, `--text-code`.
 
 ### MONO IS ALWAYS UPPERCASE — and uppercase in presentation ONLY
@@ -178,7 +179,7 @@ Yours must not collide with any of those, nor with a primitive family above.
 **Their geometry, so you can size against it rather than guessing.** A new control is measured
 against the controls beside it — if you are specifying one, say which of these it must line up with.
 
-- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-tracking` 0em
+- **accordion.css** — `--acc-rule-width` 1px · `--acc-radius` 0px · `--acc-ring-width` 2px · `--acc-ring-offset` 2px · `--acc-question-tracking` -0.005em
 - **banner.css** — `--bnr-eyebrow-tracking` 0.12em · `--bnr-heading-tracking` -0.015em · `--bnr-heading-measure` 32ch · `--bnr-band-heading-tracking` -0.018em · `--bnr-band-heading-measure` 32ch · `--bnr-lead-measure` 56ch · `--bnr-strip-label-tracking` 0.12em · `--bnr-illustration-zoom-phone` 180% · `--bnr-illustration-shift` 0%
 - **bento.css** — `--bnt-radius` 16px · `--bnt-rule-width` 1px · `--bnt-title-tracking` 0em · `--bnt-title-tracking-wide` -0.005em · `--bnt-body-measure` 56ch · `--bnt-lift` 2px · `--bnt-ring-width` 2px · `--bnt-ring-offset` 2px
 - **block-card.css** — `--bcrd-title-tracking-lg` -0.01em · `--bcrd-title-tracking-md` -0.005em · `--bcrd-title-tracking-sm` 0em · `--bcrd-eyebrow-tracking` 0.12em · `--bcrd-media-inset` 8px · `--bcrd-cover-inset` 24px · `--bcrd-text-rule-width` 1px · `--bcrd-icon-size` 1em · `--bcrd-index-tracking` 0.08em · `--bcrd-media-rule-width` 1px · `--bcrd-media-radius` 8px · `--bcrd-ring-width` 2px · `--bcrd-ring-offset` 2px · `--bcrd-box-radius` 8px · `--bcrd-rail-length` 10rem · `--bcrd-rail-thickness` 2px · `--bcrd-rail-radius` 999px
