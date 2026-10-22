@@ -47,6 +47,10 @@ yarn-error.log*
 # specimen screenshots (npm run shots)
 /.shots/
 
+# Each person's identity and role settings live in their own clone and are never pushed (team/README.md)
+/CLAUDE.local.md
+/.claude/settings.local.json
+
 # Generated, never committed: every PR rewrote them and every merge conflicted (owner, 22 Oct 2026)
 /docs/decisions/INDEX.md
 /docs/vocabulary.md

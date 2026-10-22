@@ -253,7 +253,7 @@ for (const file of tokenFiles.filter((f) => f.includes('/components/'))) {
  */
 const PERIDOT = /var\(\s*--color-peridot-/;
 const peridotFiles = [
-  ...tokenFiles.filter((f) => !f.endsWith('/primitives.css')),
+  ...tokenFiles.filter((f) => !f.replaceAll('\\', '/').endsWith('/primitives.css')),
   ...consumers,
   ...globSync('src/**/*.{ts,tsx}'),
 ].sort();
@@ -268,7 +268,8 @@ for (const file of peridotFiles) {
     for (const m of code.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
       if (!PERIDOT.test(m[2])) continue;
       const selector = m[1].trim().replace(/\s+/g, ' ');
-      if (file === 'src/app/globals.css' && selector === '::selection') continue;
+      /* globSync returns backslashes on Windows; compare in POSIX form. */
+      if (file.replaceAll('\\', '/') === 'src/app/globals.css' && selector === '::selection') continue;
       const line = code.slice(0, m.index + m[0].search(PERIDOT)).split('\n').length;
       problems.push(
         `${file}:${line}  reads the peridot ramp in \`${selector}\` — peridot on the website is ` +
