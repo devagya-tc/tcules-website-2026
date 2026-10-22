@@ -12,7 +12,7 @@ published to the Design System artifact (under `brand/`) by `/ds-publish`. Your 
 is ready to merge and sync.
 
 1. **Read the backlog.** Run `npm run decisions` and read the *Brand framework backlog* in
-   `docs/decisions/README.md`. If the argument is empty, take every chapter listed there, one commit
+   `docs/decisions/INDEX.md`. If the argument is empty, take every chapter listed there, one commit
    each. If the chapter you were given has nothing pending, say so and stop.
 2. **Read each pending entry in full**, then the chapter section each one names. Read the whole section,
    not a grep hit: the chapter's own wording elsewhere may contradict the ruling too, and it has to go
