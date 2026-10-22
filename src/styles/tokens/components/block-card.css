@@ -109,8 +109,8 @@
 
   /* The icon card's glyph: the em of the title beside it (owner, 7 Oct 2026 — the 32 glyph was far
      too big; size it to the title, from a token, not by eye). The glyph is set in the title's own
-     role for the card's size step, so 1em is 22 beside an h5 (sm), 28 beside an h4 (md) and 34
-     beside an h3 (lg), and it follows each role's 1023 / 767 steps by itself. It centres on the
+     role for the card's size step, so 1em is 18 beside an h5 (sm), 22 beside an h4 (md and a
+     vertical lg) and 34 beside the horizontal lg's h3, and it follows each role's 1023 / 767 steps by itself. It centres on the
      title's first line box (1lh), so the glyph's square spans ascender to descender — the line-height
      relationship, with the half-leading above and below. A component size, relative on purpose. */
   --bcrd-icon-size: 1em;
