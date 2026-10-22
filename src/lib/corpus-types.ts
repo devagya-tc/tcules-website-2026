@@ -244,3 +244,11 @@ export type ProposedEyebrows = Readonly<Record<string, string>>;
  * (docs/content-proposals.md P50).
  */
 export type CaseIndustry = { label: string; cases: readonly string[] };
+
+/**
+ * One stage of the case-study index's BY STAGE view (`getCaseStages`), its default: where the
+ * client's product stood when the work began, and the case routes filed under it, in order.
+ * PLACEHOLDER until the owner supplies the stage names and the case record carries a stage
+ * (docs/content-proposals.md P51).
+ */
+export type CaseStage = { label: string; cases: readonly string[] };
