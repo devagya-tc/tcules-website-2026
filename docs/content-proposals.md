@@ -648,8 +648,11 @@ proposals below are where that design asks something of the copy.
 - **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
 - **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
 
-### P47 · `/` · selected-work · the brief for the featured case card (TestimonialCase)
+### P47 · `/` · selected-work · the brief for the featured case card (now CaseCard)
 
+- **Superseded in part (22 Oct 2026):** case study cards no longer hold testimonials, so the Quote,
+  Speaker, Rating and Portrait rows below no longer apply to the card (they still apply to the
+  page's testimonial band). The other rows stand.
 - **Problem:** the featured cases are now ONE card each (owner, 16 Oct 2026): a 16:9 cover beside
   the claim, with the client's words in a box inside the card under both. The card was designed for
   the content it should carry, not for the copy as it stands, so this is the brief that content
@@ -772,3 +775,27 @@ proposals below are where that design asks something of the copy.
   (`src/content/sources/fixtures/case-industries.ts`), read through `getCaseIndustries`. A case the
   index lists and the file does not name shows under "Other industries". The CMS field that retires
   the file is `industry` on the case record (docs/strapi-changes.md § 5).
+
+### P51 · `/case-studies` · a stage for every case, for the BY STAGE view (the default)
+
+- **Proposed:** the case index opens **By stage**, which replaces **By type** (the corpus's own
+  bands); **By industry** stays as the second view (owner, 22 Oct 2026). Each case is filed under ONE
+  stage, where the client's product stood when the work began. The stages and the filing are
+  PLACEHOLDERS, read off each case's own title until the owner names them:
+
+  | Stage | Cases |
+  |---|---|
+  | Zero to one | Auxentios, ConnectX, Novus Insights, OctiFi, Kirana store payments, BuildTwin |
+  | Finding fit | Eden AI, Omny AI, Ryzeo, Scissors, GT Tools, The Wandering Raven |
+  | Scaling | Doodle, Dealpath, Benchmark Gensuite, Gold Image Printing, The Chain Hut |
+
+- **Why:** the owner asked for the cases to be grouped by stage (Jatin review, 22 Oct 2026), so a
+  founder at 0–1 finds work from a product like theirs first. The corpus authors no stage for a case.
+  The owner should name the stages as they want them read and re-file any case.
+- **On the page since this change:** a PLACEHOLDER value
+  (`src/content/sources/fixtures/case-stages.ts`), read through `getCaseStages`. A case the index
+  lists and the file does not name shows under "Other stages". The CMS field that retires the file is
+  `stage` on the case record (docs/strapi-changes.md § 21).
+- **The corpus's bands:** they still collect the cases and say which case each band features (the one
+  whose client the band quotes), but their headings no longer appear on the page.
+

@@ -2,6 +2,7 @@ import { fixtureSource } from './sources/fixtures';
 import { idealAbout } from './sources/fixtures/ideal/about';
 import { withIdealCaseStudyCopy } from './sources/fixtures/ideal/case-study-listing';
 import { CASE_INDUSTRIES } from './sources/fixtures/case-industries';
+import { CASE_STAGES } from './sources/fixtures/case-stages';
 import { benchmarkGensuite } from './sources/fixtures/ideal/case-studies/legacy-saas-modernisation-information-architecture';
 import { IDEAL_SERVICE_STORIES } from './sources/fixtures/ideal/services';
 import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
@@ -58,6 +59,7 @@ import type {
 } from './types';
 import type {
   CaseIndustry,
+  CaseStage,
   PlaceholderReasons,
   ProposedEyebrows,
   TestimonialAvatarRecord,
@@ -213,6 +215,11 @@ export async function getProposedEyebrows(route: string): Promise<ProposedEyebro
 /** The case-study index's sectors, in order (PROPOSED, fixtures/case-industries.ts). */
 export async function getCaseIndustries(): Promise<readonly CaseIndustry[]> {
   return CASE_INDUSTRIES;
+}
+
+/** The case-study index's stages, in order (PLACEHOLDER, fixtures/case-stages.ts). */
+export async function getCaseStages(): Promise<readonly CaseStage[]> {
+  return CASE_STAGES;
 }
 
 /** A route's stand-in reasons (PLACEHOLDER, fixtures/placeholder-reasons.ts), or none. */

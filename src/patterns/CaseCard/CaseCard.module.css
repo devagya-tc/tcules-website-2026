@@ -1,0 +1,108 @@
+/* CaseCard — one featured case as one card. Every colour is --ccd-*.
+
+   The card's ground and 8 radius; a `text` inset, so the cover sits in it like a print on a mat.
+
+   The card IS the anchor (19 Oct 2026), so it is a block and carries no link colour or underline of
+   its own: `inherit` keeps globals.css's bare-anchor blue off every part, each of which states its
+   own ink, and the link Button inside takes its steps from `data-btn-link-group`. */
+.article {
+  min-inline-size: 0;
+}
+
+.card {
+  display: block;
+  min-inline-size: 0;
+  padding: var(--gap-text);
+  background: var(--ccd-ground);
+  border-radius: var(--ccd-radius);
+  color: inherit;
+  text-decoration: none;
+}
+
+.card:hover {
+  text-decoration: none;
+}
+
+.card:focus {
+  outline: none;
+}
+
+.card:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--ccd-ring-offset) var(--ccd-ring-gap-color),
+    0 0 0 calc(var(--ccd-ring-offset) + var(--ccd-ring-width)) var(--ccd-ring-color);
+}
+
+/* The cover: the card ratio, ruled at the placement (Media `edge="placement"`) in the case's own
+   lighter hairline, so the capture separates from the card's ground. */
+.media {
+  display: block;
+  min-inline-size: 0;
+  aspect-ratio: var(--ccd-media-ratio);
+  overflow: hidden;
+  border: var(--ccd-rule-width) solid var(--ccd-media-rule);
+  border-radius: var(--ccd-inner-radius);
+}
+
+/* A linked card's hover and keyboard focus: the cover leans in inside its still, ruled box
+   (BlockCard's .imageZoom). Geometry does not press, so the zoom holds on :active. Scoped to
+   `.linked`, the anchor: the still frame (a story with its own link) does not move. */
+.zoom {
+  display: block;
+  block-size: 100%;
+  transition: transform var(--ccd-media-zoom-duration) var(--ccd-media-zoom-easing);
+}
+
+.linked:hover .zoom,
+.linked:focus-visible .zoom,
+.linked:active .zoom {
+  transform: scale(var(--ccd-media-zoom));
+}
+
+/* Reduced motion drops the zoom outright; keyboard focus still has the ring and the link's
+   underline. */
+@media (prefers-reduced-motion: reduce) {
+  .zoom {
+    transition: none;
+  }
+
+  .linked:hover .zoom,
+  .linked:focus-visible .zoom,
+  .linked:active .zoom {
+    transform: none;
+  }
+}
+
+/* The claim's column: its own inset (a `gutter` block, a `text` inline), so the words stand off the
+   card's edge and the cover by more than the mat. Padding inside the part, never a margin. */
+.copy {
+  min-inline-size: 0;
+  padding: var(--gap-gutter) var(--gap-text);
+}
+
+.eyebrow {
+  font: var(--ccd-eyebrow-text);
+  letter-spacing: var(--ccd-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--ccd-eyebrow-ink);
+}
+
+.title {
+  font: var(--ccd-title-text);
+  letter-spacing: var(--ccd-title-tracking);
+  text-wrap: balance;
+  color: var(--ccd-title-ink);
+}
+
+.body {
+  font: var(--ccd-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ccd-body-ink);
+}
+
+/* Prose stays the trusted-HTML seam; the two-class selector outranks its root. */
+.body .prose {
+  font: inherit;
+  color: inherit;
+}
