@@ -648,8 +648,11 @@ proposals below are where that design asks something of the copy.
 - **Done in the build:** not rendered on an offer page that has a case band. It still renders where no case band follows.
 - **Proposal:** drop the line from the hero of offer pages that list their cases below, or replace it with something the hero needs (a client logo row, a single proof figure).
 
-### P47 · `/` · selected-work · the brief for the featured case card (TestimonialCase)
+### P47 · `/` · selected-work · the brief for the featured case card (now CaseCard)
 
+- **Superseded in part (22 Oct 2026):** case study cards no longer hold testimonials, so the Quote,
+  Speaker, Rating and Portrait rows below no longer apply to the card (they still apply to the
+  page's testimonial band). The other rows stand.
 - **Problem:** the featured cases are now ONE card each (owner, 16 Oct 2026): a 16:9 cover beside
   the claim, with the client's words in a box inside the card under both. The card was designed for
   the content it should carry, not for the copy as it stands, so this is the brief that content
@@ -677,7 +680,7 @@ proposals below are where that design asks something of the copy.
   the quote box stays the card's foot rather than its largest part. Until the gaps are filled the
   copy renders as written.
 
-### P48 · `/` (and any page that argues "why us") · why-tcules · six reasons, written for the Reasons band
+### P48 · `/` (and any page that argues "why us") · why-tcules · four reasons, written for the Reasons band
 
 - **Supersedes P7** for this band. The owner set the current "why Tcules" copy aside (16 Oct 2026),
   and the band is now designed first, against ideal content: the `Reasons` pattern (`/design/reasons`,
@@ -686,11 +689,11 @@ proposals below are where that design asks something of the copy.
   and puts testimonials next to the testimonial band (P7). The new band holds every reason on one
   screen only if each reason is short and the same shape.
 - **Proposal:** write the band as follows.
-  - **Count:** three or six reasons. Six is the designed shape, three also fills whole rows. Four
-    or five leave a gap.
+  - **Count:** four reasons, set 2×2 (owner, 22 Oct 2026; was six). Three or six still fill whole
+    rows; five leaves a gap.
   - **Heading:** one short claim (about 6 words, e.g. "A studio built for what ships."). It may have
     an optional second clause that carries the gloss, which the design sets lighter in the same
-    line (about 6–12 words, e.g. "Six reasons teams stay."). Together they read as one sentence,
+    line (about 6–12 words, e.g. "Four reasons teams stay."). Together they read as one sentence,
     under about 100 characters.
   - **Eyebrow (optional):** two or three words ("Why Tcules").
   - **Per reason:**
@@ -704,7 +707,7 @@ proposals below are where that design asks something of the copy.
     Testimonials stay in the testimonial band.
   - **Optional action:** one way to go deeper ("How we work"), two or three words, with its
     destination.
-  - **Distinct reasons:** six reasons that don't overlap. If two share a picture, they are one
+  - **Distinct reasons:** four reasons that don't overlap. If two share a picture, they are one
     reason.
 - **Why:** the reasons become the band's primary object, readable in a five-second scan and in full,
   on one screen. The quotes go back to one place on the page. While the content team writes the
@@ -772,3 +775,27 @@ proposals below are where that design asks something of the copy.
   (`src/content/sources/fixtures/case-industries.ts`), read through `getCaseIndustries`. A case the
   index lists and the file does not name shows under "Other industries". The CMS field that retires
   the file is `industry` on the case record (docs/strapi-changes.md § 5).
+
+### P51 · `/case-studies` · a stage for every case, for the BY STAGE view (the default)
+
+- **Proposed:** the case index opens **By stage**, which replaces **By type** (the corpus's own
+  bands); **By industry** stays as the second view (owner, 22 Oct 2026). Each case is filed under ONE
+  stage, where the client's product stood when the work began. The stages and the filing are
+  PLACEHOLDERS, read off each case's own title until the owner names them:
+
+  | Stage | Cases |
+  |---|---|
+  | Zero to one | Auxentios, ConnectX, Novus Insights, OctiFi, Kirana store payments, BuildTwin |
+  | Finding fit | Eden AI, Omny AI, Ryzeo, Scissors, GT Tools, The Wandering Raven |
+  | Scaling | Doodle, Dealpath, Benchmark Gensuite, Gold Image Printing, The Chain Hut |
+
+- **Why:** the owner asked for the cases to be grouped by stage (Jatin review, 22 Oct 2026), so a
+  founder at 0–1 finds work from a product like theirs first. The corpus authors no stage for a case.
+  The owner should name the stages as they want them read and re-file any case.
+- **On the page since this change:** a PLACEHOLDER value
+  (`src/content/sources/fixtures/case-stages.ts`), read through `getCaseStages`. A case the index
+  lists and the file does not name shows under "Other stages". The CMS field that retires the file is
+  `stage` on the case record (docs/strapi-changes.md § 21).
+- **The corpus's bands:** they still collect the cases and say which case each band features (the one
+  whose client the band quotes), but their headings no longer appear on the page.
+

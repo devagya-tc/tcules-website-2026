@@ -14,13 +14,20 @@
 
 :root {
   /* The title steps with the placement; the item cannot see its track, so the caller says.
-       xl  h3 + body-lg   the one featured piece of a section or a format page
+       xl  h4 + body-lg   the one featured piece of a section or a format page; `beside`, the
+                          serif h3
        lg  h4 + body      a lead in a pair, a video beside its playlist
        md  h5 + body-sm   a tile in a row of three, a headline
        sm  h6 + body-sm   a row in a list, a playlist entry
+     Card titles are sans (owner, 22 Oct 2026; decisions/2026-10-22-card-titles-sans-except-horizontal):
+     the serif xl lead competed with the section heads over it. The exception is the horizontal
+     card, here the featured piece `beside` its picture, where the serif reads nicer; h3 is the
+     smallest serif role. A stacked xl differs from lg by its body, its measure and its picture.
      Every title role re-declares itself at 1023 and 767, so no step needs a breakpoint here. */
-  --tsr-title-text-xl: var(--text-h3);
-  --tsr-title-tracking-xl: var(--text-h3-tracking);
+  --tsr-title-text-xl: var(--text-h4);
+  --tsr-title-tracking-xl: var(--text-h4-tracking);
+  --tsr-title-text-xl-beside: var(--text-h3);
+  --tsr-title-tracking-xl-beside: var(--text-h3-tracking);
   --tsr-body-text-xl: var(--text-body-lg);
   /* The featured step's measures: at a cinema's full width a title and its standfirst still read
      as a title and a paragraph (beauty round 4). */

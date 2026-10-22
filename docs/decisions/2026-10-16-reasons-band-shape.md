@@ -1,7 +1,7 @@
 ---
 title: "Reasons: six argued reasons, each drawn, in one fold"
 date: 2026-10-16
-status: active
+status: superseded
 area: [components, illustration, layout]
 source: "docs/TRACKER.md task 2.18; docs/specs/Reasons.md (owner picks, 16 Oct 2026, why-us mocks rounds 1–4; PR #115)"
 supersedes: []

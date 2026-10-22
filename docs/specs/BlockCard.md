@@ -35,7 +35,7 @@ says otherwise, this block and the dated amendments at the end win.
 | **Colour tokens** | Thirteen, declared on every surface: `title-ink`, `title-ink-hover`, `title-ink-pressed`, `mark-ink`, `body-ink`, `eyebrow-ink`, `media-rule-ink`, `text-rule-ink`, `box-rule-ink`, `box-ground-hover`, `box-ground-pressed`, `ring-color`, `ring-gap-color` (§ 6 and the 7 Oct amendment; `cue-ink` deleted). The cta's three steps are Button's. |
 | **Cue** | A linked card says it navigates by ONE cue: its title (`title`, default with a cover or an icon — no glyph, the title goes blue on hover), a link-style cta with its arrow (default text-only, and for any card whose action is not obvious from its title), or `download` (the cta with the download glyph, for a file). `cue` overrides; the set passes it for all. An optional `meta` format line sits on the action row. |
 | **Head object** | A cover (an image, or `media.type: 'texture'` — the Tcules texture as hard-edged blocks at full strength, the card's icon about a fifth of the cover's width in its foot-start corner), or an `icon` (32, blue, solid Solar Bold, the C-icon card), or — text-only — the hairline then an optional blue `index` numeral and/or eyebrow. |
-| **Sizes** | `lg` h3 + body-lg (featured row, spotlight and wide leads), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; the wide lead's squares; icon cards, always). The set decides by **track width**, not count; `size` never reaches an icon set. |
+| **Sizes** | `lg` h4 + body-lg (featured row, spotlight and wide leads); the serif h3 when horizontal, the one serif card title (22 Oct 2026, `decisions/2026-10-22-card-titles-sans-except-horizontal`), `md` h4 + body (2–3 across; text cards), `sm` h5 + body-sm (4 across; the wide lead's squares; icon cards, always). The set decides by **track width**, not count; `size` never reaches an icon set. |
 | **Set shapes** | `lead`: `auto` (featured row from four, the case-study index), `none` (peers), `beside` (spotlight), `wide` ([2, 1, 1]). `stagger` drops the even cards 96 from 1024. Four across from `lg`. Below 768 a covered set of three or more, or a linked set of four or more, is a scroll row bleeding to the screen edge; an unlinked one takes the tab stop and `label`. |
 
 > **Amendment · 13 Oct 2026 · the insights hub (docs/specs/InsightsIndex.md § 12a).** `media` gains a
@@ -492,7 +492,7 @@ card's other drawn line is the image crop box's hairline (`--bcrd-media-rule-wid
 
 | Part             | Type role        | Tracking                                   | Measure           |
 | ---------------- | ---------------- | ------------------------------------------ | ----------------- |
-| `title`, `lg`    | `--text-h3`      | `--text-h3-tracking`                       | none — the track (Rev. 3) |
+| `title`, `lg`    | `--text-h4`; horizontal `--text-h3` | `--text-h4-tracking`; horizontal `--text-h3-tracking` | none — the track (Rev. 3) |
 | `title`, `md`    | `--text-h4`      | `--text-h4-tracking`                       | none — the track (Rev. 3) |
 | `title`, `sm`    | `--text-h5`      | `--text-h5-tracking`                       | none — the track (Rev. 3) |
 | `body`, `lg` / `md` / `sm` | `--text-body-lg` / `--text-body` / `--text-body-sm` | none — these roles have no tracking companion | `--measure-body`  |

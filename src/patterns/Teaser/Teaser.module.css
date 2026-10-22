@@ -317,6 +317,12 @@
   max-inline-size: var(--tsr-body-measure-xl);
 }
 
+/* The one serif title: the featured piece beside its picture (22 Oct 2026). */
+.beside.sizeXl .title {
+  font: var(--tsr-title-text-xl-beside);
+  letter-spacing: var(--tsr-title-tracking-xl-beside);
+}
+
 /* A small or middle tile's meta line keeps to its first fact, so it is one line in a narrow track
    (a list row, wide, keeps them all). */
 .sizeSm:not(.row) .metaMore,

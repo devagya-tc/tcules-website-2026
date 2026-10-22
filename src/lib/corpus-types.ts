@@ -214,8 +214,9 @@ export type TestimonialAvatarRecord = {
 
 /**
  * Stand-in reasons for a "why us" band drawn as the Reasons pattern (`getPlaceholderReasons`, owner
- * 19 Oct 2026). The band is designed for three or six short reasons, each with a drawing of its
- * claim (docs/content-proposals.md P48); the corpus authors four longer ones with quotes, so the
+ * 19 Oct 2026). The band is designed for four short reasons 2×2 (owner, 22 Oct 2026), each with a
+ * drawing of its claim (docs/content-proposals.md P48); the corpus authors four longer ones with
+ * quotes, so the
  * band shows P48's length-guide set until the content team writes its own. The heading and the
  * closing link stay the corpus's. `placeholder` is always true.
  */
@@ -244,3 +245,11 @@ export type ProposedEyebrows = Readonly<Record<string, string>>;
  * (docs/content-proposals.md P50).
  */
 export type CaseIndustry = { label: string; cases: readonly string[] };
+
+/**
+ * One stage of the case-study index's BY STAGE view (`getCaseStages`), its default: where the
+ * client's product stood when the work began, and the case routes filed under it, in order.
+ * PLACEHOLDER until the owner supplies the stage names and the case record carries a stage
+ * (docs/content-proposals.md P51).
+ */
+export type CaseStage = { label: string; cases: readonly string[] };

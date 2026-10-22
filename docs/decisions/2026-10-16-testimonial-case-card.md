@@ -1,7 +1,7 @@
 ---
 title: "A featured case is one card holding its testimonial"
 date: 2026-10-16
-status: active
+status: superseded
 area: [proof, cards, components]
 source: "Owner review, 16 Oct 2026 (selected work, round 7 approved; PR #111)"
 supersedes: ["2026-10-07-case-card-testimonial-rejected", "2026-10-10-case-and-quote-adjacent"]
@@ -18,3 +18,5 @@ A home featured case is ONE card with its quote (TestimonialCase): a tint card w
 **The mistake it prevents.** Spreading quote, speaker and rating across the box ("3 separate items"), which the owner rejected.
 
 **How to apply.** TestimonialCase, built on PR #111; the content brief is P47 in `docs/content-proposals.md`.
+
+Superseded 22 Oct 2026 by `2026-10-22-case-cards-carry-no-testimonial`: case study cards never hold a testimonial.

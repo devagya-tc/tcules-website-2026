@@ -1,7 +1,7 @@
 ---
 title: "Italic testimonials are a voice variant, beside content only"
 date: 2026-10-15
-status: active
+status: superseded
 area: [type, proof]
 source: "Owner, 15 Oct 2026 (PR #109, reversing PR #108)"
 supersedes: []

@@ -16,13 +16,13 @@ import {
   Bento,
   BlockCard,
   BlockCardSet,
+  CaseCard,
   ContentSection,
   ContentSectionText,
   CtaRow,
   Gateway,
   LogoGrid,
   Reasons,
-  TestimonialCase,
   type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
@@ -53,7 +53,6 @@ import {
   bodyOf,
   head,
   headingIdOf,
-  testimonialItem,
   type AvatarsById,
   type RatingsById,
 } from './blocks';
@@ -116,7 +115,7 @@ const linkLines = (item: ItemBlock | undefined) =>
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
  * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
- * diptychs, then a lighter pair · six icon boxes · six reasons, each beside its drawing · a wall
+ * diptychs, then a lighter pair · six icon boxes · four reasons 2×2, each beside its drawing · a wall
  * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
  * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
@@ -333,7 +332,8 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
     const scene = sketchForRoute(item.href);
     return {
       ...item,
-      visual: scene && isSituationFigureName(scene) ? <SituationFigure name={scene} /> : undefined,
+      visual:
+        scene && isSituationFigureName(scene) ? <SituationFigure name={scene} /> : undefined,
     };
   });
 }
@@ -379,19 +379,20 @@ const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
  * Featured, then listed (owner, home round 2: "2 rows for the case studies with quotes, and then the
  * other case studies listed in a 2-col layout").
  *
- *   1. The two cases whose clients spoke (Doodle, Eden AI) are each ONE card (TestimonialCase,
- *      16 Oct 2026, the shape approved in round 7). The round-3 diptych, a case card beside a quote
- *      panel, read as "disjointed, and as 3 units instead of one". Now the cover and the claim share
- *      a ground with the client's words, boxed inside the card under both. The client's name before
- *      the title's colon becomes the card's eyebrow, the rest its claim. The two cards are a set, a
- *      `gutter` apart, and the second mirrors the first.
+ *   1. The two cases whose clients spoke (Doodle, Eden AI) are each ONE featured card (CaseCard,
+ *      the shape approved in round 7 on 16 Oct 2026): the cover beside the claim on one ground. The
+ *      quote the corpus authors with the case marks it as featured, but is not shown on the card
+ *      (owner, 22 Oct 2026: "case study cards never hold testimonials in them"); the client's words
+ *      stay in the page's own testimonial band. The client's name before the title's colon becomes
+ *      the card's eyebrow, the rest its claim. The two cards are a set, a `gutter` apart, and the
+ *      second mirrors the first.
  *   2. The cases without a quote (Dealpath, Benchmark Gensuite) follow as a lighter pair, two across,
  *      one type step down, at the same 16:9 (there is no other card crop since round 3).
  *
  * A HOME shape (page-mapping § 19): a service or expertise page features one case with its quote as
  * the [7, 5] card (TestimonialBeside `card`), because there the case serves the offer.
  */
-function SelectedWork({ page, b, ratings, avatars }: BandProps) {
+function SelectedWork({ page, b }: BandProps) {
   const cases = items(b);
   /* Each case ends on its own "Read the … case" line. The band's closing link ("See all case
      studies") is authored after the last case, so the parser files it under that case: the last link
@@ -443,19 +444,18 @@ function SelectedWork({ page, b, ratings, avatars }: BandProps) {
   const body = (
     <Layout rowGap="section">
       <Layout rowGap="gutter">
-        {featured.map(({ item, index, quote }, row) => {
+        {featured.map(({ item, index }, row) => {
           const { link, story, image } = parts(item, index);
           /* A featured case without its link or cover falls back to the plain card. */
           if (!link || !image) return <ul key={item.headingText}>{card(item, index)}</ul>;
           return (
-            <TestimonialCase
+            <CaseCard
               key={item.headingText}
               {...splitClaim(item.headingText)}
               {...story}
               href={link.href}
               ctaLabel={link.labelText}
               image={image}
-              item={testimonialItem(quote!, ratings, avatars)}
               reverse={row % 2 === 1}
             />
           );
@@ -532,15 +532,15 @@ function Capabilities({ b }: BandProps) {
   );
 }
 
-/* ── 5 · why Tcules: six reasons, each beside its drawing ────────────────────────── */
+/* ── 5 · why Tcules: four reasons 2×2, each beside its drawing ───────────────────── */
 
 /**
- * The Reasons band, `open` (owner, 19 Oct 2026): six short reasons with no rules, each drawing
- * beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
+ * The Reasons band, `open` (owner, 19 Oct 2026): four short reasons 2×2 (owner, 22 Oct 2026) with
+ * no rules, each drawing beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
  * four screens and put three quotes next to the client-voices band. No proof inside the band: the
  * quotes stay in "What clients say" (P48).
  *
- * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes six; the heading
+ * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes four; the heading
  * and the closing link stay the corpus's.
  */
 function WhyTcules({ b, reasons }: BandProps) {

@@ -348,20 +348,21 @@ export {
   type LogoGridTrack,
 } from './LogoGrid';
 
+/* CaseCard — one featured case as one card: the 16:9 cover beside its claim, the whole card the case's
+   link (home's selected work, the case index's featured cases; no testimonial, 22 Oct 2026). */
+export { CaseCard, type CaseCardProps } from './CaseCard';
+
 /* Testimonial — the rated testimonial card: stars, the client's words, the speaker; a wall of them;
    and one beside the case it is about (home round 2, 10 Oct 2026). Every testimonial GROUP uses it. */
 export {
   TestimonialBeside,
   TestimonialCard,
-  TestimonialCase,
   TestimonialWall,
   type TestimonialAvatar,
   type TestimonialBesideArrangement,
   type TestimonialBesideProps,
   type TestimonialCardProps,
-  type TestimonialCaseProps,
   type TestimonialFrame,
-  type TestimonialVoice,
   type TestimonialItem,
   type TestimonialSize,
   type TestimonialWallProps,

@@ -314,3 +314,16 @@ facts; the view model (`InsightResource`, `InsightCollection`, `InsightFormatCar
 them, and the specimen (`/design/insights-index`) shows each with stress content.
 
 **Found in.** Insights front page, 13 Oct 2026 (`feat/insights-front-page`).
+
+## 21. Case studies carry a `stage`
+
+**What.** An enum on the case-study record, `stage`: where the client's product stood when the work
+began. The values are the owner's to name (stand-ins today: `zero-to-one`, `finding-fit`,
+`scaling`). One per case.
+
+**Why.** The case-study index opens BY STAGE (owner, 22 Oct 2026: it replaced BY TYPE as the default
+view). Until the record carries the stage, the filing is a PLACEHOLDER fixture
+(`src/content/sources/fixtures/case-stages.ts`, docs/content-proposals.md P51), and a case added in
+the CMS lands under "Other stages" until someone files it there.
+
+**Found in.** Jatin review, 22 Oct 2026 (`feat/case-cards-stage`).

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import {
   getCaseIndustries,
   getCaseRefs,
+  getCaseStages,
   getCorpusPage,
   getTestimonialAvatars,
   getTestimonialRatings,
@@ -14,6 +15,7 @@ import type {
   CorpusBlock,
   CorpusCaseRef,
   CaseIndustry,
+  CaseStage,
   CorpusPage,
   TestimonialAvatarRecord,
   TestimonialRating,
@@ -216,61 +218,72 @@ function sectionOf(
       if (item) items.push(item);
     } else if (block.type === 'quote') quote = testimonialItem(block, ratings, avatars);
   }
-  /* The band's quote travels with its case, so it is the same card in either view. */
+  /* The case whose client the band quotes is the band's featured case: it leads its group as one
+     card in either view. The card shows no quote (owner, 22 Oct 2026: "case study cards never hold
+     testimonials in them"); the quote only says which case the corpus put forward. */
   const owner = quote ? quotedCase(items, quote) : undefined;
   return {
     id: band.id,
     heading: band.headingText,
-    items: items.map((item) => (item === owner ? { ...item, quote } : item)),
+    items: items.map((item) => (item === owner ? { ...item, featured: true } : item)),
   };
 }
 
-const anchorOf = (label: string) =>
-  `industry-${label
+const anchorOf = (prefix: string, label: string) =>
+  `${prefix}-${label
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')}`;
 
 /**
- * BY INDUSTRY: every case the page lists, once, under its sector (PROPOSED, P50), in the sectors'
- * order. A case no sector names yet goes under "Other industries" rather than out of the view.
+ * One view's sections: every case the page lists, once, under the group a filing names (BY STAGE,
+ * PLACEHOLDER, P51; BY INDUSTRY, PROPOSED, P50), in the filing's order. A case no group names yet
+ * goes under the view's catch-all (`other`) rather than out of the view.
  */
-function byIndustry(
+function filed(
   sections: readonly CaseStudyIndexSection[],
-  industries: readonly CaseIndustry[],
+  groups: readonly (CaseStage | CaseIndustry)[],
+  prefix: string,
+  other: string,
 ): CaseStudyIndexSection[] {
   const cases = new Map<string, CaseStudyIndexItem>();
   for (const item of sections.flatMap((section) => section.items)) {
     if (item.href && !cases.has(item.href)) cases.set(item.href, item);
   }
-  const filed = new Set<string>();
-  const grouped = industries.map((industry) => {
-    const items = industry.cases.flatMap((route) => {
+  const done = new Set<string>();
+  const grouped = groups.map((group) => {
+    const items = group.cases.flatMap((route) => {
       const item = cases.get(route);
-      if (!item || filed.has(route)) return [];
-      filed.add(route);
+      if (!item || done.has(route)) return [];
+      done.add(route);
       return [item];
     });
-    return { id: anchorOf(industry.label), heading: industry.label, items };
+    return { id: anchorOf(prefix, group.label), heading: group.label, items };
   });
-  const other = [...cases.values()].filter((item) => !filed.has(item.href));
+  const rest = [...cases.values()].filter((item) => !done.has(item.href));
   return [
     ...grouped,
-    ...(other.length > 0
-      ? [{ id: anchorOf('Other industries'), heading: 'Other industries', items: other }]
-      : []),
+    ...(rest.length > 0 ? [{ id: anchorOf(prefix, other), heading: other, items: rest }] : []),
   ].filter((section) => section.items.length > 0);
 }
 
-/** The two ways the index is sorted: the corpus's own bands first, the default. */
+/**
+ * The two ways the index is sorted: BY STAGE first, the default (owner, 22 Oct 2026: it replaced BY
+ * TYPE, the corpus's own bands), then BY INDUSTRY. The bands still collect the cases and say which
+ * one each band features; they are no longer a view of their own.
+ */
 function viewsOf(
   sections: readonly CaseStudyIndexSection[],
+  stages: readonly CaseStage[],
   industries: readonly CaseIndustry[],
 ): CaseStudyIndexView[] {
-  const sectors = byIndustry(sections, industries);
+  const byStage = filed(sections, stages, 'stage', 'Other stages');
+  const byIndustry = filed(sections, industries, 'industry', 'Other industries');
   return [
-    { id: 'type', label: 'By type', sections },
-    ...(sectors.length > 0 ? [{ id: 'industry', label: 'By industry', sections: sectors }] : []),
+    { id: 'stage', label: 'By stage', sections: byStage },
+    ...(byIndustry.length > 0
+      ? [{ id: 'industry', label: 'By industry', sections: byIndustry }]
+      : []),
   ];
 }
 
@@ -282,10 +295,11 @@ export async function CaseIndexRoute({ searchParams }: CaseIndexRouteProps) {
   const page = await getCorpusPage(CASE_INDEX_ROUTE);
   if (!page) notFound();
   const ids = page.composition.testimonialIds;
-  const [refs, ratings, avatars, industries, query] = await Promise.all([
+  const [refs, ratings, avatars, stages, industries, query] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getTestimonialRatings(ids),
     getTestimonialAvatars(ids),
+    getCaseStages(),
     getCaseIndustries(),
     searchParams,
   ]);
@@ -312,6 +326,7 @@ export async function CaseIndexRoute({ searchParams }: CaseIndexRouteProps) {
         page.bands
           .filter((band) => band.id !== anchor)
           .map((band) => sectionOf(page, refs, band, ratings, avatars)),
+        stages,
         industries,
       )}
       view={view}

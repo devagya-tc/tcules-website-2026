@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+201 active rulings, 22 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -59,9 +59,11 @@ stale index.
 - ch03 §5 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md) (2026-10-11)
 - ch03 §6 · [Quoted claims at list sizes are set upright](2026-10-11-upright-type-for-quoted-lists.md) (2026-10-11)
 - ch03 §2 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md) (2026-10-15)
-- ch03 §2 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md) (2026-10-15)
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
+- ch03 §6 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md) (2026-10-22)
+- ch03 §2 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md) (2026-10-22)
+- ch03 §2 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md) (2026-10-22)
 
 **04 Iconography** — `/dbf-update 04`
 
@@ -86,6 +88,7 @@ stale index.
 - ch05 §9 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md) (2026-10-11)
 - ch05 §4 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md) (2026-10-15)
 - ch05 §4a · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md) (2026-10-16)
+- ch05 §9 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md) (2026-10-22)
 
 ## By area
 
@@ -126,8 +129,8 @@ stale index.
 
 *Arrangement, the primitives, page composition.*
 
+- 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
 - 2026-10-16 · [Rules only where they structure something](2026-10-16-lines-only-where-they-structure.md)
@@ -166,6 +169,7 @@ stale index.
 
 *The gap scale and section air.*
 
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-13 · [Island's inset is the band's air in miniature](2026-10-13-island-inset-is-band-air.md)
 - 2026-10-11 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md)
@@ -178,9 +182,12 @@ stale index.
 
 *Roles, sizes, families, case.*
 
+- 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
-- 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
 - 2026-10-15 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md)
 - 2026-10-15 · [In a selector, the option titles are the largest repeated thing](2026-10-15-selector-titles-are-the-targets.md)
 - 2026-10-15 · [Lean to the smaller sizes generally](2026-10-15-lean-to-smaller-type.md)
@@ -223,6 +230,7 @@ stale index.
 
 *Photographs, captures, media delivery.*
 
+- 2026-10-22 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
 - 2026-10-13 · [Never reuse a graphic as a stand-in](2026-10-13-no-reused-graphics-as-standins.md)
 - 2026-10-11 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md)
@@ -267,7 +275,6 @@ stale index.
 - 2026-10-19 · [Bento's drawings are the Sketch scenes, bare and in the light weight](2026-10-19-bento-sketches-are-light.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md)
 - 2026-10-15 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md)
 - 2026-10-13 · [Never reuse a graphic as a stand-in](2026-10-13-no-reused-graphics-as-standins.md)
@@ -317,17 +324,18 @@ stale index.
 
 *Card sets and their variants.*
 
+- 2026-10-22 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
 - 2026-10-16 · [Rules only where they structure something](2026-10-16-lines-only-where-they-structure.md)
-- 2026-10-16 · [The case card is one view; its visual is a fixed slot](2026-10-16-case-card-is-one-view.md)
 - 2026-10-12 · [People get ProfileCards, not image cards](2026-10-12-people-get-profile-cards.md)
 - 2026-10-12 · [A band heavy with important items gets drawn cards](2026-10-12-important-items-get-drawn-cards.md)
 - 2026-10-11 · [Card variants are never blended](2026-10-11-card-variants-stay-distinct.md)
@@ -340,7 +348,6 @@ stale index.
 - 2026-09-29 · [A BlockCard image's crop box takes an 8px radius](2026-09-29-card-image-radius-8.md)
 - 2026-09-29 · [A card's crop box draws one hairline around its image, whatever the image's kind](2026-09-29-card-crop-box-rules-every-kind.md)
 - 2026-09-28 · [A text-only card set gets its weight from scale and position](2026-09-28-text-only-cards-weight-from-scale.md)
-- 2026-09-28 · [The first card is featured when the set has 4 or more](2026-09-28-first-card-featured-from-four.md)
 
 ### Forms
 
@@ -358,10 +365,9 @@ stale index.
 
 *Logos, cases, testimonials, ratings.*
 
+- 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-19 · [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md) · enforced by `fixture: src/content/sources/fixtures/testimonial-ratings.ts (rating() throws below 4.5)`
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
-- 2026-10-16 · [The case card is one view; its visual is a fixed slot](2026-10-16-case-card-is-one-view.md)
-- 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
 - 2026-10-12 · [A testimonial always shows its quote marks and star rating](2026-10-12-testimonial-shows-marks-and-rating.md)
 - 2026-10-12 · [People get ProfileCards, not image cards](2026-10-12-people-get-profile-cards.md)
 - 2026-10-11 · [Logo walls use real logo files](2026-10-11-logo-walls-use-real-logos.md)
@@ -388,6 +394,7 @@ stale index.
 
 *Copy, narrative, IA, the CMS seam.*
 
+- 2026-10-22 · [The case-study index opens by stage](2026-10-22-case-index-opens-by-stage.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
@@ -422,9 +429,11 @@ stale index.
 
 *Contracts of a named component or pattern.*
 
+- 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
+- 2026-10-22 · [The case-study index opens by stage](2026-10-22-case-index-opens-by-stage.md)
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
 - 2026-10-16 · [Text never crosses an island's edge](2026-10-16-island-copy-stays-on-ground.md)
 - 2026-10-16 · [The insights hub is curated; By type / By topic switch the whole view](2026-10-16-insights-hub-is-curated.md)
@@ -466,6 +475,10 @@ stale index.
 Kept so a reversal and its reason stay readable. Never apply one of these.
 
 - 2026-10-16 · ~~Type smaller than 28px is Public Sans~~ (2026-10-16-type-under-28-is-sans.md) → [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
+- 2026-10-16 · ~~A featured case is one card holding its testimonial~~ (2026-10-16-testimonial-case-card.md) → [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
+- 2026-10-16 · ~~Reasons: six argued reasons, each drawn, in one fold~~ (2026-10-16-reasons-band-shape.md) → [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md)
+- 2026-10-16 · ~~The case card is one view; its visual is a fixed slot~~ (2026-10-16-case-card-is-one-view.md) → [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
+- 2026-10-15 · ~~Italic testimonials are a voice variant, beside content only~~ (2026-10-15-testimonial-italic-is-voice-variant.md) → [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
 - 2026-10-10 · ~~Placeholder ratings run 4 to 5~~ (2026-10-10-placeholder-ratings-four-to-five.md) → [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md)
 - 2026-10-10 · ~~A case and its quote sit adjacent, never embedded~~ (2026-10-10-case-and-quote-adjacent.md) → [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-09 · ~~Section body 16, section lead 18, hero lead 18/20~~ (2026-10-09-section-body-16-lead-18.md) → [Body type never above 16px](2026-10-19-body-type-ceiling.md)
@@ -478,6 +491,7 @@ Kept so a reversal and its reason stay readable. Never apply one of these.
 - 2026-09-28 · ~~Texture is kept as a decorative ground, within its limits~~ (2026-09-28-texture-kept-as-decorative-ground.md) → [Texture may be used wherever it improves rhythm](2026-10-05-texture-for-rhythm.md)
 - 2026-09-28 · ~~A quote portrait is small, 1:1, beside the name and role~~ (2026-09-28-quote-portrait-small-square-beside-name.md) → [No rating beside a client quote; avoid headshots](2026-10-07-no-rating-beside-quote-avoid-headshots.md)
 - 2026-09-28 · ~~Phase 2 is reviewed on one private claude.ai page~~ (2026-09-28-owner-reviews-on-one-private-page.md) → [No screenshots to the owner; report the routes](2026-10-09-no-screenshots-to-owner.md)
+- 2026-09-28 · ~~The first card is featured when the set has 4 or more~~ (2026-09-28-first-card-featured-from-four.md) → [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
 - 2026-09-25 · ~~Article, insight, service and glossary cards carry no media~~ (2026-09-25-only-case-study-cards-carry-media.md) → [Case studies and covered insights carry an image; service cards do not](2026-09-28-which-cards-carry-an-image.md)
 - 2026-09-24 · ~~Ink and blue are reserved social grounds, never a rhythm device such as the hinge~~ (2026-09-24-ink-and-blue-never-a-rhythm-device.md) → [Paper carries more than half of every set; the hinge may change ground](2026-09-24-paper-dominates-hinge-may-change-ground.md)
 - 2026-09-16 · ~~Photographic section openers with type over the photograph are permitted on the website~~ (2026-09-16-photographic-section-openers-permitted.md) → [No image carries type, on any surface](2026-09-24-no-image-carries-type.md)

@@ -4,7 +4,7 @@
    words, the stars that client gave, and who they are.
 
    Naming: --tsm-{part}-{role}
-     parts: ground | quote | name | role | rule | avatar | panel | case
+     parts: ground | quote | name | role | rule | avatar | panel
 
    Home round 3 (11 Oct 2026): the quote is SANS (the lead role on the card, body on the supporting
    card, lead-lg in the diptych's panel), the initials monogram is gone (banned: "the current
@@ -25,9 +25,8 @@
 
    The surface register (ground and ink) because the card is a small surface its words sit on; the
    avatar is a photograph and carries no colour. No state tokens on the testimonial itself: a quote
-   is not a control. The one linked part is TestimonialCase, whose whole card is its case's link
-   (19 Oct 2026): its cover leans in on hover and focus, its link's steps are Button's, and its focus
-   ring is the --tsm-case-ring-* pair, BlockCard's values.
+   is not a control. The case card that once carried a quote is CaseCard now (22 Oct 2026: case
+   cards hold no testimonial), with its own --ccd-* layer.
 
    Every surface restates every token (index.css, rule 2). */
 
@@ -36,10 +35,15 @@
   --tsm-rule-width: var(--border-width-hairline);
   /* The quote's sans roles (home round 3): the card that is the thing and the diptych's panel at
      18, the one step above body a quote may take (owner, 19 Oct 2026), the supporting card at 16.
-     Upright; the italic is a voice the caller opts into (Testimonial `voice`), not a token. */
-  --tsm-quote-text: var(--text-lead-lg);
-  --tsm-quote-text-sm: var(--text-body);
-  --tsm-quote-text-panel: var(--text-lead-lg);
+     ITALIC, in the composite (owner, 22 Oct 2026: testimonials are italic everywhere). Italic is
+     part of a quote's role, as in every --text-quote* composite, so it is not restated beside a
+     `font:`; the lead-lg and body roles are roman and carry no breakpoint step, so these are those
+     roles' primitives with the slant, and they move if those primitives do. */
+  --tsm-quote-text: italic var(--font-weight-regular)
+    var(--font-size-lead-lg)/var(--line-height-lead-lg) var(--font-family-sans);
+  --tsm-quote-text-sm: italic var(--font-weight-regular)
+    var(--font-size-body)/var(--line-height-body) var(--font-family-sans);
+  --tsm-quote-text-panel: var(--tsm-quote-text);
   /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),
      40 on the supporting card. A circle (owner, home round 3), the one round portrait in the kit. */
   --tsm-avatar-size-md: 48px;
@@ -47,38 +51,10 @@
   --tsm-avatar-radius: var(--radius-full);
   /* The diptych's panel from 1440: the card ratio, so its edges are the case cover's. */
   --tsm-panel-ratio: var(--ratio-standard);
-  /* TestimonialCase (16 Oct 2026, round 7 of the selected-work card): one case and its client's
-     words as ONE card. Two rows on the card's ground: the 16:9 cover beside the claim (eyebrow,
-     h3, story, link), then the client's words in their own box across the card's full width,
-     centred: stars, quote, then the portrait beside name and role. The cover and the box are both
-     inset in the card, so they take the smaller radius inside the card's 8. */
-  --tsm-case-title-text: var(--text-h3);
-  --tsm-case-title-tracking: var(--text-h3-tracking);
-  --tsm-case-body-text: var(--text-body-lg);
-  --tsm-case-eyebrow-text: var(--text-eyebrow);
-  --tsm-case-eyebrow-tracking: var(--text-eyebrow-tracking);
-  --tsm-case-media-ratio: var(--ratio-standard);
-  --tsm-case-inner-radius: var(--radius-4);
-  /* The linked case card's hover and focus: BlockCard's lean-in (1.03, geometry, so one value on
-     every surface) and the focus ring's width and offset. */
-  --tsm-case-media-zoom: 1.03;
-  --tsm-case-media-zoom-duration: var(--duration-slow);
-  --tsm-case-media-zoom-easing: var(--easing-standard);
-  --tsm-case-ring-width: var(--focus-ring-width);
-  --tsm-case-ring-offset: var(--focus-ring-offset);
 }
 
 :root,
 [data-surface='paper'] {
-  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  --tsm-case-voice-ground: var(--color-paper);
-  --tsm-case-role-ink: var(--color-neutral-700); /* 7.27:1 on paper */
-  --tsm-case-title-ink: var(--color-neutral-900);
-  --tsm-case-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  /* decoration; 300 read too dark (owner, round 7) */
-  --tsm-case-media-rule: var(--color-neutral-200);
-  --tsm-case-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
-  --tsm-case-ring-gap-color: var(--color-paper);
   --tsm-ground: var(--color-paper-deep);
   --tsm-quote-ink: var(--color-neutral-800); /* 10.54:1 on paper-deep */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper */
@@ -90,14 +66,6 @@
 }
 
 [data-surface='tint'] {
-  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
-  --tsm-case-voice-ground: var(--color-paper-deep);
-  --tsm-case-role-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  --tsm-case-title-ink: var(--color-neutral-900);
-  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
-  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
-  --tsm-case-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
-  --tsm-case-ring-gap-color: var(--color-paper-deep);
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800); /* 11.81:1 on paper */
   --tsm-quote-ink-quiet: var(--color-neutral-700); /* 7.27:1 on paper-deep */
@@ -109,14 +77,6 @@
 }
 
 [data-surface='ink'] {
-  --tsm-case-eyebrow-ink: var(--color-neutral-400);
-  --tsm-case-voice-ground: var(--color-neutral-800);
-  --tsm-case-role-ink: var(--color-neutral-300);
-  --tsm-case-title-ink: var(--color-white);
-  --tsm-case-body-ink: var(--color-neutral-300);
-  --tsm-case-media-rule: var(--color-neutral-700); /* decoration */
-  --tsm-case-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
-  --tsm-case-ring-gap-color: var(--color-neutral-950);
   --tsm-ground: var(--color-neutral-900);
   --tsm-quote-ink: var(--color-white);
   --tsm-quote-ink-quiet: var(--color-neutral-300);
@@ -128,14 +88,6 @@
 }
 
 [data-surface='blue'] {
-  --tsm-case-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
-  --tsm-case-voice-ground: var(--color-paper-deep);
-  --tsm-case-role-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
-  --tsm-case-title-ink: var(--color-neutral-900);
-  --tsm-case-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
-  --tsm-case-media-rule: var(--color-neutral-200); /* decoration */
-  --tsm-case-ring-color: var(--color-white); /* 6.23:1 against gap */
-  --tsm-case-ring-gap-color: var(--color-brandeis-500);
   --tsm-ground: var(--color-paper);
   --tsm-quote-ink: var(--color-neutral-800);
   --tsm-quote-ink-quiet: var(--color-brandeis-50);
