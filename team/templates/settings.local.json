@@ -1,0 +1,6 @@
+{
+  "env": {
+    "TCULES_MEMBER": "your-member-id",
+    "TCULES_ROLE": "designer"
+  }
+}

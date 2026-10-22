@@ -1,0 +1,9 @@
+{
+  "$comment": "Who works in this repo and in which role. Identity is chosen by each person's own clone (TCULES_MEMBER in their git-ignored .claude/settings.local.json), never by the Claude login, so a shared login still tells people apart. No emails: the repo is public (Design Hub D46, D47). Roles are described in team/roles/.",
+  "members": {
+    "devagya": { "name": "Devagya", "github": "devagya-tc", "role": "owner" },
+    "yash": { "name": "Yash", "github": "yash-rawall", "role": "gtm" },
+    "bhumika": { "name": "Bhumika", "github": null, "role": "designer" },
+    "shoghi": { "name": "Shoghi", "github": null, "role": "designer" }
+  }
+}
