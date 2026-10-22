@@ -159,7 +159,8 @@ export type BlockCardTracks = 2 | 3;
  * The card's type step: title and body roles together (visual-direction § 7.2, 5 Oct 2026). A
  * COMPONENT SIZE, so a t-shirt name. The card does not know its count, so the set passes it.
  *
- *   lg  h3 title, body-lg   the one featured, horizontal card
+ *   lg  h4 title, body-lg   the one featured card; horizontal, its title is the serif h3 (the
+ *                           one serif card title, 22 Oct 2026)
  *   md  h4 title, body      two to three cards; text cards
  *   sm  h5 title, body-sm   four to six cards across
  *
@@ -710,7 +711,9 @@ export function BlockCard({
   }
 
   return (
-    <li className={cx(styles.root, SIZE_CLASS[step], boxed && styles.boxed)}>
+    <li
+      className={cx(styles.root, SIZE_CLASS[step], horizontal && styles.horizontal, boxed && styles.boxed)}
+    >
       {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
            declares that this anchor's hover, focus-visible and pressed states are the states of

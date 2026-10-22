@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+200 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -62,6 +62,7 @@ stale index.
 - ch03 §2 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md) (2026-10-15)
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
+- ch03 §6 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md) (2026-10-22)
 
 **04 Iconography** — `/dbf-update 04`
 
@@ -166,6 +167,7 @@ stale index.
 
 *The gap scale and section air.*
 
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-13 · [Island's inset is the band's air in miniature](2026-10-13-island-inset-is-band-air.md)
 - 2026-10-11 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md)
@@ -178,6 +180,8 @@ stale index.
 
 *Roles, sizes, families, case.*
 
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
 - 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
@@ -317,6 +321,7 @@ stale index.
 
 *Card sets and their variants.*
 
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)

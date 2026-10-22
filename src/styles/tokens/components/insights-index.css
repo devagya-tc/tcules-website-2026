@@ -13,10 +13,13 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* A curated section's head: the h2 role, as every section head on the site (owner, 16 Oct 2026:
-     the h4 head was "too small. foundationally incorrect"). Section heads take h1/h2 by prominence. */
-  --iix-section-title-text: var(--text-h2);
-  --iix-section-title-tracking: var(--text-h2-tracking);
+  /* A curated section's head: the h3 role (owner, 22 Oct 2026: the h2 group title was "quite big").
+     These are groups inside one page column beside the rail, not bands of their own, so they take
+     the smallest serif title rather than a band head's h2 — the size claude.com/resources sets its
+     group heads at (about 36). Not h4: the h4 head was "too small. foundationally incorrect"
+     (16 Oct 2026). The head sits a `stack` above its pieces (CuratedSection). */
+  --iix-section-title-text: var(--text-h3);
+  --iix-section-title-tracking: var(--text-h3-tracking);
   /* An events page's group label: the eyebrow, the date column's voice. */
   --iix-group-title-text: var(--text-eyebrow);
   --iix-group-title-tracking: var(--text-eyebrow-tracking);
