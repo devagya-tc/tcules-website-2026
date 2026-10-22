@@ -9,7 +9,8 @@ The ruling: **$ARGUMENTS**
 
 If that is empty, the ruling is the one the owner just made in this conversation. If there is more than
 one, log each as its own entry. If you cannot tell what was ruled, ask in one line and stop. Never log a
-proposal, a critic's note or your own recommendation: only what the owner decided.
+critic's note or your own recommendation: only what the owner decided. An owner's rule that hasn't been
+designed and tested yet is logged as a proposal (step 0).
 
 0. **Has it been tested?** A design rule (how something looks, is drawn or is composed) becomes a ruling
    only after it has been designed and tested and the owner has seen the result (owner, 22 Oct 2026;
