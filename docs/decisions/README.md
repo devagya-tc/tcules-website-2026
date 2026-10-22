@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-201 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+202 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -88,6 +88,7 @@ stale index.
 - ch05 §9 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md) (2026-10-11)
 - ch05 §4 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md) (2026-10-15)
 - ch05 §4a · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md) (2026-10-16)
+- ch05 §4 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md) (2026-10-22)
 
 ## By area
 
@@ -270,6 +271,7 @@ stale index.
 
 *Illustrations, sketches, drawn visuals.*
 
+- 2026-10-22 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md)
 - 2026-10-19 · [Bento's drawings are the Sketch scenes, bare and in the light weight](2026-10-19-bento-sketches-are-light.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
