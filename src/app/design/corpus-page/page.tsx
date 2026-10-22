@@ -150,11 +150,11 @@ export default async function CorpusPageIndex() {
 
         {index ? (
           <Layout rowGap="block">
-            <h2>CaseStudyIndex, grouped</h2>
+            <h2>ListingIndex, the case-study index</h2>
             <Layout as="ul" rowGap="none">
               <ListCard
                 title={index.route}
-                body={`${index.pageType} · ${index.bands.length} bands: the case-study index fed grouped sections. Each group's shape comes from its position and count: a featured set, equal covers, thumbnail rows in two columns, a story with its client's words, then the form close.`}
+                body={`${index.pageType} · ${index.bands.length} bands: the case-study index on the one listing template, its cases grouped by stage or industry. Each group's shape comes from its position and count: a featured case, a featured set, equal covers, thumbnail rows in two columns, then the form close.`}
                 titleAs="h3"
                 href={designCorpusPagePath(fileSlug(index.route))}
               />

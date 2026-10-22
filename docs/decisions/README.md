@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-201 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+204 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -95,6 +95,8 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-22 · [The reduced type sizes stand as approved](2026-10-22-reduced-type-sizes-taken-as-approved.md)
+- 2026-10-22 · [The listings share one structure: a change to one applies to the other](2026-10-22-listings-share-one-structure.md) · enforced by `structure (one template, src/templates/ListingIndex/)`
 - 2026-10-20 · [The repo is public, so main's protection is enforced](2026-10-20-repo-public-main-protected.md) · enforced by `GitHub ruleset "main" (id 25475637); gh api repos/devagya-tc/tcules-website-2026/branches/main --jq .protected`
 - 2026-10-20 · [The design system lives in an artifact, generated from the repo](2026-10-20-ds-artifact-from-repo.md) · enforced by `npm run ds:build and ds:check (/ds-publish)`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)
@@ -129,6 +131,8 @@ stale index.
 *Arrangement, the primitives, page composition.*
 
 - 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
+- 2026-10-22 · [No testimonial band on a listing index, for now](2026-10-22-no-testimonial-on-listing-index.md)
+- 2026-10-22 · [The listings share one structure: a change to one applies to the other](2026-10-22-listings-share-one-structure.md) · enforced by `structure (one template, src/templates/ListingIndex/)`
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
@@ -182,6 +186,7 @@ stale index.
 *Roles, sizes, families, case.*
 
 - 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [The reduced type sizes stand as approved](2026-10-22-reduced-type-sizes-taken-as-approved.md)
 - 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
 - 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
@@ -364,6 +369,7 @@ stale index.
 *Logos, cases, testimonials, ratings.*
 
 - 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [No testimonial band on a listing index, for now](2026-10-22-no-testimonial-on-listing-index.md)
 - 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-19 · [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md) · enforced by `fixture: src/content/sources/fixtures/testimonial-ratings.ts (rating() throws below 4.5)`
 - 2026-10-12 · [A testimonial always shows its quote marks and star rating](2026-10-12-testimonial-shows-marks-and-rating.md)
@@ -428,6 +434,7 @@ stale index.
 *Contracts of a named component or pattern.*
 
 - 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
+- 2026-10-22 · [The listings share one structure: a change to one applies to the other](2026-10-22-listings-share-one-structure.md) · enforced by `structure (one template, src/templates/ListingIndex/)`
 - 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-22 · [The case-study index opens by stage](2026-10-22-case-index-opens-by-stage.md)
 - 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)

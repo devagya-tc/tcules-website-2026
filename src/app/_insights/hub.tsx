@@ -1,16 +1,20 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
-import { blogPath, ROUTES } from '@/lib/routes';
-import type {
-  InsightsFormatProps,
-  InsightsIndexItem,
-  InsightsIndexKind,
-  InsightsIndexProps,
+import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
+import { EnquiryForm } from '@/patterns';
+import {
+  insightFormatPage,
+  insightViews,
+  type InsightItem,
+  type InsightKind,
+  type ListingClosing,
+  type ListingIndexProps,
 } from '@/templates';
 
 /**
- * The insights family's composition: the view model mapped onto the hub (InsightsIndex) and onto a
- * format page (InsightsFormat), and the URL read into the hub's view and a format page's page.
- * Shared by the live routes and their specimen (`/design/insights-index`), so they cannot drift.
+ * The insights family's composition: the view model mapped onto the listing template
+ * (ListingIndex) — the hub's curated views, or a format page's picker and content — and the URL read
+ * into the hub's view and a format page's page.
+ * Shared by the live routes and their specimen (`/design/listing-index`), so they cannot drift.
  *
  * The URL is the state: `?view=topic` opens the hub's BY TOPIC view (BY TYPE is the default and
  * has no parameter); `?page=<n>` is how far down a format page the reader has asked to see.
@@ -114,7 +118,7 @@ function subjectsOf(page: InsightsPage): Map<string, string> {
   return names;
 }
 
-function toItem(resource: InsightResource, subjects?: Map<string, string>): InsightsIndexItem {
+function toItem(resource: InsightResource, subjects?: Map<string, string>): InsightItem {
   const image = resource.image;
   const watched = resource.kind === 'video' || resource.kind === 'podcast';
   const own = image?.src && !image.standIn && !GENERIC_COVER.test(image.src);
@@ -122,7 +126,7 @@ function toItem(resource: InsightResource, subjects?: Map<string, string>): Insi
     resource.duration ?? (watched ? watchedLength(resource.readingTime) : undefined);
   return {
     id: resource.documentId,
-    kind: resource.kind as InsightsIndexKind,
+    kind: resource.kind as InsightKind,
     title: resource.title,
     /* Every insight slug carries its family's segment where it has one ("podcasts/…",
        "guides/…"), so one builder serves every format and the route tree resolves it. */
@@ -197,17 +201,36 @@ const CLOSE_STAND_IN = {
   action: { label: 'Tell us about it', href: ROUTES.contact },
 };
 
-const closingOf = (page: InsightsPage, origin: string, placement: string) => ({
-  ...(page.closing?.action
+/** The close: the authored ask (or its stand-in) with the enquiry form, sent from `origin`. */
+function closingOf(page: InsightsPage, origin: string, placement: string): ListingClosing {
+  const copy = page.closing?.action
     ? {
         heading: page.closing.heading,
         body: page.closing.description,
         action: { label: page.closing.action.label, href: page.closing.action.href },
       }
-    : CLOSE_STAND_IN),
-  origin,
-  placement,
-});
+    : CLOSE_STAND_IN;
+  return {
+    ...copy,
+    form: (
+      <EnquiryForm
+        variant="enquiry"
+        urlLabel="Product or company URL"
+        action={ENDPOINTS.enquiry}
+        fieldScale="lg"
+        submit="full"
+        context={{
+          originRoute: origin,
+          placement,
+          family: 'insights',
+          serviceOrAudit: '',
+          referrer: '',
+          campaign: '',
+        }}
+      />
+    ),
+  };
+}
 
 /**
  * A topic's name as a heading sets it. The CMS writes the stage "0 to 1" with an arrow glyph
@@ -216,36 +239,39 @@ const closingOf = (page: InsightsPage, origin: string, placement: string) => ({
  */
 const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
-export function insightsIndexProps(page: InsightsPage, query: Query): InsightsIndexProps {
+export function insightsIndexProps(page: InsightsPage, query: Query): ListingIndexProps {
+  const subjects = subjectsOf(page);
+  const lede = page.hero.description?.trim();
   return {
     breadcrumbs: [
       { label: 'Home', href: ROUTES.home },
       { label: 'Insights', href: ROUTES.insights },
     ],
-    hero: { title: page.hero.heading, lede: page.hero.description },
-    items: (() => {
-      const subjects = subjectsOf(page);
-      return page.resources.items.map((item) => toItem(item, subjects));
-    })(),
-    view: first(query[VIEW_KEY]) === 'topic' ? 'topic' : 'type',
-    formats: formatsWithContent(page).map((kind) => ({
-      kind: kind as InsightsIndexKind,
-      title: formatTitle(page, kind),
-      lead: formatLine(page, kind),
-      href: FORMAT_ROUTE[kind],
-    })),
-    /* The topics the BY TOPIC view curates by: every option of the CMS's groups but industry, which
-       is a reader's sector rather than a subject. */
-    topics: page.resources.filters
-      .filter((group) => !/industry/i.test(group.label))
-      .flatMap((group) =>
-        group.options.map((option) => ({
-          id: option.id,
-          label: topicName(option.name),
-          group: group.label,
-        })),
-      ),
-    lab: labOf(page),
+    hero: { title: page.hero.heading, lede: lede ? [lede] : undefined },
+    label: 'Insights',
+    railLabel: 'Browse insights',
+    views: insightViews({
+      items: page.resources.items.map((item) => toItem(item, subjects)),
+      formats: formatsWithContent(page).map((kind) => ({
+        kind: kind as InsightKind,
+        title: formatTitle(page, kind),
+        href: FORMAT_ROUTE[kind],
+      })),
+      /* The topics the BY TOPIC view curates by: every option of the CMS's groups but industry,
+         which is a reader's sector rather than a subject. */
+      topics: page.resources.filters
+        .filter((group) => !/industry/i.test(group.label))
+        .flatMap((group) =>
+          group.options.map((option) => ({
+            id: option.id,
+            label: topicName(option.name),
+            group: group.label,
+          })),
+        ),
+    }),
+    view: first(query[VIEW_KEY]) === 'topic' ? 'topic' : undefined,
+    empty: 'Nothing has been published yet.',
+    offer: labOf(page),
     closing: closingOf(page, ROUTES.insights, 'insights-hub'),
   };
 }
@@ -260,7 +286,7 @@ export function insightsFormatProps(
   kind: InsightResourceKind,
   query: Query,
   pathFor: (kind: InsightResourceKind) => string = (k) => FORMAT_ROUTE[k],
-): InsightsFormatProps {
+): ListingIndexProps {
   const all = page.resources.items.filter((item) => item.kind === kind);
   /* The first page holds the feature and twelve more; each "Show more" adds twelve. */
   const pages = Math.max(1, Math.ceil(Math.max(0, all.length - 1) / PAGE_SIZE));
@@ -274,6 +300,16 @@ export function insightsFormatProps(
   const more = new URLSearchParams(own);
   more.set(PAGE_KEY, String(current + 1));
   const title = formatTitle(page, kind);
+  const subjects = subjectsOf(page);
+  const { record, content } = insightFormatPage({
+    kind: kind as InsightKind,
+    items: shown.map((item) => toItem(item, subjects)),
+    pageSize: PAGE_SIZE,
+    total: all.length,
+    moreHref:
+      shown.length < all.length ? `${base}?${more.toString()}#page-${current + 1}` : undefined,
+    today: new Date().toISOString(),
+  });
 
   return {
     breadcrumbs: [
@@ -281,24 +317,21 @@ export function insightsFormatProps(
       { label: 'Insights', href: ROUTES.insights },
       { label: title, href: FORMAT_ROUTE[kind] },
     ],
-    kind: kind as InsightsIndexKind,
-    hero: { title, lede: formatLine(page, kind) },
-    formats: formatsWithContent(page).map((k) => ({
-      label: formatTitle(page, k),
-      href: pathFor(k),
-      current: k === kind,
-      count: page.resources.items.filter((item) => item.kind === k).length,
-    })),
-    items: (() => {
-      const subjects = subjectsOf(page);
-      return shown.map((item) => toItem(item, subjects));
-    })(),
-    pageSize: PAGE_SIZE,
-    total: all.length,
-    moreHref:
-      shown.length < all.length ? `${base}?${more.toString()}#page-${current + 1}` : undefined,
-    today: new Date().toISOString(),
-    lab: labOf(page),
+    hero: { title, lede: [formatLine(page, kind)], record, titleSize: 'mark' },
+    label: title,
+    railLabel: 'Insights by type',
+    picker: {
+      label: 'By type',
+      items: formatsWithContent(page).map((k) => ({
+        label: formatTitle(page, k),
+        href: pathFor(k),
+        current: k === kind,
+        count: page.resources.items.filter((item) => item.kind === k).length,
+      })),
+      content,
+    },
+    empty: 'Nothing has been published here yet.',
+    offer: labOf(page),
     closing: closingOf(page, FORMAT_ROUTE[kind], `insights-${FORMAT_NAME[kind].toLowerCase()}`),
   };
 }

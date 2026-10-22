@@ -311,7 +311,7 @@ serves every placement and a cover is never re-cut per band.
 
 **Why.** The hub's front page, format bands and feed are designed for all seven formats and their
 facts; the view model (`InsightResource`, `InsightCollection`, `InsightFormatCard`) already carries
-them, and the specimen (`/design/insights-index`) shows each with stress content.
+them, and the specimen (`/design/listing-index`) shows each with stress content.
 
 **Found in.** Insights front page, 13 Oct 2026 (`feat/insights-front-page`).
 

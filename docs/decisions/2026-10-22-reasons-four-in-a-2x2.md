@@ -26,3 +26,6 @@ three-across grid, which leaves a hole: three and then one.
 **How to apply.** `src/patterns/Reasons/`. Four reasons go two across wherever the set has more than
 one column. The home placeholder fixture (P48) holds four reasons, and the P48 brief asks the content
 team for four.
+
+**Owner pick, 22 Oct 2026.** Home uses the current arrangement, `open`, as the 2×2 ("current
+arrangement for reasons"). `beside` stays available in the pattern and its specimen.

@@ -1,5 +1,15 @@
 # InsightsIndex — template specification
 
+> **Merged into ListingIndex, 22 Oct 2026 (owner).** "/insights and /case-studies should share the
+> exact same structure so any updates to one should apply to the other"
+> (`decisions/2026-10-22-listings-share-one-structure`). InsightsIndex, InsightsFormat and
+> CaseStudyIndex are now ONE template, `src/templates/ListingIndex/`: the hero (`masthead`), the rail
+> (curated views, or a picker beside a format page's content), one section head and one close.
+> Everything that differs between the listings is data: the insights curation is `insights.tsx`
+> (`insightViews`, `insightFormatPage`), the case groups `cases.tsx` (`caseViews`). Token prefix
+> `--lix-*` (`tokens/components/listing-index.css`); specimen `/design/listing-index`. The sections
+> below record the insights design and are kept for its reasoning.
+
 > **Superseded in structure, 16 Oct 2026 (owner).** The hub is now a CURATED page, after the idea of
 > claude.com/resources: the hero, then directly the curated column with IndexRail beside it. The rail's
 > switch (BY TYPE / BY TOPIC, mono capitals) changes the whole view, held in `?view=topic`; both views
@@ -19,9 +29,9 @@
 
 | | |
 |---|---|
-| **Tier** | 3 template (`src/templates/InsightsIndex/`) |
-| **Status** | implemented |
-| **Token prefix** | `--iix-*` (`src/styles/tokens/components/insights-index.css`) |
+| **Tier** | 3 template, now `src/templates/ListingIndex/` (was `src/templates/InsightsIndex/`) |
+| **Status** | superseded 22 Oct 2026 by ListingIndex (see the banner above); kept for its reasoning |
+| **Token prefix** | `--lix-*` (`src/styles/tokens/components/listing-index.css`; was `--iix-*`) |
 | **Designer / date** | Claude Code, 13 Oct 2026, to the owner's decision of the same day |
 | **Implements** | Owner decision 13 Oct 2026: "FRONT PAGE + FEED". Reference: The Verge home page, for how it lists many varied items on one page and keeps it interesting and easy to search. A featured lead and a curated mix at the top; rows per format, each its OWN shape; then a latest-first feed carrying the filters (moved off the top, still URL-driven). Beauty is the core factor. |
 | **Implemented at** | `src/templates/InsightsIndex/InsightsIndex.tsx` · `InsightsIndex.module.css` · `src/styles/tokens/components/insights-index.css` · `ListCard` `eyebrow` and `date` marker (extensions, § 3; ListCard spec amendment 13 Oct) · shared mapping `src/app/_insights/hub.ts` · specimen `src/app/design/insights-index/page.tsx` · route `src/app/insights/page.tsx` |

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { getInsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { InsightsIndex } from '@/templates';
+import { ListingIndex } from '@/templates';
 
 import { insightsIndexProps } from '../_insights/hub';
 
@@ -52,14 +52,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The insights hub: a curated page, BY TYPE or BY TOPIC (InsightsIndex). The route reads the CMS and
+ * The insights hub: a curated page, BY TYPE or BY TOPIC (ListingIndex). The route reads the CMS and
  * the URL (`?view=topic`); `insightsIndexProps` maps both onto the template, and the specimen at
- * /design/insights-index runs the same mapping over the stress fixture.
+ * /design/listing-index runs the same mapping over the stress fixture.
  */
 export default async function InsightsPage({ searchParams }: InsightsPageProps) {
   const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
 
   if (!page) notFound();
 
-  return <InsightsIndex {...insightsIndexProps(page, query)} />;
+  return <ListingIndex {...insightsIndexProps(page, query)} />;
 }
