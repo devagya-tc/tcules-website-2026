@@ -4,7 +4,7 @@ Bhumika, Shoghi. Build illustrations, components, patterns and pages inside the 
 the Claude desktop app rather than a terminal.
 
 - **Check the rules before building.** `CLAUDE.md`, and the rulings in `docs/decisions/` (read the
-  index in `docs/decisions/README.md` for the area first). The rules evolve with the design: when
+  index in `docs/decisions/INDEX.md` for the area first; `npm run decisions` writes it). The rules evolve with the design: when
   something doesn't fit or isn't ruled, suggest a change rather than working around it.
 - **Work on a branch, ship with `/ship`.** Claude creates the branch, runs the checks, commits and
   opens the pull request for Devagya. Nobody commits to `main`; it is protected.
