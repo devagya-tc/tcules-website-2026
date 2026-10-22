@@ -1,7 +1,7 @@
 ---
 title: "An illustration passes eight gates: meaning, legibility, set"
 date: 2026-10-22
-status: active
+status: proposed
 area: [illustration]
 source: "Owner, 22 Oct 2026 (Design Systems hero round 5, and a re-test of the six service heroes)"
 supersedes: []

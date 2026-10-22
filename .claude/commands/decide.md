@@ -11,6 +11,12 @@ If that is empty, the ruling is the one the owner just made in this conversation
 one, log each as its own entry. If you cannot tell what was ruled, ask in one line and stop. Never log a
 proposal, a critic's note or your own recommendation: only what the owner decided.
 
+0. **Has it been tested?** A design rule (how something looks, is drawn or is composed) becomes a ruling
+   only after it has been designed and tested and the owner has seen the result (owner, 22 Oct 2026;
+   decisions/2026-10-22-test-before-ruling). Until then it is logged with `status: proposed`. A proposal is
+   read as context and never applied as a rule. It stays out of the brand-framework backlog, and the owner
+   promotes it to `active` after the test. A process ruling, or one the owner made by looking at a built
+   result, can be `active` straight away. When it is unclear which applies, log it as `proposed`.
 1. **Is it already logged?** Read the index in `docs/decisions/README.md` for the ruling's area, and
    `grep -ril` the log for its key words. If an entry already says this, stop and say which. If an entry
    says something this contradicts, the new entry **supersedes** it. Set the old one to

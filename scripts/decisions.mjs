@@ -49,7 +49,7 @@ const AREAS = {
   content: 'Copy, narrative, IA, the CMS seam',
   components: 'Contracts of a named component or pattern',
 };
-const STATUS = ['active', 'superseded'];
+const STATUS = ['active', 'proposed', 'superseded'];
 const DBF_STATUS = ['pending', 'applied', 'none'];
 const CHAPTERS = {
   '00': '00 Cover and Contents',
@@ -174,8 +174,9 @@ for (const e of entries) {
 const link = (e) => `[${e.title}](${e.file})`;
 const active = entries.filter((e) => e.status === 'active');
 const lines = [MARKER, ''];
+const proposed = entries.filter((e) => e.status === 'proposed');
 lines.push(
-  `${active.length} active rulings, ${entries.length - active.length} superseded. Newest first within each area; a ruling in several areas is listed under each.`,
+  `${active.length} active rulings, ${proposed.length} untested proposals, ${entries.length - active.length - proposed.length} superseded. Newest first within each area; a ruling in several areas is listed under each.`,
   '',
 );
 
@@ -208,6 +209,18 @@ for (const [area, blurb] of Object.entries(AREAS)) {
     lines.push(
       `- ${e.date} · ${link(e)}${e.enforced_by && e.enforced_by !== 'review' ? ` · enforced by \`${e.enforced_by}\`` : ''}`,
     );
+  lines.push('');
+}
+
+if (proposed.length) {
+  lines.push(
+    '## Untested proposals',
+    '',
+    'Read as context, never applied as rules. A proposal becomes active only once it has been designed and tested, and the owner promotes it.',
+    '',
+  );
+  for (const e of [...proposed].sort((a, b) => b.id.localeCompare(a.id)))
+    lines.push(`- ${e.date} · ${link(e)} · ${e.area.join(', ')}`);
   lines.push('');
 }
 

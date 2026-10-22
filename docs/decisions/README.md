@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-205 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+202 active rulings, 4 untested proposals, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -88,10 +88,6 @@ stale index.
 - ch05 §9 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md) (2026-10-11)
 - ch05 §4 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md) (2026-10-15)
 - ch05 §4a · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md) (2026-10-16)
-- ch05 §4 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md) (2026-10-22)
-- ch05 §4a · [Illustrations may round corners; thickness only when it means something; no tonal fills](2026-10-22-illustration-corners-thickness-fills.md) (2026-10-22)
-- ch05 §4a, ch05 §4b · [Illustrations draw the subject as an object, on one shared base](2026-10-22-illustration-subject-object-one-base.md) (2026-10-22)
-- ch05 §4, ch05 §4d · [An illustration shows Tcules' selling point, never generic isometric](2026-10-22-illustrations-show-the-usp.md) (2026-10-22)
 
 ## By area
 
@@ -99,6 +95,7 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-22 · [Design and test before ruling; untested rules are proposals](2026-10-22-test-before-ruling.md) · enforced by `decisions (scripts/decisions.mjs)`
 - 2026-10-20 · [The repo is public, so main's protection is enforced](2026-10-20-repo-public-main-protected.md) · enforced by `GitHub ruleset "main" (id 25475637); gh api repos/devagya-tc/tcules-website-2026/branches/main --jq .protected`
 - 2026-10-20 · [The design system lives in an artifact, generated from the repo](2026-10-20-ds-artifact-from-repo.md) · enforced by `npm run ds:build and ds:check (/ds-publish)`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)
@@ -274,10 +271,6 @@ stale index.
 
 *Illustrations, sketches, drawn visuals.*
 
-- 2026-10-22 · [An illustration shows Tcules' selling point, never generic isometric](2026-10-22-illustrations-show-the-usp.md)
-- 2026-10-22 · [Illustrations draw the subject as an object, on one shared base](2026-10-22-illustration-subject-object-one-base.md)
-- 2026-10-22 · [Illustrations may round corners; thickness only when it means something; no tonal fills](2026-10-22-illustration-corners-thickness-fills.md)
-- 2026-10-22 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md)
 - 2026-10-19 · [Bento's drawings are the Sketch scenes, bare and in the light weight](2026-10-19-bento-sketches-are-light.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
@@ -475,6 +468,15 @@ stale index.
 - 2026-09-25 · [A named job gets a component only when composition cannot serve it](2026-09-25-job-is-not-a-component.md)
 - 2026-08-27 · [Prose has no measure; the caller owns the width](2026-08-27-prose-has-no-measure.md)
 - 2026-08-19 · [Component tokens live in tokens/components, not beside the component](2026-08-19-component-tokens-live-in-tokens.md) · enforced by `tokens:check`
+
+## Untested proposals
+
+Read as context, never applied as rules. A proposal becomes active only once it has been designed and tested, and the owner promotes it.
+
+- 2026-10-22 · [An illustration shows Tcules' selling point, never generic isometric](2026-10-22-illustrations-show-the-usp.md) · illustration
+- 2026-10-22 · [Illustrations draw the subject as an object, on one shared base](2026-10-22-illustration-subject-object-one-base.md) · illustration
+- 2026-10-22 · [Illustrations may round corners; thickness only when it means something; no tonal fills](2026-10-22-illustration-corners-thickness-fills.md) · illustration
+- 2026-10-22 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md) · illustration
 
 ## Superseded
 

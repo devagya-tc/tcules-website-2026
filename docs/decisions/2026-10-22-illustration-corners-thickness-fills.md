@@ -1,7 +1,7 @@
 ---
 title: "Illustrations may round corners; thickness only when it means something; no tonal fills"
 date: 2026-10-22
-status: active
+status: proposed
 area: [illustration]
 source: "Devagya, 22 Oct 2026, with Jatin's earlier preference for flat planes"
 supersedes: []

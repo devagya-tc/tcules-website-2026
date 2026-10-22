@@ -1,7 +1,7 @@
 ---
 title: "Illustrations draw the subject as an object, on one shared base"
 date: 2026-10-22
-status: active
+status: proposed
 area: [illustration]
 source: "Devagya, 22 Oct 2026, choosing from the owner's references (docs/research/illustration-references.md)"
 supersedes: []

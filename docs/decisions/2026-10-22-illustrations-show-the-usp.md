@@ -1,7 +1,7 @@
 ---
 title: "An illustration shows Tcules' selling point, never generic isometric"
 date: 2026-10-22
-status: active
+status: proposed
 area: [illustration]
 source: "Jatin's feedback on the service-hero illustrations, relayed and logged by Devagya, 22 Oct 2026"
 supersedes: []
