@@ -62,6 +62,7 @@ stale index.
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
 - ch03 §2 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md) (2026-10-22)
+- ch03 §2 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md) (2026-10-22)
 
 **04 Iconography** — `/dbf-update 04`
 
@@ -179,6 +180,7 @@ stale index.
 *Roles, sizes, families, case.*
 
 - 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
 - 2026-10-15 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md)
@@ -422,6 +424,7 @@ stale index.
 
 *Contracts of a named component or pattern.*
 
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
