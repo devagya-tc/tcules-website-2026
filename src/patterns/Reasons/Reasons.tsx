@@ -22,7 +22,8 @@ export type ReasonsItem = {
 
 /**
  * How the set is held together (owner, 16 Oct 2026, why-us mocks rounds 3–4). One item shape, three
- * ways of ordering six of them without making them read as boxed cards.
+ * ways of ordering the set without making it read as boxed cards. Four reasons (the shape since
+ * 22 Oct 2026) go two across in every arrangement: a 2×2.
  *
  *   open    no rules at all: the gap scale alone draws the grid, `column` (64) between columns and
  *           rows — the row seam of a borderless set, and between columns because each reason is a
@@ -30,11 +31,11 @@ export type ReasonsItem = {
  *           one's words. Each drawing sits beside its words, facing them.
  *           The head reads across the top with the action at its end. (Mock S1.)
  *   boxed   LogoGrid's closed frame: the cells are ruled between, the whole set sits in one rounded
- *           box, and each cell holds its words and drawing at the gutter inset. The frame makes six
+ *           box, and each cell holds its words and drawing at the gutter inset. The frame makes four
  *           different reasons read as one set of equals, as it does for nine marks. (Mock C2a.)
  *   beside  a split: the head takes the leading third as an argued sentence, the action pinned to
- *           its foot, and the set sits in the trailing two thirds, three across, each drawing above
- *           its words, hairline verticals between the columns only. (Mock C2b.)
+ *           its foot, and the set sits in the trailing two thirds, three across (two for four), each
+ *           drawing above its words, hairline verticals between the columns only. (Mock C2b.)
  */
 export type ReasonsArrangement = 'open' | 'boxed' | 'beside';
 
@@ -47,12 +48,15 @@ export type ReasonsProps = {
   heading: string;
   /**
    * The heading's second clause, set in the same h2 and stepped back in ink, so the claim leads and
-   * its gloss follows in one sentence ("A studio built for what ships." + "Six reasons teams stay.").
+   * its gloss follows in one sentence ("A studio built for what ships." + "Four reasons teams stay.").
    * Optional; part of the accessible name, so it must read on from `heading`.
    */
   headingTail?: string;
   headingId: string;
-  /** Three or six reasons — the shapes that fill whole rows at three across. Built for six. */
+  /**
+   * Built for four, set 2×2 (owner, 22 Oct 2026). Three and six are still accepted: they fill whole
+   * rows at three across. Any other count leaves a hole and warns in development.
+   */
   items: readonly ReasonsItem[];
   /** One way to go deeper, composed by the caller: in practice a link `Button` with an arrow. */
   action?: ReactNode;
@@ -71,7 +75,7 @@ const FIGURE_SIZES = '160px';
 
 /**
  * Reasons — why a buyer should choose the studio, as argued reasons each with a drawing of its claim
- * (why-us, owner 16 Oct 2026). The band fits one fold at 1440 with six reasons in every arrangement.
+ * (why-us, owner 16 Oct 2026). The band fits one fold at 1440 with four reasons in every arrangement.
  *
  * The reasons are not cards: nobody clicks or compares them, so no arrangement frames one on its
  * own. `open` uses no line, `beside` divides columns, and `boxed` frames the SET (LogoGrid's
@@ -94,13 +98,15 @@ export function Reasons({
   surface = 'paper',
 }: ReasonsProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
-  if (process.env.NODE_ENV !== 'production' && shown.length !== 3 && shown.length !== 6) {
+  if (process.env.NODE_ENV !== 'production' && ![3, 4, 6].includes(shown.length)) {
     console.warn(
-      `Reasons: ${shown.length} reasons; the set is built for three or six, which fill whole rows.`,
+      `Reasons: ${shown.length} reasons; the set is built for four (or three or six), which fill whole rows.`,
     );
   }
 
   const above = arrangement === 'beside';
+  /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. */
+  const four = shown.length === 4;
 
   const head = (
     <Layout rowGap="block">
@@ -123,10 +129,18 @@ export function Reasons({
       className={cx(
         arrangement === 'boxed' && styles.cells,
         arrangement === 'boxed' && shown.length === 3 && styles.three,
+        arrangement === 'boxed' && four && styles.four,
         arrangement === 'beside' && styles.ruled,
+        arrangement === 'beside' && four && styles.two,
       )}
       columns={
-        above ? { base: 1, md: 3 } : shown.length === 3 ? { base: 1, xl: 3 } : { base: 1, lg: 2, xl: 3 }
+        above
+          ? { base: 1, md: four ? 2 : 3 }
+          : shown.length === 3
+            ? { base: 1, xl: 3 }
+            : four
+              ? { base: 1, lg: 2 }
+              : { base: 1, lg: 2, xl: 3 }
       }
       colGap={arrangement === 'open' ? 'column' : 'none'}
       rowGap={arrangement === 'open' ? 'column' : arrangement === 'beside' ? 'stack' : 'none'}

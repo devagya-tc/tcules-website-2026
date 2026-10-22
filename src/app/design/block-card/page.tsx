@@ -1353,8 +1353,8 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="8c · The icon card · the glyph is the title's em">
             Owner, 7 Oct 2026: size each icon from the card title, from a token; 9 Oct 2026: the
             glyph stands on its own row ABOVE the title, never inline beside it. It is set in
-            the title&rsquo;s own role, so --bcrd-icon-size (1em) is 22 over an h5, 28 over an
-            h4 and 34 over an h3, a text (16) step above the title, stepping with the roles at
+            the title&rsquo;s own role, so --bcrd-icon-size (1em) is 18 over an h5, 22 over an
+            h4 and 34 over the horizontal card&rsquo;s h3, stepping with the roles at
             1023 and 767. An icon card takes no top hairline (that is the text card&rsquo;s); a
             router set that must read as separate objects is boxed (band 8b). A set of icon
             cards is always sm.
@@ -1932,20 +1932,24 @@ export default function BlockCardSpecimenPage() {
         <Layout rowGap="stack">
           <BandHead title="22 · Size steps with the count (visual-direction § 7.2, 5 Oct)">
             The card does not know its count, so it takes its type step as a component size and
-            the set passes it. <code>lg</code> is the one featured, horizontal card (h3 over
-            body-lg); <code>md</code> is two to three cards and every text card (h4 over body);{' '}
-            <code>sm</code> is four to six across (h5 over body-sm). A section&rsquo;s h2 is 43,
-            so card titles always sit at least two rungs below it. Inside every size the copy is
-            one group at <code>text</code> (16): eyebrow, title, body.
+            the set passes it. <code>lg</code> is the one featured card (h4 over body-lg, and the
+            serif h3 when horizontal); <code>md</code> is two to three cards and every text card
+            (h4 over body); <code>sm</code> is four to six across (h5 over body-sm). Card titles
+            are sans; the horizontal card at lg is the one serif title (owner, 22 Oct 2026). Inside
+            every size the copy is one group at <code>text</code> (16): eyebrow, title, body.
           </BandHead>
           <Specimen
             title='size="lg" · md · sm, one record'
-            note="The same case-study record at each step. lg is shown in its own arrangement, the horizontal row; md and sm in tracks of the widths their sets give them (392 and 286 at the cap)."
+            note="The same case-study record at each step. lg is shown in its own arrangement, the horizontal row (the serif h3), then vertical in a two-track set (sans h4 over body-lg); md and sm in tracks of the widths their sets give them (392 and 286 at the cap)."
           >
             <Layout rowGap="column">
               <Rows>
                 <BlockCard {...item(CASE_STUDIES, 1)} orientation="horizontal" size="lg" />
               </Rows>
+              <Cards columns={{ base: 1, md: 2 }}>
+                <BlockCard {...item(CASE_STUDIES, 1)} size="lg" />
+                <BlockCard {...item(CASE_STUDIES, 2)} size="lg" />
+              </Cards>
               <Cards columns={{ base: 1, md: 2, lg: 3 }}>
                 <BlockCard {...item(CASE_STUDIES, 1)} size="md" tracks={3} />
                 <BlockCard {...item(CASE_STUDIES, 2)} size="md" tracks={3} />

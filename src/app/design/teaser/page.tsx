@@ -52,11 +52,27 @@ export default function TeaserSpecimen() {
 
           <Specimen
             title="beside · xl — a section's one featured piece"
-            note="Two equal halves from md, the copy hung from the picture's top edge: meta and image start on one line. Hover: the title underlines and the picture leans in."
+            note="Two equal halves from md, the copy hung from the picture's top edge: meta and image start on one line. The horizontal card keeps the serif h3, the one serif card title (22 Oct 2026). Hover: the title underlines and the picture leans in."
           >
             <ul>
               <Teaser
                 arrangement="beside"
+                size="xl"
+                title="9 UX Design tips to boost your Ecommerce conversion rates"
+                meta={['15 Oct 2026', '11 min read']}
+                body="A field guide to the small decisions that move a checkout: what to test first, and what to leave alone."
+                media={PHOTO}
+                href={HREF}
+              />
+            </ul>
+          </Specimen>
+
+          <Specimen
+            title="stack · xl — a lead over its column"
+            note="Stacked, the featured piece's title is the sans h4 like every other card title (22 Oct 2026); it leads by its picture, its body-lg standfirst and its measure, not by a serif."
+          >
+            <ul>
+              <Teaser
                 size="xl"
                 title="9 UX Design tips to boost your Ecommerce conversion rates"
                 meta={['15 Oct 2026', '11 min read']}

@@ -1,0 +1,81 @@
+/* ══ Component layer — CaseCard ═════════════════════════════════════════════════════
+   Tier 2. One featured case as one card (home's selected work, the case index's featured cases):
+   the 16:9 cover beside the claim (eyebrow, h3, result, the "Read the … case" cue), on the card's
+   ground with a `text` mat. Born as TestimonialCase (16 Oct 2026, round 7); the client's words left
+   the card on 22 Oct 2026 (owner: "case study cards never hold testimonials in them"), so it is a
+   case card and no longer a testimonial (decisions/2026-10-22-case-cards-carry-no-testimonial).
+
+   Naming: --ccd-{part}-{role}
+     parts: ground | radius | rule | inner | title | body | eyebrow | media | ring
+
+   A CARD WITH A GROUND, the same exception to "cards have no boxes" the testimonial card had: a
+   quiet ground with no edge and the 8 radius. On paper it is the tint ground; on tint it is paper.
+   Never blue (index.css § Blue: blue is never a card fill), so the blue surface sets a paper card
+   and paper inks.
+
+   The whole card is its case's link (19 Oct 2026): the cover leans in on hover and focus, the cue's
+   steps are Button's, and the focus ring is the --ccd-ring-* pair, BlockCard's values.
+
+   Every surface restates every token (index.css, rule 2). */
+
+:root {
+  --ccd-radius: var(--radius-8);
+  --ccd-rule-width: var(--border-width-hairline);
+  --ccd-title-text: var(--text-h3);
+  --ccd-title-tracking: var(--text-h3-tracking);
+  --ccd-body-text: var(--text-body-lg);
+  --ccd-eyebrow-text: var(--text-eyebrow);
+  --ccd-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --ccd-media-ratio: var(--ratio-standard);
+  /* The cover is inset in the card, so it takes the smaller radius inside the card's 8. */
+  --ccd-inner-radius: var(--radius-4);
+  /* The linked card's hover and focus: BlockCard's lean-in (1.03, geometry, so one value on every
+     surface) and the focus ring's width and offset. */
+  --ccd-media-zoom: 1.03;
+  --ccd-media-zoom-duration: var(--duration-slow);
+  --ccd-media-zoom-easing: var(--easing-standard);
+  --ccd-ring-width: var(--focus-ring-width);
+  --ccd-ring-offset: var(--focus-ring-offset);
+}
+
+:root,
+[data-surface='paper'] {
+  --ccd-ground: var(--color-paper-deep);
+  --ccd-eyebrow-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  --ccd-title-ink: var(--color-neutral-900);
+  --ccd-body-ink: var(--color-neutral-700); /* 6.5:1+ on paper-deep */
+  /* decoration; 300 read too dark (owner, round 7) */
+  --ccd-media-rule: var(--color-neutral-200);
+  --ccd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
+  --ccd-ring-gap-color: var(--color-paper);
+}
+
+[data-surface='tint'] {
+  --ccd-ground: var(--color-paper);
+  --ccd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --ccd-title-ink: var(--color-neutral-900);
+  --ccd-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --ccd-media-rule: var(--color-neutral-200); /* decoration */
+  --ccd-ring-color: var(--color-brandeis-500); /* 5.51:1 against gap */
+  --ccd-ring-gap-color: var(--color-paper-deep);
+}
+
+[data-surface='ink'] {
+  --ccd-ground: var(--color-neutral-900);
+  --ccd-eyebrow-ink: var(--color-neutral-400);
+  --ccd-title-ink: var(--color-white);
+  --ccd-body-ink: var(--color-neutral-300);
+  --ccd-media-rule: var(--color-neutral-700); /* decoration */
+  --ccd-ring-color: var(--color-brandeis-300); /* 7.32:1 against gap */
+  --ccd-ring-gap-color: var(--color-neutral-950);
+}
+
+[data-surface='blue'] {
+  --ccd-ground: var(--color-paper);
+  --ccd-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --ccd-title-ink: var(--color-neutral-900);
+  --ccd-body-ink: var(--color-neutral-700); /* 7.27:1 on paper */
+  --ccd-media-rule: var(--color-neutral-200); /* decoration */
+  --ccd-ring-color: var(--color-white); /* 6.23:1 against gap */
+  --ccd-ring-gap-color: var(--color-brandeis-500);
+}

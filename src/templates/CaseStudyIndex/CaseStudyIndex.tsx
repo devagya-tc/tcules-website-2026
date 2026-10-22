@@ -4,15 +4,14 @@ import { Layout, Section } from '@/components';
 import {
   BlockCardSet,
   Breadcrumbs,
+  CaseCard,
   CtaSection,
   IndexRail,
   ListCard,
   PageHero,
-  TestimonialCase,
   type BlockCardImage,
   type BreadcrumbItem,
   type HeroAction,
-  type TestimonialItem,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
 import { heroTrail } from '@/lib/trail';
@@ -41,17 +40,17 @@ export type CaseStudyIndexItem = {
   /** The cta wording on a featured card ("Read the Doodle case"). Absent, the card's default. */
   ctaLabel?: string;
   /**
-   * The client's words, with the rating the page passed for them. A case that carries them is
-   * featured as ONE card with its quote (TestimonialCase, home's selected-work shape, 16 Oct 2026),
-   * in whichever section and view it falls, so the quote always travels with its case.
+   * A case the page features: it leads its group as ONE card (CaseCard, home's selected-work shape),
+   * in whichever section and view it falls. The card carries no testimonial (owner, 22 Oct 2026:
+   * "case study cards never hold testimonials in them").
    */
-  quote?: TestimonialItem;
+  featured?: boolean;
 };
 
 /**
  * One group of cases under its own heading (page-mapping G9), one jump target in the rail. The
  * group's ARRANGEMENT is decided here from its position and its count, never from its id, so a new
- * group arrives already shaped. Its quoted cases lead (TestimonialCase, a `gutter` apart, the second
+ * group arrives already shaped. Its featured cases lead (CaseCard, a `gutter` apart, the second
  * mirrored as on home); the rest take:
  *
  *   first, four or more   the featured set: the first case leads at full width, the rest under it
@@ -71,13 +70,13 @@ export type CaseStudyIndexSection = {
 };
 
 /**
- * One way of curating the index — by type of work, by industry — and its sections. The
+ * One way of curating the index — by stage, by industry — and its sections. The
  * same cases, re-sorted: the rail's switch changes the whole column and holds the choice in `?view=`.
  */
 export type CaseStudyIndexView = {
   /** The view's value in the URL. The first view is the default and has none. */
   id: string;
-  /** The switch's label ("By type"). */
+  /** The switch's label ("By stage"). */
   label: string;
   sections: readonly CaseStudyIndexSection[];
 };
@@ -188,9 +187,9 @@ export function CaseStudyIndex({
       />
 
       {views && views.length > 0 ? (
-        /* The rail beside the grouped cases (the insights hub's IndexRail, 19 Oct 2026): BY TYPE,
-           the corpus's own bands (the kind of work), or BY INDUSTRY, the same cases by sector. One paper
-           band; the sections inside it are the rail's jump targets. */
+        /* The rail beside the grouped cases (the insights hub's IndexRail, 19 Oct 2026): BY STAGE,
+           the default (the product's stage when the work began, 22 Oct 2026), or BY INDUSTRY, the same
+           cases by sector. One paper band; the sections inside it are the rail's jump targets. */
         <div data-fold-exempt={FOLD_EXEMPT}>
           <Section surface="paper" aria-label="Case studies">
             <IndexRail
@@ -288,9 +287,9 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
   const { items } = section;
   if (items.length === 0) return null;
 
-  /* A quoted case needs its cover to be the one card: without one it joins the set, quote unshown. */
-  const quoted = items.filter((item) => item.quote && item.cover);
-  const rest = items.filter((item) => !quoted.includes(item));
+  /* A featured case needs its cover to be the one card: without one it joins the set. */
+  const featured = items.filter((item) => item.featured && item.cover);
+  const rest = items.filter((item) => !featured.includes(item));
   const headingId = `${section.id}-heading`;
 
   return (
@@ -298,12 +297,12 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
       <Layout rowGap="gutter">
         <h2 id={headingId}>{section.heading}</h2>
         <Layout rowGap="stack">
-          {quoted.length > 0 ? (
+          {featured.length > 0 ? (
             <Layout rowGap="gutter">
-              {quoted.map((item, row) => {
+              {featured.map((item, row) => {
                 const cover = item.cover!;
                 return (
-                  <TestimonialCase
+                  <CaseCard
                     key={item.id}
                     {...splitClaim(item.title)}
                     {...bodyOf(item)}
@@ -314,7 +313,6 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
                       width: cover.width ?? 1600,
                       height: cover.height ?? 900,
                     }}
-                    item={item.quote!}
                     reverse={row % 2 === 1}
                   />
                 );
@@ -328,7 +326,7 @@ function SectionView({ section, first }: { section: CaseStudyIndexSection; first
   );
 }
 
-/** A group's unquoted cases, in the shape their position and count call for. */
+/** A group's other cases, in the shape their position and count call for. */
 function CaseSet({ items, first }: { items: readonly CaseStudyIndexItem[]; first: boolean }) {
   /* The first group, four or more: the featured set. */
   if (first && items.length >= 4) {

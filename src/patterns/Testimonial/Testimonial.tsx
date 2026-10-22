@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import {
   Button,
@@ -11,7 +11,7 @@ import {
   type MediaImage,
 } from '@/components';
 import { cx } from '@/lib/cx';
-import { TESTIMONIAL_AVATAR, TESTIMONIAL_CASE_COVER } from '@/lib/image-sizes';
+import { TESTIMONIAL_AVATAR } from '@/lib/image-sizes';
 
 import styles from './Testimonial.module.css';
 
@@ -74,18 +74,6 @@ export type TestimonialSize = 'md' | 'sm';
  * surface, for a supporting quote that should not read as a second object in its row.
  */
 export type TestimonialFrame = 'box' | 'none';
-
-/**
- * The quote's voice (owner, 15 Oct 2026: "when placed next to some content, i think they can be
- * italics, but in the grid of testimonials, it can remain normal").
- *
- *   upright  the default, and always in a wall: there every item is a quote, so nothing needs
- *            marking as one.
- *   italic   the sans italic, for a quote set BESIDE other content (a case, a claim, an offer),
- *            where the lean separates the client's words from the page's own. TestimonialBeside
- *            defaults to it.
- */
-export type TestimonialVoice = 'upright' | 'italic';
 
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Testimonial: ${message}`);
@@ -167,8 +155,6 @@ export type TestimonialCardProps = {
   as?: 'li' | 'div';
   /** Stretch to the row's height, the attribution pinned to the foot (a row of peers). */
   fill?: boolean;
-  /** Default `upright`. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
 };
 
 /**
@@ -182,7 +168,6 @@ export function TestimonialCard({
   frame = 'box',
   as: Root = 'div',
   fill = false,
-  voice = 'upright',
 }: TestimonialCardProps) {
   if (!valid(item)) return null;
   /* Every testimonial carries its star rating (owner, 12 Oct 2026); say so when one arrives without. */
@@ -211,7 +196,7 @@ export function TestimonialCard({
             onCard={frame === 'box'}
           />
         ) : null}
-        <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
+        <blockquote className={styles.quote}>
           <Prose
             html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
             className={styles.quoteProse}
@@ -409,8 +394,6 @@ export type TestimonialBesideProps = {
   reverse?: boolean;
   /** Default `card`. See `TestimonialBesideArrangement`. */
   arrangement?: TestimonialBesideArrangement;
-  /** Default `italic`: the quote sits beside the work. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
 };
 
 /**
@@ -424,7 +407,6 @@ export function TestimonialBeside({
   item,
   reverse = false,
   arrangement = 'card',
-  voice = 'italic',
 }: TestimonialBesideProps) {
   if (!valid(item)) return <>{work}</>;
   if (arrangement === 'diptych') {
@@ -452,9 +434,7 @@ export function TestimonialBeside({
           {typeof item.rating === 'number' ? (
             <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
           ) : null}
-          <blockquote
-            className={cx(styles.quote, styles.quotePanel, voice === 'italic' && styles.italic)}
-          >
+          <blockquote className={cx(styles.quote, styles.quotePanel)}>
             <Prose
               html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
               className={styles.quoteProse}
@@ -487,191 +467,7 @@ export function TestimonialBeside({
       className={styles.beside}
     >
       {work}
-      <TestimonialCard item={item} voice={voice} />
+      <TestimonialCard item={item} />
     </Layout>
-  );
-}
-
-/* ── The case with its client's words, as one card ──────────────────────────────── */
-
-export type TestimonialCaseProps = {
-  /** A short label above the claim: the client, optionally its discipline ("Doodle · Product design"). */
-  eyebrow?: string;
-  /** The case's claim ("Meeting times people will actually keep"). */
-  title: string;
-  /** Default `h3`: a case under the band's h2. */
-  titleAs?: 'h2' | 'h3' | 'h4';
-  /** The result, plain text. `bodyHtml` wins when both are given. */
-  body?: string;
-  /** The result as trusted, content-seam-sanitised HTML, one paragraph each. */
-  bodyHtml?: readonly string[];
-  /** The case page: the whole card links to it. */
-  href: string;
-  /**
-   * "Read the Doodle case". Button sets the label's case, so pass ordinary capitalisation. The
-   * card's cue, not a second link: the whole card is the one anchor.
-   */
-  ctaLabel: string;
-  /** The evidence, framed at the card ratio (16:9) and cropped at its `focus`. */
-  image: MediaImage;
-  /** What the client said. Without a valid quote the card is still the case, with no voice box. */
-  item: TestimonialItem;
-  /**
-   * The cover on the END from 1024, the claim at the start. Visual only: the DOM keeps the cover
-   * first, so a phone reads cover, claim, voice in every card.
-   */
-  reverse?: boolean;
-  /** Default `italic`: the client's words sit beside the page's own. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
-};
-
-/**
- * TestimonialCase — a featured case and its client's words as ONE card (owner, 16 Oct 2026: the
- * case + quote diptych "reads as disjointed, and as 3 units instead of one"; this shape approved
- * in round 7 of the selected-work card mocks).
- *
- *   ┌ the card's ground, a `text` mat ────────────────────────────────┐
- *   │ [ cover, 16:9, hairline ]   eyebrow · claim (h3) · result        │
- *   │                             read the case →          (pinned)    │
- *   │ ┌ the voice box, full width, centred ────────────────────────┐   │
- *   │ │                ★★★★★                                       │   │
- *   │ │         “the client's words”                               │   │
- *   │ │         (portrait) name / role                             │   │
- *   │ └────────────────────────────────────────────────────────────┘   │
- *   └──────────────────────────────────────────────────────────────────┘
- *
- * The voice is its own box INSIDE the card (owner, round 7: "put the testimonial inside a box that
- * stays inside the card"), so it reads as part of the case, and its parts stack as one unit, stars
- * over words over the speaker, rather than spreading across the box as three items. Stars carry
- * the rating alone: no numeral. Below 1024 one column: cover, claim, link, voice.
- *
- * The WHOLE CARD is the case's link (owner, 19 Oct 2026: "the card isn't clickable, only the link
- * is"), BlockCard's single-anchor contract: one <a> holds the card, the "Read the … case" line is a
- * link Button rendered `as="span"` (one focus stop, no nested anchor), and `data-btn-link-group`
- * hands it the card's hover, focus and press. On hover and focus the cover leans in inside its
- * still, ruled box, as a covered BlockCard's does. The anchor is named by its claim and its cue
- * (`aria-labelledby`), not by everything it holds: the quote and the story stay readable inside it.
- *
- * A story or quote with a link of its own cannot sit inside the card's anchor (BlockCard's
- * `linkScope="cta"`, G3b): the card falls back to a still frame and the cue becomes the one real
- * link, in the tab order.
- */
-export function TestimonialCase({
-  eyebrow,
-  title,
-  titleAs: Title = 'h3',
-  body,
-  bodyHtml,
-  href,
-  ctaLabel,
-  image,
-  item,
-  reverse = false,
-  voice = 'italic',
-}: TestimonialCaseProps) {
-  const paragraphs = bodyHtml?.filter((html) => html.trim().length > 0) ?? [];
-  const story =
-    paragraphs.length > 0 ? (
-      <Layout rowGap="text" className={styles.caseBody}>
-        {paragraphs.map((html, index) => (
-          <Prose key={index} html={html} className={styles.caseProse} />
-        ))}
-      </Layout>
-    ) : body?.trim() ? (
-      <p className={styles.caseBody}>{body}</p>
-    ) : null;
-  const voiced = valid(item);
-  const role = filled(item.role) ? `${item.role}, ${item.company}` : item.company;
-  const id = useId();
-  const titleId = `${id}-title`;
-  const cueId = `${id}-cue`;
-  const ownLinks = [...paragraphs, voiced ? item.quoteHtml : ''].some((html) =>
-    /<a[\s>]/i.test(html),
-  );
-  const content = (
-    <Layout rowGap="text">
-      <Layout
-        columns={{ base: 1, lg: [7, 5] }}
-        reverse={reverse ? { lg: true } : undefined}
-        colGap="stack"
-        rowGap="inline"
-      >
-        <span className={styles.caseMedia}>
-          <span className={styles.caseZoom}>
-            <Media image={image} sizes={TESTIMONIAL_CASE_COVER} fit="fill" edge="placement" />
-          </span>
-        </span>
-        <Layout rowGap="gutter" pinLast className={styles.caseCopy}>
-          <Layout rowGap="text">
-            {filled(eyebrow) ? <span className={styles.caseEyebrow}>{eyebrow}</span> : null}
-            <Title id={titleId} className={styles.caseTitle}>
-              {title}
-            </Title>
-            {story}
-          </Layout>
-          <Cluster>
-            {ownLinks ? (
-              <Button
-                as="a"
-                href={href}
-                emphasis="link"
-                tone="primary"
-                icon={<Icon name="arrow-right" />}
-              >
-                {ctaLabel}
-              </Button>
-            ) : (
-              <Button
-                as="span"
-                id={cueId}
-                emphasis="link"
-                tone="primary"
-                icon={<Icon name="arrow-right" />}
-              >
-                {ctaLabel}
-              </Button>
-            )}
-          </Cluster>
-        </Layout>
-      </Layout>
-      {voiced ? (
-        <Layout as="figure" rowGap="text" justifyItems="center" className={styles.caseVoice}>
-          {typeof item.rating === 'number' ? (
-            <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
-          ) : null}
-          <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
-            <Prose
-              html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
-              className={styles.quoteProse}
-            />
-          </blockquote>
-          <figcaption>
-            <Cluster nowrap colGap="text" align="center" className={styles.attribution}>
-              {item.avatar ? <Avatar avatar={item.avatar} size="md" /> : null}
-              <Layout rowGap="inline" className={styles.who}>
-                <span className={styles.name}>{item.name}</span>
-                <span className={styles.role}>{role}</span>
-              </Layout>
-            </Cluster>
-          </figcaption>
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-  return (
-    <article className={styles.caseArticle}>
-      {ownLinks ? (
-        <div className={styles.caseCard}>{content}</div>
-      ) : (
-        <a
-          className={styles.caseCard}
-          href={href}
-          aria-labelledby={`${titleId} ${cueId}`}
-          data-btn-link-group
-        >
-          {content}
-        </a>
-      )}
-    </article>
   );
 }

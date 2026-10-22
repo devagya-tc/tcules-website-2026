@@ -238,6 +238,11 @@ const SPECIMENS = [
         note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',
       },
       {
+        href: '/design/case-card',
+        name: 'CaseCard',
+        note: "one featured case as one card — the 16:9 cover beside its claim, the whole card the case's link; reverse, a story with its own link, no eyebrow with a long claim, the 326 track, 4 surfaces. No testimonial (22 Oct 2026)",
+      },
+      {
         href: '/design/offer-sheet',
         name: 'OfferSheet',
         note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
@@ -250,7 +255,7 @@ const SPECIMENS = [
       {
         href: '/design/reasons',
         name: 'Reasons',
-        note: 'why choose us — six argued reasons each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, three reasons, a bare head, tint',
+        note: 'why choose us — four argued reasons 2×2, each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, the longest copy, three and six reasons, a bare head, tint',
       },
       {
         href: '/design/voice-ledger',

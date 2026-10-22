@@ -3,8 +3,8 @@
  * route.
  *
  * Home's "Why teams choose Tcules" is drawn as the Reasons pattern, `open` (owner, 19 Oct 2026). The
- * pattern holds three or six short reasons, each with an isometric drawing of its claim; the corpus
- * authors four longer reasons with quotes, which leave a gap row and have no drawings. These six are
+ * pattern holds four short reasons in a 2×2 (owner, 22 Oct 2026), each with an isometric drawing of
+ * its claim; the corpus authors four longer reasons with quotes and no drawings. These four are
  * the length guide from docs/content-proposals.md P48, with the drawings made for them, and they
  * are NOT proposed copy: the claims (week-one screens, metric tracking) need the content team's
  * sign-off. Read only through `getPlaceholderReasons` (source.ts).
@@ -14,14 +14,12 @@ export type PlaceholderReasonsRef = {
   items: readonly { title: string; body: string; figure: keyof typeof FIGURES }[];
 };
 
-/** The six drawings on paper; the intrinsic sizes are the exported SVGs'. */
+/** The four drawings on paper; the intrinsic sizes are the exported SVGs'. */
 const FIGURES = {
   'same-people': [399, 359],
   'ships-as-code': [399, 356],
   'week-one': [420, 351],
   'the-number': [378, 358],
-  'ai-trust': [420, 373],
-  'system-kept': [383, 368],
 } as const;
 
 export const figureOf = (name: keyof typeof FIGURES) => ({
@@ -53,16 +51,6 @@ export const PLACEHOLDER_REASONS: Readonly<Record<string, PlaceholderReasonsRef>
         title: 'Judged on the number',
         body: 'We agree the metric that matters first, and track it after launch.',
         figure: 'the-number',
-      },
-      {
-        title: 'AI that people trust',
-        body: 'AI features designed around what people check, accept and correct.',
-        figure: 'ai-trust',
-      },
-      {
-        title: 'A system your team keeps',
-        body: 'A documented design system, so the product holds its shape after we leave.',
-        figure: 'system-kept',
       },
     ],
   },

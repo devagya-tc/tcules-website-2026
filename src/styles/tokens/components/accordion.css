@@ -45,10 +45,11 @@
      often 150–300px, and at 140ms that distance reads as a snap — the jump this replaces. Slow
      (360) made a seven-item FAQ feel heavy to scan. */
   --acc-reveal-duration: var(--duration-medium);
-  /* The question's role (home round 3): the serif h5 (22, medium) over the 16 sans answer — a 1.38
-     size step, a family change and, now, a full ink step. */
-  --acc-question-text: var(--text-h5);
-  --acc-question-tracking: var(--text-h5-tracking);
+  /* The question's role: h5-lg (20 sans, medium; 18 on a phone) over the answer — the owner's 20px
+     question (22 Oct 2026), so the question out-ranks its answer by size and ink while sitting a
+     step under a band's h4. Was h5 (18), the card-title size. */
+  --acc-question-text: var(--text-h5-lg);
+  --acc-question-tracking: var(--text-h5-lg-tracking);
 }
 
 /* Paper: the question at full ink, the answer a clear step under it. The mark rests at the accent

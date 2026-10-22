@@ -1,10 +1,4 @@
-import {
-  BlockCard,
-  TestimonialBeside,
-  TestimonialCard,
-  TestimonialCase,
-  TestimonialWall,
-} from '@/patterns';
+import { BlockCard, TestimonialBeside, TestimonialCard, TestimonialWall } from '@/patterns';
 import { Layout, Section, type SectionSurface } from '@/components';
 import type { TestimonialAvatar, TestimonialItem } from '@/patterns';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
@@ -104,16 +98,6 @@ function Work() {
   );
 }
 
-/* A case for TestimonialCase: stress copy and a kit photograph standing in for a product capture. */
-const CASE = {
-  eyebrow: 'Northwind · Product design',
-  title: 'One way into the workflow builder',
-  body: 'Users could start from a template, ask the AI for help or start from scratch, and each felt like a separate path. We brought all three into one starting point.',
-  href: '#',
-  ctaLabel: 'Read the Northwind case',
-  image: getKitPhoto('team-laptops-table', { alt: 'The Northwind team reviewing the builder' }),
-};
-
 export default function TestimonialSpecimen() {
   return (
     <>
@@ -137,7 +121,7 @@ export default function TestimonialSpecimen() {
           <Layout columns={{ lg: 3 }} colGap="gutter" rowGap="stack">
             <Specimen
               title="md · box · avatar"
-              note="the default: a wall, or beside its case; the 48 circular avatar beside the speaker"
+              note="the default: a wall, or beside its case; the quote in the sans italic, every arrangement; the 48 circular avatar beside the speaker"
             >
               <TestimonialCard item={A} />
             </Specimen>
@@ -158,18 +142,6 @@ export default function TestimonialSpecimen() {
             </Specimen>
             <Specimen title="sm · none · avatar" note="the supporting card's 40 avatar">
               <TestimonialCard item={E} size="sm" frame="none" />
-            </Specimen>
-            <Specimen
-              title={'md · box · voice="italic"'}
-              note="the sans italic, for a quote set beside other content; walls stay upright"
-            >
-              <TestimonialCard item={A} voice="italic" />
-            </Specimen>
-            <Specimen
-              title={'sm · none · voice="italic"'}
-              note="the supporting quote beside a claim, as home's why-Tcules rows use it"
-            >
-              <TestimonialCard item={E} size="sm" frame="none" voice="italic" />
             </Specimen>
           </Layout>
         </Layout>
@@ -250,43 +222,6 @@ export default function TestimonialSpecimen() {
         </Layout>
       </Section>
 
-      <Section>
-        <Layout rowGap="stack">
-          <h2>5a · The case and its words as one card</h2>
-          <Specimen
-            title="TestimonialCase"
-            note="home's selected work (16 Oct 2026, round 7): one card on the boxed card's ground with a text mat. The 16:9 cover (hairlined) beside the eyebrow, claim and result on [7, 5], the action pinned to the foot; under both, the client's words in their own full-width box, centred: stars, quote, portrait with name and role. One column below 1024. The whole card is the case's link (19 Oct 2026): hover or focus it and the cover leans in and the cue underlines; one tab stop, named by the claim and the cue."
-          >
-            <TestimonialCase {...CASE} item={A} />
-          </Specimen>
-          <Specimen
-            title="TestimonialCase · a story with its own link"
-            note="stress: a link inside the story cannot sit inside the card's anchor, so the card is a still frame and the cue is the one real link (BlockCard's linkScope cta)"
-          >
-            <TestimonialCase
-              {...CASE}
-              body={undefined}
-              bodyHtml={[
-                'We rebuilt the planner around the <a href="#">object model</a> the research found.',
-              ]}
-              item={A}
-            />
-          </Specimen>
-          <Specimen
-            title="TestimonialCase · reverse · no avatar"
-            note="the second card of a run mirrors the first from 1024; the DOM keeps the cover first. No photograph: no avatar"
-          >
-            <TestimonialCase {...CASE} item={D} reverse />
-          </Specimen>
-          <Specimen
-            title="TestimonialCase · long quote"
-            note="stress: a long quote; the voice box grows and the quote holds its measure, nothing clips"
-          >
-            <TestimonialCase {...CASE} item={B} />
-          </Specimen>
-        </Layout>
-      </Section>
-
       {SURFACES.map((surface, index) => (
         <Section key={surface} surface={surface}>
           <Layout rowGap="stack">
@@ -296,12 +231,6 @@ export default function TestimonialSpecimen() {
                 <TestimonialCard item={A} />
                 <TestimonialCard item={C} size="sm" frame="none" />
               </Layout>
-            </Specimen>
-            <Specimen
-              title={`${surface} · TestimonialCase`}
-              note="the card's ground and inks on this surface"
-            >
-              <TestimonialCase {...CASE} item={A} />
             </Specimen>
           </Layout>
         </Section>
