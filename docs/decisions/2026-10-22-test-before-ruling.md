@@ -21,7 +21,8 @@ ruling at all. if we do store them, then they should be marked as untested propo
 **The mistake it prevents.** On 22 Oct, the illustration acceptance gates, "show the USP", "subject as an
 object on one base" and "corners, thickness, fills" were logged as active rulings, pending for ch05, before a
 single illustration had been drawn against them. `/dbf-update 05` would have written untested rules into the
-brand chapter. All four are now `proposed`.
+brand chapter. All four were withdrawn the same day; what was tried and why it failed is recorded in
+`docs/research/illustration-exploration-retro-2026-10-22.md`.
 
 **How to apply.**
 - `/decide` asks whether a rule has been tested before logging it (step 0).

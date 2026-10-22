@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-202 active rulings, 4 untested proposals, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+202 active rulings, 0 untested proposals, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -468,15 +468,6 @@ stale index.
 - 2026-09-25 · [A named job gets a component only when composition cannot serve it](2026-09-25-job-is-not-a-component.md)
 - 2026-08-27 · [Prose has no measure; the caller owns the width](2026-08-27-prose-has-no-measure.md)
 - 2026-08-19 · [Component tokens live in tokens/components, not beside the component](2026-08-19-component-tokens-live-in-tokens.md) · enforced by `tokens:check`
-
-## Untested proposals
-
-Read as context, never applied as rules. A proposal becomes active only once it has been designed and tested, and the owner promotes it.
-
-- 2026-10-22 · [An illustration shows Tcules' selling point, never generic isometric](2026-10-22-illustrations-show-the-usp.md) · illustration
-- 2026-10-22 · [Illustrations draw the subject as an object, on one shared base](2026-10-22-illustration-subject-object-one-base.md) · illustration
-- 2026-10-22 · [Illustrations may round corners; thickness only when it means something; no tonal fills](2026-10-22-illustration-corners-thickness-fills.md) · illustration
-- 2026-10-22 · [An illustration passes eight gates: meaning, legibility, set](2026-10-22-illustration-acceptance-gates.md) · illustration
 
 ## Superseded
 
