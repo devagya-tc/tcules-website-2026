@@ -56,17 +56,22 @@
      know its count, so it takes the step as a component size and the set passes it — BlockCardSet,
      or the composing route. A section h2 is 43px, so its cards sit at least two rungs below it:
 
-       lg  h3 + body-lg   the one featured, horizontal card. A row spanning the column beside its
-                          image is a heavier object than a tile, and weight comes from type scale,
-                          not from a box (ruling C2). It was the horizontal arrangement's own swap
-                          (--bcrd-title-text-horizontal) with the tile's 16px body; the body now
-                          steps with the title. The horizontal default.
+       lg  h4 + body-lg   the one featured card. The horizontal default, where its title takes the
+                          serif instead (below). A vertical card at lg is the md title over the
+                          larger body: weight from the body and the cover, not a bigger sans.
        md  h4 + body      two to three cards; text cards. The vertical default.
        sm  h5 + body-sm   four to six cards across — a 286px track, where h4 set five words a line.
 
+     Card titles are sans (owner, 22 Oct 2026; decisions/2026-10-22-card-titles-sans-except-horizontal).
+     The one exception is the horizontal card at lg: a row spanning the column beside its image is
+     a heavier object than a tile, its weight comes from type scale, not from a box (ruling C2), and
+     the serif reads nicer there. h3 is the smallest serif role, so that is its step.
+
      Every title role re-declares itself at 1023 and 767, so no step needs a breakpoint here. */
-  --bcrd-title-text-lg: var(--text-h3);
-  --bcrd-title-tracking-lg: var(--text-h3-tracking);
+  --bcrd-title-text-lg: var(--text-h4);
+  --bcrd-title-tracking-lg: var(--text-h4-tracking);
+  --bcrd-title-text-horizontal: var(--text-h3);
+  --bcrd-title-tracking-horizontal: var(--text-h3-tracking);
   --bcrd-body-text-lg: var(--text-body-lg);
   --bcrd-title-text-md: var(--text-h4);
   --bcrd-title-tracking-md: var(--text-h4-tracking);
@@ -104,8 +109,8 @@
 
   /* The icon card's glyph: the em of the title beside it (owner, 7 Oct 2026 — the 32 glyph was far
      too big; size it to the title, from a token, not by eye). The glyph is set in the title's own
-     role for the card's size step, so 1em is 22 beside an h5 (sm), 28 beside an h4 (md) and 34
-     beside an h3 (lg), and it follows each role's 1023 / 767 steps by itself. It centres on the
+     role for the card's size step, so 1em is 18 beside an h5 (sm), 22 beside an h4 (md and a
+     vertical lg) and 34 beside the horizontal lg's h3, and it follows each role's 1023 / 767 steps by itself. It centres on the
      title's first line box (1lh), so the glyph's square spans ascender to descender — the line-height
      relationship, with the half-leading above and below. A component size, relative on purpose. */
   --bcrd-icon-size: 1em;

@@ -47,7 +47,7 @@ bound by proximity and anchored by what heads it. Teaser is that object and only
 ## 4 · Variants × sizes
 
 `stack` at every size; `beside` at `xl`/`lg` (a section's feature); `row` at `lg` (dated events, thumb
-15rem) and `sm` (lists, thumb 9rem). Title roles: xl h3 · lg h4 · md h5 · sm h6; body body-lg · body ·
+15rem) and `sm` (lists, thumb 9rem). Title roles: xl h4 (h3 when `beside`, 22 Oct 2026) · lg h4 · md h5 · sm h6; body body-lg · body ·
 body-sm · body-sm.
 
 ## 5 · States
@@ -82,7 +82,7 @@ radius and the tone ground. The item sets no outer spacing: the set's Layout own
 
 ## 8 · Typography
 
-Titles in the serif title roles, wrapped `pretty`; meta in the mono micro role and the date label in
+Titles in the sans title roles, the `beside` xl in the serif h3 (card titles are sans except the horizontal card, 22 Oct 2026), wrapped `pretty`; meta in the mono micro role and the date label in
 the eyebrow role, uppercase by `--text-mono-case`; a mixed set's `label` leads the meta in the title's
 ink; the day numeral in the stat role, in ink; an ordinal in the index role; body in sans. Never the serif for body copy.
 

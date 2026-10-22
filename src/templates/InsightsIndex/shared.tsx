@@ -539,7 +539,10 @@ export function SectionHead({
   );
 }
 
-/** One curated section of a view: a jump target with its one-line head over its shape. */
+/**
+ * One curated section of a view: a jump target with its one-line head over its shape, a `stack`
+ * apart (owner, 22 Oct 2026: at `gutter` the head sat too close to its pieces).
+ */
 export function CuratedSection({
   id,
   head,
@@ -551,7 +554,7 @@ export function CuratedSection({
 }) {
   return (
     <section id={id} aria-labelledby={`${id}-heading`} className={styles.curated}>
-      <Layout rowGap="gutter">
+      <Layout rowGap="stack">
         {head}
         {children}
       </Layout>
