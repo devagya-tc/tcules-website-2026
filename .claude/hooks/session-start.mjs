@@ -99,15 +99,20 @@ const branch = git(WORK, ['rev-parse', '--abbrev-ref', 'HEAD']).out || '?';
 const upstream = git(WORK, ['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}']);
 const dirty = git(WORK, ['status', '--porcelain']).out.split('\n').filter(Boolean);
 const dirtyList = (rows) => rows.slice(0, 12).map((l) => l.slice(3)).join(', ') + (rows.length > 12 ? `, and ${rows.length - 12} more` : '');
+/* Only changes to tracked files block the update. A new, never-saved file (`??`) can't be touched by a
+   fast-forward: git refuses on its own if an incoming file would overwrite it, and that refusal is
+   reported below. Counting new files as blocking meant one image dropped into the folder stopped
+   every future update. They are still listed as unsaved work. */
+const blocking = dirty.filter((l) => !l.startsWith('??'));
 
 if (fetched.ok && upstream.ok) {
   const behind = Number(git(WORK, ['rev-list', '--count', 'HEAD..@{u}']).out || 0);
-  if (behind > 0 && dirty.length === 0) {
+  if (behind > 0 && blocking.length === 0) {
     const ff = git(WORK, ['merge', '--ff-only', '@{u}'], 20000);
     facts.push(
       ff.ok
         ? `Brought "${branch}" up to date: ${behind} new change(s) from GitHub.`
-        : `"${branch}" is ${behind} change(s) behind GitHub but couldn't be updated without combining work (${ff.err.split('\n')[0]}); it was left as it is.`,
+        : `"${branch}" is ${behind} change(s) behind GitHub but couldn't be updated safely (${ff.err.split('\n')[0]}); it was left as it is.`,
     );
   } else if (behind > 0) {
     facts.push(`"${branch}" is ${behind} change(s) behind GitHub and was NOT updated, because this folder has work that isn't saved yet.`);
@@ -132,7 +137,7 @@ lines.push(
   "- The rule behind it: nothing is ever discarded, overwritten or set aside without the person choosing it. When there's unsaved work, a conflict or anything else in the way, the session says what it is and what the choices are, then carries on with what the person asked for; it never stops and waits on it.",
   '- Nothing deletes a worktree or folder before checking it for unsaved and untracked files and asking about them.',
   '- Shared context: the rules live in CLAUDE.md and docs/decisions/; what\'s happening lives on GitHub. The practice is to read `gh pr list --state open` and the latest comment starting "Handoff" on this branch\'s pull request (and on the others, briefly), and to open the first reply with a catch-up of 5 lines or fewer built from that and the facts above.',
-  '- Rulings: a ruling is valid once Devagya logs it with /decide. Jatin gives final approval in feedback sessions and Devagya logs those for him; Devagya also makes his own, which a later session with Jatin may supersede. Anyone else\'s idea is a proposal until then.',
+  '- Rulings: a ruling is valid once Devagya logs it with /decide. Jatin gives final approval in feedback sessions and Devagya logs those for Jatin; Devagya also makes rulings independently, which a later session with Jatin may supersede. Anyone else\'s idea is a proposal until then.',
   technical
     ? '- This person is technical: git terms are fine.'
     : "- This person isn't technical. Never tell them to rebase, stash, reset, merge or force-push. Describe things in terms of their work (\"changes to the enquiry form and two new images\"), offer plain choices (\"keep it and continue, save it as its own piece of work, or set it aside?\"), and do the git work for them once they choose. Explain only the outcome.",

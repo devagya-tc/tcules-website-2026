@@ -359,7 +359,7 @@ reopened by a spec, a critic or a reference. The owner overturns one with a new 
 it, and the old entry is kept.
 
 - **A ruling is valid once Devagya logs it.** Jatin has the final approval and gives it in feedback
-  sessions; Devagya logs those on his behalf, and his own rulings too, which a later session with Jatin
+  sessions; Devagya logs those on Jatin's behalf, and Devagya's own rulings too, which a later session with Jatin
   may supersede. Anyone else's idea is a proposal until then (owner, 22 Oct 2026;
   decisions/2026-10-22-rulings-valid-once-devagya-logs-them).
 - **`/decide` logs a ruling in the same PR as the change that applies it**, the way `docs/TRACKER.md` is

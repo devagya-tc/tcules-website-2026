@@ -4,7 +4,7 @@
  * hand any failure straight back to Claude so it fixes the cause before moving on.
  *
  * Bhumika works in the Claude desktop app, not a terminal, so `npm run verify` before a pull request
- * is something she would never see fail. These are the fast, dependency-free checks (well under a
+ * is something Bhumika would never see fail. These are the fast, dependency-free checks (well under a
  * second each): tokens:check for stylesheets, classes:check for CSS Modules and the TSX that reads
  * them, specimens:check for anything a /design route covers. lint and typecheck need node_modules and
  * a build, so /ship runs `npm run verify` once before the pull request instead.

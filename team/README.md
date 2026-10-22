@@ -5,7 +5,7 @@ session starts blank. This setup gives every session the same context, whoever i
 
 | What | Where | Changed by |
 |---|---|---|
-| The rules: rulings, brand chapters, components, `CLAUDE.md` | this repo | Devagya, through pull requests. A ruling is valid once he logs it: his own, or Jatin's from a feedback session |
+| The rules: rulings, brand chapters, components, `CLAUDE.md` | this repo | Devagya, through pull requests. A ruling is valid once Devagya logs it: Devagya's own, or Jatin's from a feedback session |
 | What's happening: open work, recent merges, handoff notes | GitHub: pull requests and their "Handoff" comments | everyone, through `/ship` and `/handoff` |
 | Who is at the keyboard, and their role's settings | your own clone folder, never pushed; copied into new worktrees (`.worktreeinclude`) | you, once, with `/onboard` |
 
