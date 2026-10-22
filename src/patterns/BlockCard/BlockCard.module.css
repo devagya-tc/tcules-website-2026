@@ -223,6 +223,13 @@
   font: var(--bcrd-body-text-lg);
 }
 
+/* The one serif card title: the horizontal card at lg (22 Oct 2026). Every other card title is sans. */
+.horizontal.sizeLg .title,
+.horizontal.sizeLg .icon {
+  font: var(--bcrd-title-text-horizontal);
+  letter-spacing: var(--bcrd-title-tracking-horizontal);
+}
+
 .sizeMd .title,
 .sizeMd .icon {
   font: var(--bcrd-title-text-md);

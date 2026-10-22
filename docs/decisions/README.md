@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-199 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+201 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -61,6 +61,7 @@ stale index.
 - ch03 §2 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md) (2026-10-15)
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
+- ch03 §6 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md) (2026-10-22)
 - ch03 §2 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md) (2026-10-22)
 - ch03 §2 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md) (2026-10-22)
 
@@ -167,6 +168,7 @@ stale index.
 
 *The gap scale and section air.*
 
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)
 - 2026-10-13 · [Island's inset is the band's air in miniature](2026-10-13-island-inset-is-band-air.md)
 - 2026-10-11 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md)
@@ -180,7 +182,9 @@ stale index.
 *Roles, sizes, families, case.*
 
 - 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [Listing group heads take h3, a stack above their pieces](2026-10-22-listing-group-heads-h3.md)
 - 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
 - 2026-10-15 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md)
@@ -319,6 +323,7 @@ stale index.
 *Card sets and their variants.*
 
 - 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
+- 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
 - 2026-10-19 · [The gateway board's items are 64 apart, not the 32 card-set gutter](2026-10-19-gateway-board-column-gap-64.md)

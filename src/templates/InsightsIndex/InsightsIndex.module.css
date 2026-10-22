@@ -8,7 +8,7 @@
   scroll-margin-block-start: var(--iix-scroll-top);
 }
 
-/* A section's one-line head: a quiet serif signpost, below the lead piece's title. */
+/* A section's one-line head: the h3 serif, above its pieces' sans titles (22 Oct 2026). */
 .sectionTitle {
   color: var(--iix-section-title-ink);
   font: var(--iix-section-title-text);
