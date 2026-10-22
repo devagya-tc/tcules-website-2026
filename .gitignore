@@ -47,7 +47,7 @@ yarn-error.log*
 # specimen screenshots (npm run shots)
 /.shots/
 
-# Design Hub: each person's identity lives in their own clone and is never pushed (team/README.md)
+# Each person's identity and role settings live in their own clone and are never pushed (team/README.md)
 /CLAUDE.local.md
 /.claude/settings.local.json
 

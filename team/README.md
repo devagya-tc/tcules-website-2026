@@ -1,47 +1,46 @@
-# The website team in Claude Code: the Design Hub
+# The website team in Claude Code
 
-Several people work in this repo, each with Claude, and every Claude session starts blank. The Design
-Hub gives every session the same context, whoever is signed in:
+Several people work in this repo with Claude, several on a shared Claude account, and every Claude
+session starts blank. This setup gives every session the same context, whoever is signed in:
 
 | What | Where | Changed by |
 |---|---|---|
 | The rules: rulings, brand chapters, components, `CLAUDE.md` | this repo | Devagya, through pull requests; a ruling is logged only after Jatin approves it |
-| What's happening: claims, handoffs, questions, proposed rulings | the Hub page (`team/hub.json`) | each person, through `/handoff` and the page's forms; `/claim` is coming |
-| Who is at the keyboard | your own clone folder, never pushed | you, once |
+| What's happening: open work, recent merges, handoff notes | GitHub: pull requests and their "Handoff" comments | everyone, through `/ship` and `/handoff` |
+| Who is at the keyboard, and their role's guardrails | your own clone folder, never pushed | you, once, with `/onboard` |
 
 Claude account memory and chat history are not used for shared context: they can't be shared between
 accounts, and several of us share one.
 
 ## Set up once
 
-Paste the prompt in **[`team/onboard.md`](onboard.md)** into Claude Code and answer its questions. It
-checks your tools, clones the repo, sets who you are and your commit email, and checks Hub access.
-In an existing clone, type `/onboard`.
+Paste the prompt in **[`team/onboard.md`](onboard.md)** into Claude Code (the desktop app's **Code**
+tab works; no terminal needed) and answer its questions. It checks your tools, signs you in to GitHub,
+clones the repo, sets who you are, your role's guardrails and your commit email, and installs the
+checks. In an existing clone, type `/onboard`.
 
-By hand instead:
+Then open Claude Code on the clone folder and accept "trust this folder": project hooks only run in a
+trusted folder. The first reply should name you and say what's happening on GitHub.
 
-1. Install Node LTS, 20.11.1 or later. The hooks run with `node`.
-2. Copy `team/templates/settings.local.json` to `.claude/settings.local.json` and set your member id
-   from `team/members.json` and your role:
-   `{ "env": { "TCULES_MEMBER": "bhumika", "TCULES_ROLE": "designer" } }`
-3. Copy `team/templates/CLAUDE.local.md` to the repo root as `CLAUDE.local.md` and fill in the line.
-   Both files are git-ignored: they never leave your laptop.
-4. Set your commit author to your GitHub noreply address, so no work email lands on a public commit:
-   `git config user.email "<id>+<username>@users.noreply.github.com"` (GitHub → Settings → Emails).
-5. Ask Yash for **Contributor** access to the Hub page (Viewer can read but not write).
-6. Open Claude Code on this folder (terminal, or the desktop app's **Code** tab) and accept "trust this
-   folder"; project hooks only run in a trusted folder. The first reply should name you and summarise
-   the Hub.
+## What each role's setup does
 
-Sharing a Claude login is fine: each laptop's folder says who is working. Teammates on another
-assistant (Mihir uses GPT) use the Hub page in the browser.
+| Role | Guardrails (in `.claude/settings.local.json`) | Checks after each edit |
+|---|---|---|
+| designer, gtm | Can't edit rulings, brand chapters, `CLAUDE.md`, `.claude/`, `scripts/`, package files, `.design-sync/`, `.github/`, `team/`; can't push to `main` or force-push | Yes |
+| engineer | Can't edit rulings, brand chapters, `CLAUDE.md`, `.claude/`, `team/`; can't push to `main` | Yes |
+| owner | None | No |
+
+Guardrails stop accidents, not people: anything they block is a conversation with Devagya, and GitHub
+(branch protection, code owners) is the real gate.
 
 ## Every day
 
 | When | Do |
 |---|---|
-| Opening Claude | Nothing: it tells you who you are and what changed |
-| "What's happening?" | `/hub`, or `/hub SiteNav` for one thing |
-| Before starting something | Claim it on the Hub page (`/claim` is coming) |
-| Stopping | `/handoff` |
-| "This should be a rule" | Propose it on the Hub page or in your pull request; it waits for Jatin's approval |
+| Opening Claude | Nothing: it tells you who you are and what's happening on GitHub |
+| Working | Ask for what you need; the checks run after every edit and Claude fixes what they find |
+| Work is ready | `/ship`: branch, checks, commit, pull request for Devagya |
+| Stopping | `/handoff`: a note on your pull request for whoever picks it up |
+| "This should be a rule" | Suggest it in your pull request; it waits for Jatin's approval |
+
+Handoff notes are public (the repo is public): no client-confidential detail in them.

@@ -1,5 +1,5 @@
 {
-  "$comment": "Who works in this repo and in which role. Identity is chosen by each person's own clone (TCULES_MEMBER in their git-ignored .claude/settings.local.json), never by the Claude login, so a shared login still tells people apart. No emails: the repo is public (Design Hub D46, D47). Roles are described in team/roles/. Rulings are approved by Jatin, who does not work in the repo.",
+  "$comment": "Who works in this repo and in which role. Identity is chosen by each person's own clone (TCULES_MEMBER in their git-ignored .claude/settings.local.json), never by the Claude login, so a shared login still tells people apart. No emails: the repo is public. Roles are described in team/roles/. Rulings are approved by Jatin, who does not work in the repo.",
   "members": {
     "devagya": { "name": "Devagya", "github": "devagya-tc", "role": "owner" },
     "yash": { "name": "Yash", "github": "yash-rawall", "role": "gtm" },
