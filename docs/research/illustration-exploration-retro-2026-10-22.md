@@ -1,7 +1,7 @@
 # Illustration exploration, 22 Oct 2026: what failed and why
 
 **Status:** closed. Claude's illustration exploration stopped on 22 Oct. The guidelines will now be derived from
-an illustration a designer is refining, which Devagya and Yash both liked. This is a record of the failure so it
+an illustration Bhumika (designer) is refining, which Devagya and Yash both liked. This is a record of the failure so it
 isn't repeated. It is not a ruling.
 
 **Owner's verdict on the output:** "the concepts are shallow, unpolished, and with no clear meaning." The
