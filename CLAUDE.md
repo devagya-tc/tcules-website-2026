@@ -353,7 +353,8 @@ standard.
 
 ## Rulings are logged, or they are lost
 
-Every owner ruling is one file in `docs/decisions/`, and `docs/decisions/README.md` indexes them by area.
+Every owner ruling is one file in `docs/decisions/`, and `docs/decisions/INDEX.md` indexes them by area
+(generated and git-ignored: `npm run decisions` writes it, so does `verify`; run it first in a fresh worktree).
 **Read the entries for an area before designing, building or reviewing in it.** A logged ruling is not
 reopened by a spec, a critic or a reference. The owner overturns one with a new entry that `supersedes`
 it, and the old entry is kept.
@@ -368,8 +369,9 @@ it, and the old entry is kept.
 - **A ruling that changes the brand framework is logged `dbf_status: pending`.** `/dbf-update <chapter>`
   applies a chapter's backlog in one versioned edit; `/ds-publish` then carries it to the artifact. Chapters are
   batched, never edited ruling by ruling (owner, 19 Oct 2026).
-- `npm run decisions -- --check` runs in `verify`. It fails on an invalid entry, a broken `supersedes` or a
-  stale index, and only warns on a pending backlog.
+- `npm run decisions` runs in `verify`: it fails on an invalid entry or a broken `supersedes`, only warns on a
+  pending backlog, and rewrites the index. Generated files are never committed: a file every PR rewrites
+  conflicts on every merge (owner, 22 Oct 2026; `docs/vocabulary.md` likewise, rebuilt by `ds:build`).
 
 ## The old repo
 

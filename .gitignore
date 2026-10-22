@@ -51,3 +51,6 @@ yarn-error.log*
 /CLAUDE.local.md
 /.claude/settings.local.json
 
+# Generated, never committed: every PR rewrote them and every merge conflicted (owner, 22 Oct 2026)
+/docs/decisions/INDEX.md
+/docs/vocabulary.md
