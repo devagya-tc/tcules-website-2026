@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-201 active rulings, 21 superseded. Newest first within each area; a ruling in several areas is listed under each.
+201 active rulings, 22 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -88,6 +88,7 @@ stale index.
 - ch05 §9 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md) (2026-10-11)
 - ch05 §4 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md) (2026-10-15)
 - ch05 §4a · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md) (2026-10-16)
+- ch05 §9 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md) (2026-10-22)
 
 ## By area
 
@@ -229,6 +230,7 @@ stale index.
 
 *Photographs, captures, media delivery.*
 
+- 2026-10-22 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
 - 2026-10-13 · [Never reuse a graphic as a stand-in](2026-10-13-no-reused-graphics-as-standins.md)
 - 2026-10-11 · [Split-section images keep a fixed ratio](2026-10-11-split-images-keep-fixed-ratio.md)
@@ -322,6 +324,7 @@ stale index.
 
 *Card sets and their variants.*
 
+- 2026-10-22 · [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
 - 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
@@ -345,7 +348,6 @@ stale index.
 - 2026-09-29 · [A BlockCard image's crop box takes an 8px radius](2026-09-29-card-image-radius-8.md)
 - 2026-09-29 · [A card's crop box draws one hairline around its image, whatever the image's kind](2026-09-29-card-crop-box-rules-every-kind.md)
 - 2026-09-28 · [A text-only card set gets its weight from scale and position](2026-09-28-text-only-cards-weight-from-scale.md)
-- 2026-09-28 · [The first card is featured when the set has 4 or more](2026-09-28-first-card-featured-from-four.md)
 
 ### Forms
 
@@ -489,6 +491,7 @@ Kept so a reversal and its reason stay readable. Never apply one of these.
 - 2026-09-28 · ~~Texture is kept as a decorative ground, within its limits~~ (2026-09-28-texture-kept-as-decorative-ground.md) → [Texture may be used wherever it improves rhythm](2026-10-05-texture-for-rhythm.md)
 - 2026-09-28 · ~~A quote portrait is small, 1:1, beside the name and role~~ (2026-09-28-quote-portrait-small-square-beside-name.md) → [No rating beside a client quote; avoid headshots](2026-10-07-no-rating-beside-quote-avoid-headshots.md)
 - 2026-09-28 · ~~Phase 2 is reviewed on one private claude.ai page~~ (2026-09-28-owner-reviews-on-one-private-page.md) → [No screenshots to the owner; report the routes](2026-10-09-no-screenshots-to-owner.md)
+- 2026-09-28 · ~~The first card is featured when the set has 4 or more~~ (2026-09-28-first-card-featured-from-four.md) → [The first card is featured from four items, and its media is 16:9 like every card](2026-10-22-featured-card-media-is-16-9.md)
 - 2026-09-25 · ~~Article, insight, service and glossary cards carry no media~~ (2026-09-25-only-case-study-cards-carry-media.md) → [Case studies and covered insights carry an image; service cards do not](2026-09-28-which-cards-carry-an-image.md)
 - 2026-09-24 · ~~Ink and blue are reserved social grounds, never a rhythm device such as the hinge~~ (2026-09-24-ink-and-blue-never-a-rhythm-device.md) → [Paper carries more than half of every set; the hinge may change ground](2026-09-24-paper-dominates-hinge-may-change-ground.md)
 - 2026-09-16 · ~~Photographic section openers with type over the photograph are permitted on the website~~ (2026-09-16-photographic-section-openers-permitted.md) → [No image carries type, on any surface](2026-09-24-no-image-carries-type.md)
