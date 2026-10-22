@@ -16,12 +16,12 @@ Extra notes from the person: **$ARGUMENTS**
 2. **Gather, from this session only.**
    - The branch, and what changed: `git branch --show-current`, `git status --short`, and the
      commits since the session began (`git log --oneline` against the branch's base).
-   - What was decided in this conversation, and by whom. Only the owner's decisions are rulings;
-     anyone else's is a choice or a proposal, so say which.
+   - What was decided in this conversation, and by whom. A ruling exists only once Jatin has
+     approved it; anything else is a choice or a proposal, so say which.
    - What is unfinished or next, and anything waiting on someone.
 3. **Draft the note** in three short fields, plain sentences, names not ids:
    - `changed`: what is different now, with branch and PR if any
-   - `decided`: decisions made, marked "Devagya ruled", "proposed" or "chose"
+   - `decided`: decisions made, marked "Jatin approved", "proposed" or "chose"
    - `next`: what the next person should pick up first
    Fold in the person's extra notes. Each field under 400 characters.
 4. **Show the draft and write it.** With the ArtifactData tool (load it with ToolSearch if deferred),
@@ -32,4 +32,4 @@ Extra notes from the person: **$ARGUMENTS**
    Then say it's on the board, in one line.
 5. **Loose ends.** If the person still holds claims on the board, list them and ask whether to keep
    or release each. If something in the session should become a rule, offer to add it to
-   `proposals` for Devagya; never log it in `docs/decisions/`.
+   `proposals` for Jatin's approval; never log it in `docs/decisions/`.
