@@ -36,10 +36,15 @@
   --tsm-rule-width: var(--border-width-hairline);
   /* The quote's sans roles (home round 3): the card that is the thing and the diptych's panel at
      18, the one step above body a quote may take (owner, 19 Oct 2026), the supporting card at 16.
-     Upright; the italic is a voice the caller opts into (Testimonial `voice`), not a token. */
-  --tsm-quote-text: var(--text-lead-lg);
-  --tsm-quote-text-sm: var(--text-body);
-  --tsm-quote-text-panel: var(--text-lead-lg);
+     ITALIC, in the composite (owner, 22 Oct 2026: testimonials are italic everywhere). Italic is
+     part of a quote's role, as in every --text-quote* composite, so it is not restated beside a
+     `font:`; the lead-lg and body roles are roman and carry no breakpoint step, so these are those
+     roles' primitives with the slant, and they move if those primitives do. */
+  --tsm-quote-text: italic var(--font-weight-regular)
+    var(--font-size-lead-lg)/var(--line-height-lead-lg) var(--font-family-sans);
+  --tsm-quote-text-sm: italic var(--font-weight-regular)
+    var(--font-size-body)/var(--line-height-body) var(--font-family-sans);
+  --tsm-quote-text-panel: var(--tsm-quote-text);
   /* The circular avatar: component sizes, 48 beside the h6 name and role (their two-line height),
      40 on the supporting card. A circle (owner, home round 3), the one round portrait in the kit. */
   --tsm-avatar-size-md: 48px;
