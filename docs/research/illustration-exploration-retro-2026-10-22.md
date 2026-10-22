@@ -65,12 +65,32 @@ Across three rounds of critique, averages moved by less than half a point.
 - **Two real links to the brand, neither invented:**
   - In the Omny work, blue meant "a person decided this".
   - The wordmark's T has the proportions of a drafting T-square, to within 0.3%.
-- **Untested proposals** in `docs/decisions/` (status `proposed`): the eight acceptance gates, "show the USP",
-  "subject as an object on one base", and corners, thickness and fills. The designer's work should confirm,
-  change or replace them.
+- **Nothing else.** Four illustration proposals were logged that day: the eight acceptance gates, "show the
+  USP", "subject as an object on one base", and corners, thickness and fills. All four were withdrawn the same
+  day. They won't carry forward, since the guidelines will come from Bhumika's illustration.
 - **The process change:** a design rule is designed and tested before it becomes a ruling
   (`docs/decisions/2026-10-22-test-before-ruling.md`).
 - **The owner's reference set:** `docs/research/illustration-references.md`.
+
+## Feedback given during the exploration
+
+Recorded as what was said at the time, in reaction to work that failed. **It is context, not guidance**, and any
+of it may change once it is set against work that succeeds (owner, 22 Oct: "even those things … might change").
+
+- **Jatin:**
+  - Illustrations "can't be generic isometric illustrations. anybody can draw it. what makes it tcules specific?"
+  - They "can't look like architectural drawing of buildings".
+  - "The concepts need to be well defined and detailed."
+  - "The drawings need to be simple, clear and straightforward."
+- **Jatin, earlier:** preferred flat planes to the thick-plane experiments.
+- **Devagya:**
+  - Rounded corners are acceptable, matching the site.
+  - Thickness is acceptable if it can be justified.
+  - Tonal fills "usually result in generic drawings".
+  - No type baked into objects.
+  - Show the USP, not a process.
+  - "One clear idea", "very straightforward".
+  - From the references: liked drawing the subject as an object, one base for every hero, and the craft.
 
 ## What to do differently
 
