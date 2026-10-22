@@ -86,7 +86,8 @@ for (const file of files) {
   if (!/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(-[a-z0-9]+)*$/.test(id))
     say('filename is not YYYY-MM-DD-kebab-slug.md');
 
-  const text = readFileSync(`${DIR}/${file}`, 'utf8');
+  /* A Windows checkout with core.autocrlf turns every entry into CRLF; read both. */
+  const text = readFileSync(`${DIR}/${file}`, 'utf8').replace(/\r\n/g, '\n');
   const m = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!m) {
     say('no frontmatter');
@@ -228,7 +229,7 @@ if (superseded.length) {
   lines.push('');
 }
 
-const readme = readFileSync(README, 'utf8');
+const readme = readFileSync(README, 'utf8').replace(/\r\n/g, '\n');
 const at = readme.indexOf(MARKER);
 if (at === -1) {
   problems.push(`${README}  has lost its ${MARKER} line`);

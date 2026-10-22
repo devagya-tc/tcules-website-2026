@@ -1,7 +1,7 @@
 ---
 title: "The first card is featured when the set has 4 or more"
 date: 2026-09-28
-status: active
+status: superseded
 area: [cards]
 source: "docs/phase-2-decisions.md, owner rulings for Phase 2 (28 Sep 2026), C3"
 supersedes: []
