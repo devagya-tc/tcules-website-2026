@@ -768,3 +768,13 @@ length.
 | Now | Our engineers turn the design into working software, with the designers beside them. |
 
 The GT Tools example leaves this band. Selected work carries the case proof on home.
+
+## Case study cards drop their quotes; the case index opens by stage (22 Oct 2026, owner)
+
+Case study cards never hold a testimonial (Jatin review, 22 Oct 2026). On home, the two featured cases
+(Doodle, Eden AI) are still featured cards, without the client's words; those words stay in the
+page's testimonial band. On `/case-studies`, a band's quote still marks which case that band features,
+but the quote itself is no longer shown on the card. No copy was changed.
+
+The case index's BY TYPE view (the corpus's own bands and their headings) is replaced by BY STAGE, the
+default. The stages are placeholders until the owner names them: docs/content-proposals.md P51.
