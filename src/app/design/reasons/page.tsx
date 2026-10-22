@@ -6,8 +6,9 @@ import t from '../_specimen/typeroles.module.css';
 
 /**
  * /design/reasons — why choose the studio, as argued reasons each with a drawing of its claim
- * (why-us mocks rounds 1–4, owner 16 Oct 2026). Every arrangement with six reasons (the shape), the
- * three-reason row, the bare head, and the tint ground with its paper-deep figures. Sample words,
+ * (why-us mocks rounds 1–4, owner 16 Oct 2026). Every arrangement with four reasons in a 2×2 (the
+ * shape since 22 Oct 2026), the three- and six-reason rows that still fill whole rows, the longest
+ * copy, the bare head, and the tint ground with its paper-deep figures. Sample words,
  * written to the brief's lengths (a title of about five words, a sentence of about fourteen), so the
  * pattern is proven content-agnostic.
  */
@@ -65,8 +66,22 @@ const WORDS: { title: string; body: string; figure: FigureName }[] = [
   },
 ];
 
-const items = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] =>
+const all = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] =>
   WORDS.map((w) => ({ title: w.title, body: w.body, figure: figure(w.figure, ground) }));
+
+/** The shape: four reasons, a 2×2. */
+const items = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] => all(ground).slice(0, 4);
+
+/** The ceilings P48 sets: a five-word title of long words, a sentence of twenty words. */
+const LONGEST: ReasonsItem[] = items().map((item, index) =>
+  index % 2 === 0
+    ? {
+        ...item,
+        title: 'Accountable seniority, discovery through deployment',
+        body: 'The specialists who scope your engagement stay accountable for every decision, review and release until your product is live.',
+      }
+    : item,
+);
 
 const ACTION = (
   <Button as="a" href="#how-we-work" emphasis="link" size="md" icon={<Icon name="arrow-right" />}>
@@ -83,8 +98,8 @@ export default function ReasonsSpecimen() {
           <h1>Reasons</h1>
           <p className={t.lead}>
             Why a buyer should choose the studio: argued reasons, each a title, one sentence and an
-            isometric drawing of its claim from the ch05 kit, facing its words. Three ways to hold six
-            of them without boxing a reason: open (the gap scale alone), boxed (the set in
+            isometric drawing of its claim from the ch05 kit, facing its words. Built for four, set
+            2×2. Three ways to hold them without boxing a reason: open (the gap scale alone), boxed (the set in
             LogoGrid&rsquo;s rounded frame) and beside (the head in a third, rules between columns).
             Every arrangement fits one fold at 1440.
           </p>
@@ -93,13 +108,13 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="open"
-        title="1 · Open — six reasons, no rules (the default)"
-        note="Mock S1. The gap scale draws the grid: column (64) between columns and rows. Each drawing sits beside its words, facing them; the head reads across with the action at its end. Three across from 1440, two from 1024, one below."
+        title="1 · Open — four reasons 2×2, no rules (the default; home)"
+        note="Mock S1, the set as home shows it. The gap scale draws the grid: column (64) between columns and rows. Each drawing sits beside its words, facing them; the head reads across with the action at its end. Two across from 1024 (a 2×2), one below."
       />
       <Reasons
         eyebrow="Why Tcules"
         heading="A studio built for what ships."
-        headingTail="Six reasons teams stay."
+        headingTail="Four reasons teams stay."
         headingId="rsn-open"
         items={items()}
         action={ACTION}
@@ -108,12 +123,12 @@ export default function ReasonsSpecimen() {
       <Variation
         id="boxed"
         title="2 · Boxed — the set in one rounded frame"
-        note="Mock C2a, with LogoGrid's closed frame: cells ruled between, the outer edge drawn once with the photograph radius, each cell at the gutter inset. The frame holds the SET; no reason is a card."
+        note="Mock C2a, with LogoGrid's closed frame: cells ruled between, the outer edge drawn once with the photograph radius, each cell at the gutter inset. Four cells 2×2 from 1024. The frame holds the SET; no reason is a card."
       />
       <Reasons
         eyebrow="Why Tcules"
         heading="A studio built for what ships."
-        headingTail="Six reasons teams stay."
+        headingTail="Four reasons teams stay."
         headingId="rsn-boxed"
         items={items()}
         action={ACTION}
@@ -122,8 +137,8 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="beside"
-        title="3 · Beside — the head in a third, rules between columns"
-        note="Mock C2b. From 1440 a split (section, 96): the argued heading in the leading third with the action pinned to its foot; three across in the trailing two thirds, each drawing above its words, hairline verticals between the columns only. Below 1440 the head stacks above the set (three across from 768); below 768 each drawing returns beside its words."
+        title="3 · Beside — the head in a third, the set 2×2"
+        note="Mock C2b with four. From 1440 a split (section, 96): the argued heading in the leading third with the action pinned to its foot; the four reasons 2×2 in the trailing two thirds, each drawing above its words, one hairline vertical between the two columns. Below 1440 the head stacks above the set (two across from 768); below 768 each drawing returns beside its words."
       />
       <Reasons
         eyebrow="Why Tcules"
@@ -136,9 +151,24 @@ export default function ReasonsSpecimen() {
       />
 
       <Variation
+        id="longest"
+        title="4 · The longest copy, beside"
+        note="Every other reason at P48's ceilings: a five-word title of long words and a twenty-word sentence. Still one fold at 1440."
+      />
+      <Reasons
+        eyebrow="Why Tcules"
+        heading="A studio built for what ships."
+        headingTail="Senior people, work that lands as code, and a number we answer to."
+        headingId="rsn-longest"
+        items={LONGEST}
+        action={ACTION}
+        arrangement="beside"
+      />
+
+      <Variation
         id="three"
-        title="4 · Three reasons, beside, no eyebrow"
-        note="The other count that fills whole rows. Three in open or boxed go three across from 1440 and one column below it, so a two-up row never leaves a hole in the frame. Any other count warns in development."
+        title="5 · Three reasons, beside, no eyebrow"
+        note="Another count that fills whole rows. Three in open or boxed go three across from 1440 and one column below it; in beside, three across from 768. Counts other than three, four or six warn in development."
       />
       <Reasons
         heading="Why teams pick a studio that ships."
@@ -148,21 +178,51 @@ export default function ReasonsSpecimen() {
       />
 
       <Variation
+        id="six-boxed"
+        title="6 · Six reasons, boxed"
+        note="The shape before 22 Oct 2026, still accepted because it fills whole rows: three across from 1440, two from 1024, the frame ruled for each count."
+      />
+      <Reasons
+        eyebrow="Why Tcules"
+        heading="A studio built for what ships."
+        headingTail="Six reasons teams stay."
+        headingId="rsn-six-boxed"
+        items={all()}
+        action={ACTION}
+        arrangement="boxed"
+      />
+
+      <Variation
+        id="six-beside"
+        title="7 · Six reasons, beside"
+        note="Six in beside: three across from 768 in two rows, two hairline verticals between the columns."
+      />
+      <Reasons
+        eyebrow="Why Tcules"
+        heading="A studio built for what ships."
+        headingTail="Senior people, work that lands as code, and a number we answer to."
+        headingId="rsn-six-beside"
+        items={all()}
+        action={ACTION}
+        arrangement="beside"
+      />
+
+      <Variation
         id="bare"
-        title="5 · Boxed, a bare head"
+        title="8 · Boxed, a bare head"
         note="No eyebrow, no tail, no action: the heading alone over the frame."
       />
       <Reasons heading="Why Tcules" headingId="rsn-bare" items={items()} arrangement="boxed" />
 
       <Variation
         id="tint"
-        title="6 · Tint ground, open"
+        title="9 · Tint ground, open"
         note="Every --rsn-* token is restated on tint: the tail steps to neutral-600 and the rule to neutral-300. The figures are the paper-deep exports, so their occluding faces are the ground's own colour (§4a)."
       />
       <Reasons
         eyebrow="Why Tcules"
         heading="A studio built for what ships."
-        headingTail="Six reasons teams stay."
+        headingTail="Four reasons teams stay."
         headingId="rsn-tint"
         items={items('paper-deep')}
         action={ACTION}
@@ -171,13 +231,13 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="tint-boxed"
-        title="7 · Tint ground, boxed"
+        title="10 · Tint ground, boxed"
         note="The tint rule (neutral-300) on the frame and between the cells. Paper or tint only: the figures are exported for those two grounds, so `surface` takes no other."
       />
       <Reasons
         eyebrow="Why Tcules"
         heading="A studio built for what ships."
-        headingTail="Six reasons teams stay."
+        headingTail="Four reasons teams stay."
         headingId="rsn-tint-boxed"
         items={items('paper-deep')}
         arrangement="boxed"

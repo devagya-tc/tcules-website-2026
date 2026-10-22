@@ -214,8 +214,9 @@ export type TestimonialAvatarRecord = {
 
 /**
  * Stand-in reasons for a "why us" band drawn as the Reasons pattern (`getPlaceholderReasons`, owner
- * 19 Oct 2026). The band is designed for three or six short reasons, each with a drawing of its
- * claim (docs/content-proposals.md P48); the corpus authors four longer ones with quotes, so the
+ * 19 Oct 2026). The band is designed for four short reasons 2×2 (owner, 22 Oct 2026), each with a
+ * drawing of its claim (docs/content-proposals.md P48); the corpus authors four longer ones with
+ * quotes, so the
  * band shows P48's length-guide set until the content team writes its own. The heading and the
  * closing link stay the corpus's. `placeholder` is always true.
  */
