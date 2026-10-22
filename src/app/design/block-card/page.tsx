@@ -1890,8 +1890,8 @@ export default function BlockCardSpecimenPage() {
           <BandHead title="21 · The case-study index (29 Sep)">
             The case-study card at the corpus&rsquo;s extremes: the client as the eyebrow above
             the title, a one-line description (8&ndash;15 words, strapi-changes §13), no cta.
-            Titles are the live shortest (37 characters) and longest (87). The whole page with
-            ideal content is the <code>CaseStudyIndex</code> template&rsquo;s specimen.
+            Titles are the live shortest (37 characters) and longest (87). The whole page is the
+            <code>ListingIndex</code> template&rsquo;s specimen (<code>?data=cases</code>).
           </BandHead>
           <Specimen title="6 case studies · featured + three from lg">
             <BlockCardSet items={CASE_INDEX} />

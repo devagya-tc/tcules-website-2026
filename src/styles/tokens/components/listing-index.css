@@ -1,0 +1,58 @@
+/* ══ Component layer — ListingIndex (templates) ══════════════════════════════════
+   Tier 3. The listing page type (22 Oct 2026: the insights hub, its format pages and the case-study
+   index are one structure): what the template draws itself — a section's one-line head, an events
+   page's group label, and a format page's count beside "Show more". Every piece is a card pattern
+   and draws its own; the rail is IndexRail's.
+
+   Naming: --lix-{part}-{role}
+     parts  section-title · group-title · count
+     roles  text · tracking · ink
+
+   Every surface block declares every surface-dependent token. Every band these templates paint is
+   paper; the other three are declared for self-containment (tokens rule 2).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* A section's head: the h3 role (owner, 22 Oct 2026: the h2 group title was "quite big").
+     These are groups inside one page column beside the rail, not bands of their own, so they take
+     the smallest serif title rather than a band head's h2 — the size claude.com/resources sets its
+     group heads at (about 36). Not h4: the h4 head was "too small. foundationally incorrect"
+     (16 Oct 2026). The head sits a `stack` above its pieces (ListingSection). */
+  --lix-section-title-text: var(--text-h3);
+  --lix-section-title-tracking: var(--text-h3-tracking);
+  /* An events page's group label: the eyebrow, the date column's voice. */
+  --lix-group-title-text: var(--text-eyebrow);
+  --lix-group-title-tracking: var(--text-eyebrow-tracking);
+  /* The count beside "Show more": the label voice. */
+  --lix-count-text: var(--text-eyebrow);
+  --lix-count-tracking: var(--text-eyebrow-tracking);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --lix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
+  --lix-group-title-ink: var(--color-neutral-600);
+  --lix-count-ink: var(--color-neutral-600); /* 4.92:1 */
+}
+
+/* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
+[data-surface='tint'] {
+  --lix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
+  --lix-group-title-ink: var(--color-neutral-700);
+  --lix-count-ink: var(--color-neutral-700); /* 7.27:1 */
+}
+
+/* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --lix-section-title-ink: var(--color-white);
+  --lix-group-title-ink: var(--color-neutral-400);
+  --lix-count-ink: var(--color-neutral-400); /* 8.05:1 */
+}
+
+/* ── Surface: blue ── declared for self-containment ─────────────────────────── */
+[data-surface='blue'] {
+  --lix-section-title-ink: var(--color-white); /* 6.23:1 */
+  --lix-group-title-ink: var(--color-brandeis-100);
+  --lix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+}

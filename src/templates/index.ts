@@ -9,24 +9,28 @@
  * A template may import from @/patterns and @/components. It may not import @/content — the
  * page reads content and passes it in.
  */
-export { CaseStudyIndex } from './CaseStudyIndex';
+export {
+  ListingIndex,
+  caseViews,
+  insightFormatPage,
+  insightViews,
+} from './ListingIndex';
 export type {
-  CaseStudyIndexClosing,
-  CaseStudyIndexItem,
-  CaseStudyIndexProps,
-  CaseStudyIndexSection,
-  CaseStudyIndexView,
-} from './CaseStudyIndex';
-export { InsightsFormat, InsightsIndex } from './InsightsIndex';
-export type {
-  InsightsFormatProps,
-  InsightsIndexFormat,
-  InsightsIndexItem,
-  InsightsIndexKind,
-  InsightsIndexProps,
-  InsightsIndexTopic,
-  InsightsIndexView,
-} from './InsightsIndex';
+  CaseGroup,
+  CaseItem,
+  CaseView,
+  InsightFormat,
+  InsightItem,
+  InsightKind,
+  InsightTopic,
+  ListingClosing,
+  ListingHero,
+  ListingIndexProps,
+  ListingOffer,
+  ListingPicker,
+  ListingSection,
+  ListingView,
+} from './ListingIndex';
 export { CaseStory } from './CaseStory';
 export type {
   CaseStoryChapterProps,

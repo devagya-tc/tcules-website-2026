@@ -17,3 +17,5 @@ Every card's title is set in the sans. The one exception is the horizontal card,
 **The mistake it prevents.** The insights hub's stacked `xl` lead Teaser and BlockCard `lg` set in serif h3 (34px) directly under the section heads, competing with them.
 
 **How to apply.** `--bcrd-title-text-lg` is h4, and only `.horizontal.sizeLg` reads `--bcrd-title-text-horizontal` (h3). `--tsr-title-text-xl` is h4, and only `.beside.sizeXl` reads `--tsr-title-text-xl-beside` (h3). A new card pattern takes a sans role for its title unless it is a horizontal arrangement.
+
+**Confirmed, 22 Oct 2026 (owner).** "34px at serif is right for cards when horizontally laid out." The horizontal titles stay serif at h3 (34px); CaseCard, which replaced TestimonialCase the same day (2026-10-22-case-cards-carry-no-testimonial), is one of them.
