@@ -1,5 +1,7 @@
 # Accordion
 
+> **Amended, 22 Oct 2026 (Jatin review).** The question is 20px: it reads `--text-h5-lg` (20 sans medium, 1.26; 18 on phones), a standard step between h4 and h5. The answer is body-sm (14) under the 19 Oct body-type ceiling. See docs/decisions/2026-10-22-faq-question-is-h5-lg-20.md. Where this spec still says h5 or 22px for the question, read h5-lg / 20.
+>
 > **Amended, home round 3 (11 Oct 2026).** The question rests at full ink and no longer moves on hover (`--acc-question-ink-hover` deleted); the answer takes `--acc-answer-ink`, one clear step quieter, so the question reads as the question. Only the chevron answers the pointer. See docs/page-mapping.md § 19.
 
 ## 0 · Front matter
@@ -242,12 +244,12 @@ existing icon size.
 
 | Part     | Role             | Tracking companion       | Measure |
 | -------- | ---------------- | ------------------------ | ------- |
-| question | `--text-h5`      | `--text-h5-tracking`     | `--measure-body` |
+| question | `--text-h5-lg`   | `--text-h5-lg-tracking`  | `--measure-body` |
 | answer   | owned by `Prose` | owned by `Prose`         | `Prose`'s `--measure-body` |
 
 Question copy is sentence case and retains its authored question mark: “How long does a product
 design engagement take?” It is an `h3` by default (`h4` via `questionAs`) inside the native summary,
-and it takes the h5 composite whichever element it is — the heading is semantics, not a size step.
+and it takes the h5-lg composite whichever element it is — the heading is semantics, not a size step.
 
 This overturns the original decision, which was that the question should stay a `span` because the
 summary is already a named interactive control. That holds for a single disclosure. It does not
@@ -256,12 +258,10 @@ long page. Screen-reader and voice-control users navigate a page like that by he
 one the entire FAQ is absent from the heading tree with no way to jump to it or scan it. The summary
 keeps its role, its expanded state and its accessible name either way; the heading is additive.
 
-**The answer is 16px, and Accordion says nothing to make it so.** 18px under a 22px question is a
-1.22 ratio and neither element leads; 16 gives 1.38. `Prose`'s flow is `--text-body`, so the ratio
-the redesign asked for is what the answer already renders at. The answer is never retyped and never
-recoloured — there is no `--acc-answer-ink`, because a `strong`, a link or a `code` span inside an
-answer has to match Prose everywhere else on the site. Accordion's `.answer` class owns the inset,
-the measure and the wrapping, and nothing else.
+**The answer is body-sm (14) under a 20px question** (22 Oct 2026; the 14 from the 19 Oct body-type
+ceiling). Accordion's `.answer` sets `--text-body-sm` and `--acc-answer-ink`, one clear step quieter
+than the question (home round 3); a `strong`, a link or a `code` span inside it keeps Prose's own ink.
+The class also owns the inset, the measure and the wrapping.
 
 **How that was settled, because it took three passes.** The first proposal was that `Prose` gain
 `size?: "lg" | "md"` — its single type size being the actual defect, on the evidence that `Proof`
@@ -285,10 +285,10 @@ At 767 the component shrinks to the parent track. At the 192px stress track, ful
 hard component minimum: a disclosure remains operable below 192px, so inventing one would only
 widen an illegal parent.
 
-The trigger clears the 44px touch floor through its h5 line plus its insets: 22/1.28 is a 28.16px
-line, so a closed summary (two `--gap-block` insets) measures ~76px, and ~74px at the mobile h5 step
-where 20/1.3 gives 26px. An open summary (`--gap-block` above, `--gap-text` below) measures ~68px,
-and ~66px at the mobile step. No invisible hit extension or responsive size step is needed. The gap scale does not shift
+The trigger clears the 44px touch floor through its h5-lg line plus its insets: 20/1.26 is a 25.2px
+line, so a closed summary (two `--gap-block` insets) measures ~73px, and ~71px at the mobile step
+where 18/1.3 gives 23.4px. An open summary (`--gap-block` above, `--gap-text` below) measures ~65px,
+and ~63px at the mobile step. No invisible hit extension or responsive size step is needed. The gap scale does not shift
 responsively, the answer never clamps, and the mark never overlaps the question.
 
 ## 10 · Composition
@@ -615,8 +615,8 @@ LAYOUT, TYPE, SEMANTICS
 [x] Every arrangement belongs to Layout or Cluster; no columns declaration requires a colGap.
 [x] No child margin and no responsive gap/type-role swap.
 [x] Question and answer name measures.
-[x] Native summary clears the 44px floor: ~76px closed (two --gap-block insets), ~74px at the
-    mobile h5 step; ~68px / ~66px open (--gap-block above, --gap-text below).
+[x] Native summary clears the 44px floor: ~73px closed (two --gap-block insets), ~71px at the
+    mobile h5-lg step; ~65px / ~63px open (--gap-block above, --gap-text below).
 [x] Native details/summary needs no authored ARIA idref or upward-walking selector.
 
 COMPLETENESS

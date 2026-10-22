@@ -9,7 +9,6 @@ export {
   type TestimonialCardProps,
   type TestimonialCaseProps,
   type TestimonialFrame,
-  type TestimonialVoice,
   type TestimonialItem,
   type TestimonialSize,
   type TestimonialWallProps,

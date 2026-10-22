@@ -137,7 +137,7 @@ export default function TestimonialSpecimen() {
           <Layout columns={{ lg: 3 }} colGap="gutter" rowGap="stack">
             <Specimen
               title="md · box · avatar"
-              note="the default: a wall, or beside its case; the 48 circular avatar beside the speaker"
+              note="the default: a wall, or beside its case; the quote in the sans italic, every arrangement; the 48 circular avatar beside the speaker"
             >
               <TestimonialCard item={A} />
             </Specimen>
@@ -158,18 +158,6 @@ export default function TestimonialSpecimen() {
             </Specimen>
             <Specimen title="sm · none · avatar" note="the supporting card's 40 avatar">
               <TestimonialCard item={E} size="sm" frame="none" />
-            </Specimen>
-            <Specimen
-              title={'md · box · voice="italic"'}
-              note="the sans italic, for a quote set beside other content; walls stay upright"
-            >
-              <TestimonialCard item={A} voice="italic" />
-            </Specimen>
-            <Specimen
-              title={'sm · none · voice="italic"'}
-              note="the supporting quote beside a claim, as home's why-Tcules rows use it"
-            >
-              <TestimonialCard item={E} size="sm" frame="none" voice="italic" />
             </Specimen>
           </Layout>
         </Layout>

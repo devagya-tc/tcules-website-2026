@@ -198,10 +198,10 @@ export default function AccordionSpecimenPage() {
           <Layout columns={{ base: 1, md: [1, 3] }} colGap="gutter" rowGap="tight">
             {[
               ['rest', 'Question at --acc-question-ink, mark quieter at --acc-mark-ink, quiet ending rule.'],
-              ['hover', 'Question and mark rise to their -hover ink. No ground appears, on any surface.'],
-              ['focus', 'The raised ink plus a two-part keyboard-only ring — the ring is the only Brandeis in the component.'],
-              ['pressed', 'The raised ink held, plus a hairline underline at --acc-mark-ink, so press differs from hover by more than colour.'],
-              ['expanded', 'Up chevron, visible answer and the raised ink held. The question sits --gap-text above its answer; the rule does not change.'],
+              ['hover', 'Only the chevron rises to --acc-mark-ink-hover; the question is already at full ink. No ground appears, on any surface.'],
+              ['focus', 'The chevron\'s raised ink plus a two-part keyboard-only ring — the ring is the only Brandeis in the component.'],
+              ['pressed', 'Not distinguished from hover: the hairline underline was removed (7 Oct 2026).'],
+              ['expanded', 'Up chevron at its raised ink, visible answer. The question sits --gap-text above its answer; the rule does not change.'],
             ].map(([state, note]) => (
               <div key={state}>
                 <strong>{state}</strong>
@@ -217,11 +217,10 @@ export default function AccordionSpecimenPage() {
           <Layout rowGap="block">
             <h2>6 · Rich answer shapes</h2>
             <p>
-              Accordion supplies the answer inset and nothing else. Prose owns every other
-              decision — type, colour, flow rhythm, links, lists, and the fallbacks for an answer
-              that arrives carrying an h4, a blockquote or a table. The 16px the redesign wanted
-              under the 22px question is Prose&rsquo;s own flow size, so there is nothing here to
-              restate.
+              Accordion supplies the answer&rsquo;s inset, its size and its ink: body-sm (14) under
+              the 20px question, one ink step quieter. Prose owns everything else — flow rhythm,
+              links, lists, and the fallbacks for an answer that arrives carrying an h4, a
+              blockquote or a table.
             </p>
           </Layout>
           <Accordion

@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-198 active rulings, 18 superseded. Newest first within each area; a ruling in several areas is listed under each.
+199 active rulings, 19 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -59,9 +59,10 @@ stale index.
 - ch03 §5 · [Item titles sit two type steps under their section heading](2026-10-11-item-titles-two-steps-under-heading.md) (2026-10-11)
 - ch03 §6 · [Quoted claims at list sizes are set upright](2026-10-11-upright-type-for-quoted-lists.md) (2026-10-11)
 - ch03 §2 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md) (2026-10-15)
-- ch03 §2 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md) (2026-10-15)
 - ch03 §2 · [Body type never above 16px](2026-10-19-body-type-ceiling.md) (2026-10-19)
 - ch03 §2 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md) (2026-10-19)
+- ch03 §2 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md) (2026-10-22)
+- ch03 §2 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md) (2026-10-22)
 
 **04 Iconography** — `/dbf-update 04`
 
@@ -178,9 +179,10 @@ stale index.
 
 *Roles, sizes, families, case.*
 
+- 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-19 · [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-19 · [Body type never above 16px](2026-10-19-body-type-ceiling.md)
-- 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
 - 2026-10-15 · [The serif is for titles only](2026-10-15-serif-for-titles-only.md)
 - 2026-10-15 · [In a selector, the option titles are the largest repeated thing](2026-10-15-selector-titles-are-the-targets.md)
 - 2026-10-15 · [Lean to the smaller sizes generally](2026-10-15-lean-to-smaller-type.md)
@@ -357,10 +359,10 @@ stale index.
 
 *Logos, cases, testimonials, ratings.*
 
+- 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
 - 2026-10-19 · [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md) · enforced by `fixture: src/content/sources/fixtures/testimonial-ratings.ts (rating() throws below 4.5)`
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [The case card is one view; its visual is a fixed slot](2026-10-16-case-card-is-one-view.md)
-- 2026-10-15 · [Italic testimonials are a voice variant, beside content only](2026-10-15-testimonial-italic-is-voice-variant.md)
 - 2026-10-12 · [A testimonial always shows its quote marks and star rating](2026-10-12-testimonial-shows-marks-and-rating.md)
 - 2026-10-12 · [People get ProfileCards, not image cards](2026-10-12-people-get-profile-cards.md)
 - 2026-10-11 · [Logo walls use real logo files](2026-10-11-logo-walls-use-real-logos.md)
@@ -422,6 +424,7 @@ stale index.
 *Contracts of a named component or pattern.*
 
 - 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
+- 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
@@ -466,6 +469,7 @@ Kept so a reversal and its reason stay readable. Never apply one of these.
 
 - 2026-10-16 · ~~Type smaller than 28px is Public Sans~~ (2026-10-16-type-under-28-is-sans.md) → [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
 - 2026-10-16 · ~~Reasons: six argued reasons, each drawn, in one fold~~ (2026-10-16-reasons-band-shape.md) → [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md)
+- 2026-10-15 · ~~Italic testimonials are a voice variant, beside content only~~ (2026-10-15-testimonial-italic-is-voice-variant.md) → [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
 - 2026-10-10 · ~~Placeholder ratings run 4 to 5~~ (2026-10-10-placeholder-ratings-four-to-five.md) → [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md)
 - 2026-10-10 · ~~A case and its quote sit adjacent, never embedded~~ (2026-10-10-case-and-quote-adjacent.md) → [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-09 · ~~Section body 16, section lead 18, hero lead 18/20~~ (2026-10-09-section-body-16-lead-18.md) → [Body type never above 16px](2026-10-19-body-type-ceiling.md)

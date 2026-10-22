@@ -209,7 +209,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           }))}
           aside={
             quote ? (
-              <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill voice="italic" />
+              <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill />
             ) : undefined
           }
         />

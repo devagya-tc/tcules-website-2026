@@ -96,8 +96,8 @@
   min-inline-size: 0;
   /* --gap-block above and below, up from --gap-text. With no ground defining the row, the inset
      is the only thing that makes it one — and it is what clears the 44px touch floor with room to
-     spare: 22/1.28 is a 28.16px line, so the summary measures ~76px (and ~74px at the mobile h5
-     step, where 20/1.3 gives 26px). No size token and no pseudo-element hit extension — and note
+     spare: h5-lg's 20/1.26 is a 25.2px line, so the summary measures ~73px (and ~71px at the
+     mobile step, where 18/1.3 gives 23.4px). No size token and no pseudo-element hit extension — and note
      a ::after extension would work here where it does NOT on Input, because <summary> is not a
      void element. See .design-sync/NOTES.md. */
   padding-block: var(--gap-block);
@@ -117,8 +117,8 @@
    question sits 16 from its answer and the answer sits --gap-block (24, .answer's block-end) from
    the next rule. At --gap-block both ways it read as equidistant — the answer floated between its
    own question and the next one. Closed items keep --gap-block both ways; nothing follows the
-   summary for it to attach to. The hit area still clears the 44px floor with room: 24 + 28.16 + 16
-   is ~68px (~66px at the mobile h5 step). An existing gap step, so no token. */
+   summary for it to attach to. The hit area still clears the 44px floor with room: 24 + 25.2 + 16
+   is ~65px (~63px at the mobile step). An existing gap step, so no token. */
 .item[open] > .trigger {
   padding-block-end: var(--gap-text);
 }
@@ -207,12 +207,13 @@
 }
 
 /* The answer: the inset, the measure, the wrapping, and its INK (owner, home round 3: the question
-   and answer lacked contrast). The question is serif h5 at full ink; the answer is the sans body
-   (Prose's own flow, --text-body) one clear step quieter, --acc-answer-ink. Two classes so it
-   outranks Prose's root colour on the same element; links, strong and code inside keep Prose's
-   own inks. */
+   and answer lacked contrast). The question is the sans h5-lg (20) at full ink; the answer is
+   body-sm (14, the 19 Oct body ceiling) one clear step quieter, --acc-answer-ink. Two classes so
+   both outrank Prose's own font and colour on the same element, whatever order the bundler emits
+   the two stylesheets in; links, strong and code inside keep Prose's own inks. */
 .root .answer {
   color: var(--acc-answer-ink);
+  font: var(--text-body-sm);
 }
 
 .answer {
@@ -224,7 +225,6 @@
      two, so the answer attaches to its question rather than to the next one. */
   padding-block: 0 var(--gap-block);
   overflow-wrap: anywhere;
-  font: var(--text-body-sm);
   text-wrap: var(--text-running-wrap);
 }
 
