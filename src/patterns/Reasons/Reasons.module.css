@@ -63,7 +63,8 @@
    and the sliver left beside the frame reads as a doubled rule (owner, 16 Oct 2026).
 
    Column counts are Reasons.tsx's: six reasons are one across, two from 1024 and three from 1440;
-   three reasons (`.three`) are one across until 1440. Layout's breakpoints: lg 1024, xl 1440. */
+   four (`.four`) are one across, then two from 1024 at every width — a 2×2; three reasons
+   (`.three`) are one across until 1440. Layout's breakpoints: lg 1024, xl 1440. */
 .cells > .item {
   padding: var(--gap-gutter);
 }
@@ -86,11 +87,22 @@
 }
 
 @media (min-width: 1440px) {
-  .cells > .item:nth-child(n + 4) {
+  .cells:not(.four) > .item:nth-child(n + 4) {
     border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
   }
 
-  .cells > .item:not(:nth-child(3n + 1)) {
+  .cells:not(.four) > .item:not(:nth-child(3n + 1)) {
+    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+}
+
+/* Four stay two across from 1440: the 1024–1439 rules above already draw them below it. */
+@media (min-width: 1440px) {
+  .four > .item:nth-child(n + 3) {
+    border-block-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
+  }
+
+  .four > .item:nth-child(even) {
     border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
   }
 }
@@ -102,9 +114,10 @@
 }
 
 /* ── beside: hairline verticals between columns only ──────────────────────────
-   From 768 the set is three across. Every reason but the first in its row rules its inline-start
-   edge and opens on the `block` inset; every reason but the last closes on it. So the first column
-   starts flush with the band and the last ends flush, and the only lines are the two between.
+   From 768 the set is three across, or two for four reasons (`.two`). Every reason but the first
+   in its row rules its inline-start edge and opens on the `block` inset; every reason but the last
+   closes on it. So the first column starts flush with the band and the last ends flush, and the
+   only lines are the ones between columns: one for two across, two for three.
    Placement of this unit's own cells inside the Layout it renders, at the breakpoint where it
    applies (LogoGrid's precedent). Layout's breakpoints: md 768. */
 @media (min-width: 768px) {
@@ -113,12 +126,14 @@
     border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
   }
 
-  .ruled > .item:nth-child(3n + 1) {
+  .ruled:not(.two) > .item:nth-child(3n + 1),
+  .two > .item:nth-child(odd) {
     padding-inline-start: 0;
     border-inline-start: 0;
   }
 
-  .ruled > .item:nth-child(3n) {
+  .ruled:not(.two) > .item:nth-child(3n),
+  .two > .item:nth-child(even) {
     padding-inline-end: 0;
   }
 }

@@ -1,6 +1,6 @@
 /* ══ Component layer — Reasons ═══════════════════════════════════════════════════
-   Tier 2. "Why Tcules": six argued reasons, each a title, one sentence and a drawing of its claim
-   (why-us mocks rounds 1–4, owner 16 Oct 2026). The drawing is an isometric figure from the ch05
+   Tier 2. "Why Tcules": four argued reasons set 2×2 (owner, 22 Oct 2026; six before), each a
+   title, one sentence and a drawing of its claim (why-us mocks rounds 1–4, owner 16 Oct 2026). The drawing is an isometric figure from the ch05
    §4a kit, facing its words; it illustrates the claim and carries no data.
 
    Naming: --rsn-{part}-{role}
@@ -21,7 +21,7 @@
    --rsn-figure-height  the same drawing's box height beside its words.
    --rsn-figure-height-sm
                         `beside` from 768: the drawing heads its words, so it is shorter (112),
-                        which keeps two rows of three inside the 830 fold at 1440.
+                        which keeps two rows (four 2×2, or six 3×2) inside the 830 fold at 1440.
    --rsn-figure-height-xs
                         the phone step: 92 beside a body that wraps to three or four lines.       */
 :root {

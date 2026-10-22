@@ -250,7 +250,7 @@ const SPECIMENS = [
       {
         href: '/design/reasons',
         name: 'Reasons',
-        note: 'why choose us — six argued reasons each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, three reasons, a bare head, tint',
+        note: 'why choose us — four argued reasons 2×2, each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, the longest copy, three and six reasons, a bare head, tint',
       },
       {
         href: '/design/voice-ledger',

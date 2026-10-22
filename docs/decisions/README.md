@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-197 active rulings, 17 superseded. Newest first within each area; a ruling in several areas is listed under each.
+198 active rulings, 18 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -126,8 +126,8 @@ stale index.
 
 *Arrangement, the primitives, page composition.*
 
+- 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
 - 2026-10-16 · [Rules only where they structure something](2026-10-16-lines-only-where-they-structure.md)
@@ -267,7 +267,6 @@ stale index.
 - 2026-10-19 · [Bento's drawings are the Sketch scenes, bare and in the light weight](2026-10-19-bento-sketches-are-light.md)
 - 2026-10-19 · [An animated drawing: story, then two states, then motion](2026-10-19-animated-drawing-story-first.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [A drawing is never cropped and faces what it accompanies](2026-10-16-drawing-never-cropped-faces-its-form.md)
 - 2026-10-15 · [Sketch for small visuals; isometric for large concepts](2026-10-15-sketch-for-small-visuals.md)
 - 2026-10-13 · [Never reuse a graphic as a stand-in](2026-10-13-no-reused-graphics-as-standins.md)
@@ -422,9 +421,9 @@ stale index.
 
 *Contracts of a named component or pattern.*
 
+- 2026-10-22 · [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md) · enforced by `review (Reasons warns in development on a count other than 3, 4 or 6)`
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
 - 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
-- 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
 - 2026-10-16 · [Text never crosses an island's edge](2026-10-16-island-copy-stays-on-ground.md)
 - 2026-10-16 · [The insights hub is curated; By type / By topic switch the whole view](2026-10-16-insights-hub-is-curated.md)
@@ -466,6 +465,7 @@ stale index.
 Kept so a reversal and its reason stay readable. Never apply one of these.
 
 - 2026-10-16 · ~~Type smaller than 28px is Public Sans~~ (2026-10-16-type-under-28-is-sans.md) → [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
+- 2026-10-16 · ~~Reasons: six argued reasons, each drawn, in one fold~~ (2026-10-16-reasons-band-shape.md) → [Reasons: four argued reasons, set 2×2](2026-10-22-reasons-four-in-a-2x2.md)
 - 2026-10-10 · ~~Placeholder ratings run 4 to 5~~ (2026-10-10-placeholder-ratings-four-to-five.md) → [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md)
 - 2026-10-10 · ~~A case and its quote sit adjacent, never embedded~~ (2026-10-10-case-and-quote-adjacent.md) → [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-09 · ~~Section body 16, section lead 18, hero lead 18/20~~ (2026-10-09-section-body-16-lead-18.md) → [Body type never above 16px](2026-10-19-body-type-ceiling.md)

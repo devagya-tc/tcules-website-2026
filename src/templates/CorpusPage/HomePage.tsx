@@ -116,7 +116,7 @@ const linkLines = (item: ItemBlock | undefined) =>
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
  * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
- * diptychs, then a lighter pair · six icon boxes · six reasons, each beside its drawing · a wall
+ * diptychs, then a lighter pair · six icon boxes · four reasons 2×2, each beside its drawing · a wall
  * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
  * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
@@ -532,15 +532,15 @@ function Capabilities({ b }: BandProps) {
   );
 }
 
-/* ── 5 · why Tcules: six reasons, each beside its drawing ────────────────────────── */
+/* ── 5 · why Tcules: four reasons 2×2, each beside its drawing ───────────────────── */
 
 /**
- * The Reasons band, `open` (owner, 19 Oct 2026): six short reasons with no rules, each drawing
- * beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
+ * The Reasons band, `open` (owner, 19 Oct 2026): four short reasons 2×2 (owner, 22 Oct 2026) with
+ * no rules, each drawing beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
  * four screens and put three quotes next to the client-voices band. No proof inside the band: the
  * quotes stay in "What clients say" (P48).
  *
- * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes six; the heading
+ * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes four; the heading
  * and the closing link stay the corpus's.
  */
 function WhyTcules({ b, reasons }: BandProps) {

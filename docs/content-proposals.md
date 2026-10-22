@@ -677,7 +677,7 @@ proposals below are where that design asks something of the copy.
   the quote box stays the card's foot rather than its largest part. Until the gaps are filled the
   copy renders as written.
 
-### P48 · `/` (and any page that argues "why us") · why-tcules · six reasons, written for the Reasons band
+### P48 · `/` (and any page that argues "why us") · why-tcules · four reasons, written for the Reasons band
 
 - **Supersedes P7** for this band. The owner set the current "why Tcules" copy aside (16 Oct 2026),
   and the band is now designed first, against ideal content: the `Reasons` pattern (`/design/reasons`,
@@ -686,11 +686,11 @@ proposals below are where that design asks something of the copy.
   and puts testimonials next to the testimonial band (P7). The new band holds every reason on one
   screen only if each reason is short and the same shape.
 - **Proposal:** write the band as follows.
-  - **Count:** three or six reasons. Six is the designed shape, three also fills whole rows. Four
-    or five leave a gap.
+  - **Count:** four reasons, set 2×2 (owner, 22 Oct 2026; was six). Three or six still fill whole
+    rows; five leaves a gap.
   - **Heading:** one short claim (about 6 words, e.g. "A studio built for what ships."). It may have
     an optional second clause that carries the gloss, which the design sets lighter in the same
-    line (about 6–12 words, e.g. "Six reasons teams stay."). Together they read as one sentence,
+    line (about 6–12 words, e.g. "Four reasons teams stay."). Together they read as one sentence,
     under about 100 characters.
   - **Eyebrow (optional):** two or three words ("Why Tcules").
   - **Per reason:**
@@ -704,7 +704,7 @@ proposals below are where that design asks something of the copy.
     Testimonials stay in the testimonial band.
   - **Optional action:** one way to go deeper ("How we work"), two or three words, with its
     destination.
-  - **Distinct reasons:** six reasons that don't overlap. If two share a picture, they are one
+  - **Distinct reasons:** four reasons that don't overlap. If two share a picture, they are one
     reason.
 - **Why:** the reasons become the band's primary object, readable in a five-second scan and in full,
   on one screen. The quotes go back to one place on the page. While the content team writes the
