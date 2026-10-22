@@ -1,0 +1,27 @@
+# Who must approve a change before it merges into main.
+#
+# The owner decides; Claude executes (CLAUDE.md § How a component gets made). These paths are where a
+# decision lives or where the rules that enforce decisions live, so a change to any of them is a
+# ruling, and only the owner makes rulings. GitHub enforces it once the main ruleset has "Require
+# review from Code Owners" on, with the owner as a bypass actor so he can still merge his own.
+# (Design Hub D48, 21 Oct 2026.)
+#
+# Everything not listed here merges as today.
+
+# Rulings and the brand framework
+/docs/decisions/   @devagya-tc
+/docs/brand/       @devagya-tc
+
+# The rules every session loads
+/CLAUDE.md         @devagya-tc
+
+# Agent setup: commands, skills, agents, hooks, shared settings
+/.claude/          @devagya-tc
+
+# The checks and the scripts behind them
+/scripts/          @devagya-tc
+/package.json      @devagya-tc
+/package-lock.json @devagya-tc
+
+# Who owns what
+/.github/CODEOWNERS @devagya-tc
