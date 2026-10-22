@@ -66,7 +66,7 @@ const WEIGHTS = [
   },
 ] as const;
 
-/** The six display steps. Size and line height ladder together; the breakpoint cuts are real. */
+/** The title steps, display to h6. Size and line height ladder together; the breakpoint cuts are real. */
 const TITLE_ROLES = [
   {
     className: t.display,
@@ -107,25 +107,34 @@ const TITLE_ROLES = [
   {
     className: t.h4,
     role: 'h4',
-    px: 28,
-    lh: 1.2,
+    px: 22,
+    lh: 1.25,
     track: '-0.005em',
-    steps: '25 / 22',
+    steps: '20 / 18',
     sample: 'Design that earns its keep',
+  },
+  {
+    className: t.h5lg,
+    role: 'h5-lg',
+    px: 20,
+    lh: 1.26,
+    track: '-0.005em',
+    steps: '— / 18',
+    sample: 'How long does a design-to-code audit take?',
   },
   {
     className: t.h5,
     role: 'h5',
-    px: 22,
+    px: 18,
     lh: 1.28,
     track: '0',
-    steps: '— / 20',
+    steps: '— / 17',
     sample: 'Design that earns its keep',
   },
   {
     className: t.h6,
     role: 'h6',
-    px: 18,
+    px: 16,
     lh: 1.35,
     track: '0',
     steps: '— / —',
@@ -168,7 +177,8 @@ const TEXT_ROLES = [
     lh: 1.55,
     family: 'Public Sans',
     steps: 'holds',
-    sample: 'The long-form step up, for a caller that sets it. A rich-text field is body, at 16.',
+    sample:
+      'The long-form step up, for a caller that sets it. A rich-text field is body, at 16.',
   },
   {
     className: t.body,
@@ -177,7 +187,8 @@ const TEXT_ROLES = [
     lh: 1.6,
     family: 'Public Sans',
     steps: 'holds',
-    sample: 'The interface default, what the document inherits, and what Prose sets a body field in.',
+    sample:
+      'The interface default, what the document inherits, and what Prose sets a body field in.',
   },
   {
     className: t.bodySm,
@@ -281,8 +292,9 @@ const BREAKPOINTS = [
   { role: 'h2', d: '43 / 1.1', tab: '34 / 1.14', mob: '28 / 1.18' },
   { role: 'h3', d: '34 / 1.16', tab: '28 / 1.2', mob: '25 / 1.22' },
   { role: 'h4', d: '22 / 1.25', tab: '20 / 1.26', mob: '18 / 1.3' },
-  { role: 'h5', d: '22 / 1.28', tab: '22 / 1.28', mob: '20 / 1.3' },
-  { role: 'h6', d: '18 / 1.35', tab: '18 / 1.35', mob: '18 / 1.35' },
+  { role: 'h5-lg', d: '20 / 1.26', tab: '20 / 1.26', mob: '18 / 1.3' },
+  { role: 'h5', d: '18 / 1.28', tab: '18 / 1.28', mob: '17 / 1.3' },
+  { role: 'h6', d: '16 / 1.35', tab: '16 / 1.35', mob: '16 / 1.35' },
   { role: 'quote', d: '28 / 1.35', tab: '28 / 1.35', mob: '22 / 1.4' },
   { role: 'quote-lg', d: '43 / 1.2', tab: '34 / 1.24', mob: '25 / 1.3' },
   { role: 'lead', d: '20 / 1.5', tab: '20 / 1.5', mob: '18 / 1.55' },
@@ -344,7 +356,8 @@ function SurfaceFlow() {
           <tr>
             <th scope="row">Ground</th>
             <td>
-              The body of the frame, one rung off the section: <code>--prose-table-body-ground</code>
+              The body of the frame, one rung off the section:{' '}
+              <code>--prose-table-body-ground</code>
             </td>
           </tr>
           <tr>
@@ -442,12 +455,13 @@ export default function TypographySpecimenPage() {
           <Layout rowGap="block">
             <h2>The title ladder</h2>
             <p>
-              Six steps, cut at 1.25 from 22px for Newsreader. Size and line height are one
-              decision and are named together — <code>--font-size-h2</code> pairs with{' '}
-              <code>--line-height-h2</code>, and both carry <code>-t</code> and <code>-m</code>{' '}
-              breakpoint steps. Tracking is the deliberate exception: it corrects an optical
-              error at a size rather than marking a step, so h2, h3 and h4 share three
-              corrections between them rather than owning one each.
+              Display to h3 run 1.25 in Newsreader; h4 down are the sans, cut optically. Size
+              and line height are one decision and are named together —{' '}
+              <code>--font-size-h2</code> pairs with <code>--line-height-h2</code>, and both
+              carry <code>-t</code> and <code>-m</code> breakpoint steps. Tracking is the
+              deliberate exception: it corrects an optical error at a size rather than marking a
+              step, so h2, h3 and h4 share three corrections between them rather than owning one
+              each.
             </p>
           </Layout>
 
@@ -773,15 +787,17 @@ export default function TypographySpecimenPage() {
 
               <h3>Headings, and the sixth step</h3>
               <p>
-                h1 to h3 are the display serif; h4 to h6 are the sans (owner, 19 Oct 2026), sized
-                optically so each keeps the weight its serif step had. <code>h6</code> is the 16px medium step — the
-                same voice a bare <code>h6</code> and a DataTable key column take, so there is one
-                sixth-level heading on the site rather than a label here and a title elsewhere.
+                h1 to h3 are the display serif; h4 to h6 are the sans (owner, 19 Oct 2026),
+                sized optically so each keeps the weight its serif step had. <code>h6</code> is
+                the 16px medium step — the same voice a bare <code>h6</code> and a DataTable key
+                column take, so there is one sixth-level heading on the site rather than a label
+                here and a title elsewhere.
               </p>
               <h4>A fourth-level heading</h4>
               <p>
-                Set in the sans at 22px, which reads about as large as the serif pull quote at 28
-                below. The two no longer share a value: h4 moved to the sans and the quote stayed.
+                Set in the sans at 22px, which reads about as large as the serif pull quote at
+                28 below. The two no longer share a value: h4 moved to the sans and the quote
+                stayed.
               </p>
               <h5>A fifth-level heading</h5>
               <h6>A sixth-level heading</h6>
@@ -849,8 +865,8 @@ export default function TypographySpecimenPage() {
               <h3>A table</h3>
               <p>
                 Boxed, the same structure DataTable draws: an outer border, a filled head row, a
-                body ground, and a hairline between every row and every column, so a value can be
-                followed down its column as easily as across its row.
+                body ground, and a hairline between every row and every column, so a value can
+                be followed down its column as easily as across its row.
               </p>
               <table>
                 <caption>The gap scale, and what each step separates</caption>
@@ -971,10 +987,10 @@ export default function TypographySpecimenPage() {
               <h3>Inline marks</h3>
               <p>
                 The set an editor can actually produce: <strong>strong</strong>,{' '}
-                <em>emphasis</em>, <del>a deletion</del>,{' '}
-                <ins>an insertion</ins>, <a href="/design/icon">a link</a>, <code>code</code>,
-                an abbreviation like <abbr title="Cascading Style Sheets">CSS</abbr>, a footnote
-                marker<sup>1</sup>, a subscript<sub>2</sub>, and <small>small print</small>.
+                <em>emphasis</em>, <del>a deletion</del>, <ins>an insertion</ins>,{' '}
+                <a href="/design/icon">a link</a>, <code>code</code>, an abbreviation like{' '}
+                <abbr title="Cascading Style Sheets">CSS</abbr>, a footnote marker<sup>1</sup>,
+                a subscript<sub>2</sub>, and <small>small print</small>.
               </p>
               <p>
                 Links are underlined at rest, always. Colour alone is not an affordance inside a
