@@ -36,8 +36,8 @@
 
 /* The client's words in the SANS (owner, home round 3, 11 Oct 2026: small text, readability
    first): the lead role (18) on the card that is the thing, wrapped pretty so the last line alone
-   shortens. The italic serif reading quote it replaced was the harder read at a card's measure;
-   the slant returns in the sans only as the `italic` voice, below. */
+   shortens. The italic serif reading quote it replaced was the harder read at a card's measure.
+   Italic in every arrangement (owner, 22 Oct 2026), carried by the --tsm-quote-text* composites. */
 .quote {
   min-inline-size: 0;
   /* A measure in the quote's own type: no effect inside a card's track, and a cap when an unboxed
@@ -78,19 +78,10 @@
   }
 }
 
-/* The panel's words at the lead-lg role (20): the panel is as large as the cover beside it, so the
-   quote takes one step up from the card's 18, still sans. */
+/* The panel's words: the card's own 18 lead-lg italic, named as the panel's part so it can move
+   on its own if the panel, as large as the cover beside it, ever wants a step up. */
 .quotePanel {
   font: var(--tsm-quote-text-panel);
-}
-
-/* The italic voice (owner, 15 Oct 2026): a quote set beside other content leans, so it reads as
-   the client speaking rather than as more of the page's copy; a wall of quotes stays upright,
-   where every item is a quote already. The sans italic, never the serif. Written after every
-   rule that sets the quote's `font:` (which resets font-style), and at two classes to outrank
-   `.sm .quote` and `.quotePanel` by order. */
-.quote.italic {
-  font-style: italic;
 }
 
 /* Prose stays the trusted-HTML seam; the two-class selector outranks its root so the quote's own

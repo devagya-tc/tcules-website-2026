@@ -116,6 +116,32 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.18** Reasons: the "why Tcules" band (15 Oct queue). Six argued reasons, each with an isometric drawing of
       its claim; `open`, `boxed` and `beside`, all one fold at 1440 (owner picks, 16 Oct 2026, mocks rounds 1–4). (#115)
 
+**Review with Jatin, 22 Oct.** Triaged with the owner's answers in the review checklist
+(https://claude.ai/artifact/HLnxA2opHsfw47YkfSXcnf). Batch 1 lands and is reviewed before batch 2 starts (owner, 22 Oct).
+
+*Batch 1: small items, one PR each.*
+- [~] **2.19** FAQ question at 20px, as a standard step in the type ladder.
+- [~] **2.20** Testimonials italic everywhere (supersedes the 15 Oct voice-variant ruling).
+- [~] **2.21** Reasons takes four: today's arrangement as 2×2, and `beside` with a 2×2 set.
+- [~] **2.22** Case study cards never hold a testimonial; the case study index groups by stage (default) and industry.
+- [~] **2.23** Card titles are sans except the horizontal variant; insights group titles smaller with more air; By type is the default.
+
+*Batch 2: exploratory, after batch 1 is reviewed.*
+- [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
+      improve the current card instead, on a paper-deep card ground.
+- [ ] **2.25** Recolour every Reasons isometric without peridot, to see the set in blue only.
+- [ ] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
+      polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
+- [ ] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
+- [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
+- [ ] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays).
+- [ ] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
+      cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
+
+*Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
+teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
+Jatin's explicit sign-off on the reduced type size.
+
 ## Phase 3 — Slice 1: `/services/product-design`
 
 - [ ] **3.1** Semantic section view models in `src/content/types.ts`: Situation, Capability set,
@@ -155,6 +181,9 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 ## Parked (handoff says don't freeze yet)
 
 Homepage · About · Careers · final positioning copy · migrating all 135 routes · share-preview generator.
+
+**Post-launch (Jatin review, 22 Oct).** A Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature for
+learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs with Ask AI).
 
 **Content asks, addressed later.** The design is content-agnostic for now, so nothing here blocks
 a phase: `TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in

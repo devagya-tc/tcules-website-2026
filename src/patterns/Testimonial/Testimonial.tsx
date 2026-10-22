@@ -75,18 +75,6 @@ export type TestimonialSize = 'md' | 'sm';
  */
 export type TestimonialFrame = 'box' | 'none';
 
-/**
- * The quote's voice (owner, 15 Oct 2026: "when placed next to some content, i think they can be
- * italics, but in the grid of testimonials, it can remain normal").
- *
- *   upright  the default, and always in a wall: there every item is a quote, so nothing needs
- *            marking as one.
- *   italic   the sans italic, for a quote set BESIDE other content (a case, a claim, an offer),
- *            where the lean separates the client's words from the page's own. TestimonialBeside
- *            defaults to it.
- */
-export type TestimonialVoice = 'upright' | 'italic';
-
 function warn(message: string) {
   if (process.env.NODE_ENV !== 'production') console.warn(`Testimonial: ${message}`);
 }
@@ -167,8 +155,6 @@ export type TestimonialCardProps = {
   as?: 'li' | 'div';
   /** Stretch to the row's height, the attribution pinned to the foot (a row of peers). */
   fill?: boolean;
-  /** Default `upright`. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
 };
 
 /**
@@ -182,7 +168,6 @@ export function TestimonialCard({
   frame = 'box',
   as: Root = 'div',
   fill = false,
-  voice = 'upright',
 }: TestimonialCardProps) {
   if (!valid(item)) return null;
   /* Every testimonial carries its star rating (owner, 12 Oct 2026); say so when one arrives without. */
@@ -211,7 +196,7 @@ export function TestimonialCard({
             onCard={frame === 'box'}
           />
         ) : null}
-        <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
+        <blockquote className={styles.quote}>
           <Prose
             html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
             className={styles.quoteProse}
@@ -409,8 +394,6 @@ export type TestimonialBesideProps = {
   reverse?: boolean;
   /** Default `card`. See `TestimonialBesideArrangement`. */
   arrangement?: TestimonialBesideArrangement;
-  /** Default `italic`: the quote sits beside the work. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
 };
 
 /**
@@ -424,7 +407,6 @@ export function TestimonialBeside({
   item,
   reverse = false,
   arrangement = 'card',
-  voice = 'italic',
 }: TestimonialBesideProps) {
   if (!valid(item)) return <>{work}</>;
   if (arrangement === 'diptych') {
@@ -452,9 +434,7 @@ export function TestimonialBeside({
           {typeof item.rating === 'number' ? (
             <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
           ) : null}
-          <blockquote
-            className={cx(styles.quote, styles.quotePanel, voice === 'italic' && styles.italic)}
-          >
+          <blockquote className={cx(styles.quote, styles.quotePanel)}>
             <Prose
               html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
               className={styles.quoteProse}
@@ -487,7 +467,7 @@ export function TestimonialBeside({
       className={styles.beside}
     >
       {work}
-      <TestimonialCard item={item} voice={voice} />
+      <TestimonialCard item={item} />
     </Layout>
   );
 }
@@ -521,8 +501,6 @@ export type TestimonialCaseProps = {
    * first, so a phone reads cover, claim, voice in every card.
    */
   reverse?: boolean;
-  /** Default `italic`: the client's words sit beside the page's own. See `TestimonialVoice`. */
-  voice?: TestimonialVoice;
 };
 
 /**
@@ -567,7 +545,6 @@ export function TestimonialCase({
   image,
   item,
   reverse = false,
-  voice = 'italic',
 }: TestimonialCaseProps) {
   const paragraphs = bodyHtml?.filter((html) => html.trim().length > 0) ?? [];
   const story =
@@ -639,7 +616,7 @@ export function TestimonialCase({
           {typeof item.rating === 'number' ? (
             <StarRating value={item.rating} size="md" glyph={<Icon name="star" />} onCard />
           ) : null}
-          <blockquote className={cx(styles.quote, voice === 'italic' && styles.italic)}>
+          <blockquote className={styles.quote}>
             <Prose
               html={bindShortWords(withQuoteMarks(curlQuotes(item.quoteHtml)))}
               className={styles.quoteProse}
