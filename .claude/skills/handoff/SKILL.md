@@ -10,28 +10,27 @@ disable-model-invocation: true
 
 Extra notes from the person: **$ARGUMENTS**
 
-1. **Who.** The session context names the person at this keyboard (from the startup hook). If no
-   identity is set, ask who they are in one line and stop until they answer: a handoff under the
-   wrong name is worse than none.
-2. **Where.** Find this branch's pull request: `gh pr view --json number,url,state`. If the branch
-   has none, offer `/ship` first (a draft pull request is fine); a handoff needs a pull request to
-   live on. If the person is on `main`, say there's nothing to hand off.
-3. **Gather, from this session only.**
-   - What changed: `git status --short` and the commits since the session began.
-   - What was decided in this conversation, and by whom. A ruling exists only once Jatin has
-     approved it; anything else is a choice or a proposal, so say which.
-   - What is unfinished or next, and anything waiting on someone.
-4. **Draft the note**, plain sentences, names not ids, each part under 400 characters:
+Talk in plain words for roles that aren't technical (the session context says which): no git terms,
+say what happens to their work. Nothing is discarded or set aside unless the person chooses it.
+
+1. **Who.** The session context names the person at this keyboard. If it doesn't, ask once who they
+   are, then carry on.
+2. **Unsaved work first.** If the folder has changes that aren't saved yet, say what they are in terms
+   of the work and offer: save them to this piece of work now, keep them here for later, or leave them
+   out. Do what they choose. Never discard anything.
+3. **Where the note goes.** This branch's pull request: `gh pr view --json number,url`. If there isn't
+   one, offer `/ship` first (a draft is fine): the note needs a pull request to live on. On `main`,
+   there's nothing to hand off.
+4. **Gather, from this session only**: what changed, what was decided and by whom, what's next. A
+   ruling exists only once Devagya logs it; anything else is a choice or a suggestion, so say which.
+5. **Write the note**, plain sentences, names not ids, each part under 400 characters:
    ```
    **Handoff** · <Name> · <date, local time>
    **Changed:** …
-   **Decided:** … (marked "Jatin approved", "proposed" or "chose")
+   **Decided:** … (marked "Devagya logged", "suggested" or "chose")
    **Next:** …
    ```
-   Fold in the person's extra notes. **The repo is public:** never put client-confidential detail,
-   prices or personal data in the note; refer to it as "see Slack" instead.
-5. **Post it**: write the note to a temporary file and run `gh pr comment <number> --body-file <file>`.
-   Say it's posted, with the pull request link, in one line.
-6. **Loose ends.** Uncommitted changes: offer to commit them to this branch first. Something that
-   should become a rule: suggest it in the pull request description as a proposed ruling for Jatin;
-   never write it into `docs/decisions/`.
+   Fold in the person's extra notes. **The repo is public:** no client-confidential detail, prices or
+   personal data; write "see Slack" instead.
+6. **Post it** with `gh pr comment <number> --body-file <file>`, and say it's posted, with the link.
+7. **Suggested rulings** go in the pull request description for Devagya, never into `docs/decisions/`.

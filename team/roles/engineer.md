@@ -7,7 +7,7 @@ Mihir. Engineering and the CMS: Strapi, the content seam (`src/content/`), data 
 - **Work on a branch, ship through a pull request** Devagya reviews; `main` is protected.
 - **Guardrails.** Can't edit the rulings, the brand chapters, `CLAUDE.md`, `.claude/` or `team/`;
   scripts and package files stay editable for engineering work and are owner-reviewed on GitHub.
-- **Rulings are proposals until Jatin approves them.** Suggest one in the pull request.
+- **Suggests rulings; Devagya logs them.** A ruling is valid once he logs it.
 
 Mihir works with a GPT account rather than Claude, so the Claude commands don't run for him. The
 shared context is still his: `CLAUDE.md` and `docs/decisions/` are plain files, and open pull requests

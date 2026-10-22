@@ -10,7 +10,9 @@ Already have a clone? Open Claude Code in it and type `/onboard`: it runs the sa
 
 ```markdown
 Set me up for the Tcules website repo. Work through these steps in order, tell me in one plain line
-what you're doing at each (I may not know git), and only stop to ask me when a step says so.
+what you're doing at each (I may not know git: describe what happens to my work, not git commands),
+and only stop to ask me when a step says so. Never discard, overwrite or set aside anything of mine
+unless I choose it; if something is in the way, tell me what and my choices, and carry on.
 
 1. Tools. Check `git --version`, `node --version` (needs 20.11.1 or later), `npm --version` and
    `gh --version`.
@@ -21,7 +23,13 @@ what you're doing at each (I may not know git), and only stop to ask me when a s
    - Run `gh auth status`. If I'm not signed in, run `gh auth login --web --git-protocol ssh` and tell
      me to finish the sign-in in the browser it opens; wait for me.
 2. Clone. Ask me where to put the repo (suggest `~/code/tcules-website-2026`). If that folder already
-   holds a clone of devagya-tc/tcules-website-2026, use it and pull. Otherwise:
+   holds a clone of devagya-tc/tcules-website-2026, use it and bring it up to date safely:
+   - `git fetch` always.
+   - Fast-forward (`git merge --ff-only @{u}`) only when `git status --porcelain` is empty and the
+     branch tracks a remote.
+   - Otherwise tell me, in plain words, that the folder is behind and what unsaved work it has, and
+     leave everything as it is. Never stash, reset, rebase or check out over changes.
+   Otherwise:
    - Try `git clone https://github.com/devagya-tc/tcules-website-2026.git <folder>`.
    - If that fails on a network or security error, use SSH over port 443: if `~/.ssh/id_ed25519` does
      not exist, create it with `ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519`, add a `Host github.com`
@@ -36,9 +44,8 @@ what you're doing at each (I may not know git), and only stop to ask me when a s
    guess from my Claude account or my computer's user name: accounts are shared.
 4. My role's settings, inside the clone. Both files below are git-ignored; check with
    `git check-ignore` and stop if they aren't.
-   - `.claude/settings.local.json`: start from the template for my role in `team/templates/`
-     (`settings.local.designer.json` for designer and gtm, `settings.local.engineer.json` for
-     engineer, `settings.local.owner.json` for owner), set `TCULES_MEMBER` and `TCULES_ROLE` to mine.
+   - `.claude/settings.local.json`: start from `team/templates/settings.local.<my role>.json`
+     (designer, gtm, engineer or owner), set `TCULES_MEMBER` and `TCULES_ROLE` to mine.
      If the file already exists, merge: keep its other entries, add the template's.
    - `CLAUDE.local.md`: from `team/templates/CLAUDE.local.md`, its `<Name>`, `<role>` and
      `<member-id>` replaced with mine exactly as `team/members.json` spells them.
@@ -51,7 +58,8 @@ what you're doing at each (I may not know git), and only stop to ask me when a s
    WRITE means I can't open pull requests yet: tell me to ask Devagya for access, and carry on.
 7. Finish. Tell me in a short list what was set up and what still needs me, then ask me to open Claude
    Code in the clone folder, accept "trust this folder", and check that the first reply names me and
-   says what's happening on GitHub.
+   says what's happening on GitHub. New worktrees get my identity and settings automatically
+   (`.worktreeinclude`), so I set this up once.
 ```
 
 ## What it does not do

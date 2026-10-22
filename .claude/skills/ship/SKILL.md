@@ -10,22 +10,37 @@ disable-model-invocation: true
 
 Title, if given: **$ARGUMENTS**
 
-Explain each step to the person in one plain line as you go; they may never have used git.
+**How to talk.** The session context says whether this person is technical. If not (designer, gtm),
+never ask them to rebase, stash, reset, merge or force-push, and don't name git steps at all: say what
+is happening to their work ("saving your changes", "sending them to Devagya for review"), offer plain
+choices, and do the git work yourself once they choose. Technical roles can see the git terms.
 
-1. **Branch.** If on `main`, create a branch first: `git switch -c <member>/<short-topic>` (member id
-   from the session context, topic from the title or the work, lowercase with hyphens). Never commit to
-   `main`: it is protected and a push there is refused.
-2. **Checks.** Run `npm run verify`. If `node_modules` is missing, run `npm ci` once first. A failing
-   check is fixed at its cause, then verify runs again; if a fix needs a path this person can't edit
-   (guardrails), stop and say what Devagya needs to change.
-3. **Commit.** Stage only the files this work changed (`git status` first; never commit
-   `.claude/settings.local.json` or `CLAUDE.local.md`). One commit, message in the repo's style: a
-   short summary line, then what changed and why. The author is already set in this clone.
-4. **Push and open the pull request.** `git push -u origin <branch>`, then
-   `gh pr create --base main --fill` with a body that says, in plain words: what changed, how to see it
-   (the `/design` route or page), what was checked, and any proposed ruling for Jatin. Draft
-   (`--draft`) if the person says it isn't finished.
-5. **Report** the pull request link in one line. Offer `/handoff` if they're stopping.
+**The one rule.** Nothing is discarded, overwritten or set aside unless the person chooses it. If
+something is in the way (a conflict, work that isn't theirs, a refused step), say what it is and the
+choices, then carry on with what you can; never stop and wait on it.
 
-If anything fails (no GitHub access, push refused, gh not signed in), say what failed in one line and
-what fixes it: `gh auth login`, or ask Devagya for repo access.
+1. **Branch.** If on `main`, start a branch for this work: `<member>/<short-topic>` (member id from the
+   session context; topic from the title or the work, lowercase with hyphens). Never commit to `main`:
+   it is protected.
+2. **Check what's in the folder.** `git status`. If there are changes that aren't part of this work,
+   ask in plain words which belong ("There are also changes to the footer from before. Include them,
+   leave them out for now, or save them as a separate piece of work?").
+3. **Checks.** Run `npm run verify` (if `node_modules` is missing, run `npm ci` once first). Fix a
+   failure at its cause and run it again. If the fix needs a file this person's role can't edit, say
+   what Devagya needs to change, and continue with the rest.
+4. **Commit.** Only the files this work changed; never `.claude/settings.local.json` or
+   `CLAUDE.local.md`. One commit in the repo's style: a short summary line, then what changed and why.
+5. **Bring in newer work if needed.** If `main` has moved on since this branch started, say so plainly
+   ("the site has newer changes since you started"). For technical roles, offer to merge `origin/main`.
+   For others, offer to bring them in, and do it with a merge, never a rebase. If it hits a conflict,
+   explain which parts of their work and the newer work touch the same thing, and ask which to keep.
+6. **Push and open the pull request.** `git push -u origin <branch>`, then `gh pr create --base main`
+   with a body that says, in plain words: what changed, how to see it (the `/design` route or page),
+   what was checked, and any suggested ruling for Devagya. Draft (`--draft`) if it isn't finished.
+7. **Report** the pull request link in one line, and offer `/handoff` if they're stopping.
+
+Never delete a branch, worktree or folder here. If one should go, check it for unsaved and untracked
+files first and ask in plain words.
+
+If something fails (no GitHub access, push refused, gh not signed in), say what failed and what fixes
+it: signing in to GitHub again, or asking Devagya for access.

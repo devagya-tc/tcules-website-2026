@@ -1,5 +1,5 @@
 {
-  "$comment": "Who works in this repo and in which role. Identity is chosen by each person's own clone (TCULES_MEMBER in their git-ignored .claude/settings.local.json), never by the Claude login, so a shared login still tells people apart. No emails: the repo is public. Roles are described in team/roles/. Rulings are approved by Jatin, who does not work in the repo.",
+  "$comment": "Who works in this repo and in which role. Identity is chosen by each person's own clone (TCULES_MEMBER in their git-ignored .claude/settings.local.json), never by the Claude login, so a shared login still tells people apart. No emails: the repo is public. Roles are described in team/roles/. Rulings are logged by Devagya, his own and Jatin's (decisions/2026-10-22-rulings-valid-once-devagya-logs-them).",
   "members": {
     "devagya": { "name": "Devagya", "github": "devagya-tc", "role": "owner" },
     "yash": { "name": "Yash", "github": "yash-rawall", "role": "gtm" },
@@ -7,5 +7,5 @@
     "bhumika": { "name": "Bhumika", "github": null, "role": "designer" },
     "shoghi": { "name": "Shoghi", "github": null, "role": "designer" }
   },
-  "approver": { "id": "jatin", "name": "Jatin", "approves": "proposed rulings; a ruling is logged with /decide only after his approval" }
+  "approver": { "id": "jatin", "name": "Jatin", "approves": "final approval in feedback sessions; Devagya logs those rulings on his behalf" }
 }

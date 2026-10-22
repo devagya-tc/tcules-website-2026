@@ -11,6 +11,11 @@ If that is empty, the ruling is the one the owner just made in this conversation
 one, log each as its own entry. If you cannot tell what was ruled, ask in one line and stop. Never log a
 proposal, a critic's note or your own recommendation: only what the owner decided.
 
+Only Devagya logs rulings. A ruling is valid once he logs it: his own, or Jatin's from a feedback
+session, logged on Jatin's behalf with that session as its `source`. If the person at the keyboard isn't
+Devagya, don't log anything: offer to put the suggestion in the pull request description for him
+(decisions/2026-10-22-rulings-valid-once-devagya-logs-them).
+
 1. **Is it already logged?** Read the index in `docs/decisions/README.md` for the ruling's area, and
    `grep -ril` the log for its key words. If an entry already says this, stop and say which. If an entry
    says something this contradicts, the new entry **supersedes** it. Set the old one to

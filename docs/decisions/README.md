@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-201 active rulings, 22 superseded. Newest first within each area; a ruling in several areas is listed under each.
+202 active rulings, 22 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -96,6 +96,7 @@ stale index.
 
 *How work is run, reviewed and shipped.*
 
+- 2026-10-22 · [A ruling is valid once Devagya logs it; Jatin's approvals are logged by him](2026-10-22-rulings-valid-once-devagya-logs-them.md)
 - 2026-10-20 · [The repo is public, so main's protection is enforced](2026-10-20-repo-public-main-protected.md) · enforced by `GitHub ruleset "main" (id 25475637); gh api repos/devagya-tc/tcules-website-2026/branches/main --jq .protected`
 - 2026-10-20 · [The design system lives in an artifact, generated from the repo](2026-10-20-ds-artifact-from-repo.md) · enforced by `npm run ds:build and ds:check (/ds-publish)`
 - 2026-10-16 · [Design the component for ideal content, then brief the content team](2026-10-16-design-component-first-then-brief-content.md)

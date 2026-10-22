@@ -13,8 +13,9 @@ the Claude desktop app rather than a terminal.
 - **Guardrails.** This role can't edit the rulings, the brand chapters, `CLAUDE.md`, `.claude/`,
   `scripts/`, the package files, `.design-sync/`, `.github/` or `team/`. A refused edit means the change
   belongs with Devagya: say what you need in the pull request or on Slack.
-- **Rulings are proposals until Jatin approves them.** Suggest one in your pull request description;
-  once approved it is logged with `/decide`.
+- **Suggest rulings; Devagya logs them.** Put a suggestion in your pull request description; a ruling
+  is valid once Devagya logs it with `/decide`.
+- **Plain language.** Claude never asks you to rebase, stash, reset, merge or force-push. It tells you
+  what's happening to your work, offers plain choices, and does the git work. Nothing of yours is
+  discarded or set aside unless you choose it.
 - **End every session with `/handoff`**, so whoever picks the work up next starts where you stopped.
-
-This is also the role Claude assumes when no identity is set in the folder: the most careful one.
