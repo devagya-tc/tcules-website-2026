@@ -3,7 +3,7 @@
  * → eyebrow "Doodle", title "Meeting times people will actually keep". Presentation of the authored
  * words, not a rewrite: only the claim's first letter is raised, and a run-in's closing full stop
  * ("…inside Moodle.") is punctuation, not part of the claim. A title with no colon stays whole, with
- * no eyebrow. Shared by every page that features a case as TestimonialCase (home, the case index).
+ * no eyebrow. Shared by every page that features a case as CaseCard (home, the case index).
  */
 export function splitClaim(heading: string): { eyebrow?: string; title: string } {
   const at = heading.indexOf(':');

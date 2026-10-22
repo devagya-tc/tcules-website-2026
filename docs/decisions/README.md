@@ -40,7 +40,7 @@ stale index.
 
 <!-- decisions:generated -->
 
-201 active rulings, 18 superseded. Newest first within each area; a ruling in several areas is listed under each.
+201 active rulings, 20 superseded. Newest first within each area; a ruling in several areas is listed under each.
 
 ## Brand framework backlog
 
@@ -323,6 +323,7 @@ stale index.
 
 *Card sets and their variants.*
 
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-22 · [Card titles are sans, except the horizontal card](2026-10-22-card-titles-sans-except-horizontal.md)
 - 2026-10-19 · [Home What we do is a bento of boxed tiles in two sizes](2026-10-19-what-we-do-is-a-bento.md)
 - 2026-10-19 · [No ground that exists only on hover](2026-10-19-no-hover-only-grounds.md)
@@ -330,11 +331,9 @@ stale index.
 - 2026-10-19 · [A tile with its own drawing carries no icon](2026-10-19-drawn-tile-carries-no-icon.md)
 - 2026-10-19 · [A bento tile's hover: blue hairline, 2px lift, its texture turns blue, no shadow](2026-10-19-bento-tile-hover.md)
 - 2026-10-19 · [Bento's texture is the pixel grid in one continuous wave per row](2026-10-19-bento-texture-is-a-continuous-wave.md)
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [No card is hidden behind an interaction](2026-10-16-no-hidden-cards.md)
 - 2026-10-16 · [A linked card's hover is its title in the accent ink](2026-10-16-linked-card-hover-is-accent-title.md)
 - 2026-10-16 · [Rules only where they structure something](2026-10-16-lines-only-where-they-structure.md)
-- 2026-10-16 · [The case card is one view; its visual is a fixed slot](2026-10-16-case-card-is-one-view.md)
 - 2026-10-12 · [People get ProfileCards, not image cards](2026-10-12-people-get-profile-cards.md)
 - 2026-10-12 · [A band heavy with important items gets drawn cards](2026-10-12-important-items-get-drawn-cards.md)
 - 2026-10-11 · [Card variants are never blended](2026-10-11-card-variants-stay-distinct.md)
@@ -366,9 +365,8 @@ stale index.
 *Logos, cases, testimonials, ratings.*
 
 - 2026-10-22 · [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-19 · [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md) · enforced by `fixture: src/content/sources/fixtures/testimonial-ratings.ts (rating() throws below 4.5)`
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
-- 2026-10-16 · [The case card is one view; its visual is a fixed slot](2026-10-16-case-card-is-one-view.md)
 - 2026-10-12 · [A testimonial always shows its quote marks and star rating](2026-10-12-testimonial-shows-marks-and-rating.md)
 - 2026-10-12 · [People get ProfileCards, not image cards](2026-10-12-people-get-profile-cards.md)
 - 2026-10-11 · [Logo walls use real logo files](2026-10-11-logo-walls-use-real-logos.md)
@@ -395,6 +393,7 @@ stale index.
 
 *Copy, narrative, IA, the CMS seam.*
 
+- 2026-10-22 · [The case-study index opens by stage](2026-10-22-case-index-opens-by-stage.md)
 - 2026-10-16 · [Per-item visuals illustrate the claim; they are not evidence](2026-10-16-visuals-illustrate-not-prove.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
 - 2026-10-16 · [Listings start from the approved front page and add navigation](2026-10-16-listings-add-to-the-approved-front-page.md)
@@ -430,8 +429,9 @@ stale index.
 *Contracts of a named component or pattern.*
 
 - 2026-10-22 · [An FAQ question is 20px, on a standard h5-lg step](2026-10-22-faq-question-is-h5-lg-20.md)
+- 2026-10-22 · [The case-study index opens by stage](2026-10-22-case-index-opens-by-stage.md)
+- 2026-10-22 · [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-19 · [The chip form is one wide paper panel that fits one screen](2026-10-19-chip-form-one-wide-paper-panel.md)
-- 2026-10-16 · [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)
 - 2026-10-16 · [Reasons: six argued reasons, each drawn, in one fold](2026-10-16-reasons-band-shape.md)
 - 2026-10-16 · [No counts in navigation; switch labels in capitals](2026-10-16-no-counts-in-navigation.md)
 - 2026-10-16 · [Text never crosses an island's edge](2026-10-16-island-copy-stays-on-ground.md)
@@ -474,6 +474,8 @@ stale index.
 Kept so a reversal and its reason stay readable. Never apply one of these.
 
 - 2026-10-16 · ~~Type smaller than 28px is Public Sans~~ (2026-10-16-type-under-28-is-sans.md) → [Only display and h1–h3 are serif](2026-10-19-only-display-h1-h3-serif.md)
+- 2026-10-16 · ~~A featured case is one card holding its testimonial~~ (2026-10-16-testimonial-case-card.md) → [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
+- 2026-10-16 · ~~The case card is one view; its visual is a fixed slot~~ (2026-10-16-case-card-is-one-view.md) → [Case study cards never hold a testimonial](2026-10-22-case-cards-carry-no-testimonial.md)
 - 2026-10-15 · ~~Italic testimonials are a voice variant, beside content only~~ (2026-10-15-testimonial-italic-is-voice-variant.md) → [Testimonials are italic everywhere](2026-10-22-testimonials-italic-everywhere.md)
 - 2026-10-10 · ~~Placeholder ratings run 4 to 5~~ (2026-10-10-placeholder-ratings-four-to-five.md) → [Placeholder ratings are never below 4.5](2026-10-19-placeholder-ratings-floor.md)
 - 2026-10-10 · ~~A case and its quote sit adjacent, never embedded~~ (2026-10-10-case-and-quote-adjacent.md) → [A featured case is one card holding its testimonial](2026-10-16-testimonial-case-card.md)

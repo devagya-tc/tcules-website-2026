@@ -1,7 +1,7 @@
 ---
 title: "The case card is one view; its visual is a fixed slot"
 date: 2026-10-16
-status: active
+status: superseded
 area: [cards, proof]
 source: "Owner review, 16 Oct 2026 (selected work, round 3)"
 supersedes: []
@@ -18,3 +18,5 @@ legacy: "memory/beauty-not-content-shape.md"
 **The mistake it prevents.** Remaking the project image instead of designing the card.
 
 **How to apply.** "Think textures, graphics" applies to the view, not to the project image. Case imagery is ch05 cut-outs made from the captures; whole-screen screenshots are banned there.
+
+Superseded 22 Oct 2026 by `2026-10-22-case-cards-carry-no-testimonial`: case study cards never hold a testimonial.

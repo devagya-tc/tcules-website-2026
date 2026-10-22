@@ -1,13 +1,11 @@
 export {
   TestimonialBeside,
   TestimonialCard,
-  TestimonialCase,
   TestimonialWall,
   type TestimonialAvatar,
   type TestimonialBesideArrangement,
   type TestimonialBesideProps,
   type TestimonialCardProps,
-  type TestimonialCaseProps,
   type TestimonialFrame,
   type TestimonialItem,
   type TestimonialSize,
