@@ -46,9 +46,15 @@ Claude then opens with a short catch-up: what's new, what's open and whose, and 
 | engineer | Can't edit rulings, brand chapters, `CLAUDE.md`, `.claude/`, `team/`; can't push to `main` | Yes | Yes |
 | owner | None | No | Yes |
 
-Guardrails stop accidents, not people. They cover Claude's own file edits, not shell commands, so the
-real gate is GitHub: branch protection on `main`, and Devagya as code owner. Anything they block is a
-conversation with Devagya.
+Guardrails stop accidents, not people. The deny rules cover Claude's own file edits; for designer and
+engineer, a hook that runs before every shell command (`.claude/hooks/before-shell-guard.mjs`) refuses ones that
+would write to the same paths, reading them from those rules. A command that builds its path at run
+time can still get past it, so the real gate is GitHub: branch protection on `main`, and Devagya as
+code owner. Anything they block is a conversation with Devagya.
+
+Every hook runs `node` from PATH. Without Node installed the hooks don't run at all, and nothing says
+so: no catch-up at startup and no checks after edits is the sign. A clone set up before a template
+changed picks the change up by running `/onboard` again, which merges the template in.
 
 ## Every day
 
