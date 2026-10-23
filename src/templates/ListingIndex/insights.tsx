@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { Button, Cluster, Icon, Input, Layout, Tag } from '@/components';
 
 import styles from './ListingIndex.module.css';
 import type { ListingSection, ListingView } from './ListingIndex';
@@ -8,7 +8,6 @@ import {
   byEventDate,
   CardGrid,
   Dates,
-  dateOf,
   Feature,
   followCount,
   leadFirst,
@@ -250,6 +249,69 @@ const SHAPE: Record<InsightKind, FormatShape> = {
 const pageAnchor = (index: number) => (index > 0 ? `page-${index + 1}` : undefined);
 
 /**
+ * A format page's filters, built by the route (which owns the URLs): the search form's target and the
+ * query it carries forward, and one link per topic — "All" first — the one in effect held.
+ */
+export type FormatFilters = {
+  search: {
+    /** The form's action: the page's own path. */
+    action: string;
+    /** The query the search keeps (a topic in effect, a specimen's own parameters). */
+    params: readonly (readonly [string, string])[];
+    /** The search in effect. */
+    value?: string;
+    /** The field's name for a reader ("Search guides"). */
+    label: string;
+  };
+  topics: readonly { label: string; href: string; selected: boolean }[];
+  /** A search or a topic is in effect. */
+  active: boolean;
+  /** The page with neither. */
+  clearHref: string;
+};
+
+/** The search over its topics: a GET form (Enter searches) and a row of filter links. */
+function FilterBar({ filters }: { filters: FormatFilters }) {
+  const { search, topics } = filters;
+  return (
+    <Layout rowGap="block">
+      <form role="search" action={search.action} method="get">
+        {search.params.map(([key, value]) => (
+          <input key={key} type="hidden" name={key} value={value} />
+        ))}
+        {/* Half the column from 768: a field, not a banner. */}
+        <Layout columns={{ md: 2 }} colGap="gutter">
+          <Input
+            type="search"
+            name="q"
+            defaultValue={search.value}
+            placeholder={search.label}
+            aria-label={search.label}
+            enterKeyHint="search"
+          />
+        </Layout>
+      </form>
+      {topics.length > 1 ? (
+        <div role="group" aria-label="Filter by topic">
+          <Cluster colGap="tight" rowGap="tight">
+            {topics.map((topic) => (
+              <Tag
+                key={topic.href}
+                variant="filter"
+                href={topic.href}
+                selected={topic.selected}
+              >
+                {topic.label}
+              </Tag>
+            ))}
+          </Cluster>
+        </div>
+      ) : null}
+    </Layout>
+  );
+}
+
+/**
  * A format's own page (/insights/articles …; owner, 16 Oct 2026, after
  * claude.com/resources/articles): the hero's RECORD (how many there are and how fresh) and the
  * page's content, beside the rail's picker of formats, at the format's composition at its largest —
@@ -258,7 +320,8 @@ const pageAnchor = (index: number) => (index > 0 ? `page-${index + 1}` : undefin
  *                 rows of three — then the rest as ruled rows, newest first
  *   events        the next (or latest) event as a showcase, then dated rows, upcoming above past
  *
- * — with a server-rendered "Show more" and no filters.
+ * — with a search and topic filters over it, and a server-rendered "Show more". The filters are
+ * links and a GET form, so the URL holds them: a filtered page works without script and can be shared.
  */
 export function insightFormatPage({
   kind,
@@ -267,9 +330,10 @@ export function insightFormatPage({
   pageSize,
   moreHref,
   today,
+  filters,
 }: {
   kind: InsightKind;
-  /** Every piece of this format, newest first. */
+  /** Every piece of this format that the filters let through, newest first. */
   items: readonly InsightItem[];
   /** How many pages the reader has opened, from 1. */
   page: number;
@@ -280,31 +344,13 @@ export function insightFormatPage({
   /** Now, as ISO 8601: what splits an events page into upcoming and past. The route states it, so the
       template stays pure. */
   today?: string;
-}): { record: string[]; content: ReactNode } {
+  /** The search and topic filters over the page (owner, 23 Oct 2026). Absent, none are drawn. */
+  filters?: FormatFilters;
+}): ReactNode {
   const shape = SHAPE[kind];
   const meta: MetaOptions = {};
-  /* The hero's record: how many there are and how fresh, as ONE mono line under the lede (beauty
-     round 4). An events page dates itself by its events, never by when their pages were filed: the
-     next one to come, else the last one held — so the line matches the date numerals under it. */
   const now = Date.parse(today ?? '') || 0;
-  const eventTimes = items
-    .map((item) => Date.parse(item.event?.startsAt ?? ''))
-    .filter((time) => !Number.isNaN(time));
-  const nextEvent = eventTimes.filter((time) => time >= now).sort((a, b) => a - b)[0];
-  const lastEvent = eventTimes.filter((time) => time < now).sort((a, b) => b - a)[0];
-  const freshness =
-    shape === 'dates'
-      ? nextEvent !== undefined
-        ? `Next ${dateOf(new Date(nextEvent).toISOString())}`
-        : lastEvent !== undefined
-          ? `Last held ${dateOf(new Date(lastEvent).toISOString())}`
-          : undefined
-      : (() => {
-          const newest = dateOf(items[0]?.publishedAt);
-          return newest ? `Latest ${newest}` : undefined;
-        })();
   const total = items.length;
-  const record = [`${total} published`, ...(freshness ? [freshness] : [])];
 
   /* The pages read so far: the lead and a page's worth, then a page's worth more per "Show more". */
   const shownCount = 1 + page * pageSize;
@@ -327,7 +373,7 @@ export function insightFormatPage({
 
   let content: ReactNode;
   if (items.length === 0) {
-    content = <p>Nothing has been published here yet.</p>;
+    content = filters?.active ? null : <p>Nothing has been published here yet.</p>;
   } else if (shape === 'dates') {
     /* Events: upcoming above past, each a run of dated rows. */
     const dated = byEventDate(items.slice(0, shownCount));
@@ -391,6 +437,19 @@ export function insightFormatPage({
       else if (item !== lead) pages[at].rows.push(item);
     });
     const shownRows = pages.some((entry) => entry.rows.length > 0);
+    const rowList = (
+      <Layout rowGap="none">
+        {pages.map((entry, index) => (
+          <Rows
+            key={index}
+            /* A page that opened on cards took the anchor there. */
+            id={entry.cards.length === 0 ? pageAnchor(index) : undefined}
+            items={entry.rows}
+            meta={meta}
+          />
+        ))}
+      </Layout>
+    );
     content = (
       <Layout rowGap="section">
         {lead ? (
@@ -407,32 +466,40 @@ export function insightFormatPage({
             ))}
           </Layout>
         ) : null}
-        {shownRows ? (
+        {shownRows && (lead || !filters?.active) ? (
           <section aria-labelledby="format-more">
-            <Layout rowGap="block">
-              <h2 id="format-more" className={styles.groupTitle}>
-                {lead
-                  ? `More ${LABEL[kind].many.toLowerCase()}`
-                  : `All ${LABEL[kind].many.toLowerCase()}`}
+            <Layout rowGap="stack">
+              <h2 id="format-more" className={styles.sectionTitle}>
+                {`${lead ? 'More' : 'All'} ${LABEL[kind].many.toLowerCase()}`}
               </h2>
-              <Layout rowGap="none">
-                {pages.map((entry, index) => (
-                  <Rows
-                    key={index}
-                    /* A page that opened on cards took the anchor there. */
-                    id={entry.cards.length === 0 ? pageAnchor(index) : undefined}
-                    items={entry.rows}
-                    meta={meta}
-                  />
-                ))}
-              </Layout>
+              {rowList}
             </Layout>
           </section>
+        ) : shownRows ? (
+          /* A search's results with no lead: the rows under the results line, no heading. */
+          rowList
         ) : null}
         {more}
       </Layout>
     );
   }
 
-  return { record, content };
+  if (!filters) return content;
+  return (
+    <Layout rowGap="stack">
+      <FilterBar filters={filters} />
+      {filters.active ? (
+        <Cluster colGap="block" rowGap="text" align="center">
+          <p className={styles.count} role="status">
+            {total === 0 ? 'Nothing matches' : `${total} ${total === 1 ? 'result' : 'results'}`}
+            {filters.search.value ? ` for “${filters.search.value}”` : ''}
+          </p>
+          <Button as="a" href={filters.clearHref} emphasis="link" tone="primary">
+            Clear
+          </Button>
+        </Cluster>
+      ) : null}
+      {total > 0 ? content : null}
+    </Layout>
+  );
 }

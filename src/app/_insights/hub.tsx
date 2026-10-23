@@ -27,6 +27,9 @@ type Query = Record<string, string | string[] | undefined>;
 
 const VIEW_KEY = 'view';
 const PAGE_KEY = 'page';
+/** A format page's search and topic filter (owner, 23 Oct 2026). */
+const SEARCH_KEY = 'q';
+const TOPIC_KEY = 'topic';
 /** A format page's page: twelve pieces under the feature, then "Show more". */
 const PAGE_SIZE = 12;
 
@@ -293,7 +296,17 @@ export function insightsFormatProps(
   query: Query,
   pathFor: (kind: InsightResourceKind) => string = (k) => FORMAT_ROUTE[k],
 ): ListingIndexProps {
-  const all = page.resources.items.filter((item) => item.kind === kind);
+  const every = page.resources.items.filter((item) => item.kind === kind);
+  const subjects = subjectsOf(page);
+  /* The filters in effect: a search over the title and standfirst, and one topic. */
+  const q = first(query[SEARCH_KEY]).trim();
+  const topic = first(query[TOPIC_KEY]).trim();
+  const needle = q.toLowerCase();
+  const all = every.filter(
+    (item) =>
+      (!topic || item.filterIds.includes(topic)) &&
+      (!needle || `${item.title} ${item.description ?? ''}`.toLowerCase().includes(needle)),
+  );
   /* The first page holds the feature and twelve more; each "Show more" adds twelve. */
   const pages = Math.max(1, Math.ceil(Math.max(0, all.length - 1) / PAGE_SIZE));
   const current = Math.min(
@@ -302,20 +315,59 @@ export function insightsFormatProps(
   );
   const path = pathFor(kind);
   const [base = path, own] = path.split('?');
-  const more = new URLSearchParams(own);
-  more.set(PAGE_KEY, String(current + 1));
+  /* A URL on this page with the given filters: the path's own parameters kept (the specimen's
+     `?format=`), blanks dropped. */
+  const hrefWith = (params: Record<string, string>, hash = '') => {
+    const next = new URLSearchParams(own);
+    for (const [key, value] of Object.entries(params)) if (value) next.set(key, value);
+    const search = next.toString();
+    return `${base}${search ? `?${search}` : ''}${hash}`;
+  };
   const title = formatTitle(page, kind);
-  const subjects = subjectsOf(page);
-  const { record, content } = insightFormatPage({
+  const plural = FORMAT_NAME[kind].toLowerCase();
+  /* The topics this format has pieces in, the fullest first. */
+  const topics = [...subjects.entries()]
+    .map(([id, label]) => ({
+      id,
+      label,
+      size: every.filter((item) => item.filterIds.includes(id)).length,
+    }))
+    .filter((entry) => entry.size > 0)
+    .sort((a, b) => b.size - a.size);
+  const content = insightFormatPage({
     kind: kind as InsightKind,
     items: all.map((item) => toItem(item, subjects)),
     page: current,
     pageSize: PAGE_SIZE,
     moreHref:
       1 + current * PAGE_SIZE < all.length
-        ? `${base}?${more.toString()}#page-${current + 1}`
+        ? hrefWith(
+            { [SEARCH_KEY]: q, [TOPIC_KEY]: topic, [PAGE_KEY]: String(current + 1) },
+            `#page-${current + 1}`,
+          )
         : undefined,
     today: new Date().toISOString(),
+    filters: {
+      search: {
+        action: base,
+        params: [
+          ...new URLSearchParams(own).entries(),
+          ...(topic ? [[TOPIC_KEY, topic] as const] : []),
+        ],
+        value: q || undefined,
+        label: `Search ${plural}`,
+      },
+      topics: [
+        { label: 'All', href: hrefWith({ [SEARCH_KEY]: q }), selected: !topic },
+        ...topics.map((entry) => ({
+          label: entry.label,
+          href: hrefWith({ [SEARCH_KEY]: q, [TOPIC_KEY]: entry.id }),
+          selected: entry.id === topic,
+        })),
+      ],
+      active: Boolean(q || topic),
+      clearHref: hrefWith({}),
+    },
   });
 
   return {
@@ -324,11 +376,12 @@ export function insightsFormatProps(
       { label: 'Insights', href: ROUTES.insights },
       { label: title, href: FORMAT_ROUTE[kind] },
     ],
-    hero: { title, lede: [formatLine(page, kind)], record, titleSize: 'mark' },
+    hero: { title, lede: [formatLine(page, kind)], arrangement: 'plain' },
     label: title,
     railLabel: 'Insights by type',
     picker: {
       label: 'By type',
+      menu: true,
       items: formatsWithContent(page).map((k) => ({
         label: formatTitle(page, k),
         href: pathFor(k),

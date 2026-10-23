@@ -34,6 +34,12 @@ export type ListingHero = {
   record?: readonly string[];
   /** `mark` for a page named by one word (a format page's "Articles"); default `display`. */
   titleSize?: 'display' | 'mark';
+  /**
+   * `masthead` (default): the hero band over the listing. `plain` (owner, 23 Oct 2026, after
+   * claude.com/resources/product-announcements: "keep it simple"): no hero band — the title as an h1
+   * and the lede under it, at the head of the content column beside the rail. With a `picker` only.
+   */
+  arrangement?: 'masthead' | 'plain';
 };
 
 /**
@@ -70,6 +76,8 @@ export type ListingView = {
 export type ListingPicker = {
   label: string;
   items: readonly IndexRailItem[];
+  /** The rail as one menu naming the current page (IndexRail `menu`), not a list. */
+  menu?: boolean;
   /** The page's pieces, composed by the caller. */
   content: ReactNode;
 };
@@ -158,14 +166,33 @@ export function ListingIndex({
     .map((v) => ({ ...v, sections: v.sections.filter((section) => section.content) }))
     .filter((v) => v.sections.length > 0);
 
+  const plain = Boolean(picker) && hero.arrangement === 'plain';
+
   let listing: ReactNode;
   if (picker) {
     listing = (
       <IndexRail
         ariaLabel={railLabel}
+        menu={picker.menu}
         modes={[{ id: 'picker', label: picker.label, items: picker.items }]}
       >
-        {picker.content}
+        {plain ? (
+          /* The plain head: the title and its line, then the page — the stack's air under the
+             head, as a section's head over its body. */
+          <Layout rowGap="stack">
+            <Layout rowGap="block">
+              <h1 className={styles.pageTitle}>{hero.title}</h1>
+              {lede.map((paragraph) => (
+                <p key={paragraph} className={styles.pageLede}>
+                  {paragraph}
+                </p>
+              ))}
+            </Layout>
+            {picker.content}
+          </Layout>
+        ) : (
+          picker.content
+        )}
       </IndexRail>
     );
   } else if (shown.length > 0) {
@@ -199,29 +226,34 @@ export function ListingIndex({
 
   return (
     <>
-      <PageHero
-        data-fold-hero=""
-        trail={heroTrail(breadcrumbs, hero.title, (t) => (
-          <Breadcrumbs {...t} />
-        ))}
-        eyebrow={hero.eyebrow}
-        title={hero.title}
-        titleSize={hero.titleSize}
-        body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
-        record={hero.record}
-        arrangement="masthead"
-        texture
-        surface="paper"
-      />
+      {plain ? null : (
+        <PageHero
+          data-fold-hero=""
+          trail={heroTrail(breadcrumbs, hero.title, (t) => (
+            <Breadcrumbs {...t} />
+          ))}
+          eyebrow={hero.eyebrow}
+          title={hero.title}
+          titleSize={hero.titleSize}
+          body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
+          record={hero.record}
+          arrangement="masthead"
+          texture
+          surface="paper"
+        />
+      )}
 
       {/* The fold rule's one exception on a listing: the list is the page's whole content, grows with
           the CMS and is read by scrolling, so no height could hold it. fold:check reports it with this
-          reason and still measures the hero and the close. A plain wrapper: no box, no spacing. */}
-      <div data-fold-exempt={FOLD_EXEMPT}>
-        <Section surface="paper" aria-label={label}>
-          {listing}
-        </Section>
-      </div>
+          reason and still measures the hero and the close. Plain, the band is the page's opening. */}
+      <Section
+        surface="paper"
+        aria-label={label}
+        data-fold-exempt={FOLD_EXEMPT}
+        data-fold-hero={plain ? '' : undefined}
+      >
+        {listing}
+      </Section>
 
       {offer?.image ? (
         <CtaSection

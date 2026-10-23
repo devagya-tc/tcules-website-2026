@@ -9,12 +9,7 @@
  * A template may import from @/patterns and @/components. It may not import @/content — the
  * page reads content and passes it in.
  */
-export {
-  ListingIndex,
-  caseViews,
-  insightFormatPage,
-  insightViews,
-} from './ListingIndex';
+export { ListingIndex, caseViews, insightFormatPage, insightViews } from './ListingIndex';
 export type {
   CaseGroup,
   CaseItem,
@@ -23,6 +18,7 @@ export type {
   InsightItem,
   InsightKind,
   InsightTopic,
+  FormatFilters,
   ListingClosing,
   ListingHero,
   ListingIndexProps,
