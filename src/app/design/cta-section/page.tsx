@@ -89,6 +89,15 @@ const DESK = {
   kind: 'illustration',
 } as const;
 
+/** The halves close's drawing (scripts/enquiry-sketch-to-shipped.mjs): one product, sketch to shipped. */
+const SKETCH_TO_SHIPPED = {
+  src: '/illustrations/enquiry/sketch-to-shipped.svg',
+  alt: '',
+  width: 455,
+  height: 379,
+  kind: 'illustration',
+} as const;
+
 const AUDIT_FORM_PROPS = {
   ...ENQUIRY_FORM_PROPS,
   variant: 'audit',
@@ -286,6 +295,28 @@ export default function CtaSectionSpecimenPage() {
         body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
         form={<EnquiryForm action={ENQUIRY_FORM_PROPS.action} context={FORM_CONTEXT} dress={CHOICE_DRESS} />}
       />
+      <SpecimenNote
+        title="1d · The flow close, in halves"
+        note="islandArrangement='halves' with islandTexture='flow' (owner, 23 Oct 2026). The island split 1:1: the words pinned to the foot of the start half, the card form centred in the end half on a panel with a `stack` inset. The field is TextureFlow: every cell of the site's grid an “=” turned along one flow — loose contour loops toward the start, easing into parallel streams 56 apart past the form — with the loose water churning slowly, and still and quieter behind the words. Two versions: the field alone, the start half left as open ground; and with the sketch-to-shipped drawing above the words, where the field fades out toward the start so the drawing sits on calm ground. Reduced motion draws the field once."
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="flow"
+        islandArrangement="halves"
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="flow"
+        islandArrangement="halves"
+        art={<Media image={SKETCH_TO_SHIPPED} sizes="420px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+
       <CtaSection
         arrangement="open"
         eyebrow="Work with us"

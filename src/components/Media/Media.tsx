@@ -363,8 +363,8 @@ function warn(message: string, image: MediaImage) {
  *
  * It reads `data-surface` through the token layer only, like every other unit, so a capture's
  * hairline is right on paper, tint, ink and blue without being told which. It cannot see the
- * surface in JavaScript, which is why "no illustration on blue" is a review rule rather than a
- * runtime guard (spec § 17 Q3).
+ * surface in JavaScript, so an illustration's palette for its ground is the asset's own business
+ * (an illustration may sit on blue since 23 Oct 2026; decisions/2026-10-23-illustrations-may-sit-on-blue).
  */
 export function Media({
   image,

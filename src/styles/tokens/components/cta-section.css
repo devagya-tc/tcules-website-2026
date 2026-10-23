@@ -92,6 +92,11 @@
      mock's, so the desk (153 tall at this width) stands about as tall as a two-line h2 and its
      lede beside it, and the close fits one laptop screen. */
   --cta-art-inline-size-sm: 132px;
+  /* The drawing in `islandArrangement="halves"` (owner, 23 Oct 2026): the sketch-to-shipped
+     illustration across most of the start half (524 at 1440), as the approved mock set it. */
+  --cta-art-inline-size-lg: 420px;
+  /* The halves close's panel: a `stack` inset, the air its mock was approved with. */
+  --cta-panel-inset-halves: var(--gap-stack);
 
   /* The K offer's photo frame (cmp-cta fix round 1). The frame owns the crop and Media FILLS it,
      so a copy column taller than the photo stretches the frame instead of leaving the photo ~105
@@ -111,6 +116,8 @@
 @media (max-width: 767px) {
   :root {
     --cta-panel-inset-island: var(--gap-text);
+    /* The halves panel follows the island panel down, for the same reason (23 Oct 2026). */
+    --cta-panel-inset-halves: var(--gap-text);
   }
 }
 

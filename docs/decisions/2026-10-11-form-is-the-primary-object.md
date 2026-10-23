@@ -1,7 +1,7 @@
 ---
 title: "The form is the primary object of its band"
 date: 2026-10-11
-status: active
+status: superseded
 area: [forms, layout]
 source: "Owner review, 11 Oct 2026 (home)"
 supersedes: []
