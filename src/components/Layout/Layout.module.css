@@ -454,3 +454,9 @@
     --layout-view: var(--view-xl, var(--view-lg, var(--view-md, var(--view-base, 1))));
   }
 }
+
+/* fillRows — the stack's rows share its height equally, and the stack takes its parent's height. */
+.fill-rows {
+  grid-auto-rows: 1fr;
+  block-size: 100%;
+}

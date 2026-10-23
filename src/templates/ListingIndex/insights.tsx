@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout, type IconName } from '@/components';
+import { Button, Cluster, Icon, Layout } from '@/components';
 
 import styles from './ListingIndex.module.css';
 import type { ListingSection, ListingView } from './ListingIndex';
@@ -28,6 +28,7 @@ import {
   type MetaOptions,
   COLUMN_ROWS,
   SHELF_ROWS,
+  type GroupShapeName,
   type ShelfHead,
 } from './compositions';
 
@@ -129,13 +130,7 @@ export function insightViews({
     id: topicAnchor(section),
     heading: section.label,
     count: section.size,
-    content: (
-      <GroupShape
-        group={section.group}
-        meta={{ withKind: true }}
-        head={{ icon: 'notebook', eyebrow: 'More to read' }}
-      />
-    ),
+    content: <GroupShape group={section.group} meta={{ withKind: true }} />,
   }));
 
   return [
@@ -146,99 +141,93 @@ export function insightViews({
   ];
 }
 
-/* ── A group: its lead, then the grid under it ──────────────────────────────────── */
+/* ── A group: its lead, then its shape ──────────────────────────────────────────── */
 
-/** A hub section's pieces: the lead, the cards in the grid under it, the rows of its list cell. */
-type Group = { lead?: InsightItem; cards: InsightItem[]; rows: InsightItem[]; column?: boolean };
+/** A hub section's pieces: the lead, the cards, the list's rows, and the shape they make. */
+type Group = {
+  lead?: InsightItem;
+  cards: InsightItem[];
+  rows: InsightItem[];
+  shape: GroupShapeName;
+};
 
 /**
- * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026): the best
- * pictured piece leads; the grid under it is one row of three cells, two where there is more to
- * show. Pictured pieces fill it as cards; where three or more pieces have no picture, one cell is a
- * list of them (`list: 'always'` keeps the cell even when every piece has a picture — the guides'
- * "Start here"). `avoidLead` keeps a piece from leading (the topic view's first section must not open
- * on the type view's lead).
+ * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026). The best
+ * pictured piece leads. Then, by what is left:
+ *
+ *   four pictured and a list's worth more   COLUMN: the 2 × 2 and the list beside it
+ *   three or more pictured                  GRID: rows of three (two rows where there are six)
+ *   one or two pictured, or a list kept     GRID: the cards and the list as one of its cells
+ *   nothing pictured                        WIDE: the list alone, three columns
+ *
+ * `list: 'always'` keeps the list cell whenever there are rows for it (the guides' "Start here").
+ * `avoidLead` keeps a piece from leading (the topic view's first section must not open on the type
+ * view's lead).
  */
 function groupOf(
   items: readonly InsightItem[],
-  { avoidLead, list = 'auto' }: { avoidLead?: string; list?: 'auto' | 'always' } = {},
-): Group {
-  const { pictured, plain } = partition(items);
-  /* The COLUMN shape first (owner, 23 Oct 2026): the lead, four cards as a 2 × 2, and the list down
-     the third track — wherever there are four cards and a list's worth of rows after the lead. */
   {
-    const open = (pictured.length > 0 ? pictured : items).filter((item) => item.id !== avoidLead);
-    const [first] = pictured.length > 0 ? leadFirst(open.length > 0 ? open : pictured) : open;
-    const quad = (pictured.length > 0 ? pictured : items).filter((item) => item !== first).slice(0, 4);
-    const rest = items.filter((item) => item !== first && !quad.includes(item));
-    /* Rows: the pieces without pictures first, then the pictured ones the grid had no room for. */
-    const pool = [...rest.filter((item) => !hasPicture(item)), ...rest.filter(hasPicture)];
-    const listRows = pool.slice(0, COLUMN_ROWS);
-    if (first && quad.length === 4 && listRows.length >= SHELF_ROWS) {
-      return { lead: first, cards: quad, rows: listRows, column: true };
-    }
-  }
-  let lead: InsightItem | undefined;
-  let cards: InsightItem[];
-  let rows: InsightItem[];
+    avoidLead,
+    list = 'auto',
+    columnRows = COLUMN_ROWS,
+  }: { avoidLead?: string; list?: 'auto' | 'always' | 'never'; columnRows?: number } = {},
+): Group {
+  const { pictured } = partition(items);
+  const usable = items.filter((item) => item.id !== avoidLead);
   if (pictured.length === 0) {
-    /* Nothing pictured: the kit's text cards (2026-09-28-text-only-cards-weight-from-scale), the
-       lead horizontal, two under it and the rest as the list cell — never a grid of one shape. */
-    const open = items.filter((item) => item.id !== avoidLead);
-    [lead] = open;
-    const rest = open.slice(1);
-    cards = rest.slice(0, 2);
-    rows = rest.slice(2, 2 + SHELF_ROWS);
-  } else {
-    const open = pictured.filter((item) => item.id !== avoidLead);
-    [lead] = leadFirst(open.length > 0 ? open : pictured);
-    const others = pictured.filter((item) => item !== lead);
-    const rowsFrom = list === 'always' ? items.filter((item) => item !== lead) : plain;
-    const withList = rowsFrom.length >= SHELF_ROWS || (list === 'always' && rowsFrom.length > 0);
-    const cells = followCount(others.length + (withList ? 1 : 0));
-    cards = others.slice(0, cells - (withList ? 1 : 0));
-    rows = withList ? rowsFrom.filter((item) => !cards.includes(item)).slice(0, SHELF_ROWS) : [];
+    return { cards: [], rows: usable.slice(0, 6), shape: 'wide' };
   }
-  /* A list cell needs rows enough to be a list. */
-  if (rows.length < 2) rows = [];
-  /* The grid fills its rows (no hole in the last one): six or three cells, two as halves; one alone
-     is not shown here — "See more" holds it. */
-  const panel = rows.length > 0 ? 1 : 0;
-  const count = cards.length + panel;
-  const keep = count >= 6 ? 6 : count >= 3 ? 3 : count === 2 ? 2 : 0;
-  if (keep === 0) return { lead, cards: [], rows: [] };
-  return { lead, cards: cards.slice(0, keep - panel), rows };
+  const open = pictured.filter((item) => item.id !== avoidLead);
+  const [lead] = leadFirst(open.length > 0 ? open : pictured);
+  const others = pictured.filter((item) => item !== lead);
+  const restOf = (taken: readonly InsightItem[]) => {
+    const rest = items.filter((item) => item !== lead && !taken.includes(item));
+    /* Rows: the pieces without pictures first, then the pictured ones the cards had no room for. */
+    return [...rest.filter((item) => !hasPicture(item)), ...rest.filter(hasPicture)];
+  };
+  if (list !== 'always' && others.length >= 4) {
+    const quad = others.slice(0, 4);
+    const rows = restOf(quad).slice(0, columnRows);
+    if (rows.length >= SHELF_ROWS) return { lead, cards: quad, rows, shape: 'column' };
+  }
+  if (list !== 'always' && others.length >= 3) {
+    return { lead, cards: others.slice(0, followCount(others.length)), rows: [], shape: 'grid' };
+  }
+  /* No list cell wanted (a topic: owner, 23 Oct 2026, "we don't necessarily need a 'more to read' in
+     every section"): the cards there are, two as halves. */
+  if (list === 'never') {
+    return { lead, cards: others.length === 2 ? others : [], rows: [], shape: 'grid' };
+  }
+  /* A list cell beside what cards there are, the row filled: three cells, or six. */
+  const cards = others.slice(0, list === 'always' ? 2 : others.length >= 5 ? 5 : 2);
+  /* The cell holds as many rows as the cards beside it are tall: three beside cards with standfirsts,
+     two beside a picture and a title alone (the live CMS's guides today). */
+  const fit = cards.length > 0 && cards.every(hasStandfirst) ? SHELF_ROWS : 2;
+  const rows = restOf(cards).slice(0, fit);
+  if (rows.length < 2) {
+    return { lead, cards: cards.length >= 3 ? cards.slice(0, 3) : [], rows: [], shape: 'grid' };
+  }
+  if (cards.length === 0) return { lead, cards: [], rows: restOf([]).slice(0, 6), shape: 'wide' };
+  return { lead, cards, rows, shape: 'grid' };
 }
 
-/** The glyph that heads a format's list cell. */
-const SHELF_ICON: Record<InsightKind, IconName> = {
-  article: 'document-text',
-  guide: 'notebook',
-  research: 'graph-up',
-  podcast: 'chat-round-dots',
-  video: 'monitor',
-  event: 'flag',
-  interview: 'users-group-rounded',
-};
-
-/** A group laid out: the lead, then the grid with its list cell where it has one. */
+/** A group laid out: the lead, then its shape. */
 function GroupShape({
   group,
   meta,
   head,
-  at = 'end',
 }: {
   group: Group;
   meta?: MetaOptions;
-  head: ShelfHead;
-  at?: 'start' | 'end';
+  head?: ShelfHead;
 }): ReactNode {
   return (
     <Feature
       lead={group.lead}
       cards={group.cards}
-      shelf={group.rows.length > 0 ? { items: group.rows, head, at } : undefined}
-      column={group.column}
+      rows={group.rows}
+      shape={group.shape}
+      head={head}
       meta={meta}
     />
   );
@@ -250,15 +239,15 @@ function GroupShape({
 const EVENT_TAKE = 3;
 
 /**
- * A format's hub group. Guides always keep their list cell, "Start here" (owner, 23 Oct 2026), at the
- * grid's start. Articles skip the three the format page opens on, where there are enough to spare, so
- * "See more" opens on a reveal rather than a reprint.
+ * A format's hub group. Guides keep their list, "Start here" (owner, 23 Oct 2026). Articles skip the
+ * three the format page opens on, where there are enough to spare, so "See more" opens on a reveal
+ * rather than a reprint.
  */
 function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
   if (kind === 'guide') return groupOf(items, { list: 'always' });
   if (kind === 'article') {
     const { pictured } = partition(items);
-    const skip = pictured.length >= 10 ? 3 : 0;
+    const skip = pictured.length >= 12 ? 3 : 0;
     return groupOf(items.filter((item) => !pictured.slice(0, skip).includes(item)));
   }
   return groupOf(items);
@@ -277,15 +266,11 @@ function TypeShape({
   if (kind === 'event') {
     return <Dates items={byEventDate(items).slice(0, EVENT_TAKE)} size="lg" />;
   }
-  /* The guides' cell is where to start, first in the row, with an editor's heading where there is
-     one. Any other format's cell is the rest of it, last in the row. */
-  const head: ShelfHead =
-    kind === 'guide'
-      ? { icon: SHELF_ICON.guide, eyebrow: 'Start here', heading: shelfHeading }
-      : { icon: SHELF_ICON[kind], eyebrow: `More ${LABEL[kind].many.toLowerCase()}` };
-  return (
-    <GroupShape group={typeGroup(kind, items)} head={head} at={kind === 'guide' ? 'start' : 'end'} />
-  );
+  /* Only the guides' list has a head: where to start, with an editor's heading where there is one.
+     Every other list is its rows alone (owner, 23 Oct 2026). */
+  const head: ShelfHead | undefined =
+    kind === 'guide' ? { icon: 'notebook', eyebrow: 'Start here', heading: shelfHeading } : undefined;
+  return <GroupShape group={typeGroup(kind, items)} head={head} />;
 }
 
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
@@ -314,7 +299,12 @@ function curateTopics(
   for (const topic of ordered) {
     const free = members(topic.id).filter((item) => !used.has(item.id));
     if (free.length < TOPIC_FLOOR) continue;
-    const group = groupOf(free, { avoidLead: sections.length === 0 ? avoidLead : undefined });
+    /* A topic's rows carry their format and run longer: three of them share the cards' height. */
+    const group = groupOf(free, {
+      avoidLead: sections.length === 0 ? avoidLead : undefined,
+      columnRows: SHELF_ROWS,
+      list: 'never',
+    });
     const picked = [...(group.lead ? [group.lead] : []), ...group.cards, ...group.rows];
     if (picked.length < 2) continue;
     picked.forEach((item) => used.add(item.id));

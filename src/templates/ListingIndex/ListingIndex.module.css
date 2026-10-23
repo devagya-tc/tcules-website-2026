@@ -32,32 +32,28 @@
   text-transform: var(--text-mono-case);
 }
 
-/* A shelf: one cell of a group's grid, a list beside the cards (owner, 23 Oct 2026). Its rows open
-   on a rule under the head, and each row closes on its own (ListCard's row). */
-.shelf {
+/* A group's LIST (owner, 23 Oct 2026, after claude.com/resources): one hairline box of ruled rows,
+   beside the cards or across the column. Its rows' rules run to the box's inset; the last row closes
+   on the box's own edge. A list is not a card: the no-box rule is the cards' (2026-10-05). */
+.list {
   min-inline-size: 0;
+  padding-inline: var(--lix-list-inset);
+  border: var(--lix-list-rule-width) solid var(--lix-list-rule-ink);
+  border-radius: var(--lix-list-radius);
 }
 
-/* The list column beside a 2 × 2 of cards (owner, 23 Oct 2026: "fits well in the space with no
-   awkward gaps or overshoots"). Its rows are as many as the cards' height holds at the track's width:
-   six from 1280, five between 1024 and 1280, where the narrower track wraps each title deeper. The
-   pieces it drops there stay a "See more" away. Below 1024 it sits under the cards with all six. */
-@media (min-width: 1024px) and (max-width: 1279px) {
-  .shelfColumn .shelfRows > :nth-child(n + 6) {
-    display: none;
-  }
-}
-
-/* The list's stack fills the cell it is stretched to, so `fillLast` has the height to give. */
-.shelfFill {
+/* The box's stack fills the box, so its rows have the height to share. */
+.listFill {
   block-size: 100%;
 }
 
-.shelfRows {
-  border-block-start: var(--lix-shelf-rule-width) solid var(--lix-shelf-rule-ink);
+/* The guides' head inside the box: the list's own top inset, then a rule under it (the first row's). */
+.listHead {
+  padding-block: var(--lix-list-inset) var(--gap-text);
+  border-block-end: var(--lix-list-rule-width) solid var(--lix-list-rule-ink);
 }
 
-/* A shelf's head: the glyph in the accent, the eyebrow, the editor's heading (owner, 23 Oct 2026). */
+/* The head's parts: the glyph in the accent, the eyebrow, the editor's heading (owner, 23 Oct 2026). */
 .shelfGlyph {
   color: var(--lix-shelf-glyph-ink);
 }

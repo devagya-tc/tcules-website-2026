@@ -315,19 +315,6 @@ export type BlockCardProps = {
    */
   play?: boolean;
   /**
-   * Reserve the eyebrow's line when this card has none, so a row of cards starts every title on one
-   * line. The set sets it on every card when ANY card in the row has an eyebrow (owner, 23 Oct 2026:
-   * a piece the CMS has not filed under a topic). The reserved line draws nothing.
-   */
-  eyebrowSlot?: boolean;
-  /**
-   * The horizontal card's copy against its cover: `center` (default) on the cover's middle, or
-   * `start`, hung from the cover's top edge so the eyebrow and the picture start on one line — a
-   * listing's lead, whose copy may be a title alone (the insights hub, 23 Oct 2026). Ignored when
-   * vertical or without a cover.
-   */
-  copyAlign?: 'center' | 'start';
-  /**
    * A vertical card with a cover that becomes a ROW below 768: its copy first, the cover as a
    * thumbnail at the row's end, and no standfirst. For the secondary cards of a listing's grid, so a
    * phone's single column is not a run of full-width pictures (beauty round 4, 16 Oct 2026); the
@@ -335,10 +322,10 @@ export type BlockCardProps = {
    */
   compact?: boolean;
   /**
-   * The horizontal card's two tracks: `even` (default) halves the row, 64 apart; `grid` gives the
-   * cover two thirds and the copy one, a gutter apart — the tracks of a 3-column grid under it, so
-   * the lead and its grid share one set of verticals (the insights hub, 23 Oct 2026). Ignored when
-   * vertical or without a cover.
+   * The horizontal card's two tracks, 64 apart: `even` (default) halves the row; `grid` gives the
+   * cover two thirds and the copy one — the tracks of the 2 : 1 split under it, so the lead and its
+   * grid share one set of verticals (the insights hub, 23 Oct 2026). Ignored when vertical or
+   * without a cover.
    */
   split?: 'even' | 'grid';
 };
@@ -489,8 +476,6 @@ export function BlockCard({
   linkScope = 'card',
   meta,
   play = false,
-  eyebrowSlot = false,
-  copyAlign = 'center',
   compact = false,
   split = 'even',
 }: BlockCardProps) {
@@ -629,13 +614,7 @@ export function BlockCard({
 
   const hasIndex = index !== undefined && Number.isFinite(index);
   const indexNode = hasIndex ? <span className={styles.index}>{indexLabel(index)}</span> : null;
-  const eyebrowText = hasEyebrow ? (
-    <span className={styles.eyebrow}>{eyebrow}</span>
-  ) : eyebrowSlot ? (
-    <span className={cx(styles.eyebrow, styles.eyebrowSlot)} aria-hidden="true">
-      {'\u00a0'}
-    </span>
-  ) : null;
+  const eyebrowText = hasEyebrow ? <span className={styles.eyebrow}>{eyebrow}</span> : null;
   /* The label line: an index, an eyebrow, or both on one line a `block` apart — a numeral and a
      category are two labels, and the 24 keeps them from reading as one string. */
   const eyebrowNode =
@@ -717,9 +696,9 @@ export function BlockCard({
         columns={
           split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]
         }
-        colGap={split === 'grid' ? 'gutter' : 'column'}
+        colGap="column"
         rowGap="block"
-        align={copyAlign}
+        align="center"
       >
         {imageSide === 'right' ? (
           <>

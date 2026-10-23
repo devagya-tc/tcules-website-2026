@@ -207,18 +207,6 @@
   text-wrap: var(--text-running-wrap);
 }
 
-/* A reserved eyebrow line (`eyebrowSlot`): it levels titles across a row, so it is drawn only where
-   cards sit side by side — from md. In one column it would be a hole under the picture. */
-.eyebrowSlot {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .eyebrowSlot {
-    display: block;
-  }
-}
-
 .body {
   max-inline-size: var(--measure-body);
   overflow-wrap: anywhere;

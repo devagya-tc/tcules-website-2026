@@ -1,5 +1,6 @@
+import type { ReactNode } from 'react';
+
 import { Icon, Layout, type IconName } from '@/components';
-import { cx } from '@/lib/cx';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
@@ -178,22 +179,28 @@ export function partition(items: readonly InsightItem[]) {
   };
 }
 
-/* ── The hub's group: a lead and the grid under it ─────────────────────────────────
-   Every group on the hub has one shape (owner, 23 Oct 2026, after claude.com/resources): its first
-   piece as the horizontal card and a 3-column grid under it, one row or two. The cards are the
-   site's one card, BlockCard, so a piece looks the same here as under an article. Where a group has
-   pieces without pictures, ONE cell of the grid is a list of them (a SHELF) instead of a card —
-   variety inside the row, as claude.com sets a list beside its cards, and never words loose in a
-   card grid (owner, 23 Oct 2026). Events keep their dates (Dates). */
+/* ── The hub's group ────────────────────────────────────────────────────────────────
+   Every group on the hub opens on its lead, the horizontal card (owner, 23 Oct 2026, after
+   claude.com/resources), its cover across two thirds and its copy in the third, centred on the cover,
+   with an action. Under it, one of three shapes, by what the group has:
 
-/** How many cells a group's grid holds under its lead: one row of three, or two. */
+     COLUMN  four cards as a 2 × 2 under the cover, a LIST down the third track beside them
+     GRID    the cards in rows of three; guides open the row on their "Start here" list
+     WIDE    no pictures to set as cards: the list alone, its rows in three columns
+
+   The cards are the site's one card, BlockCard, so a piece looks the same here as under an article.
+   The LIST is one hairline box of ruled rows, each its eyebrow and title — a list beside the cards,
+   never words loose in a card grid. A card or row whose piece has no eyebrow shows none. Events keep
+   their dates (Dates). */
+
+/** How many cells a GRID holds under its lead: one row of three, or two. */
 export const followCount = (available: number) => (available >= 6 ? 6 : 3);
 
-/** How many rows a list cell holds: what runs a card's height beside it in a row of three. */
+/** How many rows a LIST holds in one grid cell: what runs a card's height beside it. */
 export const SHELF_ROWS = 3;
 
-/** How many rows the list column holds beside a 2 × 2 of cards: what runs their two rows' height. */
-export const COLUMN_ROWS = 6;
+/** How many rows the COLUMN's list holds beside a 2 × 2 of cards. They share the cards' height. */
+export const COLUMN_ROWS = 4;
 
 /** A piece as the site's card: its topic (or, in a mixed set, its format) as the eyebrow. */
 function cardOf(item: InsightItem, meta: MetaOptions = {}) {
@@ -212,45 +219,67 @@ function cardOf(item: InsightItem, meta: MetaOptions = {}) {
   };
 }
 
-/** A shelf's head: its glyph, its eyebrow and, where an editor has written one, its heading. */
+/** The lead's action, in the verb its format takes. Authored case; the button sets the case. */
+const ACTION: Record<InsightKind, string> = {
+  article: 'Read more',
+  guide: 'Read the guide',
+  research: 'Read the research',
+  interview: 'Read more',
+  podcast: 'Listen',
+  video: 'Watch',
+  event: 'See the event',
+};
+
+/** A list's head, where it has one (the guides' "Start here"): its glyph, eyebrow and heading. */
 export type ShelfHead = { icon: IconName; eyebrow: string; heading?: string };
 
-/** A list cell in a group's grid: its head and its rows, at the grid's start or its end. */
-export type ShelfCell = { items: readonly InsightItem[]; head: ShelfHead; at: 'start' | 'end' };
-
 /**
- * The SHELF cell: a glyph, an eyebrow and a heading over ruled rows of titles — one grid cell, the
- * height of the cards beside it. A list a reader runs down, so its rows carry no card eyebrow.
+ * The LIST: one hairline box of ruled rows, each row its eyebrow and title (ListCard, compact). As a
+ * grid cell it is one track; WIDE, its rows run in three columns across the box.
  */
-function Shelf({
+function ListBox({
   items,
   head,
+  meta,
   titleAs,
   as: Root = 'li',
-  column = false,
-}: Omit<ShelfCell, 'at'> & { titleAs: 'h3' | 'h4'; as?: 'li' | 'div'; column?: boolean }) {
+  columns,
+}: {
+  items: readonly InsightItem[];
+  head?: ShelfHead;
+  meta?: MetaOptions;
+  titleAs: 'h3' | 'h4';
+  as?: 'li' | 'div';
+  /** Its rows' tracks: one by default, or across the box (WIDE; the COLUMN below 1280). */
+  columns?: { md: 2 | 3; xl?: 1 };
+}) {
   return (
-    <Root className={cx(styles.shelf, column && styles.shelfColumn)}>
-      {/* The rows take the cell's spare height, so a list stretched beside its cards ends on their
-          foot rather than short of it. */}
-      <Layout rowGap="text" fillLast className={styles.shelfFill}>
-        <Layout rowGap="tight">
-          <span className={styles.shelfGlyph}>
-            <Icon name={head.icon} size="lg" />
-          </span>
-          <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
-          {head.heading ? <p className={styles.shelfTitle}>{head.heading}</p> : null}
-        </Layout>
+    <Root className={styles.list}>
+      {/* Stretched to the cards beside it, the box's rows share its whole height, so its last rule is
+          the box's foot and the foot is the cards' — never a hole under the rows, never an overshoot. */}
+      <Layout rowGap="none" fillLast className={styles.listFill}>
+        {head ? (
+          <Layout rowGap="tight" className={styles.listHead}>
+            <span className={styles.shelfGlyph}>
+              <Icon name={head.icon} size="lg" />
+            </span>
+            <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
+            {head.heading ? <p className={styles.shelfTitle}>{head.heading}</p> : null}
+          </Layout>
+        ) : null}
         <Layout
           as="ul"
+          columns={columns}
+          colGap={columns ? 'column' : undefined}
           rowGap="none"
-          className={styles.shelfRows}
-          aria-label={head.heading ?? head.eyebrow}
+          fillRows
+          aria-label={head?.heading ?? head?.eyebrow}
         >
           {items.map((item) => (
             <ListCard
               key={item.id}
               title={item.title}
+              eyebrow={cardOf(item, meta).eyebrow}
               href={item.href}
               size="sm"
               density="compact"
@@ -263,28 +292,27 @@ function Shelf({
   );
 }
 
+/** A group's pieces and the shape they take under the lead. */
+export type GroupShapeName = 'column' | 'grid' | 'wide';
+
 /**
- * The FEATURE: the lead as the horizontal card (its serif title), then the grid under it — the
- * cards, and the shelf in its cell where the group has one. A card without an eyebrow keeps the
- * line where any card in the grid has one, so every title in a row starts level.
+ * The FEATURE: the lead, then the group's shape under it (see above). The lead's cover and copy take
+ * the 2 : 1 tracks the COLUMN shares, 64 apart, so the copy stands over the list.
  */
 export function Feature({
   lead,
   cards,
-  shelf,
-  column = false,
+  rows,
+  shape,
+  head,
   meta,
   titleAs = 'h3',
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
-  shelf?: ShelfCell;
-  /**
-   * The COLUMN shape (owner, 23 Oct 2026): four cards as a 2 × 2 in the lead's cover track, the list
-   * down the third track beside them at their full height — the lead's own split, so the cards sit
-   * under its cover and the list under its copy.
-   */
-  column?: boolean;
+  rows: readonly InsightItem[];
+  shape: GroupShapeName;
+  head?: ShelfHead;
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 }) {
@@ -297,14 +325,14 @@ export function Feature({
         size="lg"
         titleAs={titleAs}
         tracks={2}
-        cue="title"
-        copyAlign="start"
+        cue="cta"
+        ctaLabel={ACTION[lead.kind]}
         split="grid"
       />
     </ul>
   ) : null;
-  /* The grid's cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
-  const card = (item: InsightItem, eyebrowSlot: boolean) => (
+  /* The cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
+  const card = (item: InsightItem) => (
     <BlockCard
       key={item.id}
       {...cardOf(item, meta)}
@@ -313,55 +341,52 @@ export function Feature({
       tracks={3}
       cue="title"
       compact
-      eyebrowSlot={eyebrowSlot}
     />
   );
-  if (column && shelf) {
-    const pairHasEyebrow = (index: number) =>
-      cards.slice(index - (index % 2), index - (index % 2) + 2).some((item) => cardOf(item, meta).eyebrow);
-    return (
-      <Layout rowGap="column">
-        {leadNode}
-        {/* From 1024 the list runs down the third track; below it, under the 2 × 2. */}
-        <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column">
-          <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="column">
-            {cards.map((item, index) => card(item, pairHasEyebrow(index)))}
-          </Layout>
-          <Shelf items={shelf.items} head={shelf.head} titleAs={rowTitle} as="div" column />
+  let under: ReactNode = null;
+  if (shape === 'column') {
+    under = (
+      /* From 1280 the list runs down the third track, 64 from the cards and their height; below it,
+         under them, its rows in two columns. */
+      <Layout columns={{ xl: [2, 1] }} colGap="column" rowGap="column">
+        <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="column">
+          {cards.map(card)}
         </Layout>
+        <ListBox
+          items={rows}
+          head={head}
+          meta={meta}
+          titleAs={rowTitle}
+          as="div"
+          columns={{ md: 2, xl: 1 }}
+        />
+      </Layout>
+    );
+  } else if (shape === 'wide') {
+    under =
+      rows.length > 0 ? (
+        <ListBox items={rows} head={head} meta={meta} titleAs={rowTitle} as="div" columns={{ md: 3 }} />
+      ) : null;
+  } else if (cards.length > 0 || rows.length > 0) {
+    under = (
+      /* Three tracks; two cards and no list share the row as halves. */
+      <Layout
+        as="ul"
+        columns={{ md: rows.length === 0 && cards.length === 2 ? 2 : 3 }}
+        colGap="gutter"
+        rowGap="column"
+      >
+        {rows.length > 0 ? (
+          <ListBox items={rows} head={head} meta={meta} titleAs={rowTitle} />
+        ) : null}
+        {cards.map(card)}
       </Layout>
     );
   }
-  /* The grid's cells in reading order, so each card knows the row it shares. */
-  const cells: ({ type: 'card'; item: InsightItem } | { type: 'shelf' })[] = [
-    ...(shelf?.at === 'start' ? [{ type: 'shelf' as const }] : []),
-    ...cards.map((item) => ({ type: 'card' as const, item })),
-    ...(shelf?.at === 'end' ? [{ type: 'shelf' as const }] : []),
-  ];
-  /* Two cells share the row as halves; otherwise three tracks, so a card is never widened. */
-  const across = cells.length === 2 ? 2 : 3;
-  /* A card keeps an empty eyebrow line only where another card in ITS row has one. */
-  const rowHasEyebrow = (index: number) => {
-    const start = index - (index % across);
-    return cells
-      .slice(start, start + across)
-      .some((cell) => cell.type === 'card' && cardOf(cell.item, meta).eyebrow);
-  };
   return (
     <Layout rowGap="column">
       {leadNode}
-      {cells.length > 0 ? (
-        /* Each grid row is its tallest cell's height, so neighbours end level. */
-        <Layout as="ul" columns={{ md: across }} colGap="gutter" rowGap="column">
-          {cells.map((cell, index) =>
-            cell.type === 'shelf' && shelf ? (
-              <Shelf key="shelf" items={shelf.items} head={shelf.head} titleAs={rowTitle} />
-            ) : cell.type === 'card' ? (
-              card(cell.item, rowHasEyebrow(index))
-            ) : null,
-          )}
-        </Layout>
-      ) : null}
+      {under}
     </Layout>
   );
 }

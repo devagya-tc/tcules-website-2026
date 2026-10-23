@@ -10,16 +10,17 @@ dbf_status: none
 enforced_by: "structure (Feature and Shelf in src/templates/ListingIndex/compositions.tsx)"
 ---
 
-On the insights hub every group's first piece is the horizontal card, its cover across two of three
-columns and its copy in the third, hung from the cover's top edge. Under it: four cards as a 2 × 2 under
-the cover, and a list down the third column beside them (a glyph, an eyebrow, ruled rows), as many rows
-as end level with the cards — six from 1280, five from 1024; below 1024 the list sits under the cards.
-A group without four cards and a list's worth of rows after its lead falls back to a 3-column grid with
-one list cell (guides: "Start here" first). The cards are the site's one card, BlockCard, at the small
-step (an 18 title); on a phone they are compact rows. Events keep their dated rows: the numeral one step
-down (stat), the month and year in small body, titles at h4. Every card's eyebrow is the piece's topic
-and nothing else, at 12px. Every section head reads "See more", with no count. Group heads are h2,
-groups a section-open (128) apart. The close is the island.
+On the insights hub every group opens on its lead, the horizontal card: its cover across two thirds,
+its copy in the third, centred on the cover, with an action in its format's verb ("Read more", "Watch",
+"Listen"). Under it, by what the group has: four cards as a 2 × 2 beside a LIST down the third track
+(from 1440; under the cards below it); or the cards in rows of three; or, with no pictures, the list
+alone across the column. The list is one hairline box of ruled rows, each its eyebrow and title, sharing
+the cards' height so its foot is theirs. Only the guides' list has a head ("Start here"); no other group
+needs one, and a topic group shows cards only unless the 2 × 2 fits. Cards are the site's BlockCard at
+the small step (an 18 title), compact rows on a phone; a missing eyebrow is not drawn. Events keep their
+dated rows: the numeral one step down (stat), the month and year in small body, titles at h4. Eyebrows
+say the topic, at 12px. Section heads read "See more", with no count. Group heads are h2, groups a
+section-open (128) apart, the 2 × 2 and its list a column (64) apart. The close is the island.
 
 **Why.** "Take the page as it exists today, change the first card in each group to a horizontal card,
 place the other cards in a 3-col grid below it, standardize what the eyebrow says." "The large card, then in a
@@ -35,6 +36,6 @@ two ways, eyebrows that said a topic on one card and a date on the next, head li
 count, and a group head the same size as the title under it.
 
 **How to apply.** `insights.tsx` assigns the groups (`groupOf`); `Feature` draws them with BlockCard
-(`split="grid"`, `copyAlign="start"`, `compact`, `eyebrowSlot`, `play`) and the list cell with ListCard
-(`density="compact"`). Proposed until the owner has reviewed the built hub; promoted in the PR that
+(`split="grid"`, `compact`, `play`, a cta) and the list with ListCard (`density="compact"`) in a
+Layout that `fillRows`. Proposed until the owner has reviewed the built hub; promoted in the PR that
 shows it.

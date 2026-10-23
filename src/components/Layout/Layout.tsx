@@ -231,6 +231,14 @@ export type LayoutProps = {
    */
   fillLast?: boolean;
   /**
+   * The stack's rows SHARE its height equally, and the stack fills its parent's (the insights hub's
+   * list box, 23 Oct 2026): a list stretched to the cards beside it spreads its rows down the whole
+   * height rather than ending short of their foot or leaving a hole under its last row. Every row is
+   * `1fr`, so none drops below its content and the stack grows if they need more. Single-track only:
+   * on a grid, `equalRows` is the tool.
+   */
+  fillRows?: boolean;
+  /**
    * From lg (1024) every EVEN child drops by the `section` step (96), so a row of cards reads as
    * placed by hand rather than tiled (references.md § 3.4 item 12: "Stagger breaks the grid", kept
    * as a Layout option, cmp-feature fix round 2). The offset is a TRACK, not a margin: the row is
@@ -510,6 +518,7 @@ export function Layout({
   pinLast = false,
   fillFirst = false,
   fillLast = false,
+  fillRows = false,
   stagger = false,
   scroll,
   peek = true,
@@ -563,6 +572,7 @@ export function Layout({
         pinLast && styles['pin-last'],
         fillFirst && styles['fill-first'],
         fillLast && styles['fill-last'],
+        fillRows && styles['fill-rows'],
         stagger && scroll !== 'always' && styles.stagger,
         scroll && styles[`scroll-${scroll}`],
         scroll && !peek && styles['no-peek'],

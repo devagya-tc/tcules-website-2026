@@ -199,9 +199,9 @@ export type ListCardProps = ListCardFormProps & {
    */
   markerPosition?: 'start' | 'end';
   /**
-   * A row's inset: `default` (32 above and below the copy) or `compact` (16), for a short list
-   * that shares a grid row with cards and must end level with them — the insights hub's list cell
-   * (23 Oct 2026). Rows only; a tile ignores it.
+   * A row's inset: `default` (32 above and below the copy) or `compact` (16), for a short list held
+   * in a box beside cards — the insights hub's list (23 Oct 2026). A compact list's last row draws
+   * no closing rule: the box's edge closes it. Rows only; a tile ignores it.
    */
   density?: 'default' | 'compact';
 };
