@@ -1,7 +1,7 @@
 ---
 title: No illustration is placed on a brandeis-500 ground
 date: 2026-09-25
-status: active
+status: superseded
 area: [illustration, colour]
 source: Owner, DBF consistency pass 25 Sep 2026; recorded in ch05 v1.0 §12 decision 07 and ch10 §F2 decision 05
 supersedes: []
