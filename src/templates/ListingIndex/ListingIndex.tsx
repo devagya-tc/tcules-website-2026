@@ -39,14 +39,15 @@ export type ListingHero = {
 /**
  * One section of a view: a jump target in the rail, a one-line head and its pieces. The head is the
  * same grammar in every listing (beauty round 3, 16 Oct 2026; 22 Oct 2026): the name as an h3-scale
- * serif h2 and, on its baseline at the row's end, the way to all of it ("All 42 articles →").
+ * serif h2 and, on its baseline at the row's end, the way to all of it ("See more →").
  */
 export type ListingSection = {
   /** The section's anchor, unique across every view (every view is in the HTML). */
   id: string;
   heading: string;
-  /** The way to all of it, where the section shows a selection. */
-  link?: { label: string; href: string };
+  /** The way to all of it, where the section shows a selection: always "See more" (owner, 23 Oct
+      2026: one label on every head, never a count). */
+  link?: { href: string };
   /** How many pieces it holds: the rail's collapsed bar uses it; the rail's rows never show it. */
   count?: number;
   /** The section's pieces, composed by the caller. */
@@ -94,6 +95,12 @@ export type ListingClosing = {
   body?: string;
   form?: ReactElement;
   action?: HeroAction;
+  /**
+   * The island close, as home has it (owner, 23 Oct 2026: "replace the enquiry form with the island
+   * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band.
+   * Taken only with a `form`.
+   */
+  island?: { surface: 'blue' | 'ink'; art?: ReactElement };
 };
 
 export type ListingIndexProps = {
@@ -176,7 +183,8 @@ export function ListingIndex({
             count: section.count,
           })),
           panel: (
-            <Layout rowGap="section">
+            /* Groups open as chapters: section-open between them, against the 64 seams inside one. */
+            <Layout rowGap="section-open">
               {v.sections.map((section) => (
                 <ListingSectionView key={section.id} section={section} />
               ))}
@@ -229,7 +237,18 @@ export function ListingIndex({
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
           action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
           A conversation glyph is the eye's entry into it, as every corpus close has. */}
-      {closing?.form ? (
+      {closing?.form && closing.island ? (
+        <CtaSection
+          id={closing.id}
+          island={closing.island.surface}
+          islandTexture="frame"
+          art={closing.island.art}
+          eyebrow={closing.eyebrow || undefined}
+          heading={closing.heading}
+          body={closing.body?.trim() ? [closing.body] : undefined}
+          form={closing.form}
+        />
+      ) : closing?.form ? (
         <CtaSection
           id={closing.id}
           surface={offer?.image ? 'paper' : 'tint'}
@@ -277,8 +296,9 @@ function ListingSectionView({ section }: { section: ListingSection }) {
               emphasis="link"
               tone="primary"
               icon={<Icon name="arrow-right" />}
+              aria-describedby={headingId}
             >
-              {section.link.label}
+              See more
             </Button>
           ) : null}
         </Layout>

@@ -64,6 +64,7 @@
    5a; Media is passed `edge="placement"` and draws none). The border sits inside the box under the
    global border-box, so a ruled tile and its neighbour's copy stay on one inline edge. */
 .imageMedia {
+  position: relative;
   display: block;
   inline-size: 100%;
   aspect-ratio: var(--bcrd-media-ratio);
@@ -198,9 +199,24 @@
   text-wrap: var(--text-title-wrap);
 }
 
-/* A title-cued linked card's title: the one that moves colour (§ 3.1). */
+/* A title-cued linked card's title: the one that moves colour (§ 3.1). It wraps as running text does
+   (pretty, not balance), so its first line stays long and a narrow track does not set three short
+   lines — the rule for a clickable title (owner, 16 Oct 2026, first set on the insights hub). */
 .cued {
   transition: color var(--bcrd-title-ink-duration) var(--bcrd-title-ink-easing);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* A reserved eyebrow line (`eyebrowSlot`): it levels titles across a row, so it is drawn only where
+   cards sit side by side — from md. In one column it would be a hole under the picture. */
+.eyebrowSlot {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .eyebrowSlot {
+    display: block;
+  }
 }
 
 .body {
@@ -336,4 +352,40 @@
 
 .root.boxed .link:active {
   background-color: var(--bcrd-box-ground-pressed);
+}
+
+/* The play mark: a round chip in the cover's top-end corner, outside the zoom (23 Oct 2026). */
+.play {
+  position: absolute;
+  inset-block-start: var(--bcrd-play-inset);
+  inset-inline-end: var(--bcrd-play-inset);
+  display: grid;
+  place-items: center;
+  inline-size: var(--bcrd-play-size);
+  block-size: var(--bcrd-play-size);
+  border-radius: var(--bcrd-play-radius);
+  background-color: var(--bcrd-play-ground);
+  color: var(--bcrd-play-ink);
+}
+
+.play > svg {
+  inline-size: var(--bcrd-play-glyph);
+  block-size: var(--bcrd-play-glyph);
+}
+
+/* A compact card's cover (`compact`): the stack's full width from md, the row's thumbnail below it,
+   where the row keeps its title and drops its standfirst and the play mark (too small to carry it). */
+.compactCover {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .compactCover {
+    inline-size: var(--bcrd-thumb-inline-sm);
+  }
+
+  .compact .body,
+  .compact .play {
+    display: none;
+  }
 }

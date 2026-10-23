@@ -1,7 +1,10 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
+import { Media } from '@/components';
 import { EnquiryForm } from '@/patterns';
 import {
+  ENQUIRY_DESK,
+  ENQUIRY_DRESS,
   insightFormatPage,
   insightViews,
   type InsightItem,
@@ -212,13 +215,16 @@ function closingOf(page: InsightsPage, origin: string, placement: string): Listi
     : CLOSE_STAND_IN;
   return {
     ...copy,
+    /* The island close, as home has it: the desk beside the heading, the form in its card dress. */
+    island: { surface: 'blue', art: <Media image={ENQUIRY_DESK} sizes="240px" /> },
     form: (
       <EnquiryForm
         variant="enquiry"
         urlLabel="Product or company URL"
         action={ENDPOINTS.enquiry}
-        fieldScale="lg"
-        submit="full"
+        dress={ENQUIRY_DRESS.card}
+        fieldScale="md"
+        submit="inline"
         context={{
           originRoute: origin,
           placement,
@@ -256,6 +262,8 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
         kind: kind as InsightKind,
         title: formatTitle(page, kind),
         href: FORMAT_ROUTE[kind],
+        shelfHeading:
+          page.formatCards.find((card) => card.kind === kind)?.shelfHeading?.trim() || undefined,
       })),
       /* The topics the BY TOPIC view curates by: every option of the CMS's groups but industry,
          which is a reader's sector rather than a subject. */

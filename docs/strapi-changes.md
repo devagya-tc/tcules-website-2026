@@ -327,3 +327,14 @@ view). Until the record carries the stage, the filing is a PLACEHOLDER fixture
 the CMS lands under "Other stages" until someone files it there.
 
 **Found in.** Jatin review, 22 Oct 2026 (`feat/case-cards-stage`).
+
+## 22. Each insight format carries an optional shelf heading
+
+**What.** An optional one-line `shelfHeading` on each `cardDetails` entry of the Resource single type
+("From design to build"), mapped onto `InsightFormatCard.shelfHeading`.
+
+**Why.** On the hub, a format whose pieces mostly have no picture (guides today) shows its lead and
+then a "Start here" shelf: rows of those pieces in three columns under a glyph, an eyebrow and an
+editor's heading (owner, 23 Oct 2026). Without the field the shelf shows its eyebrow alone.
+
+**Found in.** Listings round, 23 Oct 2026 (`feat/listings-lead-grid`).

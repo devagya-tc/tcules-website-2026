@@ -26,9 +26,9 @@
   --irl-target-top-compact: 128px;
   /* Over the content that scrolls under the phone bar, under the site nav. */
   --irl-z: var(--z-raised);
-  /* The rail's heading: the label voice at its smallest. */
-  --irl-label-text: var(--text-micro);
-  --irl-label-tracking: var(--text-micro-tracking);
+  /* The rail's heading: an eyebrow, at the eyebrow step (owner, 23 Oct 2026: eyebrows at 12). */
+  --irl-label-text: var(--text-eyebrow);
+  --irl-label-tracking: var(--text-eyebrow-tracking);
   /* An entry's figure: the micro mono, tabular, at the entry's end on the name's baseline. */
   --irl-count-text: var(--text-micro);
   --irl-count-tracking: var(--text-micro-tracking);

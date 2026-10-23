@@ -57,6 +57,8 @@ export {
   proofQuote,
   slugOf,
   testimonialItem,
+  ENQUIRY_DESK,
+  ENQUIRY_DRESS,
 } from './CorpusPage';
 export type {
   AboutPageProps,
