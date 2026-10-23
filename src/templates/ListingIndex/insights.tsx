@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Input, Layout, Tag } from '@/components';
+import { Button, Cluster, Icon, Input, Layout } from '@/components';
+import { FilterPanel, type FilterPanelGroup } from '@/patterns';
 
 import styles from './ListingIndex.module.css';
 import type { ListingSection, ListingView } from './ListingIndex';
@@ -250,63 +251,59 @@ const pageAnchor = (index: number) => (index > 0 ? `page-${index + 1}` : undefin
 
 /**
  * A format page's filters, built by the route (which owns the URLs): the search form's target and the
- * query it carries forward, and one link per topic — "All" first — the one in effect held.
+ * query it carries forward, and the filter panel's groups — each option's value a readable slug.
  */
 export type FormatFilters = {
   search: {
     /** The form's action: the page's own path. */
     action: string;
-    /** The query the search keeps (a topic in effect, a specimen's own parameters). */
+    /** The query the search keeps (the filters in effect, a specimen's own parameters). */
     params: readonly (readonly [string, string])[];
     /** The search in effect. */
     value?: string;
     /** The field's name for a reader ("Search guides"). */
     label: string;
   };
-  topics: readonly { label: string; href: string; selected: boolean }[];
-  /** A search or a topic is in effect. */
+  panel: {
+    groups: readonly FilterPanelGroup[];
+    /** The query the panel keeps (the search in effect). */
+    params: readonly (readonly [string, string])[];
+    /** The page with no filter in effect, the search kept. */
+    resetHref: string;
+  };
+  /** A search or a filter is in effect. */
   active: boolean;
   /** The page with neither. */
   clearHref: string;
 };
 
-/** The search over its topics: a GET form (Enter searches) and a row of filter links. */
+/** The search field and, at the row's end, the filters (owner, 23 Oct 2026, after claude.com). */
 function FilterBar({ filters }: { filters: FormatFilters }) {
-  const { search, topics } = filters;
+  const { search, panel } = filters;
   return (
-    <Layout rowGap="block">
+    <Layout columns={{ base: [1, 'auto'], md: [1, 1] }} colGap="block" align="center">
       <form role="search" action={search.action} method="get">
         {search.params.map(([key, value]) => (
-          <input key={key} type="hidden" name={key} value={value} />
+          <input key={`${key}=${value}`} type="hidden" name={key} value={value} />
         ))}
-        {/* Half the column from 768: a field, not a banner. */}
-        <Layout columns={{ md: 2 }} colGap="gutter">
-          <Input
-            type="search"
-            name="q"
-            defaultValue={search.value}
-            placeholder={search.label}
-            aria-label={search.label}
-            enterKeyHint="search"
-          />
-        </Layout>
+        <Input
+          type="search"
+          name="q"
+          defaultValue={search.value}
+          placeholder={search.label}
+          aria-label={search.label}
+          enterKeyHint="search"
+        />
       </form>
-      {topics.length > 1 ? (
-        <div role="group" aria-label="Filter by topic">
-          <Cluster colGap="tight" rowGap="tight">
-            {topics.map((topic) => (
-              <Tag
-                key={topic.href}
-                variant="filter"
-                href={topic.href}
-                selected={topic.selected}
-              >
-                {topic.label}
-              </Tag>
-            ))}
-          </Cluster>
-        </div>
-      ) : null}
+      <Cluster justify="end">
+        <FilterPanel
+          id="format-filters"
+          action={search.action}
+          params={panel.params}
+          groups={panel.groups}
+          resetHref={panel.resetHref}
+        />
+      </Cluster>
     </Layout>
   );
 }
@@ -320,7 +317,7 @@ function FilterBar({ filters }: { filters: FormatFilters }) {
  *                 rows of three — then the rest as ruled rows, newest first
  *   events        the next (or latest) event as a showcase, then dated rows, upcoming above past
  *
- * — with a search and topic filters over it, and a server-rendered "Show more". The filters are
+ * — with a search and a filter panel over it, and a server-rendered "Show more". The filters are
  * links and a GET form, so the URL holds them: a filtered page works without script and can be shared.
  */
 export function insightFormatPage({
@@ -344,7 +341,7 @@ export function insightFormatPage({
   /** Now, as ISO 8601: what splits an events page into upcoming and past. The route states it, so the
       template stays pure. */
   today?: string;
-  /** The search and topic filters over the page (owner, 23 Oct 2026). Absent, none are drawn. */
+  /** The search and the filters over the page (owner, 23 Oct 2026). Absent, none are drawn. */
   filters?: FormatFilters;
 }): ReactNode {
   const shape = SHAPE[kind];

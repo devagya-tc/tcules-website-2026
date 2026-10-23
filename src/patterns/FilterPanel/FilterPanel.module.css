@@ -1,0 +1,98 @@
+/* FilterPanel — Layout and Cluster arrange the head, the groups, the chips and the two actions; this
+   module owns the panel's place down the screen's end edge, its ground and backdrop, the groups'
+   rules, the type, and the caret's turn. Every value is --fpn-*. */
+
+/* The panel: a popover in the top layer, the screen's height at its end edge. */
+.panel {
+  inset-block: 0;
+  inset-inline: auto 0;
+  inline-size: min(var(--fpn-inline), 100vw);
+  block-size: 100dvh;
+  max-block-size: none;
+  margin: 0;
+  padding: var(--fpn-inset);
+  overflow-y: auto;
+  border: 0;
+  border-inline-start: var(--fpn-rule-width) solid var(--fpn-rule-ink);
+  background-color: var(--fpn-ground);
+  color: var(--fpn-ink);
+}
+
+.panel::backdrop {
+  background-color: var(--fpn-backdrop);
+}
+
+.heading {
+  color: var(--fpn-heading-ink);
+  font: var(--fpn-heading-text);
+  letter-spacing: var(--fpn-heading-tracking);
+}
+
+/* A group: ruled above, and the last below too. */
+.group {
+  border-block-start: var(--fpn-rule-width) solid var(--fpn-rule-ink);
+}
+
+.group:last-child {
+  border-block-end: var(--fpn-rule-width) solid var(--fpn-rule-ink);
+}
+
+.summary {
+  display: block;
+  padding-block: var(--gap-text);
+  list-style: none;
+  cursor: pointer;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: var(--fpn-ring-width) solid var(--fpn-ring-color);
+  outline-offset: var(--fpn-ring-offset);
+}
+
+.groupLabel {
+  color: var(--fpn-label-ink);
+  font: var(--fpn-label-text);
+  letter-spacing: var(--fpn-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.caret {
+  display: block;
+  color: var(--fpn-label-ink);
+  transition: transform var(--fpn-duration) var(--fpn-easing);
+}
+
+.group[open] .caret {
+  transform: rotate(180deg);
+}
+
+/* The options under their label: the group's own air below them. */
+.options {
+  margin: 0;
+  padding: 0 0 var(--gap-block);
+  border: 0;
+  min-inline-size: 0;
+}
+
+/* The legend names the fieldset for a screen reader; the summary already shows it. */
+.hidden {
+  position: absolute;
+  inline-size: var(--fpn-hidden-size);
+  block-size: var(--fpn-hidden-size);
+  margin: calc(-1 * var(--fpn-hidden-size));
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    transition: none;
+  }
+}

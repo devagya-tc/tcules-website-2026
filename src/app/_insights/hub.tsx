@@ -29,7 +29,6 @@ const VIEW_KEY = 'view';
 const PAGE_KEY = 'page';
 /** A format page's search and topic filter (owner, 23 Oct 2026). */
 const SEARCH_KEY = 'q';
-const TOPIC_KEY = 'topic';
 /** A format page's page: twelve pieces under the feature, then "Show more". */
 const PAGE_SIZE = 12;
 
@@ -82,6 +81,11 @@ const FORMAT_LINE: Record<InsightResourceKind, string> = {
 
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
+/** Every value of a repeated query parameter (`?topic=a&topic=b`). */
+const valuesOf = (value: string | string[] | undefined) =>
+  (Array.isArray(value) ? value : value ? [value] : [])
+    .map((entry) => entry.trim())
+    .filter(Boolean);
 
 /**
  * The CMS's GENERIC covers: the brand's abstract leaf graphic, uploaded as the "cover" of pieces that
@@ -246,6 +250,17 @@ function closingOf(page: InsightsPage, origin: string, placement: string): Listi
  * ("0→1") the serif does not carry — it fell back to the sans mid-heading and read as a broken
  * string. Said in words, the same name.
  */
+/** A filter group's place in the panel: the topic first, the industry last. */
+const rank = (label: string) => (/topic/i.test(label) ? 0 : /industry/i.test(label) ? 2 : 1);
+
+/** A readable URL value from a name: "Modernise & Replatform" → "modernise-replatform". */
+const slugOf = (name: string) =>
+  name
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
 export function insightsIndexProps(page: InsightsPage, query: Query): ListingIndexProps {
@@ -298,51 +313,81 @@ export function insightsFormatProps(
 ): ListingIndexProps {
   const every = page.resources.items.filter((item) => item.kind === kind);
   const subjects = subjectsOf(page);
-  /* The filters in effect: a search over the title and standfirst, and one topic. */
+  /* The filters: every CMS filter group with pieces of this format, each a URL parameter named for
+     the group ("topic", "industry") whose values are its options' names as slugs — never the CMS's
+     record ids. Any option within a group, every group at once. */
+  const groups = page.resources.filters
+    .map((group) => ({
+      name: slugOf(group.label),
+      label: group.label,
+      options: group.options
+        .filter((option) => every.some((item) => item.filterIds.includes(option.id)))
+        .map((option) => ({
+          id: option.id,
+          value: slugOf(topicName(option.name)),
+          label: topicName(option.name),
+        })),
+    }))
+    .filter(
+      (group) =>
+        group.name &&
+        group.options.length > 0 &&
+        group.name !== SEARCH_KEY &&
+        group.name !== PAGE_KEY,
+    )
+    /* What a piece is about first — its topic, then the rest — and the reader's own sector last
+       (an industry is not a subject). */
+    .sort((a, b) => rank(a.label) - rank(b.label));
+  const chosen = groups.map((group) => {
+    const values = valuesOf(query[group.name]);
+    return {
+      ...group,
+      picked: group.options.filter((option) => values.includes(option.value)),
+    };
+  });
   const q = first(query[SEARCH_KEY]).trim();
-  const topic = first(query[TOPIC_KEY]).trim();
   const needle = q.toLowerCase();
-  const all = every.filter(
+  const filtered = every.filter(
     (item) =>
-      (!topic || item.filterIds.includes(topic)) &&
+      chosen.every(
+        (group) =>
+          group.picked.length === 0 ||
+          group.picked.some((option) => item.filterIds.includes(option.id)),
+      ) &&
       (!needle || `${item.title} ${item.description ?? ''}`.toLowerCase().includes(needle)),
   );
   /* The first page holds the feature and twelve more; each "Show more" adds twelve. */
-  const pages = Math.max(1, Math.ceil(Math.max(0, all.length - 1) / PAGE_SIZE));
+  const pages = Math.max(1, Math.ceil(Math.max(0, filtered.length - 1) / PAGE_SIZE));
   const current = Math.min(
     pages,
     Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1),
   );
   const path = pathFor(kind);
   const [base = path, own] = path.split('?');
-  /* A URL on this page with the given filters: the path's own parameters kept (the specimen's
+  /* The filters in effect as query pairs, for every URL that keeps them. */
+  const filterPairs = chosen.flatMap((group) =>
+    group.picked.map((option) => [group.name, option.value] as const),
+  );
+  /* A URL on this page with the given pairs: the path's own parameters kept (the specimen's
      `?format=`), blanks dropped. */
-  const hrefWith = (params: Record<string, string>, hash = '') => {
+  const hrefWith = (pairs: readonly (readonly [string, string])[], hash = '') => {
     const next = new URLSearchParams(own);
-    for (const [key, value] of Object.entries(params)) if (value) next.set(key, value);
+    for (const [key, value] of pairs) if (value) next.append(key, value);
     const search = next.toString();
     return `${base}${search ? `?${search}` : ''}${hash}`;
   };
+  const searchPair = q ? [[SEARCH_KEY, q] as const] : [];
   const title = formatTitle(page, kind);
   const plural = FORMAT_NAME[kind].toLowerCase();
-  /* The topics this format has pieces in, the fullest first. */
-  const topics = [...subjects.entries()]
-    .map(([id, label]) => ({
-      id,
-      label,
-      size: every.filter((item) => item.filterIds.includes(id)).length,
-    }))
-    .filter((entry) => entry.size > 0)
-    .sort((a, b) => b.size - a.size);
   const content = insightFormatPage({
     kind: kind as InsightKind,
-    items: all.map((item) => toItem(item, subjects)),
+    items: filtered.map((item) => toItem(item, subjects)),
     page: current,
     pageSize: PAGE_SIZE,
     moreHref:
-      1 + current * PAGE_SIZE < all.length
+      1 + current * PAGE_SIZE < filtered.length
         ? hrefWith(
-            { [SEARCH_KEY]: q, [TOPIC_KEY]: topic, [PAGE_KEY]: String(current + 1) },
+            [...searchPair, ...filterPairs, [PAGE_KEY, String(current + 1)]],
             `#page-${current + 1}`,
           )
         : undefined,
@@ -350,23 +395,25 @@ export function insightsFormatProps(
     filters: {
       search: {
         action: base,
-        params: [
-          ...new URLSearchParams(own).entries(),
-          ...(topic ? [[TOPIC_KEY, topic] as const] : []),
-        ],
+        params: [...new URLSearchParams(own).entries(), ...filterPairs],
         value: q || undefined,
         label: `Search ${plural}`,
       },
-      topics: [
-        { label: 'All', href: hrefWith({ [SEARCH_KEY]: q }), selected: !topic },
-        ...topics.map((entry) => ({
-          label: entry.label,
-          href: hrefWith({ [SEARCH_KEY]: q, [TOPIC_KEY]: entry.id }),
-          selected: entry.id === topic,
+      panel: {
+        groups: chosen.map((group) => ({
+          name: group.name,
+          label: group.label,
+          options: group.options.map((option) => ({
+            value: option.value,
+            label: option.label,
+            checked: group.picked.includes(option),
+          })),
         })),
-      ],
-      active: Boolean(q || topic),
-      clearHref: hrefWith({}),
+        params: [...new URLSearchParams(own).entries(), ...searchPair],
+        resetHref: hrefWith(searchPair),
+      },
+      active: Boolean(q || filterPairs.length > 0),
+      clearHref: hrefWith([]),
     },
   });
 

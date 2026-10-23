@@ -128,6 +128,11 @@ const SPECIMENS = [
         note: 'the ancestor trail — depth ladder, collapse, 4 surfaces, its own band',
       },
       {
+        href: '/design/filter-panel',
+        name: 'FilterPanel',
+        note: 'a listing’s filters in a side panel — groups of chips, Reset and Apply by GET, a popover with no script; in effect, none, one group, 4 surfaces',
+      },
+      {
         href: '/design/index-rail',
         name: 'IndexRail',
         note: 'a curated listing page’s rail beside its content — views (BY TYPE / BY TOPIC switching the whole column, held in ?view=) and a picker of sibling pages',
