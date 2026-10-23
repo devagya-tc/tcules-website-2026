@@ -1,6 +1,6 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
-import { Media } from '@/components';
+import { Icon, Media, type IconName } from '@/components';
 import { EnquiryForm } from '@/patterns';
 import {
   ENQUIRY_DESK,
@@ -42,6 +42,17 @@ const KINDS: readonly InsightResourceKind[] = [
   'research',
   'interview',
 ];
+
+/** Each format's mark in the format menu (owner, 23 Oct 2026). */
+const FORMAT_ICON: Record<InsightResourceKind, IconName> = {
+  article: 'document-text',
+  guide: 'notebook',
+  research: 'graph-up',
+  interview: 'chat-round-dots',
+  podcast: 'microphone',
+  video: 'videocamera-record',
+  event: 'calendar',
+};
 
 const FORMAT_NAME: Record<InsightResourceKind, string> = {
   article: 'Articles',
@@ -434,6 +445,7 @@ export function insightsFormatProps(
         href: pathFor(k),
         current: k === kind,
         count: page.resources.items.filter((item) => item.kind === k).length,
+        icon: <Icon name={FORMAT_ICON[k]} />,
       })),
       content,
     },

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Layout, Section } from '@/components';
+import { Icon, Layout, Section } from '@/components';
 import { ROUTES } from '@/lib/routes';
 import { IndexRail } from '@/patterns';
 
@@ -126,7 +126,7 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
       <Section aria-label="Menu">
         <Specimen
           title="picker as a menu — the current page named, its siblings under it"
-          note="menu: a <details> control naming the current page; open, the list hangs under it on the same ground. Shuts on Escape, a choice or a press outside. A format page's rail (23 Oct 2026)."
+          note="menu: a <details> control naming the current page, each entry led by its glyph; open, the list hangs under it on the same ground. Shuts on Escape, a choice or a press outside. A format page's rail (23 Oct 2026)."
         >
           <IndexRail
             ariaLabel="Formats as a menu"
@@ -136,10 +136,23 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
                 id: 'type',
                 label: 'By type',
                 items: [
-                  { label: 'Articles', href: ROUTES.articles },
-                  { label: 'Guides', href: ROUTES.guides, current: true },
-                  { label: 'Videos', href: ROUTES.videos },
-                  { label: 'Events', href: ROUTES.events },
+                  {
+                    label: 'Articles',
+                    href: ROUTES.articles,
+                    icon: <Icon name="document-text" />,
+                  },
+                  {
+                    label: 'Guides',
+                    href: ROUTES.guides,
+                    current: true,
+                    icon: <Icon name="notebook" />,
+                  },
+                  {
+                    label: 'Videos',
+                    href: ROUTES.videos,
+                    icon: <Icon name="videocamera-record" />,
+                  },
+                  { label: 'Events', href: ROUTES.events, icon: <Icon name="calendar" /> },
                 ],
               },
             ]}

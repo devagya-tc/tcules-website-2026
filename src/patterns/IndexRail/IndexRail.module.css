@@ -238,6 +238,12 @@
   white-space: nowrap;
 }
 
+/* An entry's glyph: the entry's own ink, so the current one's turns with its name. */
+.menuGlyph {
+  display: block;
+  color: currentColor;
+}
+
 .menu[open] .toggleMark {
   transform: rotate(180deg);
 }

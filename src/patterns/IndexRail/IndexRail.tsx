@@ -22,7 +22,18 @@ import styles from './IndexRail.module.css';
  * `count` is how many pieces it holds, set as a tabular mono figure at the entry's end on the label's
  * baseline — an index's page number — so the list reads as a typeset index rather than a menu.
  */
-export type IndexRailItem = { label: string; href: string; current?: boolean; count?: number };
+export type IndexRailItem = {
+  label: string;
+  href: string;
+  current?: boolean;
+  count?: number;
+  /**
+   * The entry's glyph, composed by the caller (`<Icon name="notebook" />`), set before its label in a
+   * MENU — on the control for the current page and on each entry (owner, 23 Oct 2026). A list draws
+   * names alone.
+   */
+  icon?: ReactNode;
+};
 
 /**
  * One way of curating the page — "By type", "By topic" — with the list of sections it shows and,
@@ -251,7 +262,16 @@ export function IndexRail({
           onToggle={(event) => setOpen(event.currentTarget.open)}
         >
           <summary className={styles.menuButton}>
-            <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="center">
+            <Layout
+              columns={{ base: picked?.icon ? ['auto', 1, 'auto'] : [1, 'auto'] }}
+              colGap="tight"
+              align="center"
+            >
+              {picked?.icon ? (
+                <span className={styles.menuGlyph} aria-hidden="true">
+                  {picked.icon}
+                </span>
+              ) : null}
               <span className={styles.menuLabel}>{picked?.label}</span>
               <span className={styles.toggleMark} aria-hidden="true">
                 <Icon name="alt-arrow-down" size="sm" />
@@ -267,7 +287,21 @@ export function IndexRail({
                   aria-current={item.current ? 'page' : undefined}
                   onClick={() => setOpen(false)}
                 >
-                  {item.label}
+                  {item.icon ? (
+                    <Layout
+                      as="span"
+                      columns={{ base: ['auto', 1] }}
+                      colGap="tight"
+                      align="center"
+                    >
+                      <span className={styles.menuGlyph} aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Layout>
+                  ) : (
+                    item.label
+                  )}
                 </a>
               </li>
             ))}
