@@ -1,8 +1,9 @@
 import { Layout } from '@/components';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
+  ListCard,
   Teaser,
   type TeaserImage,
   type TeaserMedia,
@@ -215,6 +216,93 @@ const ACTION: Record<InsightKind, string> = {
   event: 'See the event',
 };
 
+/** The cards: rows of three, or two as halves, at the small step — an 18 title under the lead's serif
+    (owner, 23 Oct 2026). A format page sets one grid per page of its pieces, each its own jump target. */
+export function CardGrid({
+  cards,
+  meta,
+  titleAs = 'h3',
+  id,
+}: {
+  cards: readonly InsightItem[];
+  meta?: MetaOptions;
+  titleAs?: 'h2' | 'h3' | 'h4';
+  id?: string;
+}) {
+  if (cards.length === 0) return null;
+  const halves = cards.length === 2;
+  return (
+    <Layout as="ul" id={id} columns={{ md: halves ? 2 : 3 }} colGap="gutter" rowGap="column">
+      {cards.map((item) => (
+        <BlockCard
+          key={item.id}
+          {...cardOf(item, meta)}
+          size="sm"
+          titleAs={titleAs}
+          tracks={halves ? 2 : 3}
+          cue="title"
+          compact
+        />
+      ))}
+    </Layout>
+  );
+}
+
+/**
+ * The ROWS: a format page's pieces after its cards (owner, 23 Oct 2026), one ruled row each — its
+ * eyebrow, title and standfirst, and its picture at the row's end where it has one, so every title
+ * starts on one edge. A piece without a picture is never a card; here it is a row among rows.
+ */
+export function Rows({
+  items,
+  meta,
+  titleAs = 'h3',
+  id,
+}: {
+  items: readonly InsightItem[];
+  meta?: MetaOptions;
+  titleAs?: 'h3' | 'h4';
+  id?: string;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <Layout as="ul" id={id} rowGap="none">
+      {items.map((item) => {
+        const picture = pictureOf(item);
+        return (
+          <ListCard
+            key={item.id}
+            title={item.title}
+            href={item.href}
+            eyebrow={cardOf(item, meta).eyebrow}
+            body={item.description?.trim() || undefined}
+            arrangement="stacked"
+            size="sm"
+            titleAs={titleAs}
+            marker={
+              picture
+                ? picture.type === 'image'
+                  ? /* The thumbnail fills its own box, so a cover the CMS sent without its size
+                       reserves the 16:9 the row draws it at. */
+                    {
+                      type: 'thumbnail',
+                      image: {
+                        ...picture.image,
+                        width: picture.image.width ?? 1600,
+                        height: picture.image.height ?? 900,
+                      },
+                    }
+                  : { type: 'sketch', name: picture.name }
+                : undefined
+            }
+            markerPosition="end"
+          />
+        );
+      })}
+    </Layout>
+  );
+}
+
 /** The FEATURE: the lead, then its cards under it (see above). */
 export function Feature({
   lead,
@@ -243,219 +331,18 @@ export function Feature({
           />
         </ul>
       ) : null}
-      {cards.length > 0 ? (
-        /* The cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
-        <Layout
-          as="ul"
-          columns={{ md: cards.length === 2 ? 2 : 3 }}
-          colGap="gutter"
-          rowGap="column"
-        >
-          {cards.map((item) => (
-            <BlockCard
-              key={item.id}
-              {...cardOf(item, meta)}
-              size="sm"
-              titleAs={titleAs}
-              tracks={cards.length === 2 ? 2 : 3}
-              cue="title"
-              compact
-            />
-          ))}
-        </Layout>
-      ) : null}
+      <CardGrid cards={cards} meta={meta} titleAs={titleAs} />
     </Layout>
   );
 }
 
-/* ── The compositions ────────────────────────────────────────────────────────────
-   Beauty round 4 (16 Oct 2026): a small set of FIXED compositions, each a complete rectangle with a
-   scale ladder inside it — one large piece, a middle tier, a small tier — and no column that ends
-   in empty paper. insights.tsx assigns them per section so no two neighbours match, in both views
-   and on the format pages.
-
-     LEAD     a 16:9 lead at two thirds, two pictured pieces stacked beside it
-     TRIO     three pictured pieces in a row
-     CINEMA   a lead at the column's full width, a filmstrip of pictured pieces under it
-     HALVES   two pictured pieces at half
-     LEDGER   a list of pieces, one per row, its copy and a thumbnail track at the row's end
-     DATES    a row per event, the day as a numeral at its start
-     SHOWCASE one event featured beside its day at the largest numeral
-
-   A piece shows its picture wherever it has one: a picture is decided by the DATA, never dropped by
-   a slot (beauty round 4). The pictured compositions are handed pictured pieces; the typographic
-   ones (LEDGER) carry a piece's picture as a thumbnail where it has one, in a track
-   every row of that list holds, so the copy ends on one edge whether or not a row has a picture.
-   A piece without a picture is typographic, never a stand-in. On a phone the secondary pieces of a
-   pictured set turn `compact` (a row, its picture a thumbnail at the end), so a single column is not
-   a run of identical full-width pictures. */
+/* ── The dated compositions: an event's day leads its row ───────────────────────── */
 
 type Shape = {
   items: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 };
-
-/**
- * The LEAD: the first piece at two thirds — its picture, meta, title at the largest item step and
- * its standfirst — and the next two stacked in the third beside it, each its picture over its words,
- * so the stack runs the lead's height and the rectangle closes. Below 1024 the lead takes the column
- * and the two sit side by side under it (rows on a phone).
- */
-export function Lead({ items, meta, titleAs = 'h3' }: Shape) {
-  const [lead, ...rest] = items;
-  if (!lead) return null;
-  /* Two pictured pieces beside the lead run its height; typographic ones need three, each with its
-     standfirst, to run it. */
-  const sidePictures = rest.filter(hasPicture).slice(0, 2);
-  const pictured = sidePictures.length === 2;
-  const side = pictured ? sidePictures : rest.slice(0, 3);
-  return (
-    <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="stack">
-      <Layout rowGap="gutter">
-        <ul>
-          <Teaser
-            {...teaserOf(lead, meta)}
-            size="xl"
-            titleAs={titleAs}
-            sizes={CARD_TWO_TRACKS}
-          />
-        </ul>
-      </Layout>
-      {side.length > 0 ? (
-        <Layout as="ul" columns={{ md: side.length, lg: 1 }} colGap="gutter" rowGap="gutter">
-          {side.map((item) => (
-            <Teaser
-              key={item.id}
-              {...teaserOf(item, meta)}
-              body={pictured ? undefined : item.description}
-              size={pictured ? 'sm' : 'md'}
-              titleAs={titleAs}
-              sizes={CARD_THREE_TRACKS}
-              compact={pictured}
-            />
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-}
-
-/** The TRIO: three pictured pieces in a row, the small tier — on a phone the first leads, the rest rows. */
-export function Trio({ items, meta, titleAs = 'h3' }: Shape) {
-  return (
-    <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="stack">
-      {items.slice(0, 3).map((item, i) => (
-        <Teaser
-          key={item.id}
-          {...teaserOf(item, meta)}
-          size="sm"
-          titleAs={titleAs}
-          sizes={CARD_THREE_TRACKS}
-          compact={i > 0}
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/**
- * The CINEMA: the lead at the column's full width — the watched shape, a screen — then a filmstrip
- * of the next pieces in one row under it (three or four across; on a phone a row that scrolls
- * sideways, one in view and the next peeking).
- */
-export function Cinema({ items, meta, titleAs = 'h3' }: Shape) {
-  const [lead, ...rest] = items;
-  if (!lead) return null;
-  const strip = rest.slice(0, 4);
-  return (
-    <Layout rowGap="stack">
-      <ul>
-        <Teaser {...teaserOf(lead, meta)} size="xl" titleAs={titleAs} sizes={FULL_COLUMN} />
-      </ul>
-      {strip.length > 0 ? (
-        <Layout
-          as="ul"
-          columns={{ md: strip.length }}
-          scroll="until-md"
-          colGap="gutter"
-          rowGap="stack"
-        >
-          {strip.map((item) => (
-            <Teaser
-              key={item.id}
-              {...teaserOf(item, meta)}
-              body={undefined}
-              size="sm"
-              titleAs={titleAs}
-              sizes={CARD_THREE_TRACKS}
-            />
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-}
-
-/** The HALVES: two pictured pieces at half, the middle tier (the second a compact row on a phone). */
-export function Halves({ items, meta, titleAs = 'h3' }: Shape) {
-  return (
-    <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
-      {items.slice(0, 2).map((item, i) => (
-        <Teaser
-          key={item.id}
-          {...teaserOf(item, meta)}
-          size="lg"
-          titleAs={titleAs}
-          sizes={CARD_TWO_TRACKS}
-          compact={i > 0}
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/**
- * The LEDGER: one piece per row — its meta's facts in a column at the row's start, its title and two
- * lines of standfirst at a measure, and its picture as a thumbnail at the row's end. Where any row has a picture every row holds the thumbnail's track,
- * so the copy ends on one edge; where none has, the copy takes the width.
- */
-export function Ledger({ items, meta, titleAs = 'h3' }: Shape) {
-  const slot = items.some(hasPicture);
-  return (
-    <Layout as="ul" rowGap="stack">
-      {items.map((item) => (
-        <Teaser
-          key={item.id}
-          {...teaserOf(item, meta)}
-          arrangement="row"
-          size="md"
-          titleAs={titleAs}
-          sizes={CARD_THREE_TRACKS}
-          slot={slot}
-          metaAside
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/**
- * The HEADLINES: typographic pieces in one row (two or three across), each anchored by its meta line
- * and carrying two lines of sans standfirst under a balanced, three-line title — a deliberate run of
- * words for pieces that have no picture, never a picture row with its pictures missing. Handed only
- * typographic pieces.
- */
-export function Headlines({ items, meta, titleAs = 'h3' }: Shape) {
-  const across = Math.min(3, Math.max(1, items.length)) as 1 | 2 | 3;
-  return (
-    <Layout as="ul" columns={{ md: across }} colGap="gutter" rowGap="stack">
-      {items.map((item) => (
-        <Teaser key={item.id} {...teaserOf(item, meta)} size="md" titleAs={titleAs} />
-      ))}
-    </Layout>
-  );
-}
 
 /** The DATES: a row per event, the day as a numeral at its start, its picture at its end. */
 export function Dates({ items, titleAs = 'h3', size = 'lg' }: Shape & { size?: TeaserSize }) {
@@ -497,25 +384,4 @@ export function Showcase({ items, titleAs = 'h3' }: Shape) {
       />
     </ul>
   );
-}
-
-/**
- * How a set of pictured pieces is cut into TRIO and HALVES phrases — threes and twos alternating,
- * never leaving one alone: 4 is 2 + 2, 6 is 3 + 3, 7 is 3 + 2 + 2. `first` says which opens the run
- * (a run under a filmstrip of threes opens on two). One alone is not a phrase (the caller files it
- * into a list with its thumbnail).
- */
-export function pictureRun(count: number, first: 2 | 3 = 3): number[] {
-  const parts: number[] = [];
-  let left = count;
-  let three = first === 3;
-  while (left >= 2) {
-    let take = three ? 3 : 2;
-    if (left - take === 1) take = take === 3 ? 2 : 3;
-    if (take > left) take = left;
-    parts.push(take);
-    left -= take;
-    three = !three;
-  }
-  return parts;
 }

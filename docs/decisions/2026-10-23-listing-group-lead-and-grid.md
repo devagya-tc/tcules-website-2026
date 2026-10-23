@@ -19,6 +19,11 @@ not drawn. Events keep their dated rows: the numeral one step down (stat), the m
 body, titles at h4. Eyebrows say the topic, at 12px. Section heads read "See more", with no count.
 Group heads are h2, groups a section-open (128) apart. The close is the island.
 
+A format page (/insights/articles …) opens on the same group, drawn from every piece it has: the lead,
+then all its pictured pieces as cards in rows of three. The rest follow as ruled rows (eyebrow, title,
+standfirst, a thumbnail at the row's end where there is one) under a "More articles" label, newest
+first, with "Show more". Events keep their showcase and dated rows.
+
 **Why.** "Take the page as it exists today, change the first card in each group to a horizontal card,
 place the other cards in a 3-col grid below it, standardize what the eyebrow says." A list column beside a 2 × 2,
 and a boxed list of text rows, were both built and dropped ("i don't think this is working. lets drop
@@ -32,6 +37,6 @@ groups, which is what this does.
 two ways, eyebrows that said a topic on one card and a date on the next, head links that each carried a
 count, and a group head the same size as the title under it.
 
-**How to apply.** `insights.tsx` assigns the groups (`groupOf`); `Feature` draws them with BlockCard
-(`split="grid"`, `compact`, `play`, a cta). Proposed until the owner has reviewed the built hub; promoted in the PR that
+**How to apply.** `insights.tsx` assigns the groups (`groupOf`) and a format page's order (`insightFormatPage`); `Feature` draws them with BlockCard
+(`split="grid"`, `compact`, `play`, a cta), `CardGrid` the later pages' cards, and `Rows` the rest with ListCard. Proposed until the owner has reviewed the built hub; promoted in the PR that
 shows it.

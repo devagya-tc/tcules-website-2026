@@ -6,23 +6,16 @@ import styles from './ListingIndex.module.css';
 import type { ListingSection, ListingView } from './ListingIndex';
 import {
   byEventDate,
-  Cinema,
+  CardGrid,
   Dates,
   dateOf,
   Feature,
   followCount,
-  Halves,
-  hasPicture,
-  hasStandfirst,
-  Headlines,
   leadFirst,
   LABEL,
-  Lead,
-  Ledger,
   partition,
-  pictureRun,
+  Rows,
   Showcase,
-  Trio,
   type InsightItem,
   type InsightKind,
   type MetaOptions,
@@ -235,135 +228,34 @@ function curateTopics(
   return sections;
 }
 
-/* ── Per format: the hub's composition, larger ──────────────────────────────────────
-   A format page opens on the composition its format has on the hub, at its largest (beauty round 4,
-   16 Oct 2026): a read format on a LEAD (the newest picture at two thirds, the next two beside it —
-   a complete rectangle, never a picture beside a void), a watched one on a CINEMA, events on their
-   dates. Then the archive, in phrases. */
+/* ── Per format: the hub's group, then the archive ──────────────────────────────────
+   A format page opens on its format's hub group, drawn from every piece it has (owner, 23 Oct 2026,
+   after claude.com/resources/product-announcements): the lead as the horizontal card, then its
+   pictured pieces as cards in rows of three. Then the rest, newest first, as ruled rows. Events keep
+   their dates. */
 
-type FormatShape = 'editorial' | 'screens' | 'dates';
+type FormatShape = 'cards' | 'dates';
 
 const SHAPE: Record<InsightKind, FormatShape> = {
-  article: 'editorial',
-  guide: 'editorial',
-  research: 'editorial',
-  interview: 'editorial',
-  video: 'screens',
-  podcast: 'screens',
+  article: 'cards',
+  guide: 'cards',
+  research: 'cards',
+  interview: 'cards',
+  video: 'cards',
+  podcast: 'cards',
   event: 'dates',
 };
 
-/** A run of typographic pieces is cut into phrases of this many, so no list is a wall. */
-const LEDGER_RUN = 4;
-
-/**
- * The archive, composed in PHRASES from what the pieces have (beauty round 4) — each phrase a
- * complete rectangle, and no two neighbours alike:
- *
- *   pictured  TRIO (three) and HALVES (two), cut so none is left alone (`pictureRun`)
- *   words     LEDGER (four rows, one per line) and HEADLINES (three across), alternating
- *
- * The two kinds alternate, words first (the page's lead above is pictures). A lone picture joins the
- * typographic pieces in date order, where the ledger shows it as its row's thumbnail; a short run at
- * the end joins the phrase before it, so the page ends on a full phrase.
- */
-function editorial(items: readonly InsightItem[], meta: MetaOptions): ReactNode[] {
-  const { pictured } = partition(items);
-  const runs = pictureRun(pictured.length);
-  const inRuns = pictured.slice(
-    0,
-    runs.reduce((sum, n) => sum + n, 0),
-  );
-  const words = items.filter((item) => !inRuns.includes(item));
-
-  /* The typographic phrases: fours and threes alternating, a remainder of one or two folded into
-     the phrase before it (a ledger, which takes any count). */
-  const wordPhrases: { kind: 'ledger' | 'headlines'; items: InsightItem[] }[] = [];
-  let at = 0;
-  while (at < words.length) {
-    const kind = wordPhrases.length % 2 === 0 ? 'ledger' : 'headlines';
-    const take = kind === 'ledger' ? LEDGER_RUN : 3;
-    const chunk = words.slice(at, at + take);
-    at += take;
-    /* Headlines are typographic only; a chunk carrying a picture is a ledger. */
-    const resolved = kind === 'headlines' && chunk.some(hasPicture) ? 'ledger' : kind;
-    const last = wordPhrases[wordPhrases.length - 1];
-    if (chunk.length < 3 && last) {
-      last.kind = 'ledger';
-      last.items.push(...chunk);
-    } else {
-      wordPhrases.push({ kind: resolved, items: chunk });
-    }
-  }
-  /* Two ledgers side by side in the sequence would read as one long list: a pictured phrase sits
-     between them where there is one. */
-  const picPhrases = runs.map((n, i) => {
-    const start = runs.slice(0, i).reduce((sum, m) => sum + m, 0);
-    return inRuns.slice(start, start + n);
-  });
-
-  const out: ReactNode[] = [];
-  const total = Math.max(wordPhrases.length, picPhrases.length);
-  for (let i = 0; i < total; i += 1) {
-    const word = wordPhrases[i];
-    if (word) {
-      out.push(
-        word.kind === 'ledger' ? (
-          <Ledger key={`w${i}`} items={word.items} meta={meta} titleAs="h2" />
-        ) : (
-          <Headlines key={`w${i}`} items={word.items} meta={meta} titleAs="h2" />
-        ),
-      );
-    }
-    const pic = picPhrases[i];
-    if (pic) {
-      out.push(
-        pic.length === 3 ? (
-          <Trio key={`p${i}`} items={pic} meta={meta} titleAs="h2" />
-        ) : (
-          <Halves key={`p${i}`} items={pic} meta={meta} titleAs="h2" />
-        ),
-      );
-    }
-  }
-  return out;
-}
-
-/** The format page's body below its lead: one page's worth, in the format's own composition. */
-function body(shape: FormatShape, items: readonly InsightItem[], meta: MetaOptions): ReactNode {
-  if (items.length === 0) return null;
-  if (shape === 'screens') {
-    /* Screens in twos and threes, every one a picture — opening on two, so the first row under the
-       cinema's filmstrip is never a second row of threes. */
-    const runs = pictureRun(items.length, 2);
-    const out: ReactNode[] = [];
-    let start = 0;
-    runs.forEach((n, i) => {
-      const run = items.slice(start, start + n);
-      start += n;
-      out.push(
-        n === 3 ? (
-          <Trio key={i} items={run} meta={meta} titleAs="h2" />
-        ) : (
-          <Halves key={i} items={run} meta={meta} titleAs="h2" />
-        ),
-      );
-    });
-    const rest = items.slice(start);
-    if (rest.length > 0) out.push(<Ledger key="rest" items={rest} meta={meta} titleAs="h2" />);
-    return <Layout rowGap="column">{out}</Layout>;
-  }
-  return <Layout rowGap="column">{editorial(items, meta)}</Layout>;
-}
+/** A page's anchor: where "Show more" lands, on the first piece the new page adds. */
+const pageAnchor = (index: number) => (index > 0 ? `page-${index + 1}` : undefined);
 
 /**
  * A format's own page (/insights/articles …; owner, 16 Oct 2026, after
  * claude.com/resources/articles): the hero's RECORD (how many there are and how fresh) and the
  * page's content, beside the rail's picker of formats, at the format's composition at its largest —
  *
- *   read formats  a LEAD (the newest picture at two thirds, the next two beside it), then the
- *                 archive in phrases: trios and halves of pictures between ledgers and headlines
- *   videos        a CINEMA (the newest at the column's width, a filmstrip), then screens
+ *   every format  its hub group — the lead as the horizontal card, its pictured pieces as cards in
+ *                 rows of three — then the rest as ruled rows, newest first
  *   events        the next (or latest) event as a showcase, then dated rows, upcoming above past
  *
  * — with a server-rendered "Show more" and no filters.
@@ -371,18 +263,18 @@ function body(shape: FormatShape, items: readonly InsightItem[], meta: MetaOptio
 export function insightFormatPage({
   kind,
   items,
+  page,
   pageSize,
-  total,
   moreHref,
   today,
 }: {
   kind: InsightKind;
-  /** Every piece of this format the page shows, newest first: the pages read so far, in order. */
+  /** Every piece of this format, newest first. */
   items: readonly InsightItem[];
-  /** How many a page holds (the first page adds the feature). */
+  /** How many pages the reader has opened, from 1. */
+  page: number;
+  /** How many a page holds (the first page adds the lead). */
   pageSize: number;
-  /** How many of this format exist. */
-  total: number;
   /** The next page's URL (server-rendered "Show more"). Present while more exist. */
   moreHref?: string;
   /** Now, as ISO 8601: what splits an events page into upcoming and past. The route states it, so the
@@ -411,14 +303,34 @@ export function insightFormatPage({
           const newest = dateOf(items[0]?.publishedAt);
           return newest ? `Latest ${newest}` : undefined;
         })();
+  const total = items.length;
   const record = [`${total} published`, ...(freshness ? [freshness] : [])];
+
+  /* The pages read so far: the lead and a page's worth, then a page's worth more per "Show more". */
+  const shownCount = 1 + page * pageSize;
+  const pageOf = (index: number) => (index === 0 ? 0 : Math.floor((index - 1) / pageSize));
+  const more = moreHref ? (
+    /* Where the reader is, then the way on — only while there is more to show. */
+    <Cluster colGap="block" rowGap="text" align="center">
+      <p className={styles.count}>{`${Math.min(shownCount, total)} of ${total}`}</p>
+      <Button
+        as="a"
+        href={moreHref}
+        emphasis="link"
+        tone="primary"
+        icon={<Icon name="alt-arrow-down" />}
+      >
+        Show more
+      </Button>
+    </Cluster>
+  ) : null;
 
   let content: ReactNode;
   if (items.length === 0) {
     content = <p>Nothing has been published here yet.</p>;
   } else if (shape === 'dates') {
     /* Events: upcoming above past, each a run of dated rows. */
-    const dated = byEventDate(items);
+    const dated = byEventDate(items.slice(0, shownCount));
     const upcoming = dated.filter((item) => Date.parse(item.event?.startsAt ?? '') >= now);
     const past = dated.filter((item) => !upcoming.includes(item));
     /* The newest-to-come (else the latest) is the SHOWCASE — its picture large, its day at the
@@ -456,71 +368,68 @@ export function insightFormatPage({
             </Layout>
           </section>
         ))}
+        {more}
       </Layout>
     );
   } else {
-    /* The lead: the newest pieces with pictures — a read format's LEAD (the newest at two thirds,
-       the next two stacked beside it, the rectangle closed), a watched format's CINEMA (the newest
-       at the column's width over a filmstrip of the next three). The hub skips these pieces, so
-       arriving here is a reveal. */
-    const { pictured, plain } = partition(items);
-    /* The newest pictured piece leads — unless it has no standfirst and the next pictured one does:
-       a lead's words run its picture's height, and the newest stays in the stack beside it. */
-    const newest = pictured[0];
-    const [first, ...others] =
-      shape === 'screens' || !newest || hasStandfirst(newest)
-        ? pictured
-        : [...leadFirst(pictured.slice(0, 3)), ...pictured.slice(3)];
-    /* A read format with too few pictures for a picture stack sets its next three typographic
-       pieces beside the lead instead, each with its standfirst, so the stack still runs the lead's
-       height. */
-    const leadShown: InsightItem[] = !first
-      ? []
-      : shape === 'screens'
-        ? [first, ...others.slice(0, 3)]
-        : others.length >= 2
-          ? /* With the newest typographic piece as the lead's companion, should its column need
-               one (see Lead). */
-            [first, ...others.slice(0, 2), ...(hasStandfirst(first) ? [] : plain.slice(0, 1))]
-          : [first, ...plain.slice(0, 3)];
-    const rest = items.filter((item) => !leadShown.includes(item));
-    const pages: InsightItem[][] = [];
-    for (let start = 0; start < rest.length; start += pageSize) {
-      pages.push(rest.slice(start, start + pageSize));
-    }
+    /* The order the pages run in: the lead, its cards (every pictured piece, in threes), then the
+       rest as rows. The hub's lead leads here too, so its group reads as the same group, opened up. */
+    const { pictured } = partition(items);
+    const [lead, ...others] = leadFirst(pictured);
+    const cardCount =
+      others.length >= 3 ? others.length - (others.length % 3) : others.length === 2 ? 2 : 0;
+    const cards = others.slice(0, cardCount);
+    const rows = items.filter((item) => item !== lead && !cards.includes(item));
+    const order = [...(lead ? [lead] : []), ...cards, ...rows];
+    /* Each page's cards and rows, so "Show more" lands on the first piece it added. A page is a
+       multiple of three, so every page's cards fill their rows. */
+    const pages: { cards: InsightItem[]; rows: InsightItem[] }[] = [];
+    order.slice(0, shownCount).forEach((item, index) => {
+      const at = pageOf(index);
+      pages[at] ??= { cards: [], rows: [] };
+      if (cards.includes(item)) pages[at].cards.push(item);
+      else if (item !== lead) pages[at].rows.push(item);
+    });
+    const shownRows = pages.some((entry) => entry.rows.length > 0);
     content = (
-      <Layout rowGap="column">
-        {leadShown.length > 0 ? (
-          shape === 'screens' ? (
-            <Cinema items={leadShown} meta={meta} titleAs="h2" />
-          ) : (
-            <Lead items={leadShown} meta={meta} titleAs="h2" />
-          )
+      <Layout rowGap="section">
+        {lead ? (
+          <Layout rowGap="column">
+            <Feature lead={lead} cards={pages[0]?.cards ?? []} titleAs="h2" />
+            {pages.slice(1).map((entry, index) => (
+              <CardGrid
+                key={index}
+                id={pageAnchor(index + 1)}
+                cards={entry.cards}
+                meta={meta}
+                titleAs="h2"
+              />
+            ))}
+          </Layout>
         ) : null}
-        {pages.map((page, index) => (
-          <div
-            key={index}
-            id={index > 0 ? `page-${index + 1}` : undefined}
-            className={styles.page}
-          >
-            {body(shape, page, meta)}
-          </div>
-        ))}
-        {moreHref ? (
-          /* Where the reader is, then the way on — only while there is more to show. */
-          <Cluster colGap="block" rowGap="text" align="center">
-            <p className={styles.count}>{`${items.length} of ${total}`}</p>
-            <Button
-              as="a"
-              href={moreHref}
-              emphasis="link"
-              tone="primary"
-              icon={<Icon name="alt-arrow-down" />}
-            >
-              Show more
-            </Button>
-          </Cluster>
+        {shownRows ? (
+          <section aria-labelledby="format-more">
+            <Layout rowGap="block">
+              <h2 id="format-more" className={styles.groupTitle}>
+                {lead
+                  ? `More ${LABEL[kind].many.toLowerCase()}`
+                  : `All ${LABEL[kind].many.toLowerCase()}`}
+              </h2>
+              <Layout rowGap="none">
+                {pages.map((entry, index) => (
+                  <Rows
+                    key={index}
+                    /* A page that opened on cards took the anchor there. */
+                    id={entry.cards.length === 0 ? pageAnchor(index) : undefined}
+                    items={entry.rows}
+                    meta={meta}
+                  />
+                ))}
+              </Layout>
+            </Layout>
+          </section>
         ) : null}
+        {more}
       </Layout>
     );
   }

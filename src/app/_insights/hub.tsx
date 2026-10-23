@@ -300,7 +300,6 @@ export function insightsFormatProps(
     pages,
     Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1),
   );
-  const shown = all.slice(0, 1 + current * PAGE_SIZE);
   const path = pathFor(kind);
   const [base = path, own] = path.split('?');
   const more = new URLSearchParams(own);
@@ -309,11 +308,13 @@ export function insightsFormatProps(
   const subjects = subjectsOf(page);
   const { record, content } = insightFormatPage({
     kind: kind as InsightKind,
-    items: shown.map((item) => toItem(item, subjects)),
+    items: all.map((item) => toItem(item, subjects)),
+    page: current,
     pageSize: PAGE_SIZE,
-    total: all.length,
     moreHref:
-      shown.length < all.length ? `${base}?${more.toString()}#page-${current + 1}` : undefined,
+      1 + current * PAGE_SIZE < all.length
+        ? `${base}?${more.toString()}#page-${current + 1}`
+        : undefined,
     today: new Date().toISOString(),
   });
 
