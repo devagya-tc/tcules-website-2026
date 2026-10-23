@@ -132,7 +132,7 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [ ] **2.25** Recolour every Reasons isometric without peridot, to see the set in blue only.
 - [ ] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
-- [ ] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
+- [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
 - [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
 - [ ] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays).
 - [ ] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation

@@ -45,17 +45,17 @@
   --tsr-title-tracking-sm: var(--text-h5-tracking);
   --tsr-body-text-sm: var(--text-body-sm);
 
-  /* The meta line: the label voice at its smallest step, so the title under it clearly leads
-     (beauty round, 16 Oct 2026: at the eyebrow step a stack of identical meta lines weighed nearly
-     what the 22px titles did). Its ink is the AA floor, so it lightens by size, not by colour. */
-  --tsr-meta-text: var(--text-micro);
-  --tsr-meta-tracking: var(--text-micro-tracking);
+  /* The meta line is the card's eyebrow, at the eyebrow step like every eyebrow (owner, 23 Oct 2026:
+     eyebrows standardise at 12). It now says one thing, the piece's topic, so a stack of them no longer
+     weighs what the titles do (the 16 Oct reason it had dropped to micro). Its ink is the AA floor. */
+  --tsr-meta-text: var(--text-eyebrow);
+  --tsr-meta-tracking: var(--text-eyebrow-tracking);
 
   /* An indexed list's ordinal ("01"), in the row's marker column: the index role, a quiet mark. */
   --tsr-index-text: var(--text-index);
   --tsr-index-tracking: var(--text-index-tracking);
   /* A row's marker column: fixed, so every row's copy starts on one edge. Component sizes — the
-     date's fits a two-digit day at the stat step and "MAR 2023" under it; the ordinal's, "01". */
+     date's fits a two-digit day at the stat step and "Mar 2023" under it; the ordinal's, "01". */
   --tsr-marker-date-inline: 5.5rem;
   --tsr-marker-index-inline: 2.5rem;
   /* A ledger row's meta column: wide enough for the longest topic name in the label voice
@@ -69,20 +69,16 @@
   --tsr-index-tracking-lg: var(--text-stat-tracking);
   --tsr-marker-index-inline-lg: 4rem;
 
-  /* The date anchor (an event): the day as a numeral in the stat role, the month under it in the
-     label voice, in the surface's accent ink — the date list is the one colour beat in a listing
-     (beauty round 3, 16 Oct 2026). It steps with the row so it always outweighs the title: stat-lg
-     in a row of md and up, stat-xl heading a featured event. */
+  /* The date anchor (an event): the day as a numeral in the stat role and the surface's accent ink,
+     the month under it in small body and the meta's ink — the date list is the one colour beat in a
+     listing (beauty round 3, 16 Oct 2026). One step down from where it was (owner, 23 Oct 2026): stat
+     in a row, stat-lg heading a featured event. The month and year left the mono label voice for
+     small body, which balances the numeral rather than competing with it as a second label. */
   --tsr-date-day-text: var(--text-stat);
   --tsr-date-day-tracking: var(--text-stat-tracking);
   --tsr-date-day-text-lg: var(--text-stat-lg);
   --tsr-date-day-tracking-lg: var(--text-stat-lg-tracking);
-  --tsr-date-day-text-xl: var(--text-stat-xl);
-  --tsr-date-day-tracking-xl: var(--text-stat-xl-tracking);
-  /* The date column beside a stat-lg day: "11" at 54 and "MAR 2023" under it. */
-  --tsr-marker-date-inline-lg: 7rem;
-  --tsr-date-label-text: var(--text-eyebrow);
-  --tsr-date-label-tracking: var(--text-eyebrow-tracking);
+  --tsr-date-label-text: var(--text-body-sm);
 
   /* One image ratio for every placement (owner, 11 Oct 2026: never random ratios on cards). */
   --tsr-media-ratio: var(--ratio-standard);

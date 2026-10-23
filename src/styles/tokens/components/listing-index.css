@@ -5,7 +5,7 @@
    and draws its own; the rail is IndexRail's.
 
    Naming: --lix-{part}-{role}
-     parts  section-title · group-title · count
+     parts  section-title · group-title · count · shelf-glyph · shelf-eyebrow · shelf-title
      roles  text · tracking · ink
 
    Every surface block declares every surface-dependent token. Every band these templates paint is
@@ -23,6 +23,13 @@
   /* An events page's group label: the eyebrow, the date column's voice. */
   --lix-group-title-text: var(--text-eyebrow);
   --lix-group-title-tracking: var(--text-eyebrow-tracking);
+  /* A shelf's head (owner, 23 Oct 2026: the guides' "Start here"): a glyph, an eyebrow and an
+     editor's heading over rows of pieces without pictures. The heading is a card-scale title, the
+     h4 sans, so it reads as the shelf's own name and never competes with the section head. */
+  --lix-shelf-eyebrow-text: var(--text-eyebrow);
+  --lix-shelf-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --lix-shelf-title-text: var(--text-h4);
+  --lix-shelf-title-tracking: var(--text-h4-tracking);
   /* The count beside "Show more": the label voice. */
   --lix-count-text: var(--text-eyebrow);
   --lix-count-tracking: var(--text-eyebrow-tracking);
@@ -34,6 +41,9 @@
   --lix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lix-group-title-ink: var(--color-neutral-600);
   --lix-count-ink: var(--color-neutral-600); /* 4.92:1 */
+  --lix-shelf-glyph-ink: var(--color-brandeis-500);
+  --lix-shelf-eyebrow-ink: var(--color-neutral-600);
+  --lix-shelf-title-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
@@ -41,6 +51,9 @@
   --lix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lix-group-title-ink: var(--color-neutral-700);
   --lix-count-ink: var(--color-neutral-700); /* 7.27:1 */
+  --lix-shelf-glyph-ink: var(--color-brandeis-600);
+  --lix-shelf-eyebrow-ink: var(--color-neutral-700);
+  --lix-shelf-title-ink: var(--color-neutral-900);
 }
 
 /* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
@@ -48,6 +61,9 @@
   --lix-section-title-ink: var(--color-white);
   --lix-group-title-ink: var(--color-neutral-400);
   --lix-count-ink: var(--color-neutral-400); /* 8.05:1 */
+  --lix-shelf-glyph-ink: var(--color-brandeis-300);
+  --lix-shelf-eyebrow-ink: var(--color-neutral-400);
+  --lix-shelf-title-ink: var(--color-white);
 }
 
 /* ── Surface: blue ── declared for self-containment ─────────────────────────── */
@@ -55,4 +71,7 @@
   --lix-section-title-ink: var(--color-white); /* 6.23:1 */
   --lix-group-title-ink: var(--color-brandeis-100);
   --lix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --lix-shelf-glyph-ink: var(--color-white);
+  --lix-shelf-eyebrow-ink: var(--color-brandeis-100);
+  --lix-shelf-title-ink: var(--color-white);
 }

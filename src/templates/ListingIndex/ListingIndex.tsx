@@ -39,14 +39,15 @@ export type ListingHero = {
 /**
  * One section of a view: a jump target in the rail, a one-line head and its pieces. The head is the
  * same grammar in every listing (beauty round 3, 16 Oct 2026; 22 Oct 2026): the name as an h3-scale
- * serif h2 and, on its baseline at the row's end, the way to all of it ("All 42 articles →").
+ * serif h2 and, on its baseline at the row's end, the way to all of it ("See more →").
  */
 export type ListingSection = {
   /** The section's anchor, unique across every view (every view is in the HTML). */
   id: string;
   heading: string;
-  /** The way to all of it, where the section shows a selection. */
-  link?: { label: string; href: string };
+  /** The way to all of it, where the section shows a selection: always "See more" (owner, 23 Oct
+      2026: one label on every head, never a count). */
+  link?: { href: string };
   /** How many pieces it holds: the rail's collapsed bar uses it; the rail's rows never show it. */
   count?: number;
   /** The section's pieces, composed by the caller. */
@@ -277,8 +278,9 @@ function ListingSectionView({ section }: { section: ListingSection }) {
               emphasis="link"
               tone="primary"
               icon={<Icon name="arrow-right" />}
+              aria-describedby={headingId}
             >
-              {section.link.label}
+              See more
             </Button>
           ) : null}
         </Layout>

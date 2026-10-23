@@ -223,34 +223,18 @@
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-/* The day steps up with the row, so the numeral always clearly outweighs the title beside it; a
-   featured event (beside, xl) sets it at its largest — the date is that item's picture-sized anchor.
-   From md: on a phone the copy needs the width, and the stat step already outweighs the title. */
-@media (min-width: 768px) {
-  .row.sizeXl .day,
-  .row.sizeLg .day,
-  .row.sizeMd .day {
-    font: var(--tsr-date-day-text-lg);
-    letter-spacing: var(--tsr-date-day-tracking-lg);
-  }
-
-  .row.sizeXl .markerDate,
-  .row.sizeLg .markerDate,
-  .row.sizeMd .markerDate {
-    inline-size: var(--tsr-marker-date-inline-lg);
-  }
-}
-
+/* A featured event (beside, xl) sets the day a step up — the date is that item's picture-sized
+   anchor. A row keeps the stat step at every width: it outweighs the h4 title beside it (owner,
+   23 Oct 2026: one step down from stat-lg). */
 .beside.sizeXl .day {
-  font: var(--tsr-date-day-text-xl);
-  letter-spacing: var(--tsr-date-day-tracking-xl);
+  font: var(--tsr-date-day-text-lg);
+  letter-spacing: var(--tsr-date-day-tracking-lg);
 }
 
+/* The month and year: small body in the meta's ink — a sans role, so it keeps its authored case. */
 .dateLabel {
   color: var(--tsr-meta-ink);
   font: var(--tsr-date-label-text);
-  letter-spacing: var(--tsr-date-label-tracking);
-  text-transform: var(--text-mono-case);
 }
 
 /* A clickable title wraps as running text does (pretty, not balance), so its first line stays long

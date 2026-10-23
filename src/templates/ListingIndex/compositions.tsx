@@ -1,13 +1,16 @@
-import { Layout } from '@/components';
+import { Icon, Layout, type IconName } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
+  ListCard,
   Teaser,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,
   type TeaserSize,
 } from '@/patterns';
+
+import styles from './ListingIndex.module.css';
 
 /* ── An insight as a listing places it ──────────────────────────────────────────
    A template may not import @/content, so the route maps the view model onto these and the
@@ -112,56 +115,21 @@ export function leadFirst(items: readonly InsightItem[]): InsightItem[] {
   return lead ? [lead, ...items.filter((item) => item !== lead)] : [];
 }
 
-/** Publish dates closer than this do not tell pieces apart. */
-const DATE_SPREAD_DAYS = 7;
-const DAY_MS = 24 * 60 * 60 * 1000;
-
-/**
- * Whether a set's publish dates say anything: only when the pieces were published apart — more
- * than a week between the set's newest and oldest. A set published within days (a migration stamps
- * every piece with one of two dates) would stack identical date lines down the page, so its meta
- * keeps to what does differ, the length (beauty round, 16 Oct 2026). Asked of the set SHOWN.
- */
-export function datesVary(items: readonly InsightItem[]) {
-  const times = items
-    .map((item) => parse(item.publishedAt)?.valueOf())
-    .filter((time): time is number => time !== undefined);
-  if (times.length < 2) return false;
-  return Math.max(...times) - Math.min(...times) > DATE_SPREAD_DAYS * DAY_MS;
-}
-
 /** How a placement words an item's meta line. */
 export type MetaOptions = {
-  /** The set mixes formats (BY TOPIC): the format leads the line, in the title's ink. */
+  /** The set mixes formats (BY TOPIC): the format is the eyebrow, in the title's ink. */
   withKind?: boolean;
-  /** The set is one format across topics: the piece's subject leads the line (beauty round 4). */
-  withSubject?: boolean;
-  /** Show the publish date — only where the set's dates differ (`datesVary`). */
-  withDate?: boolean;
 };
 
 /**
- * The meta line: what the section does not already say. A watched or heard piece's running time
- * ("Watch · 7 min", "Listen · 48 min"), a read piece's reading time, an event's date and place
- * (never its publish date), and the publish date only where it tells pieces apart.
+ * The card's eyebrow says ONE thing, the same thing on every card (owner, 23 Oct 2026): the piece's
+ * topic. Where the section already names the topic (BY TOPIC), the format says it instead. No reading
+ * time, running time or publish date: a line that said something different on each card, or nothing,
+ * read as noise. A piece the CMS has not filed under a topic shows no eyebrow — a content gap to fill
+ * there, never a different fact standing in.
  */
-export function metaOf(
-  item: InsightItem,
-  { withKind = false, withSubject = false, withDate = false }: MetaOptions = {},
-) {
-  if (item.kind === 'event') {
-    return line(dateOf(item.event?.startsAt) ?? 'Date TBC', item.event?.place);
-  }
-  /* Where the format leads the line, it keeps to one fact more, so a narrow row holds one line. */
-  if (withKind) return line(item.duration ?? item.readingTime);
-  const date = withDate ? dateOf(item.publishedAt) : undefined;
-  if (WATCHED.has(item.kind)) {
-    const verb = item.kind === 'podcast' ? 'Listen' : 'Watch';
-    return line(item.duration ? `${verb} · ${item.duration}` : verb, date);
-  }
-  /* A read piece: what it is about, then how long — the subject is the fact that differs down a
-     list; the reading time alone, "11 min read" on every row, said nothing. */
-  return line(withSubject ? item.subject : undefined, item.readingTime, date);
+export function metaOf(item: InsightItem, { withKind = false }: MetaOptions = {}) {
+  return withKind ? undefined : line(item.subject);
 }
 
 /** An event's date anchor: the day as a numeral, its month under it. "Date TBC" without one. */
@@ -208,6 +176,107 @@ export function partition(items: readonly InsightItem[]) {
   };
 }
 
+/* ── The hub's group: a lead and what follows it ─────────────────────────────────────
+   Every group on the hub has one shape (owner, 23 Oct 2026, after claude.com/resources): its first
+   piece as the horizontal card, and the rest UNDER it — a grid of three pictured cards (one row, or
+   two where the group has more to show), or, where the pieces have no pictures, a shelf of rows in
+   three columns. Text without a picture is never set loose in a card grid: it reads as floating
+   words (owner, 23 Oct 2026). Events keep their dates (Dates). */
+
+/** How many pieces a group's grid or shelf holds under its lead: one row of three, or two. */
+export const followCount = (available: number) => (available >= 6 ? 6 : 3);
+
+/**
+ * The FEATURE: the lead as the horizontal card (`beside`, xl: the serif title), then a grid of three
+ * pictured cards under it, each its picture, eyebrow, title and two lines of standfirst. On a phone
+ * the grid's cards turn compact rows; the lead never does.
+ */
+export function Feature({ items, meta, titleAs = 'h3' }: Shape) {
+  const [lead, ...rest] = items;
+  if (!lead) return null;
+  /* A grid card without an eyebrow keeps the line, so every title in the row starts level. */
+  const metaSlot = rest.some((item) => teaserOf(item, meta).meta || meta?.withKind);
+  return (
+    <Layout rowGap="column">
+      <ul>
+        <Teaser
+          {...teaserOf(lead, meta)}
+          arrangement="beside"
+          size="xl"
+          titleAs={titleAs}
+          sizes={CARD_TWO_TRACKS}
+        />
+      </ul>
+      {rest.length > 0 ? (
+        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+          {rest.map((item) => (
+            <Teaser
+              key={item.id}
+              {...teaserOf(item, meta)}
+              size="md"
+              titleAs={titleAs}
+              sizes={CARD_THREE_TRACKS}
+              compact
+              metaSlot={metaSlot}
+            />
+          ))}
+        </Layout>
+      ) : null}
+    </Layout>
+  );
+}
+
+/** A shelf's head: its glyph, its eyebrow and, where an editor has written one, its heading. */
+export type ShelfHead = { icon: IconName; eyebrow: string; heading?: string };
+
+/**
+ * The SHELF: pieces as ruled rows in three columns under one head — a glyph, an eyebrow and a
+ * heading — each row its title alone, a list a reader runs down rather than a set of cards (so no
+ * card eyebrow). Rows in a grid share their grid rows, so every column ends on one line.
+ */
+export function Shelf({
+  items,
+  head,
+  titleAs = 'h3',
+}: Shape & { head?: ShelfHead }) {
+  if (items.length === 0) return null;
+  return (
+    <Layout rowGap="block">
+      {head ? (
+        <Layout rowGap="tight">
+          <span className={styles.shelfGlyph}>
+            <Icon name={head.icon} size="xl" />
+          </span>
+          <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
+          {head.heading ? (
+            <p className={styles.shelfTitle}>
+              {head.heading}
+            </p>
+          ) : null}
+        </Layout>
+      ) : null}
+      <Layout
+        as="ul"
+        columns={{ md: 3 }}
+        colGap="gutter"
+        rowGap="none"
+        equalRows
+        aria-label={head?.heading ?? head?.eyebrow}
+      >
+        {items.map((item) => (
+          <ListCard
+            key={item.id}
+            title={item.title}
+            href={item.href}
+            size="sm"
+            titleAs={titleAs === 'h2' ? 'h3' : 'h4'}
+          />
+        ))}
+      </Layout>
+    </Layout>
+  );
+}
+
 /* ── The compositions ────────────────────────────────────────────────────────────
    Beauty round 4 (16 Oct 2026): a small set of FIXED compositions, each a complete rectangle with a
    scale ladder inside it — one large piece, a middle tier, a small tier — and no column that ends
@@ -217,7 +286,6 @@ export function partition(items: readonly InsightItem[]) {
      LEAD     a 16:9 lead at two thirds, two pictured pieces stacked beside it
      TRIO     three pictured pieces in a row
      CINEMA   a lead at the column's full width, a filmstrip of pictured pieces under it
-     INDEX    one pictured piece beside a numbered index of typographic ones (the hub's short index)
      HALVES   two pictured pieces at half
      LEDGER   a list of pieces, one per row, its copy and a thumbnail track at the row's end
      DATES    a row per event, the day as a numeral at its start
@@ -225,7 +293,7 @@ export function partition(items: readonly InsightItem[]) {
 
    A piece shows its picture wherever it has one: a picture is decided by the DATA, never dropped by
    a slot (beauty round 4). The pictured compositions are handed pictured pieces; the typographic
-   ones (INDEX's list, LEDGER) carry a piece's picture as a thumbnail where it has one, in a track
+   ones (LEDGER) carry a piece's picture as a thumbnail where it has one, in a track
    every row of that list holds, so the copy ends on one edge whether or not a row has a picture.
    A piece without a picture is typographic, never a stand-in. On a phone the secondary pieces of a
    pictured set turn `compact` (a row, its picture a thumbnail at the end), so a single column is not
@@ -394,46 +462,6 @@ export function Headlines({ items, meta, titleAs = 'h3' }: Shape) {
       {items.map((item) => (
         <Teaser key={item.id} {...teaserOf(item, meta)} size="md" titleAs={titleAs} />
       ))}
-    </Layout>
-  );
-}
-
-/**
- * The INDEX: one piece with its picture beside a list of the rest — the hub's short index. The
- * list's rows carry a piece's thumbnail where it has one, in a track every row holds. No numerals
- * (owner, 16 Oct 2026: the 01–04 column made it "messy").
- */
-export function Index({ items, meta, titleAs = 'h3' }: Shape) {
-  const { pictured, plain } = partition(items);
-  const lead = pictured[0];
-  const rest = lead ? items.filter((item) => item !== lead) : [...plain];
-  const slot = rest.some(hasPicture);
-  const list = (
-    <Layout as="ul" rowGap="gutter">
-      {rest.map((item) => (
-        <Teaser
-          key={item.id}
-          {...teaserOf(item, meta)}
-          body={undefined}
-          arrangement="row"
-          size="md"
-          titleAs={titleAs}
-          sizes={CARD_THREE_TRACKS}
-          slot={slot}
-        />
-      ))}
-    </Layout>
-  );
-  if (!lead) return list;
-  return (
-    /* A feature beside a list of balanced titles: balanced wrapping leaves the list's right edge
-       ragged and short, so the pair reads as two regions and takes the column step (owner, 16 Oct
-       2026: "for such layouts, we can have bigger gutter"). */
-    <Layout columns={{ md: [1, 1] }} colGap="column" rowGap="stack" align="start">
-      <ul>
-        <Teaser {...teaserOf(lead, meta)} size="lg" titleAs={titleAs} sizes={CARD_TWO_TRACKS} />
-      </ul>
-      {rest.length > 0 ? list : null}
     </Layout>
   );
 }

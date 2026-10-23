@@ -9,24 +9,25 @@ import {
   Cinema,
   Dates,
   dateOf,
-  datesVary,
+  Feature,
+  followCount,
   Halves,
   hasPicture,
   hasStandfirst,
   Headlines,
-  Index,
   leadFirst,
   LABEL,
   Lead,
   Ledger,
   partition,
   pictureRun,
+  Shelf,
   Showcase,
   Trio,
   type InsightItem,
   type InsightKind,
-  isWatched,
   type MetaOptions,
+  type ShelfHead,
 } from './compositions';
 
 /* ── The insights family, as ListingIndex data ─────────────────────────────────────
@@ -39,18 +40,16 @@ import {
 export type InsightFormat = {
   kind: InsightKind;
   title?: string;
-  /** The format's page (/insights/articles …), where "All articles" goes. */
+  /** The format's page (/insights/articles …), where the section's "See more" goes. */
   href?: string;
+  /** The editor's heading over the format's "Start here" shelf on the hub. */
+  shelfHeading?: string;
 };
 
 /** One topic from the CMS taxonomy the BY TOPIC view curates by, and the group it is filed in. */
 export type InsightTopic = { id: string; label: string; group?: string };
 
-/**
- * BY TYPE, in page order, each format in its own composition (beauty round 4, 16 Oct 2026) —
- * articles a LEAD over a TRIO, events DATES, videos a CINEMA, guides an INDEX — so no two neighbours
- * share a silhouette and the view opens on its strongest shape: the lead's picture breaks the fold.
- */
+/** BY TYPE, in page order: events second, so the dated rows break the run of leads. */
 const TYPE_ORDER: readonly InsightKind[] = [
   'article',
   'event',
@@ -79,13 +78,12 @@ const topicAnchor = (topic: { id: string; label: string }) => {
 /**
  * The insights hub's two views (owner, 16 Oct 2026; the idea of claude.com/resources):
  *
- *   BY TYPE   a section per format, each in its own composition — articles a lead over a trio,
- *             events dated, videos a cinema, guides an index — its head carrying "All …"
- *   BY TOPIC  a section per topic, formats mixed, no piece in two sections, each in the composition
- *             its pieces can fill (a cinema where it has a video, an index where it is mostly words,
- *             a lead where it has pictures), no two neighbours alike
+ *   BY TYPE   a section per format: its lead as the horizontal card, the rest under it (a grid of
+ *             pictured cards, or a shelf of rows where the pieces have no pictures); events dated
+ *   BY TOPIC  a section per topic, formats mixed, no piece in two sections, in the same shape
  *
- * BY TYPE first, the default. BY TOPIC only where the topics fill a section.
+ * Every section's head carries the same "See more" (owner, 23 Oct 2026). BY TYPE first, the
+ * default. BY TOPIC only where the topics fill a section.
  */
 export function insightViews({
   items,
@@ -107,32 +105,30 @@ export function insightViews({
         kind,
         title: format?.title?.trim() || LABEL[kind].many,
         href: format?.href,
+        shelfHeading: format?.shelfHeading,
         items: all,
       },
     ];
   });
   /* The type view's first lead: the topic view must not open on the same piece, or switching looks
      as if nothing happened. */
-  const typeLead = byType[0] ? typeSet(byType[0].kind, byType[0].items)[0] : undefined;
+  const typeLead = byType[0] ? typeGroup(byType[0].kind, byType[0].items).lead : undefined;
   const byTopic = curateTopics(items, topics, typeLead?.id);
 
   const typeSections: ListingSection[] = byType.map((section) => ({
     id: typeAnchor(section.kind),
     heading: section.title,
     count: section.items.length,
-    link: section.href
-      ? {
-          label: `All ${section.items.length} ${section.title.toLowerCase()}`,
-          href: section.href,
-        }
-      : undefined,
-    content: <TypeShape kind={section.kind} items={section.items} />,
+    link: section.href ? { href: section.href } : undefined,
+    content: (
+      <TypeShape kind={section.kind} items={section.items} shelfHeading={section.shelfHeading} />
+    ),
   }));
   const topicSections: ListingSection[] = byTopic.map((section) => ({
     id: topicAnchor(section),
     heading: section.label,
     count: section.size,
-    content: <TopicShape items={section.items} shape={section.shape} />,
+    content: <GroupShape group={section.group} meta={{ withKind: true }} />,
   }));
 
   return [
@@ -143,165 +139,101 @@ export function insightViews({
   ];
 }
 
-/* ── BY TYPE · the pieces each format shows ─────────────────────────────────────── */
+/* ── A group: its lead, then what follows ───────────────────────────────────────── */
 
-/** How many pieces each format's hub composition takes. */
-const TYPE_TAKE: Record<InsightKind, number> = {
-  article: 6,
-  event: 3,
-  video: 5,
-  podcast: 5,
-  guide: 5,
-  research: 5,
-  interview: 5,
-};
+/** A hub section's pieces: the lead, the pictured cards under it, or the shelf of rows. */
+type Group = { lead?: InsightItem; grid: InsightItem[]; shelf: InsightItem[] };
 
 /**
- * The pieces a format's hub section shows, in the order its composition places them. Articles: six
- * pictured, skipping the three the format page opens on, so "All articles" opens on a reveal rather
- * than a reprint (all pictured from the newest where there are too few to skip). Events by when they
- * happen. Watched pieces newest first. Guides and the other indexed formats: one pictured, then the
- * typographic ones.
+ * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026): four or more
+ * with pictures make a lead and a grid of three (six where seven or more have pictures); fewer make
+ * the first pictured piece the lead and the rest a shelf of rows, three or six. `avoidLead` keeps a
+ * piece from leading (the topic view's first section must not open on the type view's lead).
  */
-function typeSet(kind: InsightKind, items: readonly InsightItem[]) {
-  const { pictured, plain } = partition(items);
-  switch (kind) {
-    case 'event':
-      return byEventDate(items).slice(0, TYPE_TAKE.event);
-    case 'video':
-    case 'podcast':
-      return [...pictured, ...plain].slice(0, TYPE_TAKE[kind]);
-    case 'guide':
-    case 'research':
-    case 'interview':
-      return [...pictured.slice(0, 1), ...plain, ...pictured.slice(1)].slice(
-        0,
-        TYPE_TAKE[kind],
-      );
-    case 'article':
-    default: {
-      const skip = pictured.length >= 9 ? 3 : 0;
-      const shown = leadFirst(pictured.slice(skip, skip + TYPE_TAKE.article));
-      return shown.length >= 3 ? shown : items.slice(0, 3);
-    }
+function groupOf(items: readonly InsightItem[], avoidLead?: string): Group {
+  const { pictured } = partition(items);
+  if (pictured.length >= 4) {
+    const open = pictured.filter((item) => item.id !== avoidLead);
+    const [lead] = leadFirst(open.length > 0 ? open : pictured);
+    const rest = pictured.filter((item) => item !== lead);
+    return { lead, grid: rest.slice(0, followCount(rest.length)), shelf: [] };
   }
+  const lead = pictured.find((item) => item.id !== avoidLead) ?? pictured[0];
+  const rest = items.filter((item) => item !== lead);
+  return { lead, grid: [], shelf: rest.slice(0, followCount(rest.length)) };
+}
+
+/** A group laid out: the lead and its grid as a FEATURE, then the shelf under them. */
+function GroupShape({
+  group,
+  meta,
+  head,
+}: {
+  group: Group;
+  meta?: MetaOptions;
+  head?: ShelfHead;
+}): ReactNode {
+  const featured = group.lead ? [group.lead, ...group.grid] : [];
+  if (group.shelf.length === 0) return <Feature items={featured} meta={meta} />;
+  if (featured.length === 0) return <Shelf items={group.shelf} head={head} />;
+  return (
+    <Layout rowGap="column">
+      <Feature items={featured} meta={meta} />
+      <Shelf items={group.shelf} head={head} />
+    </Layout>
+  );
+}
+
+/* ── BY TYPE · the pieces each format shows ─────────────────────────────────────── */
+
+/** How many events the hub's dated rows hold. */
+const EVENT_TAKE = 3;
+
+/**
+ * A format's hub group. Articles skip the three the format page opens on, where there are enough to
+ * spare (seven still shown), so "See more" opens on a reveal rather than a reprint.
+ */
+function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
+  /* Guides are always a lead and the "Start here" shelf (owner, 23 Oct 2026): where to begin, as rows
+     a reader runs down, whether or not the guides have pictures. */
+  if (kind === 'guide') {
+    const lead = items.find(hasPicture);
+    const rest = items.filter((item) => item !== lead);
+    return { lead, grid: [], shelf: rest.slice(0, followCount(rest.length)) };
+  }
+  if (kind === 'article') {
+    const { pictured } = partition(items);
+    const skip = pictured.length >= 10 ? 3 : 0;
+    const kept = items.filter((item) => !pictured.slice(0, skip).includes(item));
+    return groupOf(kept);
+  }
+  return groupOf(items);
 }
 
 function TypeShape({
   kind,
   items,
+  shelfHeading,
 }: {
   kind: InsightKind;
   items: readonly InsightItem[];
+  shelfHeading?: string;
 }): ReactNode {
-  const set = typeSet(kind, items);
-  /* The meta line is worded for the pieces SHOWN: the subject leads it (each piece's topic, the
-     fact that differs), the dates only where they tell the pieces apart. */
-  const meta: MetaOptions = { withSubject: true, withDate: datesVary(set) };
-  switch (kind) {
-    case 'event':
-      return <Dates items={set} size="md" />;
-    case 'video':
-    case 'podcast':
-      return <Cinema items={set} meta={meta} />;
-    case 'guide':
-    case 'research':
-    case 'interview':
-      return <Index items={set} meta={meta} />;
-    case 'article':
-    default: {
-      if (!set.every(hasPicture)) return <Ledger items={set} meta={meta} />;
-      /* The newest typographic piece is the lead's companion, should its column need one. */
-      const companion = partition(items).plain.slice(0, 1);
-      return (
-        <Layout rowGap="column">
-          <Lead items={[...set.slice(0, 3), ...companion]} meta={meta} />
-          {set.length >= 6 ? <Trio items={set.slice(3, 6)} meta={meta} /> : null}
-        </Layout>
-      );
-    }
+  /* Events keep their dates: the day as a numeral at each row's start, the h4 title beside it. */
+  if (kind === 'event') {
+    return <Dates items={byEventDate(items).slice(0, EVENT_TAKE)} size="lg" />;
   }
+  /* The guides' shelf is where to start, with an editor's heading where there is one. Any other
+     format's shelf is its rows alone, under the section's own head. */
+  const head: ShelfHead | undefined =
+    kind === 'guide' ? { icon: 'notebook', eyebrow: 'Start here', heading: shelfHeading } : undefined;
+  return <GroupShape group={typeGroup(kind, items)} head={head} />;
 }
 
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
 
-type TopicShapeName = 'cinema' | 'lead' | 'index' | 'halves' | 'ledger';
-
 /**
- * What a topic's free pieces can fill, best first: a CINEMA where it has a watched piece and two
- * more pictures; an INDEX where it is mostly words; a LEAD where it has three pictures; HALVES where
- * two; else a LEDGER. Each a complete rectangle, so no composition is asked for more than it has.
- */
-function shapesFor(free: readonly InsightItem[]): TopicShapeName[] {
-  const pictured = free.filter(hasPicture);
-  const watched = pictured.some((item) => isWatched(item.kind));
-  const plain = free.length - pictured.length;
-  const out: TopicShapeName[] = [];
-  if (watched && pictured.length >= 3) out.push('cinema');
-  if (pictured.length >= 1 && plain >= 3) out.push('index');
-  if (pictured.length >= 3) out.push('lead');
-  if (pictured.length >= 2) out.push('halves');
-  out.push('ledger');
-  return out;
-}
-
-/** Pieces in an order that shows a topic's range: one of each format before any repeats. */
-function byRange(items: readonly InsightItem[]) {
-  const seen = new Set<InsightKind>();
-  const first: InsightItem[] = [];
-  const later: InsightItem[] = [];
-  for (const item of items) {
-    if (seen.has(item.kind)) later.push(item);
-    else {
-      seen.add(item.kind);
-      first.push(item);
-    }
-  }
-  return [...first, ...later];
-}
-
-/** The pieces a shape takes from a topic's free pieces, in the order the shape places them. */
-function fill(
-  shape: TopicShapeName,
-  free: readonly InsightItem[],
-  avoidLead?: string,
-): InsightItem[] {
-  const pictured = byRange(free.filter(hasPicture));
-  const plain = byRange(free.filter((item) => !hasPicture(item)));
-  const leadFrom = (pool: InsightItem[]) => {
-    const open = pool.filter((item) => item.id !== avoidLead);
-    return open.find(hasStandfirst) ?? open[0] ?? pool[0];
-  };
-  switch (shape) {
-    case 'cinema': {
-      const lead =
-        pictured.find((item) => isWatched(item.kind) && item.id !== avoidLead) ??
-        pictured.find((item) => isWatched(item.kind));
-      if (!lead) return [];
-      return [lead, ...pictured.filter((item) => item !== lead).slice(0, 3)];
-    }
-    case 'index': {
-      const lead = leadFrom(pictured);
-      return lead ? [lead, ...plain.slice(0, 4)] : plain.slice(0, 4);
-    }
-    case 'lead': {
-      const lead = leadFrom(pictured);
-      /* With a typographic companion, should the lead's column need one (see Lead). */
-      return lead
-        ? [lead, ...pictured.filter((item) => item !== lead).slice(0, 2), ...plain.slice(0, 1)]
-        : [];
-    }
-    case 'halves':
-      return pictured.slice(0, 2);
-    case 'ledger':
-    default:
-      return [...pictured, ...plain].slice(0, 4);
-  }
-}
-
-/**
- * The topic sections: the largest topics first, each in the best composition its free pieces can
- * fill that differs from the section before it, taking exactly the pieces that composition places —
+ * The topic sections: the largest topics first, each a group of the pieces no earlier section took —
  * never the type view's first lead in the first section. A piece sits in one section only; a topic
  * left with too few is dropped.
  */
@@ -318,57 +250,21 @@ function curateTopics(
   const sections: {
     id: string;
     label: string;
-    group?: string;
+    group: Group;
     size: number;
-    shape: TopicShapeName;
-    items: InsightItem[];
   }[] = [];
   for (const topic of ordered) {
     const free = members(topic.id).filter((item) => !used.has(item.id));
     if (free.length < TOPIC_FLOOR) continue;
-    const previous = sections[sections.length - 1]?.shape;
-    const taken = new Set(sections.map((section) => section.shape));
-    const options = shapesFor(free).filter((candidate) => candidate !== previous);
-    /* A composition not yet used in the view, before one that has been. */
-    const shape = options.find((candidate) => !taken.has(candidate)) ?? options[0] ?? 'ledger';
-    const picked = fill(shape, free, sections.length === 0 ? avoidLead : undefined);
+    const group = groupOf(free, sections.length === 0 ? avoidLead : undefined);
+    const picked = [...(group.lead ? [group.lead] : []), ...group.grid, ...group.shelf];
     if (picked.length < 2) continue;
     picked.forEach((item) => used.add(item.id));
-    sections.push({
-      id: topic.id,
-      label: topic.label,
-      group: topic.group,
-      size: topic.size,
-      shape,
-      items: picked,
-    });
+    sections.push({ id: topic.id, label: topic.label, group, size: topic.size });
   }
   return sections;
 }
 
-function TopicShape({
-  items,
-  shape,
-}: {
-  items: readonly InsightItem[];
-  shape: TopicShapeName;
-}) {
-  /* A topic mixes formats: the format leads each piece's meta line. */
-  const meta: MetaOptions = { withKind: true, withDate: datesVary(items) };
-  switch (shape) {
-    case 'cinema':
-      return <Cinema items={items} meta={meta} />;
-    case 'index':
-      return <Index items={items} meta={meta} />;
-    case 'lead':
-      return <Lead items={items} meta={meta} />;
-    case 'halves':
-      return <Halves items={items} meta={meta} />;
-    case 'ledger':
-    default:
-      return <Ledger items={items} meta={meta} />;
-  }
-}
 /* ── Per format: the hub's composition, larger ──────────────────────────────────────
    A format page opens on the composition its format has on the hub, at its largest (beauty round 4,
    16 Oct 2026): a read format on a LEAD (the newest picture at two thirds, the next two beside it —
@@ -524,7 +420,7 @@ export function insightFormatPage({
   today?: string;
 }): { record: string[]; content: ReactNode } {
   const shape = SHAPE[kind];
-  const meta: MetaOptions = { withSubject: true, withDate: datesVary(items) };
+  const meta: MetaOptions = {};
   /* The hero's record: how many there are and how fresh, as ONE mono line under the lede (beauty
      round 4). An events page dates itself by its events, never by when their pages were filed: the
      next one to come, else the last one held — so the line matches the date numerals under it. */
@@ -622,14 +518,13 @@ export function insightFormatPage({
     for (let start = 0; start < rest.length; start += pageSize) {
       pages.push(rest.slice(start, start + pageSize));
     }
-    const leadMeta = { ...meta, withDate: true };
     content = (
       <Layout rowGap="column">
         {leadShown.length > 0 ? (
           shape === 'screens' ? (
-            <Cinema items={leadShown} meta={leadMeta} titleAs="h2" />
+            <Cinema items={leadShown} meta={meta} titleAs="h2" />
           ) : (
-            <Lead items={leadShown} meta={leadMeta} titleAs="h2" />
+            <Lead items={leadShown} meta={meta} titleAs="h2" />
           )
         ) : null}
         {pages.map((page, index) => (

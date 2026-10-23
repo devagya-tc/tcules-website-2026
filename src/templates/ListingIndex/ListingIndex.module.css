@@ -31,3 +31,22 @@
   letter-spacing: var(--lix-count-tracking);
   text-transform: var(--text-mono-case);
 }
+
+/* A shelf's head: the glyph in the accent, the eyebrow, the editor's heading (owner, 23 Oct 2026). */
+.shelfGlyph {
+  color: var(--lix-shelf-glyph-ink);
+}
+
+.shelfEyebrow {
+  color: var(--lix-shelf-eyebrow-ink);
+  font: var(--lix-shelf-eyebrow-text);
+  letter-spacing: var(--lix-shelf-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.shelfTitle {
+  color: var(--lix-shelf-title-ink);
+  font: var(--lix-shelf-title-text);
+  letter-spacing: var(--lix-shelf-title-tracking);
+  text-wrap: var(--text-title-wrap);
+}

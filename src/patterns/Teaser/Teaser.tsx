@@ -98,6 +98,12 @@ export type TeaserProps = {
    */
   slot?: boolean;
   /**
+   * Reserve the meta line's height when this piece has none, so a row of tiles starts every title on
+   * one line. The caller sets it on every tile of a set in which ANY tile has a meta line; the
+   * reserved line draws nothing (owner, 23 Oct 2026: a piece the CMS has not filed under a topic).
+   */
+  metaSlot?: boolean;
+  /**
    * The picture is a GRAPHIC on a white ground (an event's card): its white takes the picture box's
    * own pale ground, so the graphic keeps an edge on paper instead of dissolving into it. Never for
    * a photograph — photographs share one tone layer and are never treated locally.
@@ -163,6 +169,7 @@ export function Teaser({
   slot = false,
   graphic = false,
   metaAside = false,
+  metaSlot = false,
 }: TeaserProps) {
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
@@ -225,6 +232,10 @@ export function Teaser({
               </span>
             ),
           )}
+        </p>
+      ) : metaSlot ? (
+        <p className={styles.meta} aria-hidden="true">
+          {'\u00a0'}
         </p>
       ) : null}
       <Title className={styles.title}>{title}</Title>
