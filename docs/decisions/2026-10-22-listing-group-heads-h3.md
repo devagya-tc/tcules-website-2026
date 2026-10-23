@@ -1,7 +1,7 @@
 ---
 title: "Listing group heads take h3, a stack above their pieces"
 date: 2026-10-22
-status: proposed
+status: superseded
 area: [type, spacing]
 source: "Owner, 22 Oct 2026 (review with Jatin, triage Q10)"
 supersedes: []

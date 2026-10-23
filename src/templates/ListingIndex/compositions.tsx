@@ -221,10 +221,10 @@ export type ShelfCell = { items: readonly InsightItem[]; head: ShelfHead; at: 's
 function Shelf({ items, head, titleAs }: Omit<ShelfCell, 'at'> & { titleAs: 'h3' | 'h4' }) {
   return (
     <li className={styles.shelf}>
-      <Layout rowGap="block">
+      <Layout rowGap="text">
         <Layout rowGap="tight">
           <span className={styles.shelfGlyph}>
-            <Icon name={head.icon} size="xl" />
+            <Icon name={head.icon} size="lg" />
           </span>
           <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
           {head.heading ? <p className={styles.shelfTitle}>{head.heading}</p> : null}
@@ -236,7 +236,14 @@ function Shelf({ items, head, titleAs }: Omit<ShelfCell, 'at'> & { titleAs: 'h3'
           aria-label={head.heading ?? head.eyebrow}
         >
           {items.map((item) => (
-            <ListCard key={item.id} title={item.title} href={item.href} size="sm" titleAs={titleAs} />
+            <ListCard
+              key={item.id}
+              title={item.title}
+              href={item.href}
+              size="sm"
+              density="compact"
+              titleAs={titleAs}
+            />
           ))}
         </Layout>
       </Layout>
@@ -262,12 +269,22 @@ export function Feature({
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 }) {
-  const cells = cards.length + (shelf ? 1 : 0);
-  const eyebrowSlot = cards.some((item) => cardOf(item, meta).eyebrow);
   const rowTitle = titleAs === 'h2' ? 'h3' : 'h4';
-  const shelfNode = shelf ? (
-    <Shelf items={shelf.items} head={shelf.head} titleAs={rowTitle} />
-  ) : null;
+  /* The grid's cells in reading order, so each card knows the row it shares. */
+  const cells: ({ type: 'card'; item: InsightItem } | { type: 'shelf' })[] = [
+    ...(shelf?.at === 'start' ? [{ type: 'shelf' as const }] : []),
+    ...cards.map((item) => ({ type: 'card' as const, item })),
+    ...(shelf?.at === 'end' ? [{ type: 'shelf' as const }] : []),
+  ];
+  /* Two cells share the row as halves; otherwise three tracks, so a card is never widened. */
+  const across = cells.length === 2 ? 2 : 3;
+  /* A card keeps an empty eyebrow line only where another card in ITS row has one. */
+  const rowHasEyebrow = (index: number) => {
+    const start = index - (index % across);
+    return cells
+      .slice(start, start + across)
+      .some((cell) => cell.type === 'card' && cardOf(cell.item, meta).eyebrow);
+  };
   return (
     <Layout rowGap="column">
       {lead ? (
@@ -278,29 +295,31 @@ export function Feature({
             size="lg"
             titleAs={titleAs}
             tracks={2}
+            cue="title"
+            copyAlign="start"
+            split="grid"
           />
         </ul>
       ) : null}
-      {cells > 0 ? (
-        <Layout
-          as="ul"
-          columns={{ md: Math.min(3, cells) as 1 | 2 | 3 }}
-          colGap="gutter"
-          rowGap="column"
-          equalRows
-        >
-          {shelf?.at === 'start' ? shelfNode : null}
-          {cards.map((item) => (
-            <BlockCard
-              key={item.id}
-              {...cardOf(item, meta)}
-              size="md"
-              titleAs={titleAs}
-              tracks={3}
-              eyebrowSlot={eyebrowSlot}
-            />
-          ))}
-          {shelf?.at === 'end' ? shelfNode : null}
+      {cells.length > 0 ? (
+        /* Each grid row is its tallest cell's height, so neighbours end level. */
+        <Layout as="ul" columns={{ md: across }} colGap="gutter" rowGap="column">
+          {cells.map((cell, index) =>
+            cell.type === 'shelf' && shelf ? (
+              <Shelf key="shelf" items={shelf.items} head={shelf.head} titleAs={rowTitle} />
+            ) : cell.type === 'card' ? (
+              <BlockCard
+                key={cell.item.id}
+                {...cardOf(cell.item, meta)}
+                size="md"
+                titleAs={titleAs}
+                tracks={3}
+                cue="title"
+                compact
+                eyebrowSlot={rowHasEyebrow(index)}
+              />
+            ) : null,
+          )}
         </Layout>
       ) : null}
     </Layout>

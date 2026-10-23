@@ -163,23 +163,36 @@ function groupOf(
   { avoidLead, list = 'auto' }: { avoidLead?: string; list?: 'auto' | 'always' } = {},
 ): Group {
   const { pictured, plain } = partition(items);
-  /* Nothing pictured: the kit's text cards, the lead horizontal and the rest under it — each with
-     its hairline, title and standfirst (2026-09-28-text-only-cards-weight-from-scale). */
+  let lead: InsightItem | undefined;
+  let cards: InsightItem[];
+  let rows: InsightItem[];
   if (pictured.length === 0) {
-    const [first, ...rest] = items.filter((item) => item.id !== avoidLead);
-    return { lead: first, cards: rest.slice(0, followCount(rest.length)), rows: [] };
+    /* Nothing pictured: the kit's text cards (2026-09-28-text-only-cards-weight-from-scale), the
+       lead horizontal, two under it and the rest as the list cell — never a grid of one shape. */
+    const open = items.filter((item) => item.id !== avoidLead);
+    [lead] = open;
+    const rest = open.slice(1);
+    cards = rest.slice(0, 2);
+    rows = rest.slice(2, 2 + SHELF_ROWS);
+  } else {
+    const open = pictured.filter((item) => item.id !== avoidLead);
+    [lead] = leadFirst(open.length > 0 ? open : pictured);
+    const others = pictured.filter((item) => item !== lead);
+    const rowsFrom = list === 'always' ? items.filter((item) => item !== lead) : plain;
+    const withList = rowsFrom.length >= SHELF_ROWS || (list === 'always' && rowsFrom.length > 0);
+    const cells = followCount(others.length + (withList ? 1 : 0));
+    cards = others.slice(0, cells - (withList ? 1 : 0));
+    rows = withList ? rowsFrom.filter((item) => !cards.includes(item)).slice(0, SHELF_ROWS) : [];
   }
-  const open = pictured.filter((item) => item.id !== avoidLead);
-  const [lead] = leadFirst(open.length > 0 ? open : pictured);
-  const others = pictured.filter((item) => item !== lead);
-  const rowsFrom = list === 'always' ? items.filter((item) => item !== lead) : plain;
-  const withList = rowsFrom.length >= SHELF_ROWS || (list === 'always' && rowsFrom.length > 0);
-  const cells = followCount(others.length + (withList ? 1 : 0));
-  const cards = others.slice(0, cells - (withList ? 1 : 0));
-  const rows = withList
-    ? rowsFrom.filter((item) => !cards.includes(item)).slice(0, SHELF_ROWS)
-    : [];
-  return { lead, cards, rows };
+  /* A list cell needs rows enough to be a list. */
+  if (rows.length < 2) rows = [];
+  /* The grid fills its rows (no hole in the last one): six or three cells, two as halves; one alone
+     is not shown here — "See more" holds it. */
+  const panel = rows.length > 0 ? 1 : 0;
+  const count = cards.length + panel;
+  const keep = count >= 6 ? 6 : count >= 3 ? 3 : count === 2 ? 2 : 0;
+  if (keep === 0) return { lead, cards: [], rows: [] };
+  return { lead, cards: cards.slice(0, keep - panel), rows };
 }
 
 /** The glyph that heads a format's list cell. */

@@ -199,9 +199,24 @@
   text-wrap: var(--text-title-wrap);
 }
 
-/* A title-cued linked card's title: the one that moves colour (§ 3.1). */
+/* A title-cued linked card's title: the one that moves colour (§ 3.1). It wraps as running text does
+   (pretty, not balance), so its first line stays long and a narrow track does not set three short
+   lines — the rule for a clickable title (owner, 16 Oct 2026, first set on the insights hub). */
 .cued {
   transition: color var(--bcrd-title-ink-duration) var(--bcrd-title-ink-easing);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* A reserved eyebrow line (`eyebrowSlot`): it levels titles across a row, so it is drawn only where
+   cards sit side by side — from md. In one column it would be a hole under the picture. */
+.eyebrowSlot {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .eyebrowSlot {
+    display: block;
+  }
 }
 
 .body {
@@ -356,4 +371,21 @@
 .play > svg {
   inline-size: var(--bcrd-play-glyph);
   block-size: var(--bcrd-play-glyph);
+}
+
+/* A compact card's cover (`compact`): the stack's full width from md, the row's thumbnail below it,
+   where the row keeps its title and drops its standfirst and the play mark (too small to carry it). */
+.compactCover {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .compactCover {
+    inline-size: var(--bcrd-thumb-inline-sm);
+  }
+
+  .compact .body,
+  .compact .play {
+    display: none;
+  }
 }

@@ -183,7 +183,8 @@ export function ListingIndex({
             count: section.count,
           })),
           panel: (
-            <Layout rowGap="section">
+            /* Groups open as chapters: section-open between them, against the 64 seams inside one. */
+            <Layout rowGap="section-open">
               {v.sections.map((section) => (
                 <ListingSectionView key={section.id} section={section} />
               ))}

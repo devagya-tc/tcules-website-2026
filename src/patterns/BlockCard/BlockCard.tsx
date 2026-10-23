@@ -320,6 +320,27 @@ export type BlockCardProps = {
    * a piece the CMS has not filed under a topic). The reserved line draws nothing.
    */
   eyebrowSlot?: boolean;
+  /**
+   * The horizontal card's copy against its cover: `center` (default) on the cover's middle, or
+   * `start`, hung from the cover's top edge so the eyebrow and the picture start on one line — a
+   * listing's lead, whose copy may be a title alone (the insights hub, 23 Oct 2026). Ignored when
+   * vertical or without a cover.
+   */
+  copyAlign?: 'center' | 'start';
+  /**
+   * A vertical card with a cover that becomes a ROW below 768: its copy first, the cover as a
+   * thumbnail at the row's end, and no standfirst. For the secondary cards of a listing's grid, so a
+   * phone's single column is not a run of full-width pictures (beauty round 4, 16 Oct 2026); the
+   * set's lead never takes it. Ignored when horizontal, without a cover, or with a cta.
+   */
+  compact?: boolean;
+  /**
+   * The horizontal card's two tracks: `even` (default) halves the row, 64 apart; `grid` gives the
+   * cover two thirds and the copy one, a gutter apart — the tracks of a 3-column grid under it, so
+   * the lead and its grid share one set of verticals (the insights hub, 23 Oct 2026). Ignored when
+   * vertical or without a cover.
+   */
+  split?: 'even' | 'grid';
 };
 
 function warn(message: string) {
@@ -469,6 +490,9 @@ export function BlockCard({
   meta,
   play = false,
   eyebrowSlot = false,
+  copyAlign = 'center',
+  compact = false,
+  split = 'even',
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -608,7 +632,7 @@ export function BlockCard({
   const eyebrowText = hasEyebrow ? (
     <span className={styles.eyebrow}>{eyebrow}</span>
   ) : eyebrowSlot ? (
-    <span className={styles.eyebrow} aria-hidden="true">
+    <span className={cx(styles.eyebrow, styles.eyebrowSlot)} aria-hidden="true">
       {'\u00a0'}
     </span>
   ) : null;
@@ -689,7 +713,14 @@ export function BlockCard({
   let frameContent;
   if (horizontal && imageNode) {
     frameContent = (
-      <Layout columns={[1, 1]} colGap="column" rowGap="block" align="center">
+      <Layout
+        columns={
+          split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]
+        }
+        colGap={split === 'grid' ? 'gutter' : 'column'}
+        rowGap="block"
+        align={copyAlign}
+      >
         {imageSide === 'right' ? (
           <>
             {content}
@@ -737,6 +768,21 @@ export function BlockCard({
           {cta}
         </Layout>
       );
+    } else if (compact && imageNode) {
+      /* One Layout, two arrangements: below md the cover takes the auto track at the row's END
+         (reverse mirrors the template, so the weight travels with it); from md the stack. */
+      frameContent = (
+        <Layout
+          columns={{ base: ['auto', 1], md: 1 }}
+          reverse={{ base: true, md: false }}
+          colGap="block"
+          rowGap="block"
+          align="start"
+        >
+          <span className={styles.compactCover}>{imageNode}</span>
+          {content}
+        </Layout>
+      );
     } else {
       frameContent = (
         <Layout rowGap="block">
@@ -750,7 +796,13 @@ export function BlockCard({
 
   return (
     <li
-      className={cx(styles.root, SIZE_CLASS[step], horizontal && styles.horizontal, boxed && styles.boxed)}
+      className={cx(
+        styles.root,
+        SIZE_CLASS[step],
+        horizontal && styles.horizontal,
+        boxed && styles.boxed,
+        compact && !horizontal && imageNode && !cta && styles.compact,
+      )}
     >
       {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it

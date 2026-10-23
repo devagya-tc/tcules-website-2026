@@ -158,6 +158,8 @@
   --bcrd-play-glyph: var(--space-16);
   --bcrd-play-inset: var(--space-12);
   --bcrd-play-radius: var(--radius-full);
+  /* A compact card's thumbnail on a phone (`compact`): the cover at the row's end. A component size. */
+  --bcrd-thumb-inline-sm: 6rem;
 }
 
 /* Paper: every ink but the covered linked title's holds whether or not the card is linked. The

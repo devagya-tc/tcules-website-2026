@@ -581,3 +581,9 @@
     inline-size: var(--lcrd-thumbnail-inline-sm);
   }
 }
+
+/* A compact row (`density="compact"`): the copy 16 inside its rules rather than 32, so a short list
+   sharing a grid row with cards ends level with them (the insights hub, 23 Oct 2026). */
+.compact .frame {
+  padding-block: var(--gap-text);
+}

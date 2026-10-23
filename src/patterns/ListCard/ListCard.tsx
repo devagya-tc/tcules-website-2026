@@ -198,6 +198,12 @@ export type ListCardProps = ListCardFormProps & {
    * the row), and beside a 326 phone column it squeezed the copy to ~200px.
    */
   markerPosition?: 'start' | 'end';
+  /**
+   * A row's inset: `default` (32 above and below the copy) or `compact` (16), for a short list
+   * that shares a grid row with cards and must end level with them — the insights hub's list cell
+   * (23 Oct 2026). Rows only; a tile ignores it.
+   */
+  density?: 'default' | 'compact';
 };
 
 /** One modifier per step, on the root; the module sets title, body and ordinal offset under it. */
@@ -339,6 +345,7 @@ export function ListCard({
   external = false,
   ctaLabel,
   markerPosition = 'start',
+  density = 'default',
 }: ListCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -542,6 +549,7 @@ export function ListCard({
         boxed && styles.boxed,
         action !== null && styles.withAction,
         trailing && styles.markerEnd,
+        !isTile && density === 'compact' && styles.compact,
       )}
     >
       {destination ? (
