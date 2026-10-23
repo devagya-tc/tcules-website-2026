@@ -1294,12 +1294,6 @@ export type InsightFormatCard = {
   kind?: InsightResourceKind;
   /** One sentence on the format ("Two recorded conversations with product leaders"). */
   description?: string;
-  /**
-   * The heading an editor gives the format's "Start here" shelf on the hub ("From design to build"):
-   * the rows of pieces without pictures under the format's lead. Absent, the shelf shows its eyebrow
-   * alone. No Strapi field yet (docs/strapi-changes.md).
-   */
-  shelfHeading?: string;
 };
 
 export type InsightFilterOption = {

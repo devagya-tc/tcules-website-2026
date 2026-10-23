@@ -262,8 +262,6 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
         kind: kind as InsightKind,
         title: formatTitle(page, kind),
         href: FORMAT_ROUTE[kind],
-        shelfHeading:
-          page.formatCards.find((card) => card.kind === kind)?.shelfHeading?.trim() || undefined,
       })),
       /* The topics the BY TOPIC view curates by: every option of the CMS's groups but industry,
          which is a reader's sector rather than a subject. */

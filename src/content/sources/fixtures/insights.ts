@@ -470,7 +470,6 @@ export const INSIGHTS_FIXTURE: InsightsPage = {
       kind: 'guide',
       title: 'Guides',
       description: 'Practical walkthroughs, from SaaS onboarding to landing pages.',
-      shelfHeading: 'From design to build',
     },
     {
       id: 'research',

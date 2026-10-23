@@ -1,19 +1,14 @@
-import type { ReactNode } from 'react';
-
-import { Icon, Layout, type IconName } from '@/components';
+import { Layout } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
-  ListCard,
   Teaser,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,
   type TeaserSize,
 } from '@/patterns';
-
-import styles from './ListingIndex.module.css';
 
 /* ── An insight as a listing places it ──────────────────────────────────────────
    A template may not import @/content, so the route maps the view model onto these and the
@@ -182,25 +177,15 @@ export function partition(items: readonly InsightItem[]) {
 /* ── The hub's group ────────────────────────────────────────────────────────────────
    Every group on the hub opens on its lead, the horizontal card (owner, 23 Oct 2026, after
    claude.com/resources), its cover across two thirds and its copy in the third, centred on the cover,
-   with an action. Under it, one of three shapes, by what the group has:
-
-     COLUMN  four cards as a 2 × 2 under the cover, a LIST down the third track beside them
-     GRID    the cards in rows of three; guides open the row on their "Start here" list
-     WIDE    no pictures to set as cards: the list alone, its rows in three columns
+   with an action. Under it, its cards in rows of three — one row, or two where there are six — or two
+   as halves. No list beside or under them (owner, 23 Oct 2026: the boxed list was dropped): a piece
+   with no picture is not a card here, and its format page holds it.
 
    The cards are the site's one card, BlockCard, so a piece looks the same here as under an article.
-   The LIST is one hairline box of ruled rows, each its eyebrow and title — a list beside the cards,
-   never words loose in a card grid. A card or row whose piece has no eyebrow shows none. Events keep
-   their dates (Dates). */
+   A card whose piece has no eyebrow shows none. Events keep their dates (Dates). */
 
-/** How many cells a GRID holds under its lead: one row of three, or two. */
+/** How many cards a group holds under its lead: one row of three, or two. */
 export const followCount = (available: number) => (available >= 6 ? 6 : 3);
-
-/** How many rows a LIST holds in one grid cell: what runs a card's height beside it. */
-export const SHELF_ROWS = 3;
-
-/** How many rows the COLUMN's list holds beside a 2 × 2 of cards. They share the cards' height. */
-export const COLUMN_ROWS = 4;
 
 /** A piece as the site's card: its topic (or, in a mixed set, its format) as the eyebrow. */
 function cardOf(item: InsightItem, meta: MetaOptions = {}) {
@@ -230,163 +215,55 @@ const ACTION: Record<InsightKind, string> = {
   event: 'See the event',
 };
 
-/** A list's head, where it has one (the guides' "Start here"): its glyph, eyebrow and heading. */
-export type ShelfHead = { icon: IconName; eyebrow: string; heading?: string };
-
-/**
- * The LIST: one hairline box of ruled rows, each row its eyebrow and title (ListCard, compact). As a
- * grid cell it is one track; WIDE, its rows run in three columns across the box.
- */
-function ListBox({
-  items,
-  head,
-  meta,
-  titleAs,
-  as: Root = 'li',
-  columns,
-}: {
-  items: readonly InsightItem[];
-  head?: ShelfHead;
-  meta?: MetaOptions;
-  titleAs: 'h3' | 'h4';
-  as?: 'li' | 'div';
-  /** Its rows' tracks: one by default, or across the box (WIDE; the COLUMN below 1280). */
-  columns?: { md: 2 | 3; xl?: 1 };
-}) {
-  return (
-    <Root className={styles.list}>
-      {/* Stretched to the cards beside it, the box's rows share its whole height, so its last rule is
-          the box's foot and the foot is the cards' — never a hole under the rows, never an overshoot. */}
-      <Layout rowGap="none" fillLast className={styles.listFill}>
-        {head ? (
-          <Layout rowGap="tight" className={styles.listHead}>
-            <span className={styles.shelfGlyph}>
-              <Icon name={head.icon} size="lg" />
-            </span>
-            <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
-            {head.heading ? <p className={styles.shelfTitle}>{head.heading}</p> : null}
-          </Layout>
-        ) : null}
-        <Layout
-          as="ul"
-          columns={columns}
-          colGap={columns ? 'column' : undefined}
-          rowGap="none"
-          fillRows
-          aria-label={head?.heading ?? head?.eyebrow}
-        >
-          {items.map((item) => (
-            <ListCard
-              key={item.id}
-              title={item.title}
-              eyebrow={cardOf(item, meta).eyebrow}
-              href={item.href}
-              size="sm"
-              density="compact"
-              titleAs={titleAs}
-            />
-          ))}
-        </Layout>
-      </Layout>
-    </Root>
-  );
-}
-
-/** A group's pieces and the shape they take under the lead. */
-export type GroupShapeName = 'column' | 'grid' | 'wide';
-
-/**
- * The FEATURE: the lead, then the group's shape under it (see above). The lead's cover and copy take
- * the 2 : 1 tracks the COLUMN shares, 64 apart, so the copy stands over the list.
- */
+/** The FEATURE: the lead, then its cards under it (see above). */
 export function Feature({
   lead,
   cards,
-  rows,
-  shape,
-  head,
   meta,
   titleAs = 'h3',
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
-  rows: readonly InsightItem[];
-  shape: GroupShapeName;
-  head?: ShelfHead;
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 }) {
-  const rowTitle = titleAs === 'h2' ? 'h3' : 'h4';
-  const leadNode = lead ? (
-    <ul>
-      <BlockCard
-        {...cardOf(lead, meta)}
-        orientation="horizontal"
-        size="lg"
-        titleAs={titleAs}
-        tracks={2}
-        cue="cta"
-        ctaLabel={ACTION[lead.kind]}
-        split="grid"
-      />
-    </ul>
-  ) : null;
-  /* The cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
-  const card = (item: InsightItem) => (
-    <BlockCard
-      key={item.id}
-      {...cardOf(item, meta)}
-      size="sm"
-      titleAs={titleAs}
-      tracks={3}
-      cue="title"
-      compact
-    />
-  );
-  let under: ReactNode = null;
-  if (shape === 'column') {
-    under = (
-      /* From 1280 the list runs down the third track, 64 from the cards and their height; below it,
-         under them, its rows in two columns. */
-      <Layout columns={{ xl: [2, 1] }} colGap="column" rowGap="column">
-        <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="column">
-          {cards.map(card)}
-        </Layout>
-        <ListBox
-          items={rows}
-          head={head}
-          meta={meta}
-          titleAs={rowTitle}
-          as="div"
-          columns={{ md: 2, xl: 1 }}
-        />
-      </Layout>
-    );
-  } else if (shape === 'wide') {
-    under =
-      rows.length > 0 ? (
-        <ListBox items={rows} head={head} meta={meta} titleAs={rowTitle} as="div" columns={{ md: 3 }} />
-      ) : null;
-  } else if (cards.length > 0 || rows.length > 0) {
-    under = (
-      /* Three tracks; two cards and no list share the row as halves. */
-      <Layout
-        as="ul"
-        columns={{ md: rows.length === 0 && cards.length === 2 ? 2 : 3 }}
-        colGap="gutter"
-        rowGap="column"
-      >
-        {rows.length > 0 ? (
-          <ListBox items={rows} head={head} meta={meta} titleAs={rowTitle} />
-        ) : null}
-        {cards.map(card)}
-      </Layout>
-    );
-  }
   return (
     <Layout rowGap="column">
-      {leadNode}
-      {under}
+      {lead ? (
+        <ul>
+          <BlockCard
+            {...cardOf(lead, meta)}
+            orientation="horizontal"
+            size="lg"
+            titleAs={titleAs}
+            tracks={2}
+            cue="cta"
+            ctaLabel={ACTION[lead.kind]}
+            split="grid"
+          />
+        </ul>
+      ) : null}
+      {cards.length > 0 ? (
+        /* The cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
+        <Layout
+          as="ul"
+          columns={{ md: cards.length === 2 ? 2 : 3 }}
+          colGap="gutter"
+          rowGap="column"
+        >
+          {cards.map((item) => (
+            <BlockCard
+              key={item.id}
+              {...cardOf(item, meta)}
+              size="sm"
+              titleAs={titleAs}
+              tracks={cards.length === 2 ? 2 : 3}
+              cue="title"
+              compact
+            />
+          ))}
+        </Layout>
+      ) : null}
     </Layout>
   );
 }

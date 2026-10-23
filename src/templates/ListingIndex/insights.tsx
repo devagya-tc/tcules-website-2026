@@ -26,10 +26,6 @@ import {
   type InsightItem,
   type InsightKind,
   type MetaOptions,
-  COLUMN_ROWS,
-  SHELF_ROWS,
-  type GroupShapeName,
-  type ShelfHead,
 } from './compositions';
 
 /* ── The insights family, as ListingIndex data ─────────────────────────────────────
@@ -44,8 +40,6 @@ export type InsightFormat = {
   title?: string;
   /** The format's page (/insights/articles …), where the section's "See more" goes. */
   href?: string;
-  /** The editor's heading over the format's "Start here" shelf on the hub. */
-  shelfHeading?: string;
 };
 
 /** One topic from the CMS taxonomy the BY TOPIC view curates by, and the group it is filed in. */
@@ -80,8 +74,8 @@ const topicAnchor = (topic: { id: string; label: string }) => {
 /**
  * The insights hub's two views (owner, 16 Oct 2026; the idea of claude.com/resources):
  *
- *   BY TYPE   a section per format: its lead as the horizontal card, the rest under it (a grid of
- *             pictured cards, or a shelf of rows where the pieces have no pictures); events dated
+ *   BY TYPE   a section per format: its lead as the horizontal card, its pictured cards in rows
+ *             of three under it; events dated
  *   BY TOPIC  a section per topic, formats mixed, no piece in two sections, in the same shape
  *
  * Every section's head carries the same "See more" (owner, 23 Oct 2026). BY TYPE first, the
@@ -107,7 +101,6 @@ export function insightViews({
         kind,
         title: format?.title?.trim() || LABEL[kind].many,
         href: format?.href,
-        shelfHeading: format?.shelfHeading,
         items: all,
       },
     ];
@@ -122,15 +115,19 @@ export function insightViews({
     heading: section.title,
     count: section.items.length,
     link: section.href ? { href: section.href } : undefined,
-    content: (
-      <TypeShape kind={section.kind} items={section.items} shelfHeading={section.shelfHeading} />
-    ),
+    content: <TypeShape kind={section.kind} items={section.items} />,
   }));
   const topicSections: ListingSection[] = byTopic.map((section) => ({
     id: topicAnchor(section),
     heading: section.label,
     count: section.size,
-    content: <GroupShape group={section.group} meta={{ withKind: true }} />,
+    content: (
+      <Feature
+        lead={section.group.lead}
+        cards={section.group.cards}
+        meta={{ withKind: true }}
+      />
+    ),
   }));
 
   return [
@@ -141,96 +138,32 @@ export function insightViews({
   ];
 }
 
-/* ── A group: its lead, then its shape ──────────────────────────────────────────── */
+/* ── A group: its lead, then its cards ──────────────────────────────────────────── */
 
-/** A hub section's pieces: the lead, the cards, the list's rows, and the shape they make. */
-type Group = {
-  lead?: InsightItem;
-  cards: InsightItem[];
-  rows: InsightItem[];
-  shape: GroupShapeName;
-};
+/** A hub section's pieces: the lead and the cards under it. */
+type Group = { lead?: InsightItem; cards: InsightItem[] };
 
 /**
  * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026). The best
- * pictured piece leads. Then, by what is left:
- *
- *   four pictured and a list's worth more   COLUMN: the 2 × 2 and the list beside it
- *   three or more pictured                  GRID: rows of three (two rows where there are six)
- *   one or two pictured, or a list kept     GRID: the cards and the list as one of its cells
- *   nothing pictured                        WIDE: the list alone, three columns
- *
- * `list: 'always'` keeps the list cell whenever there are rows for it (the guides' "Start here").
- * `avoidLead` keeps a piece from leading (the topic view's first section must not open on the type
- * view's lead).
+ * pictured piece leads; under it, the pictured pieces in rows of three (six where there are six),
+ * or two as halves. Pieces without a picture stay on their format page. `avoidLead` keeps a piece
+ * from leading (the topic view's first section must not open on the type view's lead).
  */
 function groupOf(
   items: readonly InsightItem[],
-  {
-    avoidLead,
-    list = 'auto',
-    columnRows = COLUMN_ROWS,
-  }: { avoidLead?: string; list?: 'auto' | 'always' | 'never'; columnRows?: number } = {},
+  { avoidLead }: { avoidLead?: string } = {},
 ): Group {
   const { pictured } = partition(items);
-  const usable = items.filter((item) => item.id !== avoidLead);
-  if (pictured.length === 0) {
-    return { cards: [], rows: usable.slice(0, 6), shape: 'wide' };
-  }
   const open = pictured.filter((item) => item.id !== avoidLead);
-  const [lead] = leadFirst(open.length > 0 ? open : pictured);
-  const others = pictured.filter((item) => item !== lead);
-  const restOf = (taken: readonly InsightItem[]) => {
-    const rest = items.filter((item) => item !== lead && !taken.includes(item));
-    /* Rows: the pieces without pictures first, then the pictured ones the cards had no room for. */
-    return [...rest.filter((item) => !hasPicture(item)), ...rest.filter(hasPicture)];
-  };
-  if (list !== 'always' && others.length >= 4) {
-    const quad = others.slice(0, 4);
-    const rows = restOf(quad).slice(0, columnRows);
-    if (rows.length >= SHELF_ROWS) return { lead, cards: quad, rows, shape: 'column' };
-  }
-  if (list !== 'always' && others.length >= 3) {
-    return { lead, cards: others.slice(0, followCount(others.length)), rows: [], shape: 'grid' };
-  }
-  /* No list cell wanted (a topic: owner, 23 Oct 2026, "we don't necessarily need a 'more to read' in
-     every section"): the cards there are, two as halves. */
-  if (list === 'never') {
-    return { lead, cards: others.length === 2 ? others : [], rows: [], shape: 'grid' };
-  }
-  /* A list cell beside what cards there are, the row filled: three cells, or six. */
-  const cards = others.slice(0, list === 'always' ? 2 : others.length >= 5 ? 5 : 2);
-  /* The cell holds as many rows as the cards beside it are tall: three beside cards with standfirsts,
-     two beside a picture and a title alone (the live CMS's guides today). */
-  const fit = cards.length > 0 && cards.every(hasStandfirst) ? SHELF_ROWS : 2;
-  const rows = restOf(cards).slice(0, fit);
-  if (rows.length < 2) {
-    return { lead, cards: cards.length >= 3 ? cards.slice(0, 3) : [], rows: [], shape: 'grid' };
-  }
-  if (cards.length === 0) return { lead, cards: [], rows: restOf([]).slice(0, 6), shape: 'wide' };
-  return { lead, cards, rows, shape: 'grid' };
-}
-
-/** A group laid out: the lead, then its shape. */
-function GroupShape({
-  group,
-  meta,
-  head,
-}: {
-  group: Group;
-  meta?: MetaOptions;
-  head?: ShelfHead;
-}): ReactNode {
-  return (
-    <Feature
-      lead={group.lead}
-      cards={group.cards}
-      rows={group.rows}
-      shape={group.shape}
-      head={head}
-      meta={meta}
-    />
-  );
+  const [lead, ...others] = leadFirst(open.length > 0 ? open : pictured);
+  if (!lead) return { cards: [] };
+  const cards =
+    others.length >= 3
+      ? others.slice(0, followCount(others.length))
+      : others.length === 2
+        ? others
+        : [];
+  return { lead, cards };
 }
 
 /* ── BY TYPE · the pieces each format shows ─────────────────────────────────────── */
@@ -239,12 +172,11 @@ function GroupShape({
 const EVENT_TAKE = 3;
 
 /**
- * A format's hub group. Guides keep their list, "Start here" (owner, 23 Oct 2026). Articles skip the
+ * A format's hub group. Articles skip the
  * three the format page opens on, where there are enough to spare, so "See more" opens on a reveal
  * rather than a reprint.
  */
 function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
-  if (kind === 'guide') return groupOf(items, { list: 'always' });
   if (kind === 'article') {
     const { pictured } = partition(items);
     const skip = pictured.length >= 12 ? 3 : 0;
@@ -256,21 +188,16 @@ function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
 function TypeShape({
   kind,
   items,
-  shelfHeading,
 }: {
   kind: InsightKind;
   items: readonly InsightItem[];
-  shelfHeading?: string;
 }): ReactNode {
   /* Events keep their dates: the day as a numeral at each row's start, the h4 title beside it. */
   if (kind === 'event') {
     return <Dates items={byEventDate(items).slice(0, EVENT_TAKE)} size="lg" />;
   }
-  /* Only the guides' list has a head: where to start, with an editor's heading where there is one.
-     Every other list is its rows alone (owner, 23 Oct 2026). */
-  const head: ShelfHead | undefined =
-    kind === 'guide' ? { icon: 'notebook', eyebrow: 'Start here', heading: shelfHeading } : undefined;
-  return <GroupShape group={typeGroup(kind, items)} head={head} />;
+  const group = typeGroup(kind, items);
+  return <Feature lead={group.lead} cards={group.cards} />;
 }
 
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
@@ -299,13 +226,8 @@ function curateTopics(
   for (const topic of ordered) {
     const free = members(topic.id).filter((item) => !used.has(item.id));
     if (free.length < TOPIC_FLOOR) continue;
-    /* A topic's rows carry their format and run longer: three of them share the cards' height. */
-    const group = groupOf(free, {
-      avoidLead: sections.length === 0 ? avoidLead : undefined,
-      columnRows: SHELF_ROWS,
-      list: 'never',
-    });
-    const picked = [...(group.lead ? [group.lead] : []), ...group.cards, ...group.rows];
+    const group = groupOf(free, { avoidLead: sections.length === 0 ? avoidLead : undefined });
+    const picked = [...(group.lead ? [group.lead] : []), ...group.cards];
     if (picked.length < 2) continue;
     picked.forEach((item) => used.add(item.id));
     sections.push({ id: topic.id, label: topic.label, group, size: topic.size });
