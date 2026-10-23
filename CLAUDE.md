@@ -366,6 +366,9 @@ it, and the old entry is kept.
 - **`/decide` logs a ruling in the same PR as the change that applies it**, the way `docs/TRACKER.md` is
   ticked. A ruling that exists only in a chat, a review note or agent memory is broken by the next session
   that never saw it, and memory is local to one machine.
+- **Design and test before ruling.** A design rule is logged `status: proposed` until it has been designed,
+  tested and seen by the owner. A proposal is context, never a rule, and stays out of the brand-framework
+  backlog. The owner promotes it to `active` (owner, 22 Oct 2026; decisions/2026-10-22-test-before-ruling).
 - **A ruling that changes the brand framework is logged `dbf_status: pending`.** `/dbf-update <chapter>`
   applies a chapter's backlog in one versioned edit; `/ds-publish` then carries it to the artifact. Chapters are
   batched, never edited ruling by ruling (owner, 19 Oct 2026).

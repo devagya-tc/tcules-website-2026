@@ -17,7 +17,7 @@ id, so parallel worktrees never collide on a number.
 
 | Field | Values |
 |---|---|
-| `status` | `active` · `superseded`. Superseded only when a later entry lists it in `supersedes` |
+| `status` | `active` · `proposed` · `superseded`. `proposed` is a design rule not yet designed and tested: context, never applied, kept out of the backlog, promoted to `active` by the owner (decisions/2026-10-22-test-before-ruling). Superseded only when a later entry lists it in `supersedes` |
 | `area` | one or more of the areas in the index (`INDEX.md`) |
 | `source` | where it was ruled: a review, a PR, a spec's open question, a chat with its date |
 | `dbf` | the Digital Branding Framework sections the ruling changes, e.g. `[ch03 §4, ch05 §9]`. Empty when it changes none |
