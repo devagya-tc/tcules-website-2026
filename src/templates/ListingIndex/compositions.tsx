@@ -1,4 +1,5 @@
 import { Icon, Layout, type IconName } from '@/components';
+import { cx } from '@/lib/cx';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
@@ -188,8 +189,11 @@ export function partition(items: readonly InsightItem[]) {
 /** How many cells a group's grid holds under its lead: one row of three, or two. */
 export const followCount = (available: number) => (available >= 6 ? 6 : 3);
 
-/** How many rows a shelf cell holds: what runs a card's height beside it. */
+/** How many rows a list cell holds: what runs a card's height beside it in a row of three. */
 export const SHELF_ROWS = 3;
+
+/** How many rows the list column holds beside a 2 × 2 of cards: what runs their two rows' height. */
+export const COLUMN_ROWS = 6;
 
 /** A piece as the site's card: its topic (or, in a mixed set, its format) as the eyebrow. */
 function cardOf(item: InsightItem, meta: MetaOptions = {}) {
@@ -218,10 +222,18 @@ export type ShelfCell = { items: readonly InsightItem[]; head: ShelfHead; at: 's
  * The SHELF cell: a glyph, an eyebrow and a heading over ruled rows of titles — one grid cell, the
  * height of the cards beside it. A list a reader runs down, so its rows carry no card eyebrow.
  */
-function Shelf({ items, head, titleAs }: Omit<ShelfCell, 'at'> & { titleAs: 'h3' | 'h4' }) {
+function Shelf({
+  items,
+  head,
+  titleAs,
+  as: Root = 'li',
+  column = false,
+}: Omit<ShelfCell, 'at'> & { titleAs: 'h3' | 'h4'; as?: 'li' | 'div'; column?: boolean }) {
   return (
-    <li className={styles.shelf}>
-      <Layout rowGap="text">
+    <Root className={cx(styles.shelf, column && styles.shelfColumn)}>
+      {/* The rows take the cell's spare height, so a list stretched beside its cards ends on their
+          foot rather than short of it. */}
+      <Layout rowGap="text" fillLast className={styles.shelfFill}>
         <Layout rowGap="tight">
           <span className={styles.shelfGlyph}>
             <Icon name={head.icon} size="lg" />
@@ -247,7 +259,7 @@ function Shelf({ items, head, titleAs }: Omit<ShelfCell, 'at'> & { titleAs: 'h3'
           ))}
         </Layout>
       </Layout>
-    </li>
+    </Root>
   );
 }
 
@@ -260,16 +272,66 @@ export function Feature({
   lead,
   cards,
   shelf,
+  column = false,
   meta,
   titleAs = 'h3',
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
   shelf?: ShelfCell;
+  /**
+   * The COLUMN shape (owner, 23 Oct 2026): four cards as a 2 × 2 in the lead's cover track, the list
+   * down the third track beside them at their full height — the lead's own split, so the cards sit
+   * under its cover and the list under its copy.
+   */
+  column?: boolean;
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
 }) {
   const rowTitle = titleAs === 'h2' ? 'h3' : 'h4';
+  const leadNode = lead ? (
+    <ul>
+      <BlockCard
+        {...cardOf(lead, meta)}
+        orientation="horizontal"
+        size="lg"
+        titleAs={titleAs}
+        tracks={2}
+        cue="title"
+        copyAlign="start"
+        split="grid"
+      />
+    </ul>
+  ) : null;
+  /* The grid's cards take the small step: an 18 title under the lead's serif (owner, 23 Oct 2026). */
+  const card = (item: InsightItem, eyebrowSlot: boolean) => (
+    <BlockCard
+      key={item.id}
+      {...cardOf(item, meta)}
+      size="sm"
+      titleAs={titleAs}
+      tracks={3}
+      cue="title"
+      compact
+      eyebrowSlot={eyebrowSlot}
+    />
+  );
+  if (column && shelf) {
+    const pairHasEyebrow = (index: number) =>
+      cards.slice(index - (index % 2), index - (index % 2) + 2).some((item) => cardOf(item, meta).eyebrow);
+    return (
+      <Layout rowGap="column">
+        {leadNode}
+        {/* From 1024 the list runs down the third track; below it, under the 2 × 2. */}
+        <Layout columns={{ lg: [2, 1] }} colGap="gutter" rowGap="column">
+          <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="column">
+            {cards.map((item, index) => card(item, pairHasEyebrow(index)))}
+          </Layout>
+          <Shelf items={shelf.items} head={shelf.head} titleAs={rowTitle} as="div" column />
+        </Layout>
+      </Layout>
+    );
+  }
   /* The grid's cells in reading order, so each card knows the row it shares. */
   const cells: ({ type: 'card'; item: InsightItem } | { type: 'shelf' })[] = [
     ...(shelf?.at === 'start' ? [{ type: 'shelf' as const }] : []),
@@ -287,20 +349,7 @@ export function Feature({
   };
   return (
     <Layout rowGap="column">
-      {lead ? (
-        <ul>
-          <BlockCard
-            {...cardOf(lead, meta)}
-            orientation="horizontal"
-            size="lg"
-            titleAs={titleAs}
-            tracks={2}
-            cue="title"
-            copyAlign="start"
-            split="grid"
-          />
-        </ul>
-      ) : null}
+      {leadNode}
       {cells.length > 0 ? (
         /* Each grid row is its tallest cell's height, so neighbours end level. */
         <Layout as="ul" columns={{ md: across }} colGap="gutter" rowGap="column">
@@ -308,16 +357,7 @@ export function Feature({
             cell.type === 'shelf' && shelf ? (
               <Shelf key="shelf" items={shelf.items} head={shelf.head} titleAs={rowTitle} />
             ) : cell.type === 'card' ? (
-              <BlockCard
-                key={cell.item.id}
-                {...cardOf(cell.item, meta)}
-                size="md"
-                titleAs={titleAs}
-                tracks={3}
-                cue="title"
-                compact
-                eyebrowSlot={rowHasEyebrow(index)}
-              />
+              card(cell.item, rowHasEyebrow(index))
             ) : null,
           )}
         </Layout>

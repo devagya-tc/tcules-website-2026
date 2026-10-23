@@ -38,6 +38,21 @@
   min-inline-size: 0;
 }
 
+/* The list column beside a 2 × 2 of cards (owner, 23 Oct 2026: "fits well in the space with no
+   awkward gaps or overshoots"). Its rows are as many as the cards' height holds at the track's width:
+   six from 1280, five between 1024 and 1280, where the narrower track wraps each title deeper. The
+   pieces it drops there stay a "See more" away. Below 1024 it sits under the cards with all six. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .shelfColumn .shelfRows > :nth-child(n + 6) {
+    display: none;
+  }
+}
+
+/* The list's stack fills the cell it is stretched to, so `fillLast` has the height to give. */
+.shelfFill {
+  block-size: 100%;
+}
+
 .shelfRows {
   border-block-start: var(--lix-shelf-rule-width) solid var(--lix-shelf-rule-ink);
 }

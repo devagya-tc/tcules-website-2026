@@ -26,6 +26,7 @@ import {
   type InsightItem,
   type InsightKind,
   type MetaOptions,
+  COLUMN_ROWS,
   SHELF_ROWS,
   type ShelfHead,
 } from './compositions';
@@ -148,7 +149,7 @@ export function insightViews({
 /* ── A group: its lead, then the grid under it ──────────────────────────────────── */
 
 /** A hub section's pieces: the lead, the cards in the grid under it, the rows of its list cell. */
-type Group = { lead?: InsightItem; cards: InsightItem[]; rows: InsightItem[] };
+type Group = { lead?: InsightItem; cards: InsightItem[]; rows: InsightItem[]; column?: boolean };
 
 /**
  * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026): the best
@@ -163,6 +164,20 @@ function groupOf(
   { avoidLead, list = 'auto' }: { avoidLead?: string; list?: 'auto' | 'always' } = {},
 ): Group {
   const { pictured, plain } = partition(items);
+  /* The COLUMN shape first (owner, 23 Oct 2026): the lead, four cards as a 2 × 2, and the list down
+     the third track — wherever there are four cards and a list's worth of rows after the lead. */
+  {
+    const open = (pictured.length > 0 ? pictured : items).filter((item) => item.id !== avoidLead);
+    const [first] = pictured.length > 0 ? leadFirst(open.length > 0 ? open : pictured) : open;
+    const quad = (pictured.length > 0 ? pictured : items).filter((item) => item !== first).slice(0, 4);
+    const rest = items.filter((item) => item !== first && !quad.includes(item));
+    /* Rows: the pieces without pictures first, then the pictured ones the grid had no room for. */
+    const pool = [...rest.filter((item) => !hasPicture(item)), ...rest.filter(hasPicture)];
+    const listRows = pool.slice(0, COLUMN_ROWS);
+    if (first && quad.length === 4 && listRows.length >= SHELF_ROWS) {
+      return { lead: first, cards: quad, rows: listRows, column: true };
+    }
+  }
   let lead: InsightItem | undefined;
   let cards: InsightItem[];
   let rows: InsightItem[];
@@ -223,6 +238,7 @@ function GroupShape({
       lead={group.lead}
       cards={group.cards}
       shelf={group.rows.length > 0 ? { items: group.rows, head, at } : undefined}
+      column={group.column}
       meta={meta}
     />
   );
