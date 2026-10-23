@@ -2,6 +2,7 @@ import { Icon, Layout, type IconName } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS, FULL_COLUMN } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
+  BlockCard,
   ListCard,
   Teaser,
   type TeaserImage,
@@ -176,103 +177,132 @@ export function partition(items: readonly InsightItem[]) {
   };
 }
 
-/* ── The hub's group: a lead and what follows it ─────────────────────────────────────
+/* ── The hub's group: a lead and the grid under it ─────────────────────────────────
    Every group on the hub has one shape (owner, 23 Oct 2026, after claude.com/resources): its first
-   piece as the horizontal card, and the rest UNDER it — a grid of three pictured cards (one row, or
-   two where the group has more to show), or, where the pieces have no pictures, a shelf of rows in
-   three columns. Text without a picture is never set loose in a card grid: it reads as floating
-   words (owner, 23 Oct 2026). Events keep their dates (Dates). */
+   piece as the horizontal card and a 3-column grid under it, one row or two. The cards are the
+   site's one card, BlockCard, so a piece looks the same here as under an article. Where a group has
+   pieces without pictures, ONE cell of the grid is a list of them (a SHELF) instead of a card —
+   variety inside the row, as claude.com sets a list beside its cards, and never words loose in a
+   card grid (owner, 23 Oct 2026). Events keep their dates (Dates). */
 
-/** How many pieces a group's grid or shelf holds under its lead: one row of three, or two. */
+/** How many cells a group's grid holds under its lead: one row of three, or two. */
 export const followCount = (available: number) => (available >= 6 ? 6 : 3);
 
-/**
- * The FEATURE: the lead as the horizontal card (`beside`, xl: the serif title), then a grid of three
- * pictured cards under it, each its picture, eyebrow, title and two lines of standfirst. On a phone
- * the grid's cards turn compact rows; the lead never does.
- */
-export function Feature({ items, meta, titleAs = 'h3' }: Shape) {
-  const [lead, ...rest] = items;
-  if (!lead) return null;
-  /* A grid card without an eyebrow keeps the line, so every title in the row starts level. */
-  const metaSlot = rest.some((item) => teaserOf(item, meta).meta || meta?.withKind);
-  return (
-    <Layout rowGap="column">
-      <ul>
-        <Teaser
-          {...teaserOf(lead, meta)}
-          arrangement="beside"
-          size="xl"
-          titleAs={titleAs}
-          sizes={CARD_TWO_TRACKS}
-        />
-      </ul>
-      {rest.length > 0 ? (
-        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
-          {rest.map((item) => (
-            <Teaser
-              key={item.id}
-              {...teaserOf(item, meta)}
-              size="md"
-              titleAs={titleAs}
-              sizes={CARD_THREE_TRACKS}
-              compact
-              metaSlot={metaSlot}
-            />
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
+/** How many rows a shelf cell holds: what runs a card's height beside it. */
+export const SHELF_ROWS = 3;
+
+/** A piece as the site's card: its topic (or, in a mixed set, its format) as the eyebrow. */
+function cardOf(item: InsightItem, meta: MetaOptions = {}) {
+  const picture = pictureOf(item);
+  return {
+    title: item.title,
+    href: item.href,
+    body: item.description?.trim() || undefined,
+    eyebrow: meta.withKind ? LABEL[item.kind].one : item.subject?.trim() || undefined,
+    media: picture
+      ? picture.type === 'image'
+        ? { type: 'image' as const, image: picture.image }
+        : { type: 'sketch' as const, name: picture.name }
+      : undefined,
+    play: isWatched(item.kind),
+  };
 }
 
 /** A shelf's head: its glyph, its eyebrow and, where an editor has written one, its heading. */
 export type ShelfHead = { icon: IconName; eyebrow: string; heading?: string };
 
+/** A list cell in a group's grid: its head and its rows, at the grid's start or its end. */
+export type ShelfCell = { items: readonly InsightItem[]; head: ShelfHead; at: 'start' | 'end' };
+
 /**
- * The SHELF: pieces as ruled rows in three columns under one head — a glyph, an eyebrow and a
- * heading — each row its title alone, a list a reader runs down rather than a set of cards (so no
- * card eyebrow). Rows in a grid share their grid rows, so every column ends on one line.
+ * The SHELF cell: a glyph, an eyebrow and a heading over ruled rows of titles — one grid cell, the
+ * height of the cards beside it. A list a reader runs down, so its rows carry no card eyebrow.
  */
-export function Shelf({
-  items,
-  head,
-  titleAs = 'h3',
-}: Shape & { head?: ShelfHead }) {
-  if (items.length === 0) return null;
+function Shelf({ items, head, titleAs }: Omit<ShelfCell, 'at'> & { titleAs: 'h3' | 'h4' }) {
   return (
-    <Layout rowGap="block">
-      {head ? (
+    <li className={styles.shelf}>
+      <Layout rowGap="block">
         <Layout rowGap="tight">
           <span className={styles.shelfGlyph}>
             <Icon name={head.icon} size="xl" />
           </span>
           <p className={styles.shelfEyebrow}>{head.eyebrow}</p>
-          {head.heading ? (
-            <p className={styles.shelfTitle}>
-              {head.heading}
-            </p>
-          ) : null}
+          {head.heading ? <p className={styles.shelfTitle}>{head.heading}</p> : null}
+        </Layout>
+        <Layout
+          as="ul"
+          rowGap="none"
+          className={styles.shelfRows}
+          aria-label={head.heading ?? head.eyebrow}
+        >
+          {items.map((item) => (
+            <ListCard key={item.id} title={item.title} href={item.href} size="sm" titleAs={titleAs} />
+          ))}
+        </Layout>
+      </Layout>
+    </li>
+  );
+}
+
+/**
+ * The FEATURE: the lead as the horizontal card (its serif title), then the grid under it — the
+ * cards, and the shelf in its cell where the group has one. A card without an eyebrow keeps the
+ * line where any card in the grid has one, so every title in a row starts level.
+ */
+export function Feature({
+  lead,
+  cards,
+  shelf,
+  meta,
+  titleAs = 'h3',
+}: {
+  lead?: InsightItem;
+  cards: readonly InsightItem[];
+  shelf?: ShelfCell;
+  meta?: MetaOptions;
+  titleAs?: 'h2' | 'h3' | 'h4';
+}) {
+  const cells = cards.length + (shelf ? 1 : 0);
+  const eyebrowSlot = cards.some((item) => cardOf(item, meta).eyebrow);
+  const rowTitle = titleAs === 'h2' ? 'h3' : 'h4';
+  const shelfNode = shelf ? (
+    <Shelf items={shelf.items} head={shelf.head} titleAs={rowTitle} />
+  ) : null;
+  return (
+    <Layout rowGap="column">
+      {lead ? (
+        <ul>
+          <BlockCard
+            {...cardOf(lead, meta)}
+            orientation="horizontal"
+            size="lg"
+            titleAs={titleAs}
+            tracks={2}
+          />
+        </ul>
+      ) : null}
+      {cells > 0 ? (
+        <Layout
+          as="ul"
+          columns={{ md: Math.min(3, cells) as 1 | 2 | 3 }}
+          colGap="gutter"
+          rowGap="column"
+          equalRows
+        >
+          {shelf?.at === 'start' ? shelfNode : null}
+          {cards.map((item) => (
+            <BlockCard
+              key={item.id}
+              {...cardOf(item, meta)}
+              size="md"
+              titleAs={titleAs}
+              tracks={3}
+              eyebrowSlot={eyebrowSlot}
+            />
+          ))}
+          {shelf?.at === 'end' ? shelfNode : null}
         </Layout>
       ) : null}
-      <Layout
-        as="ul"
-        columns={{ md: 3 }}
-        colGap="gutter"
-        rowGap="none"
-        equalRows
-        aria-label={head?.heading ?? head?.eyebrow}
-      >
-        {items.map((item) => (
-          <ListCard
-            key={item.id}
-            title={item.title}
-            href={item.href}
-            size="sm"
-            titleAs={titleAs === 'h2' ? 'h3' : 'h4'}
-          />
-        ))}
-      </Layout>
     </Layout>
   );
 }

@@ -30,6 +30,8 @@
   --lix-shelf-eyebrow-tracking: var(--text-eyebrow-tracking);
   --lix-shelf-title-text: var(--text-h4);
   --lix-shelf-title-tracking: var(--text-h4-tracking);
+  /* The rule its rows open on: ListCard's hairline, so the first row reads like the others. */
+  --lix-shelf-rule-width: var(--border-width-hairline);
   /* The count beside "Show more": the label voice. */
   --lix-count-text: var(--text-eyebrow);
   --lix-count-tracking: var(--text-eyebrow-tracking);
@@ -44,6 +46,7 @@
   --lix-shelf-glyph-ink: var(--color-brandeis-500);
   --lix-shelf-eyebrow-ink: var(--color-neutral-600);
   --lix-shelf-title-ink: var(--color-neutral-900);
+  --lix-shelf-rule-ink: var(--color-neutral-300);
 }
 
 /* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
@@ -54,6 +57,7 @@
   --lix-shelf-glyph-ink: var(--color-brandeis-600);
   --lix-shelf-eyebrow-ink: var(--color-neutral-700);
   --lix-shelf-title-ink: var(--color-neutral-900);
+  --lix-shelf-rule-ink: var(--color-neutral-400);
 }
 
 /* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
@@ -64,6 +68,7 @@
   --lix-shelf-glyph-ink: var(--color-brandeis-300);
   --lix-shelf-eyebrow-ink: var(--color-neutral-400);
   --lix-shelf-title-ink: var(--color-white);
+  --lix-shelf-rule-ink: var(--color-neutral-700);
 }
 
 /* ── Surface: blue ── declared for self-containment ─────────────────────────── */
@@ -74,4 +79,5 @@
   --lix-shelf-glyph-ink: var(--color-white);
   --lix-shelf-eyebrow-ink: var(--color-brandeis-100);
   --lix-shelf-title-ink: var(--color-white);
+  --lix-shelf-rule-ink: var(--color-brandeis-300);
 }

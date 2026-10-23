@@ -32,6 +32,16 @@
   text-transform: var(--text-mono-case);
 }
 
+/* A shelf: one cell of a group's grid, a list beside the cards (owner, 23 Oct 2026). Its rows open
+   on a rule under the head, and each row closes on its own (ListCard's row). */
+.shelf {
+  min-inline-size: 0;
+}
+
+.shelfRows {
+  border-block-start: var(--lix-shelf-rule-width) solid var(--lix-shelf-rule-ink);
+}
+
 /* A shelf's head: the glyph in the accent, the eyebrow, the editor's heading (owner, 23 Oct 2026). */
 .shelfGlyph {
   color: var(--lix-shelf-glyph-ink);

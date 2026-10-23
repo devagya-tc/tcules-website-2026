@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Button, Cluster, Icon, Layout } from '@/components';
+import { Button, Cluster, Icon, Layout, type IconName } from '@/components';
 
 import styles from './ListingIndex.module.css';
 import type { ListingSection, ListingView } from './ListingIndex';
@@ -21,12 +21,12 @@ import {
   Ledger,
   partition,
   pictureRun,
-  Shelf,
   Showcase,
   Trio,
   type InsightItem,
   type InsightKind,
   type MetaOptions,
+  SHELF_ROWS,
   type ShelfHead,
 } from './compositions';
 
@@ -128,7 +128,13 @@ export function insightViews({
     id: topicAnchor(section),
     heading: section.label,
     count: section.size,
-    content: <GroupShape group={section.group} meta={{ withKind: true }} />,
+    content: (
+      <GroupShape
+        group={section.group}
+        meta={{ withKind: true }}
+        head={{ icon: 'notebook', eyebrow: 'More to read' }}
+      />
+    ),
   }));
 
   return [
@@ -139,48 +145,73 @@ export function insightViews({
   ];
 }
 
-/* ── A group: its lead, then what follows ───────────────────────────────────────── */
+/* ── A group: its lead, then the grid under it ──────────────────────────────────── */
 
-/** A hub section's pieces: the lead, the pictured cards under it, or the shelf of rows. */
-type Group = { lead?: InsightItem; grid: InsightItem[]; shelf: InsightItem[] };
+/** A hub section's pieces: the lead, the cards in the grid under it, the rows of its list cell. */
+type Group = { lead?: InsightItem; cards: InsightItem[]; rows: InsightItem[] };
 
 /**
- * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026): four or more
- * with pictures make a lead and a grid of three (six where seven or more have pictures); fewer make
- * the first pictured piece the lead and the rest a shelf of rows, three or six. `avoidLead` keeps a
- * piece from leading (the topic view's first section must not open on the type view's lead).
+ * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026): the best
+ * pictured piece leads; the grid under it is one row of three cells, two where there is more to
+ * show. Pictured pieces fill it as cards; where three or more pieces have no picture, one cell is a
+ * list of them (`list: 'always'` keeps the cell even when every piece has a picture — the guides'
+ * "Start here"). `avoidLead` keeps a piece from leading (the topic view's first section must not open
+ * on the type view's lead).
  */
-function groupOf(items: readonly InsightItem[], avoidLead?: string): Group {
-  const { pictured } = partition(items);
-  if (pictured.length >= 4) {
-    const open = pictured.filter((item) => item.id !== avoidLead);
-    const [lead] = leadFirst(open.length > 0 ? open : pictured);
-    const rest = pictured.filter((item) => item !== lead);
-    return { lead, grid: rest.slice(0, followCount(rest.length)), shelf: [] };
+function groupOf(
+  items: readonly InsightItem[],
+  { avoidLead, list = 'auto' }: { avoidLead?: string; list?: 'auto' | 'always' } = {},
+): Group {
+  const { pictured, plain } = partition(items);
+  /* Nothing pictured: the kit's text cards, the lead horizontal and the rest under it — each with
+     its hairline, title and standfirst (2026-09-28-text-only-cards-weight-from-scale). */
+  if (pictured.length === 0) {
+    const [first, ...rest] = items.filter((item) => item.id !== avoidLead);
+    return { lead: first, cards: rest.slice(0, followCount(rest.length)), rows: [] };
   }
-  const lead = pictured.find((item) => item.id !== avoidLead) ?? pictured[0];
-  const rest = items.filter((item) => item !== lead);
-  return { lead, grid: [], shelf: rest.slice(0, followCount(rest.length)) };
+  const open = pictured.filter((item) => item.id !== avoidLead);
+  const [lead] = leadFirst(open.length > 0 ? open : pictured);
+  const others = pictured.filter((item) => item !== lead);
+  const rowsFrom = list === 'always' ? items.filter((item) => item !== lead) : plain;
+  const withList = rowsFrom.length >= SHELF_ROWS || (list === 'always' && rowsFrom.length > 0);
+  const cells = followCount(others.length + (withList ? 1 : 0));
+  const cards = others.slice(0, cells - (withList ? 1 : 0));
+  const rows = withList
+    ? rowsFrom.filter((item) => !cards.includes(item)).slice(0, SHELF_ROWS)
+    : [];
+  return { lead, cards, rows };
 }
 
-/** A group laid out: the lead and its grid as a FEATURE, then the shelf under them. */
+/** The glyph that heads a format's list cell. */
+const SHELF_ICON: Record<InsightKind, IconName> = {
+  article: 'document-text',
+  guide: 'notebook',
+  research: 'graph-up',
+  podcast: 'chat-round-dots',
+  video: 'monitor',
+  event: 'flag',
+  interview: 'users-group-rounded',
+};
+
+/** A group laid out: the lead, then the grid with its list cell where it has one. */
 function GroupShape({
   group,
   meta,
   head,
+  at = 'end',
 }: {
   group: Group;
   meta?: MetaOptions;
-  head?: ShelfHead;
+  head: ShelfHead;
+  at?: 'start' | 'end';
 }): ReactNode {
-  const featured = group.lead ? [group.lead, ...group.grid] : [];
-  if (group.shelf.length === 0) return <Feature items={featured} meta={meta} />;
-  if (featured.length === 0) return <Shelf items={group.shelf} head={head} />;
   return (
-    <Layout rowGap="column">
-      <Feature items={featured} meta={meta} />
-      <Shelf items={group.shelf} head={head} />
-    </Layout>
+    <Feature
+      lead={group.lead}
+      cards={group.cards}
+      shelf={group.rows.length > 0 ? { items: group.rows, head, at } : undefined}
+      meta={meta}
+    />
   );
 }
 
@@ -190,22 +221,16 @@ function GroupShape({
 const EVENT_TAKE = 3;
 
 /**
- * A format's hub group. Articles skip the three the format page opens on, where there are enough to
- * spare (seven still shown), so "See more" opens on a reveal rather than a reprint.
+ * A format's hub group. Guides always keep their list cell, "Start here" (owner, 23 Oct 2026), at the
+ * grid's start. Articles skip the three the format page opens on, where there are enough to spare, so
+ * "See more" opens on a reveal rather than a reprint.
  */
 function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
-  /* Guides are always a lead and the "Start here" shelf (owner, 23 Oct 2026): where to begin, as rows
-     a reader runs down, whether or not the guides have pictures. */
-  if (kind === 'guide') {
-    const lead = items.find(hasPicture);
-    const rest = items.filter((item) => item !== lead);
-    return { lead, grid: [], shelf: rest.slice(0, followCount(rest.length)) };
-  }
+  if (kind === 'guide') return groupOf(items, { list: 'always' });
   if (kind === 'article') {
     const { pictured } = partition(items);
     const skip = pictured.length >= 10 ? 3 : 0;
-    const kept = items.filter((item) => !pictured.slice(0, skip).includes(item));
-    return groupOf(kept);
+    return groupOf(items.filter((item) => !pictured.slice(0, skip).includes(item)));
   }
   return groupOf(items);
 }
@@ -223,11 +248,15 @@ function TypeShape({
   if (kind === 'event') {
     return <Dates items={byEventDate(items).slice(0, EVENT_TAKE)} size="lg" />;
   }
-  /* The guides' shelf is where to start, with an editor's heading where there is one. Any other
-     format's shelf is its rows alone, under the section's own head. */
-  const head: ShelfHead | undefined =
-    kind === 'guide' ? { icon: 'notebook', eyebrow: 'Start here', heading: shelfHeading } : undefined;
-  return <GroupShape group={typeGroup(kind, items)} head={head} />;
+  /* The guides' cell is where to start, first in the row, with an editor's heading where there is
+     one. Any other format's cell is the rest of it, last in the row. */
+  const head: ShelfHead =
+    kind === 'guide'
+      ? { icon: SHELF_ICON.guide, eyebrow: 'Start here', heading: shelfHeading }
+      : { icon: SHELF_ICON[kind], eyebrow: `More ${LABEL[kind].many.toLowerCase()}` };
+  return (
+    <GroupShape group={typeGroup(kind, items)} head={head} at={kind === 'guide' ? 'start' : 'end'} />
+  );
 }
 
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
@@ -256,8 +285,8 @@ function curateTopics(
   for (const topic of ordered) {
     const free = members(topic.id).filter((item) => !used.has(item.id));
     if (free.length < TOPIC_FLOOR) continue;
-    const group = groupOf(free, sections.length === 0 ? avoidLead : undefined);
-    const picked = [...(group.lead ? [group.lead] : []), ...group.grid, ...group.shelf];
+    const group = groupOf(free, { avoidLead: sections.length === 0 ? avoidLead : undefined });
+    const picked = [...(group.lead ? [group.lead] : []), ...group.cards, ...group.rows];
     if (picked.length < 2) continue;
     picked.forEach((item) => used.add(item.id));
     sections.push({ id: topic.id, label: topic.label, group, size: topic.size });

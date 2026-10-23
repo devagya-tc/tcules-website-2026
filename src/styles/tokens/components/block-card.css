@@ -151,6 +151,13 @@
   --bcrd-rail-length: 10rem;
   --bcrd-rail-thickness: var(--border-width-2);
   --bcrd-rail-radius: var(--radius-full);
+
+  /* The play mark on a watched piece's cover (23 Oct 2026, the insights hub): a round chip in the
+     cover's top-end corner. Optical sizes from the ramp: the chip, its glyph, its inset. */
+  --bcrd-play-size: var(--space-40);
+  --bcrd-play-glyph: var(--space-16);
+  --bcrd-play-inset: var(--space-12);
+  --bcrd-play-radius: var(--radius-full);
 }
 
 /* Paper: every ink but the covered linked title's holds whether or not the card is linked. The
@@ -171,6 +178,8 @@
   --bcrd-ring-gap-color: var(--color-paper);
   --bcrd-rail-ink: var(--color-neutral-200); /* decoration */
   --bcrd-rail-thumb-ink: var(--color-brandeis-500); /* the current marker */
+  --bcrd-play-ground: var(--color-paper);
+  --bcrd-play-ink: var(--color-neutral-900);
 }
 
 /* Tint: the light-surface text inks still clear their floors on paper-deep, so they are restated at
@@ -190,6 +199,8 @@
   --bcrd-ring-gap-color: var(--color-paper-deep);
   --bcrd-rail-ink: var(--color-neutral-300); /* decoration */
   --bcrd-rail-thumb-ink: var(--color-brandeis-500); /* the current marker */
+  --bcrd-play-ground: var(--color-paper);
+  --bcrd-play-ink: var(--color-neutral-900);
 }
 
 /* Ink: the direction inverts. Title lifts to white, body to neutral-300 and the
@@ -209,6 +220,8 @@
   --bcrd-ring-gap-color: var(--color-neutral-950);
   --bcrd-rail-ink: var(--color-neutral-800); /* decoration */
   --bcrd-rail-thumb-ink: var(--color-brandeis-300); /* the current marker */
+  --bcrd-play-ground: var(--color-white);
+  --bcrd-play-ink: var(--color-neutral-900);
 }
 
 /* Blue: white and the light Brandeis end are the only AA text choices. The paired focus gap is the
@@ -231,4 +244,6 @@
   --bcrd-ring-gap-color: var(--color-brandeis-500);
   --bcrd-rail-ink: var(--color-brandeis-400); /* decoration */
   --bcrd-rail-thumb-ink: var(--color-white); /* the current marker */
+  --bcrd-play-ground: var(--color-white);
+  --bcrd-play-ink: var(--color-brandeis-700);
 }

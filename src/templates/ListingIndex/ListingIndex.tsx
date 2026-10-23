@@ -95,6 +95,12 @@ export type ListingClosing = {
   body?: string;
   form?: ReactElement;
   action?: HeroAction;
+  /**
+   * The island close, as home has it (owner, 23 Oct 2026: "replace the enquiry form with the island
+   * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band.
+   * Taken only with a `form`.
+   */
+  island?: { surface: 'blue' | 'ink'; art?: ReactElement };
 };
 
 export type ListingIndexProps = {
@@ -230,7 +236,18 @@ export function ListingIndex({
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
           action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
           A conversation glyph is the eye's entry into it, as every corpus close has. */}
-      {closing?.form ? (
+      {closing?.form && closing.island ? (
+        <CtaSection
+          id={closing.id}
+          island={closing.island.surface}
+          islandTexture="frame"
+          art={closing.island.art}
+          eyebrow={closing.eyebrow || undefined}
+          heading={closing.heading}
+          body={closing.body?.trim() ? [closing.body] : undefined}
+          form={closing.form}
+        />
+      ) : closing?.form ? (
         <CtaSection
           id={closing.id}
           surface={offer?.image ? 'paper' : 'tint'}
