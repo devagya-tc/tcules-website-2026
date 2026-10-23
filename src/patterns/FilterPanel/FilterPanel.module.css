@@ -22,7 +22,12 @@
   background-color: var(--fpn-backdrop);
 }
 
+/* The heading's box trimmed to its cap height and baseline, so the close centres on the letters
+   rather than on a line box whose descender room sits empty under "Filter" (owner, 23 Oct 2026: "not
+   center aligned"; RatingBadge and Tag make the same correction). Where text-box is unsupported the
+   line box remains, and the close sits as before. */
 .heading {
+  text-box: trim-both cap alphabetic;
   color: var(--fpn-heading-ink);
   font: var(--fpn-heading-text);
   letter-spacing: var(--fpn-heading-tracking);
