@@ -59,6 +59,18 @@ authored order only decides when each part joins (within the first 140ms); every
 Expo-out on lines and slides, a small back-out spring on what lands, short slides (12 to 20 units), no pen.
 Engine in `round-3.html`.
 
+Take 3: 250ms was "too quick"; the page offers 400 / 500 / 650 / 800ms. Owner: "good enough for now".
+
+## Where motion goes (25 Oct)
+
+Owner: "not all of them need to have motion. for example an article card image doesn't need to be animated
+but maybe in the services card we could do some hover animation?" So: article covers are still; the entrance
+animation is parked until a page has a large drawing standing alone; the service tiles (home bento) get a
+hover move. Mock: https://claude.ai/artifact/FtDASZntfAr7a7rnhcjb3D (`flat-graphics/hover-1.html`, scenes in
+`hover.py`). Built on the logged rulings `2026-10-19-hover-is-a-move` (one transition, 360ms on the owner's
+ease, both ways, transform and colour only) and `2026-10-19-animated-drawing-story-first` (rest = the problem,
+hover = it solved, one element moves most, trace rather than slide).
+
 ## Open
 
 - Product design still reads as a flowchart (step, decision, two branches). Candidate: a screen with its one
