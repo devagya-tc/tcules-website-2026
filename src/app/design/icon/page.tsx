@@ -13,9 +13,9 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  * the tick in check-circle, the bars in hamburger-menu and the marks in info-circle and
  * danger-triangle on the ink and blue sections at the bottom.
  *
- * A glyph with a counter is never set below 16 (glyphs.ts, `hasCounter`), so the `sm` rows below
+ * A glyph with a counter is never set below 16 (@/lib/icon-glyphs, `hasCounter`), so the `sm` rows below
  * carry only the glyphs that have none. The matrix is rendered from `iconNames`, so this page
- * cannot fall behind glyphs.ts.
+ * cannot fall behind @/lib/icon-glyphs.
  */
 
 /* ch04's fixed choices that the set carries today, with the meaning each one is reserved for.
