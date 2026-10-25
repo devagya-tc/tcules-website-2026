@@ -28,3 +28,11 @@
      view and a focus ring is never trapped in a scrollport. */
   overflow: clip;
 }
+
+/* The tile: the smaller inset, and the full height of the grid cell it sits in, so it ends level
+   with the cards beside it. */
+.sm {
+  block-size: 100%;
+  padding-block: var(--isl-inset-block-sm);
+  padding-inline: var(--isl-inset-inline-sm);
+}

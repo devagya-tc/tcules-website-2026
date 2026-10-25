@@ -1,0 +1,18 @@
+/* OfferTile — Island draws the ground and the inset and fills the cell, Layout stacks the glyph,
+   the words and the action; this module owns the type and inks. Every value is --oft-*. */
+.glyph {
+  display: block;
+  color: var(--oft-glyph-ink);
+}
+
+.title {
+  color: var(--oft-title-ink);
+  font: var(--oft-title-text);
+  letter-spacing: var(--oft-title-tracking);
+  text-wrap: var(--oft-title-wrap);
+}
+
+.body {
+  color: var(--oft-body-ink);
+  font: var(--oft-body-text);
+}

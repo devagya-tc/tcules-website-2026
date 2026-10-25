@@ -1,7 +1,7 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { Icon, Media, type IconName } from '@/components';
-import { EnquiryForm } from '@/patterns';
+import { EnquiryForm, NewsletterCard, OfferTile, type SiteFooterNewsletter } from '@/patterns';
 import {
   ENQUIRY_DESK,
   ENQUIRY_DRESS,
@@ -194,19 +194,40 @@ export const formatsWithContent = (page: InsightsPage) =>
   KINDS.filter((kind) => page.resources.items.some((item) => item.kind === kind));
 
 /**
- * The Lab's offer. The templates show it only with its picture, and the CMS holds none yet (the
- * Lab's illustration is to be drawn): the band is held back until then rather than shipped as words
- * alone on tint (beauty round 3, 16 Oct 2026). Strapi recommendation logged: an image on the
- * insights page's `secondSection`.
+ * The Lab's offer, as a tile among the cards (owner, 25 Oct 2026: "CTA cards in the grid"). As a band
+ * it was held back, waiting for its picture (beauty round 3, 16 Oct 2026: words alone on tint); as a
+ * cell of a card grid its ground, glyph and pixel field are its shape, and it stands as tall as the
+ * cards beside it. The Lab's own illustration, when drawn, is for its band.
  */
-const labOf = (page: InsightsPage) =>
-  page.lab?.action
-    ? {
-        heading: page.lab.heading,
-        body: page.lab.description,
-        action: { label: page.lab.action.label, href: page.lab.action.href },
-      }
-    : undefined;
+const labTile = (page: InsightsPage) =>
+  page.lab?.action ? (
+    <OfferTile
+      title={page.lab.heading}
+      body={page.lab.description}
+      action={{ label: page.lab.action.label, href: page.lab.action.href }}
+      glyph={<Icon name="stars" />}
+    />
+  ) : undefined;
+
+/**
+ * The newsletter's card under the rail (owner, 25 Oct 2026, after claude.com/resources): the
+ * footer's own newsletter, so the two never say different things. The route reads it from the
+ * navigation; the specimen passes none.
+ */
+const newsletterCard = (newsletter?: SiteFooterNewsletter) =>
+  newsletter ? (
+    <NewsletterCard
+      title={newsletter.title}
+      description={newsletter.description}
+      action={newsletter.action}
+      fieldLabel={newsletter.fieldLabel}
+      placeholder={newsletter.placeholder}
+      submitLabel={newsletter.cta.label}
+    />
+  ) : undefined;
+
+/** What the routes add from outside the insights page: the site's newsletter. */
+export type InsightsExtras = { newsletter?: SiteFooterNewsletter };
 
 /**
  * The close: the page's last beat, the ask on paper before the ink footer. The CMS's closing section
@@ -274,7 +295,11 @@ const slugOf = (name: string) =>
 
 const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
-export function insightsIndexProps(page: InsightsPage, query: Query): ListingIndexProps {
+export function insightsIndexProps(
+  page: InsightsPage,
+  query: Query,
+  { newsletter }: InsightsExtras = {},
+): ListingIndexProps {
   const subjects = subjectsOf(page);
   const lede = page.hero.description?.trim();
   return {
@@ -285,7 +310,9 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
     hero: { title: page.hero.heading, lede: lede ? [lede] : undefined },
     label: 'Insights',
     railLabel: 'Browse insights',
+    railAside: newsletterCard(newsletter),
     views: insightViews({
+      offer: labTile(page),
       items: page.resources.items.map((item) => toItem(item, subjects)),
       formats: formatsWithContent(page).map((kind) => ({
         kind: kind as InsightKind,
@@ -306,7 +333,6 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
     }),
     view: first(query[VIEW_KEY]) === 'topic' ? 'topic' : undefined,
     empty: 'Nothing has been published yet.',
-    offer: labOf(page),
     closing: closingOf(page, ROUTES.insights, 'insights-hub'),
   };
 }
@@ -321,6 +347,7 @@ export function insightsFormatProps(
   kind: InsightResourceKind,
   query: Query,
   pathFor: (kind: InsightResourceKind) => string = (k) => FORMAT_ROUTE[k],
+  { newsletter }: InsightsExtras = {},
 ): ListingIndexProps {
   const every = page.resources.items.filter((item) => item.kind === kind);
   const subjects = subjectsOf(page);
@@ -391,6 +418,7 @@ export function insightsFormatProps(
   const title = formatTitle(page, kind);
   const plural = FORMAT_NAME[kind].toLowerCase();
   const content = insightFormatPage({
+    offer: labTile(page),
     kind: kind as InsightKind,
     items: filtered.map((item) => toItem(item, subjects)),
     page: current,
@@ -437,6 +465,7 @@ export function insightsFormatProps(
     hero: { title, lede: [formatLine(page, kind)], arrangement: 'plain' },
     label: title,
     railLabel: 'Insights by type',
+    railAside: newsletterCard(newsletter),
     picker: {
       label: 'By type',
       menu: true,
@@ -451,7 +480,6 @@ export function insightsFormatProps(
       content,
     },
     empty: 'Nothing has been published here yet.',
-    offer: labOf(page),
     closing: closingOf(page, FORMAT_ROUTE[kind], `insights-${FORMAT_NAME[kind].toLowerCase()}`),
   };
 }

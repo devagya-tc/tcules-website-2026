@@ -219,6 +219,28 @@ export default function IslandSpecimen() {
         </Island>
       </Band>
 
+      <Band surface="paper">
+        <Caption
+          title="size sm · the tile — one cell of a grid"
+          note="A block (24) inset on every side at every width, every island's radius, and the full height of its cell: beside a taller neighbour it stretches to end level with it. OfferTile is its one consumer (25 Oct 2026)."
+        />
+        <Layout columns={{ md: 3 }} colGap="gutter" rowGap="column">
+          <Island surface="tint" size="sm">
+            <p className={s.specNote}>A tile on a paper band, its own copy short.</p>
+          </Island>
+          <Island surface="tint" size="sm">
+            <TextureCorner />
+            <Layout rowGap="block">
+              <p className={s.specTitle}>Its neighbour</p>
+              <p className={s.specNote}>
+                Longer copy sets the row&rsquo;s height, and the tile beside it fills to the same
+                depth. The corner field arrives from the tile&rsquo;s own edge.
+              </p>
+            </Layout>
+          </Island>
+        </Layout>
+      </Band>
+
       {/* Blue and ink exist for one placement, the enquiry close, so they are rendered AS that close:
           CtaSection composes the Island, its TextureFrame, the [5, 7] split and the form's paper
           panel. A stand-in box would show an island nobody ships. */}

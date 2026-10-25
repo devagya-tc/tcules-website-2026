@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { cx } from '@/lib/cx';
 import styles from './Island.module.css';
 
 /**
@@ -25,6 +26,13 @@ export type IslandProps = {
    * a paper band draws nothing. The primitive cannot see its band, so the patterns enforce that.
    */
   surface: IslandSurface;
+  /**
+   * `md` (default) is the band's island: a section's object, its inset the band's air in miniature.
+   * `sm` is a TILE (owner, 25 Oct 2026, a listing's offer among its cards): one cell of a grid, its
+   * inset the `block` step a card's copy keeps from its picture, and it fills its cell's height so
+   * it stands as tall as the cards beside it. The radius is every island's.
+   */
+  size?: 'md' | 'sm';
   children: ReactNode;
 };
 
@@ -45,9 +53,9 @@ export type IslandProps = {
  * `className`, by design — its ground, inset and radius are the whole component, and a class that
  * moved any of them would be rule 5 (never override a surface from outside) one level down.
  */
-export function Island({ surface, children }: IslandProps) {
+export function Island({ surface, size = 'md', children }: IslandProps) {
   return (
-    <div className={styles.island} data-surface={surface}>
+    <div className={cx(styles.island, size === 'sm' && styles.sm)} data-surface={surface}>
       {children}
     </div>
   );

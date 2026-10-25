@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsPage } from '@/content';
+import { getInsightsPage, getNavigation } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { ListingIndex } from '@/templates';
 
@@ -57,9 +57,15 @@ export async function generateMetadata(): Promise<Metadata> {
  * /design/listing-index runs the same mapping over the stress fixture.
  */
 export default async function InsightsPage({ searchParams }: InsightsPageProps) {
-  const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
+  const [page, query, { footer }] = await Promise.all([
+    getInsightsPage(INSIGHTS_SLUG),
+    searchParams,
+    getNavigation(),
+  ]);
 
   if (!page) notFound();
 
-  return <ListingIndex {...insightsIndexProps(page, query)} />;
+  return (
+    <ListingIndex {...insightsIndexProps(page, query, { newsletter: footer.newsletter })} />
+  );
 }

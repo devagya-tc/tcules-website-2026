@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsPage, type InsightResourceKind } from '@/content';
+import { getInsightsPage, getNavigation, type InsightResourceKind } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { ListingIndex } from '@/templates';
 
@@ -45,9 +45,19 @@ export function formatRoute(kind: InsightResourceKind) {
   }
 
   async function FormatPage({ searchParams }: FormatPageProps) {
-    const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
+    const [page, query, { footer }] = await Promise.all([
+      getInsightsPage(INSIGHTS_SLUG),
+      searchParams,
+      getNavigation(),
+    ]);
     if (!page || !page.resources.items.some((item) => item.kind === kind)) notFound();
-    return <ListingIndex {...insightsFormatProps(page, kind, query)} />;
+    return (
+      <ListingIndex
+        {...insightsFormatProps(page, kind, query, undefined, {
+          newsletter: footer.newsletter,
+        })}
+      />
+    );
   }
 
   return { generateMetadata, FormatPage };

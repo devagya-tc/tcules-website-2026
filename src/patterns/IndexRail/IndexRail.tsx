@@ -75,6 +75,12 @@ export type IndexRailProps = {
    * so the reader can step back up without the breadcrumb (owner, 25 Oct 2026). Menu only.
    */
   parent?: IndexRailItem;
+  /**
+   * What sits under the rail from 1024 (owner, 25 Oct 2026: the newsletter's card, after
+   * claude.com/resources): outside the nav, a stack under it, the pair sticking as one. Below 1024
+   * the rail is a one-line bar with no room under it, and the aside is not drawn.
+   */
+  aside?: ReactNode;
   /** The nav's accessible name. */
   ariaLabel: string;
   /** The content column, when the modes carry no panels (a picker of pages beside one listing). */
@@ -117,6 +123,7 @@ export function IndexRail({
   label = 'Jump to',
   menu = false,
   parent,
+  aside,
   ariaLabel,
   children,
   className,
@@ -442,7 +449,14 @@ export function IndexRail({
   return (
     <div ref={rootRef} className={styles.frame}>
       <Layout columns={{ lg: [1, 4] }} colGap="column" rowGap="stack" align="start">
-        {rail}
+        {aside ? (
+          <Layout rowGap="stack" className={styles.side}>
+            {rail}
+            <div className={styles.aside}>{aside}</div>
+          </Layout>
+        ) : (
+          rail
+        )}
         <div className={styles.content}>
           {views
             ? modes.map((m) => (

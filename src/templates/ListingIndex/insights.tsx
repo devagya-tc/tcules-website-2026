@@ -78,12 +78,15 @@ export function insightViews({
   items,
   formats = [],
   topics = [],
+  offer,
 }: {
   /** Every resource, newest first. */
   items: readonly InsightItem[];
   formats?: readonly InsightFormat[];
   /** The topics, industry excluded (a reader's sector, not a subject). */
   topics?: readonly InsightTopic[];
+  /** One offer among the cards (an OfferTile), once per view: see `offerAt`. */
+  offer?: ReactNode;
 }): ListingView[] {
   const byType = TYPE_ORDER.flatMap((kind) => {
     const all = items.filter((item) => item.kind === kind);
@@ -103,25 +106,42 @@ export function insightViews({
   const typeLead = byType[0] ? typeGroup(byType[0].kind, byType[0].items).lead : undefined;
   const byTopic = curateTopics(items, topics, typeLead?.id);
 
-  const typeSections: ListingSection[] = byType.map((section) => ({
+  const typeOffer = offerAt(
+    byType.map((section) =>
+      section.kind === 'event' ? 0 : typeGroup(section.kind, section.items).cards.length,
+    ),
+  );
+  const topicOffer = offerAt(byTopic.map((section) => section.group.cards.length));
+
+  const typeSections: ListingSection[] = byType.map((section, index) => ({
     id: typeAnchor(section.kind),
     heading: section.title,
     count: section.items.length,
     link: section.href ? { href: section.href } : undefined,
-    content: <TypeShape kind={section.kind} items={section.items} />,
-  }));
-  const topicSections: ListingSection[] = byTopic.map((section) => ({
-    id: topicAnchor(section),
-    heading: section.label,
-    count: section.size,
     content: (
-      <Feature
-        lead={section.group.lead}
-        cards={section.group.cards}
-        meta={{ withKind: true }}
+      <TypeShape
+        kind={section.kind}
+        items={section.items}
+        tail={index === typeOffer ? offer : undefined}
       />
     ),
   }));
+  const topicSections: ListingSection[] = byTopic.map((section, index) => {
+    const tail = index === topicOffer ? offer : undefined;
+    return {
+      id: topicAnchor(section),
+      heading: section.label,
+      count: section.size,
+      content: (
+        <Feature
+          lead={section.group.lead}
+          cards={withRoomFor(section.group.cards, tail)}
+          meta={{ withKind: true }}
+          tail={tail}
+        />
+      ),
+    };
+  });
 
   return [
     { id: 'type', label: 'By type', sections: typeSections },
@@ -129,6 +149,23 @@ export function insightViews({
       ? [{ id: 'topic', label: 'By topic', sections: topicSections }]
       : []),
   ];
+}
+
+/* ── The offer: one tile among the cards ──────────────────────────────────────────
+   One offer per view, as a cell of a card grid (owner, 25 Oct 2026). It closes the SECOND group that
+   has cards, so a reader meets it after one whole group rather than before any (claude.com/resources
+   sets its own in the second section); where only one group has cards, that one. It takes the last
+   card's cell, so a row of three stays a row of three and two halves become a row of three. */
+
+/** Which group (by index) carries the offer, from each group's card count; -1 for none. */
+function offerAt(cardCounts: readonly number[]): number {
+  const withCards = cardCounts.flatMap((count, index) => (count >= 2 ? [index] : []));
+  return withCards[1] ?? withCards[0] ?? -1;
+}
+
+/** A group's cards with the cell the offer takes: the last, unless it was two (halves → three). */
+function withRoomFor<T>(cards: readonly T[], tail: ReactNode): readonly T[] {
+  return tail && cards.length >= 3 ? cards.slice(0, -1) : cards;
 }
 
 /* ── A group: its lead, then its cards ──────────────────────────────────────────── */
@@ -181,16 +218,18 @@ function typeGroup(kind: InsightKind, items: readonly InsightItem[]): Group {
 function TypeShape({
   kind,
   items,
+  tail,
 }: {
   kind: InsightKind;
   items: readonly InsightItem[];
+  tail?: ReactNode;
 }): ReactNode {
   /* Events keep their dates: the day as a numeral at each row's start, the h4 title beside it. */
   if (kind === 'event') {
     return <Dates items={byEventDate(items).slice(0, EVENT_TAKE)} size="lg" />;
   }
   const group = typeGroup(kind, items);
-  return <Feature lead={group.lead} cards={group.cards} />;
+  return <Feature lead={group.lead} cards={withRoomFor(group.cards, tail)} tail={tail} />;
 }
 
 /* ── BY TOPIC · curation ──────────────────────────────────────────────────────── */
@@ -328,6 +367,7 @@ export function insightFormatPage({
   moreHref,
   today,
   filters,
+  offer,
 }: {
   kind: InsightKind;
   /** Every piece of this format that the filters let through, newest first. */
@@ -343,6 +383,8 @@ export function insightFormatPage({
   today?: string;
   /** The search and the filters over the page (owner, 23 Oct 2026). Absent, none are drawn. */
   filters?: FormatFilters;
+  /** One offer closing the first grid (an OfferTile). Not drawn over a search or a filter. */
+  offer?: ReactNode;
 }): ReactNode {
   const shape = SHAPE[kind];
   const meta: MetaOptions = {};
@@ -352,21 +394,23 @@ export function insightFormatPage({
   /* The pages read so far: the lead and a page's worth, then a page's worth more per "Show more". */
   const shownCount = 1 + page * pageSize;
   const pageOf = (index: number) => (index === 0 ? 0 : Math.floor((index - 1) / pageSize));
-  const more = moreHref ? (
-    /* Where the reader is, then the way on — only while there is more to show. */
-    <Cluster colGap="block" rowGap="text" align="center">
-      <p className={styles.count}>{`${Math.min(shownCount, total)} of ${total}`}</p>
-      <Button
-        as="a"
-        href={moreHref}
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name="alt-arrow-down" />}
-      >
-        Show more
-      </Button>
-    </Cluster>
-  ) : null;
+  /* Where the reader is (`shown` pieces, an offer's cell not among them), then the way on — only
+     while there is more to show. */
+  const more = (shown: number) =>
+    moreHref ? (
+      <Cluster colGap="block" rowGap="text" align="center">
+        <p className={styles.count}>{`${Math.min(shown, total)} of ${total}`}</p>
+        <Button
+          as="a"
+          href={moreHref}
+          emphasis="link"
+          tone="primary"
+          icon={<Icon name="alt-arrow-down" />}
+        >
+          Show more
+        </Button>
+      </Cluster>
+    ) : null;
 
   let content: ReactNode;
   if (items.length === 0) {
@@ -411,7 +455,7 @@ export function insightFormatPage({
             </Layout>
           </section>
         ))}
-        {more}
+        {more(shownCount)}
       </Layout>
     );
   } else {
@@ -419,18 +463,29 @@ export function insightFormatPage({
        rest as rows. The hub's lead leads here too, so its group reads as the same group, opened up. */
     const { pictured } = partition(items);
     const [lead, ...others] = leadFirst(pictured);
-    const cardCount =
-      others.length >= 3 ? others.length - (others.length % 3) : others.length === 2 ? 2 : 0;
+    /* The offer takes a card's cell, so with it the cards are one short of a multiple of three. */
+    const tile = lead && others.length >= 2 && !filters?.active ? offer : undefined;
+    const cardCount = tile
+      ? others.length - ((others.length + 1) % 3)
+      : others.length >= 3
+        ? others.length - (others.length % 3)
+        : others.length === 2
+          ? 2
+          : 0;
     const cards = others.slice(0, cardCount);
     const rows = items.filter((item) => item !== lead && !cards.includes(item));
-    const order = [...(lead ? [lead] : []), ...cards, ...rows];
+    /* The offer stands in the order as a cell of its own, at the end of the first page's cards. */
+    const OFFER = 'offer' as const;
+    const order: (InsightItem | typeof OFFER)[] = [...(lead ? [lead] : []), ...cards, ...rows];
+    if (tile) order.splice(Math.min(pageSize, cardCount + 1), 0, OFFER);
     /* Each page's cards and rows, so "Show more" lands on the first piece it added. A page is a
        multiple of three, so every page's cards fill their rows. */
-    const pages: { cards: InsightItem[]; rows: InsightItem[] }[] = [];
+    const pages: { cards: InsightItem[]; rows: InsightItem[]; tail?: ReactNode }[] = [];
     order.slice(0, shownCount).forEach((item, index) => {
       const at = pageOf(index);
       pages[at] ??= { cards: [], rows: [] };
-      if (cards.includes(item)) pages[at].cards.push(item);
+      if (item === OFFER) pages[at].tail = tile;
+      else if (cards.includes(item)) pages[at].cards.push(item);
       else if (item !== lead) pages[at].rows.push(item);
     });
     const shownRows = pages.some((entry) => entry.rows.length > 0);
@@ -451,7 +506,12 @@ export function insightFormatPage({
       <Layout rowGap="section">
         {lead ? (
           <Layout rowGap="column">
-            <Feature lead={lead} cards={pages[0]?.cards ?? []} titleAs="h2" />
+            <Feature
+              lead={lead}
+              cards={pages[0]?.cards ?? []}
+              tail={pages[0]?.tail}
+              titleAs="h2"
+            />
             {pages.slice(1).map((entry, index) => (
               <CardGrid
                 key={index}
@@ -476,7 +536,7 @@ export function insightFormatPage({
           /* A search's results with no lead: the rows under the results line, no heading. */
           rowList
         ) : null}
-        {more}
+        {more(shownCount - (pages[0]?.tail ? 1 : 0))}
       </Layout>
     );
   }

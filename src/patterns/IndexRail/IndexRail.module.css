@@ -27,6 +27,31 @@
   min-inline-size: 0;
 }
 
+/* The rail with something under it (`aside`): from 1024 the pair sticks as one, so the card rides
+   with the list rather than scrolling away beneath it. Below 1024 the wrapper steps aside and the
+   bar sticks on its own, as it does without one. */
+@media (min-width: 1024px) {
+  .side {
+    position: sticky;
+    inset-block-start: var(--irl-sticky-top);
+    z-index: var(--irl-z);
+  }
+
+  .side > .root {
+    position: static;
+  }
+}
+
+@media (max-width: 1023px) {
+  .frame .side {
+    display: contents;
+  }
+
+  .aside {
+    display: none;
+  }
+}
+
 /* The bar: the positioning context for a phone's opened list (it arranges nothing). */
 .bar {
   position: relative;

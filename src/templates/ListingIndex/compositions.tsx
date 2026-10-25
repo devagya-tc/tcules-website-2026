@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { Layout } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
@@ -223,14 +225,18 @@ export function CardGrid({
   meta,
   titleAs = 'h3',
   id,
+  tail,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
   id?: string;
+  /** A cell after the cards that is not a piece (an OfferTile, owner, 25 Oct 2026). It counts
+      toward the row, so two cards and a tail are a row of three, not halves. */
+  tail?: ReactNode;
 }) {
-  if (cards.length === 0) return null;
-  const halves = cards.length === 2;
+  if (cards.length === 0 && !tail) return null;
+  const halves = cards.length === 2 && !tail;
   return (
     <Layout as="ul" id={id} columns={{ md: halves ? 2 : 3 }} colGap="gutter" rowGap="column">
       {cards.map((item) => (
@@ -244,6 +250,7 @@ export function CardGrid({
           compact
         />
       ))}
+      {tail ? <li>{tail}</li> : null}
     </Layout>
   );
 }
@@ -309,11 +316,14 @@ export function Feature({
   cards,
   meta,
   titleAs = 'h3',
+  tail,
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
+  /** The cell that closes the grid (CardGrid `tail`). */
+  tail?: ReactNode;
 }) {
   return (
     <Layout rowGap="column">
@@ -331,7 +341,7 @@ export function Feature({
           />
         </ul>
       ) : null}
-      <CardGrid cards={cards} meta={meta} titleAs={titleAs} />
+      <CardGrid cards={cards} meta={meta} titleAs={titleAs} tail={tail} />
     </Layout>
   );
 }

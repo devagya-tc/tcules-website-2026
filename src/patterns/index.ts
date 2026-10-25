@@ -428,3 +428,11 @@ export {
 /* Bento — linked tiles of two sizes on four tracks, each a name, a line and its drawing, over one
    continuous texture per row (home "What we do", owner 19 Oct 2026). */
 export { Bento, type BentoItem, type BentoProps } from './Bento';
+
+/* NewsletterCard — the newsletter's sign-up as one small panel in a listing's rail: the letter, the
+   name and line, the field and its arrow (owner, 25 Oct 2026, after claude.com/resources). */
+export { NewsletterCard, type NewsletterCardProps } from './NewsletterCard';
+
+/* OfferTile — one offer as a cell among a grid's cards: an island at the tile size, glyph, title,
+   line and arrowed link, as tall as its row (owner, 25 Oct 2026). */
+export { OfferTile, type OfferTileProps } from './OfferTile';

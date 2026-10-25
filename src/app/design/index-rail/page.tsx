@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 import { Icon, Layout, Section } from '@/components';
-import { ROUTES } from '@/lib/routes';
-import { IndexRail } from '@/patterns';
+import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { IndexRail, NewsletterCard } from '@/patterns';
 
 import { Box, Specimen } from '../_specimen/Specimen';
 
@@ -126,11 +126,21 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
       <Section aria-label="Menu">
         <Specimen
           title="picker as a menu — the current page named, its siblings under it"
-          note="menu: a <details> control naming the current page, each entry led by its glyph; open, the list hangs, its parent page first over a rule, under it on the same ground. Shuts on Escape, a choice or a press outside. A format page's rail (23 Oct 2026)."
+          note="menu: a <details> control naming the current page, each entry led by its glyph; open, the list hangs under it on the same ground, its parent page first over a rule. Shuts on Escape, a choice or a press outside. From 1024 an aside sits under the rail (the newsletter's card, 25 Oct 2026) and sticks with it. A format page's rail (23 Oct 2026)."
         >
           <IndexRail
             ariaLabel="Formats as a menu"
             menu
+            aside={
+              <NewsletterCard
+                title="Beyond Interfaces"
+                description="A deep dive into the intersection of design, strategy, and product innovation."
+                action={ENDPOINTS.newsletter}
+                fieldLabel="Email address"
+                placeholder="you@company.com"
+                submitLabel="Subscribe"
+              />
+            }
             parent={{
               label: 'All insights',
               href: ROUTES.insights,

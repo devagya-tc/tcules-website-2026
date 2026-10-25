@@ -1,0 +1,86 @@
+/* ══ Component layer — NewsletterCard ════════════════════════════════════════════
+   Tier 2. The newsletter's sign-up as one small panel in a listing's rail (owner, 25 Oct 2026, after
+   claude.com/resources): the letter glyph, the newsletter's name and line, the field and its arrow.
+
+   Naming: --nlc-{part}-{role}
+     parts: (panel: ground, inset, radius) | rule | glyph | title | body
+
+   A panel, not a card in a set: a white ground and a hairline, as IndexRail's menu and the
+   FilterPanel beside it. Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The panel's air: the `text` step, a dense cell's padding — the rail is narrow, and the field
+     needs the width. */
+  --nlc-inset: var(--gap-text);
+  --nlc-radius: var(--radius-8);
+  --nlc-rule-width: var(--border-width-hairline);
+  /* The name: the smallest sans title, a card title's voice at the rail's scale. */
+  --nlc-title-text: var(--text-h6);
+  --nlc-title-tracking: var(--text-h6-tracking);
+  /* The line: a card's body. */
+  --nlc-body-text: var(--text-body-sm);
+  /* The field's box, restated by value from Input's (a component never reads another's tokens):
+     the radius, and the optical insets round the bare value and the 32 arrow, so the box stands
+     about as tall as Input's 40. */
+  --nlc-well-radius: var(--radius-8);
+  --nlc-well-inset: var(--space-4); /* optical control inset, not layout spacing */
+  --nlc-well-inset-start: var(--space-12); /* optical control inset, as Input's padding-x */
+  --nlc-ring-width: var(--focus-ring-width);
+  --nlc-ring-offset: var(--focus-ring-offset);
+  --nlc-duration: var(--duration-fast);
+  --nlc-easing: var(--easing-standard);
+  /* The visually hidden label's box: one pixel, the standard clip. */
+  --nlc-hidden-size: 1px;
+}
+
+:root,
+[data-surface='paper'] {
+  --nlc-ground: var(--color-white);
+  --nlc-rule-ink: var(--color-neutral-200); /* decoration: the panel's edge */
+  --nlc-glyph-ink: var(--color-neutral-900);
+  --nlc-title-ink: var(--color-neutral-900); /* 17.4:1 on white */
+  --nlc-body-ink: var(--color-neutral-700);
+  --nlc-well-bg: var(--color-white);
+  --nlc-well-rule: var(--color-neutral-300);
+  --nlc-well-rule-hover: var(--color-neutral-500);
+  --nlc-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='tint'] {
+  --nlc-ground: var(--color-white);
+  --nlc-rule-ink: var(--color-neutral-300); /* decoration: the panel's edge */
+  --nlc-glyph-ink: var(--color-neutral-900);
+  --nlc-title-ink: var(--color-neutral-900);
+  --nlc-body-ink: var(--color-neutral-700);
+  --nlc-well-bg: var(--color-paper);
+  --nlc-well-rule: var(--color-neutral-400);
+  --nlc-well-rule-hover: var(--color-neutral-600);
+  --nlc-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='ink'] {
+  --nlc-ground: var(--color-neutral-900);
+  --nlc-rule-ink: var(--color-neutral-700); /* decoration: the panel's edge */
+  --nlc-glyph-ink: var(--color-white);
+  --nlc-title-ink: var(--color-white);
+  --nlc-body-ink: var(--color-neutral-300);
+  --nlc-well-bg: var(--color-neutral-900);
+  --nlc-well-rule: var(--color-neutral-700);
+  --nlc-well-rule-hover: var(--color-neutral-500);
+  --nlc-ring-color: var(--color-brandeis-300);
+}
+
+[data-surface='blue'] {
+  --nlc-ground: var(--color-brandeis-600);
+  --nlc-rule-ink: var(--color-brandeis-300); /* decoration: the panel's edge */
+  --nlc-glyph-ink: var(--color-white);
+  --nlc-title-ink: var(--color-white);
+  --nlc-body-ink: var(--color-brandeis-50);
+  /* The card's own ground: the bare address takes the surface's white ink, so a white box would
+     swallow it. */
+  --nlc-well-bg: var(--color-brandeis-600);
+  --nlc-well-rule: var(--color-brandeis-300);
+  --nlc-well-rule-hover: var(--color-brandeis-100);
+  --nlc-ring-color: var(--color-white);
+}

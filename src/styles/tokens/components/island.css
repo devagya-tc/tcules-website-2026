@@ -35,6 +35,11 @@
      island read as one more card; at 24 it floats. Every island takes it, since an island is one
      kind of object. Was 8 (docs/specs/Island.md § 17, Q2). */
   --isl-radius: var(--radius-24);
+  /* The tile (`size="sm"`, owner, 25 Oct 2026): one cell of a card grid. A `block` (24) on every
+     side, the step a card's copy keeps from its picture, at every width — a tile does not take the
+     band's air. */
+  --isl-inset-block-sm: var(--gap-block);
+  --isl-inset-inline-sm: var(--gap-block);
 }
 
 /* Phone: 48 above and below, as from 768, and the container `gutter` (32) at the sides, because 48

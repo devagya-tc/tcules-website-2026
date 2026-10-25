@@ -1,0 +1,61 @@
+/* NewsletterCard — Layout stacks the glyph, the words and the field, and sets the field beside its
+   arrow; this module owns the panel's ground, edge and inset, the type and inks, and the hidden
+   label. Every value is --nlc-*. */
+.root {
+  padding: var(--nlc-inset);
+  border: var(--nlc-rule-width) solid var(--nlc-rule-ink);
+  border-radius: var(--nlc-radius);
+  background-color: var(--nlc-ground);
+}
+
+.glyph {
+  display: block;
+  color: var(--nlc-glyph-ink);
+}
+
+.title {
+  color: var(--nlc-title-ink);
+  font: var(--nlc-title-text);
+  letter-spacing: var(--nlc-title-tracking);
+}
+
+.body {
+  color: var(--nlc-body-ink);
+  font: var(--nlc-body-text);
+}
+
+/* The field's box, round the bare address and its arrow: Input's box restated by value (a pattern
+   never reads Input's tokens), so it reads as the same control. */
+.well {
+  padding-block: var(--nlc-well-inset);
+  padding-inline: var(--nlc-well-inset-start) var(--nlc-well-inset);
+  border: var(--nlc-rule-width) solid var(--nlc-well-rule);
+  border-radius: var(--nlc-well-radius);
+  background-color: var(--nlc-well-bg);
+  transition: border-color var(--nlc-duration) var(--nlc-easing);
+}
+
+.well:hover {
+  border-color: var(--nlc-well-rule-hover);
+}
+
+/* Focus on the address rings the whole box; the arrow keeps its own ring. */
+.well:has(input:focus-visible) {
+  outline: var(--nlc-ring-width) solid var(--nlc-ring-color);
+  outline-offset: var(--nlc-ring-offset);
+}
+
+.field {
+  display: block;
+  min-inline-size: 0;
+}
+
+/* The field's name for a screen reader: the standard visually hidden box. */
+.hidden {
+  position: absolute;
+  inline-size: var(--nlc-hidden-size);
+  block-size: var(--nlc-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
