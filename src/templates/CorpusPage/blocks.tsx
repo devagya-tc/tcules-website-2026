@@ -385,6 +385,15 @@ const ENQUIRY_DESK = {
   kind: 'illustration',
 } as const;
 
+/** The halves close's drawing (owner, 25 Oct 2026; scripts/enquiry-sketch-to-shipped.mjs). */
+const ENQUIRY_SKETCH_TO_SHIPPED = {
+  src: '/illustrations/enquiry/sketch-to-shipped.svg',
+  alt: '',
+  width: 455,
+  height: 379,
+  kind: 'illustration',
+} as const;
+
 /**
  * The island close's two form dresses (owner, 16 Oct 2026). Their framing words are not in the
  * corpus: the owner approved them for shipping, and they are logged in docs/content-changes.md for
@@ -393,10 +402,16 @@ const ENQUIRY_DESK = {
  */
 const ENQUIRY_PROMPT = 'A link, a Figma file, or two lines about the problem.';
 const ENQUIRY_WRITE_TO = 'hello@tcules.com';
-const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
+const ENQUIRY_DRESS: Record<'card' | 'card-untitled' | 'message', EnquiryDress> = {
   card: {
     kind: 'card',
     title: 'Start a project',
+    prompt: ENQUIRY_PROMPT,
+    reply: 'We reply in 1 business day',
+  },
+  /* The card with no title of its own (owner, 25 Oct 2026): the band's heading already asks. */
+  'card-untitled': {
+    kind: 'card',
     prompt: ENQUIRY_PROMPT,
     reply: 'We reply in 1 business day',
   },
@@ -437,12 +452,37 @@ export function EnquiryBand({
        * form, all on a blue or ink island on a paper band, the form on a paper panel in one of its
        * two dresses, the island's texture framing it. It takes no `surface`: the band goes paper.
        */
-      island: { surface: 'blue' | 'ink'; dress: 'card' | 'message' };
+      island: {
+        surface: 'blue' | 'ink';
+        dress: 'card' | 'card-untitled' | 'message';
+        /**
+         * `beside` (default): the desk drawing, heading and lede beside the form, TextureFrame
+         * framing it. `halves` (owner, 25 Oct 2026): the island split 1:1, the sketch-to-shipped
+         * drawing above the words, the TextureFlow field across the island, fading at the start.
+         * The drawing and the field come with the arrangement, so the two never mix.
+         */
+        arrangement?: 'beside' | 'halves';
+      };
       surface?: never;
     }
 )) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
   const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
+  if (island?.arrangement === 'halves') {
+    return (
+      <CtaSection
+        id={band.id}
+        data-band="L"
+        island={island.surface}
+        islandArrangement="halves"
+        islandTexture="flow"
+        art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
+        heading={band.headingText}
+        body={body}
+        form={corpusEnquiryForm(page, band, { dress: ENQUIRY_DRESS[island.dress] })}
+      />
+    );
+  }
   if (island) {
     return (
       <CtaSection
