@@ -19,6 +19,18 @@ unless I choose it; if something is in the way, tell me what and my choices, and
    - If node or npm is missing or too old, tell me to install Node LTS from nodejs.org and stop until
      I say done. If node is installed but not found (`where node` on Windows, `which node`
      elsewhere), say so: the repo's hooks call `node` from PATH.
+   - On Windows, before I install anything, ask me to look at Windows Security → App & browser
+     control → Smart App Control. If it's On, an installer may be blocked part-way (Node's fails with
+     error 1603 or 1723). Never tell me to turn it off; use the zip instead:
+     - Node: download the official Node LTS zip for Windows x64 from nodejs.org, unzip it to
+       `%LOCALAPPDATA%\Programs\nodejs` (the folder holding `node.exe`), and add that folder to my
+       user PATH, keeping what's already there.
+     - GitHub CLI, if its installer is blocked the same way: the Windows amd64 zip from
+       github.com/cli/cli/releases, unzipped to `%LOCALAPPDATA%\Programs\gh`, with its `bin` folder
+       added to my user PATH.
+     - Then tell me to end Claude in Task Manager (Ctrl+Shift+Esc, right-click Claude, End task) and
+       reopen it, and to come back with `/onboard`. Closing the window isn't enough: Claude keeps
+       running in the background and only sees the new PATH once it fully restarts.
    - If gh is missing, tell me to install GitHub CLI from cli.github.com and stop until I say done.
    - Run `gh auth status`. If I'm not signed in, run `gh auth login --web --git-protocol ssh` and tell
      me to finish the sign-in in the browser it opens; wait for me.
@@ -53,9 +65,13 @@ unless I choose it; if something is in the way, tell me what and my choices, and
    read my username and id with `gh api user --jq '.login, .id'` and set
    `git config user.email "<id>+<login>@users.noreply.github.com"`. Never put a work email here:
    the repo is public.
-6. Install and check. Run `npm ci` in the clone (the checks need it). Then check I can reach the
-   repo: `gh repo view devagya-tc/tcules-website-2026 --json viewerPermission`. Anything less than
-   WRITE means I can't open pull requests yet: tell me to ask Devagya for access, and carry on.
+6. Install and check. Run `npm ci` in the clone (the checks need it). If it fails, run it once more at
+   most; if it fails again (on Windows, often `esbuild.exe` blocked by Smart App Control), tell me in
+   plain words that the full set of checks can't be installed on this laptop, and carry on. I can still
+   work: the checks after each edit need only node, and every pull request is checked on GitHub. Then
+   check I can reach the repo: `gh repo view devagya-tc/tcules-website-2026 --json viewerPermission`.
+   Anything less than WRITE means I can't open pull requests yet: tell me to ask Devagya for access,
+   and carry on.
 7. Finish. Tell me in a short list what was set up and what still needs me, then ask me to open Claude
    Code in the clone folder, accept "trust this folder", and check that the first reply names me and
    says what's happening on GitHub. New worktrees get my identity and settings automatically
