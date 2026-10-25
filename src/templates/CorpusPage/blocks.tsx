@@ -402,7 +402,7 @@ const ENQUIRY_SKETCH_TO_SHIPPED = {
  */
 const ENQUIRY_PROMPT = 'A link, a Figma file, or two lines about the problem.';
 const ENQUIRY_WRITE_TO = 'hello@tcules.com';
-const ENQUIRY_DRESS: Record<'card' | 'card-untitled' | 'message', EnquiryDress> = {
+export const ENQUIRY_DRESS: Record<'card' | 'card-untitled' | 'message', EnquiryDress> = {
   card: {
     kind: 'card',
     title: 'Start a project',
