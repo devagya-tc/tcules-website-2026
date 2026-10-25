@@ -297,7 +297,7 @@ export default function CtaSectionSpecimenPage() {
       />
       <SpecimenNote
         title="1d · The flow close, in halves"
-        note="islandArrangement='halves' with islandTexture='flow' (owner, 23 Oct 2026). The island split 1:1, 96 apart: the words pinned to the foot of the start half, the title at a two-line measure, the card form centred in the end half on a panel with a `gutter` inset (owner, 25 Oct 2026). The field is TextureFlow: every cell of the site's grid an “=” turned along one flow — loose contour loops toward the start, easing into parallel streams 56 apart past the form — with the loose water churning slowly, and still and quieter behind the words. Two versions: the field alone, the start half left as open ground; and with the sketch-to-shipped drawing at ~300, a `stack` above the title, where the field fades out toward the start so the drawing sits on calm ground. Reduced motion draws the field once."
+        note="islandArrangement='halves' with islandTexture='flow' (owner, 23 Oct 2026). The island split 1:1, 96 apart: the words pinned to the foot of the start half, the title at a two-line measure, the card form centred in the end half on a panel with a `gutter` inset (owner, 25 Oct 2026). The field is TextureFlow: every cell of the site's grid an “=” turned along one flow — loose contour loops toward the start, easing into parallel streams 56 apart past the form — with the loose water churning slowly, and still and quieter behind the words. Two versions: the field alone, the start half left as open ground; and with the sketch-to-shipped drawing at ~300, a `stack` above the title, where the field fades out toward the start so the drawing sits on calm ground. The third is the second with no title on the form (owner, 25 Oct 2026): the card opens on its first field. Reduced motion draws the field once."
       />
       <CtaSection
         island="blue"
@@ -311,10 +311,19 @@ export default function CtaSectionSpecimenPage() {
         island="blue"
         islandTexture="flow"
         islandArrangement="halves"
-        art={<Media image={SKETCH_TO_SHIPPED} sizes="420px" />}
+        art={<Media image={SKETCH_TO_SHIPPED} sizes="300px" />}
         heading="Tell us what you're building"
         body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
+      />
+      <CtaSection
+        island="blue"
+        islandTexture="flow"
+        islandArrangement="halves"
+        art={<Media image={SKETCH_TO_SHIPPED} sizes="300px" />}
+        heading="Tell us what you're building"
+        body={['A sketch, a prototype or a product with years of history behind it. Start wherever you are.']}
+        form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={{ ...DRESS.card, title: undefined }} />}
       />
 
       <CtaSection

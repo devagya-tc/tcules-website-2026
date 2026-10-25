@@ -130,8 +130,12 @@ export type EnquiryChoiceGroup = {
 export type EnquiryDress =
   | {
       kind: 'card';
-      /** The form's own heading, an h3 under the band's h2: "Start a project". */
-      title: string;
+      /**
+       * The form's own heading, an h3 under the band's h2: "Start a project". Optional (owner,
+       * 25 Oct 2026): where the band's heading already asks, the card opens on its first field. The
+       * form's accessible name is its own label either way.
+       */
+      title?: string;
       /** The example in the big field: "A link, a Figma file, or two lines about the problem." */
       prompt?: string;
       /** The address offered in the foot as "or write to …", linked as mailto. */
@@ -1136,7 +1140,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
       return (
         <form {...formAttrs}>
           <Layout rowGap="block">
-            <h3 className={styles.dressTitle}>{dress.title}</h3>
+            {dress.title?.trim() ? <h3 className={styles.dressTitle}>{dress.title}</h3> : null}
             <Layout rowGap="text">
               {renderField(email, { visibleLabel: true, placeholder: 'you@company.com', look: 'fill' })}
               {renderField(FIELD.work, {
