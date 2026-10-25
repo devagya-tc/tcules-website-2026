@@ -138,14 +138,14 @@ const SPECIMENS = [
         note: 'a curated listing page’s rail beside its content — views (BY TYPE / BY TOPIC switching the whole column, held in ?view=) and a picker of sibling pages',
       },
       {
-        href: '/design/newsletter-card',
-        name: 'NewsletterCard',
-        note: 'the newsletter’s sign-up as a small panel in a listing’s rail — the letter, the name and line, the field with its arrow inside; 4 surfaces, stress, full column',
+        href: '/design/newsletter-field',
+        name: 'NewsletterField',
+        note: 'the newsletter’s sign-up as one field, the arrow inside the address’s box; 4 surfaces at a tile’s width, full column',
       },
       {
         href: '/design/offer-tile',
         name: 'OfferTile',
-        note: 'one offer as a cell among a grid’s cards — an island at the tile size, as tall as its row; in a row, tint and ink, bare, full column',
+        note: 'one offer as a cell among a grid’s cards — an island at the tile size, as tall as its row, its foot a link or a form; in a row, tint and ink, bare, full column',
       },
       {
         href: '/design/teaser',

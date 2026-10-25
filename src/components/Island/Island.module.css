@@ -30,9 +30,10 @@
 }
 
 /* The tile: the smaller inset, and the full height of the grid cell it sits in, so it ends level
-   with the cards beside it. */
+   with the cards beside it, at the cards' radius. */
 .sm {
   block-size: 100%;
+  border-radius: var(--isl-radius-sm);
   padding-block: var(--isl-inset-block-sm);
   padding-inline: var(--isl-inset-inline-sm);
 }

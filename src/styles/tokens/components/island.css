@@ -40,6 +40,9 @@
      band's air. */
   --isl-inset-block-sm: var(--gap-block);
   --isl-inset-inline-sm: var(--gap-block);
+  /* The tile's radius: the 8 its row's card covers take (owner, 25 Oct 2026: 24 "is too off" in a
+     row of cards). The 24 above is a band's island, floating; a tile is set in a grid. */
+  --isl-radius-sm: var(--radius-8);
 }
 
 /* Phone: 48 above and below, as from 768, and the container `gutter` (32) at the sides, because 48

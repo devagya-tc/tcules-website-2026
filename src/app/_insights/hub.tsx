@@ -1,7 +1,7 @@
 import type { InsightResource, InsightResourceKind, InsightsPage } from '@/content';
 import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { Icon, Media, type IconName } from '@/components';
-import { EnquiryForm, NewsletterCard, OfferTile, type SiteFooterNewsletter } from '@/patterns';
+import { EnquiryForm, NewsletterField, OfferTile, type SiteFooterNewsletter } from '@/patterns';
 import {
   ENQUIRY_DESK,
   ENQUIRY_DRESS,
@@ -202,6 +202,7 @@ export const formatsWithContent = (page: InsightsPage) =>
 const labTile = (page: InsightsPage) =>
   page.lab?.action ? (
     <OfferTile
+      eyebrow="Lab"
       title={page.lab.heading}
       body={page.lab.description}
       action={{ label: page.lab.action.label, href: page.lab.action.href }}
@@ -210,19 +211,25 @@ const labTile = (page: InsightsPage) =>
   ) : undefined;
 
 /**
- * The newsletter's card under the rail (owner, 25 Oct 2026, after claude.com/resources): the
- * footer's own newsletter, so the two never say different things. The route reads it from the
- * navigation; the specimen passes none.
+ * The newsletter as a tile among the cards (owner, 25 Oct 2026: the rail was too narrow to hold it):
+ * the footer's own newsletter, so the two never say different things, its field at the tile's foot.
+ * The route reads it from the navigation; the specimen passes none.
  */
-const newsletterCard = (newsletter?: SiteFooterNewsletter) =>
+const newsletterTile = (newsletter?: SiteFooterNewsletter) =>
   newsletter ? (
-    <NewsletterCard
+    <OfferTile
+      eyebrow="Newsletter"
       title={newsletter.title}
-      description={newsletter.description}
-      action={newsletter.action}
-      fieldLabel={newsletter.fieldLabel}
-      placeholder={newsletter.placeholder}
-      submitLabel={newsletter.cta.label}
+      body={newsletter.description}
+      glyph={<Icon name="letter" />}
+      form={
+        <NewsletterField
+          action={newsletter.action}
+          fieldLabel={newsletter.fieldLabel}
+          placeholder={newsletter.placeholder}
+          submitLabel={newsletter.cta.label}
+        />
+      }
     />
   ) : undefined;
 
@@ -310,9 +317,9 @@ export function insightsIndexProps(
     hero: { title: page.hero.heading, lede: lede ? [lede] : undefined },
     label: 'Insights',
     railLabel: 'Browse insights',
-    railAside: newsletterCard(newsletter),
     views: insightViews({
-      offer: labTile(page),
+      /* The newsletter first: the hub's second group carries it, the third the Lab. */
+      offers: [newsletterTile(newsletter), labTile(page)].filter(Boolean),
       items: page.resources.items.map((item) => toItem(item, subjects)),
       formats: formatsWithContent(page).map((kind) => ({
         kind: kind as InsightKind,
@@ -418,7 +425,9 @@ export function insightsFormatProps(
   const title = formatTitle(page, kind);
   const plural = FORMAT_NAME[kind].toLowerCase();
   const content = insightFormatPage({
-    offer: labTile(page),
+    /* A format page's one offer is the newsletter: a reader going through a format's archive is
+       the reader a monthly letter is for. */
+    offer: newsletterTile(newsletter),
     kind: kind as InsightKind,
     items: filtered.map((item) => toItem(item, subjects)),
     page: current,
@@ -465,7 +474,6 @@ export function insightsFormatProps(
     hero: { title, lede: [formatLine(page, kind)], arrangement: 'plain' },
     label: title,
     railLabel: 'Insights by type',
-    railAside: newsletterCard(newsletter),
     picker: {
       label: 'By type',
       menu: true,

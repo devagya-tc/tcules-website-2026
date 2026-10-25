@@ -1,0 +1,37 @@
+/* NewsletterField — Layout sets the address beside its arrow; this module owns the field's box
+   round them, its focus ring and the hidden label. Every value is --nlf-*. */
+/* The field's box, round the bare address and its arrow: Input's box restated by value (a pattern
+   never reads Input's tokens), so it reads as the same control. */
+.well {
+  padding-block: var(--nlf-well-inset);
+  padding-inline: var(--nlf-well-inset-start) var(--nlf-well-inset);
+  border: var(--nlf-rule-width) solid var(--nlf-well-rule);
+  border-radius: var(--nlf-well-radius);
+  background-color: var(--nlf-well-bg);
+  transition: border-color var(--nlf-duration) var(--nlf-easing);
+}
+
+.well:hover {
+  border-color: var(--nlf-well-rule-hover);
+}
+
+/* Focus on the address rings the whole box; the arrow keeps its own ring. */
+.well:has(input:focus-visible) {
+  outline: var(--nlf-ring-width) solid var(--nlf-ring-color);
+  outline-offset: var(--nlf-ring-offset);
+}
+
+.field {
+  display: block;
+  min-inline-size: 0;
+}
+
+/* The field's name for a screen reader: the standard visually hidden box. */
+.hidden {
+  position: absolute;
+  inline-size: var(--nlf-hidden-size);
+  block-size: var(--nlf-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

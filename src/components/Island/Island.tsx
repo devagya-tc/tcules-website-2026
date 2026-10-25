@@ -30,7 +30,7 @@ export type IslandProps = {
    * `md` (default) is the band's island: a section's object, its inset the band's air in miniature.
    * `sm` is a TILE (owner, 25 Oct 2026, a listing's offer among its cards): one cell of a grid, its
    * inset the `block` step a card's copy keeps from its picture, and it fills its cell's height so
-   * it stands as tall as the cards beside it. The radius is every island's.
+   * it stands as tall as the cards beside it. Its radius is the cards' 8, not a band island's 24.
    */
   size?: 'md' | 'sm';
   children: ReactNode;

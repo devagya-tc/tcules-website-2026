@@ -126,8 +126,6 @@ export type ListingIndexProps = {
   view?: string;
   /** The rail as a picker beside the page's own content. Exclusive with `views`. */
   picker?: ListingPicker;
-  /** What sits under the rail from 1024 (the newsletter's card; IndexRail `aside`). */
-  railAside?: ReactNode;
   /** What the band says when there is nothing to list ("Nothing has been published yet."). */
   empty: string;
   offer?: ListingOffer;
@@ -161,7 +159,6 @@ export function ListingIndex({
   views = [],
   view,
   picker,
-  railAside,
   empty,
   offer,
   closing,
@@ -178,7 +175,6 @@ export function ListingIndex({
     listing = (
       <IndexRail
         ariaLabel={railLabel}
-        aside={railAside}
         menu={picker.menu}
         parent={picker.parent}
         modes={[{ id: 'picker', label: picker.label, items: picker.items }]}
@@ -206,7 +202,6 @@ export function ListingIndex({
     listing = (
       <IndexRail
         ariaLabel={railLabel}
-        aside={railAside}
         initialMode={view}
         param="view"
         modes={shown.map((v) => ({

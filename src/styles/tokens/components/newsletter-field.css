@@ -1,0 +1,56 @@
+/* ══ Component layer — NewsletterField ═══════════════════════════════════════════
+   Tier 2. The newsletter's sign-up as one field: the address and its arrow inside one box (owner,
+   25 Oct 2026, after claude.com/resources). The box restates Input's by value.
+
+   Naming: --nlf-{part}-{role}
+     parts: well (the box: bg, rule, radius, inset) | rule | ring
+
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --nlf-rule-width: var(--border-width-hairline);
+  /* The field's box, restated by value from Input's (a component never reads another's tokens):
+     the radius, and the optical insets round the bare value and the 32 arrow, so the box stands
+     about as tall as Input's 40. */
+  --nlf-well-radius: var(--radius-8);
+  --nlf-well-inset: var(--space-4); /* optical control inset, not layout spacing */
+  --nlf-well-inset-start: var(--space-12); /* optical control inset, as Input's padding-x */
+  --nlf-ring-width: var(--focus-ring-width);
+  --nlf-ring-offset: var(--focus-ring-offset);
+  --nlf-duration: var(--duration-fast);
+  --nlf-easing: var(--easing-standard);
+  /* The visually hidden label's box: one pixel, the standard clip. */
+  --nlf-hidden-size: 1px;
+}
+
+:root,
+[data-surface='paper'] {
+  --nlf-well-bg: var(--color-white);
+  --nlf-well-rule: var(--color-neutral-300);
+  --nlf-well-rule-hover: var(--color-neutral-500);
+  --nlf-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='tint'] {
+  --nlf-well-bg: var(--color-paper);
+  --nlf-well-rule: var(--color-neutral-400);
+  --nlf-well-rule-hover: var(--color-neutral-600);
+  --nlf-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='ink'] {
+  --nlf-well-bg: var(--color-neutral-900);
+  --nlf-well-rule: var(--color-neutral-700);
+  --nlf-well-rule-hover: var(--color-neutral-500);
+  --nlf-ring-color: var(--color-brandeis-300);
+}
+
+[data-surface='blue'] {
+  /* The card's own ground: the bare address takes the surface's white ink, so a white box would
+     swallow it. */
+  --nlf-well-bg: var(--color-brandeis-600);
+  --nlf-well-rule: var(--color-brandeis-300);
+  --nlf-well-rule-hover: var(--color-brandeis-100);
+  --nlf-ring-color: var(--color-white);
+}

@@ -4,13 +4,16 @@
    tokens set the words on it.
 
    Naming: --oft-{part}-{role}
-     parts: glyph | title | body
+     parts: glyph | eyebrow | title | body
 
    The tile's own surface is declared by its Island, so every surface block declares every
    surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* The eyebrow: the cards' eyebrow step (12), so the tile's kind reads where their topics do. */
+  --oft-eyebrow-text: var(--text-eyebrow);
+  --oft-eyebrow-tracking: var(--text-eyebrow-tracking);
   /* The title: the grid's card title, the sans h5 (18), so the tile reads at its row's scale. */
   --oft-title-text: var(--text-h5);
   --oft-title-tracking: var(--text-h5-tracking);
@@ -21,6 +24,7 @@
 
 :root,
 [data-surface='paper'] {
+  --oft-eyebrow-ink: var(--color-neutral-600);
   --oft-glyph-ink: var(--color-brandeis-500);
   --oft-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --oft-body-ink: var(--color-neutral-700); /* 8.14:1 */
@@ -28,18 +32,21 @@
 
 /* Tint, the default tile: the body steps to 700, as every quiet ink does on paper-deep. */
 [data-surface='tint'] {
+  --oft-eyebrow-ink: var(--color-neutral-700);
   --oft-glyph-ink: var(--color-brandeis-600);
   --oft-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --oft-body-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 [data-surface='ink'] {
+  --oft-eyebrow-ink: var(--color-neutral-400);
   --oft-glyph-ink: var(--color-brandeis-300);
   --oft-title-ink: var(--color-white);
   --oft-body-ink: var(--color-neutral-300);
 }
 
 [data-surface='blue'] {
+  --oft-eyebrow-ink: var(--color-brandeis-100);
   --oft-glyph-ink: var(--color-white);
   --oft-title-ink: var(--color-white);
   --oft-body-ink: var(--color-brandeis-50);

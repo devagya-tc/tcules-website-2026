@@ -78,15 +78,15 @@ export function insightViews({
   items,
   formats = [],
   topics = [],
-  offer,
+  offers = [],
 }: {
   /** Every resource, newest first. */
   items: readonly InsightItem[];
   formats?: readonly InsightFormat[];
   /** The topics, industry excluded (a reader's sector, not a subject). */
   topics?: readonly InsightTopic[];
-  /** One offer among the cards (an OfferTile), once per view: see `offerAt`. */
-  offer?: ReactNode;
+  /** The offers among the cards (OfferTiles), each once per view, in order: see `offersAt`. */
+  offers?: readonly ReactNode[];
 }): ListingView[] {
   const byType = TYPE_ORDER.flatMap((kind) => {
     const all = items.filter((item) => item.kind === kind);
@@ -106,28 +106,26 @@ export function insightViews({
   const typeLead = byType[0] ? typeGroup(byType[0].kind, byType[0].items).lead : undefined;
   const byTopic = curateTopics(items, topics, typeLead?.id);
 
-  const typeOffer = offerAt(
+  const typeOffers = offersAt(
     byType.map((section) =>
       section.kind === 'event' ? 0 : typeGroup(section.kind, section.items).cards.length,
     ),
+    offers,
   );
-  const topicOffer = offerAt(byTopic.map((section) => section.group.cards.length));
+  const topicOffers = offersAt(
+    byTopic.map((section) => section.group.cards.length),
+    offers,
+  );
 
   const typeSections: ListingSection[] = byType.map((section, index) => ({
     id: typeAnchor(section.kind),
     heading: section.title,
     count: section.items.length,
     link: section.href ? { href: section.href } : undefined,
-    content: (
-      <TypeShape
-        kind={section.kind}
-        items={section.items}
-        tail={index === typeOffer ? offer : undefined}
-      />
-    ),
+    content: <TypeShape kind={section.kind} items={section.items} tail={typeOffers[index]} />,
   }));
   const topicSections: ListingSection[] = byTopic.map((section, index) => {
-    const tail = index === topicOffer ? offer : undefined;
+    const tail = topicOffers[index];
     return {
       id: topicAnchor(section),
       heading: section.label,
@@ -151,16 +149,23 @@ export function insightViews({
   ];
 }
 
-/* ── The offer: one tile among the cards ──────────────────────────────────────────
-   One offer per view, as a cell of a card grid (owner, 25 Oct 2026). It closes the SECOND group that
-   has cards, so a reader meets it after one whole group rather than before any (claude.com/resources
-   sets its own in the second section); where only one group has cards, that one. It takes the last
-   card's cell, so a row of three stays a row of three and two halves become a row of three. */
+/* ── The offers: tiles among the cards ─────────────────────────────────────────────
+   Each offer once per view, as a cell of a card grid (owner, 25 Oct 2026), one to a group. They
+   start at the SECOND group that has cards, so a reader meets the first after one whole group of
+   pieces (claude.com/resources sets its own in the second section), and take the groups after it in
+   order; where there are too few, the first group takes one too. An offer takes the last card's
+   cell, so a row of three stays a row of three and two halves become a row of three. */
 
-/** Which group (by index) carries the offer, from each group's card count; -1 for none. */
-function offerAt(cardCounts: readonly number[]): number {
+/** Each group's offer (by group index), from each group's card count. */
+function offersAt(
+  cardCounts: readonly number[],
+  offers: readonly ReactNode[],
+): Record<number, ReactNode> {
   const withCards = cardCounts.flatMap((count, index) => (count >= 2 ? [index] : []));
-  return withCards[1] ?? withCards[0] ?? -1;
+  const order = [...withCards.slice(1), ...withCards.slice(0, 1)];
+  return Object.fromEntries(
+    offers.flatMap((offer, i) => (order[i] === undefined ? [] : [[order[i], offer]])),
+  );
 }
 
 /** A group's cards with the cell the offer takes: the last, unless it was two (halves → three). */
