@@ -350,14 +350,16 @@ function present(node: ReactNode): boolean {
  */
 /**
  * `scale` picks the heading's step: `offer` h2 (the mid-page ask), `close` h1 (the split close),
- * `open` display (the centred open close). The element is an `h2` in all three.
+ * `open` display (the centred open close), `halves` the offer step at a two-line measure (the halves
+ * close, 25 Oct 2026). The element is an `h2` in all four.
  */
-type CtaHeadingScale = 'offer' | 'close' | 'open';
+type CtaHeadingScale = 'offer' | 'close' | 'open' | 'halves';
 
 const HEADING_CLASS: Record<CtaHeadingScale, string | undefined> = {
   offer: styles.heading,
   close: styles.headingClose,
   open: styles.headingOpen,
+  halves: styles.headingHalves,
 };
 
 function CtaLede({
@@ -1040,10 +1042,11 @@ export function CtaSection(props: CtaSectionProps) {
        a contact strip, when a caller passes them, follow the lede in the words' column as they do
        beside; the close is built for a heading and a lede, and each of them costs the fit. */
     /* ── Halves (23 Oct 2026): 1:1, the words at the foot of the start half ──────────────────
-       Two regions of different kind side by side, so the split's `section`. The start half pins its
-       last child — the words — to its foot (`pinLast`), the drawing above them; the words are the
-       field's still water (`data-texture-calm`). The panel centres on the row rather than
-       stretching to it, so it never grows empty paper under the form. */
+       Two regions of different kind side by side, so the split's `section`. The start half pins
+       one group to its foot (`pinLast`): the drawing, then a `stack` under it the words (owner,
+       25 Oct 2026: "right above the title with a 48px gap"). The words are the field's still water
+       (`data-texture-calm`). The panel centres on the row rather than stretching to it, so it
+       never grows empty paper under the form. */
     if (props.islandArrangement === 'halves') {
       const art = present(props.art);
       return (
@@ -1058,15 +1061,17 @@ export function CtaSection(props: CtaSectionProps) {
             {props.islandTexture === 'flow' ? <TextureFlow fade={art ? 'start' : undefined} /> : null}
             {props.islandTexture === 'frame' ? <TextureFrame /> : null}
             <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack">
-              <Layout rowGap="stack" pinLast>
-                {art ? <div className={styles.artLarge}>{props.art}</div> : null}
-                <div data-texture-calm>
-                  <Layout rowGap="block">
-                    {lede({ scale: 'offer' })}
-                    <CtaPoints shape="stack" markers={markers} points={points} />
-                    {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
-                  </Layout>
-                </div>
+              <Layout pinLast>
+                <Layout rowGap="stack">
+                  {art ? <div className={styles.artLarge}>{props.art}</div> : null}
+                  <div data-texture-calm>
+                    <Layout rowGap="block">
+                      {lede({ scale: 'halves' })}
+                      <CtaPoints shape="stack" markers={markers} points={points} />
+                      {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                    </Layout>
+                  </div>
+                </Layout>
               </Layout>
               <div className={cx(styles.islandPanel, styles.islandPanelHalves)} data-surface="paper">
                 {props.form}

@@ -297,7 +297,7 @@ export default function CtaSectionSpecimenPage() {
       />
       <SpecimenNote
         title="1d · The flow close, in halves"
-        note="islandArrangement='halves' with islandTexture='flow' (owner, 23 Oct 2026). The island split 1:1: the words pinned to the foot of the start half, the card form centred in the end half on a panel with a `stack` inset. The field is TextureFlow: every cell of the site's grid an “=” turned along one flow — loose contour loops toward the start, easing into parallel streams 56 apart past the form — with the loose water churning slowly, and still and quieter behind the words. Two versions: the field alone, the start half left as open ground; and with the sketch-to-shipped drawing above the words, where the field fades out toward the start so the drawing sits on calm ground. Reduced motion draws the field once."
+        note="islandArrangement='halves' with islandTexture='flow' (owner, 23 Oct 2026). The island split 1:1, 96 apart: the words pinned to the foot of the start half, the title at a two-line measure, the card form centred in the end half on a panel with a `gutter` inset (owner, 25 Oct 2026). The field is TextureFlow: every cell of the site's grid an “=” turned along one flow — loose contour loops toward the start, easing into parallel streams 56 apart past the form — with the loose water churning slowly, and still and quieter behind the words. Two versions: the field alone, the start half left as open ground; and with the sketch-to-shipped drawing at ~300, a `stack` above the title, where the field fades out toward the start so the drawing sits on calm ground. Reduced motion draws the field once."
       />
       <CtaSection
         island="blue"

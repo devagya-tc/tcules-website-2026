@@ -66,6 +66,7 @@
 .heading,
 .headingClose,
 .headingOpen,
+.headingHalves,
 .lead,
 .body,
 .label,
@@ -114,6 +115,17 @@
    and an unnamed region is a findable fault where a placeholder string is a shipped one. */
 .heading {
   max-inline-size: var(--cta-heading-measure);
+  color: var(--cta-heading-ink);
+  font: var(--cta-heading-text);
+  letter-spacing: var(--cta-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The halves close's heading (owner, 25 Oct 2026): the offer step at a two-line measure, so the
+   title collapses to two lines in the 524 half instead of running one long line. A whole rule, not
+   a modifier on `.heading`, for the reason the closes' rules below give. */
+.headingHalves {
+  max-inline-size: var(--cta-heading-measure-halves);
   color: var(--cta-heading-ink);
   font: var(--cta-heading-text);
   letter-spacing: var(--cta-heading-tracking);
