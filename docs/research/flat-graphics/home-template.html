@@ -1,0 +1,85 @@
+<title>Service Tile Hover</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+/* The home page's own compiled CSS, lifted from the running site on 25 Oct 2026, so the section below is the
+   site's markup and styling. Only the six drawings are swapped. Single-theme: the site's paper surface. */
+{{SITE_CSS}}
+</style>
+<style>
+/* ── The redrawn drawings, on the --skt-* paper values ── */
+.nd { --n-fill: var(--color-paper); --n-frame: var(--color-neutral-500); --n-quiet: var(--color-neutral-400);
+  --n-copy: var(--color-neutral-300); --n-accent: var(--color-brandeis-500); --n-on: #fff;
+  --n-region: var(--color-brandeis-100); --n-lift: var(--color-neutral-700); --n-lift-under: var(--color-neutral-200); }
+.nd * { vector-effect: non-scaling-stroke; }
+.nd .f { fill: var(--n-fill); stroke: var(--n-frame); stroke-width: 1; }
+.nd .q, .nd .q2 { fill: var(--n-fill); stroke: var(--n-quiet); stroke-width: 1; }
+.nd .c { fill: none; stroke: var(--n-copy); stroke-width: 2; stroke-linecap: round; }
+.nd .cq, .nd .c2b { fill: none; stroke: var(--n-quiet); stroke-width: 2; stroke-linecap: round; }
+.nd .cq1 { fill: none; stroke: var(--n-quiet); stroke-width: 1; }
+.nd .rule { fill: none; stroke: var(--n-frame); stroke-width: 1; }
+.nd .l { fill: none; stroke: var(--n-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nd .ah, .nd .s, .nd .port { fill: var(--n-accent); }
+.nd .ring { fill: var(--n-fill); stroke: var(--n-accent); stroke-width: 1.5; }
+.nd .halo, .nd .r0 { fill: var(--n-region); }
+.nd .knob { fill: var(--n-quiet); }
+.nd .soft { fill: var(--color-brandeis-200); }
+.nd .chip { fill: var(--color-paper-deep); }
+.nd .g-a { fill: var(--n-accent); fill-rule: evenodd; } .nd .g-q { fill: var(--n-frame); fill-rule: evenodd; }
+.nd .lift { fill: var(--n-fill); stroke: var(--n-lift); stroke-width: 2; stroke-linejoin: round; }
+.nd .lift-s { fill: var(--n-lift-under); stroke: var(--n-lift-under); stroke-width: 2.5; stroke-linejoin: round; }
+
+/* ── The hover: the tile's own transition (the owner's curve), there and back ── */
+.nd .tr, .nd .grow, .nd .glide, .nd .lit, .nd .litS {
+  transition: transform var(--bnt-duration) var(--bnt-easing), stroke-dashoffset var(--bnt-duration) var(--bnt-easing),
+    fill var(--bnt-duration) var(--bnt-easing), stroke var(--bnt-duration) var(--bnt-easing);
+}
+.nd .tr { stroke-dasharray: var(--len, 400px) calc(var(--len, 400px) + 8px); stroke-dashoffset: var(--len, 400px); }
+.nd .grow { transform: scale(0); transform-box: fill-box; transform-origin: center; }
+.nd .glide { transform: translate(var(--dx), var(--dy)); }
+.nd .dia { fill: var(--n-fill); stroke: var(--n-accent); stroke-width: 1.5; }
+.nd .blk { fill: var(--n-region); stroke: var(--n-accent); stroke-width: 1; }
+.nd .btn, .nd .node { fill: var(--n-fill); stroke: var(--n-quiet); stroke-width: 1; }
+.nd .codeln { fill: none; stroke: var(--n-quiet); stroke-width: 2; stroke-linecap: round; }
+.nd .g-rel { fill: var(--n-quiet); fill-rule: evenodd; }
+.nd .slot { fill: none; stroke: var(--n-quiet); stroke-width: 1; stroke-dasharray: 6 4; }
+a:is(:hover, :focus-visible) .nd .tr { stroke-dashoffset: 0; }
+a:is(:hover, :focus-visible) .nd :is(.grow, .glide) { transform: none; }
+a:is(:hover, :focus-visible) .nd :is(.dia, .blk, .btn, .node) { fill: var(--n-accent); stroke: var(--n-accent); }
+a:is(:hover, :focus-visible) .nd .codeln { stroke: var(--n-accent); }
+a:is(:hover, :focus-visible) .nd .g-rel { fill: var(--n-on); }
+
+/* The open question: the drawing at the words' edge (today) or centred in its tile. */
+body[data-art='centre'] [class*='Bento-module'][class*='__art'] { justify-self: center; }
+
+/* The mock's own bar, outside the site's section. */
+.mockbar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+  padding: 12px max(16px, env(safe-area-inset-left, 0px)); background: var(--color-paper); border-bottom: 1px solid var(--color-neutral-200);
+  font: 500 13px/1.3 'Public Sans', sans-serif; color: var(--color-neutral-700); }
+.mockbar b { font-weight: 600; color: var(--color-neutral-900); }
+.mockbar button { font: 600 12px/1 'Geist Mono', monospace; letter-spacing: .06em; text-transform: uppercase; padding: 9px 12px;
+  border-radius: 999px; border: 1px solid var(--color-neutral-200); background: var(--color-paper); color: var(--color-neutral-900); cursor: pointer; }
+.mockbar button[aria-pressed='true'] { background: var(--color-brandeis-500); border-color: var(--color-brandeis-500); color: #fff; }
+body { background: var(--color-paper); }
+</style>
+
+<div class="mockbar" role="group" aria-label="Mock controls">
+  <span><b>Home · What we do.</b> The site's own section; hover a tile.</span>
+  <span>Drawing:</span>
+  <button type="button" data-art="left" aria-pressed="true">At the words' edge (today)</button>
+  <button type="button" data-art="centre" aria-pressed="false">Centred</button>
+</div>
+{{SECTION}}
+<script>
+const measure = () => document.querySelectorAll('svg.nd').forEach(s => {
+  const k = s.getScreenCTM().a;
+  s.querySelectorAll('.tr').forEach(p => p.style.setProperty('--len', (p.getTotalLength() * k + 2) + 'px'));
+});
+measure(); addEventListener('resize', measure);
+document.querySelectorAll('.mockbar [data-art]').forEach(b => b.addEventListener('click', () => {
+  document.body.dataset.art = b.dataset.art;
+  document.querySelectorAll('.mockbar [data-art]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  requestAnimationFrame(measure);
+}));
+document.querySelectorAll('#capabilities a').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+</script>
