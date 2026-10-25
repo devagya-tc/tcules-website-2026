@@ -44,14 +44,20 @@ Corners: 8 for a screen, 4 inside it, pills stay pills. Dash 6 4. Colours unchan
 From the polish candidates (https://claude.ai/artifact/GbimJ1c9yiYowjtFEt9DQG) the owner kept: **one focal point**
 per drawing (solid blue on a soft blue ground), **hatching** inside dashed outlines for what isn't built, **sheets
 behind** for "one of many", and **copy rhythm** (one 12-unit pitch, a paragraph's fall, a darker heading line).
-Glyphs in chips: "maybe", shown both ways. Not taken: knockouts at frame edges, the fading dot field.
+Glyphs in chips: "maybe", then kept ("keep the tiles"). Not taken: knockouts at frame edges, the fading dot field.
 Also applied: every drawing centred in one shared area, answering the owner's "should the drawings be center
 aligned in the tile so it feels more balanced?" (yes; the wide bento tiles already centre).
 
 Motion: the owner wants it, and called the first demo "very poorly executed". Round 3's motion is choreographed:
 a pen draws each route at one eased speed; ports, nodes and arrowheads land when the pen reaches them; the focal
 point settles last; one story beat per drawing (checks tick, lens glides, cursor presses, people walk up). Once,
-on entering view; never on hover or looping; nothing under reduced motion. Engine in `round-3.html`.
+on entering view; never on hover or looping; nothing under reduced motion.
+
+Take 2 (owner: "at least working correct but not the best. feels very boring and linearly timed... i'd like
+one conitnuous animation that finishes in 250ms"): the whole drawing is one gesture of exactly 250ms. The
+authored order only decides when each part joins (within the first 140ms); every part then ends at 250ms.
+Expo-out on lines and slides, a small back-out spring on what lands, short slides (12 to 20 units), no pen.
+Engine in `round-3.html`.
 
 ## Open
 

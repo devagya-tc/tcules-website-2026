@@ -139,7 +139,7 @@ S['ai-product-ux'] = ''.join([
     path('M70,70 L226,70', 'c'), path('M70,82 L212,82', 'c'), path('M70,94 L158,94', 'c'),
     a(rect(70, 104, 58, 16, 8, 's'), press=1, t=1000),
     rect(136, 104, 62, 16, 8, 'q'),
-    g(lifted(cursor, 2, 2), slide='44,30', t=150, dur=850),
+    g(lifted(cursor, 2, 2), slide='16,12', t=150, dur=850),
 ])
 
 # ── design-engineering ──────────────────────────────────────────────────────────────────────────
@@ -179,8 +179,7 @@ def software(chips):
     ])
 
 
-S['software-development'] = software(False)
-S['software-development-chips'] = software(True)
+S['software-development'] = software(True)  # 5 kept (owner, 25 Oct): glyphs in chips
 
 # ── code-review: sheets behind, the whole set 20 left so it centres ───────────────────────────────
 rows = [46, 58, 70, 82, 94, 106, 118, 130, 142]
@@ -195,7 +194,7 @@ S['code-review'] = '<g transform="translate(-20,0)">' + ''.join([
     rect(90, 30, 180, 120, 8, 'f'),
     path('M116,30 L116,150', 'rule'),
     file_lines, ticks, s0.hi,
-    g(lifted(s0.lens, 3, 3), slide='56,34', t=420, dur=900),
+    g(lifted(s0.lens, 3, 3), slide='20,12', t=420, dur=900),
 ]) + '</g>'
 
 # ── security-checklist ──────────────────────────────────────────────────────────────────────────
@@ -216,7 +215,7 @@ S['security-checklist'] = ''.join([
     rect(184, 40, 12, 100, 6, 'f'),
     halo_c(190, 90),
     g(circle(190, 90, 11, 's') + glyph('lock', 190, 90, 11, 'g-on'), land=1),
-    ''.join(g(glyph('user', x, 72, 20, 'g-q'), slide='34,0', t=i * 120, dur=760)
+    ''.join(g(glyph('user', x, 72, 20, 'g-q'), slide='14,0', t=i * 120, dur=760)
             for i, x in enumerate((230, 260, 290))),
     path('M218,90 L302,90', 'rule'),
     route([(290, 110), (204, 110)], 'dq'),
