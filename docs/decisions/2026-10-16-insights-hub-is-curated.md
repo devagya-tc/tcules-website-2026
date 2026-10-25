@@ -1,7 +1,7 @@
 ---
 title: "The insights hub is curated; By type / By topic switch the whole view"
 date: 2026-10-16
-status: active
+status: superseded
 area: [content, components]
 source: "Owner, 16 Oct 2026 (insights hub)"
 supersedes: []

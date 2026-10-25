@@ -1,10 +1,10 @@
 ---
 title: "Format pages: a plain head, the formats as one menu, and search with a filter panel"
 date: 2026-10-23
-status: proposed
+status: active
 area: [layout, components, content]
 source: "Owner, 23 Oct 2026 (listings round, after claude.com/resources/product-announcements)"
-supersedes: []
+supersedes: ["2026-10-16-insights-hub-is-curated"]
 dbf: []
 dbf_status: none
 enforced_by: "structure (ListingIndex hero `plain`, IndexRail `menu`, FilterPanel, FilterBar in src/templates/ListingIndex/insights.tsx)"
@@ -12,7 +12,8 @@ enforced_by: "structure (ListingIndex hero `plain`, IndexRail `menu`, FilterPane
 
 A format's own page (/insights/articles …) opens without a hero band: its title as an h1 and its one
 line under it, at the head of the content column beside the rail. The rail is one menu naming the
-current format, opening the list of the others under it; there is no in-page list to jump through.
+current format, opening the list of the others under it, each led by its glyph, with "All insights"
+first over a rule as the way back up; there is no in-page list to jump through.
 Under the head, a search field (half the column) and, at the row's end, "Filters", after
 claude.com's: it opens a side panel (FilterPanel) of the CMS's filter groups — Topic, Product, then
 Industry — each a disclosure of chips, with Reset and Apply. Any option within a group, every group at
@@ -28,6 +29,11 @@ Let's keep it simple like the claude reference." "'More guides' can be a section
 **The mistake it prevents.** A one-word display title and a record line in a textured band over a page
 whose job is finding a piece; a "Jump to" rail that jumped nowhere.
 
-**How to apply.** Format pages only. The hub stays curated with no filtering
-(2026-10-16-insights-hub-is-curated); once this is promoted, that ruling is superseded by an entry that
-keeps its hub half and drops its format-page half. Proposed until the owner has reviewed the pages.
+**The hub stays curated** (kept from 2026-10-16-insights-hub-is-curated, which this replaces): By type /
+By topic switch the whole view; no separate featured section, no format chips under the hero, no full
+feed and no filtering on the hub. Search and filters belong to a format's own page, where the job is
+finding a piece. What it drops is that ruling's other half, the format pages built "after
+claude.com/resources/articles" with the hub's rail; they are now as above.
+
+**How to apply.** The insights hub and its format pages. Promoted by the owner, 25 Oct 2026 ("i think we
+can lock this in"), with "All insights" in the menu (IndexRail `parent`).

@@ -1,7 +1,7 @@
 ---
 title: "A listing group is its lead as the horizontal card, then its cards in rows of three"
 date: 2026-10-23
-status: proposed
+status: active
 area: [layout, cards, type]
 source: "Owner, 23 Oct 2026 (listings round, checklist S3)"
 supersedes: ["2026-10-22-listing-group-heads-h3"]
@@ -38,5 +38,5 @@ two ways, eyebrows that said a topic on one card and a date on the next, head li
 count, and a group head the same size as the title under it.
 
 **How to apply.** `insights.tsx` assigns the groups (`groupOf`) and a format page's order (`insightFormatPage`); `Feature` draws them with BlockCard
-(`split="grid"`, `compact`, `play`, a cta), `CardGrid` the later pages' cards, and `Rows` the rest with ListCard. Proposed until the owner has reviewed the built hub; promoted in the PR that
-shows it.
+(`split="grid"`, `compact`, `play`, a cta), `CardGrid` the later pages' cards, and `Rows` the rest with ListCard.
+Promoted by the owner, 25 Oct 2026 ("i think we can lock this in").
