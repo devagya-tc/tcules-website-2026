@@ -57,6 +57,9 @@ const NAMES = [
   'cart',
   'wallet',
   'heart-pulse',
+  'calendar',
+  'videocamera-record',
+  'microphone',
 ] as const;
 
 /** Every glyph at the default 16. Every one is solid and filled with currentColor. */

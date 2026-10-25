@@ -74,6 +74,12 @@ export type SectionProps = {
    * inside the first screen). Present (`""`) or absent; a marker for the gate, never a style hook.
    */
   'data-fold-hero'?: '';
+  /**
+   * Exempts the band from `fold:check`'s height rule, with the reason as the value (§ 1.3: a list
+   * that grows with the CMS). On the band itself, so the band stays the page's first child of
+   * `main` and keeps the first band's air. A marker for the gate, never a style hook.
+   */
+  'data-fold-exempt'?: string;
   /** Optional component-owned arrangement marker for rendered-output acceptance checks. */
   'data-arrangement'?: string;
 };
@@ -103,6 +109,7 @@ export function Section({
   'data-arrangement': dataArrangement,
   'data-band': dataBand,
   'data-fold-hero': dataFoldHero,
+  'data-fold-exempt': dataFoldExempt,
 }: SectionProps) {
   return (
     <Tag
@@ -112,6 +119,7 @@ export function Section({
       data-arrangement={dataArrangement}
       data-band={dataBand}
       data-fold-hero={dataFoldHero}
+      data-fold-exempt={dataFoldExempt}
       data-surface={surface}
       className={cx(
         styles.section,

@@ -9,7 +9,7 @@ export type {
   ListingView,
 } from './ListingIndex';
 export { insightFormatPage, insightViews } from './insights';
-export type { InsightFormat, InsightTopic } from './insights';
+export type { FormatFilters, InsightFormat, InsightTopic } from './insights';
 export type { InsightItem, InsightKind } from './compositions';
 export { caseViews } from './cases';
 export type { CaseGroup, CaseItem, CaseView } from './cases';

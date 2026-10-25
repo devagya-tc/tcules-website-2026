@@ -308,6 +308,26 @@ export type BlockCardProps = {
    * row when the card has none. Facts about the file, never a second description.
    */
   meta?: string;
+  /**
+   * A play mark on the cover: the piece is watched or heard, not read (the insights hub, 23 Oct
+   * 2026). A round chip in the cover's top-end corner; it does not zoom with the cover. Ignored
+   * without a cover. Decorative: the title and eyebrow say what the piece is.
+   */
+  play?: boolean;
+  /**
+   * A vertical card with a cover that becomes a ROW below 768: its copy first, the cover as a
+   * thumbnail at the row's end, and no standfirst. For the secondary cards of a listing's grid, so a
+   * phone's single column is not a run of full-width pictures (beauty round 4, 16 Oct 2026); the
+   * set's lead never takes it. Ignored when horizontal, without a cover, or with a cta.
+   */
+  compact?: boolean;
+  /**
+   * The horizontal card's two tracks, 64 apart: `even` (default) halves the row; `grid` gives the
+   * cover two thirds and the copy one — the tracks of the 2 : 1 split under it, so the lead and its
+   * grid share one set of verticals (the insights hub, 23 Oct 2026). Ignored when vertical or
+   * without a cover.
+   */
+  split?: 'even' | 'grid';
 };
 
 function warn(message: string) {
@@ -325,7 +345,22 @@ function mediaRecord(image: BlockCardImage): MediaImage {
 /** Kinds a cover crop would damage: shown whole, centred, with air inside the ruled box. */
 const CONTAINED_KINDS: ReadonlySet<string> = new Set(['illustration', 'cut-out']);
 
-function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) {
+/** The play mark on a cover: outside the zoom, so it stays put while the cover leans in. */
+const PlayMark = () => (
+  <span className={styles.play} aria-hidden="true">
+    <Icon name="chrome-play" />
+  </span>
+);
+
+function ImageMedia({
+  image,
+  sizes,
+  play = false,
+}: {
+  image: BlockCardImage;
+  sizes: string;
+  play?: boolean;
+}) {
   /* An illustration or a cut-out is not cropped (cmp-feature, 6 Oct 2026): the cover crop took the
      label off the top of the drawing and the run button off the part. `contain` shows the whole
      object at the largest size that fits, and the box's inset gives it the air a lifted part needs
@@ -354,6 +389,7 @@ function ImageMedia({ image, sizes }: { image: BlockCardImage; sizes: string }) 
           edge="placement"
         />
       </span>
+      {play ? <PlayMark /> : null}
     </span>
   );
 }
@@ -395,12 +431,13 @@ function TextureMedia({
  * The generated cover: a Sketch scene filling the ruled 16:9 box. The plate is the Sketch's own
  * (dot field, radius) and the drawing is 16:9 like the box, so nothing is cropped.
  */
-function SketchMedia({ name }: { name: ArticleSceneName }) {
+function SketchMedia({ name, play = false }: { name: ArticleSceneName; play?: boolean }) {
   return (
     <span className={styles.imageMedia} aria-hidden="true">
       <span className={styles.imageZoom}>
         <Sketch name={name} />
       </span>
+      {play ? <PlayMark /> : null}
     </span>
   );
 }
@@ -438,6 +475,9 @@ export function BlockCard({
   frame = 'none',
   linkScope = 'card',
   meta,
+  play = false,
+  compact = false,
+  split = 'even',
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -472,12 +512,13 @@ export function BlockCard({
     <ImageMedia
       image={image}
       sizes={horizontal || tracks === 2 ? CARD_TWO_TRACKS : CARD_THREE_TRACKS}
+      play={play}
     />
   ) : media?.type === 'texture' ? (
     /* The card's icon, if any, moves onto the texture: one head object, never two. */
     <TextureMedia recipe={media.recipe} icon={icon} />
   ) : media?.type === 'sketch' ? (
-    <SketchMedia name={media.name} />
+    <SketchMedia name={media.name} play={play} />
   ) : null;
 
   /* The icon heads a card with no cover; a cover wins, because a card has one head object. */
@@ -651,7 +692,14 @@ export function BlockCard({
   let frameContent;
   if (horizontal && imageNode) {
     frameContent = (
-      <Layout columns={[1, 1]} colGap="column" rowGap="block" align="center">
+      <Layout
+        columns={
+          split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]
+        }
+        colGap="column"
+        rowGap="block"
+        align="center"
+      >
         {imageSide === 'right' ? (
           <>
             {content}
@@ -699,6 +747,21 @@ export function BlockCard({
           {cta}
         </Layout>
       );
+    } else if (compact && imageNode) {
+      /* One Layout, two arrangements: below md the cover takes the auto track at the row's END
+         (reverse mirrors the template, so the weight travels with it); from md the stack. */
+      frameContent = (
+        <Layout
+          columns={{ base: ['auto', 1], md: 1 }}
+          reverse={{ base: true, md: false }}
+          colGap="block"
+          rowGap="block"
+          align="start"
+        >
+          <span className={styles.compactCover}>{imageNode}</span>
+          {content}
+        </Layout>
+      );
     } else {
       frameContent = (
         <Layout rowGap="block">
@@ -712,7 +775,13 @@ export function BlockCard({
 
   return (
     <li
-      className={cx(styles.root, SIZE_CLASS[step], horizontal && styles.horizontal, boxed && styles.boxed)}
+      className={cx(
+        styles.root,
+        SIZE_CLASS[step],
+        horizontal && styles.horizontal,
+        boxed && styles.boxed,
+        compact && !horizontal && imageNode && !cta && styles.compact,
+      )}
     >
       {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it

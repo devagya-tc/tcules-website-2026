@@ -31,3 +31,18 @@
   letter-spacing: var(--lix-count-tracking);
   text-transform: var(--text-mono-case);
 }
+
+/* A plain page head (owner, 23 Oct 2026): the h1 and the lede under it, the lede quieter. */
+.pageTitle {
+  color: var(--lix-page-title-ink);
+  font: var(--lix-page-title-text);
+  letter-spacing: var(--lix-page-title-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+.pageLede {
+  max-inline-size: var(--lix-page-lede-measure);
+  color: var(--lix-page-lede-ink);
+  font: var(--lix-page-lede-text);
+  letter-spacing: var(--lix-page-lede-tracking);
+}

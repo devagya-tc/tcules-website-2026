@@ -26,9 +26,9 @@
   --irl-target-top-compact: 128px;
   /* Over the content that scrolls under the phone bar, under the site nav. */
   --irl-z: var(--z-raised);
-  /* The rail's heading: the label voice at its smallest. */
-  --irl-label-text: var(--text-micro);
-  --irl-label-tracking: var(--text-micro-tracking);
+  /* The rail's heading: an eyebrow, at the eyebrow step (owner, 23 Oct 2026: eyebrows at 12). */
+  --irl-label-text: var(--text-eyebrow);
+  --irl-label-tracking: var(--text-eyebrow-tracking);
   /* An entry's figure: the micro mono, tabular, at the entry's end on the name's baseline. */
   --irl-count-text: var(--text-micro);
   --irl-count-tracking: var(--text-micro-tracking);
@@ -83,6 +83,14 @@
   --irl-indicator-x: 0;
   --irl-indicator-w: 0;
   --irl-easing: var(--easing-standard);
+  /* A picker as a MENU (23 Oct 2026): the control's own air and radius, the list's air and its
+     entries', and the step between the control and the list. A control's padding, from the ramp
+     (button.css's argument). */
+  --irl-menu-inset: var(--space-8);
+  --irl-menu-inset-inline: var(--space-12);
+  --irl-menu-item-inset: var(--space-8);
+  --irl-menu-gap: var(--space-8);
+  --irl-menu-radius: var(--radius-8);
 }
 
 :root,
@@ -102,6 +110,8 @@
   --irl-switch-ground: var(--color-paper-deep);
   --irl-thumb-ground: var(--color-paper);
   --irl-rule-ink: var(--color-neutral-200);
+  --irl-menu-ground: var(--color-white);
+  --irl-menu-rule-ink: var(--color-neutral-300);
 }
 
 [data-surface='tint'] {
@@ -120,6 +130,8 @@
   --irl-switch-ground: var(--color-neutral-100);
   --irl-thumb-ground: var(--color-paper);
   --irl-rule-ink: var(--color-neutral-300);
+  --irl-menu-ground: var(--color-white);
+  --irl-menu-rule-ink: var(--color-neutral-300);
 }
 
 [data-surface='ink'] {
@@ -138,6 +150,8 @@
   --irl-switch-ground: var(--color-neutral-900);
   --irl-thumb-ground: var(--color-neutral-800);
   --irl-rule-ink: var(--color-neutral-800);
+  --irl-menu-ground: var(--color-neutral-900);
+  --irl-menu-rule-ink: var(--color-neutral-700);
 }
 
 [data-surface='blue'] {
@@ -156,4 +170,6 @@
   --irl-switch-ground: var(--color-brandeis-600);
   --irl-thumb-ground: var(--color-brandeis-700);
   --irl-rule-ink: var(--color-brandeis-400);
+  --irl-menu-ground: var(--color-brandeis-600);
+  --irl-menu-rule-ink: var(--color-brandeis-300);
 }
