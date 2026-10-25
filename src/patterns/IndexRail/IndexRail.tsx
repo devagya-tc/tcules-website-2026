@@ -70,6 +70,11 @@ export type IndexRailProps = {
    * with script it shuts on Escape, on a choice and on a press outside it. Ignored with views.
    */
   menu?: boolean;
+  /**
+   * The page the menu's siblings belong to ("All insights"), set first in the open list over a rule,
+   * so the reader can step back up without the breadcrumb (owner, 25 Oct 2026). Menu only.
+   */
+  parent?: IndexRailItem;
   /** The nav's accessible name. */
   ariaLabel: string;
   /** The content column, when the modes carry no panels (a picker of pages beside one listing). */
@@ -111,6 +116,7 @@ export function IndexRail({
   param,
   label = 'Jump to',
   menu = false,
+  parent,
   ariaLabel,
   children,
   className,
@@ -279,8 +285,8 @@ export function IndexRail({
             </Layout>
           </summary>
           <Layout as="ul" rowGap="none" className={styles.menuList}>
-            {active.items.map((item) => (
-              <li key={item.href}>
+            {(parent ? [parent, ...active.items] : active.items).map((item) => (
+              <li key={item.href} className={item === parent ? styles.menuParent : undefined}>
                 <a
                   href={item.href}
                   className={styles.menuItem}

@@ -78,6 +78,8 @@ export type ListingPicker = {
   items: readonly IndexRailItem[];
   /** The rail as one menu naming the current page (IndexRail `menu`), not a list. */
   menu?: boolean;
+  /** The menu's way back up ("All insights"), first in the list over a rule (IndexRail `parent`). */
+  parent?: IndexRailItem;
   /** The page's pieces, composed by the caller. */
   content: ReactNode;
 };
@@ -174,6 +176,7 @@ export function ListingIndex({
       <IndexRail
         ariaLabel={railLabel}
         menu={picker.menu}
+        parent={picker.parent}
         modes={[{ id: 'picker', label: picker.label, items: picker.items }]}
       >
         {plain ? (

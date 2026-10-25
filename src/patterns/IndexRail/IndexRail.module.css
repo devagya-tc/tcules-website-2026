@@ -262,6 +262,17 @@
   );
 }
 
+/* The parent page, first, ruled off from its siblings: the rule spans the list, and the inset on
+   either side of it is the list's own. */
+.menuParent {
+  padding-block-end: var(--irl-menu-inset);
+  border-block-end: var(--irl-rule-width) solid var(--irl-menu-rule-ink);
+}
+
+.menuParent + li {
+  padding-block-start: var(--irl-menu-inset);
+}
+
 /* An entry: the rail's sans name; the current page in ink. No ground on hover (2026-10-19). */
 .menuItem {
   display: block;

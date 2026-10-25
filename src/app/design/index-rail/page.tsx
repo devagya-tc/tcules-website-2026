@@ -126,11 +126,16 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
       <Section aria-label="Menu">
         <Specimen
           title="picker as a menu — the current page named, its siblings under it"
-          note="menu: a <details> control naming the current page, each entry led by its glyph; open, the list hangs under it on the same ground. Shuts on Escape, a choice or a press outside. A format page's rail (23 Oct 2026)."
+          note="menu: a <details> control naming the current page, each entry led by its glyph; open, the list hangs, its parent page first over a rule, under it on the same ground. Shuts on Escape, a choice or a press outside. A format page's rail (23 Oct 2026)."
         >
           <IndexRail
             ariaLabel="Formats as a menu"
             menu
+            parent={{
+              label: 'All insights',
+              href: ROUTES.insights,
+              icon: <Icon name="widget" />,
+            }}
             modes={[
               {
                 id: 'type',

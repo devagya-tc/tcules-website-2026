@@ -440,6 +440,7 @@ export function insightsFormatProps(
     picker: {
       label: 'By type',
       menu: true,
+      parent: { label: 'All insights', href: ROUTES.insights, icon: <Icon name="widget" /> },
       items: formatsWithContent(page).map((k) => ({
         label: formatTitle(page, k),
         href: pathFor(k),
