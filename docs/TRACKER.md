@@ -134,7 +134,10 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
 - [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
 - [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
-- [ ] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays).
+- [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further
+      (owner, 23 Oct 2026): the close at 1:1 (`islandArrangement="halves"`, the panel at a `stack` inset),
+      the TextureFlow field, and the sketch-to-shipped drawing; both versions on /design/cta-section § 1d.
+      Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
 - [ ] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
       cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
 

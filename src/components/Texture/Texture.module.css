@@ -32,6 +32,12 @@
 }
 
 /* TextureFrame: fitted to the island close's side-by-side split, so drawn from 1024 only. */
+/* TextureFlow's canvas (owner, 23 Oct 2026): the box comes from .texture; a canvas is inline by
+   default, and an inline replaced element sits on a line box and leaves a descender gap. */
+.flow {
+  display: block;
+}
+
 .frame {
   display: none;
 }
