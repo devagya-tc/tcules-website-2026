@@ -22,7 +22,18 @@ import styles from './IndexRail.module.css';
  * `count` is how many pieces it holds, set as a tabular mono figure at the entry's end on the label's
  * baseline — an index's page number — so the list reads as a typeset index rather than a menu.
  */
-export type IndexRailItem = { label: string; href: string; current?: boolean; count?: number };
+export type IndexRailItem = {
+  label: string;
+  href: string;
+  current?: boolean;
+  count?: number;
+  /**
+   * The entry's glyph, composed by the caller (`<Icon name="notebook" />`), set before its label in a
+   * MENU — on the control for the current page and on each entry (owner, 23 Oct 2026). A list draws
+   * names alone.
+   */
+  icon?: ReactNode;
+};
 
 /**
  * One way of curating the page — "By type", "By topic" — with the list of sections it shows and,
@@ -52,6 +63,18 @@ export type IndexRailProps = {
    * uppercases it. From 1024 only — in a phone's bar the switch speaks for itself.
    */
   label?: string;
+  /**
+   * A picker as a MENU (owner, 23 Oct 2026, after claude.com/resources/product-announcements): one
+   * control naming the current page, opening the list of its siblings under it — for a picker of
+   * pages, where there is no in-page list to jump through. A `<details>`, so it opens without script;
+   * with script it shuts on Escape, on a choice and on a press outside it. Ignored with views.
+   */
+  menu?: boolean;
+  /**
+   * The page the menu's siblings belong to ("All insights"), set first in the open list over a rule,
+   * so the reader can step back up without the breadcrumb (owner, 25 Oct 2026). Menu only.
+   */
+  parent?: IndexRailItem;
   /** The nav's accessible name. */
   ariaLabel: string;
   /** The content column, when the modes carry no panels (a picker of pages beside one listing). */
@@ -92,6 +115,8 @@ export function IndexRail({
   initialMode,
   param,
   label = 'Jump to',
+  menu = false,
+  parent,
   ariaLabel,
   children,
   className,
@@ -233,128 +258,186 @@ export function IndexRail({
   const collapsible = views && modes.length > 1;
   const here = active.items.find((item) => item.href === `#${current}`) ?? active.items[0];
 
-  const rail = (
-    <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
-      <Layout rowGap="text">
-        <Layout
-          columns={collapsible ? { base: ['auto', 1], lg: 1 } : undefined}
-          colGap="block"
-          rowGap="block"
-          align="center"
-          className={styles.bar}
+  const picked = active.items.find((item) => item.current) ?? active.items[0];
+  const rail =
+    menu && !views ? (
+      <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
+        <details
+          className={styles.menu}
+          open={open}
+          onToggle={(event) => setOpen(event.currentTarget.open)}
         >
-          {modes.length > 1 ? (
-            <div
-              role="group"
-              aria-label="View"
-              ref={switchRef}
-              className={cx(styles.row, styles.switch)}
-              data-measured={indicator ? '' : undefined}
-              style={
-                indicator
-                  ? ({
-                      '--irl-indicator-x': `${indicator.x}px`,
-                      '--irl-indicator-w': `${indicator.w}px`,
-                    } as CSSProperties)
-                  : undefined
-              }
+          <summary className={styles.menuButton}>
+            <Layout
+              columns={{ base: picked?.icon ? ['auto', 1, 'auto'] : [1, 'auto'] }}
+              colGap="tight"
+              align="center"
             >
-              {/* Two labels, the shown one in ink over a rule that slides between them. Content-sized
+              {picked?.icon ? (
+                <span className={styles.menuGlyph} aria-hidden="true">
+                  {picked.icon}
+                </span>
+              ) : null}
+              <span className={styles.menuLabel}>{picked?.label}</span>
+              <span className={styles.toggleMark} aria-hidden="true">
+                <Icon name="alt-arrow-down" size="sm" />
+              </span>
+            </Layout>
+          </summary>
+          <Layout as="ul" rowGap="none" className={styles.menuList}>
+            {(parent ? [parent, ...active.items] : active.items).map((item) => (
+              <li key={item.href} className={item === parent ? styles.menuParent : undefined}>
+                <a
+                  href={item.href}
+                  className={styles.menuItem}
+                  aria-current={item.current ? 'page' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.icon ? (
+                    <Layout
+                      as="span"
+                      columns={{ base: ['auto', 1] }}
+                      colGap="tight"
+                      align="center"
+                    >
+                      <span className={styles.menuGlyph} aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Layout>
+                  ) : (
+                    item.label
+                  )}
+                </a>
+              </li>
+            ))}
+          </Layout>
+        </details>
+      </nav>
+    ) : (
+      <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
+        <Layout rowGap="text">
+          <Layout
+            columns={collapsible ? { base: ['auto', 1], lg: 1 } : undefined}
+            colGap="block"
+            rowGap="block"
+            align="center"
+            className={styles.bar}
+          >
+            {modes.length > 1 ? (
+              <div
+                role="group"
+                aria-label="View"
+                ref={switchRef}
+                className={cx(styles.row, styles.switch)}
+                data-measured={indicator ? '' : undefined}
+                style={
+                  indicator
+                    ? ({
+                        '--irl-indicator-x': `${indicator.x}px`,
+                        '--irl-indicator-w': `${indicator.w}px`,
+                      } as CSSProperties)
+                    : undefined
+                }
+              >
+                {/* Two labels, the shown one in ink over a rule that slides between them. Content-sized
                   tracks in the phone bar, so the pair never stacks there (a bare `2` starts at md); equal
                   halves of the rail from 1024. */}
-              <Layout columns={{ base: ['auto', 'auto'], lg: 2 }} colGap="none">
-                {modes.map((m) => (
-                  <a
-                    key={m.id}
-                    href={hrefFor(m.id)}
-                    className={styles.mode}
-                    aria-current={m.id === active.id ? 'true' : undefined}
-                    aria-controls={
-                      views
-                        ? `${uid}-panel-${m.id}`
-                        : active.items.length > 0
-                          ? `${uid}-list`
-                          : undefined
-                    }
-                    onClick={choose(m.id)}
-                  >
-                    {m.label}
-                  </a>
-                ))}
-              </Layout>
-              <span className={styles.indicator} aria-hidden="true" />
-            </div>
-          ) : null}
-          {collapsible && count > 0 ? (
-            /* Below 1024 only: the section in view, opening the list. It takes what the switch
+                <Layout columns={{ base: ['auto', 'auto'], lg: 2 }} colGap="none">
+                  {modes.map((m) => (
+                    <a
+                      key={m.id}
+                      href={hrefFor(m.id)}
+                      className={styles.mode}
+                      aria-current={m.id === active.id ? 'true' : undefined}
+                      aria-controls={
+                        views
+                          ? `${uid}-panel-${m.id}`
+                          : active.items.length > 0
+                            ? `${uid}-list`
+                            : undefined
+                      }
+                      onClick={choose(m.id)}
+                    >
+                      {m.label}
+                    </a>
+                  ))}
+                </Layout>
+                <span className={styles.indicator} aria-hidden="true" />
+              </div>
+            ) : null}
+            {collapsible && count > 0 ? (
+              /* Below 1024 only: the section in view, opening the list. It takes what the switch
                leaves, so a long section name truncates at the chevron and the switch never wraps
                (the case index, 19 Oct 2026: "Four to start with" pushed it onto two lines). */
-            <button
-              type="button"
-              className={styles.toggle}
-              aria-expanded={open}
-              aria-controls={`${uid}-list`}
-              onClick={() => setOpen((was) => !was)}
-            >
-              <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="center">
-                <span className={styles.toggleLabel}>{here?.label}</span>
-                <span className={styles.toggleMark} aria-hidden="true">
-                  <Icon name="alt-arrow-down" size="sm" />
-                </span>
-              </Layout>
-            </button>
-          ) : null}
-          {count > 0 ? (
-            <div
-              ref={lineRef}
-              className={cx(styles.row, styles.line, collapsible && styles.pop)}
-              data-open={open ? '' : undefined}
-            >
-              {/* "Jump to" over the list, the rail's one rule under it (owner, 16 Oct 2026: after
+              <button
+                type="button"
+                className={styles.toggle}
+                aria-expanded={open}
+                aria-controls={`${uid}-list`}
+                onClick={() => setOpen((was) => !was)}
+              >
+                <Layout columns={{ base: [1, 'auto'] }} colGap="tight" align="center">
+                  <span className={styles.toggleLabel}>{here?.label}</span>
+                  <span className={styles.toggleMark} aria-hidden="true">
+                    <Icon name="alt-arrow-down" size="sm" />
+                  </span>
+                </Layout>
+              </button>
+            ) : null}
+            {count > 0 ? (
+              <div
+                ref={lineRef}
+                className={cx(styles.row, styles.line, collapsible && styles.pop)}
+                data-open={open ? '' : undefined}
+              >
+                {/* "Jump to" over the list, the rail's one rule under it (owner, 16 Oct 2026: after
                   claude.com/resources). From 1024 only. */}
-              <Layout rowGap="block">
-                {label ? <p className={styles.label}>{label}</p> : null}
-                {/* One list, two arrangements: a column beside the content from 1024; below it a picker's
+                <Layout rowGap="block">
+                  {label ? <p className={styles.label}>{label}</p> : null}
+                  {/* One list, two arrangements: a column beside the content from 1024; below it a picker's
                   single line of content-sized labels (scrolling sideways when it must), or a view's
                   list opened from the bar. */}
-                <Layout
-                  as="ul"
-                  columns={
-                    collapsible
-                      ? undefined
-                      : { base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }
-                  }
-                  colGap="block"
-                  rowGap="text"
-                  justify="start"
-                  id={`${uid}-list`}
-                  key={active.id}
-                  className={cx(styles.list, switched && styles.entering)}
-                >
-                  {active.items.map((item) => {
-                    const isHere = item.current || item.href === `#${current}`;
-                    return (
-                      <li key={item.href}>
-                        <a
-                          href={item.href}
-                          className={styles.item}
-                          aria-current={item.current ? 'page' : isHere ? 'location' : undefined}
-                          onClick={() => setOpen(false)}
-                        >
-                          {/* The name alone: no count (owner, 16 Oct 2026: "remove the numbers"). */}
-                          <span className={styles.name}>{item.label}</span>
-                        </a>
-                      </li>
-                    );
-                  })}
+                  <Layout
+                    as="ul"
+                    columns={
+                      collapsible
+                        ? undefined
+                        : { base: Array.from({ length: count }, () => 'auto' as const), lg: 1 }
+                    }
+                    colGap="block"
+                    rowGap="text"
+                    justify="start"
+                    id={`${uid}-list`}
+                    key={active.id}
+                    className={cx(styles.list, switched && styles.entering)}
+                  >
+                    {active.items.map((item) => {
+                      const isHere = item.current || item.href === `#${current}`;
+                      return (
+                        <li key={item.href}>
+                          <a
+                            href={item.href}
+                            className={styles.item}
+                            aria-current={
+                              item.current ? 'page' : isHere ? 'location' : undefined
+                            }
+                            onClick={() => setOpen(false)}
+                          >
+                            {/* The name alone: no count (owner, 16 Oct 2026: "remove the numbers"). */}
+                            <span className={styles.name}>{item.label}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </Layout>
                 </Layout>
-              </Layout>
-            </div>
-          ) : null}
+              </div>
+            ) : null}
+          </Layout>
         </Layout>
-      </Layout>
-    </nav>
-  );
+      </nav>
+    );
 
   return (
     <div ref={rootRef} className={styles.frame}>

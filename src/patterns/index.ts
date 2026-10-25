@@ -405,6 +405,14 @@ export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowPr
    changes the whole view (held in the URL), or a picker of sibling pages (insights, 16 Oct 2026). */
 export { IndexRail, type IndexRailItem, type IndexRailMode, type IndexRailProps } from './IndexRail';
 
+/* FilterPanel — a listing's filters in a side panel: groups of chips, Reset and Apply, by GET. */
+export {
+  FilterPanel,
+  type FilterPanelGroup,
+  type FilterPanelOption,
+  type FilterPanelProps,
+} from './FilterPanel';
+
 /* Teaser — one linked piece held without an edge: picture or date or meta line at its head, in a
    stack, beside, or as a row with an end thumbnail (insights hub and format pages, 16 Oct 2026). */
 export {

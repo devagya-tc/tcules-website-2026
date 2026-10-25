@@ -208,6 +208,96 @@
   transform: scaleY(1);
 }
 
+/* The MENU (a picker of pages, owner, 23 Oct 2026): one bordered control naming the page, its list
+   hung under it on the same ground. A positioning context for the list. */
+.menu {
+  position: relative;
+}
+
+.menuButton {
+  display: block;
+  padding-block: var(--irl-menu-inset);
+  padding-inline: var(--irl-menu-inset-inline);
+  border: var(--irl-rule-width) solid var(--irl-menu-rule-ink);
+  border-radius: var(--irl-menu-radius);
+  background-color: var(--irl-menu-ground);
+  color: var(--irl-item-ink-current);
+  font: var(--irl-item-text);
+  letter-spacing: var(--irl-item-tracking);
+  list-style: none;
+  cursor: pointer;
+}
+
+.menuButton::-webkit-details-marker {
+  display: none;
+}
+
+.menuLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* An entry's glyph: the entry's own ink, so the current one's turns with its name. */
+.menuGlyph {
+  display: block;
+  color: currentColor;
+}
+
+.menu[open] .toggleMark {
+  transform: rotate(180deg);
+}
+
+.menuList {
+  position: absolute;
+  inset-block-start: calc(100% + var(--irl-menu-gap));
+  inset-inline: 0;
+  z-index: var(--irl-z);
+  padding-block: var(--irl-menu-inset);
+  border: var(--irl-rule-width) solid var(--irl-menu-rule-ink);
+  border-radius: var(--irl-menu-radius);
+  background-color: var(--irl-menu-ground);
+  filter: drop-shadow(
+    0 var(--irl-pop-shadow-y) var(--irl-pop-shadow-blur) var(--irl-pop-shadow-ink)
+  );
+}
+
+/* The parent page, first, ruled off from its siblings: the rule spans the list, and the inset on
+   either side of it is the list's own. */
+.menuParent {
+  padding-block-end: var(--irl-menu-inset);
+  border-block-end: var(--irl-rule-width) solid var(--irl-menu-rule-ink);
+}
+
+.menuParent + li {
+  padding-block-start: var(--irl-menu-inset);
+}
+
+/* An entry: the rail's sans name; the current page in ink. No ground on hover (2026-10-19). */
+.menuItem {
+  display: block;
+  padding-block: var(--irl-menu-item-inset);
+  padding-inline: var(--irl-menu-inset-inline);
+  border-radius: var(--irl-ring-radius);
+  color: var(--irl-item-ink);
+  font: var(--irl-item-text);
+  letter-spacing: var(--irl-item-tracking);
+  text-decoration: none;
+  transition: color var(--irl-duration) var(--irl-easing);
+}
+
+.menuItem:hover,
+.menuItem[aria-current] {
+  color: var(--irl-item-ink-current);
+  text-decoration: none;
+}
+
+.menuButton:focus-visible,
+.menuItem:focus-visible {
+  outline: var(--irl-ring-width) solid var(--irl-ring-color);
+  outline-offset: var(--irl-ring-offset);
+}
+
 @keyframes irl-enter {
   from {
     opacity: 0;
@@ -320,6 +410,7 @@
   .item,
   .item::before,
   .toggleMark,
+  .menuItem,
   .switch[data-measured] .indicator {
     transition: none;
   }

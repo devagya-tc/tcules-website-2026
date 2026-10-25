@@ -1,0 +1,73 @@
+/* ══ Component layer — FilterPanel ═══════════════════════════════════════════════
+   Tier 2. A listing's filters in a side panel (owner, 23 Oct 2026, after
+   claude.com/resources/product-announcements): a popover down the screen's end edge, its groups
+   ruled disclosures of chips, Reset and Apply at its foot.
+
+   Naming: --fpn-{part}-{role}
+     parts: panel (unnamed: ground, ink, inset, inline) | heading | label (a group's) | rule |
+            backdrop | ring
+
+   The panel reads its ground from the band it is opened from, so every surface block declares every
+   surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The panel's width: a component size, wide enough for a chip row of three short topics. */
+  --fpn-inline: 28rem;
+  /* The panel's air: the column gutter, as a band's content takes it. */
+  --fpn-inset: var(--gap-gutter);
+  /* The heading: the h3 serif, the panel's one title (claude.com's "Filter"). */
+  --fpn-heading-text: var(--text-h3);
+  --fpn-heading-tracking: var(--text-h3-tracking);
+  /* A group's label: the eyebrow, the label voice at 12 (owner, 23 Oct 2026). */
+  --fpn-label-text: var(--text-eyebrow);
+  --fpn-label-tracking: var(--text-eyebrow-tracking);
+  --fpn-rule-width: var(--border-width-hairline);
+  --fpn-ring-width: var(--focus-ring-width);
+  --fpn-ring-offset: var(--focus-ring-offset);
+  --fpn-duration: var(--duration-fast);
+  --fpn-easing: var(--easing-standard);
+  /* The visually hidden legend's box: one pixel, the standard clip. */
+  --fpn-hidden-size: 1px;
+}
+
+:root,
+[data-surface='paper'] {
+  --fpn-ground: var(--color-paper);
+  --fpn-ink: var(--color-neutral-900);
+  --fpn-heading-ink: var(--color-neutral-900); /* 14.62:1 */
+  --fpn-label-ink: var(--color-neutral-600); /* 4.92:1 */
+  --fpn-rule-ink: var(--color-neutral-200);
+  --fpn-backdrop: color-mix(in srgb, var(--color-neutral-900) 24%, transparent);
+  --fpn-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='tint'] {
+  --fpn-ground: var(--color-paper-deep);
+  --fpn-ink: var(--color-neutral-900);
+  --fpn-heading-ink: var(--color-neutral-900);
+  --fpn-label-ink: var(--color-neutral-700); /* 7.27:1 */
+  --fpn-rule-ink: var(--color-neutral-300);
+  --fpn-backdrop: color-mix(in srgb, var(--color-neutral-900) 24%, transparent);
+  --fpn-ring-color: var(--color-brandeis-500);
+}
+
+[data-surface='ink'] {
+  --fpn-ground: var(--color-neutral-950);
+  --fpn-ink: var(--color-white);
+  --fpn-heading-ink: var(--color-white);
+  --fpn-label-ink: var(--color-neutral-400);
+  --fpn-rule-ink: var(--color-neutral-800);
+  --fpn-backdrop: color-mix(in srgb, var(--color-black) 48%, transparent);
+  --fpn-ring-color: var(--color-brandeis-300);
+}
+
+[data-surface='blue'] {
+  --fpn-ground: var(--color-brandeis-500);
+  --fpn-ink: var(--color-white);
+  --fpn-heading-ink: var(--color-white);
+  --fpn-label-ink: var(--color-brandeis-100);
+  --fpn-rule-ink: var(--color-brandeis-400);
+  --fpn-backdrop: color-mix(in srgb, var(--color-brandeis-700) 48%, transparent);
+  --fpn-ring-color: var(--color-white);
+}

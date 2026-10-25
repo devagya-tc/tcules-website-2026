@@ -38,6 +38,13 @@
   transition: border-color var(--inp-transition-duration) var(--inp-transition-easing);
 }
 
+/* A search field draws no browser chrome of its own: WebKit's clear cross and its decoration are off
+   brand (owner, 23 Oct 2026: "the 'x' is not on brand"). Escape still clears the field. */
+.control::-webkit-search-cancel-button,
+.control::-webkit-search-decoration {
+  appearance: none;
+}
+
 .control::placeholder {
   /* Browsers otherwise attenuate the declared ink and invalidate its measured contrast. This is
      a rendering normalization, not a visual state or a transition. */
