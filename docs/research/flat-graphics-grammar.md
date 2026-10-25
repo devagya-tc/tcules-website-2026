@@ -39,6 +39,20 @@ paths in `glyphs.json`, copied from `src/components/Icon/glyphs.ts`).
 
 Corners: 8 for a screen, 4 inside it, pills stay pills. Dash 6 4. Colours unchanged from `--skt-*` paper.
 
+## Round 3 (25 Oct, https://claude.ai/artifact/4uKmWsk7H9pynx2x6t9stT, `flat-graphics/round-3.html`)
+
+From the polish candidates (https://claude.ai/artifact/GbimJ1c9yiYowjtFEt9DQG) the owner kept: **one focal point**
+per drawing (solid blue on a soft blue ground), **hatching** inside dashed outlines for what isn't built, **sheets
+behind** for "one of many", and **copy rhythm** (one 12-unit pitch, a paragraph's fall, a darker heading line).
+Glyphs in chips: "maybe", shown both ways. Not taken: knockouts at frame edges, the fading dot field.
+Also applied: every drawing centred in one shared area, answering the owner's "should the drawings be center
+aligned in the tile so it feels more balanced?" (yes; the wide bento tiles already centre).
+
+Motion: the owner wants it, and called the first demo "very poorly executed". Round 3's motion is choreographed:
+a pen draws each route at one eased speed; ports, nodes and arrowheads land when the pen reaches them; the focal
+point settles last; one story beat per drawing (checks tick, lens glides, cursor presses, people walk up). Once,
+on entering view; never on hover or looping; nothing under reduced motion. Engine in `round-3.html`.
+
 ## Open
 
 - Product design still reads as a flowchart (step, decision, two branches). Candidate: a screen with its one
