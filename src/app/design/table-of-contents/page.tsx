@@ -4,38 +4,16 @@ import { TableOfContents, type TocItem } from '@/patterns';
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
 
 /**
- * TableOfContents specimen — one variant, one size, and two things that actually vary: ENTRY COUNT,
- * which is data, and ARRANGEMENT, which is a media query rather than a prop.
+ * TableOfContents specimen — the outline in IndexRail's grammar (owner, 26 Oct 2026): an eyebrow over
+ * one rule, names alone on one line, and ONE 2px marker that slides from row to row. Below 1024 the
+ * same markup is a sticky bar under the nav naming the section in view, opening the list under it.
  *
- * Every rail below is a TRACK, not a band — the component sits inside somebody else's `Section` and
- * reads `data-surface` from it — so every band here is a real `Section` holding the two-column shell
- * from the spec's § 10. `align="start"` on that shell is load-bearing rather than tidy: a stretched
- * grid item fills its row and has nowhere to stick.
+ * Every rail below is a TRACK inside a real `Section`, in the two-column shell the long-form pages
+ * use. `align="start"` on that shell is load-bearing: a stretched grid item has nowhere to stick.
  *
- * WHAT THIS PAGE CANNOT FORCE, and the spec was wrong about one of them.
- *
- *   hover · pressed · tab focus   have no props, by design. Point at an entry, hold it down, and tab
- *                                 to it, on each of the four surfaces. The inward focus ring and the
- *                                 underline's wipe in particular have to be tabbed into to be seen.
- *   CURRENT                       the spec's § 15 said currency is "the only thing forcible from
- *                                 outside". It is not, and cannot be: § 3 rules out `activeId` on
- *                                 purpose, so the mark comes only from the observer. Every rail here
- *                                 is therefore LIVE and derives its own mark from where its own
- *                                 headings sit relative to the reading line. Scroll this page and
- *                                 they all move. A rail whose headings are still below the line
- *                                 marks nothing — which is the above-the-first-heading case, seen
- *                                 for free at the top of the page — and one you have scrolled past
- *                                 holds its LAST entry, which is the below-the-last-heading case.
- *   the 1024 switch               needs a viewport either side of it. Narrow the window: every rail
- *                                 stops being sticky, drops its 232px cap, takes the full content
- *                                 column, collapses into a closed <details> and stops marking
- *                                 anything, and the shell's second track disappears so the one
- *                                 "On this page" row sits directly above the body.
- *   the computed geometry         § 14 items 2, 3 and 7 name a computed grid, a computed
- *                                 `inset-block-start` of 104px, a computed `max-inline-size` of
- *                                 232px and a 45.70px row. There is no browser test runner in this
- *                                 repo, so those four are read once in devtools rather than
- *                                 asserted. Band 1 is where to read them.
+ * Nothing here can be forced from outside, by design: the mark comes from where the page is
+ * scrolled. Every rail is LIVE — scroll and they all move. Hover and focus have no props; point and
+ * tab. The 1024 switch needs a narrower window.
  */
 
 /** The audit family's median outline: eleven sections, real labels rather than lorem. */
@@ -69,7 +47,7 @@ const NINETEEN = [
   'Contact',
 ] as const;
 
-/** The three real 71–77-character fallback headings, plus a pasted URL. */
+/** Headings handed in where a marker should be: the fallback, cut to one line and warned about. */
 const LONG = [
   'What we look at when we review a design system that has grown past one team',
   'How the token layer and the component layer disagree, and what that costs a reader',
@@ -135,14 +113,14 @@ export default function TableOfContentsSpecimen() {
         <Layout rowGap="stack">
           <Layout rowGap="block">
             <h1>TableOfContents</h1>
-            <Prose html="<p>The outline of a long-form document. A sticky rail beside the body at 1024 and up; the same markup as a closed disclosure immediately after the hero below that. Nine bands, and the mark in every one of them is live.</p>" />
+            <Prose html="<p>The outline of a long-form document. A sticky rail beside the body at 1024 and up; below that, the same markup as a sticky bar under the nav naming the section in view. The mark in every band is live.</p>" />
           </Layout>
           <div className={s.mockBar}>
             <p className={s.eyebrow}>SiteNav stand-in · --nav-bar-height</p>
           </div>
           <Specimen
             title="1 · In situ, eleven sections, paper"
-            note="The band where the mechanism is proved. Scroll and the mark tracks the reading line, 104px down — the bar's 72 plus a 32 gutter. At the very top nothing is marked, because the reader is above the first heading and marking 01 there would be a false claim. This is also the band to read the computed geometry in: the rail's inset-block-start is 104px, its max-inline-size 232px — wide enough that none of the eleven labels wraps — and a one-line entry box measures 45.70px against the 44px floor. Below 1024 this band shows the closed disclosure: one 44px row."
+            note="The band where the mechanism is proved. Scroll: at the top nothing is marked, because the reader is above the first heading. The first section grows the marker in where it lands; every section after slides it, on transform alone. The reading line is 30% down the viewport, IndexRail's. Click an entry: the page glides to the heading, which lands level with the rail's top. Below 1024 this band is the sticky bar instead: it says On this page until the first section, then names the section in view."
           >
             <Shell prefix="situ" labels={ELEVEN} />
           </Specimen>
@@ -156,12 +134,12 @@ export default function TableOfContentsSpecimen() {
             title={`2 · Surface: ${surface}`}
             note={
               surface === 'blue'
-                ? 'The band to read. Blue on blue is 1:1, so "blue means you are here" cannot be taken literally here — the mark becomes white on both the ordinal and the rule, and the 3px against 1px does proportionally more work than on any other surface. Unmarked labels sit at brandeis-100, 4.91:1, the tightest cell in the whole table; the head and the ordinals one step up at brandeis-50, 5.57:1. Hover goes to brandeis-50 rather than a neutral, because neutral-200 is 4.63:1 here and reads as muddy grey. Pressed and current are both white; the underline width is what tells them apart.'
+                ? 'Blue on blue is 1:1, so the marker goes white; unmarked names sit at brandeis-100, 4.91:1, the tightest cell.'
                 : surface === 'ink'
-                  ? 'The unmarked labels get QUIETER here, not louder — neutral-500 at 5.41:1, one step below what the surface layer would have given them, because nineteen rows at 8.05:1 on a dark ground glow and compete with the body. The head and the 12px ordinals do take neutral-400, 8.05:1 — small mono is not what glows. The mark lifts three ramp steps to brandeis-300: brandeis-500 on this ground is 2.77:1 and is exactly the failure the surface model exists to prevent. The rule travels the other way, to neutral-700, because on ink a light hairline is louder than the labels behind it.'
+                  ? 'The marker lifts to brandeis-300 (brandeis-500 is 2.77:1 here); names at neutral-400, white when current or pointed at.'
                   : surface === 'tint'
-                    ? 'Every muted value steps one darker because the ground did, and here it is FORCED rather than preferred: neutral-600 is 4.39:1 on paper-deep and fails the floor. The head and the ordinals step once more, to neutral-800 at 10.54:1. Both blues hold, so the mark is the same hue as on paper — a reader moving down a page of alternating bands should not see it change colour.'
-                    : 'The baseline. Unmarked labels sit at neutral-600, 4.92:1, as quiet as they can legally go — neutral-500 is 3.16:1 and fails. The head and the ordinals sit at neutral-700, 8.14:1: at 11px and 4.92:1 they read as grey on grey. They still read quieter than the ladder, by size and family — 12px mono against 14px sans.'
+                    ? 'Names step to neutral-700 because neutral-600 is 4.39:1 on paper-deep; the marker deepens to brandeis-600.'
+                    : 'The baseline: names at neutral-600, 4.92:1, neutral-900 when current or pointed at; the marker at brandeis-500.'
             }
           >
             <Shell prefix={`surface-${surface}`} labels={EIGHT} />
@@ -173,7 +151,7 @@ export default function TableOfContentsSpecimen() {
       <Section surface="paper">
         <Specimen
           title="3 · Nineteen entries — the terms of use"
-          note="The longest outline in the corpus. Nineteen 45.70px rows plus the head measure about 870px, so on any viewport under roughly 1000px tall the rail scrolls inside its own sticky box rather than growing past it. Shorten the window to see it. It does not stop being sticky and it does not cap the count. The accepted cost is visible here: the head scrolls away with the first few entries, because pinning it needs a grid row relationship Layout does not express."
+          note="The longest outline in the corpus. Nineteen rows measure about 700px, so on a short viewport the rail scrolls inside its own sticky box, and the component scrolls it to keep the current row in view. It does not stop being sticky and it does not cap the count."
         >
           <Shell prefix="long" labels={NINETEEN} />
         </Specimen>
@@ -182,11 +160,11 @@ export default function TableOfContentsSpecimen() {
       {/* ── 4 · Nested surface ────────────────────────────────────────────────── */}
       <Section surface="ink">
         <Layout rowGap="stack">
-          <Prose html="<p>4 · Nested surface. The tint panel below sits inside this ink band. Its rail must resolve the TINT column throughout — neutral-700 labels at 7.27:1 on the tint ground — and not an ink-tuned neutral-500 stranded there at 2.82:1, under the text floor, on a rail that would look merely quiet. That is what every surface block restating every token buys; a deltas-only block would inherit ink here.</p>" />
+          <Prose html="<p>4 · Nested surface. The tint panel below sits inside this ink band.</p>" />
           <Section surface="tint" flush>
             <Specimen
               title="A tint panel inside an ink band"
-              note="Compare the labels against the ink band around it: darker, not lighter. Compare the interior rule too — neutral-400 against this tint ground, not the neutral-700 the ink rails use. The doubled horizontal gutter is this specimen's cost for nesting one band inside another, not the component's."
+              note="The rail resolves the TINT column throughout — neutral-700 names, a brandeis-600 marker — not the ink band’s values around it. That is what every surface block restating every token buys."
             >
               <Shell prefix="nested" labels={EIGHT} />
             </Specimen>
@@ -199,7 +177,7 @@ export default function TableOfContentsSpecimen() {
         <Layout rowGap="stack">
           <Specimen
             title="5 · Longest strings, and a pasted URL"
-            note="Three real 71–77-character fallback headings and one URL. Each clamps to two lines with an ellipsis, and the clamp is VISUAL only — the full string stays in the DOM, so a screen reader reads the whole heading. The URL breaks inside the word rather than pushing the rail past its cap: overflow-wrap: anywhere is what reduces the intrinsic minimum, not just the wrapping. All four trip the development warning at 40 characters; open the console."
+            note="What a page hands the outline before its markers are written: whole headings. Each is cut to one line with an ellipsis — the full string stays in the DOM, so a screen reader reads it — and all four trip the development warning at 26 characters. The answer is a short navigationLabel, not a wider rail."
           >
             <Shell prefix="long-labels" labels={LONG} />
           </Specimen>
@@ -226,7 +204,7 @@ export default function TableOfContentsSpecimen() {
       <Section surface="paper">
         <Specimen
           title="6 · Two adjacent — SPECIMEN ONLY, invalid on a route"
-          note="One per page. Two produce two navigation landmarks with the identical accessible name 'On this page' — and because the name comes from the fixed title rather than a prop, there is nothing to tell them apart with, so a screen reader lists both. Both observers are also live, so two entries are marked at once. The component does not defend against this."
+          note="One per page. Two produce two navigation landmarks with the identical name On this page, and both mark at once. The component does not defend against this."
         >
           <Layout columns={2} colGap="gutter" align="start">
             <TableOfContents items={outline('twin-a', EIGHT)} />
@@ -235,12 +213,12 @@ export default function TableOfContentsSpecimen() {
         </Specimen>
       </Section>
 
-      {/* ── 7 · The floor, and the placements that are forbidden ───────────────── */}
+      {/* ── 7 · The floor ───────────────────────────────────────────────────────── */}
       <Section surface="paper">
         <Layout rowGap="stack">
           <Specimen
             title="7 · The floor — a [1, 6] track, 160.6px"
-            note="Rendering at --toc-min-inline. The label column is 104px here, holding 14 characters a line and 28 across the clamp. Below this the rail is not narrow but broken, which is what the floor exists to prevent — in a Cluster or a columns='fit' track the intrinsic minimum would be the widest unbreakable word, about 60px."
+            note="Rendering at --toc-min-inline. The marker’s room and the one-line names hold; a longer marker cuts sooner here."
           >
             <Layout
               columns={{ base: 1, lg: [1, 6] }}
@@ -252,24 +230,14 @@ export default function TableOfContentsSpecimen() {
               <Body prefix="floor" labels={EIGHT} />
             </Layout>
           </Specimen>
-
-          <Specimen
-            title="7b · The 44px floor, next to a 44px box"
-            note="The dashed frame is --btn-hit-min. A one-line entry box is 45.70px — a 21.7px line box plus twice the 12px block padding — so the row clears the target by 1.70px and the PITCH equals the target, which is why consecutive rows clear each other. Reached by stepping the box up, never by a hit extension: entries are contiguous, so an extension would overlap its neighbours."
-          >
-            <Layout columns={{ base: 1, lg: [1, 4] }} colGap="column" align="start">
-              <TableOfContents items={outline('hit', ELEVEN.slice(0, 3))} />
-              <div className={s.hitFloor} />
-            </Layout>
-          </Specimen>
         </Layout>
       </Section>
 
       {/* ── 8 · Below 1024 ────────────────────────────────────────────────────── */}
       <Section surface="paper">
         <Specimen
-          title="8 · Below 1024 — a closed disclosure"
-          note="NARROW THE WINDOW past 1024 to see this band change: the shell's second track disappears, and the outline becomes a native <details>, CLOSED by default — one 44px 'On this page' row between two hairlines, where it used to be an eleven-row, ~500px block before the first paragraph. Tap it and the same list opens in place. No script decides this: at 1024 and up the same <details> is forced open through ::details-content and its summary hidden, which is the rail. Nothing is ever marked below 1024, open or closed, because the observer does not run there."
+          title="8 · Below 1024 — the sticky bar"
+          note="NARROW THE WINDOW past 1024. The shell’s second track goes and the outline becomes one bar under the nav, spreading to the screen’s edges on its own ground: On this page above the first section, then the section in view. Tap it and the list drops under the bar with the same marker; a choice, Escape, a press outside or a scroll shuts it. No script decides the arrangement: at 1024 the same <details> is forced open by ::details-content and its summary hidden."
         >
           <Shell prefix="narrow" labels={ELEVEN} />
         </Specimen>
