@@ -42,6 +42,7 @@ export {
   listCorpusPages,
   getTestimonialRatings,
   getTestimonialAvatars,
+  getOfferScenes,
   getPlaceholderReasons,
   getProposedEyebrows,
   getCaseIndustries,

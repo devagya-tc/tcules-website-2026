@@ -145,6 +145,12 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
       Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
 - [ ] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
       cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
+- [~] **2.31** Service pages at home's level, starting with Product Design (owner, 26 Oct 2026; mock
+      https://claude.ai/artifact/8d5ZWF4hQTMkJ57iZDc4Em, rounds 1–4). Built on design/service-page-pd, awaiting
+      the owner's look: drawn offer and starting points, the Dealpath strip on tint, the case slider (2a), two
+      tint testimonial bands, Ways to work drawn as Reasons, specialist services as an equal bento, home's close.
+      Rulings: decisions/2026-10-26-sliders-allowed-off-homepage, -quote-gets-its-own-band,
+      -case-cards-use-the-case-image, -service-items-drawn-per-item, -worked-example-is-a-strip.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·

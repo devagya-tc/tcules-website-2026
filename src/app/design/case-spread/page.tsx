@@ -41,10 +41,11 @@ export default function CaseSpreadSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>CaseSpread</h1>
           <p className={t.lead}>
-            A worked example argues one thing: we changed a real product and this is what it got. The
-            story runs in the order it happened — the problem, what we did, the result — as one line
-            down a rail that turns blue at the result, the payoff, with the action closing it; the
-            evidence sits beside it at 16:9 and holds in view while the story is read.
+            A worked example argues one thing: we changed a real product and this is what it
+            got. The story runs in the order it happened — the problem, what we did, the result
+            — as one line down a rail that turns blue at the result, the payoff, with the action
+            closing it; the evidence sits beside it at 16:9 and holds in view while the story is
+            read.
           </p>
         </Layout>
       </Section>
@@ -76,7 +77,10 @@ export default function CaseSpreadSpecimen() {
         story={[
           PROBLEM,
           DID,
-          { title: 'What stayed.', body: 'The screens people already knew, wherever they worked.' },
+          {
+            title: 'What stayed.',
+            body: 'The screens people already knew, wherever they worked.',
+          },
         ]}
       />
 
@@ -92,6 +96,33 @@ export default function CaseSpreadSpecimen() {
         action={ACTION}
         image={IMAGE}
         story={[PROBLEM, DID]}
+        surface="tint"
+      />
+
+      <Variation
+        id="strip"
+        title="4 · The strip — the problem and what we did drawn, the result shown"
+        note="`scenes` (owner, 26 Oct 2026, product-design page): an eyebrow over the case's name, the action at the head's end; the problem and what we did drawn on the same screen (a Sketch scene each) and the evidence as the result's picture, three on one ground joined in reading order; each step's words under its picture, the result's on the blue rule. Paper here; tint below, where the drawings' own plates are the panels."
+      />
+      <CaseSpread
+        eyebrow="Example"
+        heading="Dealpath"
+        headingId="csp-strip"
+        claim={CLAIM}
+        action={ACTION}
+        image={IMAGE}
+        story={[PROBLEM, DID]}
+        scenes={['case-dealpath-problem', 'case-dealpath-did']}
+      />
+      <CaseSpread
+        eyebrow="Example"
+        heading="Dealpath"
+        headingId="csp-strip-tint"
+        claim={CLAIM}
+        action={ACTION}
+        image={IMAGE}
+        story={[PROBLEM, DID]}
+        scenes={['case-dealpath-problem', 'case-dealpath-did']}
         surface="tint"
       />
     </>

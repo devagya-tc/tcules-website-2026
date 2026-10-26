@@ -37,6 +37,16 @@
   /* Where the sticky evidence stops under the viewport's top: clear of the site nav, a section's
      air. A distance, so a gap step. */
   --csp-media-sticky-top: var(--gap-section);
+  /* The strip (`scenes`, owner 26 Oct 2026): the story's three pictures on one ground, joined by the
+     route that runs from one to the next. */
+  --csp-eyebrow-text: var(--text-eyebrow);
+  --csp-eyebrow-tracking: var(--text-eyebrow-tracking);
+  --csp-strip-radius: var(--radius-16);
+  --csp-join-width: var(--border-width-2);
+  /* A component SIZE: the join's length between two pictures, and its head (the drawings' arrowhead, 7 × 8). */
+  --csp-join-length: var(--space-24);
+  --csp-join-head-length: var(--space-8);
+  --csp-join-head-width: var(--space-4);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -50,6 +60,9 @@
   --csp-story-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --csp-rule-ink: var(--color-neutral-300); /* decoration */
   --csp-media-rule-ink: var(--color-neutral-300); /* decoration */
+  --csp-eyebrow-ink: var(--color-neutral-600);
+  --csp-strip-ground: var(--color-paper-deep);
+  --csp-join-ink: var(--color-brandeis-500); /* a mark */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -62,6 +75,11 @@
   --csp-story-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --csp-rule-ink: var(--color-neutral-400); /* decoration */
   --csp-media-rule-ink: var(--color-neutral-400); /* decoration */
+  --csp-eyebrow-ink: var(--color-neutral-700);
+  /* On tint the strip takes no ground of its own: each drawing's plate is its panel there, as every
+     sketch on a tint band is. */
+  --csp-strip-ground: var(--color-paper-deep);
+  --csp-join-ink: var(--color-brandeis-500); /* a mark */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -74,6 +92,9 @@
   --csp-story-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --csp-rule-ink: var(--color-neutral-700); /* decoration */
   --csp-media-rule-ink: var(--color-neutral-700); /* decoration */
+  --csp-eyebrow-ink: var(--color-neutral-400);
+  --csp-strip-ground: var(--color-neutral-900);
+  --csp-join-ink: var(--color-brandeis-300); /* a mark */
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
@@ -86,4 +107,7 @@
   --csp-story-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --csp-rule-ink: var(--color-brandeis-300); /* decoration */
   --csp-media-rule-ink: var(--color-brandeis-300); /* decoration */
+  --csp-eyebrow-ink: var(--color-brandeis-100);
+  --csp-strip-ground: var(--color-brandeis-600);
+  --csp-join-ink: var(--color-white); /* a mark */
 }

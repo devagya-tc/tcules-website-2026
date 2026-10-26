@@ -5,6 +5,8 @@ import {
   getCaseRefs,
   getCorpusBindings,
   getCorpusPage,
+  getOfferScenes,
+  getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
@@ -49,10 +51,21 @@ export async function offerMetadata(route: string): Promise<Metadata | null> {
 export async function OfferRoute({ route }: { route: string }) {
   const page = await getCorpusPage(route);
   if (!page) notFound();
-  const [caseRefs, shared, ratings] = await Promise.all([
+  const [caseRefs, shared, ratings, avatars, scenes] = await Promise.all([
     getCaseRefs(caseRoutesIn(page)),
     getCorpusBindings(SHARED_BINDINGS),
     getTestimonialRatings(page.composition.testimonialIds),
+    getTestimonialAvatars(page.composition.testimonialIds),
+    getOfferScenes(route),
   ]);
-  return <OfferPage page={page} caseRefs={caseRefs} shared={shared} ratings={ratings} />;
+  return (
+    <OfferPage
+      page={page}
+      caseRefs={caseRefs}
+      shared={shared}
+      ratings={ratings}
+      avatars={avatars}
+      scenes={scenes}
+    />
+  );
 }

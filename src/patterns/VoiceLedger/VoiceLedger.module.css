@@ -51,4 +51,8 @@
   max-inline-size: var(--vlg-reply-measure);
 }
 
-
+/* A drawn row's closing drawing: its plate at the ledger's art width, at every width. */
+.art {
+  inline-size: var(--vlg-art-width);
+  max-inline-size: 100%;
+}

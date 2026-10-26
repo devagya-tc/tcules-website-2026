@@ -89,6 +89,15 @@
   opacity: 0;
 }
 
+.set {
+  --bnt-tracks: 4;
+}
+
+/* Three tracks of peers (`tracks={3}`): the same row wave, each tile's window a third of the row. */
+.set[data-tracks='3'] {
+  --bnt-tracks: 3;
+}
+
 .cell {
   --bnt-wave: url('/textures/bento-wave-tile.svg');
   --bnt-wave-size: 100% 100%;
@@ -101,7 +110,11 @@
   .cell {
     --bnt-wave-size: 100cqi 100%;
     --bnt-wave-x: calc(
-      -1 * var(--bnt-col) * ((100cqi - 3 * var(--gap-gutter)) / 4 + var(--gap-gutter)) -
+      -1 * var(--bnt-col) *
+        (
+          (100cqi - (var(--bnt-tracks) - 1) * var(--gap-gutter)) / var(--bnt-tracks) +
+            var(--gap-gutter)
+        ) -
         var(--bnt-rule-width)
     );
   }

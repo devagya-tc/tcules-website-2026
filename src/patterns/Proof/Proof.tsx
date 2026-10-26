@@ -7,12 +7,14 @@ import {
   Layout,
   Media,
   Prose,
+  StarRating,
   Tag,
   type BrandMarkName,
   type MediaImage,
 } from '@/components';
 import { cx } from '@/lib/cx';
 import { MEDIA_SPLIT, PROOF_PORTRAIT } from '@/lib/image-sizes';
+import { curlQuotes, withQuoteMarks } from '@/lib/quote-marks';
 
 import styles from './Proof.module.css';
 
@@ -26,8 +28,17 @@ import styles from './Proof.module.css';
 export type ProofPortrait = Pick<MediaImage, 'src' | 'width' | 'height' | 'sources'>;
 
 export type ProofQuote = {
-  /** Trusted, content-seam-sanitised rich text. Attribution never belongs in this field. */
+  /**
+   * Trusted, content-seam-sanitised rich text. Attribution never belongs in this field. Shown with
+   * its quote marks whether or not they were authored (owner, 12 Oct and 26 Oct 2026).
+   */
   quoteHtml: string;
+  /**
+   * The client's star rating out of 5, shown above the quote (owner, 26 Oct 2026: "we can introduce
+   * the star ratings back"). A testimonial's own score, never a platform rating (`ProofRating`, which
+   * never sits beside a quote). Absent, no stars.
+   */
+  stars?: number;
   /** The speaker. Required: named attribution is mandatory (CS; strapi-changes.md entry 4). */
   name: string;
   /** The speaker's title. Optional (HO §4): a blank or missing role leaves no separator or gap. */
@@ -455,10 +466,24 @@ function Quote({
           <Tag>{tag}</Tag>
         </Cluster>
       ) : null}
-      {/* Centred: the quote rule on its side, a block above the quote. Decorative. */}
-      {centred ? <span className={styles.mark} aria-hidden="true" /> : null}
+      {/* The client's stars open the quote (owner, 26 Oct 2026). Centred, they take the place of the
+          quote rule, so the figure opens on one mark, not two; beside a portrait they sit on the
+          quote's first letter, over its rule. */}
+      {typeof quote.stars === 'number' ? (
+        <StarRating
+          value={quote.stars}
+          glyph={<Icon name="star" />}
+          className={indented ? styles.attributionIndented : undefined}
+        />
+      ) : centred ? (
+        /* Centred without stars: the quote rule on its side, a block above the quote. Decorative. */
+        <span className={styles.mark} aria-hidden="true" />
+      ) : null}
       <blockquote className={styles.quoteText}>
-        <Prose html={bindShortWords(quote.quoteHtml)} className={styles.quoteProse} />
+        <Prose
+          html={bindShortWords(withQuoteMarks(curlQuotes(quote.quoteHtml)))}
+          className={styles.quoteProse}
+        />
       </blockquote>
       {/* The figcaption is the attribution row, and the figure's last child. With a portrait, the
           portrait sits flush on the start edge, under the rule, and the text starts a bind (block,

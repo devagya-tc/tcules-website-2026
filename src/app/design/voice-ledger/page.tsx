@@ -17,9 +17,13 @@ import t from '../_specimen/typeroles.module.css';
 const FIVE = [
   {
     voice: '"Customers keep getting stuck."',
-    reply: 'We watch how people really use the product, then redesign the steps that trip them up.',
+    reply:
+      'We watch how people really use the product, then redesign the steps that trip them up.',
   },
-  { voice: '"The product has grown messy."', reply: 'We reorganise its structure and navigation.' },
+  {
+    voice: '"The product has grown messy."',
+    reply: 'We reorganise its structure and navigation.',
+  },
   {
     voice: '"We want to test an idea before building it."',
     reply: 'We prototype it and put it in front of real users.',
@@ -42,12 +46,13 @@ export default function VoiceLedgerSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>VoiceLedger</h1>
           <p className={t.lead}>
-            The reader knows what is going wrong before they know which service they need. So the
-            complaint, in their own words, is the band&rsquo;s large thing (upright sans at h4, its
-            opening quote mark hung into the margin) down one edge on hairlines, and where we start is
-            the reply beside it, no arrow, its first line on the complaint&rsquo;s first baseline (Layout{' '}
-            <code>align=&quot;first-baseline&quot;</code>). Quote marks and apostrophes are typeset;
-            the words are as authored.
+            The reader knows what is going wrong before they know which service they need. So
+            the complaint, in their own words, is the band&rsquo;s large thing (upright sans at
+            h4, its opening quote mark hung into the margin) down one edge on hairlines, and
+            where we start is the reply beside it, no arrow, its first line on the
+            complaint&rsquo;s first baseline (Layout{' '}
+            <code>align=&quot;first-baseline&quot;</code>). Quote marks and apostrophes are
+            typeset; the words are as authored.
           </p>
         </Layout>
       </Section>
@@ -61,7 +66,31 @@ export default function VoiceLedgerSpecimen() {
         heading="Where we start depends on what's going wrong"
         headingId="vlg-five"
         items={FIVE}
-        note={<p className={t.body}>A closing line under the rows (`note`), in the same band.</p>}
+        note={
+          <p className={t.body}>A closing line under the rows (`note`), in the same band.</p>
+        }
+      />
+
+      <Variation
+        id="drawn"
+        title="1b · Drawn — each row closes on its fix"
+        note="`scene` on every row (owner, 26 Oct 2026, product-design page): the complaint, the answer, then the complaint drawn as the problem turning into its fix, at --vlg-art-width. Every row stays in view at once. Below 1024 the complaint heads the row and the answer and drawing share the next line; below 768 they stack."
+      />
+      <VoiceLedger
+        heading="Where we start depends on what's going wrong"
+        headingId="vlg-drawn"
+        items={FIVE.map((item, index) => ({
+          ...item,
+          scene: (
+            [
+              'symptom-stuck',
+              'symptom-messy',
+              'symptom-test',
+              'symptom-consistent',
+              'symptom-match',
+            ] as const
+          )[index],
+        }))}
       />
 
       <Variation
@@ -88,7 +117,10 @@ export default function VoiceLedgerSpecimen() {
               </>
             ),
           },
-          { voice: '"It worked in the prototype."', reply: 'Users can\'t finish the real flow.' },
+          {
+            voice: '"It worked in the prototype."',
+            reply: "Users can't finish the real flow.",
+          },
         ]}
       />
 

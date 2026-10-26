@@ -4,6 +4,13 @@
    tokens/components/case-spread.css. Paddings are the inside of an element's own edge (the claim's
    rule, a story item's ruled top), always a gap-scale step. No margins. */
 
+.eyebrow {
+  font: var(--csp-eyebrow-text);
+  letter-spacing: var(--csp-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--csp-eyebrow-ink);
+}
+
 .heading {
   font: var(--csp-heading-text);
   letter-spacing: var(--csp-heading-tracking);
@@ -71,4 +78,61 @@
   overflow: hidden;
   border: var(--csp-media-rule-width) solid var(--csp-media-rule-ink);
   border-radius: var(--csp-media-radius);
+}
+
+/* ── The strip (`scenes`) ─────────────────────────────────────────────────────────
+   The three pictures on one ground, its inset the gap scale's `block`, joined by the route: a line in
+   the drawings' accent ending on their one arrowhead. Below 1024 the strip stacks and each join turns
+   down. Each step's words sit under the ground, on a ruled top; the result's rule is the blue one. */
+.strip {
+  padding: var(--gap-block);
+  border-radius: var(--csp-strip-radius);
+  background: var(--csp-strip-ground);
+}
+
+.join {
+  position: relative;
+  justify-self: center;
+  inline-size: var(--csp-join-width);
+  block-size: var(--csp-join-length);
+  background: var(--csp-join-ink);
+}
+
+.join::after {
+  content: '';
+  position: absolute;
+  inset-block-end: calc(var(--csp-join-head-length) * -1);
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  border-block-start: var(--csp-join-head-length) solid var(--csp-join-ink);
+  border-inline: var(--csp-join-head-width) solid transparent;
+}
+
+@media (min-width: 1024px) {
+  .join {
+    inline-size: var(--csp-join-length);
+    block-size: var(--csp-join-width);
+  }
+
+  .join::after {
+    inset-block-end: auto;
+    inset-block-start: 50%;
+    inset-inline-start: auto;
+    inset-inline-end: calc(var(--csp-join-head-length) * -1);
+    translate: 0 -50%;
+    border-block-start: var(--csp-join-head-width) solid transparent;
+    border-block-end: var(--csp-join-head-width) solid transparent;
+    border-inline: 0;
+    border-inline-start: var(--csp-join-head-length) solid var(--csp-join-ink);
+  }
+}
+
+.stripStep,
+.stripResult {
+  padding-block-start: var(--gap-text);
+  border-block-start: var(--csp-rule-width) solid var(--csp-rule-ink);
+}
+
+.stripResult {
+  border-block-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
 }

@@ -97,6 +97,51 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="three-tracks"
+        title="2b · Peers on three tracks (tracks={3})"
+        note="Five destinations of one weight (owner, 26 Oct 2026, product-design specialist services): every tile one size, three a row from 1024 and the last row left-aligned; spans are ignored. Each row's wave runs on across its three tiles."
+      />
+      <Section>
+        <Bento
+          tracks={3}
+          items={(
+            [
+              [
+                'ux-research',
+                'UX Research',
+                'Find out how people really use your product.',
+                'specialist-research',
+              ],
+              [
+                'ia',
+                'Information Architecture & Workflow Design',
+                'Make complex products easy to navigate.',
+                'specialist-ia',
+              ],
+              [
+                'ui',
+                'Interaction & UI Design',
+                'Screens and interactions that make the next step obvious.',
+                'specialist-ui',
+              ],
+              [
+                'dataviz',
+                'Data Visualisation',
+                'Dashboards and charts people can act on.',
+                'specialist-dataviz',
+              ],
+              [
+                'prototyping',
+                'Prototyping & Usability Testing',
+                'Test ideas before you build them.',
+                'specialist-prototype',
+              ],
+            ] as const
+          ).map(([id, title, body, scene]) => ({ id, title, body, scene, href: `#${id}` }))}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

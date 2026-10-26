@@ -8,6 +8,8 @@ import { INSIGHTS_FIXTURE } from './sources/fixtures/insights';
 import { PLACEHOLDER_REASONS, figureOf } from './sources/fixtures/placeholder-reasons';
 import { PROPOSED_EYEBROWS } from './sources/fixtures/proposed-eyebrows';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
+import { OFFER_SCENES } from './sources/offer-scenes';
+import type { OfferScenes } from '@/lib/sketches';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
@@ -195,6 +197,14 @@ export async function getTestimonialAvatars(
     if (avatar) found[id] = avatar;
   }
   return found;
+}
+
+/**
+ * The drawings a corpus offer page's items carry (content/sources/offer-scenes.ts), by route. A route
+ * with none gets empty maps, and its bands keep their undrawn arrangements.
+ */
+export async function getOfferScenes(route: string): Promise<OfferScenes> {
+  return OFFER_SCENES[route] ?? { items: {}, stories: {} };
 }
 
 /** A route's proposed band eyebrows (PROPOSED, fixtures/proposed-eyebrows.ts), keyed by band id. */

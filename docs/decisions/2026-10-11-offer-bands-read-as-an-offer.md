@@ -1,7 +1,7 @@
 ---
 title: "\"What you get\" bands read as a clear offer"
 date: 2026-10-11
-status: active
+status: superseded
 area: [layout, content]
 source: "Owner review, 11 Oct 2026 (product-design service page)"
 supersedes: []
@@ -18,3 +18,5 @@ legacy: "memory/home-review-patterns-oct-2026.md"
 **The mistake it prevents.** The service page's deliverables as a row of equal cards.
 
 **How to apply.** Offer bands on every service page; OfferSheet is the iterated pattern.
+
+Superseded 26 Oct 2026 by `2026-10-26-quote-gets-its-own-band`: the testimonial no longer sits beside the offer; it takes its own tint band after it.

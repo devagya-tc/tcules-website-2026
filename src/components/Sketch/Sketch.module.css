@@ -28,7 +28,6 @@
   background: none;
 }
 
-
 .frame {
   fill: var(--skt-frame-fill);
   stroke: var(--skt-frame-ink);
@@ -219,6 +218,12 @@
   fill: var(--skt-accent);
 }
 
+/* A glyph for something absent or waiting (an empty state, a manual set aside): the quiet ink. */
+.glyphQuiet {
+  fill: var(--skt-quiet-ink);
+  fill-rule: evenodd;
+}
+
 /* What floats (the cursor): a heavier outline, and its flat offset under it. */
 .lift {
   fill: var(--skt-frame-fill);
@@ -353,7 +358,8 @@
 
 /* Held still (every plate, and a bare story scene not asked to move): the solved state above, with no
    move to make, and the route a plain line at the line weight, since nothing reveals it. */
-.still :is(.decision, .block, .press, .release, .codeLine, .releaseMark, .trace, .grow, .glide) {
+.still
+  :is(.decision, .block, .press, .release, .codeLine, .releaseMark, .trace, .grow, .glide) {
   transition: none;
 }
 .still .trace {

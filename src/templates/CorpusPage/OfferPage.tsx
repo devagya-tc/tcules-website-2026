@@ -29,9 +29,16 @@ export type OfferPageProps = Omit<OfferContext, 'page'> & {
  *   3. Photographs alternate sides down the page; a media split is never a third in a row.
  *   4. It closes on the enquiry form, split, the page's one ask made once more.
  */
-export function OfferPage({ page, caseRefs, shared, ratings }: OfferPageProps) {
+export function OfferPage({
+  page,
+  caseRefs,
+  shared,
+  ratings,
+  avatars,
+  scenes,
+}: OfferPageProps) {
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared, ratings };
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes };
 
   const drawing = page.route.startsWith('/services/')
     ? serviceIllustration(page.slug)
