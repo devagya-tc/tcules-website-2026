@@ -34,7 +34,7 @@ const PROMPT = 'docs/prompts/component-spec-brief.md';
    vocabulary into the middle of that note and left the real marker sitting in the output. */
 const MARKER = /^<!-- VOCABULARY -->[ \t]*$/m;
 const PRIMITIVES = 'src/styles/tokens/primitives.css';
-const GLYPHS = 'src/components/Icon/glyphs.ts';
+const GLYPHS = 'src/lib/icon-glyphs.ts';
 const SECTION_TOKENS = 'src/styles/tokens/components/section.css';
 const SURFACES = ['paper', 'tint', 'ink', 'blue'];
 
