@@ -27,7 +27,9 @@ choices, then carry on with what you can; never stop and wait on it.
    leave them out for now, or save them as a separate piece of work?").
 3. **Checks.** Run `npm run verify` (if `node_modules` is missing, run `npm ci` once first). Fix a
    failure at its cause and run it again. If the fix needs a file this person's role can't edit, say
-   what Devagya needs to change, and continue with the rest.
+   what Devagya needs to change, and continue with the rest. If the checks can't run on this laptop
+   at all (no Node, or `npm ci` blocked), say so in plain words, carry on, and note it in the pull
+   request body: GitHub runs the same checks on every pull request.
 4. **Commit.** Only the files this work changed; never `.claude/settings.local.json` or
    `CLAUDE.local.md`. One commit in the repo's style: a short summary line, then what changed and why.
 5. **Bring in newer work if needed.** If `main` has moved on since this branch started, say so plainly
