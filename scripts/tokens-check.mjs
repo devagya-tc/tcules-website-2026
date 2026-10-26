@@ -34,6 +34,10 @@ const CONSUMER_GLOBS = ['src/**/*.module.css', 'src/app/globals.css', 'src/style
  *   cannot be a class. Media.module.css also declares a local default on .fill and .crop (the
  *   stylesheet's anchor where the record names none), but the inline write is the source, and it is
  *   listed here so the check does not depend on that default happening to exist.
+ *
+ * --toc-marker-offset, --toc-marker-size  written by src/patterns/TableOfContents/TableOfContents.tsx
+ *   from the current row's offsetTop and offsetHeight, so its one marker can slide. The token layer
+ *   declares their rests, but the inline write is the source.
  */
 const JS_INJECTED = new Set([
   '--tmpl-base',
@@ -44,6 +48,8 @@ const JS_INJECTED = new Set([
   '--view-md',
   '--view-lg',
   '--view-xl',
+  '--toc-marker-offset', // TableOfContents: the current row's box, measured in TableOfContents.tsx
+  '--toc-marker-size',
   '--slider-count', // Slider: the slide count, and the scroll progress it writes on scroll
   '--slider-progress',
   '--slider-bleed', // Slider `bleed`: the measured distance from its end edge to the viewport's
