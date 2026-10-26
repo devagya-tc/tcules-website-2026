@@ -115,16 +115,30 @@ function Chip({ x, y, glyph }: { x: number; y: number; glyph: IconName }) {
   );
 }
 
-/** The lens: a magnifier over (x, y), its handle at 135°, the flat offset under the handle. */
+/**
+ * The lens: a magnifier over (x, y), drawn as ONE object (owner, 26 Oct 2026: the handle "reads as line
+ * on top of the circle not as one unit"). The handle is an outlined bar in the ring's own ink and
+ * weight, set at 135° and tucked under the ring, and the two share one flat offset, as everything that
+ * floats does.
+ */
 function Lens({ x, y, r }: { x: number; y: number; r: number }) {
-  const hx = x - r * Math.SQRT1_2;
-  const hy = y + r * Math.SQRT1_2;
+  const handle = (dx: number, className: string | undefined) => (
+    <rect
+      className={className}
+      x={-3.5}
+      y={r - 3}
+      width={7}
+      height={15}
+      rx={3.5}
+      transform={`translate(${x + dx},${y + dx}) rotate(45)`}
+    />
+  );
   return (
     <>
-      <circle className={styles.blank} cx={x} cy={y} r={r} />
-      <path className={styles.handleUnder} d={`M${hx + 2},${hy + 2} L${hx - 14},${hy + 18}`} />
-      <path className={styles.handle} d={`M${hx},${hy} L${hx - 16},${hy + 16}`} />
-      <circle className={styles.lens} cx={x} cy={y} r={r} />
+      <circle className={styles.liftUnder} cx={x + 2} cy={y + 2} r={r} />
+      {handle(2, styles.liftUnder)}
+      {handle(0, styles.lift)}
+      <circle className={styles.lift} cx={x} cy={y} r={r} />
     </>
   );
 }

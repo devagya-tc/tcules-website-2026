@@ -66,48 +66,44 @@
 }
 
 /* ── The strip (`scenes`) ─────────────────────────────────────────────────────────
-   The three pictures on one ground, its inset the gap scale's `block`, joined by the route: a line in
-   the drawings' accent ending on their one arrowhead. Below 1024 the strip stacks and each join turns
-   down. Each step's words sit under the ground, on a ruled top; the result's rule is the blue one. */
-.strip {
-  padding: var(--gap-block);
-  border-radius: var(--csp-strip-radius);
-  background: var(--csp-strip-ground);
+   Each step's picture over its words, on three equal tracks. The join is the drawings' own route, a
+   line in their accent ending on their one arrowhead, centred in the seam between two pictures and
+   level with their middle. Below 1024 the steps stack and the joins go: the order reads down. */
+.picture {
+  position: relative;
 }
 
 .join {
-  position: relative;
-  justify-self: center;
-  inline-size: var(--csp-join-width);
-  block-size: var(--csp-join-length);
-  background: var(--csp-join-ink);
-}
-
-.join::after {
-  content: '';
-  position: absolute;
-  inset-block-end: calc(var(--csp-join-head-length) * -1);
-  inset-inline-start: 50%;
-  translate: -50% 0;
-  border-block-start: var(--csp-join-head-length) solid var(--csp-join-ink);
-  border-inline: var(--csp-join-head-width) solid transparent;
+  display: none;
 }
 
 @media (min-width: 1024px) {
   .join {
+    display: block;
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 100%;
+    inline-size: var(--gap-column);
+  }
+
+  /* The line and its head, centred together in the seam. */
+  .join::before,
+  .join::after {
+    content: '';
+    position: absolute;
+    translate: 0 -50%;
+  }
+
+  .join::before {
+    inset-inline-start: calc(50% - (var(--csp-join-length) + var(--csp-join-head-length)) / 2);
     inline-size: var(--csp-join-length);
     block-size: var(--csp-join-width);
+    background: var(--csp-join-ink);
   }
 
   .join::after {
-    inset-block-end: auto;
-    inset-block-start: 50%;
-    inset-inline-start: auto;
-    inset-inline-end: calc(var(--csp-join-head-length) * -1);
-    translate: 0 -50%;
-    border-block-start: var(--csp-join-head-width) solid transparent;
-    border-block-end: var(--csp-join-head-width) solid transparent;
-    border-inline: 0;
+    inset-inline-start: calc(50% + (var(--csp-join-length) - var(--csp-join-head-length)) / 2);
+    border-block: var(--csp-join-head-width) solid transparent;
     border-inline-start: var(--csp-join-head-length) solid var(--csp-join-ink);
   }
 }

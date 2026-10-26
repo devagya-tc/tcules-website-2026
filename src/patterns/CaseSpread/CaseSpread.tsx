@@ -104,33 +104,41 @@ export function CaseSpread({
           ) : (
             head
           )}
-          <Layout rowGap="block">
-            {/* The three pictures on one ground, joined in reading order. Decorative joins. */}
-            <Layout
-              className={styles.strip}
-              columns={{ base: 1, lg: [1, 'auto', 1, 'auto', 1] }}
-              colGap="tight"
-              rowGap="text"
-              align="center"
-            >
-              <Sketch name={problem} />
-              <span className={styles.join} aria-hidden="true" />
-              <Sketch name={did} />
-              <span className={styles.join} aria-hidden="true" />
-              <div className={styles.frame}>
-                <Media image={image} sizes={CASE_SPREAD_MEDIA} fit="fill" edge="placement" />
-              </div>
-            </Layout>
-            <Layout as="ol" columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-              {steps.map((part) => (
-                <li key={part.title}>
+          {/* Each step is ONE unit, its picture over its words, on one grid of three equal tracks, so
+              every picture sits on its own words' edges (owner, 26 Oct 2026: "each drawing needs to
+              be associated with the card below it so there's symmetry"). The route between pictures
+              sits in the seam, centred in it and level with the pictures' middle, so the joins are
+              evenly spaced by construction. Below 1024 the steps stack in order and the joins go. */}
+          <Layout as="ol" columns={{ base: 1, lg: 3 }} colGap="column" rowGap="stack">
+            {steps.map((part, index) => (
+              <li key={part.title}>
+                <Layout rowGap="block">
+                  <div className={styles.picture}>
+                    {index === 0 ? (
+                      <Sketch name={problem} />
+                    ) : index === 1 ? (
+                      <Sketch name={did} />
+                    ) : (
+                      <div className={styles.frame}>
+                        <Media
+                          image={image}
+                          sizes={CASE_SPREAD_MEDIA}
+                          fit="fill"
+                          edge="placement"
+                        />
+                      </div>
+                    )}
+                    {index < steps.length - 1 ? (
+                      <span className={styles.join} aria-hidden="true" />
+                    ) : null}
+                  </div>
                   <Layout rowGap="tight">
                     <h3 className={styles.storyTitle}>{part.title}</h3>
                     <p className={styles.storyBody}>{part.body}</p>
                   </Layout>
-                </li>
-              ))}
-            </Layout>
+                </Layout>
+              </li>
+            ))}
           </Layout>
         </Layout>
       </Section>
