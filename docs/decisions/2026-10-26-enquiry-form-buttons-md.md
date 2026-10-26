@@ -2,7 +2,7 @@
 title: Enquiry form buttons are md, one step down from lg
 date: 2026-10-26
 status: active
-area: [forms, buttons]
+area: [forms, components]
 source: Devagya, 26 Oct 2026, seen built on /design/enquiry-form (PR for design/enquiry-form-md-buttons)
 supersedes: []
 dbf: []
