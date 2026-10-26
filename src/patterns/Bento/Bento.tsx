@@ -99,7 +99,7 @@ export function Bento({ items, titleAs: Title = 'h3' }: BentoProps) {
         );
         const art = (
           <div className={styles.art}>
-            <Sketch name={item.scene} frame="bare" weight="light" story />
+            <Sketch name={item.scene} frame="bare" story />
           </div>
         );
         return (

@@ -62,20 +62,20 @@ export default function SketchSpecimen() {
           </Specimen>
           <Specimen
             title={`S.3 · the story drawings, rest and solved · ${surface}`}
-            note="Owner, 25 Oct 2026: the bento's service drawings, redrawn to the flat-graphics grammar, the problem at rest and solved when the link they sit in is hovered or focused, in one move on the owner's hover curve. Left: at rest (hover it). Right: held solved. Bare frame, light weight, as the bento sets them."
+            note="Owner, 25 Oct 2026: the bento's service drawings, redrawn to the flat-graphics grammar, the problem at rest and solved when the link they sit in is hovered or focused, in one move on the owner's hover curve. Left: at rest (hover it). Right: held solved. Bare frame, as the bento sets them. On a plate the same drawing is held solved and does not move (S.1)."
           >
             <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
               {STORY.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Layout columns={2} colGap="gutter" rowGap="tight">
                     <a
-                      href={`#story-${name}`}
-                      id={`story-${name}`}
+                      href={`#story-${surface}-${name}`}
+                      id={`story-${surface}-${name}`}
                       aria-label={`Hover: ${name}`}
                     >
-                      <Sketch name={name} frame="bare" weight="light" story />
+                      <Sketch name={name} frame="bare" story />
                     </a>
-                    <Sketch name={name} frame="bare" weight="light" story end />
+                    <Sketch name={name} frame="bare" story end />
                   </Layout>
                   <code>{name}</code>
                 </Layout>

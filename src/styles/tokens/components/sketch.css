@@ -3,7 +3,7 @@
    plate language EngagementOptions and TracePlates set: dot field, quiet frames, one blue subject.
 
    Naming: --skt-{part}-{role}
-     parts  plate · field · frame · quiet · copy · line · accent · region · dash · soft · chip · lift · glide
+     parts  plate · field · frame · quiet · copy · line · accent · region · region-copy · dash · soft · chip · lift · handle · glide
      roles  ground · ink · fill · width · radius · under · duration · easing
 
    No state tokens. A sketch is decorative; a STORY sketch has a rest and a solved state (its link
@@ -13,26 +13,28 @@
 
 :root {
   --skt-plate-radius: var(--radius-8);
-  --skt-frame-width: var(--border-width-2);
-  --skt-copy-width: var(--border-width-3);
-  --skt-line-width: var(--border-width-3);
+  /* The grammar's two weights (owner, 26 Oct 2026, S2): 1 for every outline, 2 for every line that
+     carries (copy, the route, a tick). One weight set at every size, so a small drawing gets denser,
+     not fainter. */
+  --skt-frame-width: var(--border-width-1);
+  --skt-copy-width: var(--border-width-2);
+  --skt-line-width: var(--border-width-2);
   /* The bare frame's size: one drawing unit at scale 1 is one CSS pixel, and the scale is the
      parent's to set (Bento sets it per tile size). */
   --skt-unit: var(--space-1);
   /* The drawing's width in units: the full 320 here, set per drawing by Sketch on a bare one. */
   --skt-units: 320;
   --skt-scale: 1;
-  /* The light weight (owner, 19 Oct 2026, home What we do): every stroke one step down the ramp. */
-  --skt-frame-width-light: var(--border-width-1);
-  --skt-copy-width-light: var(--border-width-2);
-  --skt-line-width-light: var(--border-width-2);
-  /* The dashed connection, in the drawing's own units (SVG user space). */
-  --skt-dash: 5 4;
+  /* The one dash, in the drawing's own units (SVG user space): something not built yet, a trail, a
+     gap. The same 6 4 as the isometric illustrations and the other flat families. */
+  --skt-dash: 6 4;
   /* The field's dot: an optical size, and the edge it softens over so it is not jagged. */
   --skt-dot-radius: var(--border-width-hairline);
   --skt-dot-soft: var(--border-width-hairline);
   /* What floats above the drawing (a cursor): its outline, heavier than the drawing's own. */
   --skt-lift-width: var(--border-width-2);
+  /* The lens's handle: a bar in the drawing's own units (SVG user space), scaling with the lens. */
+  --skt-handle-width: 6;
   /* A story drawing's one move (owner's hover curve, decisions/2026-10-19-hover-is-a-move), the same
      values the bento's tile moves on, duplicated on purpose: a component never reads another's tokens. */
   --skt-duration: var(--duration-slow);
@@ -55,6 +57,7 @@
   --skt-accent: var(--color-brandeis-500); /* 6.17:1 */
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100); /* decoration */
+  --skt-region-copy-ink: var(--color-brandeis-300); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
   --skt-chip-fill: var(--color-paper-deep); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-700);
@@ -72,6 +75,7 @@
   --skt-accent: var(--color-brandeis-500);
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100);
+  --skt-region-copy-ink: var(--color-brandeis-300); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
   --skt-chip-fill: var(--color-paper); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-700);
@@ -89,6 +93,7 @@
   --skt-accent: var(--color-brandeis-300);
   --skt-accent-on: var(--color-neutral-950);
   --skt-region-fill: var(--color-neutral-800);
+  --skt-region-copy-ink: var(--color-neutral-600); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-neutral-700); /* a part not yet placed */
   --skt-chip-fill: var(--color-neutral-900); /* a glyph's chip */
   --skt-lift-ink: var(--color-neutral-200);
@@ -106,6 +111,7 @@
   --skt-accent: var(--color-white);
   --skt-accent-on: var(--color-brandeis-600);
   --skt-region-fill: var(--color-brandeis-400);
+  --skt-region-copy-ink: var(--color-brandeis-200); /* decoration: copy inside a region */
   --skt-soft-fill: var(--color-brandeis-300); /* a part not yet placed */
   --skt-chip-fill: var(--color-brandeis-600); /* a glyph's chip */
   --skt-lift-ink: var(--color-white);

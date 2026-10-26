@@ -28,12 +28,6 @@
   background: none;
 }
 
-/* The light weight: the same drawing in thinner strokes. */
-.light {
-  --skt-frame-width: var(--skt-frame-width-light);
-  --skt-copy-width: var(--skt-copy-width-light);
-  --skt-line-width: var(--skt-line-width-light);
-}
 
 .frame {
   fill: var(--skt-frame-fill);
@@ -130,6 +124,57 @@
 
 .halo {
   fill: var(--skt-region-fill);
+}
+/* Copy inside a blue region, and a region's edge where it runs on without its sides (under the lens). */
+.regionCopy {
+  fill: none;
+  stroke: var(--skt-region-copy-ink);
+  stroke-width: var(--skt-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.regionEdge {
+  fill: none;
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+/* What is not built yet: 45° hatching inside its dashed outline. */
+.hatch {
+  fill: none;
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+/* The one arrowhead, on a route not yet taken. */
+.quietMark {
+  fill: var(--skt-quiet-ink);
+}
+/* A glyph knocked out of a solid focal point. */
+.glyphOn {
+  fill: var(--skt-accent-on);
+  fill-rule: evenodd;
+}
+/* The lens: it floats, so its rim takes the lift outline and its handle the lift ink. The handle is a
+   bar drawn in the drawing's own units, so it scales with the lens it belongs to. */
+.blank {
+  fill: var(--skt-frame-fill);
+}
+.lens {
+  fill: none;
+  stroke: var(--skt-lift-ink);
+  stroke-width: var(--skt-lift-width);
+  vector-effect: non-scaling-stroke;
+}
+.handle,
+.handleUnder {
+  fill: none;
+  stroke: var(--skt-lift-ink);
+  stroke-width: var(--skt-handle-width);
+  stroke-linecap: round;
+}
+.handleUnder {
+  stroke: var(--skt-lift-under);
 }
 
 /* ── Story drawings ───────────────────────────────────────────────────────────────
@@ -306,6 +351,17 @@
   fill: var(--skt-accent-on);
 }
 
+/* Held still (every plate, and a bare story scene not asked to move): the solved state above, with no
+   move to make, and the route a plain line at the line weight, since nothing reveals it. */
+.still :is(.decision, .block, .press, .release, .codeLine, .releaseMark, .trace, .grow, .glide) {
+  transition: none;
+}
+.still .trace {
+  stroke-width: var(--skt-line-width);
+  stroke-linecap: round;
+  stroke-dasharray: none;
+  vector-effect: non-scaling-stroke;
+}
 @media (prefers-reduced-motion: reduce) {
   .decision,
   .block,

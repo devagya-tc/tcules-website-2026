@@ -29,11 +29,11 @@
   --trp-node-reach: var(--space-8);
   --trp-trace-width: var(--border-width-2);
   --trp-frame-width: var(--border-width-hairline);
-  --trp-mark-width: var(--border-width-hairline-deck);
+  --trp-mark-width: var(--border-width-1); /* an outline, 1 in the flat-graphics grammar's two weights (owner, 26 Oct 2026, S2) */
   /* A line of copy in the drawing: a thick rounded stroke, read as text at a glance. */
-  --trp-copy-width: var(--border-width-3);
+  --trp-copy-width: var(--border-width-2); /* a line that carries, 2 */
   /* The unspecified state's dashed box, in the drawing's own units (SVG user space). */
-  --trp-dash: 5 4;
+  --trp-dash: 6 4; /* the grammar's one dash, shared with every flat family */
   /* Each stage has a fifth of the column from 1024: the card-title step and the small body. */
   --trp-title-text: var(--text-h5);
   --trp-title-tracking: var(--text-h5-tracking);

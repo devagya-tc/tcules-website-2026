@@ -33,11 +33,11 @@
   --eop-plate-radius: var(--radius-8);
   --eop-body-measure: var(--measure-lead);
   /* Strokes stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
-  --eop-line-width: var(--border-width-3); /* a workflow: the drawing's heavy stroke */
-  --eop-region-width: var(--border-width-2); /* a region's edge */
-  --eop-node-width: var(--border-width-2); /* an open node's ring */
+  --eop-line-width: var(--border-width-2); /* a workflow: a line that carries, 2 in the flat-graphics grammar's two weights (owner, 26 Oct 2026, S2) */
+  --eop-region-width: var(--border-width-1); /* a region's edge: an outline, 1 */
+  --eop-node-width: var(--border-width-1); /* an open node's ring: an outline, 1 */
   /* The drawn-but-not-built region's dash, in the drawing's own units (SVG user space). */
-  --eop-region-dash: 6 5;
+  --eop-region-dash: 6 4; /* the grammar's one dash, shared with every flat family */
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
