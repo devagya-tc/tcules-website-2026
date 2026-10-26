@@ -185,7 +185,7 @@ and the close on all six. There is no ink or blue anywhere, because both are res
 sits above the ink footer. There is no peridot either (removed in the second pass).
 
 **Icons** follow ch04: one glyph per row, in the text's ink, never on a heading, never in a disc. I
-added 24 Solar Bold glyphs verbatim from `@iconify-json/solar` (see `glyphs.ts`); 11 of them are
+added 24 Solar Bold glyphs verbatim from `@iconify-json/solar` (see `src/lib/icon-glyphs.ts`); 11 of them are
 ch04's starter set.
 
 ## 3 · Images

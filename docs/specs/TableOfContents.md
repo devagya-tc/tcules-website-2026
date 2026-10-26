@@ -1,12 +1,23 @@
 # TableOfContents
 
+> **Superseded in its visual design, 26 Oct 2026** (owner; `docs/decisions/2026-10-26-toc-in-the-index-rail-grammar.md`).
+> The outline is now drawn in IndexRail's grammar. It has no ordinals, and each entry is a one-line
+> marker (`navigationLabel`). An "On this page" eyebrow sits over one rule. One 2px marker grows in at
+> the first section and then slides row to row, by transform only. Below 1024 a sticky bar under the
+> nav names the section in view and opens the list under itself, and the scroll tracking now runs at
+> every width. Where this document describes ordinals, the two-line clamp, 44px desktop rows, the
+> 3px current rule, the underline wipe, the blue-ordinal currency, the closed disclosure on phones
+> or the observer gated to ≥ 1024, it is history. The API (`items: TocItem[]`), the ≥ 2 floor, the
+> rail's caps and stickiness, the surface model and `aria-current="location"` still hold. The code
+> and `tokens/components/table-of-contents.css` are the current statement.
+
 ## 0 · Front matter
 
 | | |
 |---|---|
 | **Component** | `TableOfContents` |
 | **Tier** | 2 pattern (`src/patterns/TableOfContents/`) |
-| **Status** | implemented |
+| **Status** | implemented 26 Aug 2026 · **visual design superseded 26 Oct 2026** — see the note above; §§ 4–9 and § 14 describe the August build and their greps no longer run against the module |
 | **Token prefix** | `--toc-*` (collides with none of `--acc-` `--bcrd-` `--crumb-` `--btn-` `--call-` `--cta-` `--enq-` `--fig-` `--foot-` `--icn-` `--inp-` `--lay-` `--lcrd-` `--logo-` `--nav-` `--hero-` `--proof-` `--prose-` `--sec-`) |
 | **Designer / date** | Design · 26 Aug 2026 |
 | **Implements** | `docs/briefs/19-table-of-contents.md` |

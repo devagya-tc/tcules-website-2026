@@ -1,6 +1,6 @@
 import { cx } from '@/lib/cx';
 
-import { glyphs, hasCounter, type IconName } from './glyphs';
+import { glyphs, hasCounter, type IconName } from '@/lib/icon-glyphs';
 import styles from './Icon.module.css';
 
 export type { IconName };
@@ -19,7 +19,7 @@ export type { IconName };
  * That is deliberate — the spec's rule is that the icon steps with the BUTTON, so the button is
  * the component that gets to decide.
  *
- * The 16px floor: a glyph with a counter (see `hasCounter` in glyphs.ts) is never set at `sm`.
+ * The 16px floor: a glyph with a counter (see `hasCounter` in @/lib/icon-glyphs) is never set at `sm`.
  * Its hole is about 1.5 units wide, which at 14px is under a device pixel and fills in. Icon warns
  * in development when asked for one; a control that sizes its own glyph owes the same rule and is
  * told so in docs/specs/Icon.md.
@@ -27,7 +27,7 @@ export type { IconName };
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export type IconProps = {
-  /** Which glyph. A union of the set in glyphs.ts, so a typo fails to compile. */
+  /** Which glyph. A union of the set in @/lib/icon-glyphs, so a typo fails to compile. */
   name: IconName;
   /** Size role. Defaults to `md` (16). Ignored inside a control that sizes its own icons. */
   size?: IconSize;

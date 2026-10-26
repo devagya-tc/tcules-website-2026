@@ -13,7 +13,7 @@
 | **Implemented at** | `src/components/Icon/` · `src/styles/tokens/components/icon.css` · `src/app/design/icon/page.tsx` |
 
 This document did not exist before 29 Sep 2026: `Icon` shipped from the Button spec's glyph
-requests and from the reasoning in `glyphs.ts`, `Icon.tsx` and `icon.css`, which remain the
+requests and from the reasoning in `src/lib/icon-glyphs.ts`, `Icon.tsx` and `icon.css`, which remain the
 detailed record. It is written now so the ch04 migration has a spec to amend, and it states only
 what the code does.
 
@@ -59,7 +59,7 @@ Fifteen glyphs, each ch04's fixed choice for its meaning, and none used for anot
 | `danger-triangle` | Warning | ch04 embed |
 
 Where both sources carry a glyph they are the same drawing, differing only in coordinate rounding.
-Paths are pasted into `glyphs.ts`; there is no icon package at runtime. **Never hand-edit a path —
+Paths are pasted into `src/lib/icon-glyphs.ts`; there is no icon package at runtime. **Never hand-edit a path —
 replace it from source.**
 
 ### Renamed in 2.17
@@ -82,7 +82,7 @@ caller and `/insights`, and the `.design-sync` previews.
 
 | Prop | Type | Default | |
 |---|---|---|---|
-| `name` | `IconName` | — | The union of `glyphs.ts`; a typo fails to compile |
+| `name` | `IconName` | — | The union of `src/lib/icon-glyphs.ts`; a typo fails to compile |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Ignored inside a control that sizes its own glyph |
 | `label` | `string` | `undefined` | Only for a glyph that carries meaning alone: gives `role="img"` and a `<title>`. Otherwise `aria-hidden` |
 | `className` | `string` | `undefined` | Never for colour or size |

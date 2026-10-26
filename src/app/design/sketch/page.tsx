@@ -12,8 +12,14 @@ const NAMES: readonly SketchName[] = [
   'software-development',
 ];
 /** The article scenes: each drawn for one insight, its cover until a real one exists. */
-const ARTICLE: readonly SketchName[] = ['code-review', 'security-checklist', 'prototype-to-production'];
+const ARTICLE: readonly SketchName[] = [
+  'code-review',
+  'security-checklist',
+  'prototype-to-production',
+];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
+/** The scenes with a STORY drawing: the six the home bento shows. */
+const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
 
 export default function SketchSpecimen() {
   return (
@@ -49,6 +55,28 @@ export default function SketchSpecimen() {
               {ARTICLE.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.3 · the story drawings, rest and solved · ${surface}`}
+            note="Owner, 25 Oct 2026: the bento's service drawings, redrawn to the flat-graphics grammar, the problem at rest and solved when the link they sit in is hovered or focused, in one move on the owner's hover curve. Left: at rest (hover it). Right: held solved. Bare frame, light weight, as the bento sets them."
+          >
+            <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+              {STORY.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Layout columns={2} colGap="gutter" rowGap="tight">
+                    <a
+                      href={`#story-${name}`}
+                      id={`story-${name}`}
+                      aria-label={`Hover: ${name}`}
+                    >
+                      <Sketch name={name} frame="bare" weight="light" story />
+                    </a>
+                    <Sketch name={name} frame="bare" weight="light" story end />
+                  </Layout>
                   <code>{name}</code>
                 </Layout>
               ))}

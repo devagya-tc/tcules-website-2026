@@ -1,6 +1,6 @@
 /* Icon — a solid glyph on a 24-unit box.
 
-   Presentation attributes are set here rather than on the markup so the glyph data in glyphs.ts
+   Presentation attributes are set here rather than on the markup so the glyph data in @/lib/icon-glyphs
    stays pure path geometry: a new glyph is a `d` string and nothing else, and it cannot arrive
    carrying its own fill or its own weight. Both properties below inherit down the SVG tree, so
    declaring them once on the root element covers every path inside it.
