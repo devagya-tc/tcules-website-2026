@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 
-import type { IconName } from '@/lib/icon-glyphs';
 import type { OfferSceneName } from '@/lib/sketches';
 
 import styles from './Sketch.module.css';
@@ -101,16 +100,6 @@ function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
         cy={y + 6}
         r="3.5"
       />
-    </>
-  );
-}
-
-/** A glyph in its chip, top-left at (x, y). */
-function Chip({ x, y, glyph }: { x: number; y: number; glyph: IconName }) {
-  return (
-    <>
-      <Rect x={x} y={y} w={16} h={16} className={styles.chip} />
-      <Glyph name={glyph} cx={x + 8} cy={y + 8} size={10} className={styles.glyphAccent} />
     </>
   );
 }
@@ -445,15 +434,20 @@ function SpecialistPrototype() {
 }
 
 /* ── A worked example: Dealpath ──────────────────────────────────────────────────
-   Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.8, so the listing card, its
+   Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.82, so the listing card, its
    "Add to pipeline" action and the pipeline column read at the plate's size. The two drawings share
-   every part but the change. */
+   every part but the change.
 
+   The PROPERTY has an identity: its picture is the soft blue tile, on the listing and on every deal
+   for it, and every other deal's picture is quiet. So a duplicate reads as a twin of the deal already
+   there, without words (owner, 26 Oct 2026: "the problem graphic doesn't look like a problem"). */
+
+/** The listing card: this property's picture, its name and place, its line, its action. */
 function Listing() {
   return (
     <>
       <Rect x={20} y={50} w={140} h={120} rx={8} className={styles.frame} />
-      <Hatched x={32} y={62} w={44} h={44} />
+      <Rect x={32} y={62} w={44} h={44} className={styles.soft} />
       <Copy x={86} y={70} w={56} />
       <Copy x={86} y={84} w={40} quiet />
       <Copy x={86} y={98} w={48} quiet />
@@ -465,56 +459,77 @@ function Listing() {
   );
 }
 
-function Deal({ x, y, className }: { x: number; y: number; className: string | undefined }) {
+/** A deal in the pipeline: its property's picture (this one's soft blue, any other's quiet) and two lines. */
+function Deal({
+  y,
+  ours = false,
+  className,
+}: {
+  y: number;
+  ours?: boolean;
+  className: string | undefined;
+}) {
   return (
     <>
-      <Rect x={x} y={y} w={96} h={36} className={className} />
-      <Copy x={x + 12} y={y + 13} w={44} quiet={className === styles.tile} />
-      <Copy x={x + 12} y={y + 25} w={64} quiet />
+      <Rect x={238} y={y} w={104} h={36} className={className} />
+      <Rect
+        x={246}
+        y={y + 8}
+        w={20}
+        h={20}
+        rx={3}
+        className={ours ? styles.soft : styles.tile}
+      />
+      <Copy x={274} y={y + 13} w={52} quiet={!ours} />
+      <Copy x={274} y={y + 25} w={36} quiet />
     </>
   );
 }
 
-function Pipeline() {
+/** The pipeline column: another property's deal, then this property's, already there. */
+function Pipeline({ found = false }: { found?: boolean }) {
   return (
     <>
-      <Rect x={240} y={30} w={140} h={160} rx={8} className={styles.frameQuiet} />
-      <Copy x={256} y={44} w={48} quiet />
-      <Deal x={262} y={56} className={styles.tile} />
-      <Deal x={262} y={94} className={styles.tile} />
+      <Rect x={230} y={24} w={120} h={166} rx={8} className={styles.frameQuiet} />
+      <Copy x={238} y={36} w={44} quiet />
+      <Deal y={46} className={styles.tile} />
+      {found ? <Rect x={232} y={84} w={116} h={48} rx={10} className={styles.halo} /> : null}
+      <Deal y={90} ours className={found ? styles.region : styles.tile} />
     </>
   );
 }
 
-/** The problem: "Add to pipeline" always made a new deal, so the same property lands twice. */
+/** The problem: "Add to pipeline" always made a new deal, so the property's deal is there twice. */
 function CaseDealpathProblem() {
   return (
     <g transform="translate(-6,-6) scale(0.82)">
       <Pipeline />
-      <Rect x={256} y={127} w={108} h={48} rx={10} className={styles.wash} />
-      <Deal x={262} y={133} className={styles.frame} />
-      <Hop x1={148} x2={262} y={151} />
-      <Chip x={340} y={143} glyph="danger-triangle" />
+      <Deal y={133} ours className={styles.frame} />
+      <Hop x1={148} x2={238} y={151} />
+      {/* The twins, joined: the deal that was there and the one the button just made. */}
+      <path
+        className={styles.trail}
+        d="M342,108 L350,108 Q356,108 356,114 L356,145 Q356,151 350,151 L342,151"
+      />
+      <Focus x={376} y={130} glyph="danger-triangle" size={12} />
       <Listing />
     </g>
   );
 }
 
-/** What we did: the same action searches first, finds the deal and adds to it; no second card. */
+/** What we did: the same action searches first, finds the deal and adds to it; the second slot stays empty. */
 function CaseDealpathDid() {
   return (
     <g transform="translate(-6,-6) scale(0.82)">
-      <Pipeline />
-      <Rect x={256} y={88} w={108} h={48} rx={10} className={styles.halo} />
-      <Deal x={262} y={94} className={styles.region} />
-      <Hatched x={262} y={133} w={96} h={36} />
+      <Pipeline found />
+      <Hatched x={238} y={133} w={104} h={36} />
       <path
         className={styles.line}
-        d="M148,151 L224,151 Q230,151 230,145 L230,118 Q230,112 236,112 L255,112"
+        d="M148,151 L208,151 Q214,151 214,145 L214,114 Q214,108 220,108 L231,108"
       />
-      <ArrowRight x={262} y={112} />
+      <ArrowRight x={238} y={108} />
       <circle className={styles.node} cx="148" cy="151" r="2.5" />
-      <Lens x={334} y={104} r={16} />
+      <Lens x={318} y={102} r={14} />
       <Listing />
     </g>
   );
