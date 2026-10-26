@@ -53,7 +53,8 @@ time can still get past it, so the real gate is GitHub: branch protection on `ma
 code owner. Anything they block is a conversation with Devagya.
 
 Every hook runs `node` from PATH. Without Node installed the hooks don't run at all, and nothing says
-so: no catch-up at startup and no checks after edits is the sign. A clone set up before a template
+so: no catch-up at startup and no checks after edits is the sign. If Windows blocks the Node installer,
+use the zip and restart Claude from Task Manager, not just its window (`team/onboard.md` step 1). A clone set up before a template
 changed picks the change up by running `/onboard` again, which merges the template in.
 
 ## Every day
