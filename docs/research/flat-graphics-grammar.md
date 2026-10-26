@@ -75,8 +75,10 @@ hover = it solved, one element moves most, trace rather than slide).
 
 Built on `design/s2-flat-grammar`. Sketch draws the round-3 scenes on every plate, still and held solved
 (the six service scenes from `stories.tsx`, the other four from `scenes.tsx`), at one weight set: the
-`weight` prop is gone. The three diagram families take the round-1 values (1 / 2, dash 6 4) through their
-own tokens; their shapes and corners are unchanged, as in the mock. Hatching is drawn as lines and the
+`weight` prop is gone. EngagementOptions and TracePlates no longer draw their own pictures: their 14 drawings
+were redrawn to the full grammar as Sketch kit scenes (`scope-*`, `trace-*`, in `Sketch/kit.tsx`) after
+Devagya rejected a token-only pass ("the grammar was applied but the drawing is the same as before").
+EngagementModel, a chart, takes the round-1 values (1 / 2, dash 6 4) through its own tokens. Hatching is drawn as lines and the
 lens magnifies by geometry, so a sketch still uses no ids. Logged `proposed`:
 `decisions/2026-10-26-flat-graphics-grammar`, `decisions/2026-10-26-flat-or-isometric-two-questions`.
 

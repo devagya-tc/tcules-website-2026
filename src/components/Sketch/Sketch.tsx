@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { cx } from '@/lib/cx';
 
 import styles from './Sketch.module.css';
+import { KIT } from './kit';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
 import type { SketchName } from '@/lib/sketches';
@@ -21,7 +22,9 @@ import type { SketchName } from '@/lib/sketches';
  *   software-development   three layers of a product, joined, the release lit
  * And the ARTICLE scenes, each drawn for one insight from its own argument, its cover until a real
  * one exists (owner, 13 Oct 2026; @/lib/sketches `ArticleSceneName`): code-review,
- * security-checklist, prototype-to-production.
+ * security-checklist, prototype-to-production. And the KIT scenes (./kit): EngagementOptions' scopes
+ * (`scope-*`) and TracePlates' stages (`trace-*`), so every flat drawing is drawn by this one component
+ * (owner, 26 Oct 2026, S2).
  */
 export type { SketchName };
 
@@ -71,7 +74,7 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   const storyDrawing = STORY[name];
   /* A story scene moves only where it is asked to, in the bare frame; anywhere else it is held solved. */
   const moving = storyDrawing !== undefined && story && bare;
-  const Still = STILL[name];
+  const Still = STILL[name] ?? (name in KIT ? KIT[name as keyof typeof KIT] : undefined);
   const [x, y, w, h] =
     (bare && (storyDrawing ? STORY_DRAWN[name] : DRAWN[name])) || ([0, 0, W, H] as const);
   return (

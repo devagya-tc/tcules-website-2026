@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import type { IconName } from '@/lib/icon-glyphs';
 
-import { Glyph } from './scenes';
+import { CURSOR, Glyph } from './scenes';
 import styles from './Sketch.module.css';
 import type { SketchName } from '@/lib/sketches';
 
@@ -46,8 +46,6 @@ function Layer({ y, glyph, to }: { y: number; glyph: IconName; to: number }) {
   );
 }
 
-/** The cursor: drawn at its place on the button, with its flat offset under it. */
-const CURSOR = 'M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z';
 
 export const STORY: Partial<Record<SketchName, ReactNode>> = {
   /* The decision is open, then made: both branches trace out to their screens, the decision fills. */

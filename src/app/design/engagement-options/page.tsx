@@ -60,7 +60,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="rows"
         title="1b · Alternating rows — explored"
-        note="One row per option from 768, the 2:1 drawing in 5 of [5, 7] beside its words, swapping sides row by row; rows a column apart. Roomier, but four rows run to about two folds (1,551 at 1440). Below 768 each drawing heads its words at full width."
+        note="One row per option from 768, the 16:9 drawing in 5 of [5, 7] beside its words, swapping sides row by row; rows a column apart. Roomier, but four rows run to about two folds (1,551 at 1440). Below 768 each drawing heads its words at full width."
       />
       <EngagementOptions
         heading="Ways to work with us"

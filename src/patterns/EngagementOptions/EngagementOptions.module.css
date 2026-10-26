@@ -1,8 +1,7 @@
-/* EngagementOptions — type, ink and the scope drawings.
+/* EngagementOptions — type and ink. The scope drawings are Sketch's.
 
    Section paints the band; Layout owns every seam. Every value is an --eop-* token in
-   tokens/components/engagement-options.css. The drawing's strokes are non-scaling, so a line keeps
-   one weight from 1440 to 390 and the four drawings read as drawn rather than as images scaled. */
+   tokens/components/engagement-options.css. */
 
 .heading {
   font: var(--eop-heading-text);
@@ -46,104 +45,4 @@
 /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
 .bodyRows {
   font: var(--eop-body-text-rows);
-}
-
-/* ── The scope drawing ───────────────────────────────────────────────────────── */
-
-/* `grid`: the drawing on its plate, the card's image. The radius is the photograph radius. */
-.plate {
-  background-color: var(--eop-plate-ground);
-  border-radius: var(--eop-plate-radius);
-}
-
-.drawing {
-  display: block;
-  inline-size: 100%;
-  block-size: auto;
-  overflow: visible;
-}
-
-.field {
-  fill: var(--eop-field-ink);
-}
-
-.line {
-  fill: none;
-  stroke: var(--eop-line-ink);
-  stroke-width: var(--eop-line-width);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-.region {
-  fill: var(--eop-region-fill);
-  stroke: var(--eop-line-ink);
-  stroke-width: var(--eop-region-width);
-  vector-effect: non-scaling-stroke;
-}
-
-/* Drawn, not yet built: the region's edge dashed, its field the band's ground. */
-.drawn {
-  fill: var(--eop-node-fill);
-  stroke: var(--eop-line-ink);
-  stroke-width: var(--eop-region-width);
-  stroke-dasharray: var(--eop-region-dash);
-  vector-effect: non-scaling-stroke;
-}
-
-/* Built: the same region, solid. */
-.built {
-  fill: var(--eop-line-ink);
-}
-
-.nodeOpen {
-  fill: var(--eop-node-fill);
-  stroke: var(--eop-line-ink);
-  stroke-width: var(--eop-node-width);
-  vector-effect: non-scaling-stroke;
-}
-
-.nodeShut {
-  fill: var(--eop-line-ink);
-}
-
-.halo {
-  fill: var(--eop-halo-fill);
-}
-
-/* Your team: open nodes in the quiet ink; ours is the one blue node among them. */
-.member {
-  fill: var(--eop-node-fill);
-  stroke: var(--eop-member-ink);
-  stroke-width: var(--eop-node-width);
-  vector-effect: non-scaling-stroke;
-}
-
-/* An optional continuation: the path not yet taken, dashed in the quiet ink. */
-.trail {
-  fill: none;
-  stroke: var(--eop-member-ink);
-  stroke-width: var(--eop-node-width);
-  stroke-dasharray: var(--eop-region-dash);
-  vector-effect: non-scaling-stroke;
-}
-
-/* The client's environment: a window in the quiet ink, its chrome rule and dots. */
-.frame {
-  fill: var(--eop-node-fill);
-  stroke: var(--eop-member-ink);
-  stroke-width: var(--eop-region-width);
-  vector-effect: non-scaling-stroke;
-}
-
-.frameRule {
-  fill: none;
-  stroke: var(--eop-member-ink);
-  stroke-width: var(--eop-node-width);
-  vector-effect: non-scaling-stroke;
-}
-
-.frameDot {
-  fill: var(--eop-member-ink);
 }

@@ -17,6 +17,23 @@ const ARTICLE: readonly SketchName[] = [
   'security-checklist',
   'prototype-to-production',
 ];
+/** The kit scenes: EngagementOptions' scopes and TracePlates' stages, in the same grammar. */
+const KIT: readonly SketchName[] = [
+  'scope-feature',
+  'scope-area',
+  'scope-embedded',
+  'scope-build',
+  'scope-start',
+  'scope-direct',
+  'scope-inside',
+  'scope-overlap',
+  'scope-commercial',
+  'trace-design',
+  'trace-handoff',
+  'trace-code',
+  'trace-product',
+  'trace-signoff',
+];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 /** The scenes with a STORY drawing: the six the home bento shows. */
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
@@ -53,6 +70,19 @@ export default function SketchSpecimen() {
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {ARTICLE.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.4 · the kit scenes · ${surface}`}
+            note="Owner, 26 Oct 2026 (S2): EngagementOptions' scopes and TracePlates' stages, drawn by Sketch in the same grammar as the service and article scenes, so the flat families cannot drift apart. The trace stages share one screen; its action sits on the trace's line at (110, 110)."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {KIT.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
                   <code>{name}</code>

@@ -40,9 +40,12 @@ words inside the drawings, they "read as some kind of a diagram".
 covers beside the bento's light ones. A drawing with labels in it. A new flat family that picks its own
 dash. Animating every flat drawing.
 
-**How to apply.** The weights and the dash are tokens in `sketch.css`, `engagement-options.css`,
-`trace-plates.css` and `engagement-model.css`, duplicated on purpose (a component never reads another's
-tokens). Any new flat drawing is drawn to this list before it is shown. Sketch has one weight: the
-`weight` prop is gone.
+**How to apply.** Every flat drawing is a `Sketch` scene: the service and article scenes, and the kit
+scenes EngagementOptions (`scope-*`) and TracePlates (`trace-*`) render, so one component and one token
+layer draw them all and they cannot drift. A pattern that needs a new flat drawing adds a Sketch scene;
+it never draws its own. Applying the grammar means redrawing to all of the list above, not changing the
+weights: "the grammar was applied but the drawing is the same as before" (Devagya, 26 Oct, on a
+token-only first pass). EngagementModel is a chart, not a scene, and takes the weights and the dash
+through its own tokens. Sketch has one weight: the `weight` prop is gone.
 
 Would refine `2026-10-19-bento-sketches-are-light` (light becomes every drawing's weight) once active.

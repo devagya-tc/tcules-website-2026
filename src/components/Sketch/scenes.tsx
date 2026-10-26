@@ -42,6 +42,9 @@ export function Glyph({
   );
 }
 
+/** The cursor, tip at its origin: placed with a translate, its flat offset drawn under it. */
+export const CURSOR = 'M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z';
+
 /** The hatch's pitch along an edge: a 5-unit spacing between 45° lines. */
 const PITCH = 5 * Math.SQRT2;
 /** How far inside the outline the hatch stops, so it clears a 4-unit corner. */
@@ -51,7 +54,7 @@ const INSET = 2;
  * Something not built yet: its dashed outline, filled with 45° hatching. The lines are drawn rather
  * than patterned, because a pattern needs an id.
  */
-function Hatched({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
+export function Hatched({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
   const [x0, y0, x1, y1] = [x + INSET, y + INSET, x + w - INSET, y + h - INSET];
   const lines: string[] = [];
   /* Each line is x + y = c, clipped to the inset box. */
@@ -70,7 +73,7 @@ function Hatched({ x, y, w, h }: { x: number; y: number; w: number; h: number })
 }
 
 /** The lit end of a drawing: a solid disc on its soft ground, a glyph knocked out of it. */
-function Focus({ x, y, glyph, size }: { x: number; y: number; glyph: IconName; size: number }) {
+export function Focus({ x, y, glyph, size }: { x: number; y: number; glyph: IconName; size: number }) {
   return (
     <>
       <circle className={styles.halo} cx={x} cy={y} r="18" />
