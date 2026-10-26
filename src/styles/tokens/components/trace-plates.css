@@ -23,8 +23,11 @@
   --trp-trace-x: 34.375%; /* the action's centre, x 110 */
   --trp-trace-y: 61.111%; /* the action's centre, y 110 */
   /* The trace's dash: 6 on, 4 off, in px at every width, inside the plates and across the seams. */
-  --trp-dash-on: var(--space-6);
   --trp-dash-period: var(--space-10);
+  /* The dash centred in its period, as shares of it (a 6 dash, 2 of 10 either side), so a period
+     stretched to fit a segment keeps the dash in its middle and both ends on a half gap. */
+  --trp-dash-lead: 20%;
+  --trp-dash-tail: 80%;
   /* The end nodes: a 12 ring, set a node's reach in from the plate's edge. Optical sizes. */
   --trp-node-size: var(--space-12);
   --trp-node-reach: var(--space-8);

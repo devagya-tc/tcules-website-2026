@@ -20,6 +20,13 @@
    every width (a dash drawn in the SVG scaled with the plate and never matched the seam's). Each
    segment is a strip of the trace's width painted with a repeating dash.
 
+   ONE segment per stretch between two screens, never two meeting at a plate's edge: two segments
+   each start their own dash, so at the join two dashes ran together and the line broke (owner,
+   26 Oct 2026). Across the gutter (from 1024) and down the row seam (from 768) the out segment runs
+   on to the next screen's edge and that plate draws no in segment. Each segment fits whole dashes
+   from end to end (`round`): the period stretches by under half a dash, so both ends finish on the
+   same half gap and nothing is cut.
+
    Where the screen sits in the plate, as shares of the 320 × 180 Sketch plate (Sketch's kit `trace-*`
    scenes): frame x 50–270 → 15.625%–84.375%; frame y 30–150 → 16.667%–83.333%; the action's centre
    (110, 110) → 34.375% across, 61.111% down. The tokens hold them. */
@@ -27,6 +34,9 @@
 .plate::after {
   content: '';
   position: absolute;
+  /* Above the next plate, which is positioned too and comes later: a segment running on over it
+     would otherwise be painted under its ground. */
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -35,8 +45,14 @@
 .across .plate::after {
   inset-block-start: calc(var(--trp-trace-y) - var(--trp-trace-width) / 2);
   block-size: var(--trp-trace-width);
-  background-image: linear-gradient(to right, var(--trp-accent) 0 var(--trp-dash-on), transparent 0);
+  background-image: linear-gradient(
+    to right,
+    transparent 0 var(--trp-dash-lead),
+    var(--trp-accent) 0 var(--trp-dash-tail),
+    transparent 0
+  );
   background-size: var(--trp-dash-period) 100%;
+  background-repeat: round no-repeat;
 }
 
 .across .plate::before {
@@ -54,8 +70,14 @@
 .down .plate::after {
   inset-inline-start: calc(var(--trp-trace-x) - var(--trp-trace-width) / 2);
   inline-size: var(--trp-trace-width);
-  background-image: linear-gradient(to bottom, var(--trp-accent) 0 var(--trp-dash-on), transparent 0);
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0 var(--trp-dash-lead),
+    var(--trp-accent) 0 var(--trp-dash-tail),
+    transparent 0
+  );
   background-size: 100% var(--trp-dash-period);
+  background-repeat: no-repeat round;
 }
 
 .down .plate::before {
@@ -123,13 +145,19 @@
    down, from 768 (plate beside its words, plates one under another) it runs on over the row seam. */
 @media (min-width: 1024px) {
   .across .stage:not(:last-child) .plate::after {
-    inline-size: calc(100% - var(--trp-frame-end) + var(--gap-gutter));
+    inline-size: calc(100% - var(--trp-frame-end) + var(--gap-gutter) + var(--trp-frame-start));
+  }
+  .across .stage:not(:first-child) .plate::before {
+    content: none;
   }
 }
 
 @media (min-width: 768px) {
   .down .stage:not(:last-child) .plate::after {
-    block-size: calc(100% - var(--trp-frame-bottom) + var(--gap-block));
+    block-size: calc(100% - var(--trp-frame-bottom) + var(--gap-block) + var(--trp-frame-top));
+  }
+  .down .stage:not(:first-child) .plate::before {
+    content: none;
   }
 }
 
