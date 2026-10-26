@@ -861,13 +861,13 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
      has no authored wording, so its titles are the cue. */
   const labelled = items.every((item) => item.ctaLabel);
   const cue = linked ? (labelled ? 'cta' : 'title') : undefined;
-  /* Four or more cases: the kit Slider, three in view and the next peeking in the margin (Slider
-     `bleed`, owner 26 Oct 2026; sliders are allowed off the homepage while every card is in the page
+  /* Four or more cases: the kit Slider, three in view and the next peeking inside the column (Slider
+     `peek`, owner 26 Oct 2026: the bled row "just shows the overflow"; sliders are allowed off the homepage while every card is in the page
      as it loads, with real links and no autoplay). The client's words left the set for a band of their
      own (`voice`); a case card never holds a quote (22 Oct 2026). */
   if (items.length >= 4 && linked) {
     return (
-      <Slider label={band.headingText} bleed>
+      <Slider label={band.headingText} peek>
         {items.map((item) => (
           <BlockCard
             key={item.id}

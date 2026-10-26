@@ -80,6 +80,13 @@ export type SliderProps = {
    */
   bleed?: boolean;
   /**
+   * Show part of the next slide at every width, inside the column (owner, 26 Oct 2026: "ideally, we
+   * show a peek of the 4th card within the width available"). From md up the slides narrow to leave
+   * `--lay-scroll-peek-wide` of the next one at the end edge; the row never leaves the column. The
+   * alternative to `bleed`, which shows the next card in the margin. Ignored at one per view.
+   */
+  peek?: boolean;
+  /**
    * Advance on its own, one slide every `interval`, wrapping from the last to the first (owner, 7 Oct
    * 2026: the typographic testimonial "inside the auto-advancing Slider"). One per view only: at
    * two or more in view an advance moves things the reader is part-way through, so with any other
@@ -200,6 +207,7 @@ export function Slider({
   align = 'start',
   slideName = 'slide',
   bleed = false,
+  peek = false,
   autoplay = false,
   interval = INTERVAL,
 }: SliderProps) {
@@ -595,7 +603,7 @@ export function Slider({
           ref={rowRef}
           scroll="always"
           columns={LADDER[perView]}
-          peek={perView !== 1}
+          peek={perView === 1 ? false : peek ? 'always' : true}
           colGap="gutter"
           tabIndex={tabStop ? 0 : undefined}
           className={styles.row}

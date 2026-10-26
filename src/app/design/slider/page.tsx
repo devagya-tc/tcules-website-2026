@@ -271,6 +271,23 @@ export default function SliderSpecimen() {
         <Slider label="Case studies">{workCards(8)}</Slider>
       </ContentSection>
 
+      {/* ── 2b ─────────────────────────────────────────────────────────────────────────────── */}
+      <Label title="2b · peek — the next card shows inside the column (perView 3, align start)">
+        `peek` (owner, 26 Oct 2026): from 768 the three slides narrow so the fourth shows
+        --lay-scroll-peek-wide of itself at the column&rsquo;s end edge. The row never leaves
+        the column, so nothing spills into the margin; the offer pages&rsquo; case sets of four
+        or more.
+      </Label>
+      <ContentSection
+        eyebrow="Case studies"
+        heading="More complex products we have made easier to use"
+        headingId="slider-c-image-peek"
+      >
+        <Slider label="Case studies, peeking" peek>
+          {workCards(4)}
+        </Slider>
+      </ContentSection>
+
       {/* ── 2a ─────────────────────────────────────────────────────────────────────────────── */}
       <Label title="2a · bleed — the row runs to the viewport's end edge (perView 3, align start)">
         From 768 the row runs past the column&rsquo;s end edge to the viewport&rsquo;s, so the

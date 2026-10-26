@@ -295,9 +295,11 @@ export type LayoutProps = {
    * Slider turns it off at one per view (cmp-testimonials, 6 Oct 2026): a one-up slide is a
    * composite — a portrait over a quote — so its peeking start edge is a sliver of photograph and a
    * loose quote rule, not a card's edge, and the Slider's controls already say there is more.
-   * Ignored without `scroll`.
+   * Ignored without `scroll`. `'always'` keeps a peek from md up too, inside the column
+   * (`--lay-scroll-peek-wide`): a Slider whose next card should show without the row leaving the
+   * column (owner, 26 Oct 2026: the bled row "just shows the overflow").
    */
-  peek?: boolean;
+  peek?: boolean | 'always';
   /**
    * The rendered element, for a caller that drives a scroll row (the Slider reads its scroll
    * position and scrolls it). A plain prop, as React 19 passes refs.
@@ -566,6 +568,7 @@ export function Layout({
         stagger && scroll !== 'always' && styles.stagger,
         scroll && styles[`scroll-${scroll}`],
         scroll && !peek && styles['no-peek'],
+        scroll === 'always' && peek === 'always' && styles['peek-always'],
         className,
       )}
     >
