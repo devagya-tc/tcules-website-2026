@@ -29,7 +29,7 @@ export type CaseSpreadProps = {
   /** "Dealpath" (or "Example: Dealpath" without an eyebrow): the h2, the band's accessible name. */
   heading: string;
   headingId: string;
-  /** The outcome ("The result."): the story's last step, its payoff, marked on the rail. */
+  /** The outcome ("The result."): the story's last step, its payoff. */
   claim: CaseSpreadPart;
   /** The way to the whole case: in practice a `CtaRow` with `rule={false}`. A slot. */
   action?: ReactNode;
@@ -57,8 +57,8 @@ export type CaseSpreadProps = {
  * the image; the owner found them "quite disconnected from the content above" (11 Oct 2026). Now:
  *
  *   the h2 across the band, then [5, 7] from 1024: the story in the order it happened — the
- *   problem, what we did, the result — as one connected line down a rail that turns blue and full
- *   ink at the result (the payoff), the action closing the line · the evidence at 16:9 beside it,
+ *   problem, what we did, the result — read down in one column, held by type and spacing alone (no
+ *   rail, no rules: owner, 26 Oct 2026), the action closing it · the evidence at 16:9 beside it,
  *   its top on the problem's, sticky while the story is read.
  *
  * Below 1024 one column: heading, story, action, image. Every word stays, in its authored order.
@@ -122,11 +122,8 @@ export function CaseSpread({
               </div>
             </Layout>
             <Layout as="ol" columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="block">
-              {steps.map((part, index) => (
-                <li
-                  key={part.title}
-                  className={index === steps.length - 1 ? styles.stripResult : styles.stripStep}
-                >
+              {steps.map((part) => (
+                <li key={part.title}>
                   <Layout rowGap="tight">
                     <h3 className={styles.storyTitle}>{part.title}</h3>
                     <p className={styles.storyBody}>{part.body}</p>
@@ -145,21 +142,22 @@ export function CaseSpread({
       <Layout rowGap="stack">
         {head}
         <Layout columns={{ base: 1, lg: [5, 7] }} colGap="column" rowGap="stack" align="start">
-          {/* The story, in the order it happened, as one connected line: a rail runs down the
+          {/* The story, in the order it happened, held together by type and spacing alone (owner, 26 Oct
+              2026: no rail and no rules beside or above the steps). Previously: a rail ran down the
               problem and what we did and turns blue at the result, the payoff, so the three read as
               one argument rather than a claim with notes under it. The action follows on the section's
               edge, not the rail's inset (owner, 11 Oct 2026). */}
           <Layout rowGap="stack">
-            <Layout as="ol" rowGap="none">
+            <Layout as="ol" rowGap="block">
               {parts.map((part) => (
-                <li key={part.title} className={styles.step}>
+                <li key={part.title}>
                   <Layout rowGap="text">
                     <h3 className={styles.storyTitle}>{part.title}</h3>
                     <p className={styles.storyBody}>{part.body}</p>
                   </Layout>
                 </li>
               ))}
-              <li className={styles.result}>
+              <li>
                 <Layout rowGap="text">
                   <h3 className={styles.claimTitle}>{claim.title}</h3>
                   <p className={styles.claimBody}>{claim.body}</p>

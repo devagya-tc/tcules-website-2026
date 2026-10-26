@@ -19,21 +19,6 @@
   max-inline-size: var(--csp-heading-measure);
 }
 
-/* The story's rail: each step hangs a gutter inside a hairline down its start edge, and the steps
-   meet with no gap so the rail is one line; a step's air is its own end inset (a `block`). The
-   result's segment is the blue rule, heavier: the line arrives at the payoff. */
-.step,
-.result {
-  padding-inline-start: var(--gap-gutter);
-  padding-block-end: var(--gap-block);
-  border-inline-start: var(--csp-rule-width) solid var(--csp-rule-ink);
-}
-
-.result {
-  padding-block-end: 0;
-  border-inline-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
-}
-
 .claimTitle {
   font: var(--csp-claim-title-text);
   letter-spacing: var(--csp-claim-title-tracking);
@@ -125,14 +110,4 @@
     border-inline: 0;
     border-inline-start: var(--csp-join-head-length) solid var(--csp-join-ink);
   }
-}
-
-.stripStep,
-.stripResult {
-  padding-block-start: var(--gap-text);
-  border-block-start: var(--csp-rule-width) solid var(--csp-rule-ink);
-}
-
-.stripResult {
-  border-block-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
 }
