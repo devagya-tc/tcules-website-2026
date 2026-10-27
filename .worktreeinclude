@@ -1,6 +1,5 @@
 # Git-ignored files Claude Code copies into every worktree it creates (gitignore syntax; only
-# ignored files are copied). Each person's identity and role guardrails follow them into a new
-# worktree, so nobody sets them up twice. Desktop-app worktree sessions also read settings from the
-# main checkout; this covers `claude --worktree`, subagent worktrees and parallel sessions.
-.claude/settings.local.json
+# ignored files are copied), so who you are and your role's read-only rules follow you into a new
+# worktree and nobody sets them up twice.
 CLAUDE.local.md
+.claude/settings.local.json
