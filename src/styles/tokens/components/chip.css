@@ -43,6 +43,16 @@
   --chip-transition-easing: var(--easing-standard);
   --chip-ring-width: var(--focus-ring-width);
   --chip-ring-offset: var(--focus-ring-offset);
+  /* The `check` look (a listing's filter rail, 28 Oct 2026): a square box before the label, in a
+     column of options. The box is a component size; its tick is the pill's tick glyph at the box's
+     own scale. Its gap to the label is the gap scale's "icon to label". */
+  --chip-box-size: var(--icon-size-16);
+  --chip-box-radius: var(--radius-4);
+  --chip-box-gap: var(--gap-tight);
+  --chip-box-tick-size: var(--icon-size-14);
+  /* A row's own air above and below its label, so a column of options is a list a pointer can hit
+     (24 target floor with the 20 line). Optical, from the ramp. */
+  --chip-row-padding-y: var(--space-4);
 }
 
 /* Paper. The rest edge is neutral-300 at 1.54:1, the approved mock's own: the label (11.81:1)
@@ -61,6 +71,8 @@
   --chip-bg-checked-disabled: var(--color-neutral-200);
   --chip-fg-checked-disabled: var(--color-neutral-600);
   --chip-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  /* The check look's box edge at rest: a control's edge, firmer than the pill's. */
+  --chip-box-rule: var(--color-neutral-500); /* 3.16:1 */
 }
 
 /* Tint: the edge firms one step so the outline survives the deeper ground (300 nearly vanishes). */
@@ -75,6 +87,8 @@
   --chip-bg-checked-disabled: var(--color-neutral-300);
   --chip-fg-checked-disabled: var(--color-neutral-600);
   --chip-ring-color: var(--color-brandeis-500); /* 5.51:1 */
+  /* The check look's box edge at rest: a control's edge, firmer than the pill's. */
+  --chip-box-rule: var(--color-neutral-500);
 }
 
 /* Ink: the label lifts and the edge firms by going lighter. The checked fill stays the accent blue,
@@ -91,6 +105,8 @@
   --chip-bg-checked-disabled: var(--color-neutral-800);
   --chip-fg-checked-disabled: var(--color-neutral-500);
   --chip-ring-color: var(--color-brandeis-300); /* 7.32:1 */
+  /* The check look's box edge at rest: a control's edge, firmer than the pill's. */
+  --chip-box-rule: var(--color-neutral-500);
 }
 
 /* Blue: every value is a blue or white because the ground is. Checked reverses to a white fill
@@ -106,4 +122,6 @@
   --chip-bg-checked-disabled: var(--color-brandeis-400);
   --chip-fg-checked-disabled: var(--color-brandeis-200);
   --chip-ring-color: var(--color-white); /* 6.23:1 */
+  /* The check look's box edge at rest: a control's edge, firmer than the pill's. */
+  --chip-box-rule: var(--color-brandeis-200);
 }

@@ -5,6 +5,7 @@ import { EnquiryForm } from '@/patterns';
 import {
   ENQUIRY_DESK,
   ENQUIRY_DRESS,
+  insightFinder,
   insightFormatPage,
   insightViews,
   type InsightItem,
@@ -274,9 +275,132 @@ const slugOf = (name: string) =>
 
 const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
-export function insightsIndexProps(page: InsightsPage, query: Query): ListingIndexProps {
+/** The finder's format group: each format's plural name in the URL (`?type=articles`). */
+const TYPE_KEY = 'type';
+const typeValue = (kind: InsightResourceKind) => slugOf(FORMAT_NAME[kind]);
+
+/** The CMS's "Product" group holds a product's STAGE (0 to 1, growth, modernise): named for that. */
+const groupName = (label: string) => (/^product$/i.test(label.trim()) ? 'Stage' : label);
+
+type FilterOptionOf = { id: string; value: string; label: string };
+type FilterGroupOf = { name: string; label: string; options: FilterOptionOf[] };
+
+/**
+ * The CMS's filter groups with pieces among `pool`, each a URL parameter named for the group
+ * ("topic", "stage", "industry") whose values are its options' names as slugs — never the CMS's
+ * record ids. What a piece is about first, the reader's own sector last.
+ */
+function filterGroupsOf(page: InsightsPage, pool: readonly InsightResource[]): FilterGroupOf[] {
+  return page.resources.filters
+    .map((group) => ({
+      name: slugOf(groupName(group.label)),
+      label: groupName(group.label),
+      options: group.options
+        .filter((option) => pool.some((item) => item.filterIds.includes(option.id)))
+        .map((option) => ({
+          id: option.id,
+          value: slugOf(topicName(option.name)),
+          label: topicName(option.name),
+        })),
+    }))
+    .filter(
+      (group) =>
+        group.name &&
+        group.options.length > 0 &&
+        group.name !== SEARCH_KEY &&
+        group.name !== PAGE_KEY &&
+        group.name !== TYPE_KEY,
+    )
+    .sort((a, b) => rank(a.label) - rank(b.label));
+}
+
+export function insightsIndexProps(
+  page: InsightsPage,
+  query: Query,
+  path: string = ROUTES.insights,
+): ListingIndexProps {
   const subjects = subjectsOf(page);
   const lede = page.hero.description?.trim();
+  const all = page.resources.items;
+
+  /* The finder (owner, 28 Oct 2026): Type, then the CMS's groups, each read out of the URL. */
+  const groups: FilterGroupOf[] = [
+    {
+      name: TYPE_KEY,
+      label: 'Type',
+      options: formatsWithContent(page).map((kind) => ({
+        id: kind,
+        value: typeValue(kind),
+        label: formatTitle(page, kind),
+      })),
+    },
+    ...filterGroupsOf(page, all),
+  ];
+  const chosen = groups.map((group) => {
+    const values = valuesOf(query[group.name]);
+    return { ...group, picked: group.options.filter((option) => values.includes(option.value)) };
+  });
+  const q = first(query[SEARCH_KEY]).trim();
+  const needle = q.toLowerCase();
+  /* Any option within a group, every group at once: "design system for SaaS". */
+  const filtered = all.filter(
+    (item) =>
+      chosen.every(
+        (group) =>
+          group.picked.length === 0 ||
+          group.picked.some((option) =>
+            group.name === TYPE_KEY ? item.kind === option.id : item.filterIds.includes(option.id),
+          ),
+      ) &&
+      (!needle || `${item.title} ${item.description ?? ''}`.toLowerCase().includes(needle)),
+  );
+  const [base = path, own] = path.split('?');
+  const pairs = chosen.flatMap((group) =>
+    group.picked.map((option) => [group.name, option.value] as const),
+  );
+  const searchPair = q ? [[SEARCH_KEY, q] as const] : [];
+  const hrefWith = (next: readonly (readonly [string, string])[], hash = '') => {
+    const params = new URLSearchParams(own);
+    for (const [key, value] of next) if (value) params.append(key, value);
+    const search = params.toString();
+    return `${base}${search ? `?${search}` : ''}${hash}`;
+  };
+  const current = Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1);
+  const shown = current * PAGE_SIZE;
+  const finder = insightFinder({
+    action: base,
+    query: new URLSearchParams([...searchPair, ...pairs].map(([k, v]) => [k, v])).toString(),
+    search: { value: q || undefined, label: 'Search insights' },
+    groups: chosen.map((group) => ({
+      name: group.name,
+      label: group.label,
+      options: group.options.map((option) => ({
+        value: option.value,
+        label: option.label,
+        picked: group.picked.includes(option),
+      })),
+    })),
+    picks: [
+      ...(q ? [{ label: `“${q}”`, removeHref: hrefWith(pairs) }] : []),
+      ...pairs.map(([name, value]) => ({
+        label:
+          chosen.find((group) => group.name === name)?.picked.find((o) => o.value === value)
+            ?.label ?? value,
+        removeHref: hrefWith([
+          ...searchPair,
+          ...pairs.filter((pair) => !(pair[0] === name && pair[1] === value)),
+        ]),
+      })),
+    ],
+    clearHref: hrefWith([]),
+    items: filtered.map((item) => toItem(item, subjects)),
+    shown,
+    moreHref:
+      shown < filtered.length
+        ? hrefWith([...searchPair, ...pairs, [PAGE_KEY, String(current + 1)]])
+        : undefined,
+  });
+
   return {
     breadcrumbs: [
       { label: 'Home', href: ROUTES.home },
@@ -290,7 +414,8 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
       formats: formatsWithContent(page).map((kind) => ({
         kind: kind as InsightKind,
         title: formatTitle(page, kind),
-        href: FORMAT_ROUTE[kind],
+        /* "See more" opens this page with the format picked (owner, 28 Oct 2026). */
+        href: `${base}?${TYPE_KEY}=${typeValue(kind)}`,
       })),
       /* The topics the BY TOPIC view curates by: every option of the CMS's groups but industry,
          which is a reader's sector rather than a subject. */
@@ -305,6 +430,7 @@ export function insightsIndexProps(page: InsightsPage, query: Query): ListingInd
         ),
     }),
     view: first(query[VIEW_KEY]) === 'topic' ? 'topic' : undefined,
+    finder,
     empty: 'Nothing has been published yet.',
     offer: labOf(page),
     closing: closingOf(page, ROUTES.insights, 'insights-hub'),

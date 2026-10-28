@@ -1,5 +1,7 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
+import { cx } from '@/lib/cx';
+
 import styles from './Chip.module.css';
 
 /**
@@ -37,11 +39,17 @@ export type ChipProps = Omit<
   children: string;
   /** The glyph shown when checked. Decorative: the input's checked state is what is announced. */
   tick: ReactNode;
+  /**
+   * `pill` (default): the pill, for a set of answers in a row. `check` (a listing's filter rail,
+   * 28 Oct 2026): a square box before the label, for a COLUMN of options where a pill per line
+   * would read as a stack of buttons; the box fills with the tick when checked.
+   */
+  look?: 'pill' | 'check';
 };
 
-export function Chip({ type, children, tick, ...input }: ChipProps) {
+export function Chip({ type, children, tick, look = 'pill', ...input }: ChipProps) {
   return (
-    <label className={styles.chip}>
+    <label className={cx(styles.chip, look === 'check' && styles.check)}>
       <input {...input} type={type} className={styles.input} />
       <span className={styles.face}>
         <span className={styles.tick} aria-hidden="true">

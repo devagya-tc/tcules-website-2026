@@ -228,6 +228,29 @@
   text-wrap: var(--text-running-wrap);
 }
 
+/* ── sm: the set at a rail's scale (a listing's filter groups, 28 Oct 2026) ────────────
+   The same rule ladder, chevron and reveal; each head in the label voice (the 12 mono eyebrow, as
+   the rail's old "Jump to" was set) and the insets one step down, so four groups fit a rail column
+   beside the content without out-shouting it. The body is composed, so it takes no measure. */
+.sm .trigger {
+  padding-block: var(--gap-text);
+}
+
+.sm .item[open] > .trigger {
+  padding-block-end: var(--gap-tight);
+}
+
+.sm .question {
+  font: var(--acc-label-text);
+  letter-spacing: var(--acc-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.sm .answer {
+  max-inline-size: none;
+  padding-block-end: var(--gap-text);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .question,
   .mark,

@@ -13,6 +13,8 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* A visually hidden name (a filter group's legend): the one-pixel box assistive tech still reads. */
+  --lix-hidden-size: 1px;
   /* A section's head: the h2 role (listings round, 23 Oct 2026). At h3 it tied with the h3 serif of
      the horizontal lead under it, and the two competed; claude.com/resources sets its group heads at
      44 over 32 leads, and it is the air between groups (section-open, 128) — not a smaller head —

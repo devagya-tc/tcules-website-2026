@@ -50,6 +50,9 @@
      step under a band's h4. Was h5 (18), the card-title size. */
   --acc-question-text: var(--text-h5-lg);
   --acc-question-tracking: var(--text-h5-lg-tracking);
+  /* The `sm` set's head: the label voice at the eyebrow step (a filter rail's group, 28 Oct 2026). */
+  --acc-label-text: var(--text-eyebrow);
+  --acc-label-tracking: var(--text-eyebrow-tracking);
 }
 
 /* Paper: the question at full ink, the answer a clear step under it. The mark rests at the accent

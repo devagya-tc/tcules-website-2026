@@ -12,6 +12,7 @@ import {
   type IndexRailItem,
 } from '@/patterns';
 
+import { FinderForm, FinderLinks } from './Finder';
 import styles from './ListingIndex.module.css';
 
 /* ── The page type's shape ─────────────────────────────────────────────────────────
@@ -84,6 +85,27 @@ export type ListingPicker = {
   content: ReactNode;
 };
 
+/**
+ * The rail as the listing's FINDER (Jatin, 26 Oct 2026; owner, 28 Oct 2026): the search and the
+ * filter groups in the rail's place, the same spot on every visit. Nothing picked, the content is the
+ * curated view; anything picked, it is the picks as removable chips, then the results. The URL holds
+ * every pick, and a tick applies at once without moving the page.
+ */
+export type ListingFinder = {
+  /** The page's own path: the form's target. */
+  action: string;
+  /** The query in effect, as a string: the controls re-render from the URL when it changes. */
+  query: string;
+  /** The search and the groups, composed by the caller (its fields are the query). */
+  controls: ReactNode;
+  /** The phone bar's button ("Filters · 2"). */
+  label?: string;
+  /** The picks over the results: present only when something is picked. */
+  picks?: ReactNode;
+  /** The results: present only when something is picked. Absent, the curated view. */
+  results?: ReactNode;
+};
+
 /** Another offer before the close (the insights family's Lab): shown ONLY with its picture. */
 export type ListingOffer = {
   heading: string;
@@ -126,11 +148,16 @@ export type ListingIndexProps = {
   view?: string;
   /** The rail as a picker beside the page's own content. Exclusive with `views`. */
   picker?: ListingPicker;
+  /** The rail as the finder; the first view is the curated content while nothing is picked. */
+  finder?: ListingFinder;
   /** What the band says when there is nothing to list ("Nothing has been published yet."). */
   empty: string;
   offer?: ListingOffer;
   closing?: ListingClosing;
 };
+
+/** The finder's content column: where a change of picks brings a reader scrolled past it back to. */
+const FINDER_TOP = 'listing-results';
 
 /** The fold rule's one exception, on the list band (visual-direction § 1.3). */
 const FOLD_EXEMPT =
@@ -159,6 +186,7 @@ export function ListingIndex({
   views = [],
   view,
   picker,
+  finder,
   empty,
   offer,
   closing,
@@ -171,7 +199,39 @@ export function ListingIndex({
   const plain = Boolean(picker) && hero.arrangement === 'plain';
 
   let listing: ReactNode;
-  if (picker) {
+  if (finder) {
+    const curated = shown[0];
+    listing = (
+      <IndexRail
+        ariaLabel={railLabel}
+        modes={[{ id: 'finder', label: railLabel, items: [] }]}
+        controlsLabel={finder.label}
+        controls={
+          <FinderForm key={finder.query} action={finder.action} anchor={FINDER_TOP}>
+            {finder.controls}
+          </FinderForm>
+        }
+      >
+        <div id={FINDER_TOP}>
+          {finder.results != null ? (
+            /* The picks lead the column, then the results: a stack apart, as a head over its body. */
+            <Layout rowGap="stack">
+              <FinderLinks anchor={FINDER_TOP}>{finder.picks}</FinderLinks>
+              <FinderLinks anchor={FINDER_TOP}>{finder.results}</FinderLinks>
+            </Layout>
+          ) : curated ? (
+            <Layout rowGap="section-open">
+              {curated.sections.map((section) => (
+                <ListingSectionView key={section.id} section={section} />
+              ))}
+            </Layout>
+          ) : (
+            <p>{empty}</p>
+          )}
+        </div>
+      </IndexRail>
+    );
+  } else if (picker) {
     listing = (
       <IndexRail
         ariaLabel={railLabel}
