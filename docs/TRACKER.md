@@ -130,8 +130,11 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [ ] **2.24** Branded case study cards: an experiment on Linear's concept, logged as experimenting. If it fails,
       improve the current card instead, on a paper-deep card ground.
 - [ ] **2.25** Recolour every Reasons isometric without peridot, to see the set in blue only.
-- [ ] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
+- [~] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
+      The bento's six drawings are redrawn and solve their story on hover (decisions/2026-10-25-bento-drawings-tell-their-story).
+      Still to come: the grammar (`docs/research/flat-graphics-grammar.md`) for the other Sketch uses and the three
+      other flat families, then which content takes which tier.
 - [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
 - [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
 - [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further

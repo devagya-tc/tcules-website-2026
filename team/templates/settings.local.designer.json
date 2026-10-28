@@ -1,8 +1,4 @@
 {
-  "env": {
-    "TCULES_MEMBER": "your-member-id",
-    "TCULES_ROLE": "designer"
-  },
   "permissions": {
     "deny": [
       "Edit(/docs/decisions/**)",
@@ -23,36 +19,6 @@
       "PowerShell(git push --force:*)",
       "PowerShell(git push -f:*)",
       "PowerShell(git reset --hard:*)"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash|PowerShell",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/before-shell-guard.mjs"],
-            "timeout": 15,
-            "statusMessage": "Checking the command"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node",
-            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/after-edit-check.mjs"],
-            "timeout": 60,
-            "statusMessage": "Checking the edit"
-          }
-        ]
-      }
     ]
   }
 }

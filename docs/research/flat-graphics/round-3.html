@@ -1,0 +1,296 @@
+<title>Flat Graphics Round 3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400&family=Public+Sans:wght@400;500;600&family=Geist+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column; each scene is a head, the current and redrawn drawings side by side,
+   then the changes beside the redrawn drawing at the bento's small size.
+   Single-theme on the site's paper, by choice: the drawings are judged against the paper they sit on. */
+:root {
+  --paper: #fffefa; --deep: #f3f1ea; --ink: #1b1b18; --body: #504f49; --label: #71706a; --rule: #dedede;
+  --blue: #0048ff; --blue-50: #eef2ff;
+  --display: 'Newsreader', Georgia, serif; --sans: 'Public Sans', -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Menlo, monospace; color-scheme: light;
+
+  /* The redrawn grammar, paper surface: the --skt-* paper values, plus the two new roles. */
+  --n-ground: #f3f1ea; --n-field: #cfcfce; --n-fill: #fffefa;
+  --n-frame: #91908d; --n-quiet: #b2b1ae; --n-copy: #cfcfce;
+  --n-accent: #0048ff; --n-on: #ffffff; --n-region: #dbe4ff; --n-region-copy: #8aa5ff;
+  --n-label: #71706a;
+  --n-lift: #504f49;     /* new: the outline of an object that floats (neutral-700) */
+  --n-lift-under: #dedede; /* new: its flat offset (neutral-200) */
+}
+body { background: var(--paper); color: var(--ink); font: 400 15px/1.6 var(--sans); }
+.wrap { max-width: 1120px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 56px 96px; display: grid; gap: 80px; }
+header, section { display: grid; gap: 32px; }
+.head { display: grid; gap: 10px; max-width: 68ch; }
+.eyebrow, .mono { font: 600 11px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--label); }
+h1 { font: 400 clamp(34px, 5vw, 52px)/1.05 var(--display); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h2 { font: 400 30px/1.15 var(--display); margin: 0; text-wrap: balance; }
+h3 { font: 600 18px/1.35 var(--sans); margin: 0; }
+p { margin: 0; color: var(--body); }
+.lead { font-size: 18px; line-height: 1.55; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px 32px; }
+.rules div { border-top: 1px solid var(--rule); padding-top: 12px; display: grid; gap: 4px; align-content: start; }
+.rules b { font-weight: 600; }
+.note { background: var(--blue-50); border-radius: 8px; padding: 20px 24px; display: grid; gap: 8px; }
+.note p { color: var(--ink); }
+.note ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+.scene { display: grid; gap: 20px; padding-top: 32px; border-top: 1px solid var(--rule); }
+.scene-head { display: grid; gap: 6px; }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px 32px; }
+figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.foot { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px 32px; align-items: start; }
+.foot ul { margin: 0; padding-left: 18px; color: var(--body); display: grid; gap: 6px; }
+.small svg { width: 224px; max-width: 100%; }
+.foot ul { order: 2; }
+@media (min-width: 900px) { .foot ul { order: 0; } }
+
+/* ── The current scenes, as compiled on the site ── */
+
+
+/* ── The redrawn scenes ── */
+svg.nd {
+  display: block; width: 100%; height: auto; border-radius: 8px;
+  background-color: var(--n-ground);
+  background-image: radial-gradient(circle, var(--n-field) 1px, transparent 2px);
+  background-size: 6.25% 11.111%;
+}
+.nd * { vector-effect: non-scaling-stroke; }
+.nd .f { fill: var(--n-fill); stroke: var(--n-frame); stroke-width: 1; }
+.nd .q { fill: var(--n-fill); stroke: var(--n-quiet); stroke-width: 1; }
+.nd .q2 { fill: var(--n-fill); stroke: var(--n-quiet); stroke-width: 1; }
+.nd .d { fill: none; stroke: var(--n-quiet); stroke-width: 1; stroke-dasharray: 6 4; }
+.nd .tab.f { stroke: var(--n-frame); } .nd .tab.q, .nd .tab.d { stroke: var(--n-quiet); }
+.nd .tab { fill: var(--n-fill); stroke-width: 1; } .nd .tab.d { fill: none; stroke-dasharray: 6 4; }
+.nd .seam { fill: var(--n-fill); }
+.nd .c { fill: none; stroke: var(--n-copy); stroke-width: 2; stroke-linecap: round; }
+.nd .cq { fill: none; stroke: var(--n-quiet); stroke-width: 2; stroke-linecap: round; }
+.nd .cq1 { fill: none; stroke: var(--n-quiet); stroke-width: 1; }
+.nd .c2 { fill: none; stroke: var(--n-region-copy); stroke-width: 2; stroke-linecap: round; }
+.nd .rule { fill: none; stroke: var(--n-frame); stroke-width: 1; }
+.nd .l { fill: none; stroke: var(--n-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.nd .dq { fill: none; stroke: var(--n-quiet); stroke-width: 1; stroke-dasharray: 6 4; }
+.nd .ah { fill: var(--n-accent); } .nd .ah-q { fill: var(--n-quiet); }
+.nd .r { fill: var(--n-region); stroke: var(--n-accent); stroke-width: 1; }
+.nd .s, .nd .port { fill: var(--n-accent); }
+.nd .ring { fill: var(--n-fill); stroke: var(--n-accent); stroke-width: 1.5; }
+.nd .qnode { fill: var(--n-fill); stroke: var(--n-accent); stroke-width: 1.5; }
+.nd .halo { fill: var(--n-region); }
+.nd .knob { fill: var(--n-quiet); }
+.nd .pill { fill: var(--n-fill); stroke: var(--n-accent); stroke-width: 1; }
+.nd text { font-family: var(--mono); font-weight: 500; letter-spacing: .08em; }
+.nd .lab { fill: var(--n-label); } .nd .lab-a { fill: var(--n-accent); } .nd .lab-q { fill: var(--n-frame); }
+.nd .lab-on { fill: var(--n-on); } .nd .num { fill: var(--n-quiet); letter-spacing: 0; }
+.nd .code { fill: var(--n-accent); letter-spacing: 0; }
+.nd .g-on { fill: var(--n-on); fill-rule: evenodd; } .nd .g-a { fill: var(--n-accent); fill-rule: evenodd; }
+.nd .g-q { fill: var(--n-frame); fill-rule: evenodd; }
+.nd .tk { fill: none; stroke: var(--n-accent); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.nd .tk-on { fill: none; stroke: var(--n-on); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+/* What floats: a heavier outline on paper, its flat offset under it. */
+.nd .lift { fill: var(--n-fill); stroke: var(--n-lift); stroke-width: 2; stroke-linejoin: round; }
+.nd .lift-s { fill: var(--n-lift-under); stroke: var(--n-lift-under); stroke-width: 2.5; stroke-linejoin: round; }
+.nd .lift-s-h { stroke: var(--n-lift-under); stroke-width: 6; stroke-linecap: round; vector-effect: none; }
+.nd .lens { fill: none; stroke: var(--n-lift); stroke-width: 2.5; }
+.nd .lens-h { stroke: var(--n-lift); stroke-width: 6; stroke-linecap: round; vector-effect: none; }
+.nd .lensfill { fill: var(--n-fill); }
+
+.nd .soft { fill: #b8c8ff; }
+.nd .hatchline { stroke: var(--n-quiet); stroke-width: 1; }
+.nd .chip { fill: #f3f1ea; }
+.nd .c2b { fill: none; stroke: var(--n-quiet); stroke-width: 2; stroke-linecap: round; }
+.nd .c2r { fill: none; stroke: var(--n-region-copy); stroke-width: 2; stroke-linecap: round; }
+.nd .r0 { fill: var(--n-region); }
+.nd .pen { fill: var(--n-accent); }
+.cap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 28px; }
+.replay { font: 600 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--blue); background: var(--blue-50); border: 0; border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+.replay:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.motion-list { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--body); }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <span class="eyebrow">Graphics · tracker 2.26 · round 3, motion take 2</span>
+    <h1>Lit, rhythmic, and moving</h1>
+    <p class="lead">Round 2 with the four techniques you kept: one focal point, hatching for what isn't built, sheets behind, and copy with a text's rhythm. Every drawing is centred in one shared area, and each now moves once as it arrives. Glyphs sit in their chips (kept).</p>
+  </header>
+
+  <section>
+    <div class="head"><span class="eyebrow">How the motion works</span><h2>Choreographed, not animated</h2></div>
+    <ul class="motion-list">
+      <li><b>One gesture, 250ms.</b> The whole drawing is one movement, and every part of it finishes at the same instant, 250ms after it starts.</li>
+      <li><b>A wave, not a queue.</b> The order you saw in take 1 (route, then nodes, then the focal point) survives only as when each part joins the movement: within the first 140ms. Everything then settles together.</li>
+      <li><b>Deceleration, not speed.</b> Lines and slides start fast and spend most of their time easing into place (an exponential ease-out). Nothing moves at a constant rate.</li>
+      <li><b>Things that land, spring.</b> Ports, nodes, arrowheads and the focal point scale up with a small overshoot. Slides are short (12 to 20 units), so the lens, the cursor and the people arrive rather than travel.</li>
+      <li><b>Once,</b> on entering view. Never on hover, never looping, nothing under reduced motion.</li>
+    </ul>
+  </section>
+
+  <section>
+    
+<article class="scene" id="new-product">
+  <div class="scene-head"><span class="eyebrow">01 · new-product</span><h3>New product</h3><p>Hatching in the two unbuilt modules; V1's copy given a heading line and a paragraph's fall.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="d" x="30" y="30" width="200" height="120" rx="8"/><rect class="r" x="50" y="50" width="80" height="80" rx="4"/><path class="c" d="M62,82 L114,82"/><path class="c" d="M62,94 L100,94"/><rect class="s" x="62" y="108" width="36" height="12" rx="6"/><rect class="d" x="150" y="50" width="60" height="20" rx="4"/><rect class="d" x="150" y="110" width="60" height="20" rx="4"/><path class="l" d="M130,90 L258,90"/><circle class="port" cx="130" cy="90" r="2.5"/><circle class="ring" cx="230" cy="90" r="3"/><circle class="halo" cx="270" cy="90" r="18"/><circle class="s" cx="270" cy="90" r="11"/><g class="g-on" transform="translate(264.0,84.0) scale(0.5)"><path d="M5.75 1C6.16421 1 6.5 1.33579 6.5 1.75V3.6L8.22067 3.25587C9.8712 2.92576 11.5821 3.08284 13.1449 3.70797L13.3486 3.78943C14.9097 4.41389 16.628 4.53051 18.2592 4.1227C19.0165 3.93339 19.75 4.50613 19.75 5.28669V12.6537C19.75 13.298 19.3115 13.8596 18.6864 14.0159L18.472 14.0695C16.7024 14.5119 14.8385 14.3854 13.1449 13.708C11.5821 13.0828 9.8712 12.9258 8.22067 13.2559L6.5 13.6V21.75C6.5 22.1642 6.16421 22.5 5.75 22.5C5.33579 22.5 5 22.1642 5 21.75V1.75C5 1.33579 5.33579 1 5.75 1Z"/></g></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><defs><pattern id="hatch2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0,0 L0,5" class="hatchline"/></pattern></defs><rect class="d" x="30" y="30" width="200" height="120" rx="8"/><rect class="r" x="50" y="50" width="80" height="80" rx="4"/><path class="c2r" d="M62,70 L114,70"/><path class="c" d="M62,82 L110,82"/><path class="c" d="M62,94 L92,94"/><rect class="s" x="62" y="108" width="36" height="12" rx="6"/><rect class="hatchfill" fill="url(#hatch2)" x="150" y="50" width="60" height="20" rx="4"/><rect class="d" x="150" y="50" width="60" height="20" rx="4"/><rect class="hatchfill" fill="url(#hatch2)" x="150" y="110" width="60" height="20" rx="4"/><rect class="d" x="150" y="110" width="60" height="20" rx="4"/><path data-t="0" class="l" d="M130,90 L258,90"/><circle data-land="1" class="port" cx="130" cy="90" r="2.5"/><circle data-land="1" class="ring" cx="230" cy="90" r="3"/><circle data-land="halo" class="halo" cx="270" cy="90" r="18"/><g data-land="1" ><circle class="s" cx="270" cy="90" r="11"/><g class="g-on" transform="translate(264.0,84.0) scale(0.5)"><path d="M5.75 1C6.16421 1 6.5 1.33579 6.5 1.75V3.6L8.22067 3.25587C9.8712 2.92576 11.5821 3.08284 13.1449 3.70797L13.3486 3.78943C14.9097 4.41389 16.628 4.53051 18.2592 4.1227C19.0165 3.93339 19.75 4.50613 19.75 5.28669V12.6537C19.75 13.298 19.3115 13.8596 18.6864 14.0159L18.472 14.0695C16.7024 14.5119 14.8385 14.3854 13.1449 13.708C11.5821 13.0828 9.8712 12.9258 8.22067 13.2559L6.5 13.6V21.75C6.5 22.1642 6.16421 22.5 5.75 22.5C5.33579 22.5 5 22.1642 5 21.75V1.75C5 1.33579 5.33579 1 5.75 1Z"/></g></g></svg></figure>
+  </div>
+</article>
+<article class="scene" id="product-design">
+  <div class="scene-head"><span class="eyebrow">02 · product-design</span><h3>Product design</h3><p>A heading line for the screen; the two branches start once the decision has landed.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="50" y="30" width="220" height="120" rx="8"/><rect class="f" x="70" y="80" width="40" height="20" rx="4"/><path class="c" d="M80,90 L100,90"/><path class="l" d="M110,90 L139,90"/><circle class="port" cx="110" cy="90" r="2.5"/><circle class="halo" cx="150" cy="90" r="18"/><path class="s" d="M150,78 L162,90 L150,102 L138,90 Z"/><path class="l" d="M162,90 L174,90 A6,6 0 0 0 180,84 L180,76 A6,6 0 0 1 186,70 L210,70"/><path class="l" d="M162,90 L174,90 A6,6 0 0 1 180,96 L180,104 A6,6 0 0 0 186,110 L210,110"/><path class="ah" d="M210,70 L203,74 L203,66 Z"/><path class="ah" d="M210,110 L203,114 L203,106 Z"/><rect class="f" x="210" y="60" width="40" height="20" rx="4"/><path class="c" d="M220,70 L240,70"/><rect class="f" x="210" y="100" width="40" height="20" rx="4"/><path class="c" d="M220,110 L234,110"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="50" y="30" width="220" height="120" rx="8"/><path class="c2b" d="M70,50 L118,50"/><rect class="f" x="70" y="80" width="40" height="20" rx="4"/><path class="c" d="M80,90 L100,90"/><path data-t="0" class="l" d="M110,90 L139,90"/><circle data-land="1" class="port" cx="110" cy="90" r="2.5"/><circle data-land="halo" class="halo" cx="150" cy="90" r="18"/><path data-land="1" class="s" d="M150,78 L162,90 L150,102 L138,90 Z"/><path data-t="380" class="l" d="M162,90 L174,90 A6,6 0 0 0 180,84 L180,76 A6,6 0 0 1 186,70 L210,70"/><path data-t="380" class="l" d="M162,90 L174,90 A6,6 0 0 1 180,96 L180,104 A6,6 0 0 0 186,110 L210,110"/><path data-land="1" class="ah" d="M210,70 L203,74 L203,66 Z"/><path data-land="1" class="ah" d="M210,110 L203,114 L203,106 Z"/><rect class="f" x="210" y="60" width="40" height="20" rx="4"/><path class="c" d="M220,70 L240,70"/><rect class="f" x="210" y="100" width="40" height="20" rx="4"/><path class="c" d="M220,110 L234,110"/></svg></figure>
+  </div>
+</article>
+<article class="scene" id="product-modernisation">
+  <div class="scene-head"><span class="eyebrow">03 · product-modernisation</span><h3>Product modernisation</h3><p>Focus chosen: the clean screen's main block, lit last, once the arrow arrives.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="q" x="30" y="30" width="100" height="120" rx="8"/><path class="cq" d="M44,50 L96,50"/><rect class="q" x="102" y="45" width="16" height="10" rx="2"/><path class="cq" d="M44,62 L118,62"/><rect class="q" x="44" y="70" width="34" height="14" rx="2"/><path class="cq" d="M84,77 L116,77"/><path class="cq" d="M50,92 L104,92"/><path class="cq" d="M44,102 L112,102"/><rect class="q" x="60" y="110" width="54" height="12" rx="2"/><path class="cq" d="M44,130 L74,130"/><path class="cq" d="M82,130 L108,130"/><path class="l" d="M130,90 L190,90"/><path class="ah" d="M190,90 L183,94 L183,86 Z"/><circle class="port" cx="130" cy="90" r="2.5"/><rect class="f" x="190" y="30" width="100" height="120" rx="8"/><path class="c" d="M210,50 L250,50"/><rect class="r" x="210" y="70" width="60" height="20" rx="4"/><rect class="q" x="210" y="110" width="26" height="20" rx="4"/><rect class="q" x="244" y="110" width="26" height="20" rx="4"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="q" x="30" y="30" width="100" height="120" rx="8"/><path class="cq" d="M44,50 L96,50"/><rect class="q" x="102" y="45" width="16" height="10" rx="2"/><path class="cq" d="M44,62 L118,62"/><rect class="q" x="44" y="70" width="34" height="14" rx="2"/><path class="cq" d="M84,77 L116,77"/><path class="cq" d="M50,92 L104,92"/><path class="cq" d="M44,102 L112,102"/><rect class="q" x="60" y="110" width="54" height="12" rx="2"/><path class="cq" d="M44,130 L74,130"/><path class="cq" d="M82,130 L108,130"/><path data-t="0" class="l" d="M130,90 L190,90"/><path data-land="1" class="ah" d="M190,90 L183,94 L183,86 Z"/><circle data-land="1" class="port" cx="130" cy="90" r="2.5"/><rect class="f" x="190" y="30" width="100" height="120" rx="8"/><path class="c2b" d="M210,50 L254,50"/><path class="c" d="M210,62 L240,62"/><rect data-after="halo" class="halo" x="204" y="74" width="72" height="32" rx="8"/><rect data-after="1" class="s" x="210" y="80" width="60" height="20" rx="4"/><rect class="q" x="210" y="118" width="26" height="16" rx="4"/><rect class="q" x="244" y="118" width="26" height="16" rx="4"/></svg></figure>
+  </div>
+</article>
+<article class="scene" id="design-systems">
+  <div class="scene-head"><span class="eyebrow">04 · design-systems</span><h3>Design systems</h3><p>Focus moved: the source tile goes pale, the placed button is lit.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><rect class="q" x="40" y="38" width="40" height="24" rx="4"/><rect class="q2" x="48" y="44" width="24" height="12" rx="6"/><rect class="q" x="100" y="38" width="40" height="24" rx="4"/><rect class="q2" x="108" y="44" width="22" height="12" rx="6"/><circle class="knob" cx="124" cy="50" r="4"/><rect class="q" x="40" y="78" width="40" height="24" rx="4"/><rect class="q2" x="46" y="84" width="28" height="12" rx="3"/><path class="cq1" d="M51,87 L51,93"/><rect class="q" x="100" y="78" width="40" height="24" rx="4"/><rect class="q2" x="106" y="86" width="8" height="8" rx="2"/><path class="cq" d="M118,90 L132,90"/><rect class="q" x="40" y="118" width="40" height="24" rx="4"/><circle class="q2" cx="52" cy="130" r="5"/><path class="cq" d="M62,130 L72,130"/><rect class="r" x="100" y="118" width="40" height="24" rx="4"/><rect class="s" x="108" y="124" width="24" height="12" rx="6"/><path class="l" d="M140,130 L164,130 A6,6 0 0 0 170,124 L170,96 A6,6 0 0 1 176,90 L190,90"/><rect class="f" x="190" y="30" width="100" height="120" rx="8"/><circle class="port" cx="140" cy="130" r="2.5"/><circle class="ring" cx="190" cy="90" r="3"/><path class="c" d="M210,50 L262,50"/><path class="c" d="M210,62 L246,62"/><rect class="s" x="210" y="84" width="40" height="12" rx="6"/><path class="cq" d="M210,116 L270,116"/><path class="cq" d="M210,128 L250,128"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><rect class="q" x="40" y="38" width="40" height="24" rx="4"/><rect class="q2" x="48" y="44" width="24" height="12" rx="6"/><rect class="q" x="100" y="38" width="40" height="24" rx="4"/><rect class="q2" x="108" y="44" width="22" height="12" rx="6"/><circle class="knob" cx="124" cy="50" r="4"/><rect class="q" x="40" y="78" width="40" height="24" rx="4"/><rect class="q2" x="46" y="84" width="28" height="12" rx="3"/><path class="cq1" d="M51,87 L51,93"/><rect class="q" x="100" y="78" width="40" height="24" rx="4"/><rect class="q2" x="106" y="86" width="8" height="8" rx="2"/><path class="cq" d="M118,90 L132,90"/><rect class="q" x="40" y="118" width="40" height="24" rx="4"/><circle class="q2" cx="52" cy="130" r="5"/><path class="cq" d="M62,130 L72,130"/><rect class="q" x="100" y="118" width="40" height="24" rx="4"/><rect class="soft" x="108" y="124" width="24" height="12" rx="6"/><path data-t="0" class="l" d="M140,130 L164,130 A6,6 0 0 0 170,124 L170,96 A6,6 0 0 1 176,90 L190,90"/><rect class="f" x="190" y="30" width="100" height="120" rx="8"/><circle data-land="1" class="port" cx="140" cy="130" r="2.5"/><circle data-land="1" class="ring" cx="190" cy="90" r="3"/><path class="c2b" d="M210,50 L262,50"/><path class="c" d="M210,62 L250,62"/><path class="c" d="M210,74 L234,74"/><rect data-after="halo" class="halo" x="202" y="92" width="56" height="28" rx="10"/><rect data-after="1" class="s" x="210" y="100" width="40" height="12" rx="6"/><path class="cq" d="M210,134 L262,134"/></svg></figure>
+  </div>
+</article>
+<article class="scene" id="ai-product-ux">
+  <div class="scene-head"><span class="eyebrow">05 · ai-product-ux</span><h3>AI product UX</h3><p>The card widened to the shared area; three lines of copy that fall like a paragraph. The cursor arrives and presses.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="70" y="30" width="180" height="120" rx="8"/><g class="g-a" transform="translate(84.0,44.0) scale(0.5)"><path d="M16.9246 13.3914C17.1306 12.8694 17.869 12.8694 18.075 13.3914L18.9763 15.6756C19.0392 15.8346 19.165 15.9603 19.324 16.0232L21.6082 16.9246C22.1302 17.1306 22.1302 17.869 21.6082 18.075L19.324 18.9763C19.165 19.0392 19.0392 19.165 18.9763 19.324L18.075 21.6082C17.869 22.1302 17.1306 22.1302 16.9246 21.6082L16.0232 19.324C15.9603 19.165 15.8346 19.0392 15.6756 18.9763L13.3914 18.075C12.8694 17.869 12.8694 17.1306 13.3914 16.9246L15.6756 16.0232C15.8346 15.9603 15.9603 15.8346 16.0232 15.6756L16.9246 13.3914Z"/><path d="M7.4529 2.71267C7.82766 1.76244 9.17189 1.76244 9.54665 2.71267L10.7088 5.657C10.8232 5.94704 11.0525 6.17637 11.3425 6.29079L14.2869 7.4529C15.2371 7.82766 15.2371 9.17189 14.2869 9.54665L11.3425 10.7088C11.0525 10.8232 10.8232 11.0525 10.7088 11.3425L9.54665 14.2869C9.17189 15.2371 7.82766 15.2371 7.4529 14.2869L6.29079 11.3425C6.17637 11.0525 5.94704 10.8232 5.657 10.7088L2.71267 9.54665C1.76244 9.17189 1.76244 7.82766 2.71267 7.4529L5.657 6.29079C5.94704 6.17637 6.17637 5.94704 6.29079 5.657L7.4529 2.71267Z"/></g><path class="c" d="M104,50 L150,50"/><path class="c" d="M90,74 L210,74"/><path class="c" d="M90,86 L186,86"/><rect class="s" x="90" y="104" width="58" height="16" rx="8"/><rect class="q" x="156" y="104" width="62" height="16" rx="8"/><g transform="translate(2,2)" class="lift-shadow"><path class="lift-s" d="M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z" transform="translate(141,113)"/></g><path class="lift" d="M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z" transform="translate(141,113)"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="50" y="30" width="220" height="120" rx="8"/><g class="g-a" transform="translate(64.0,44.0) scale(0.5)"><path d="M16.9246 13.3914C17.1306 12.8694 17.869 12.8694 18.075 13.3914L18.9763 15.6756C19.0392 15.8346 19.165 15.9603 19.324 16.0232L21.6082 16.9246C22.1302 17.1306 22.1302 17.869 21.6082 18.075L19.324 18.9763C19.165 19.0392 19.0392 19.165 18.9763 19.324L18.075 21.6082C17.869 22.1302 17.1306 22.1302 16.9246 21.6082L16.0232 19.324C15.9603 19.165 15.8346 19.0392 15.6756 18.9763L13.3914 18.075C12.8694 17.869 12.8694 17.1306 13.3914 16.9246L15.6756 16.0232C15.8346 15.9603 15.9603 15.8346 16.0232 15.6756L16.9246 13.3914Z"/><path d="M7.4529 2.71267C7.82766 1.76244 9.17189 1.76244 9.54665 2.71267L10.7088 5.657C10.8232 5.94704 11.0525 6.17637 11.3425 6.29079L14.2869 7.4529C15.2371 7.82766 15.2371 9.17189 14.2869 9.54665L11.3425 10.7088C11.0525 10.8232 10.8232 11.0525 10.7088 11.3425L9.54665 14.2869C9.17189 15.2371 7.82766 15.2371 7.4529 14.2869L6.29079 11.3425C6.17637 11.0525 5.94704 10.8232 5.657 10.7088L2.71267 9.54665C1.76244 9.17189 1.76244 7.82766 2.71267 7.4529L5.657 6.29079C5.94704 6.17637 6.17637 5.94704 6.29079 5.657L7.4529 2.71267Z"/></g><path class="c2b" d="M84,50 L140,50"/><path class="c" d="M70,70 L226,70"/><path class="c" d="M70,82 L212,82"/><path class="c" d="M70,94 L158,94"/><rect data-press="1" data-t="1000" class="s" x="70" y="104" width="58" height="16" rx="8"/><rect class="q" x="136" y="104" width="62" height="16" rx="8"/><g data-slide="16,12" data-t="150" data-dur="850" ><g transform="translate(2,2)" class="lift-shadow"><path class="lift-s" d="M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z" transform="translate(121,113)"/></g><path class="lift" d="M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z" transform="translate(121,113)"/></g></svg></figure>
+  </div>
+</article>
+<article class="scene" id="design-engineering">
+  <div class="scene-head"><span class="eyebrow">06 · design-engineering</span><h3>Design engineering</h3><p>Focus chosen: the shared component. The code line lights after the route reaches it.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><path class="c" d="M50,54 L110,54"/><rect class="s" x="62" y="82" width="48" height="16" rx="8"/><path class="cq" d="M50,122 L130,122"/><path class="cq" d="M50,134 L102,134"/><rect class="f" x="170" y="30" width="120" height="120" rx="8"/><path class="rule" d="M190,30 L190,150"/><path class="cq" d="M198,50 L236,50"/><path class="cq" d="M206,62 L270,62"/><path class="cq" d="M206,74 L252,74"/><path class="cq" d="M206,106 L262,106"/><path class="cq" d="M206,118 L240,118"/><path class="cq" d="M198,130 L222,130"/><rect class="r" x="194" y="82" width="86" height="16" rx="3"/><path class="l" d="M200,90.0 L250,90.0"/><path class="l" d="M110,90 L194,90"/><circle class="port" cx="110" cy="90" r="2.5"/><circle class="ring" cx="150" cy="90" r="3"/><circle class="ring" cx="170" cy="90" r="3"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><path class="c2b" d="M50,50 L110,50"/><path class="c" d="M50,62 L94,62"/><rect data-land="halo" class="halo" x="54" y="76" width="64" height="28" rx="12"/><rect data-land="1" class="s" x="62" y="82" width="48" height="16" rx="8"/><path class="c" d="M50,122 L130,122"/><path class="c" d="M50,134 L102,134"/><rect class="f" x="170" y="30" width="120" height="120" rx="8"/><path class="rule" d="M190,30 L190,150"/><path class="cq" d="M198,50 L236,50"/><path class="cq" d="M206,62 L270,62"/><path class="cq" d="M206,74 L252,74"/><path class="cq" d="M206,106 L262,106"/><path class="cq" d="M206,118 L240,118"/><path class="cq" d="M198,130 L222,130"/><rect class="r0" x="194" y="82" width="86" height="16" rx="3"/><path data-t="650" data-nopen="1" class="l" d="M200,90 L250,90"/><path data-t="0" class="l" d="M110,90 L194,90"/><circle data-land="1" class="ring" cx="150" cy="90" r="3"/><circle data-land="1" class="ring" cx="170" cy="90" r="3"/></svg></figure>
+  </div>
+</article>
+<article class="scene" id="software-development">
+  <div class="scene-head"><span class="eyebrow">07 · software-development</span><h3>Software development</h3><p>Glyphs in chips (kept). The three layers fire at once and meet at the bus; the release lands last.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><path class="rule" d="M120,62 L120,78 M120,102 L120,118"/><rect class="f" x="50" y="38" width="140" height="24" rx="4"/><g class="g-q" transform="translate(58.0,44.0) scale(0.5)"><path d="M8 17C5.17157 17 3.75736 17 2.87868 16.1213C2.30938 15.552 2.10893 14.7579 2.03835 13.5H21.9616C21.8911 14.7579 21.6906 15.552 21.1213 16.1213C20.2426 17 18.8284 17 16 17H12.75V21H16C16.4142 21 16.75 21.3358 16.75 21.75C16.75 22.1642 16.4142 22.5 16 22.5H8C7.58579 22.5 7.25 22.1642 7.25 21.75C7.25 21.3358 7.58579 21 8 21H11.25V17H8Z"/><path d="M10 2H14C17.7712 2 19.6569 2 20.8284 3.17157C22 4.34315 22 6.22876 22 10V11C22 11.5516 22 12.0494 21.9935 12.5H2.00652C2 12.0494 2 11.5516 2 11V10C2 6.22876 2 4.34315 3.17157 3.17157C4.34315 2 6.22876 2 10 2Z"/></g><path class="c" d="M80,50 L150,50"/><rect class="f" x="50" y="78" width="140" height="24" rx="4"/><g class="g-q" transform="translate(58.0,84.0) scale(0.5)"><path d="M2 7C2 5.11438 2 4.17157 2.58579 3.58579C3.17157 3 4.11438 3 6 3H18C19.8856 3 20.8284 3 21.4142 3.58579C22 4.17157 22 5.11438 22 7C22 8.88562 22 9.82843 21.4142 10.4142C20.8284 11 19.8856 11 18 11H6C4.11438 11 3.17157 11 2.58579 10.4142C2 9.82843 2 8.88562 2 7ZM6 6.25C5.58579 6.25 5.25 6.58579 5.25 7C5.25 7.41421 5.58579 7.75 6 7.75H8C8.41421 7.75 8.75 7.41421 8.75 7C8.75 6.58579 8.41421 6.25 8 6.25H6ZM10.25 7C10.25 6.58579 10.5858 6.25 11 6.25H18C18.4142 6.25 18.75 6.58579 18.75 7C18.75 7.41421 18.4142 7.75 18 7.75H11C10.5858 7.75 10.25 7.41421 10.25 7Z"/><path d="M2 17C2 15.1144 2 14.1716 2.58579 13.5858C3.17157 13 4.11438 13 6 13H18C19.8856 13 20.8284 13 21.4142 13.5858C22 14.1716 22 15.1144 22 17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17ZM6 16.25C5.58579 16.25 5.25 16.5858 5.25 17C5.25 17.4142 5.58579 17.75 6 17.75H8C8.41421 17.75 8.75 17.4142 8.75 17C8.75 16.5858 8.41421 16.25 8 16.25H6ZM10.25 17C10.25 16.5858 10.5858 16.25 11 16.25H18C18.4142 16.25 18.75 16.5858 18.75 17C18.75 17.4142 18.4142 17.75 18 17.75H11C10.5858 17.75 10.25 17.4142 10.25 17Z"/></g><path class="c" d="M80,90 L136,90"/><rect class="f" x="50" y="118" width="140" height="24" rx="4"/><g class="g-q" transform="translate(58.0,124.0) scale(0.5)"><path d="M20 18C20 20.2091 16.4183 22 12 22C7.58172 22 4 20.2091 4 18V13.974C4.50221 14.5906 5.21495 15.1029 6.00774 15.4992C7.58004 16.2854 9.69967 16.75 12 16.75C14.3003 16.75 16.42 16.2854 17.9923 15.4992C18.7851 15.1029 19.4978 14.5906 20 13.974V18Z"/><path d="M12 10.75C14.3003 10.75 16.42 10.2854 17.9923 9.49925C18.7851 9.10285 19.4978 8.59059 20 7.97397V12C20 12.5 18.2143 13.5911 17.3214 14.1576C15.9983 14.8192 14.118 15.25 12 15.25C9.88205 15.25 8.00168 14.8192 6.67856 14.1576C5.5 13.5683 4 12.5 4 12V7.97397C4.50221 8.59059 5.21495 9.10285 6.00774 9.49925C7.58004 10.2854 9.69967 10.75 12 10.75Z"/><path d="M17.3214 8.15761C15.9983 8.81917 14.118 9.25 12 9.25C9.88205 9.25 8.00168 8.81917 6.67856 8.15761C6.16384 7.95596 5.00637 7.31492 4.2015 6.27935C4.06454 6.10313 4.00576 5.87853 4.03988 5.65798C4.06283 5.50969 4.0948 5.35695 4.13578 5.26226C4.82815 3.40554 8.0858 2 12 2C15.9142 2 19.1718 3.40554 19.8642 5.26226C19.9052 5.35695 19.9372 5.50969 19.9601 5.65798C19.9942 5.87853 19.9355 6.10313 19.7985 6.27935C18.9936 7.31492 17.8362 7.95596 17.3214 8.15761Z"/></g><path class="c" d="M80,130 L120,130"/><path class="l" d="M190,50 L204,50 A6,6 0 0 1 210,56 L210,90"/><path class="l" d="M190,130 L204,130 A6,6 0 0 0 210,124 L210,90"/><path class="l" d="M190,90 L239,90"/><circle class="port" cx="190" cy="50" r="2.5"/><circle class="port" cx="190" cy="90" r="2.5"/><circle class="port" cx="190" cy="130" r="2.5"/><circle class="port" cx="210" cy="90" r="3.5"/><circle class="halo" cx="250" cy="90" r="18"/><circle class="s" cx="250" cy="90" r="11"/><g class="g-on" transform="translate(244.0,84.0) scale(0.5)"><path d="M5.46967 17.4697C5.17678 17.7626 5.17678 18.2374 5.46967 18.5303C5.76256 18.8232 6.23744 18.8232 6.53033 18.5303L13.5 11.5607L17.4697 15.5303C17.6842 15.7448 18.0068 15.809 18.287 15.6929C18.5673 15.5768 18.75 15.3033 18.75 15V6C18.75 5.58579 18.4142 5.25 18 5.25L9 5.25C8.69665 5.25 8.42318 5.43273 8.30709 5.71299C8.19101 5.99324 8.25517 6.31583 8.46967 6.53033L12.4393 10.5L5.46967 17.4697Z"/></g></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><path class="rule" d="M120,62 L120,78 M120,102 L120,118"/><rect class="f" x="50" y="38" width="140" height="24" rx="4"/><rect class="chip" x="56" y="42" width="16" height="16" rx="4"/><g class="g-q" transform="translate(59.0,45.0) scale(0.4166666666666667)"><path d="M8 17C5.17157 17 3.75736 17 2.87868 16.1213C2.30938 15.552 2.10893 14.7579 2.03835 13.5H21.9616C21.8911 14.7579 21.6906 15.552 21.1213 16.1213C20.2426 17 18.8284 17 16 17H12.75V21H16C16.4142 21 16.75 21.3358 16.75 21.75C16.75 22.1642 16.4142 22.5 16 22.5H8C7.58579 22.5 7.25 22.1642 7.25 21.75C7.25 21.3358 7.58579 21 8 21H11.25V17H8Z"/><path d="M10 2H14C17.7712 2 19.6569 2 20.8284 3.17157C22 4.34315 22 6.22876 22 10V11C22 11.5516 22 12.0494 21.9935 12.5H2.00652C2 12.0494 2 11.5516 2 11V10C2 6.22876 2 4.34315 3.17157 3.17157C4.34315 2 6.22876 2 10 2Z"/></g><path class="c" d="M80,50 L150,50"/><rect class="f" x="50" y="78" width="140" height="24" rx="4"/><rect class="chip" x="56" y="82" width="16" height="16" rx="4"/><g class="g-q" transform="translate(59.0,85.0) scale(0.4166666666666667)"><path d="M2 7C2 5.11438 2 4.17157 2.58579 3.58579C3.17157 3 4.11438 3 6 3H18C19.8856 3 20.8284 3 21.4142 3.58579C22 4.17157 22 5.11438 22 7C22 8.88562 22 9.82843 21.4142 10.4142C20.8284 11 19.8856 11 18 11H6C4.11438 11 3.17157 11 2.58579 10.4142C2 9.82843 2 8.88562 2 7ZM6 6.25C5.58579 6.25 5.25 6.58579 5.25 7C5.25 7.41421 5.58579 7.75 6 7.75H8C8.41421 7.75 8.75 7.41421 8.75 7C8.75 6.58579 8.41421 6.25 8 6.25H6ZM10.25 7C10.25 6.58579 10.5858 6.25 11 6.25H18C18.4142 6.25 18.75 6.58579 18.75 7C18.75 7.41421 18.4142 7.75 18 7.75H11C10.5858 7.75 10.25 7.41421 10.25 7Z"/><path d="M2 17C2 15.1144 2 14.1716 2.58579 13.5858C3.17157 13 4.11438 13 6 13H18C19.8856 13 20.8284 13 21.4142 13.5858C22 14.1716 22 15.1144 22 17C22 18.8856 22 19.8284 21.4142 20.4142C20.8284 21 19.8856 21 18 21H6C4.11438 21 3.17157 21 2.58579 20.4142C2 19.8284 2 18.8856 2 17ZM6 16.25C5.58579 16.25 5.25 16.5858 5.25 17C5.25 17.4142 5.58579 17.75 6 17.75H8C8.41421 17.75 8.75 17.4142 8.75 17C8.75 16.5858 8.41421 16.25 8 16.25H6ZM10.25 17C10.25 16.5858 10.5858 16.25 11 16.25H18C18.4142 16.25 18.75 16.5858 18.75 17C18.75 17.4142 18.4142 17.75 18 17.75H11C10.5858 17.75 10.25 17.4142 10.25 17Z"/></g><path class="c" d="M80,90 L136,90"/><rect class="f" x="50" y="118" width="140" height="24" rx="4"/><rect class="chip" x="56" y="122" width="16" height="16" rx="4"/><g class="g-q" transform="translate(59.0,125.0) scale(0.4166666666666667)"><path d="M20 18C20 20.2091 16.4183 22 12 22C7.58172 22 4 20.2091 4 18V13.974C4.50221 14.5906 5.21495 15.1029 6.00774 15.4992C7.58004 16.2854 9.69967 16.75 12 16.75C14.3003 16.75 16.42 16.2854 17.9923 15.4992C18.7851 15.1029 19.4978 14.5906 20 13.974V18Z"/><path d="M12 10.75C14.3003 10.75 16.42 10.2854 17.9923 9.49925C18.7851 9.10285 19.4978 8.59059 20 7.97397V12C20 12.5 18.2143 13.5911 17.3214 14.1576C15.9983 14.8192 14.118 15.25 12 15.25C9.88205 15.25 8.00168 14.8192 6.67856 14.1576C5.5 13.5683 4 12.5 4 12V7.97397C4.50221 8.59059 5.21495 9.10285 6.00774 9.49925C7.58004 10.2854 9.69967 10.75 12 10.75Z"/><path d="M17.3214 8.15761C15.9983 8.81917 14.118 9.25 12 9.25C9.88205 9.25 8.00168 8.81917 6.67856 8.15761C6.16384 7.95596 5.00637 7.31492 4.2015 6.27935C4.06454 6.10313 4.00576 5.87853 4.03988 5.65798C4.06283 5.50969 4.0948 5.35695 4.13578 5.26226C4.82815 3.40554 8.0858 2 12 2C15.9142 2 19.1718 3.40554 19.8642 5.26226C19.9052 5.35695 19.9372 5.50969 19.9601 5.65798C19.9942 5.87853 19.9355 6.10313 19.7985 6.27935C18.9936 7.31492 17.8362 7.95596 17.3214 8.15761Z"/></g><path class="c" d="M80,130 L120,130"/><path data-t="0" class="l" d="M190,50 L204,50 A6,6 0 0 1 210,56 L210,90"/><path data-t="0" class="l" d="M190,130 L204,130 A6,6 0 0 0 210,124 L210,90"/><path data-t="260" class="l" d="M190,90 L239,90"/><circle data-land="1" class="port" cx="190" cy="50" r="2.5"/><circle data-land="1" class="port" cx="190" cy="90" r="2.5"/><circle data-land="1" class="port" cx="190" cy="130" r="2.5"/><circle data-land="1" class="port" cx="210" cy="90" r="3.5"/><circle data-land="halo" class="halo" cx="250" cy="90" r="18"/><g data-land="1" ><circle class="s" cx="250" cy="90" r="11"/><g class="g-on" transform="translate(244.0,84.0) scale(0.5)"><path d="M5.46967 17.4697C5.17678 17.7626 5.17678 18.2374 5.46967 18.5303C5.76256 18.8232 6.23744 18.8232 6.53033 18.5303L13.5 11.5607L17.4697 15.5303C17.6842 15.7448 18.0068 15.809 18.287 15.6929C18.5673 15.5768 18.75 15.3033 18.75 15V6C18.75 5.58579 18.4142 5.25 18 5.25L9 5.25C8.69665 5.25 8.42318 5.43273 8.30709 5.71299C8.19101 5.99324 8.25517 6.31583 8.46967 6.53033L12.4393 10.5L5.46967 17.4697Z"/></g></g></svg></figure>
+  </div>
+</article>
+<article class="scene" id="code-review">
+  <div class="scene-head"><span class="eyebrow">08 · code-review</span><h3>Code review · article cover</h3><p>Two sheets behind, moved to centre. The routine lines tick down, then the lens glides in.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="90" y="30" width="180" height="120" rx="8"/><path class="rule" d="M116,30 L116,150"/><path class="cq" d="M126,46 L202,46"/><path class="cq" d="M134,58 L228,58"/><path class="cq" d="M134,70 L194,70"/><path class="cq" d="M134,106 L216,106"/><path class="cq" d="M126,118 L206,118"/><path class="cq" d="M134,130 L180,130"/><path class="cq" d="M126,142 L220,142"/><path class="tk" d="M242,46 L245,49 L250,43"/><path class="tk" d="M242,58 L245,61 L250,55"/><path class="tk" d="M242,130 L245,133 L250,127"/><path class="tk" d="M242,142 L245,145 L250,139"/><rect class="r" x="120" y="76" width="136" height="24" rx="4"/><path class="c2" d="M132,82 L234,82"/><path class="c2" d="M132,94 L206,94"/><g transform="translate(3,3)" class="lift-shadow"><circle class="lift-s" cx="154" cy="88" r="26"/><path class="lift-s-h" d="M134.9,107.1 L118.6,123.4"/></g><clipPath id="lensclip15"><circle cx="154" cy="88" r="26"/></clipPath><g clip-path="url(#lensclip15)"><circle class="lensfill" cx="154" cy="88" r="26"/><g transform="translate(154,88) scale(1.35) translate(-154,-88)"><rect class="r" x="120" y="76" width="136" height="24" rx="4"/><path class="c2" d="M132,82 L234,82"/><path class="c2" d="M132,94 L206,94"/></g></g><circle class="lens" cx="154" cy="88" r="26"/><path class="lens-h" d="M134.9,107.1 L118.6,123.4"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><g transform="translate(-20,0)"><rect class="q" x="98" y="22" width="180" height="120" rx="8"/><rect class="q" x="94" y="26" width="180" height="120" rx="8"/><rect class="f" x="90" y="30" width="180" height="120" rx="8"/><path class="rule" d="M116,30 L116,150"/><path class="cq" d="M126,46 L202,46"/><path class="cq" d="M134,58 L228,58"/><path class="cq" d="M134,70 L194,70"/><path class="cq" d="M134,106 L216,106"/><path class="cq" d="M126,118 L206,118"/><path class="cq" d="M134,130 L180,130"/><path class="cq" d="M126,142 L220,142"/><path data-t="0" data-nopen="1" class="tk" d="M242,46 L245,49 L250,43"/><path data-t="130" data-nopen="1" class="tk" d="M242,58 L245,61 L250,55"/><path data-t="260" data-nopen="1" class="tk" d="M242,130 L245,133 L250,127"/><path data-t="390" data-nopen="1" class="tk" d="M242,142 L245,145 L250,139"/><rect class="r" x="120" y="76" width="136" height="24" rx="4"/><path class="c2" d="M132,82 L234,82"/><path class="c2" d="M132,94 L206,94"/><g data-slide="20,12" data-t="420" data-dur="900" ><g transform="translate(3,3)" class="lift-shadow"><circle class="lift-s" cx="154" cy="88" r="26"/><path class="lift-s-h" d="M134.9,107.1 L118.6,123.4"/></g><clipPath id="lensclip16"><circle cx="154" cy="88" r="26"/></clipPath><g clip-path="url(#lensclip16)"><circle class="lensfill" cx="154" cy="88" r="26"/><g transform="translate(154,88) scale(1.35) translate(-154,-88)"><rect class="r" x="120" y="76" width="136" height="24" rx="4"/><path class="c2" d="M132,82 L234,82"/><path class="c2" d="M132,94 L206,94"/></g></g><circle class="lens" cx="154" cy="88" r="26"/><path class="lens-h" d="M134.9,107.1 L118.6,123.4"/></g></g></svg></figure>
+  </div>
+</article>
+<article class="scene" id="security-checklist">
+  <div class="scene-head"><span class="eyebrow">09 · security-checklist</span><h3>Security checklist · article cover</h3><p>The checks tick in order, then the route reaches the gate; the people walk up to it.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><rect class="s" x="46" y="64" width="12" height="12" rx="3"/><path class="tk-on" d="M49,70 L51.5,72.5 L55,67.5"/><path class="c" d="M70,70 L130,70"/><rect class="s" x="46" y="84" width="12" height="12" rx="3"/><path class="tk-on" d="M49,90 L51.5,92.5 L55,87.5"/><path class="c" d="M70,90 L116,90"/><rect class="s" x="46" y="104" width="12" height="12" rx="3"/><path class="tk-on" d="M49,110 L51.5,112.5 L55,107.5"/><path class="c" d="M70,110 L126,110"/><rect class="q" x="46" y="124" width="12" height="12" rx="3"/><path class="cq" d="M70,130 L112,130"/><path class="l" d="M150,90 L178,90"/><circle class="port" cx="150" cy="90" r="2.5"/><rect class="f" x="184" y="40" width="12" height="100" rx="6"/><circle class="halo" cx="190" cy="90" r="18"/><circle class="s" cx="190" cy="90" r="11"/><g class="g-on" transform="translate(184.5,84.5) scale(0.4583333333333333)"><path d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.5907 10.348 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.40931 10.348 4.13525 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8Z"/></g><g class="g-q" transform="translate(220.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g><g class="g-q" transform="translate(250.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g><g class="g-q" transform="translate(280.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g><path class="rule" d="M218,90 L302,90"/><path class="dq" d="M290,110 L204,110"/><path class="ah-q" d="M203,110 L210,106 L210,114 Z"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="f" x="30" y="30" width="120" height="120" rx="8"/><path class="c2b" d="M46,50 L98,50"/><rect class="s" x="46" y="64" width="12" height="12" rx="3"/><path data-t="0" data-nopen="1" class="tk-on" d="M49,70 L51.5,72.5 L55,67.5"/><path class="c" d="M70,70 L130,70"/><rect class="s" x="46" y="84" width="12" height="12" rx="3"/><path data-t="160" data-nopen="1" class="tk-on" d="M49,90 L51.5,92.5 L55,87.5"/><path class="c" d="M70,90 L116,90"/><rect class="s" x="46" y="104" width="12" height="12" rx="3"/><path data-t="320" data-nopen="1" class="tk-on" d="M49,110 L51.5,112.5 L55,107.5"/><path class="c" d="M70,110 L126,110"/><rect class="q" x="46" y="124" width="12" height="12" rx="3"/><path class="cq" d="M70,130 L112,130"/><path data-t="560" class="l" d="M150,90 L178,90"/><circle data-land="1" class="port" cx="150" cy="90" r="2.5"/><rect class="f" x="184" y="40" width="12" height="100" rx="6"/><circle data-land="halo" class="halo" cx="190" cy="90" r="18"/><g data-land="1" ><circle class="s" cx="190" cy="90" r="11"/><g class="g-on" transform="translate(184.5,84.5) scale(0.4583333333333333)"><path d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.5907 10.348 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.40931 10.348 4.13525 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8Z"/></g></g><g data-slide="14,0" data-t="0" data-dur="760" ><g class="g-q" transform="translate(220.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g></g><g data-slide="14,0" data-t="120" data-dur="760" ><g class="g-q" transform="translate(250.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g></g><g data-slide="14,0" data-t="240" data-dur="760" ><g class="g-q" transform="translate(280.0,62.0) scale(0.8333333333333334)"><path d="M12 13C16.4183 13 20 15.0147 20 17.5C20 19.9853 20 22 12 22C4 22 4 19.9853 4 17.5C4 15.0147 7.58172 13 12 13Z"/><path d="M12 2C14.2091 2 16 3.79086 16 6C16 8.20914 14.2091 10 12 10C9.79086 10 8 8.20914 8 6C8 3.79086 9.79086 2 12 2Z"/></g></g><path class="rule" d="M218,90 L302,90"/><path class="dq" d="M290,110 L204,110"/><path class="ah-q" d="M203,110 L210,106 L210,114 Z"/></svg></figure>
+  </div>
+</article>
+<article class="scene" id="prototype-to-production">
+  <div class="scene-head"><span class="eyebrow">10 · prototype-to-production</span><h3>Prototype to production · article cover</h3><p>Focus chosen: the store's top, lit when the route lands. Each question lands as the line passes it.</p></div>
+  <div class="pair">
+    <figure><div class="cap mono">Round 2</div><svg class="nd" viewBox="0 0 320 180" aria-hidden="true"><rect class="d" x="210" y="30" width="80" height="40" rx="6"/><path class="cq" d="M222,44 L262,44"/><path class="cq" d="M222,56 L248,56"/><path class="l" d="M250,70 L250,124 A6,6 0 0 1 244,130 L156,130 A6,6 0 0 1 150,124 L150,96 A6,6 0 0 0 144,90 L112,90"/><path class="ah" d="M112,90 L119,86 L119,94 Z"/><circle class="port" cx="250" cy="70" r="2.5"/><circle class="qnode" cx="250" cy="110" r="6.5"/><circle class="qnode" cx="210" cy="130" r="6.5"/><circle class="qnode" cx="170" cy="130" r="6.5"/><circle class="qnode" cx="150" cy="110" r="6.5"/><path class="f" d="M50,60 L50,120 A30,8 0 0 0 110,120 L110,60"/><ellipse class="r" cx="80" cy="60" rx="30" ry="8"/><path class="rule" d="M50,80 A30,8 0 0 0 110,80"/><path class="rule" d="M50,100 A30,8 0 0 0 110,100"/><circle class="s" cx="98" cy="114" r="3"/></svg></figure>
+    <figure class="motion"><div class="cap mono">Round 3 <button class="replay" type="button">Replay</button></div><svg class="nd m" viewBox="0 0 320 180" aria-hidden="true"><rect class="d" x="210" y="30" width="80" height="40" rx="6"/><path class="cq" d="M222,44 L262,44"/><path class="cq" d="M222,56 L248,56"/><path data-t="0" class="l" d="M250,70 L250,124 A6,6 0 0 1 244,130 L156,130 A6,6 0 0 1 150,124 L150,96 A6,6 0 0 0 144,90 L112,90"/><path data-land="1" class="ah" d="M112,90 L119,86 L119,94 Z"/><circle data-land="1" class="port" cx="250" cy="70" r="2.5"/><circle data-land="1" class="qnode" cx="250" cy="110" r="6.5"/><circle data-land="1" class="qnode" cx="210" cy="130" r="6.5"/><circle data-land="1" class="qnode" cx="170" cy="130" r="6.5"/><circle data-land="1" class="qnode" cx="150" cy="110" r="6.5"/><path class="f" d="M50,60 L50,120 A30,8 0 0 0 110,120 L110,60"/><path class="rule" d="M50,80 A30,8 0 0 0 110,80"/><path class="rule" d="M50,100 A30,8 0 0 0 110,100"/><ellipse class="r" cx="80" cy="60" rx="30" ry="8"/><ellipse data-after="halo" class="halo" cx="80" cy="60" rx="38" ry="13"/><ellipse data-after="1" class="s" cx="80" cy="60" rx="30" ry="8"/><circle class="s" cx="98" cy="114" r="3"/></svg></figure>
+  </div>
+</article>
+  </section>
+
+  <section>
+    <div class="head"><span class="eyebrow">Your call</span><h2>What to decide on this round</h2></div>
+    <div class="note">
+      <ol>
+        <li><b>The feel:</b> does one 250ms gesture read as finished and alive, or too quick to register on a page you scroll past?</li>
+        <li><b>The spring:</b> nodes overshoot slightly as they land. Keep it, or settle them without any overshoot?</li>
+        <li><b>The new focal points:</b> modernisation (the clean block), design engineering (the shared component), prototype (the store's top).</li>
+      </ol>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  // One gesture: every element of a drawing ends at exactly TOTAL ms. The authored order (data-t, route
+  // lengths) only decides WHEN each element joins the wave; then everything decelerates into place together.
+  const TOTAL = 250;             // ms, the whole drawing
+  const WAVE = 140;              // ms, the latest any element may join
+  const AUTHOR_SPEED = 0.15;     // the authored timeline's units per ms, used only for ordering
+  const OUT = 'cubic-bezier(.16, 1, .3, 1)';      // expo-out: fast, then a long settle
+  const SPRING = 'cubic-bezier(.34, 1.45, .64, 1)'; // back-out: a small overshoot for things that land
+  const outInv = f => Math.min(1, -Math.log2(Math.max(1e-4, 1 - f)) / 10); // expo-out, inverted
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const center = el => { el.style.transformBox = 'fill-box'; el.style.transformOrigin = 'center'; };
+
+  function build(svg) {
+    (svg._anims || []).forEach(a => a.cancel());
+    const k = svg.getScreenCTM().a;
+    const anims = [], routes = [];
+    const paths = [...svg.querySelectorAll('path[data-t]')];
+    // The authored end, to compress the authored order into the wave.
+    let T = 1;
+    paths.forEach(el => { T = Math.max(T, +el.dataset.t + el.getTotalLength() / AUTHOR_SPEED); });
+    svg.querySelectorAll('[data-slide],[data-press]').forEach(el => { T = Math.max(T, +el.dataset.t || 0); });
+    const join = t => WAVE * Math.min(1, t / T);
+    const run = (el, frames, start, easing) => {
+      start = Math.min(start, TOTAL - 70);
+      anims.push(el.animate(frames, { duration: TOTAL - start, delay: start, fill: 'both', easing }));
+    };
+
+    paths.forEach(el => {
+      const L = el.getTotalLength(), Ls = L * k, start = join(+el.dataset.t);
+      el.style.strokeDasharray = `${Ls} ${Ls + 8}`;
+      run(el, [{ strokeDashoffset: Ls }, { strokeDashoffset: 0 }], start, OUT);
+      anims[anims.length - 1].finished.then(() => { el.style.strokeDasharray = ''; }).catch(() => {});
+      if (el.dataset.nopen !== undefined) return;
+      const samples = [];
+      for (let s = 0; s <= L; s += 1.5) samples.push([el.getPointAtLength(s), s]);
+      routes.push({ start, L, samples });
+    });
+
+    svg.querySelectorAll('[data-land], [data-after]').forEach(el => {
+      const b = el.getBBox(), cx = b.x + b.width / 2, cy = b.y + b.height / 2;
+      const halo = el.dataset.land === 'halo' || el.dataset.after === 'halo';
+      let at = 0;
+      if (el.dataset.after !== undefined) at = WAVE;
+      else {
+        let best = 1e9;
+        for (const r of routes) for (const [p, s] of r.samples) {
+          const d = Math.hypot(p.x - cx, p.y - cy);
+          if (d < best) { best = d; at = r.start + outInv(s / r.L) * (TOTAL - r.start); }
+        }
+        if (best > 24) at = 0;
+      }
+      center(el);
+      run(el, [{ transform: `scale(${halo ? 0.35 : 0.2})` }, { transform: 'scale(1)' }], Math.max(0, at - 25), SPRING);
+    });
+
+    svg.querySelectorAll('[data-slide]').forEach(el => {
+      const [dx, dy] = el.dataset.slide.split(',').map(Number);
+      run(el, [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0px, 0px)' }], join(+el.dataset.t || 0), OUT);
+    });
+
+    svg.querySelectorAll('[data-press]').forEach(el => {
+      center(el);
+      run(el, [{ transform: 'scale(1)' }, { transform: 'scale(.93)', offset: 0.45 }, { transform: 'scale(1)' }], WAVE, OUT);
+    });
+
+    anims.forEach(a => { a.pause(); a.currentTime = 0; });
+    svg._anims = anims;
+  }
+  const play = svg => svg._anims.forEach(a => a.play());
+
+  if (reduce) { document.querySelectorAll('.replay').forEach(b => b.hidden = true); return; }
+  const all = [...document.querySelectorAll('svg.m')];
+  all.forEach(build);
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { play(e.target); io.unobserve(e.target); }
+  }), { threshold: 0.6 });
+  all.forEach(s => io.observe(s));
+  document.querySelectorAll('.replay').forEach(b => b.addEventListener('click', () => {
+    const s = b.closest('figure').querySelector('svg.m'); build(s); play(s);
+  }));
+})();
+</script>

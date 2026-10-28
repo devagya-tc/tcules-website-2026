@@ -1,449 +1,246 @@
-/* TableOfContents — the outline of a long-form document, built to docs/specs/TableOfContents.md.
+/* TableOfContents — the outline of a long-form document, in IndexRail's grammar (owner, 26 Oct 2026;
+   decisions/2026-10-26-toc-in-the-index-rail-grammar).
 
-   Every colour, distance, radius, duration and easing comes from --toc-*, declared in
-   tokens/components/table-of-contents.css and re-declared once per surface there. This file states
-   no value of its own: it decides STRUCTURE and which token each state reads, and nothing else.
-   That is what lets the same markup answer a paper band, a tint panel, an ink band and a blue
-   pivot without knowing which one it is standing on.
+   Every colour, distance, duration and easing comes from --toc-*, declared in
+   tokens/components/table-of-contents.css and re-declared once per surface there.
 
    ── Two arrangements, one DOM ───────────────────────────────────────────────────
-   Below 1024 the outline is a native <details>, closed by default, sitting immediately after the
-   hero: one 44px "On this page" row, full width. At 1024 and up the same <details> is forced open
-   through ::details-content, its summary is hidden, and `.rail` makes it sticky — position, both
-   inline caps, the block cap, the internal scroll and the scrollbar's clearance. Those two blocks
-   at the end of the file are the whole difference between the arrangements, and no gap step and
-   no type role may ever sit inside either: the layout changes at 1024, the distances do not.
+   One native <details>. Below 1024 it is a sticky BAR under the compact nav: the summary names the
+   section in view, and opening it hangs the list under the bar on the bar's own ground. At 1024 and
+   up the same <details> is forced open through ::details-content, the summary goes, and the nav is a
+   sticky RAIL beside the body: an eyebrow over one rule, then the names.
 
-   ── What is NOT here, and why ───────────────────────────────────────────────────
-   No display: grid. Two display: flex, each inside one control box — `.link`, laying an ordinal
-   and a label on one baseline, and `.summary`, holding a label and a chevron at opposite ends —
-   the case CLAUDE.md permits explicitly, named here as that rule requires. It arranges nothing and no sibling depends on it. Every real arrangement is a
-   Layout: the head's air, and the ladder's contiguous rows at `rowGap="none"`.
+   ── The marker ──────────────────────────────────────────────────────────────────
+   ONE line for the whole list, positioned by the component from the current row's box and moved by
+   transform alone: it grows in at the first section the reader reaches, then slides from row to
+   row. It is not a per-row ::before, which is IndexRail's grow-in-place and was the choice for a
+   list of separate destinations; an article is one read, and one travelling line says so.
 
-   One display: -webkit-box, on `.labelInk`, because that is what -webkit-line-clamp requires. The
-   unprefixed `line-clamp` is NOT Baseline in 2026 — Firefox still needs the prefix — so both are
-   declared and the prefixed pair is the one that works. Spec §14 item 10 is amended to permit it.
+   ── Arrangement ─────────────────────────────────────────────────────────────────
+   No display: grid. One display: flex, inside the summary control, laying a label and a chevron at
+   opposite ends, and one inline-flex on the chevron, a glyph box sizing its own inside — the case
+   CLAUDE.md permits, arranging nothing a sibling depends on. Every real
+   arrangement is a Layout: the head's air above the list, and the list's contiguous rows.
 
-   No list reset. reset.css already zeroes an <ol>'s margin, padding and marker, and restating them
-   here would be a second answer to a settled question.
+   No margin, anywhere. No background on any part of the rail from 1024: it sits in somebody else's
+   Section and reads data-surface from it. The phone bar alone paints a ground, because text scrolls
+   under it, and it paints it as a border image so the ground reaches the screen's edges without the
+   bar's box leaving the column. */
 
-   No margin, anywhere, with no exception — this component has no visually hidden text to clip.
-
-   No z-index. --z-base is 0 and that is what this component takes: the rail's only overlap is the
-   SiteNav bar crossing its top edge, and the nav must win that. Taking --z-sticky would put the
-   outline over the site's own bar.
-
-   No background, on any part, in any state. The rail must not own its ground: it sits inside
-   somebody else's Section and reads data-surface from it, which is why the hover and pressed inks
-   are measured against the surface ground in the token layer.
-
-   ── Rule order is load-bearing ──────────────────────────────────────────────────
-   Hover is declared BEFORE pressed, so pointer-down wins while the pointer is also hovering. They
-   are an equal-specificity pair decided by source order — moving a block breaks a state.
-
-   ── Why the colour rules are scoped `.list .link` ──────────────────────────────
-   globals.css maps bare anchors onto the surface roles: `a` and `a:hover`. A lone `.link:hover`
-   ties `a:hover` on specificity (0,1,1) and the winner is then decided by stylesheet order, which
-   is the bundler's business rather than this file's — and the two values differ (a dark neutral
-   here against --sec-link-ink-hover's blue), so a lost tie is a real colour drift that renders
-   perfectly and looks almost right. It would also hand this component's hover back to the blue
-   that currency has been given, which is the one confusion the whole colour model exists to
-   prevent. The descendant selector takes it to (0,2,1) and settles it here. It needs no extra
-   markup: .list is on the <ol> every link sits inside.
-
-   ── Where currency and the pointer meet ─────────────────────────────────────────
-   They compose, and the precedence is decided by specificity rather than by a rule about it.
-   `.current .link` is (0,2,0) and `.list .link:hover` is (0,2,1), so HOVER WINS ON THE LABEL —
-   the reader is pointing at that row and the live thing should answer. Nothing in any pointer
-   state touches `.ordinal` or `::before`, so the blue ordinal and the 3px rule PERSIST through
-   hover, press and focus: a pointer can never hide the mark. Hovering the current row therefore
-   renders a blue ordinal, a blue 3px rule, a dark neutral label and an underline — visibly the
-   current row being pointed at, not either state alone. */
-
-/* ── The disclosure · below 1024, and wherever ::details-content is unsupported ──
-   A native <details>, closed by default, and the footer directory's idiom: no script, every link
-   in the markup whether or not it is open, and the summary is the only control. It replaces the
-   eleven-row, ~500px block a phone used to meet before the first paragraph with ONE row.
-
-   These are BASE rules rather than a below-1024 media query, and that is the fallback being
-   designed rather than tolerated: the rail undoes them only inside `@supports
-   selector(::details-content)` below, so a browser that cannot force a closed <details> open keeps
-   this working disclosure at every width instead of rendering a desktop rail with its links
-   hidden.
-
-   One hairline above and one below, so the closed row reads as a ruled line in the document — the
-   same shape the footer's accordions make — and not as a button floating in the text. --toc-rule
-   is the ladder's own hairline ink, measured per surface in the token layer. */
-.disclosure {
-  border-block: var(--toc-rule-width) solid var(--toc-rule);
+/* ── The nav: the bar below 1024, the rail from 1024 ──────────────────────────── */
+.rail {
+  position: sticky;
+  inset-block-start: var(--toc-sticky-inset-compact);
+  z-index: var(--toc-z);
+  min-inline-size: 0;
 }
 
-/* The control box, and the second flex container in this file — the case CLAUDE.md permits: one
-   label and one glyph pushed to opposite ends of one control, arranging nothing and depended on by
-   no sibling. It is SiteFooter's .accordionSummary for the same reason.
+/* The panel's positioning context below 1024. */
+.disclosure {
+  position: relative;
+}
 
-   The 44px floor is a MIN block size rather than padding, because the title role's line box is
-   about 14.4px and no gap step pads it to 44 without overshooting — and a floor stated as a floor
-   cannot silently disagree with the type role the day it changes.
-
-   `list-style: none` plus the WebKit pseudo-element: the two engines hide the disclosure triangle
-   differently, and both are needed for the chevron to be the only marker. */
+/* The bar's one control: the section in view and a chevron, at opposite ends. The 48px floor is a
+   MIN block size, so the type role can change under it without the bar disagreeing. */
 .summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--gap-text);
-  min-block-size: var(--toc-summary-min-block);
+  min-block-size: var(--toc-bar-min-block);
   cursor: pointer;
   list-style: none;
-  color: var(--toc-title-ink);
-  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+  color: var(--toc-item-ink-current);
+}
+
+.summary:hover .chevron {
+  color: var(--toc-item-ink-hover);
 }
 
 .summary::-webkit-details-marker {
   display: none;
 }
 
-.summary:hover {
-  color: var(--toc-label-ink-hover);
+.summary:focus-visible {
+  outline: var(--toc-ring-width) solid var(--toc-ring-color);
+  outline-offset: calc(-1 * var(--toc-ring-offset) - var(--toc-ring-width));
+  border-radius: var(--toc-ring-radius);
 }
 
-/* The summary's label takes the head's role, so the phone and the rail say "On this page" in one
-   voice. Mono, uppercased in presentation only. */
-.summaryLabel {
-  font: var(--toc-title-text);
-  letter-spacing: var(--toc-title-tracking);
-  text-transform: var(--text-mono-case);
+/* The section in view, in the entries' sans; truncated at the chevron rather than wrapping the bar. */
+.summaryCurrent {
+  min-inline-size: 0;
+  overflow: hidden;
+  font: var(--toc-item-text);
+  letter-spacing: var(--toc-item-tracking);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* currentColor, so the glyph follows the summary's ink through hover without a token of its own. */
-.chevron {
-  display: inline-flex;
-  transition: transform var(--toc-transition-duration) var(--toc-transition-easing);
-}
-
-.disclosure[open] .chevron {
-  transform: rotate(180deg);
-}
-
-/* Air between the last row and the closing hairline when it is open. The rail zeroes it. */
-.panel {
-  padding-block-end: var(--gap-block);
-}
-
-/* ── The head ──────────────────────────────────────────────────────────────────
-   It carries no rule. An earlier draft drew a hairline under it AND one down the leading edge of
-   every row; the two met at a corner and read as a box nobody finished. The air below it — the
-   Layout's --gap-block — is now the only thing separating the head from the ladder.
-
-   HIDDEN BY DEFAULT and shown only on the rail: in the disclosure the summary says the same thing,
-   and two "On this page" lines one above the other is a stutter. It stays the landmark's name at
-   every width, because aria-labelledby resolves a hidden element's text.
-
-   Mono, and uppercased in PRESENTATION only: the string is authored "On this page" so that the
-   capitalisation an editor wrote is the capitalisation a screen reader announces. text-transform
-   sits beside `font` because a composite carries no transform, for the same reason letter-spacing
-   does. */
-.title {
-  display: none;
+/* Above the first section there is no "here" to name, so the bar says what it is: the rail's title,
+   in its voice. Authored sentence case; mono uppercases it in presentation. */
+.summaryRest {
   font: var(--toc-title-text);
   letter-spacing: var(--toc-title-tracking);
   text-transform: var(--text-mono-case);
   color: var(--toc-title-ink);
 }
 
-/* ── The ladder ────────────────────────────────────────────────────────────────
-   One type role set here and INHERITED by the links and their labels, which is why `.labelInk`
-   names no font: the only part that overrides it is the ordinal, which is the other role. A
-   composite, so nothing restates a family, a weight, a size or a ratio. --text-body-sm has no
-   tracking companion, so there is no letter-spacing to state either.
-
-   No measure. Nothing here carries running text — what caps a label's line is the rail's own
-   inline size, and --measure-body would cap it around 500px, four times the label column, naming
-   a constraint that never binds and implying the rail is a reading column. It is not; the body
-   track beside it is. */
-.list {
-  font: var(--toc-label-text);
+/* inline-flex: the glyph's own box, so the chevron is as tall as its icon and rotates about its centre. */
+.chevron {
+  display: inline-flex;
+  color: var(--toc-item-ink);
+  transition: transform var(--toc-travel-duration) var(--toc-easing);
 }
 
-/* ── The row ───────────────────────────────────────────────────────────────────
-   The control box, and the only flex container in the file.
+.disclosure[open] .chevron {
+  transform: rotate(180deg);
+}
 
-   `position: relative` is the containing block for the rule below, and it is the only reason it is
-   here. `align-items: baseline` is what puts the digits on the label's FIRST line's baseline at
-   every row height, so a one-line row and a two-line row read as the same ladder — an earlier
-   draft positioned the ordinal absolutely, which took it out of baseline alignment and left every
-   digit floating a few pixels above its label.
+/* The rail's title: an eyebrow over the rail's one rule, IndexRail's head. Not drawn in the bar,
+   where the summary speaks; still the landmark's name at every width, because aria-labelledby
+   resolves a hidden element's text. */
+.title {
+  display: none;
+  padding-block-end: var(--gap-text);
+  border-block-end: var(--toc-rule-width) solid var(--toc-rule-ink);
+  font: var(--toc-title-text);
+  letter-spacing: var(--toc-title-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--toc-title-ink);
+}
 
-   `gap` is doing two jobs at once: it is the column seam, and it is the clearance the rule needs
-   on both sides of itself. --gap-text is read directly rather than renamed — a --toc-column-seam
-   token would be a second name for one distance, which is why --sec-gap was deleted.
-
-   The block padding is what reaches the 44px touch floor: a --text-body-sm line box is about
-   21.7px, so 21.7 + 24 = about 45.7px. That is the first of the two legal means, stepping the BOX
-   up, and the second is unavailable here — entries are contiguous, so a hit extension past the box
-   would overlap the rows above and below, which is precisely the defect Breadcrumbs measured and
-   fixed. It also means the row PITCH equals the target, so consecutive rows clear each other. */
-.link {
+/* The marker's positioning context: the list and the one line beside it. */
+.track {
   position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: var(--gap-text);
-  padding-block: var(--toc-entry-padding-block);
-  color: var(--toc-label-ink);
+}
+
+/* An entry: the name alone, on one line. The labels are short markers authored for the outline, so
+   one line is the contract and the ellipsis is the fallback for content not yet rewritten — the dev
+   warning names any label past the cap. Scoped `.list .link` so `a:hover` in globals.css never ties
+   it on specificity. */
+.list .link {
+  display: block;
+  overflow: hidden;
+  padding-block: var(--toc-item-padding-block);
+  padding-inline-start: var(--toc-item-inset);
+  border-radius: var(--toc-ring-radius);
+  color: var(--toc-item-ink);
+  font: var(--toc-item-text);
+  letter-spacing: var(--toc-item-tracking);
   text-decoration: none;
-  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--toc-duration) var(--toc-easing);
 }
 
 .list .link:hover {
-  color: var(--toc-label-ink-hover);
+  color: var(--toc-item-ink-hover);
+  text-decoration: none;
 }
 
-.list .link:active {
-  color: var(--toc-label-ink-pressed);
+.list .link[aria-current] {
+  color: var(--toc-item-ink-current);
 }
 
-/* ── The ordinal ───────────────────────────────────────────────────────────────
-   A FIXED basis and no shrink, which is what holds the rule at one inline position on a 232px rail
-   and on a 160px one alike — a ratio would move it every time the track did. Start-aligned rather
-   than end-aligned: the digits stay flush with the content column's inline start, so they line up
-   with the hero title, every h2 and every card edge on the page, and the slack falls where the
-   rule needs clearance.
-
-   It carries its OWN colour, which is what makes it immune to the pointer: no hover or pressed
-   rule touches this part, so when the row is current the blue survives being pointed at.
-
-   Mono, uppercased in presentation — a no-op on digits, which have no case, and the reason the
-   mono role costs nothing here while buying a monospaced column in which two digits are always the
-   same width. */
-.ordinal {
-  flex: 0 0 var(--toc-ordinal-inline);
-  font: var(--toc-ordinal-text);
-  letter-spacing: var(--toc-ordinal-tracking);
-  text-transform: var(--text-mono-case);
-  color: var(--toc-ordinal-ink);
-  transition: color var(--toc-transition-duration) var(--toc-transition-easing);
+.list .link:focus-visible {
+  outline: var(--toc-ring-width) solid var(--toc-ring-color);
+  outline-offset: var(--toc-ring-offset);
 }
 
-/* ── The label ─────────────────────────────────────────────────────────────────
-   Two elements, and the split is the same one Button makes for the same reason. `.label` is the
-   underline's positioning context and takes the remaining inline space; `.labelInk` is the box
-   that CLIPS, and the clip is why they cannot be one element — `overflow: hidden` on the box the
-   underline is drawn against would crop the underline.
-
-   `min-inline-size: 0` lets the flex item shrink below its content's intrinsic width, which is
-   what allows the clamp and the word-break to work at all in a 160px rail; without it a long
-   label would push the rail wider than its cap. */
-.label {
-  position: relative;
-  flex: 1 1 auto;
-  min-inline-size: 0;
+/* A touch target under a coarse pointer, at every width: the input changed, not the layout. */
+@media (pointer: coarse) {
+  .list .link {
+    padding-block: var(--toc-item-padding-block-coarse);
+  }
 }
 
-/* Clamped to two lines with an ellipsis, and the clamp is VISUAL only: the full string stays in
-   the DOM, so a screen reader reads the whole heading and the accessible name is complete.
-
-   `overflow-wrap: anywhere` rather than `break-word`, and the difference is load-bearing: only
-   `anywhere` also reduces the element's intrinsic MINIMUM width, which is what stops a pasted URL
-   setting the rail's minimum to the length of one unbreakable token and pushing it past its cap.
-
-   Both spellings of the clamp are declared. The prefixed pair is the one that works — unprefixed
-   `line-clamp` is not Baseline in 2026 — and `display: -webkit-box` is the one
-   non-flex `display` that arranges anything in this file. */
-.labelInk {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--toc-label-lines);
-  line-clamp: var(--toc-label-lines);
-  overflow: hidden;
-  overflow-wrap: anywhere;
-}
-
-/* ── The rule · currency, and nothing else ─────────────────────────────────────
-   One hairline, and it runs BETWEEN the ordinal column and the label column rather than around
-   anything: it sits at the start of the row's gap, spans the row's full height, and turns no
-   corners. Because the rows are contiguous, the per-row segments butt into one unbroken line down
-   the ladder, and the rail's outer edge stays a single clean alignment.
-
-   It reports CURRENCY only. There is no hover value and no --toc-rule-hover to read: a hairline
-   that also brightened on hover would give the rail two marks that both mean "attention" and no
-   way to tell which is which. `underline` carries the pointer; this carries the mark. Nothing in
-   this component is ever ambiguous about which of the two it is reporting.
-
-   `background-color` transitions; `inline-size` deliberately does not, so the 1px -> 3px step is a
-   CHANGE rather than a growth. Animating the mark would be the current section chasing the scroll,
-   which is the one motion the design forbids. */
-.link::before {
-  content: '';
+/* The one line. Its offset and height are the current row's, set by the component; it rests at
+   scaleY(0) until the reader reaches the first section, so arriving is a grow-in and every move
+   after is a slide. Transform only, and only once the first position has been placed
+   (`data-live`), so a page opened mid-article draws its marker where it belongs rather than
+   sliding in from the top. */
+.marker {
   position: absolute;
-  inset-block: 0;
-  inset-inline-start: var(--toc-ordinal-inline);
-  inline-size: var(--toc-rule-width);
-  background-color: var(--toc-rule);
-  transition: background-color var(--toc-transition-duration) var(--toc-transition-easing);
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: var(--toc-marker-width);
+  block-size: var(--toc-marker-size);
+  background-color: var(--toc-marker-ink);
+  transform: translateY(var(--toc-marker-offset)) scaleY(0);
+  transform-origin: top;
 }
 
-/* ── The underline · the pointer, and nothing else ─────────────────────────────
-   Drawn as a rule rather than text-decoration, because a decorated underline can only appear all
-   at once and this one wipes in from the inline start — the same part, in the same system, as
-   Button's link rule and Breadcrumbs' rule. It paints `currentColor` and has no colour token of
-   its own, deliberately: it can then never disagree with the label above it, and it never needs a
-   surface block. It is decoration — redundant with a colour move it always accompanies — so it is
-   not a contrast floor.
-
-   The offset is a NEGATIVE inset rather than bottom padding on `.label`, and that is the one place
-   this component departs from how Breadcrumbs draws the same part. Padding there was forced: its
-   band gives nothing downward, so anything below the box would be painted over by the next band.
-   Here the row has 12px of its own padding below the text and its neighbour has 12 above, so there
-   is room — and taking the padding route instead would grow the label's box by 2px, push the row
-   past the measured 45.70px, and change the touch arithmetic for a clearance the row already has.
-
-   `transform-origin` is the one place a physical value is unavoidable: CSS has no logical
-   equivalent, and `0 50%` at least states the origin as a position rather than as the `left`
-   keyword the rest of this file avoids. In LTR it is the inline start, which is what the wipe
-   wants. */
-.label::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: calc(-1 * var(--toc-underline-offset));
-  block-size: var(--toc-underline-width);
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  transition: transform var(--toc-transition-duration) var(--toc-transition-easing);
+.marker[data-shown] {
+  transform: translateY(var(--toc-marker-offset)) scaleY(1);
 }
 
-.list .link:hover .label::after,
-.list .link:focus-visible .label::after,
-.list .link:active .label::after {
-  transform: scaleX(1);
+.track[data-live] .marker {
+  transition: transform var(--toc-travel-duration) var(--toc-easing);
 }
 
-/* The pressed step. `block-size` is not in the transition list above, so it is instant — a change,
-   not a growth, following --crumb-link-rule-width-pressed. This is also what keeps a rendered
-   hover and a rendered pressed distinguishable in a second, NON-COLOUR way on all four surfaces,
-   rather than only on the one where the ramp ran out. */
-.list .link:active .label::after {
-  block-size: var(--toc-underline-width-pressed);
+/* ── The bar · below 1024 ──────────────────────────────────────────────────────
+   The ground and its two hairlines are ONE border image pushed out sideways: ink, not layout, so
+   nothing scrolls sideways and the list can hang below. The open list hangs under the bar on the
+   same ground, ruled off at its foot, and opens with a drop from the bar (transform only). */
+@media (max-width: 1023px) {
+  .rail {
+    border-image: linear-gradient(
+        var(--toc-rule-ink) var(--toc-rule-width),
+        var(--toc-bar-ground) var(--toc-rule-width),
+        var(--toc-bar-ground) calc(100% - var(--toc-rule-width)),
+        var(--toc-rule-ink) calc(100% - var(--toc-rule-width))
+      )
+      fill 0 / 0 / 0 var(--toc-bar-bleed);
+  }
+
+  .panel {
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline: 0;
+    padding-block: var(--gap-tight) var(--gap-block);
+    border-image: linear-gradient(
+        var(--toc-bar-ground) calc(100% - var(--toc-rule-width)),
+        var(--toc-rule-ink) calc(100% - var(--toc-rule-width))
+      )
+      fill 0 / 0 / 0 var(--toc-bar-bleed);
+    transform-origin: top;
+  }
+
+  .disclosure[open] .panel {
+    transform: scaleY(1);
+    transition: transform var(--toc-travel-duration) var(--toc-easing);
+  }
+
+  @starting-style {
+    .disclosure[open] .panel {
+      transform: scaleY(0);
+    }
+  }
 }
 
-/* ── Currency ──────────────────────────────────────────────────────────────────
-   A class on the <li>, emitted by the component. Nothing detects anything: no :has(), no selector
-   that walks upward. It holds no value of its own — it re-points three other parts at their
-   --toc-current-* values, which is why it is a PART in the token layer rather than a state.
-
-   Focus also shows what hover shows: :focus-visible is listed alongside :hover in the label rule
-   above, so a keyboard user is shown exactly what a pointer user is shown. */
-.current .link {
-  color: var(--toc-current-label-ink);
-}
-
-.current .ordinal {
-  color: var(--toc-current-ordinal-ink);
-}
-
-.current .link::before {
-  inline-size: var(--toc-current-rule-width);
-  background-color: var(--toc-current-rule);
-}
-
-/* ── Tab focus ─────────────────────────────────────────────────────────────────
-   Keyboard only, via :focus-visible, so a mouse click never draws the ring and a tab always does.
-   Two rings in one shadow: the gap drawn in the SURFACE colour, then the ring itself. The
-   surface-coloured gap is what lets a white ring read against a blue ground, and because both
-   halves are surface tokens a rail in an ink band takes an ink gap and a lighter blue ring with no
-   change here.
-
-   DRAWN INWARD, which is this component's one departure from how Button, Breadcrumbs and
-   SiteFooter draw theirs. An outset ring at --toc-ring-offset would reach 4px above and below a
-   box whose neighbours are CONTIGUOUS — so it would overlap the rows either side — and 4px past
-   the rail's inline start, breaking the one alignment the rail has. Inset, the ring's outer edge
-   is the row's own edge and nothing collides. The row paints no fill, so the gap is still the
-   surface ground and the ring's 3:1 measurement is against the same thing it would have been
-   outset.
-
-   A row has no corner of its own, but a 2px ring drawing a hard rectangle around bare text reads
-   as a rendering artefact, so the ring alone takes a radius. */
-.link:focus,
-.summary:focus {
-  outline: none;
-}
-
-.list .link:focus-visible,
-.summary:focus-visible {
-  outline: none;
-  border-radius: var(--toc-entry-radius-focus);
-  color: var(--toc-label-ink-hover);
-  box-shadow:
-    inset 0 0 0 var(--toc-ring-offset) var(--toc-ring-gap-color),
-    inset 0 0 0 calc(var(--toc-ring-offset) + var(--toc-ring-width)) var(--toc-ring-color);
-}
-
-/* ── The rail · 1024 and up ────────────────────────────────────────────────────
-   The one media query in this file, and it changes only position, the caps and the scroll. The
-   literal matches Layout's `lg` breakpoint, so the shell's second track appearing and the rail
-   sticking are one width by construction.
-
-   The block cap is the viewport below the sticky inset, less a gutter at the end. Nineteen entries
-   — the corpus worst case — measure about 870px, so on most viewports the rail scrolls inside its
-   own sticky box. It does not stop being sticky (the outline would vanish on the one page that
-   needs it most) and it does not cap the count (an outline that silently omits sections is a lie).
-   The cost, accepted: the head scrolls away with the first few entries while the reader is
-   scrolling inside the rail. Pinning it needs a grid row relationship Layout does not express, and
-   a prop on the most load-bearing primitive in the system earns its place at the second caller.
-
-   `overflow-y`, and it is the one physical property in this file. The logical spelling is
-   `overflow-block` and it is deliberately not the load-bearing declaration: its support could not
-   be confirmed at build time, and its failure mode is a CLIPPED nineteen-entry outline on the one
-   page that most needs one. This site is horizontal-tb throughout with no vertical writing mode
-   anywhere, so overflow-y IS the block axis here and nothing is lost but the spelling. Spec §12's
-   logical-properties row is amended to record this.
-
-   `overscroll-behavior: contain` as the shorthand rather than the -block longhand, for the same
-   support reason and at no cost: the rail never scrolls on the inline axis, so setting both is
-   setting one.
-
-   The inline-end padding is where a classic scrollbar draws its track. Without it the scrollbar
-   sits over the last characters of every label, which is why it is a real distance rather than
-   trim — and why it lives here rather than at base: there is no internal scroll below 1024. */
+/* ── The rail · 1024 and up ─────────────────────────────────────────────────────
+   Position, the caps and the internal scroll. Nineteen entries measure about 700px, so on a short
+   viewport the rail scrolls inside its own sticky box, and the component keeps the current row in
+   view there. `overflow-y` is the one physical property: this site is horizontal-tb throughout. The
+   inline-end padding is where a classic scrollbar draws, so it never sits over a label. */
 @media (min-width: 1024px) {
   .rail {
-    position: sticky;
     inset-block-start: var(--toc-sticky-inset);
+    z-index: auto;
     max-inline-size: var(--toc-max-inline);
     min-inline-size: var(--toc-min-inline);
     max-block-size: var(--toc-max-block);
     padding-inline-end: var(--gap-text);
-    overflow-block: auto;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 }
 
-/* ── The rail · the disclosure forced open ─────────────────────────────────────
-   At 1024 and up the <details> stops disclosing. ::details-content is the part the UA hides a
-   closed <details>' content through, as `content-visibility: hidden`, and an author rule setting it
-   visible is the one override that works — which `display` on the children does not, as
-   SiteFooter.tsx records from having tried it in Chrome. The summary goes, the rail's own title
-   comes back, and the disclosure's hairlines and closing air are undone, so what renders is the
-   rail exactly as it was.
-
-   `open` stays false and that is correct rather than tolerated: nothing on the rail is collapsible,
-   the summary that would expose aria-expanded is display: none and therefore out of the
-   accessibility tree, and the content is laid out, visible and keyboard-focusable in Chromium,
-   WebKit and Firefox, and exposed as ordinary content in the Chromium and Firefox accessibility
-   trees — measured, not assumed. WebKit's own tree could not be read headlessly (Playwright
-   substitutes an "is the <details> open" heuristic there), so VoiceOver on Safari is the one
-   check still owed by hand.
-
-   Inside @supports so the fallback is the working disclosure above rather than a hidden rail. */
+/* The disclosure forced open from 1024. Inside @supports, so a browser that cannot force a closed
+   <details> open keeps a working disclosure in the rail rather than a rail with its links hidden. */
 @supports selector(::details-content) {
   @media (min-width: 1024px) {
-    .disclosure {
-      border-block-style: none;
-    }
-
     .disclosure::details-content {
       content-visibility: visible;
     }
@@ -452,30 +249,17 @@
       display: none;
     }
 
-    .panel {
-      padding-block-end: 0;
-    }
-
     .title {
       display: block;
     }
   }
 }
 
-/* The wipe is the one motion here, so it is the one thing to answer for. Reduced motion keeps the
-   underline — it is the affordance — and simply stops it travelling.
-
-   The colour transitions drop too, and that is belt-and-braces rather than doctrine: strictly a
-   colour change is not motion. It is specified because a nineteen-row rail re-colouring as the
-   reader scrolls is the one place in this system where a 140ms colour tween could read as movement
-   to a motion-sensitive reader. */
 @media (prefers-reduced-motion: reduce) {
-  .summary,
   .chevron,
-  .link,
-  .ordinal,
-  .link::before,
-  .label::after {
-    transition-duration: var(--duration-instant);
+  .list .link,
+  .track[data-live] .marker,
+  .disclosure[open] .panel {
+    transition: none;
   }
 }

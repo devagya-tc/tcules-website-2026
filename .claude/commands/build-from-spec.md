@@ -84,7 +84,7 @@ Then **stop and ask** if any of these is true. Do not guess, and do not "pick th
   spec must say either that the target is always rendered, or what the attribute does when it is not.
 
 A **NEW GLYPH REQUEST** is not a stop. A glyph is an asset, not a system change: add it to
-`src/components/Icon/glyphs.ts` at Step 7. But read how the set is drawn first — the glyphs are
+`src/lib/icon-glyphs.ts` at Step 7. But read how the set is drawn first — the glyphs are
 **solid shapes filled in `currentColor` with counters cut through the mass** (`fill-rule: evenodd`,
 `stroke: none`). There is no stroke-width token. A glyph described in the spec as strokes or line
 work must be redrawn as a filled shape, or it renders **nothing** and no check will tell you.
@@ -110,7 +110,7 @@ Four answers, one line each. Stop for confirmation if any is a close call.
    automated check and violated the tier rule.
 3. **Is a new folder right at all?** The alternatives, checked explicitly:
    - a new `emphasis` / `tone` / `size` / boolean on `Button`;
-   - a glyph in `src/components/Icon/glyphs.ts`;
+   - a glyph in `src/lib/icon-glyphs.ts`;
    - a `surface` or `density` on `Section`;
    - a `columns` / `rowGap` / `colGap` arrangement in `Layout` or `Cluster`;
    - a rule inside `Prose`;
@@ -230,7 +230,7 @@ is a spec nobody runs.
 
 Only if they apply, and say which you are doing and why:
 
-- `src/components/Icon/glyphs.ts` — a glyph the set does not have, drawn as a **filled** shape.
+- `src/lib/icon-glyphs.ts` — a glyph the set does not have, drawn as a **filled** shape.
   Then **rasterise it and look at it**, because a stroke-described glyph renders nothing at all and
   no check can see an empty box:
 

@@ -11,7 +11,7 @@
 | **File** | `src/styles/tokens/components/chip.css`, registered in `tokens/index.css` after `input.css` |
 | **Designer / date** | Owner-approved mock, 19 Oct 2026 (`choice.src.html`, round 3); spec and build by Claude, 19 Oct 2026 |
 | **Implements** | The chip enquiry form: EnquiryForm's `choice` dress and the message dress's `needs` (EnquiryForm.md, amendment of 19 Oct 2026) |
-| **Implemented at** | `src/components/Chip/Chip.tsx` · `Chip.module.css` · `index.ts` · `src/styles/tokens/components/chip.css` · glyph `chrome-check` in `src/components/Icon/glyphs.ts` · specimen `src/app/design/chip/page.tsx` |
+| **Implemented at** | `src/components/Chip/Chip.tsx` · `Chip.module.css` · `index.ts` · `src/styles/tokens/components/chip.css` · glyph `chrome-check` in `src/lib/icon-glyphs.ts` · specimen `src/app/design/chip/page.tsx` |
 
 ## 1 · Identity
 

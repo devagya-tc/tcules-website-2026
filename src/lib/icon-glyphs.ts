@@ -1,5 +1,6 @@
 /**
- * The glyph set — path data only, no components.
+ * The glyph set — path data only, no components. It lives in lib, a leaf, because two primitives
+ * draw from it: Icon, and Sketch, whose drawings set a glyph inside them (25 Oct 2026).
  *
  * Every glyph is Solar Icons, **Bold** (DBF ch04 · Iconography), by 480 Design, licensed CC BY 4.0,
  * and every path below is Solar's own artwork copied verbatim. ch04: "never redraw, trace or

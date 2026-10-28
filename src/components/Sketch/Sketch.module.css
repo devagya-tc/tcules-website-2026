@@ -131,3 +131,191 @@
 .halo {
   fill: var(--skt-region-fill);
 }
+
+/* ── Story drawings ───────────────────────────────────────────────────────────────
+   A story scene (`story`) is drawn in two states: at rest the problem, and when the link it sits in is
+   hovered or focused, solved, in ONE move on the owner's hover curve, there and back
+   (decisions/2026-10-19-hover-is-a-move, -animated-drawing-story-first). The parts below are the
+   story drawings' own marks, then the four kinds of part that move. */
+
+/* A one-unit line in the quiet ink (an input's caret). */
+.hair {
+  fill: none;
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+/* A ground without an edge (the shared line of code). */
+.wash {
+  fill: var(--skt-region-fill);
+}
+
+.knob {
+  fill: var(--skt-quiet-ink);
+}
+
+.soft {
+  fill: var(--skt-soft-fill);
+}
+
+.chip {
+  fill: var(--skt-chip-fill);
+}
+
+/* Solar glyphs set inside a drawing: the frame ink, or the accent. */
+.glyph,
+.glyphAccent {
+  fill: var(--skt-frame-ink);
+  fill-rule: evenodd;
+}
+
+.glyphAccent {
+  fill: var(--skt-accent);
+}
+
+/* What floats (the cursor): a heavier outline, and its flat offset under it. */
+.lift {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-lift-ink);
+  stroke-width: var(--skt-lift-width);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.liftUnder {
+  fill: var(--skt-lift-under);
+  stroke: var(--skt-lift-under);
+  stroke-width: var(--skt-lift-width);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Parts that light: drawn quiet at rest, in the accent when solved. */
+.decision,
+.block,
+.press,
+.release,
+.codeLine,
+.releaseMark {
+  transition:
+    fill var(--skt-duration) var(--skt-easing),
+    stroke var(--skt-duration) var(--skt-easing);
+}
+
+.decision {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-line-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.block {
+  fill: var(--skt-region-fill);
+  stroke: var(--skt-accent);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.press,
+.release {
+  fill: var(--skt-frame-fill);
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-frame-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.codeLine {
+  fill: none;
+  stroke: var(--skt-quiet-ink);
+  stroke-width: var(--skt-copy-width);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.releaseMark {
+  fill: var(--skt-quiet-ink);
+  fill-rule: evenodd;
+}
+
+/* A route that draws itself along its own length (pathLength 1). The one stroke here that scales with
+   the drawing, because a dash on a non-scaling stroke is measured in screen pixels in every engine; its
+   width is divided by the drawing's scale so it lands at the line weight (bare frame only). */
+.trace {
+  fill: none;
+  stroke: var(--skt-accent);
+  stroke-width: calc(var(--skt-line-width) / var(--skt-scale));
+  /* Butt, not round: a round cap would leave a dot at the hidden end of the dash at rest. */
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+  /* A gap twice the path, so rounding in an arc's measured length never lets the dash show at rest. */
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--skt-duration) var(--skt-easing);
+}
+
+/* A part that arrives with the route: from nothing, about its own centre. */
+.grow {
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--skt-duration) var(--skt-easing);
+}
+
+/* The one part that travels (the cursor): from its rest offset to its place. */
+.glide {
+  transform: translate(var(--skt-glide-x), var(--skt-glide-y));
+  transition: transform var(--skt-duration) var(--skt-easing);
+}
+
+/* The cursor's rest, in drawing units: below and right of Accept, off the button. */
+.glideToAccept {
+  --skt-glide-x: calc(96 * var(--skt-unit));
+  --skt-glide-y: calc(14 * var(--skt-unit));
+}
+
+/* Solved: the link the drawing sits in is hovered or focused, or a specimen asks for the end. */
+:global(a:hover) .sketch .trace,
+:global(a:focus-visible) .sketch .trace,
+.end .trace {
+  stroke-dashoffset: 0;
+}
+
+:global(a:hover) .sketch :is(.grow, .glide),
+:global(a:focus-visible) .sketch :is(.grow, .glide),
+.end :is(.grow, .glide) {
+  transform: none;
+}
+
+:global(a:hover) .sketch :is(.decision, .block, .press, .release),
+:global(a:focus-visible) .sketch :is(.decision, .block, .press, .release),
+.end :is(.decision, .block, .press, .release) {
+  fill: var(--skt-accent);
+  stroke: var(--skt-accent);
+}
+
+:global(a:hover) .sketch .codeLine,
+:global(a:focus-visible) .sketch .codeLine,
+.end .codeLine {
+  stroke: var(--skt-accent);
+}
+
+:global(a:hover) .sketch .releaseMark,
+:global(a:focus-visible) .sketch .releaseMark,
+.end .releaseMark {
+  fill: var(--skt-accent-on);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decision,
+  .block,
+  .press,
+  .release,
+  .codeLine,
+  .releaseMark,
+  .trace,
+  .grow,
+  .glide {
+    transition-duration: var(--duration-instant);
+  }
+}

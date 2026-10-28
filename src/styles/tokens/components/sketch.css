@@ -3,11 +3,12 @@
    plate language EngagementOptions and TracePlates set: dot field, quiet frames, one blue subject.
 
    Naming: --skt-{part}-{role}
-     parts  plate · field · frame · quiet · copy · line · accent · region · dash
-     roles  ground · ink · fill · width · radius
+     parts  plate · field · frame · quiet · copy · line · accent · region · dash · soft · chip · lift · glide
+     roles  ground · ink · fill · width · radius · under · duration · easing
 
-   No state tokens: a sketch is decorative and inert. Every surface block declares every
-   surface-dependent token.
+   No state tokens. A sketch is decorative; a STORY sketch has a rest and a solved state (its link
+   hovered or focused), and the solved state reuses --skt-accent and --skt-accent-on through classes.
+   Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -30,6 +31,16 @@
   /* The field's dot: an optical size, and the edge it softens over so it is not jagged. */
   --skt-dot-radius: var(--border-width-hairline);
   --skt-dot-soft: var(--border-width-hairline);
+  /* What floats above the drawing (a cursor): its outline, heavier than the drawing's own. */
+  --skt-lift-width: var(--border-width-2);
+  /* A story drawing's one move (owner's hover curve, decisions/2026-10-19-hover-is-a-move), the same
+     values the bento's tile moves on, duplicated on purpose: a component never reads another's tokens. */
+  --skt-duration: var(--duration-slow);
+  --skt-easing: var(--easing-ease);
+  /* The travelling part's rest offset, in drawing units: set per drawing by a class in
+     Sketch.module.css. None by default. */
+  --skt-glide-x: 0px;
+  --skt-glide-y: 0px;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -44,6 +55,10 @@
   --skt-accent: var(--color-brandeis-500); /* 6.17:1 */
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100); /* decoration */
+  --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
+  --skt-chip-fill: var(--color-paper-deep); /* a glyph's chip */
+  --skt-lift-ink: var(--color-neutral-700);
+  --skt-lift-under: var(--color-neutral-200); /* the flat offset under what floats */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -57,6 +72,10 @@
   --skt-accent: var(--color-brandeis-500);
   --skt-accent-on: var(--color-white);
   --skt-region-fill: var(--color-brandeis-100);
+  --skt-soft-fill: var(--color-brandeis-200); /* a part not yet placed */
+  --skt-chip-fill: var(--color-paper); /* a glyph's chip */
+  --skt-lift-ink: var(--color-neutral-700);
+  --skt-lift-under: var(--color-neutral-300); /* the flat offset under what floats */
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -70,6 +89,10 @@
   --skt-accent: var(--color-brandeis-300);
   --skt-accent-on: var(--color-neutral-950);
   --skt-region-fill: var(--color-neutral-800);
+  --skt-soft-fill: var(--color-neutral-700); /* a part not yet placed */
+  --skt-chip-fill: var(--color-neutral-900); /* a glyph's chip */
+  --skt-lift-ink: var(--color-neutral-200);
+  --skt-lift-under: var(--color-neutral-800); /* the flat offset under what floats */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
@@ -83,4 +106,8 @@
   --skt-accent: var(--color-white);
   --skt-accent-on: var(--color-brandeis-600);
   --skt-region-fill: var(--color-brandeis-400);
+  --skt-soft-fill: var(--color-brandeis-300); /* a part not yet placed */
+  --skt-chip-fill: var(--color-brandeis-600); /* a glyph's chip */
+  --skt-lift-ink: var(--color-white);
+  --skt-lift-under: var(--color-brandeis-700); /* the flat offset under what floats */
 }
