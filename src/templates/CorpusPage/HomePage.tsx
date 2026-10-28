@@ -612,8 +612,8 @@ function AiPractice({ page, b }: BandProps) {
 /**
  * Eight sectors as image cards (owner, 10 Oct 2026, note 9), four across from 1024 and two across on a
  * phone — never one per row, never a scroll row (BlockCardSet `phone="pair"`). Each card's picture is
- * its sector's stock photograph (owner, 19 Oct 2026: the people the sector serves, in a good moment),
- * else its register slot.
+ * its sector's stock photograph (owner, 26 Oct 2026: the main part of the sector's activity, close,
+ * no faces), else its register slot.
  */
 function Expertise({ page, b }: BandProps) {
   const cards: BlockCardSetItem[] = bandLinks(b).map((link) => {
