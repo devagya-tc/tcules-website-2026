@@ -365,12 +365,8 @@
   overflow: hidden;
 }
 
-/* A card carrying a topic tag fills its row, so the stack can pin the tag to the foot. The tag keeps
-   its own width at the stack's start (a grid item stretches; the wrapper only holds the Tag). */
-.tagged .frame {
-  block-size: 100%;
-}
-
+/* The topic tag keeps its own width at the stack's start (a grid item stretches; the wrapper only
+   holds the Tag). */
 .tag {
   justify-self: start;
 }

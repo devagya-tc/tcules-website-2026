@@ -215,11 +215,15 @@ export function ListingIndex({
         }
       >
         <div id={FINDER_TOP}>
-          {finder.results != null ? (
-            /* The picks lead the column, then the results: a stack apart, as a head over its body. */
+          {finder.picks != null ? (
+            /* The picks lead the column, then the results: a stack apart, as a head over its body.
+               With nothing matching, the picks stay ("Nothing matches", each chip, Clear all) rather
+               than the page falling back to the curated view and losing them. */
             <Layout rowGap="stack">
               <FinderLinks anchor={FINDER_TOP}>{finder.picks}</FinderLinks>
-              <FinderLinks anchor={FINDER_TOP}>{finder.results}</FinderLinks>
+              {finder.results != null ? (
+                <FinderLinks anchor={FINDER_TOP}>{finder.results}</FinderLinks>
+              ) : null}
             </Layout>
           ) : curated ? (
             <Layout rowGap="section-open">

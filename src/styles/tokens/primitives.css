@@ -855,6 +855,9 @@
    own weight in the geometry — that is what makes them scale to 14px without
    looking heavier than the label beside them, where a fixed stroke would not.   */
 :root {
+  /* A plain cross on a held filter chip (owner, 28 Oct 2026: "'x' can be made 12x12px"): a glyph
+     with no counter, so the 16 floor for a cut-out does not bind it. */
+  --icon-size-12: 12px;
   --icon-size-14: 14px;
   --icon-size-16: 16px;
   --icon-size-18: 18px;

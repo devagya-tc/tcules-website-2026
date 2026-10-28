@@ -846,14 +846,16 @@ export function BlockCard({
         </Layout>
       );
     } else if (tagNode) {
-      /* The topic tag holds the card's foot: the stack fills the row and pins the tag last, so a
-         row's tags sit on one line whatever its titles run to. */
+      /* The topic tag follows the copy (owner, 28 Oct 2026: "go with the tag under the title"):
+         pinned to the foot of a box-less card it floated away from the words it labels. */
       frameContent = (
-        <Layout rowGap="block" pinLast className={styles.grow}>
+        <Layout rowGap="block">
           {imageNode}
           {ruleNode}
-          {content}
-          {tagNode}
+          <Layout rowGap="block">
+            {content}
+            {tagNode}
+          </Layout>
         </Layout>
       );
     } else {
@@ -875,7 +877,6 @@ export function BlockCard({
         horizontal && styles.horizontal,
         boxed && styles.boxed,
         panel && styles.panel,
-        tagNode && styles.tagged,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}
     >

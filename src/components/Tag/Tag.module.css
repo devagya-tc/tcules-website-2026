@@ -157,9 +157,9 @@
 
 /* The glyph, at the tag's size rather than its own. `> svg` is a class-plus-element selector, so
    it beats Icon's single-class size rule deliberately: the glyph steps with the TAG, which makes
-   the tag the component that decides. 16, the floor for a glyph with a counter: the one glyph a
-   filter carries is close-circle, whose cross is a hole that fills in at 14 (docs/specs/Icon.md,
-   tracker 2.17). Solar's own 2-unit clearance means the disc itself is 13.3px in the 24 box. */
+   the tag the component that decides. 16, the floor for a glyph with a counter: the glyph a
+   filter carried was close-circle, whose cross is a hole that fills in at 14 (docs/specs/Icon.md,
+   tracker 2.17). Since 28 Oct 2026 the glyph is the plain chrome cross at 12, which has no counter. */
 .filter > svg {
   /* Physical rather than logical here, and it is the one place in this file that is. A glyph box
      is square, so there is no direction to be correct about — and this rule has to beat Icon's own
@@ -266,6 +266,15 @@
    the label is what was picked, the glyph only how to undo it. */
 .selected > svg {
   color: var(--tag-filter-glyph-ink-pressed);
+  transition: color var(--tag-transition-duration) var(--tag-transition-easing);
+}
+
+/* The held chip has no hover paint (below), so the close answers the pointer instead: it takes the
+   label's ink, saying the click removes this one (owner, 28 Oct 2026: "missing hover state on the
+   'x'"). Focus shows what hover shows. */
+.selected:hover > svg,
+.selected:focus-visible > svg {
+  color: var(--tag-filter-ink-pressed);
 }
 
 /* Every state still renders — colour and edge arrive at once instead of over 140ms — because the
