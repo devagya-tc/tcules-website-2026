@@ -147,6 +147,8 @@
      foot holds. Component sizes. */
   --bcrd-panel-ratio: 1;
   --bcrd-panel-body-lines: 3;
+  /* The panel's format glyph before its label: the label's scale, not the card icon's. */
+  --bcrd-panel-glyph: var(--icon-size-16);
 
   /* The phone scroll row's progress rail (BlockCardSet, cmp-services fix round 2): a neutral line
      with a blue thumb, the Slider's rail without its controls, so a swipeable set says how many it

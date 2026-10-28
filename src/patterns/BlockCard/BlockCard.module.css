@@ -365,6 +365,19 @@
   overflow: hidden;
 }
 
+/* The panel's glyph leads its label at the label's scale, centred on its capitals (ch04): the label
+   is trimmed to cap height so the glyph centres on the letters, not the line box. */
+.panel .icon,
+.panel .icon > svg {
+  inline-size: var(--bcrd-panel-glyph);
+  block-size: var(--bcrd-panel-glyph);
+}
+
+.panel .eyebrow {
+  display: block;
+  text-box: trim-both cap alphabetic;
+}
+
 @media (min-width: 768px) {
   .panel .frame {
     aspect-ratio: var(--bcrd-panel-ratio);

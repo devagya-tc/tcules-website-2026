@@ -120,7 +120,8 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  *         with no picture beside pieces with one): at rest, the drawn covers' plate — their ground,
  *         hairline and 8 radius — with the label at its head and the title and standfirst at its
  *         foot, filling its row's height (from md, never less than a square), so a row of covered
- *         and uncovered pieces ends on one line. Title-cued; no top hairline, no cover, no icon.
+ *         and uncovered pieces ends on one line. Title-cued; no top hairline. In place of a picture
+ *         it carries what the piece has: its `icon` before the label, its `meta` under the title.
  *
  * A set's decision, like the type step: BlockCardSet `frame` states it for every card. `panel` is
  * the one a caller may set per card, for the card that has no cover.
@@ -311,9 +312,11 @@ export type BlockCardProps = {
   /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
-   * row when the card has none. Facts about the file, never a second description.
+   * row when the card has none. Facts about the file, never a second description. As a list, each
+   * fact is its own word-group, a `text` apart, so a line that wraps breaks between facts and never
+   * starts on a separator (a panel's "Design system  27 Oct 2026  12 min read").
    */
-  meta?: string;
+  meta?: string | readonly string[];
   /**
    * A play mark on the cover: the piece is watched or heard, not read (the insights hub, 23 Oct
    * 2026). A round chip in the cover's top-end corner; it does not zoom with the cover. Ignored
@@ -544,8 +547,9 @@ export function BlockCard({
      it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
   const boxed = frame === 'box';
-  /* The panel is a text-only card's own frame: a cover or an icon outranks it. */
-  const panel = frame === 'panel' && textOnly && !horizontal;
+  /* The panel is an uncovered card's own frame: a cover outranks it. Its icon, if any, leads its
+     label line rather than heading the card on a row of its own. */
+  const panel = frame === 'panel' && !imageNode && !horizontal;
   const ruleNode =
     textOnly && !boxed && !panel ? (
       <span className={styles.textRule} aria-hidden="true" />
@@ -585,8 +589,21 @@ export function BlockCard({
 
      The tone is primary: a text link is blue at rest, label and arrow (visual-direction § 4, owner
      6 Oct 2026 — blue is the recurring foreground accent; fdn-colour's neutral tone was reversed). */
-  const hasMeta = meta !== undefined && meta.trim().length > 0;
-  const metaNode = hasMeta ? <span className={styles.meta}>{meta}</span> : null;
+  const metaParts = (typeof meta === 'string' ? [meta] : (meta ?? [])).filter(
+    (part) => part.trim().length > 0,
+  );
+  const metaNode =
+    metaParts.length > 1 ? (
+      <Cluster colGap="text" rowGap="inline">
+        {metaParts.map((part) => (
+          <span key={part} className={styles.meta}>
+            {part}
+          </span>
+        ))}
+      </Cluster>
+    ) : metaParts.length === 1 ? (
+      <span className={styles.meta}>{metaParts[0]}</span>
+    ) : null;
   /* The action row: the cta, with the format line a `block` after it on the same row when there is
      one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
   const ctaButton =
@@ -743,7 +760,14 @@ export function BlockCard({
        spare height between them. A cta, where one is asked for, closes the foot group. */
     frameContent = (
       <Layout rowGap="block" pinLast className={styles.grow}>
-        {eyebrowNode ?? <span />}
+        {iconNode ? (
+          <Cluster colGap="tight" align="center" nowrap>
+            {iconNode}
+            {eyebrowNode}
+          </Cluster>
+        ) : (
+          (eyebrowNode ?? <span />)
+        )}
         <Layout rowGap="block" className={styles.content}>
           <Layout rowGap="text">
             {titleNode}

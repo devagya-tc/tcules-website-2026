@@ -1,4 +1,4 @@
-import { Layout } from '@/components';
+import { Layout, type IconName } from '@/components';
 import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
@@ -55,6 +55,17 @@ export const LABEL: Record<InsightKind, { one: string; many: string }> = {
   video: { one: 'Video', many: 'Videos' },
   event: { one: 'Event', many: 'Events' },
   interview: { one: 'Interview', many: 'Interviews' },
+};
+
+/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026). */
+const GLYPH: Record<InsightKind, IconName> = {
+  article: 'document-text',
+  guide: 'notebook',
+  research: 'graph-up',
+  interview: 'chat-round-dots',
+  podcast: 'microphone',
+  video: 'videocamera-record',
+  event: 'calendar',
 };
 
 const DAY = new Intl.DateTimeFormat('en-GB', {
@@ -242,8 +253,21 @@ export function CardGrid({
           tracks={halves ? 2 : 3}
           cue="title"
           compact
-          /* A piece with no picture stands as a panel, so a row of mixed pieces ends level. */
-          frame={pictureOf(item) ? undefined : 'panel'}
+          /* A piece with no picture stands as a panel, so a row of mixed pieces ends level, and
+             says what it has instead (owner, 28 Oct 2026): its format's glyph before the label, and
+             under the title its topic, date and length — the line the 23 Oct ruling keeps off a
+             covered card's eyebrow. */
+          {...(pictureOf(item)
+            ? {}
+            : {
+                frame: 'panel' as const,
+                icon: GLYPH[item.kind],
+                meta: [
+                  item.subject,
+                  dateOf(item.publishedAt),
+                  item.duration ?? item.readingTime,
+                ].filter((part): part is string => Boolean(part)),
+              })}
         />
       ))}
     </Layout>
