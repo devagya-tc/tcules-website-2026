@@ -239,6 +239,7 @@
 }
 
 .sm .question {
+  color: var(--acc-label-ink);
   font: var(--acc-label-text);
   letter-spacing: var(--acc-label-tracking);
   text-transform: var(--text-mono-case);

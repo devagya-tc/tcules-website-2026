@@ -635,7 +635,12 @@ export function insightFinder({
     results:
       total === 0 ? null : (
         <Layout rowGap="column">
-          <CardGrid cards={items.slice(0, shown)} meta={{ withKind: true }} titleAs="h2" />
+          <CardGrid
+            cards={items.slice(0, shown)}
+            meta={{ withKind: true }}
+            titleAs="h2"
+            facts
+          />
           {moreHref ? (
             <Cluster colGap="block" rowGap="text" align="center">
               <p className={styles.count}>{`${Math.min(shown, total)} of ${total}`}</p>

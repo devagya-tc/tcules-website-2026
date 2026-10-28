@@ -234,42 +234,44 @@ export function CardGrid({
   meta,
   titleAs = 'h3',
   id,
+  facts = false,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
   id?: string;
+  /**
+   * The finder's results (owner, 28 Oct 2026, after claude.com/resources): each card says its date
+   * at the label line's end and its topic as a tag at its foot, and a piece with no picture stands
+   * as a panel led by its format's glyph, so a row of mixed pieces ends level.
+   */
+  facts?: boolean;
 }) {
   if (cards.length === 0) return null;
   const halves = cards.length === 2;
   return (
     <Layout as="ul" id={id} columns={{ md: halves ? 2 : 3 }} colGap="gutter" rowGap="column">
-      {cards.map((item) => (
-        <BlockCard
-          key={item.id}
-          {...cardOf(item, meta)}
-          size="sm"
-          titleAs={titleAs}
-          tracks={halves ? 2 : 3}
-          cue="title"
-          compact
-          /* A piece with no picture stands as a panel, so a row of mixed pieces ends level, and
-             says what it has instead (owner, 28 Oct 2026): its format's glyph before the label, and
-             under the title its topic, date and length — the line the 23 Oct ruling keeps off a
-             covered card's eyebrow. */
-          {...(pictureOf(item)
-            ? {}
-            : {
-                frame: 'panel' as const,
-                icon: GLYPH[item.kind],
-                meta: [
-                  item.subject,
-                  dateOf(item.publishedAt),
-                  item.duration ?? item.readingTime,
-                ].filter((part): part is string => Boolean(part)),
-              })}
-        />
-      ))}
+      {cards.map((item) => {
+        const pictured = Boolean(pictureOf(item));
+        return (
+          <BlockCard
+            key={item.id}
+            {...cardOf(item, meta)}
+            size="sm"
+            titleAs={titleAs}
+            tracks={halves ? 2 : 3}
+            cue="title"
+            compact={!facts}
+            {...(facts
+              ? {
+                  aside: dateOf(item.publishedAt),
+                  tag: item.subject,
+                  ...(pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] }),
+                }
+              : {})}
+          />
+        );
+      })}
     </Layout>
   );
 }

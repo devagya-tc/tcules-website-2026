@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   Media,
   type MediaImage,
   Sketch,
+  Tag,
   Texture,
   TextureShape,
 } from '@/components';
@@ -318,6 +319,17 @@ export type BlockCardProps = {
    */
   meta?: string | readonly string[];
   /**
+   * One fact at the END of the label line, on its baseline: a listing's date (owner, 28 Oct 2026,
+   * after claude.com/resources: "the date to the top right"). In the label voice, quiet.
+   */
+  aside?: string;
+  /**
+   * The piece's topic as an inert Tag at the card's FOOT (owner, 28 Oct 2026, after
+   * claude.com/resources: "the topic to the bottom"). The card fills its row and the tag holds the
+   * foot, so a row of cards ends on one line of tags.
+   */
+  tag?: string;
+  /**
    * A play mark on the cover: the piece is watched or heard, not read (the insights hub, 23 Oct
    * 2026). A round chip in the cover's top-end corner; it does not zoom with the cover. Ignored
    * without a cover. Decorative: the title and eyebrow say what the piece is.
@@ -487,6 +499,8 @@ export function BlockCard({
   play = false,
   compact = false,
   split = 'even',
+  aside,
+  tag,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -653,6 +667,13 @@ export function BlockCard({
     ) : (
       (indexNode ?? eyebrowText)
     );
+  const hasAside = aside !== undefined && aside.trim().length > 0;
+  const tagNode = tag?.trim() ? (
+    <span className={styles.tag}>
+      <Tag>{tag}</Tag>
+    </span>
+  ) : null;
+
   /* A title-cued card's title is its affordance (owner, 7 Oct 2026): no glyph after it — the blue
      arrow that stood here on nearly every card read as bulky — and on hover and focus it takes the
      accent ink while a cover leans in. The whole card is the one anchor, so the title needs no
@@ -683,10 +704,22 @@ export function BlockCard({
      leads the head, above any eyebrow or index. Icon to its copy is `text` (16): the step the head
      group already uses between its rows, because the glyph is a row of the head sized from the
      title's role, not a label it decorates (`tight` would weld it to the title as a bullet). */
+  /* The label line: the label at its start and, where there is one, the aside (a date) at its end,
+     centred on each other. Absent an aside, the label alone, as every card had it. */
+  const withAside = (node: ReactNode) =>
+    hasAside ? (
+      <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
+        {node ?? <span />}
+        <span className={styles.meta}>{aside}</span>
+      </Layout>
+    ) : (
+      node
+    );
+  const labelLine = withAside(eyebrowNode);
   const head = (
     <>
       {iconNode}
-      {eyebrowNode}
+      {labelLine}
       {titleNode}
     </>
   );
@@ -720,9 +753,7 @@ export function BlockCard({
   if (horizontal && imageNode) {
     frameContent = (
       <Layout
-        columns={
-          split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]
-        }
+        columns={split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]}
         colGap="column"
         rowGap="block"
         align="center"
@@ -758,24 +789,32 @@ export function BlockCard({
   } else if (panel) {
     /* The panel: the label at its head, the title and standfirst pinned to its foot, the plate's
        spare height between them. A cta, where one is asked for, closes the foot group. */
+    /* The panel's ground IS the tint surface's ground, so it says so: what sits on it (the topic
+       tag's quiet patch, the inks) takes tint's values, measured for that ground, rather than
+       paper's — a paper tag ground on the plate was the plate's own colour and vanished. */
     frameContent = (
-      <Layout rowGap="block" pinLast className={styles.grow}>
-        {iconNode ? (
-          <Cluster colGap="tight" align="center" nowrap>
-            {iconNode}
-            {eyebrowNode}
-          </Cluster>
-        ) : (
-          (eyebrowNode ?? <span />)
-        )}
-        <Layout rowGap="block" className={styles.content}>
-          <Layout rowGap="text">
-            {titleNode}
-            {bodyNode}
+      <div data-surface="tint" className={styles.grow}>
+        <Layout rowGap="block" pinLast className={styles.grow}>
+          {withAside(
+            iconNode ? (
+              <Cluster colGap="tight" align="center" nowrap>
+                {iconNode}
+                {eyebrowNode}
+              </Cluster>
+            ) : (
+              eyebrowNode
+            ),
+          ) ?? <span />}
+          <Layout rowGap="block" className={styles.content}>
+            <Layout rowGap="text">
+              {titleNode}
+              {bodyNode}
+            </Layout>
+            {tagNode}
+            {cta}
           </Layout>
-          {cta}
         </Layout>
-      </Layout>
+      </div>
     );
   } else {
     if (cta) {
@@ -811,6 +850,17 @@ export function BlockCard({
           {content}
         </Layout>
       );
+    } else if (tagNode) {
+      /* The topic tag holds the card's foot: the stack fills the row and pins the tag last, so a
+         row's tags sit on one line whatever its titles run to. */
+      frameContent = (
+        <Layout rowGap="block" pinLast className={styles.grow}>
+          {imageNode}
+          {ruleNode}
+          {content}
+          {tagNode}
+        </Layout>
+      );
     } else {
       frameContent = (
         <Layout rowGap="block">
@@ -830,6 +880,7 @@ export function BlockCard({
         horizontal && styles.horizontal,
         boxed && styles.boxed,
         panel && styles.panel,
+        tagNode && styles.tagged,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}
     >

@@ -365,6 +365,16 @@
   overflow: hidden;
 }
 
+/* A card carrying a topic tag fills its row, so the stack can pin the tag to the foot. The tag keeps
+   its own width at the stack's start (a grid item stretches; the wrapper only holds the Tag). */
+.tagged .frame {
+  block-size: 100%;
+}
+
+.tag {
+  justify-self: start;
+}
+
 /* The panel's glyph leads its label at the label's scale, centred on its capitals (ch04): the label
    is trimmed to cap height so the glyph centres on the letters, not the line box. */
 .panel .icon,
@@ -373,7 +383,8 @@
   block-size: var(--bcrd-panel-glyph);
 }
 
-.panel .eyebrow {
+.panel .eyebrow,
+.panel .meta {
   display: block;
   text-box: trim-both cap alphabetic;
 }

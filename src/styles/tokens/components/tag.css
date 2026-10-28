@@ -42,9 +42,10 @@
    is why there is no --tag-mark-ink-hover: an inert mark has no states at all, on any
    surface, and a hover added for symmetry would be a lie about whether the thing can be
    operated — on ten routes at once. --tag-filter-bg-pressed moves on all four surfaces.
-   Pressed and held are LIGHT (owner, 28 Oct 2026, the insights finder's picks: "too heavy with
-   the dark fill. lets keep them light themed"): a pale blue ground under a blue label and edge
-   on paper and tint, a lifted dark ground on ink; blue keeps its forced white fill. Once a token is in the set, EVERY surface declares it, even where that surface's
+   Pressed and held are QUIET (owner, 28 Oct 2026, the insights finder's picks: "too heavy with
+   the dark fill" … "not blue chips … paper bg, but with a slight border and the 'x'"): the
+   paper ground under the ink label and a hairline-light edge; what says held is the close glyph,
+   permanence and aria-current. On ink, the band's own deep ground; blue keeps its white fill. Once a token is in the set, EVERY surface declares it, even where that surface's
    value equals its own rest.
 
    ── Every surface restates every token ──────────────────────────────────────────
@@ -143,11 +144,11 @@
   --tag-mark-bg: var(--color-paper-deep); /*  1.12:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  8.14:1 */
   --tag-filter-ink-hover: var(--color-brandeis-600); /*  7.53:1 */
-  --tag-filter-ink-pressed: var(--color-brandeis-700);
+  --tag-filter-ink-pressed: var(--color-neutral-900);
   --tag-filter-edge: var(--color-neutral-600); /*  4.92:1 — outline floor is 3:1 */
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  6.17:1 */
-  --tag-filter-edge-pressed: var(--color-brandeis-200);
-  --tag-filter-bg-pressed: var(--color-brandeis-50);
+  --tag-filter-edge-pressed: var(--color-neutral-300);
+  --tag-filter-bg-pressed: var(--color-paper);
   --tag-ring-color: var(--color-brandeis-500); /*  6.17:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper);
 }
@@ -173,11 +174,11 @@
   --tag-mark-bg: var(--color-neutral-200); /*  1.19:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  7.27:1 */
   --tag-filter-ink-hover: var(--color-brandeis-600); /*  6.72:1 */
-  --tag-filter-ink-pressed: var(--color-brandeis-700);
+  --tag-filter-ink-pressed: var(--color-neutral-900);
   --tag-filter-edge: var(--color-neutral-700); /*  7.27:1 — 500 is 2.82:1 here */
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  5.51:1 */
-  --tag-filter-edge-pressed: var(--color-brandeis-200);
-  --tag-filter-bg-pressed: var(--color-brandeis-50);
+  --tag-filter-edge-pressed: var(--color-neutral-400);
+  --tag-filter-bg-pressed: var(--color-paper);
   --tag-ring-color: var(--color-brandeis-500); /*  5.51:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper-deep);
 }
@@ -208,7 +209,7 @@
   --tag-filter-ink-pressed: var(--color-white);
   --tag-filter-edge: var(--color-neutral-500); /*  5.41:1 — firmer is lighter here */
   --tag-filter-edge-hover: var(--color-brandeis-300); /*  7.32:1 */
-  --tag-filter-edge-pressed: var(--color-brandeis-300);
+  --tag-filter-edge-pressed: var(--color-neutral-700);
   --tag-filter-bg-pressed: var(--color-neutral-900);
   --tag-ring-color: var(--color-brandeis-300); /*  7.32:1 vs its gap */
   --tag-ring-gap-color: var(--color-neutral-950);
