@@ -1123,11 +1123,11 @@ export function EnquiryForm(props: EnquiryFormProps) {
           {status ? (
             status
           ) : dress.reply ? (
-            <Cluster nowrap colGap="tight" align="baseline">
+            <Cluster nowrap colGap="tight" align="center">
               <span className={styles.dressReplyMark}>
                 <Icon name="bolt-circle" />
               </span>
-              <span>{dress.reply}</span>
+              <span className={styles.dressReplyText}>{dress.reply}</span>
             </Cluster>
           ) : null}
         </div>

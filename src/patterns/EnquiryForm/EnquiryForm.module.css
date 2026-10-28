@@ -212,14 +212,18 @@
   color: var(--enq-caption-ink);
 }
 
-/* The bolt sits ON the text's baseline (owner, 28 Oct 2026). The row aligns on the baseline, and
-   this empty-of-text box's baseline is its bottom edge, so the 16 glyph box lands on it. Optical
-   correction: Solar draws inside 2 of every 24 units, so the disc itself would float 1/12 of the
-   box above the line; the translate drops it by exactly that. */
 .dressReplyMark {
   display: inline-flex;
   color: var(--enq-accent-ink);
-  translate: 0 calc(var(--icon-size-16) / 12);
+}
+
+/* The promise's words trimmed to cap height over the alphabetic baseline, so the bolt centres on
+   the capitals rather than on a line box whose descender room sits empty below them (owner, 28 Oct
+   2026; ch04: an icon centres on the text beside it, not on the line box; RatingBadge, Tag and
+   FilterPanel make the same correction). Where text-box is unsupported the line box remains. */
+.dressReplyText {
+  display: block;
+  text-box: trim-both cap alphabetic;
 }
 
 /* A send's status takes the promise's place; an error keeps the error ink (this rule follows
