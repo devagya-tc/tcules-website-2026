@@ -27,7 +27,29 @@ export type ServiceSceneName =
  */
 export type ArticleSceneName = 'code-review' | 'security-checklist' | 'prototype-to-production';
 
-export type SketchName = ServiceSceneName | ArticleSceneName;
+/**
+ * KIT scenes (owner, 26 Oct 2026, S2): the drawings EngagementOptions and TracePlates show, drawn in the
+ * same grammar as every other sketch so the flat families cannot drift apart. The patterns name them
+ * by their own scope or stage; the prefix keeps them apart from the service and article scenes.
+ */
+export type ScopeSceneName =
+  | 'scope-feature'
+  | 'scope-area'
+  | 'scope-embedded'
+  | 'scope-build'
+  | 'scope-start'
+  | 'scope-direct'
+  | 'scope-inside'
+  | 'scope-overlap'
+  | 'scope-commercial';
+export type TraceSceneName =
+  | 'trace-design'
+  | 'trace-handoff'
+  | 'trace-code'
+  | 'trace-product'
+  | 'trace-signoff';
+
+export type SketchName = ServiceSceneName | ArticleSceneName | ScopeSceneName | TraceSceneName;
 
 const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
   '/services/new-product-design-first-release': 'new-product',

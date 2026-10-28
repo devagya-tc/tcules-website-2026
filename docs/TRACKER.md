@@ -133,16 +133,20 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [~] **2.26** Graphics tiers: test the isometric illustrations in the services bento against the flat graphics, and
       polish the flat graphics without changing their style. Rules for which content takes which graphic come after.
       The bento's six drawings are redrawn and solve their story on hover (decisions/2026-10-25-bento-drawings-tell-their-story).
-      Still to come: the grammar (`docs/research/flat-graphics-grammar.md`) for the other Sketch uses and the three
-      other flat families, then which content takes which tier.
+      Rolled out 26 Oct (branch design/s2-flat-grammar, awaiting the owner's look): every Sketch plate draws the
+      redrawn scenes, still and held solved, in the two weights; EngagementOptions and TracePlates draw through
+      Sketch, their 14 drawings redrawn as kit scenes; EngagementModel takes the weights and dash. Logged as proposed: decisions/2026-10-26-flat-graphics-grammar and
+      -flat-or-isometric-two-questions.
 - [~] **2.27** Listings polish before lock: a claude.com/resources pass and a cut of every line that doesn't structure.
 - [ ] **2.28** Tools in the listings, looking like tools rather than standard cards.
 - [x] **2.29** Enquiry form: mocks with more air inside the panel (the island width stays). Went further
       (owner, 23 Oct 2026): the close at 1:1 (`islandArrangement="halves"`, the panel at a `stack` inset),
       the TextureFlow field, and the sketch-to-shipped drawing; both versions on /design/cta-section § 1d.
       Home carries the halves close with the drawing and an untitled card (owner, 25 Oct 2026).
-- [ ] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
+- [~] **2.30** Industries band ("Products we know well"): a better interaction (refs: stripe.com startup-foundation
       cards, apple.com/iphone "Get to know iPhone") and better, non-stereotypical stock until a shoot. Low priority.
+      Photos replaced (owner, 26 Oct 2026): no faces, a close crop on the main part of each sector's activity.
+      The band stays the 4×2 grid for now; accordion, contact-sheet and sentence directions were mocked and set aside.
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·

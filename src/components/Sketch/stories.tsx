@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 
 import { cx } from '@/lib/cx';
-import { glyphs, type IconName } from '@/lib/icon-glyphs';
+import type { IconName } from '@/lib/icon-glyphs';
 
+import { CURSOR, Glyph } from './scenes';
 import styles from './Sketch.module.css';
 import type { SketchName } from '@/lib/sketches';
 
@@ -17,33 +18,6 @@ import type { SketchName } from '@/lib/sketches';
  * 20-unit dots; 1 for every outline, 2 for copy and the route; no words inside a drawing; glyphs are
  * Solar's, in a chip; one focal point, solid on a soft blue ground.
  */
-
-/** A Solar glyph set inside a drawing at (cx, cy), `size` drawing units square. */
-function Glyph({
-  name,
-  cx,
-  cy,
-  size,
-  className,
-}: {
-  name: IconName;
-  cx: number;
-  cy: number;
-  size: number;
-  className: string | undefined;
-}) {
-  const s = size / 24;
-  return (
-    <g
-      className={className}
-      transform={`translate(${cx - size / 2},${cy - size / 2}) scale(${s})`}
-    >
-      {glyphs[name].map((d) => (
-        <path key={d} d={d} />
-      ))}
-    </g>
-  );
-}
 
 /** A route that draws itself: drawn at its own length (1), so the dash reveals it from the start. */
 function Trace({ d }: { d: string }) {
@@ -72,8 +46,6 @@ function Layer({ y, glyph, to }: { y: number; glyph: IconName; to: number }) {
   );
 }
 
-/** The cursor: drawn at its place on the button, with its flat offset under it. */
-const CURSOR = 'M0,0 L0,17 L4.6,12.9 L7.6,19.6 L10.6,18.3 L7.7,11.7 L13.6,11.7 Z';
 
 export const STORY: Partial<Record<SketchName, ReactNode>> = {
   /* The decision is open, then made: both branches trace out to their screens, the decision fills. */

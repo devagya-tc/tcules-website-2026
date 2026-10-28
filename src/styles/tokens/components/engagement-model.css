@@ -32,15 +32,14 @@
   --eng-axis-tracking: var(--text-micro-tracking);
 
   /* Stroke widths stay true at every scale (the drawing sets vector-effect: non-scaling-stroke). */
-  --eng-line-width: var(--border-width-3); /* the team: the drawing's one heavy stroke */
+  --eng-line-width: var(--border-width-2); /* the team: the line that carries, 2 in the flat-graphics grammar's two weights (owner, 26 Oct 2026, S2) */
   --eng-level-width: var(--border-width-1); /* the assignment level, dashed */
   --eng-rule-width: var(--border-width-hairline); /* the time axis and its week ticks */
   --eng-idle-width: var(--border-width-1); /* the hatch strokes */
-  --eng-node-width: var(--border-width-2); /* the open start node's ring */
+  --eng-node-width: var(--border-width-1); /* the open start node's ring: an outline, 1 */
   /* Dash patterns, in the drawing's own units (unitless: SVG user space, not a layout distance).
-     The level reads as a dashed line; the two drops to the axis as a finer dotted measure. */
-  --eng-level-dash: 4 4;
-  --eng-drop-dash: 2 3;
+     The level and the drops take the grammar's one dash, 6 4, shared with every flat family (owner, 26 Oct 2026, S2). */
+  --eng-dash: 6 4;
 
   /* The key beside each point: a component SIZE (a drawing's frame), not a distance, so it may
      take the space ramp. 2:1, near the proportion of the chart it keys. */

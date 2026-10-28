@@ -2051,58 +2051,28 @@
     ]
   },
   {
-    "file": "hand-orange-note-glass.webp",
+    "file": "hands-notebook-pen-pointing.webp",
     "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/a-hand-holding-the-orange-sticky-note-on-the-glass-wall-6592364/",
-    "originalUrl": "https://images.pexels.com/photos/6592364/pexels-photo-6592364.jpeg",
-    "subject": "A hand pressing an orange sticky note onto a glass wall among other notes",
-    "mood": "calm, mid-task, bright grey",
-    "orientation": "portrait",
-    "width": 2400,
-    "height": 3600,
-    "focalPoint": {
-      "x": 0.6,
-      "y": 0.4
-    },
-    "bestPlacements": [
-      "card"
-    ],
-    "notes": "B2B SaaS and workflow software. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "cool",
-    "saturation": "quiet",
-    "tone": {
-      "rb": 0.012,
-      "sat": 0.068
-    },
-    "derived": [
-      1240,
-      652,
-      320
-    ]
-  },
-  {
-    "file": "hands-laptop-headphones.webp",
-    "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/close-up-photograph-of-a-person-s-hands-typing-on-a-laptop-beside-headphones-7236621/",
-    "originalUrl": "https://images.pexels.com/photos/7236621/pexels-photo-7236621.jpeg",
-    "subject": "Hands typing on a laptop, a pair of headphones beside it on a white table",
-    "mood": "focused, quiet, cool",
+    "sourceUrl": "https://www.pexels.com/photo/a-person-writing-on-white-paper-9052296/",
+    "originalUrl": "https://images.pexels.com/photos/9052296/pexels-photo-9052296.jpeg",
+    "subject": "Two colleagues' hands over a notebook beside a laptop, one with a pen, one pointing",
+    "mood": "working, focused, daylight",
     "orientation": "landscape",
     "width": 2400,
     "height": 1600,
     "focalPoint": {
-      "x": 0.55,
+      "x": 0.5,
       "y": 0.5
     },
     "bestPlacements": [
       "card"
     ],
-    "notes": "AI products and developer tools. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "cool",
+    "notes": "B2B SaaS and workflow software. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "neutral",
     "saturation": "quiet",
     "tone": {
-      "rb": -0.003,
-      "sat": 0.198
+      "rb": 0.051,
+      "sat": 0.159
     },
     "derived": [
       1240,
@@ -2111,28 +2081,28 @@
     ]
   },
   {
-    "file": "meeting-lead-presenting.webp",
-    "source": "unsplash",
-    "sourceUrl": "https://unsplash.com/photos/-Lzdk59aldE",
-    "originalUrl": "https://images.unsplash.com/photo-1758691736664-0b83e4f1215e",
-    "subject": "A woman leading a meeting at a whiteboard, colleagues at a long table, a chart on the wall screen",
-    "mood": "engaged, bright, daylight",
+    "file": "laptop-code-cafe-table.webp",
+    "source": "pexels",
+    "sourceUrl": "https://www.pexels.com/photo/black-and-silver-laptop-computer-on-round-brown-wooden-table-1181243/",
+    "originalUrl": "https://images.pexels.com/photos/1181243/pexels-photo-1181243.jpeg",
+    "subject": "Over the shoulder: hands on a laptop full of code at a café table, coffee beside it",
+    "mood": "absorbed, bright, café",
     "orientation": "landscape",
     "width": 2400,
-    "height": 1350,
+    "height": 1602,
     "focalPoint": {
-      "x": 0.55,
+      "x": 0.6,
       "y": 0.45
     },
     "bestPlacements": [
       "card"
     ],
-    "notes": "Data and analytics products. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
+    "notes": "AI products and developer tools. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
     "temperature": "cool",
     "saturation": "quiet",
     "tone": {
-      "rb": -0.021,
-      "sat": 0.113
+      "rb": 0.002,
+      "sat": 0.19
     },
     "derived": [
       1240,
@@ -2141,28 +2111,28 @@
     ]
   },
   {
-    "file": "parcel-at-front-door.webp",
+    "file": "pen-on-bar-chart.webp",
     "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/smiling-woman-receiving-package-from-courier-13443801/",
-    "originalUrl": "https://images.pexels.com/photos/13443801/pexels-photo-13443801.jpeg",
-    "subject": "A smiling woman taking a parcel from a courier at her front door",
-    "mood": "happy, warm, doorstep",
+    "sourceUrl": "https://www.pexels.com/photo/a-person-holding-a-pen-5717701/",
+    "originalUrl": "https://images.pexels.com/photos/5717701/pexels-photo-5717701.jpeg",
+    "subject": "A pen tip on a printed horizontal bar chart on a white desk",
+    "mood": "calm, precise, bright",
     "orientation": "landscape",
     "width": 2400,
     "height": 1600,
     "focalPoint": {
-      "x": 0.55,
-      "y": 0.45
+      "x": 0.45,
+      "y": 0.5
     },
     "bestPlacements": [
       "card"
     ],
-    "notes": "Commerce and transactional products. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "neutral",
+    "notes": "Data and analytics products. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "cool",
     "saturation": "quiet",
     "tone": {
-      "rb": 0.066,
-      "sat": 0.368
+      "rb": -0.005,
+      "sat": 0.065
     },
     "derived": [
       1240,
@@ -2171,58 +2141,28 @@
     ]
   },
   {
-    "file": "hands-paper-bag-handover.webp",
+    "file": "parcel-courier-handoff.webp",
     "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/food-italian-pizza-restaurant-6969975/",
-    "originalUrl": "https://images.pexels.com/photos/6969975/pexels-photo-6969975.jpeg",
-    "subject": "A paper shopping bag passed from one hand to another in a doorway",
-    "mood": "warm, exchange, close",
-    "orientation": "portrait",
-    "width": 2400,
-    "height": 3600,
-    "focalPoint": {
-      "x": 0.6,
-      "y": 0.32
-    },
-    "bestPlacements": [
-      "card"
-    ],
-    "notes": "Marketplaces and multi-sided platforms. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "warm",
-    "saturation": "quiet",
-    "tone": {
-      "rb": 0.199,
-      "sat": 0.365
-    },
-    "derived": [
-      1240,
-      652,
-      320
-    ]
-  },
-  {
-    "file": "older-couple-papers-sofa.webp",
-    "source": "unsplash",
-    "sourceUrl": "https://unsplash.com/photos/DQdilc0v6u8",
-    "originalUrl": "https://images.unsplash.com/photo-1758691031749-607d43c14f63",
-    "subject": "An older couple on their sofa going over papers together, at ease",
-    "mood": "settled, warm, colourful room",
+    "sourceUrl": "https://www.pexels.com/photo/a-person-holding-brown-cardboard-box-7843933/",
+    "originalUrl": "https://images.pexels.com/photos/7843933/pexels-photo-7843933.jpeg",
+    "subject": "A plain kraft box passing from a courier's hands to a customer's",
+    "mood": "everyday, bright, hand-off",
     "orientation": "landscape",
     "width": 2400,
-    "height": 1350,
+    "height": 1602,
     "focalPoint": {
       "x": 0.5,
-      "y": 0.45
+      "y": 0.5
     },
     "bestPlacements": [
       "card"
     ],
-    "notes": "FinTech and InsurTech. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "neutral",
+    "notes": "Commerce and transactional products. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "warm",
     "saturation": "quiet",
     "tone": {
-      "rb": 0.075,
-      "sat": 0.311
+      "rb": 0.107,
+      "sat": 0.268
     },
     "derived": [
       1240,
@@ -2231,58 +2171,118 @@
     ]
   },
   {
-    "file": "hands-held-across-table.webp",
+    "file": "keys-into-palm.webp",
     "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/elderly-man-holding-hands-with-his-daughter-8172814/",
-    "originalUrl": "https://images.pexels.com/photos/8172814/pexels-photo-8172814.jpeg",
-    "subject": "An older man's hand held in a younger person's across a table",
-    "mood": "tender, warm, close",
-    "orientation": "landscape",
-    "width": 2400,
-    "height": 1800,
-    "focalPoint": {
-      "x": 0.4,
-      "y": 0.45
-    },
-    "bestPlacements": [
-      "card"
-    ],
-    "notes": "HealthTech. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
-    "temperature": "neutral",
-    "saturation": "vivid",
-    "tone": {
-      "rb": 0.06,
-      "sat": 0.456
-    },
-    "derived": [
-      1240,
-      652,
-      320
-    ]
-  },
-  {
-    "file": "megaphone-pink-ground.webp",
-    "source": "pexels",
-    "sourceUrl": "https://www.pexels.com/photo/woman-in-white-button-up-long-sleeve-shirt-holding-a-megaphone-8638300/",
-    "originalUrl": "https://images.pexels.com/photos/8638300/pexels-photo-8638300.jpeg",
-    "subject": "A woman in white calling through a megaphone against a flat pink ground",
-    "mood": "loud, playful, studio",
+    "sourceUrl": "https://www.pexels.com/photo/a-person-giving-a-bundle-of-keys-to-another-person-7642000/",
+    "originalUrl": "https://images.pexels.com/photos/7642000/pexels-photo-7642000.jpeg",
+    "subject": "A bundle of keys dropped into an open palm between two people",
+    "mood": "trust, hand-off, muted",
     "orientation": "landscape",
     "width": 2400,
     "height": 1600,
     "focalPoint": {
-      "x": 0.6,
-      "y": 0.4
+      "x": 0.58,
+      "y": 0.45
     },
     "bestPlacements": [
       "card"
     ],
-    "notes": "MarTech and SalesTech. Home sector card (owner, 19 Oct 2026): the people a sector serves, in a good moment, close and cropped like the tcules.com hero scroller. Reserved for its sector card; never a stand-in.",
+    "notes": "Marketplaces and multi-sided platforms. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
     "temperature": "warm",
     "saturation": "quiet",
     "tone": {
-      "rb": 0.183,
-      "sat": 0.276
+      "rb": 0.108,
+      "sat": 0.21
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "phone-qr-counter-scan.webp",
+    "source": "pexels",
+    "sourceUrl": "https://www.pexels.com/photo/a-close-up-shot-of-a-person-scanning-a-qr-code-12935051/",
+    "originalUrl": "https://images.pexels.com/photos/12935051/pexels-photo-12935051.jpeg",
+    "subject": "A customer's phone held to a QR scanner on a shop counter",
+    "mood": "everyday, quick, warm",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.55,
+      "y": 0.55
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "FinTech and InsurTech. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "warm",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.131,
+      "sat": 0.262
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "hand-over-hand-table.webp",
+    "source": "pexels",
+    "sourceUrl": "https://www.pexels.com/photo/people-holding-each-others-hand-6436185/",
+    "originalUrl": "https://images.pexels.com/photos/6436185/pexels-photo-6436185.jpeg",
+    "subject": "A hand laid over another's on a wooden table",
+    "mood": "supportive, warm, close",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1600,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.6
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "HealthTech. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.023,
+      "sat": 0.259
+    },
+    "derived": [
+      1240,
+      652,
+      320
+    ]
+  },
+  {
+    "file": "hands-laptop-collection-page.webp",
+    "source": "pexels",
+    "sourceUrl": "https://www.pexels.com/photo/close-up-of-person-using-a-laptop-and-creating-a-fashion-collection-7857496/",
+    "originalUrl": "https://images.pexels.com/photos/7857496/pexels-photo-7857496.jpeg",
+    "subject": "Hands typing on a laptop, building a product collection page from fresh product shots",
+    "mood": "making, focused, warm wood",
+    "orientation": "landscape",
+    "width": 2400,
+    "height": 1602,
+    "focalPoint": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "bestPlacements": [
+      "card"
+    ],
+    "notes": "MarTech and SalesTech. Home sector card (owner, 26 Oct 2026): no faces, a close crop on the main part of the activity the sector is about, so the photo alone names the sector. Reserved for its sector card; never a stand-in.",
+    "temperature": "neutral",
+    "saturation": "quiet",
+    "tone": {
+      "rb": 0.071,
+      "sat": 0.224
     },
     "derived": [
       1240,

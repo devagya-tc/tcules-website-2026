@@ -282,20 +282,21 @@ export const SERVICE_PHOTO_SLOTS = {
 } as const satisfies Record<string, ServicePhotoSlots>;
 
 /**
- * The home page's sector cards (owner, 19 Oct 2026), keyed by the sector page each card links to.
- * Each shows the people the sector serves in a good moment, close and cropped like the tcules.com
- * hero scroller — never a product shot or a generic industry image. Picked by the owner from free
- * Unsplash and Pexels shortlists; a sector with no row keeps its register placeholder.
+ * The home page's sector cards, keyed by the sector page each card links to. Each shows the main
+ * part of the activity its sector is about, close and with no faces (owner, 26 Oct 2026): a pen on
+ * a chart, a parcel passing hands, keys dropped into a palm. Cover the label and the photo still
+ * names the sector — never a metaphor, never a portrait. Picked by the owner from free Pexels
+ * shortlists; a sector with no row keeps its register placeholder.
  */
 export const HOME_SECTOR_PHOTOS: Readonly<Partial<Record<string, PhotoId>>> = {
-  [ROUTES.b2bSaasWorkflow]: 'hand-orange-note-glass',
-  [ROUTES.aiDeveloperTools]: 'hands-laptop-headphones',
-  [ROUTES.dataDecisionProducts]: 'meeting-lead-presenting',
-  [ROUTES.commerce]: 'parcel-at-front-door',
-  [ROUTES.marketplaces]: 'hands-paper-bag-handover',
-  [ROUTES.fintech]: 'older-couple-papers-sofa',
-  [ROUTES.healthtech]: 'hands-held-across-table',
-  [ROUTES.martech]: 'megaphone-pink-ground',
+  [ROUTES.b2bSaasWorkflow]: 'hands-notebook-pen-pointing',
+  [ROUTES.aiDeveloperTools]: 'laptop-code-cafe-table',
+  [ROUTES.dataDecisionProducts]: 'pen-on-bar-chart',
+  [ROUTES.commerce]: 'parcel-courier-handoff',
+  [ROUTES.marketplaces]: 'keys-into-palm',
+  [ROUTES.fintech]: 'phone-qr-counter-scan',
+  [ROUTES.healthtech]: 'hand-over-hand-table',
+  [ROUTES.martech]: 'hands-laptop-collection-page',
 };
 
 /** The photos a page's own slots take: never also one of its stand-ins (§ 5.1 rule 4). */

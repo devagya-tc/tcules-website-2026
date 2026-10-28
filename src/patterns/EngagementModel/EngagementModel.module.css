@@ -89,7 +89,7 @@
 .level {
   stroke: var(--eng-level-ink);
   stroke-width: var(--eng-level-width);
-  stroke-dasharray: var(--eng-level-dash);
+  stroke-dasharray: var(--eng-dash);
   vector-effect: non-scaling-stroke;
 }
 
@@ -103,7 +103,7 @@
 .drop {
   stroke: var(--eng-rule-ink);
   stroke-width: var(--eng-rule-width);
-  stroke-dasharray: var(--eng-drop-dash);
+  stroke-dasharray: var(--eng-dash);
   vector-effect: non-scaling-stroke;
 }
 
