@@ -322,7 +322,17 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
+    padding-block: var(--irl-controls-ring-room);
+    margin-block: calc(-1 * var(--irl-controls-ring-room));
   }
+}
+
+/* The controls scroll (in the column from 1024, in the opened sheet below it), and a scroll box
+   clips: room for a focus ring on the inline sides, cancelled so the fields stay on the column's
+   edges (the search field's ring was cut on three sides, 28 Oct 2026). The block sides are below. */
+.controls {
+  padding-inline: var(--irl-controls-ring-room);
+  margin-inline: calc(-1 * var(--irl-controls-ring-room));
 }
 
 /* The controls' phone button sits at the bar's start: it is the bar's only control. */

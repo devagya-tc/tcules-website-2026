@@ -245,6 +245,18 @@
   text-transform: var(--text-mono-case);
 }
 
+/* The sm chevron is neutral (owner, 28 Oct 2026: "dropdown arrows can be neutral. blue is too much
+   for them"): four of them down a rail spend the accent on chrome. It darkens as the md one does. */
+.sm .mark {
+  color: var(--acc-label-mark-ink);
+}
+
+.sm .trigger:hover .mark,
+.sm .trigger:focus-visible .mark,
+.sm .item[open] .mark {
+  color: var(--acc-label-mark-ink-hover);
+}
+
 .sm .answer {
   max-inline-size: none;
   padding-block-end: var(--gap-text);

@@ -64,6 +64,7 @@ export {
   slugOf,
   testimonialItem,
   ENQUIRY_DESK,
+  ENQUIRY_SKETCH_TO_SHIPPED,
   ENQUIRY_DRESS,
 } from './CorpusPage';
 export type {

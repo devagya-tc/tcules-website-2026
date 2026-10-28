@@ -5,6 +5,7 @@ import { Accordion, FilterPanel, type FilterPanelGroup } from '@/patterns';
 
 import styles from './ListingIndex.module.css';
 import type { ListingFinder, ListingSection, ListingView } from './ListingIndex';
+import { FinderMore } from './Finder';
 import {
   byEventDate,
   CardGrid,
@@ -603,32 +604,35 @@ export function insightFinder({
     label,
     picks: (
       /* "Showing results for", then each pick as a held filter chip with its close, then the way
-         back to the curated page. One wrapping row, the chips at the tight step. */
+         back to the curated page. */
       <Layout columns={{ base: 1, md: ['auto', 1] }} colGap="text" rowGap="tight" align="center">
         <p className={styles.count} role="status">
           {total === 0
             ? 'Nothing matches'
             : `${total} ${total === 1 ? 'result' : 'results'} for`}
         </p>
-        <Cluster as="ul" colGap="tight" rowGap="tight" align="center">
-          {picks.map((pick) => (
-            <li key={pick.removeHref}>
-              <Tag
-                variant="filter"
-                href={pick.removeHref}
-                selected
-                icon={<Icon name="close-circle" label="Remove" />}
-              >
-                {pick.label}
-              </Tag>
-            </li>
-          ))}
-          {/* The way back to the curated page, the row's last entry, a step clear of the chips. */}
-          <li className={styles.clear}>
+        {/* The chips at the tight step, and the way back to the curated page a text step clear of
+            them (owner, 28 Oct 2026: "8px is too tight"): grouping, not a gap knob. */}
+        <Cluster colGap="text" rowGap="tight" align="center">
+          <Cluster as="ul" colGap="tight" rowGap="tight" align="center">
+            {picks.map((pick) => (
+              <li key={pick.removeHref}>
+                <Tag
+                  variant="filter"
+                  href={pick.removeHref}
+                  selected
+                  icon={<Icon name="chrome-close" label="Remove" />}
+                >
+                  {pick.label}
+                </Tag>
+              </li>
+            ))}
+          </Cluster>
+          <span className={styles.clear}>
             <Button as="a" href={clearHref} emphasis="link" tone="primary">
               Clear all
             </Button>
-          </li>
+          </span>
         </Cluster>
       </Layout>
     ),
@@ -644,15 +648,9 @@ export function insightFinder({
           {moreHref ? (
             <Cluster colGap="block" rowGap="text" align="center">
               <p className={styles.count}>{`${Math.min(shown, total)} of ${total}`}</p>
-              <Button
-                as="a"
-                href={moreHref}
-                emphasis="link"
-                tone="primary"
-                icon={<Icon name="alt-arrow-down" />}
-              >
+              <FinderMore href={moreHref} icon={<Icon name="alt-arrow-down" />}>
                 Show more
-              </Button>
+              </FinderMore>
             </Cluster>
           ) : null}
         </Layout>

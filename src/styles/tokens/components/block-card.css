@@ -183,7 +183,7 @@
   --bcrd-media-rule-ink: var(--color-neutral-300); /* 1.54:1 — decoration */
   --bcrd-box-ground-hover: var(--color-paper-deep); /* a boxed linked card only */
   --bcrd-box-ground-pressed: var(--color-neutral-100);
-  --bcrd-panel-ground: var(--color-paper-deep); /* the drawn covers' plate (sketch.css) */
+  --bcrd-panel-ground: var(--color-paper); /* the page's own ground, the hairline draws the box (owner, 28 Oct 2026: "paper-deep is too much") */
   --bcrd-ring-color: var(--color-brandeis-500); /* 6.17:1 against gap */
   --bcrd-ring-gap-color: var(--color-paper);
   --bcrd-rail-ink: var(--color-neutral-200); /* decoration */

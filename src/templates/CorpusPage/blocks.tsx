@@ -386,7 +386,7 @@ export const ENQUIRY_DESK = {
 } as const;
 
 /** The halves close's drawing (owner, 25 Oct 2026; scripts/enquiry-sketch-to-shipped.mjs). */
-const ENQUIRY_SKETCH_TO_SHIPPED = {
+export const ENQUIRY_SKETCH_TO_SHIPPED = {
   src: '/illustrations/enquiry/sketch-to-shipped.svg',
   alt: '',
   width: 455,

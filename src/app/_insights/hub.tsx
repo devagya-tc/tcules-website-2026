@@ -3,7 +3,7 @@ import { blogPath, ENDPOINTS, ROUTES } from '@/lib/routes';
 import { Icon, Media, type IconName } from '@/components';
 import { EnquiryForm } from '@/patterns';
 import {
-  ENQUIRY_DESK,
+  ENQUIRY_SKETCH_TO_SHIPPED,
   ENQUIRY_DRESS,
   insightFinder,
   insightFormatPage,
@@ -234,8 +234,9 @@ function closingOf(page: InsightsPage, origin: string, placement: string): Listi
     : CLOSE_STAND_IN;
   return {
     ...copy,
-    /* The island close, as home has it: the desk beside the heading, the form in its card dress. */
-    island: { surface: 'blue', art: <Media image={ENQUIRY_DESK} sizes="240px" /> },
+    /* The island close, as home has it: the halves, the sketch-to-shipped drawing over the words, the
+       moving field across the island, the form in its card dress (owner, 28 Oct 2026). */
+    island: { surface: 'blue', art: <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> },
     form: (
       <EnquiryForm
         variant="enquiry"

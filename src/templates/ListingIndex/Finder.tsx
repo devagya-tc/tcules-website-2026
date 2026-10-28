@@ -2,7 +2,9 @@
 
 import Form from 'next/form';
 import { useRouter } from 'next/navigation';
-import { type MouseEvent, type ReactNode, useEffect, useRef } from 'react';
+import { type MouseEvent, type ReactNode, useEffect, useRef, useTransition } from 'react';
+
+import { Button } from '@/components';
 
 /* ── The finder's behaviour: the URL is the state, the layout never moves ──────────────
    Jatin, 26 Oct 2026: "URL change hogi, result change hoga, woh more or less stable rahega". A tick
@@ -80,7 +82,8 @@ export function FinderForm({
 export function FinderLinks({ anchor, children }: { anchor: string; children: ReactNode }) {
   const router = useRouter();
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
     const link = (event.target as HTMLElement).closest('a');
     /* Only a link to this same page with another query: a piece's own link navigates as usual. */
     if (
@@ -94,4 +97,45 @@ export function FinderLinks({ anchor, children }: { anchor: string; children: Re
     settle(anchor);
   };
   return <div onClick={onClick}>{children}</div>;
+}
+
+/**
+ * "Show more": the next page of results added where the reader is (owner, 28 Oct 2026: "show more
+ * shouldn't bring me back to the top of the page"). It never settles to the listing's head, and
+ * while the longer list is on its way the link holds its busy state and says so. Without script it
+ * is the plain link to the longer page.
+ */
+export function FinderMore({
+  href,
+  icon,
+  children,
+}: {
+  href: string;
+  icon?: ReactNode;
+  children: ReactNode;
+}) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  if (pending)
+    return (
+      <Button as="a" href={href} emphasis="link" tone="primary" icon={icon} busy>
+        Loading more
+      </Button>
+    );
+  return (
+    <Button
+      as="a"
+      href={href}
+      emphasis="link"
+      tone="primary"
+      icon={icon}
+      onClick={(event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        start(() => router.replace(href, { scroll: false }));
+      }}
+    >
+      {children}
+    </Button>
+  );
 }

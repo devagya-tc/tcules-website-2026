@@ -789,32 +789,27 @@ export function BlockCard({
   } else if (panel) {
     /* The panel: the label at its head, the title and standfirst pinned to its foot, the plate's
        spare height between them. A cta, where one is asked for, closes the foot group. */
-    /* The panel's ground IS the tint surface's ground, so it says so: what sits on it (the topic
-       tag's quiet patch, the inks) takes tint's values, measured for that ground, rather than
-       paper's — a paper tag ground on the plate was the plate's own colour and vanished. */
     frameContent = (
-      <div data-surface="tint" className={styles.grow}>
-        <Layout rowGap="block" pinLast className={styles.grow}>
-          {withAside(
-            iconNode ? (
-              <Cluster colGap="tight" align="center" nowrap>
-                {iconNode}
-                {eyebrowNode}
-              </Cluster>
-            ) : (
-              eyebrowNode
-            ),
-          ) ?? <span />}
-          <Layout rowGap="block" className={styles.content}>
-            <Layout rowGap="text">
-              {titleNode}
-              {bodyNode}
-            </Layout>
-            {tagNode}
-            {cta}
+      <Layout rowGap="block" pinLast className={styles.grow}>
+        {withAside(
+          iconNode ? (
+            <Cluster colGap="tight" align="center" nowrap>
+              {iconNode}
+              {eyebrowNode}
+            </Cluster>
+          ) : (
+            eyebrowNode
+          ),
+        ) ?? <span />}
+        <Layout rowGap="block" className={styles.content}>
+          <Layout rowGap="text">
+            {titleNode}
+            {bodyNode}
           </Layout>
+          {tagNode}
+          {cta}
         </Layout>
-      </div>
+      </Layout>
     );
   } else {
     if (cta) {

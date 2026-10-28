@@ -129,7 +129,9 @@ export type ListingClosing = {
   action?: HeroAction;
   /**
    * The island close, as home has it (owner, 23 Oct 2026: "replace the enquiry form with the island
-   * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band.
+   * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band,
+   * in home's halves with the moving field across it (owner, 28 Oct 2026: "the one with the moving
+   * texture is preferred").
    * Taken only with a `form`.
    */
   island?: { surface: 'blue' | 'ink'; art?: ReactElement };
@@ -336,7 +338,8 @@ export function ListingIndex({
         <CtaSection
           id={closing.id}
           island={closing.island.surface}
-          islandTexture="frame"
+          islandArrangement="halves"
+          islandTexture="flow"
           art={closing.island.art}
           eyebrow={closing.eyebrow || undefined}
           heading={closing.heading}
