@@ -1,72 +1,45 @@
 # The website team in Claude Code
 
-Several people work in this repo with Claude, several on a shared Claude account, and every Claude
-session starts blank. This setup gives every session the same context, whoever is signed in:
+Everyone working on this repo with Claude gets the same project context, and each person stays
+themselves, even when two people use the same Claude account on different computers.
 
-| What | Where | Changed by |
+## How it works
+
+| What | Where | Why it works |
 |---|---|---|
-| The rules: rulings, brand chapters, components, `CLAUDE.md` | this repo | Devagya, through pull requests. A ruling is valid once Devagya logs it: Devagya's own, or Jatin's from a feedback session |
-| What's happening: open work, recent merges, handoff notes | GitHub: pull requests and their "Handoff" comments | everyone, through `/ship` and `/handoff` |
-| Who is at the keyboard, and their role's settings | your own clone folder, never pushed; copied into new worktrees (`.worktreeinclude`) | you, once, with `/onboard` |
+| **The project context**: rules, rulings, docs, what's in progress | this repo: `CLAUDE.md`, `docs/decisions/`, the docs, the pull requests | Claude Code reads `CLAUDE.md` on every computer, every session. Everyone who pulls has the same context |
+| **Who is at the keyboard** | `CLAUDE.local.md` in your own copy of the repo, never pushed | Claude Code reads it automatically too. Bhumika on a shared account still sees "Bhumika" |
+| **Not used** for project context | Claude account chat history and memory | It can't be shared between accounts, and a shared account mixes people |
 
-Claude account memory and chat history are not used for shared context: they can't be shared between
-accounts, and several of us share one.
+The rule that keeps it true: **anything the team should know goes into the repo** (through a pull
+request), not only into a chat.
+
+No installs beyond Git and Claude, no scripts, no background hooks: both files are read by Claude Code
+itself.
 
 ## Set up once
 
-Paste the prompt in **[`team/onboard.md`](onboard.md)** into Claude Code (the desktop app's **Code**
-tab works; no terminal needed) and answer its questions. It checks your tools, signs you in to GitHub,
-clones the repo, sets who you are, your role's settings and your commit email, and installs the
-checks. In an existing clone, type `/onboard`.
+Paste the prompt in **[`team/onboard.md`](onboard.md)** into Claude Code and answer "who are you?".
+In a copy you already have, type `/onboard`.
 
-Then open Claude Code on the clone folder and accept "trust this folder": project hooks only run in a
-trusted folder. The first reply should name you and say what's happening.
+## What a session does
 
-## What happens when a session opens
+When you open Claude in the repo, it greets you by name, gets the latest from GitHub (only if
+nothing of yours is unsaved; otherwise it tells you and leaves your work alone), and gives a short
+catch-up: what changed, what's open, the latest handoff note. These steps are written in `CLAUDE.md`.
 
-The startup hook (`.claude/hooks/session-start.mjs`) works out who you are, then brings the folder up
-to date **without ever touching unsaved work**:
+## Roles
 
-- It always checks GitHub for new work.
-- It brings new work in only when the folder has nothing unsaved and the branch is linked to GitHub,
-  and only by moving forward (a fast-forward).
-- Otherwise it leaves everything as it is and tells you, in plain words, what's waiting and what's
-  unsaved. It never stashes, resets, rebases or checks out over your changes.
-- In a worktree, it also tells you about unsaved work left in the main folder.
-- If anything gets in the way, the session says what and carries on with your work.
+| Role | Read-only for this role (`.claude/settings.local.json`) | Git terms |
+|---|---|---|
+| designer | rulings, brand chapters, `CLAUDE.md`, `.claude/`, `scripts/`, package files, `.design-sync/`, `.github/`, `team/`; no pushing to `main` | Never: plain words and plain choices |
+| engineer | rulings, brand chapters, `CLAUDE.md`, `.claude/`, `team/`; no pushing to `main` | Yes |
+| gtm, owner | nothing | gtm: plain words; owner: yes |
 
-Claude then opens with a short catch-up: what's new, what's open and whose, and the latest handoff.
+These are built into Claude Code and need no installs. They stop accidents; the real gate is GitHub:
+`main` is protected and Devagya reviews every pull request.
 
-## What each role's settings do
+## Optional helpers
 
-| Role | Guardrails (in `.claude/settings.local.json`) | Checks after each edit | Git terms |
-|---|---|---|---|
-| designer | Can't edit rulings, brand chapters, `CLAUDE.md`, `.claude/`, `scripts/`, package files, `.design-sync/`, `.github/`, `team/`; can't push to `main` or force-push | Yes | Never: plain words and plain choices |
-| gtm | None for now | No | Never: plain words and plain choices |
-| engineer | Can't edit rulings, brand chapters, `CLAUDE.md`, `.claude/`, `team/`; can't push to `main` | Yes | Yes |
-| owner | None | No | Yes |
-
-Guardrails stop accidents, not people. The deny rules cover Claude's own file edits; for designer and
-engineer, a hook that runs before every shell command (`.claude/hooks/before-shell-guard.mjs`) refuses ones that
-would write to the same paths, reading them from those rules. A command that builds its path at run
-time can still get past it, so the real gate is GitHub: branch protection on `main`, and Devagya as
-code owner. Anything they block is a conversation with Devagya.
-
-Every hook runs `node` from PATH. Without Node installed the hooks don't run at all, and nothing says
-so: no catch-up at startup and no checks after edits is the sign. If Windows blocks the Node installer,
-use the zip and restart Claude from Task Manager, not just its window (`team/onboard.md` step 1). A clone set up before a template
-changed picks the change up by running `/onboard` again, which merges the template in.
-
-## Every day
-
-| When | Do |
-|---|---|
-| Opening Claude | Nothing: it tells you who you are and what's happening |
-| Working | Ask for what you need; the checks run after every edit and Claude fixes what they find |
-| Work is ready | `/ship`: checks, saves and sends it to Devagya as a pull request |
-| Stopping | `/handoff`: a note on your pull request for whoever picks it up |
-| "This should be a rule" | Suggest it in your pull request; it's a ruling once Devagya logs it |
-
-Nothing is discarded, overwritten or set aside unless you choose it, and no worktree or folder is
-deleted before it's checked for unsaved work and you're asked. Handoff notes are public (the repo is
-public): no client-confidential detail in them.
+With the GitHub CLI installed (`gh auth login`): `/ship` sends finished work to Devagya as a pull
+request, and `/handoff` leaves a note on it for whoever picks it up next.
