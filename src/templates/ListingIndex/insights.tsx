@@ -569,11 +569,11 @@ export function insightFinder({
           content: (
             <fieldset className={styles.options}>
               <legend className={styles.hidden}>{group.label}</legend>
-              <Layout rowGap="none">
+              <Layout rowGap="text">
                 {group.options.map((option) => (
                   <Chip
                     key={option.value}
-                    look="check"
+                    look="index"
                     type="checkbox"
                     name={group.name}
                     value={option.value}

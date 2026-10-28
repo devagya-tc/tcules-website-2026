@@ -242,6 +242,8 @@ export function CardGrid({
           tracks={halves ? 2 : 3}
           cue="title"
           compact
+          /* A piece with no picture stands as a panel, so a row of mixed pieces ends level. */
+          frame={pictureOf(item) ? undefined : 'panel'}
         />
       ))}
     </Layout>

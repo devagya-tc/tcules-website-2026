@@ -106,74 +106,68 @@
   color: var(--chip-fg-checked-disabled);
 }
 
-/* ── The check look: a box before the label, one option per line ──────────────────
-   The face loses its pill (no edge, no ground, no floor) and the TICK becomes the box: always its
-   size, edged at rest, filled in the accent with the glyph scaled in when checked. The label keeps
-   the chip's ink in every state; the box carries the state. */
-.check {
+/* ── The index look: the rail's entry, one option per line (owner, 28 Oct 2026) ─────────────
+   The face loses its pill (no edge, no ground, no floor, no tick) and becomes the listing rail's
+   entry: the name, quiet at rest; picked, in the ink with the blue tick at its own start edge,
+   inside the entry's inset so nothing crosses the column's edge. The pointer darkens the name, as
+   it does on every rail entry. The tick grows from its centre, as the rail's does. */
+.index {
   display: flex;
 }
 
-.check .face {
-  align-items: flex-start;
-  column-gap: var(--chip-box-gap);
+.index .face {
+  position: relative;
+  display: block;
   min-block-size: 0;
-  padding: var(--chip-row-padding-y) 0;
+  padding: 0 0 0 var(--chip-index-inset);
   border: 0;
-  border-radius: 0;
+  border-radius: var(--chip-index-ring-radius);
+  color: var(--chip-index-fg);
+  font: var(--chip-index-text);
+  letter-spacing: var(--chip-index-tracking);
   text-wrap: pretty;
+  transition: color var(--chip-transition-duration) var(--chip-transition-easing);
 }
 
-.check .tick {
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--chip-box-size);
-  block-size: var(--chip-box-size);
-  /* The box centres on the label's FIRST line, so a wrapped label hangs from it: moved down by the
-     line's leading around the box, an optical shift (translate), never outer spacing. */
-  translate: 0 calc((1lh - var(--chip-box-size)) / 2);
-  border: var(--chip-rule-width) solid var(--chip-box-rule);
-  border-radius: var(--chip-box-radius);
-  transform: none;
+.index .tick {
+  display: none;
 }
 
-.check .tick svg {
-  inline-size: var(--chip-box-tick-size);
-  block-size: var(--chip-box-tick-size);
-  transform: scale(0);
+.index .face::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--chip-index-marker-width);
+  background-color: var(--chip-index-marker);
+  transform: scaleY(0);
   transition: transform var(--chip-transition-duration) var(--chip-transition-easing);
 }
 
-.check .input:checked + .face {
-  column-gap: var(--chip-box-gap);
-  background: none;
-  color: var(--chip-fg);
-}
-
-.check .input:checked + .face .tick {
-  inline-size: var(--chip-box-size);
-  border-color: var(--chip-rule-checked);
-  background: var(--chip-bg-checked);
-  color: var(--chip-fg-checked);
-}
-
-.check .input:checked + .face .tick svg {
-  transform: scale(1);
-}
-
-/* The row does not lift: a column of options moving under the pointer reads as a list shaking. */
-.check:hover .input:not(:disabled) + .face {
+.index:hover .input:not(:disabled) + .face {
   transform: none;
+  color: var(--chip-index-fg-checked);
 }
 
-.check .input:disabled + .face,
-.check .input:disabled:checked + .face {
+.index .input:checked + .face {
+  border-color: transparent;
+  background: none;
+  color: var(--chip-index-fg-checked);
+}
+
+.index .input:checked + .face::before {
+  transform: scaleY(1);
+}
+
+.index .input:disabled + .face,
+.index .input:disabled:checked + .face {
   background: none;
   color: var(--chip-fg-disabled);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .check .tick svg {
+  .index .face,
+  .index .face::before {
     transition-duration: var(--duration-instant);
   }
 }

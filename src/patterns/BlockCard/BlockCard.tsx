@@ -116,10 +116,16 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  *         a ground at the 8 radius under the pointer, which is what the inset is for. For a set
  *         whose cards must read as separate targets: an icon router of four to six destinations.
  *         A text-only card draws no top hairline inside a box.
+ *   panel the text-only card as an OBJECT (owner, 28 Oct 2026, the insights finder's grid: a piece
+ *         with no picture beside pieces with one): at rest, the drawn covers' plate — their ground,
+ *         hairline and 8 radius — with the label at its head and the title and standfirst at its
+ *         foot, filling its row's height (from md, never less than a square), so a row of covered
+ *         and uncovered pieces ends on one line. Title-cued; no top hairline, no cover, no icon.
  *
- * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
+ * A set's decision, like the type step: BlockCardSet `frame` states it for every card. `panel` is
+ * the one a caller may set per card, for the card that has no cover.
  */
-export type BlockCardFrame = 'none' | 'box';
+export type BlockCardFrame = 'none' | 'box' | 'panel';
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -538,8 +544,12 @@ export function BlockCard({
      it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
   const boxed = frame === 'box';
+  /* The panel is a text-only card's own frame: a cover or an icon outranks it. */
+  const panel = frame === 'panel' && textOnly && !horizontal;
   const ruleNode =
-    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
+    textOnly && !boxed && !panel ? (
+      <span className={styles.textRule} aria-hidden="true" />
+    ) : null;
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
@@ -547,7 +557,7 @@ export function BlockCard({
   const cueKind: BlockCardCue | undefined = destination
     ? ctaScoped
       ? 'cta'
-      : (cue ?? (textOnly ? 'cta' : 'title'))
+      : (cue ?? (textOnly && !panel ? 'cta' : 'title'))
     : undefined;
 
   const download = cueKind === 'download';
@@ -728,6 +738,21 @@ export function BlockCard({
         </Layout>
       </Layout>
     );
+  } else if (panel) {
+    /* The panel: the label at its head, the title and standfirst pinned to its foot, the plate's
+       spare height between them. A cta, where one is asked for, closes the foot group. */
+    frameContent = (
+      <Layout rowGap="block" pinLast className={styles.grow}>
+        {eyebrowNode ?? <span />}
+        <Layout rowGap="block" className={styles.content}>
+          <Layout rowGap="text">
+            {titleNode}
+            {bodyNode}
+          </Layout>
+          {cta}
+        </Layout>
+      </Layout>
+    );
   } else {
     if (cta) {
       /* An action row sits on the card's FOOT (§ 3.1 item 4, "pinLast for the CTA"; owner, 7 Oct
@@ -780,6 +805,7 @@ export function BlockCard({
         SIZE_CLASS[step],
         horizontal && styles.horizontal,
         boxed && styles.boxed,
+        panel && styles.panel,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}
     >

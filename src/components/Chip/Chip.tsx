@@ -40,16 +40,17 @@ export type ChipProps = Omit<
   /** The glyph shown when checked. Decorative: the input's checked state is what is announced. */
   tick: ReactNode;
   /**
-   * `pill` (default): the pill, for a set of answers in a row. `check` (a listing's filter rail,
-   * 28 Oct 2026): a square box before the label, for a COLUMN of options where a pill per line
-   * would read as a stack of buttons; the box fills with the tick when checked.
+   * `pill` (default): the pill, for a set of answers in a row. `index` (a listing's filter rail,
+   * owner 28 Oct 2026: "checkboxes look old school"): the rail's typeset-index entry — the name
+   * alone, quiet at rest; picked, it takes the ink and the blue tick at its start edge, as the
+   * rail's current entry does. The `tick` glyph is not drawn.
    */
-  look?: 'pill' | 'check';
+  look?: 'pill' | 'index';
 };
 
 export function Chip({ type, children, tick, look = 'pill', ...input }: ChipProps) {
   return (
-    <label className={cx(styles.chip, look === 'check' && styles.check)}>
+    <label className={cx(styles.chip, look === 'index' && styles.index)}>
       <input {...input} type={type} className={styles.input} />
       <span className={styles.face}>
         <span className={styles.tick} aria-hidden="true">
