@@ -1,9 +1,9 @@
 ---
 title: The reply promise is led by a lightning bolt, for speed
 date: 2026-10-28
-status: proposed
+status: active
 area: [forms, iconography]
-source: "Jatin, feedback session 26 Oct 2026 (asked for 'an icon that shows the speed over checkbox'); Devagya picked the bolt over a stopwatch, 28 Oct 2026. Promote once seen rendered."
+source: "Jatin, feedback session 26 Oct 2026 (asked for 'an icon that shows the speed over checkbox'); Devagya picked the bolt over a stopwatch, 28 Oct 2026. Seen rendered and approved by Devagya, 28 Oct 2026."
 supersedes: []
 dbf: ["ch04 Choosing a glyph"]
 dbf_status: pending
@@ -23,4 +23,4 @@ rather than as quickness.
 
 **How to apply.** `EnquiryForm` card dress, the `dressReplyMark`. `bolt` is in `src/lib/icon-glyphs.ts`,
 copied verbatim from `@iconify-json/solar` (`bolt-bold`). Use it wherever the site promises speed. ch04's
-meaning table needs a speed → bolt row when this is promoted.
+meaning table needs a speed → bolt row (pending, /dbf-update 04).
