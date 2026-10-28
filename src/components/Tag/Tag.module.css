@@ -262,6 +262,12 @@
   padding-inline-end: var(--gap-tight);
 }
 
+/* The held chip's close sits a step under its label (owner, 28 Oct 2026: "make the 'x' lighter"):
+   the label is what was picked, the glyph only how to undo it. */
+.selected > svg {
+  color: var(--tag-filter-glyph-ink-pressed);
+}
+
 /* Every state still renders — colour and edge arrive at once instead of over 140ms — because the
    states are paint, not movement. There is nothing to lose. */
 @media (prefers-reduced-motion: reduce) {

@@ -149,6 +149,7 @@
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  6.17:1 */
   --tag-filter-edge-pressed: var(--color-neutral-300);
   --tag-filter-bg-pressed: var(--color-paper);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-500); /*  6.17:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper);
 }
@@ -179,6 +180,7 @@
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  5.51:1 */
   --tag-filter-edge-pressed: var(--color-neutral-400);
   --tag-filter-bg-pressed: var(--color-paper);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-500); /*  5.51:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper-deep);
 }
@@ -211,6 +213,7 @@
   --tag-filter-edge-hover: var(--color-brandeis-300); /*  7.32:1 */
   --tag-filter-edge-pressed: var(--color-neutral-700);
   --tag-filter-bg-pressed: var(--color-neutral-900);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-300); /*  7.32:1 vs its gap */
   --tag-ring-gap-color: var(--color-neutral-950);
 }
@@ -252,6 +255,7 @@
   --tag-filter-edge-hover: var(--color-white); /*  6.23:1 */
   --tag-filter-edge-pressed: var(--color-white); /*  6.23:1 — constant; fill carries it */
   --tag-filter-bg-pressed: var(--color-white); /*  6.23:1 — forced, and the model */
+  --tag-filter-glyph-ink-pressed: var(--color-brandeis-300); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-white); /*  6.23:1 vs its gap */
   --tag-ring-gap-color: var(--color-brandeis-500);
 }
