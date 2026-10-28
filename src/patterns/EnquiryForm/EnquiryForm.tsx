@@ -116,7 +116,7 @@ export type EnquiryChoiceGroup = {
  *
  *   card     a structured card with no heading of its own (Jatin, 26 Oct 2026: the band's heading
  *            already asks): visible labels over filled fields, and a foot under a hairline:
- *            the send with the reply promise beside it, led by a bolt, and optionally a line
+ *            the send with the reply promise beside it, led by a bolt in a disc, and optionally a line
  *            under ("or write to …", a note). The status of a send replaces the promise, in the
  *            same live region.
  *   message  the reply to a note: a person's portrait, name and role with their one-line note in a
@@ -138,7 +138,7 @@ export type EnquiryDress =
       writeTo?: string;
       /** A closing clause after it: "We never share your details." */
       note?: string;
-      /** The promise beside the send, led by a bolt (speed, not a tick): "We reply in 1 business day". */
+      /** The promise beside the send, led by a bolt in a disc (speed, not a tick): "We reply in 1 business day". */
       reply?: string;
     }
   | {
@@ -1125,7 +1125,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
           ) : dress.reply ? (
             <Cluster nowrap colGap="tight" align="center">
               <span className={styles.dressReplyMark}>
-                <Icon name="bolt" />
+                <Icon name="bolt-circle" />
               </span>
               <span>{dress.reply}</span>
             </Cluster>
