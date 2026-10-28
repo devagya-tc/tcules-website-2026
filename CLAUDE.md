@@ -3,6 +3,31 @@
 A clean rebuild. The previous codebase is at `../tcules-website` and is **not** a source of
 patterns — see § The old repo.
 
+## Team context: shared through git, identity from your own folder
+
+Several people work in this repo with Claude, some on a shared Claude account from different computers.
+Two rules keep their context the same and their identities separate:
+
+- **Project knowledge lives in git.** This file, the rulings in `docs/decisions/`, the docs and the pull
+  requests are the shared context, identical for everyone who pulls. When a session learns something
+  the team needs (a decision, a convention, a gotcha), it goes into the repo through a pull request,
+  never only into a chat or a Claude account's memory, which the next person can't see.
+- **Who is at the keyboard comes from `CLAUDE.local.md`**, a one-line file in each person's own clone,
+  git-ignored and never pushed (template: `team/templates/CLAUDE.local.md`; roles: `team/roles/`).
+  Commits, pull requests and notes are that person's, never the Claude account's. If it's missing, ask
+  once who they are (names in `team/members.json`), carry on, and offer `/onboard` to save it.
+
+**At the start of a session**, catch up from GitHub without ever risking unsaved work: run `git fetch`;
+bring new work in only with `git merge --ff-only` when `git status --porcelain` is empty and the branch
+tracks a remote; otherwise leave everything as it is and say what's waiting and what's unsaved. Never
+stash, reset, rebase or check out over changes, and never delete a folder or worktree without checking
+it for unsaved work and asking. If anything is in the way, say so and carry on with the person's work.
+Then give a catch-up of five lines or fewer: what merged recently, what's open (`gh pr list` if `gh` is
+installed, otherwise `git log origin/main`), and the latest "Handoff" note on this branch's pull request.
+
+**Designers and gtm aren't technical.** Never ask them to rebase, stash, reset, merge or force-push;
+describe what is happening to their work, offer plain choices, and do the git work for them.
+
 ## Scope: three tiers, one direction
 
 ```

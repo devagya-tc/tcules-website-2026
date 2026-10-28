@@ -28,8 +28,8 @@ choices, then carry on with what you can; never stop and wait on it.
 3. **Checks.** Run `npm run verify` (if `node_modules` is missing, run `npm ci` once first). Fix a
    failure at its cause and run it again. If the fix needs a file this person's role can't edit, say
    what Devagya needs to change, and continue with the rest.
-   If `verify` can't run at all because `npm ci` fails (on Windows, often `esbuild.exe` blocked by
-   Smart App Control), don't block on it: say in plain words that the full checks couldn't run on this
+   If `verify` can't run at all (no Node on this laptop, or `npm ci` fails: on Windows, often
+   `esbuild.exe` blocked by Smart App Control), don't block on it: say in plain words that the full checks couldn't run on this
    laptop, open the pull request anyway, say in its body that local checks didn't run and why, and
    point the person to the checks GitHub runs on the pull request. A `verify` that runs and fails is
    still fixed before shipping.
