@@ -136,7 +136,7 @@ export function HomePage({ page, ratings, avatars, reasons, eyebrows }: HomePage
               key={b.id}
               page={page}
               band={b}
-              island={{ surface: 'blue', dress: 'card-untitled', arrangement: 'halves' }}
+              island={{ surface: 'blue', dress: 'card', arrangement: 'halves' }}
             />
           );
         if (isFaqBand(b)) {

@@ -1,0 +1,26 @@
+---
+title: The reply promise is led by a lightning bolt, for speed
+date: 2026-10-28
+status: proposed
+area: [forms, iconography]
+source: "Jatin, feedback session 26 Oct 2026 (asked for 'an icon that shows the speed over checkbox'); Devagya picked the bolt over a stopwatch, 28 Oct 2026. Promote once seen rendered."
+supersedes: []
+dbf: ["ch04 Choosing a glyph"]
+dbf_status: pending
+enforced_by: review
+---
+
+The enquiry card's reply promise ("We reply in 1 business day") is led by Solar Bold `bolt` (a lightning
+bolt), not `check-circle`. In the brand's one-meaning-one-glyph table, the bolt is the glyph for *speed*.
+
+**Why.** Jatin: "can we use an icon that shows the speed over checkbox, like positive check?" A check says
+the thing is done or included. The promise is about how fast we answer. A stopwatch was tried first and
+Devagya turned it down: "maybe lightning or something else that signifies speed".
+
+**The mistake it prevents.** `check-circle` beside "We reply in 1 business day" in the card's foot, which
+reads as a confirmation that something has already happened. Also the stopwatch, which reads as timing
+rather than as quickness.
+
+**How to apply.** `EnquiryForm` card dress, the `dressReplyMark`. `bolt` is in `src/lib/icon-glyphs.ts`,
+copied verbatim from `@iconify-json/solar` (`bolt-bold`). Use it wherever the site promises speed. ch04's
+meaning table needs a speed → bolt row when this is promoted.

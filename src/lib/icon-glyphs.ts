@@ -18,6 +18,7 @@
  *   alt-arrow-up     not in ch04's starter set; the Accordion's open mark needs it next
  *   arrow-right-up   not in ch04's starter set; ListCard's off-site cue needs it (see below)
  *   play             not in ch04's starter set; VideoTestimonial's play control (9 Oct 2026)
+ *   bolt             not in ch04's starter set; the enquiry reply line's promise of speed (28 Oct 2026)
  *   star             not in ch04's starter set; RatingBadge's mark (1 Oct 2026). It replaced a ★
  *                    text character, whose centre landed differently on every platform because
  *                    the mono face has no ★ and each browser fell back to a different font
@@ -65,7 +66,8 @@
  *                alt-arrow-right (leads to a page) · hamburger-menu · close-circle (close, dismiss).
  *                A mega-menu trigger has to SAY it opens something and a drawer has to say it shuts,
  *                and neither claim can be made in words without two labels on one control.
- *   STATUS       square-arrow-right-up (leaves the site) · info-circle · danger-triangle
+ *   STATUS       square-arrow-right-up (leaves the site) · info-circle · danger-triangle ·
+ *                bolt (a promise of speed: "We reply in 1 business day")
  *   MEDIA        play (starts a film the reader chose to watch)
  *   FORMATS      document-text (an article) · notebook (a guide) · videocamera-record (a video) ·
  *                microphone (a podcast) · calendar (an event) · graph-up (research) ·
@@ -233,6 +235,9 @@ export const glyphs = {
   ],
   'clock-circle': [
     'M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 7.25C11.5858 7.25 11.25 7.58579 11.25 8V12C11.25 12.1989 11.3291 12.3896 11.4697 12.5303L13.9697 15.0303C14.2626 15.3232 14.7374 15.3232 15.0303 15.0303C15.3232 14.7374 15.3232 14.2626 15.0303 13.9697L12.75 11.6895V8C12.75 7.58579 12.4142 7.25 12 7.25Z',
+  ],
+  bolt: [
+    'M5.66953 9.91436L8.73167 5.77133C10.711 3.09327 11.7007 1.75425 12.6241 2.03721C13.5474 2.32018 13.5474 3.96249 13.5474 7.24712V7.55682C13.5474 8.74151 13.5474 9.33386 13.926 9.70541L13.946 9.72466C14.3327 10.0884 14.9492 10.0884 16.1822 10.0884C18.4011 10.0884 19.5106 10.0884 19.8855 10.7613C19.8917 10.7724 19.8977 10.7837 19.9036 10.795C20.2576 11.4784 19.6152 12.3475 18.3304 14.0857L15.2683 18.2287C13.2889 20.9067 12.2992 22.2458 11.3758 21.9628C10.4525 21.6798 10.4525 20.0375 10.4525 16.7528L10.4526 16.4433C10.4526 15.2585 10.4526 14.6662 10.074 14.2946L10.054 14.2754C9.6673 13.9117 9.05079 13.9117 7.81775 13.9117C5.59888 13.9117 4.48945 13.9117 4.1145 13.2387C4.10829 13.2276 4.10225 13.2164 4.09639 13.205C3.74244 12.5217 4.3848 11.6526 5.66953 9.91436Z',
   ],
   'database': [
     'M20 18C20 20.2091 16.4183 22 12 22C7.58172 22 4 20.2091 4 18V13.974C4.50221 14.5906 5.21495 15.1029 6.00774 15.4992C7.58004 16.2854 9.69967 16.75 12 16.75C14.3003 16.75 16.42 16.2854 17.9923 15.4992C18.7851 15.1029 19.4978 14.5906 20 13.974V18Z',

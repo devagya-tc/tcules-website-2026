@@ -402,17 +402,11 @@ const ENQUIRY_SKETCH_TO_SHIPPED = {
  */
 const ENQUIRY_PROMPT = 'A link, a Figma file, or two lines about the problem.';
 const ENQUIRY_WRITE_TO = 'hello@tcules.com';
-export const ENQUIRY_DRESS: Record<'card' | 'card-untitled' | 'message', EnquiryDress> = {
+export const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
+  /* No title of its own (owner, 25 Oct 2026; every card, Jatin, 26 Oct 2026): the band's heading
+     already asks. Its fields carry no placeholder, so it takes no prompt. */
   card: {
     kind: 'card',
-    title: 'Start a project',
-    prompt: ENQUIRY_PROMPT,
-    reply: 'We reply in 1 business day',
-  },
-  /* The card with no title of its own (owner, 25 Oct 2026): the band's heading already asks. */
-  'card-untitled': {
-    kind: 'card',
-    prompt: ENQUIRY_PROMPT,
     reply: 'We reply in 1 business day',
   },
   message: {
@@ -454,7 +448,7 @@ export function EnquiryBand({
        */
       island: {
         surface: 'blue' | 'ink';
-        dress: 'card' | 'card-untitled' | 'message';
+        dress: 'card' | 'message';
         /**
          * `beside` (default): the desk drawing, heading and lede beside the form, TextureFrame
          * framing it. `halves` (owner, 25 Oct 2026): the island split 1:1, the sketch-to-shipped

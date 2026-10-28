@@ -179,12 +179,6 @@
 /* ── The dressed forms (owner, 16 Oct 2026; see EnquiryDress) ─────────────────────────
    Type and ink only, plus the composer's own box. Every colour is an --enq-* surface token, so a
    dressed form reads on paper, tint, ink and blue as the plain set does. */
-.dressTitle {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  color: var(--enq-title-ink);
-}
-
 .labelVisible {
   font: var(--text-label);
   letter-spacing: var(--text-label-tracking);

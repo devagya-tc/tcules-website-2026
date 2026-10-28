@@ -36,6 +36,7 @@ const NAMES = [
   'shield-check',
   'lock',
   'clock-circle',
+  'bolt',
   'database',
   'server',
   'users-group-rounded',

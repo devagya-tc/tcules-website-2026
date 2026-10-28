@@ -93,8 +93,6 @@ const ISLAND_CLOSES: readonly {
     island: 'blue',
     dress: {
       kind: 'card',
-      title: 'Start a project',
-      prompt: 'A link, a Figma file, or two lines about the problem.',
       reply: 'We reply in 1 business day',
     },
     title: 'paper band · blue island — the enquiry close, with the card dress (what home carries)',

@@ -216,7 +216,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         <EnquiryBand
           page={page}
           band={band}
-          island={{ surface: 'blue', dress: 'card-untitled', arrangement: 'halves' }}
+          island={{ surface: 'blue', dress: 'card', arrangement: 'halves' }}
         />
       );
 
