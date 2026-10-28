@@ -1,6 +1,14 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Media, Section, type MediaImage, type SectionSurface } from '@/components';
+import {
+  Layout,
+  Media,
+  Section,
+  Sketch,
+  type MediaImage,
+  type SectionSurface,
+  type SketchName,
+} from '@/components';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 
 import styles from './OfferSheet.module.css';
@@ -13,6 +21,12 @@ export type OfferSheetItem = {
   body?: string;
   /** Or trusted HTML from the content seam, for a body that carries a link or emphasis. */
   bodyHtml?: string;
+  /**
+   * The promise drawn: what it changes in the product, a Sketch scene drawn for this promise
+   * (owner, 26 Oct 2026, product-design page). Set on every item or on none; with all four drawn the
+   * sheet is two rows of two, each drawing beside its words.
+   */
+  scene?: SketchName;
 };
 
 export type OfferSheetProps = {
@@ -79,7 +93,40 @@ export function OfferSheet({
     console.warn(`OfferSheet: ${shown.length} promises; the sheet is built for two to six.`);
   }
 
-  const promises = (
+  /* Drawn: every promise beside its own drawing, two up at full width, no rule (the drawing opens the
+     item). The quote has its own band after the offer (owner, 26 Oct 2026: a quote beside or under
+     the set "reads as noise"), so a drawn sheet takes no aside. */
+  const drawn = shown.length > 0 && shown.every((item) => item.scene);
+  if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
+    console.warn('OfferSheet: some promises carry a scene and some do not; drawing none.');
+  }
+  const words = (item: OfferSheetItem) => (
+    <Layout rowGap="text">
+      <h3 className={styles.title}>{item.title}</h3>
+      {item.bodyHtml ? (
+        <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+      ) : item.body ? (
+        <p className={styles.body}>{item.body}</p>
+      ) : null}
+    </Layout>
+  );
+  const promises = drawn ? (
+    <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="stack">
+      {shown.map((item) => (
+        <li key={item.title}>
+          <Layout
+            columns={{ base: 1, md: [5, 6] }}
+            colGap="gutter"
+            rowGap="block"
+            align="center"
+          >
+            {item.scene ? <Sketch name={item.scene} /> : null}
+            {words(item)}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  ) : (
     <Layout
       as="ul"
       columns={{ base: 1, md: 2, lg: aside || asideImage ? 2 : across }}
@@ -88,14 +135,7 @@ export function OfferSheet({
     >
       {shown.map((item) => (
         <li key={item.title} className={styles.item}>
-          <Layout rowGap="text">
-            <h3 className={styles.title}>{item.title}</h3>
-            {item.bodyHtml ? (
-              <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-            ) : item.body ? (
-              <p className={styles.body}>{item.body}</p>
-            ) : null}
-          </Layout>
+          {words(item)}
         </li>
       ))}
     </Layout>
@@ -109,13 +149,14 @@ export function OfferSheet({
   ) : (
     promises
   );
-  const side =
-    aside ??
-    (asideImage ? (
-      <div className={styles.asideFrame}>
-        <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
-      </div>
-    ) : undefined);
+  const side = drawn
+    ? undefined
+    : (aside ??
+      (asideImage ? (
+        <div className={styles.asideFrame}>
+          <Media image={asideImage} fit="fill" sizes={HEAD_TRACK} />
+        </div>
+      ) : undefined));
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">

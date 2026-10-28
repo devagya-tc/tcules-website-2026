@@ -9,8 +9,9 @@ import styles from './Reasons.module.css';
 export type ReasonsItem = {
   /** The claim in about five words ("Senior people, start to finish"). */
   title: string;
-  /** One sentence that argues it, about fourteen words. Plain text. */
-  body: string;
+  /** One sentence that argues it, about fourteen words. Plain text, or inline content the caller
+   *  renders (a link to the service an engagement hands on to). */
+  body: ReactNode;
   /**
    * The drawing of the claim: an isometric figure from the ch05 §4a kit, facing left toward its
    * words, exported on the band's ground (`.paper.svg` on paper, `.paper-deep.svg` on tint). It
@@ -60,6 +61,11 @@ export type ReasonsProps = {
   items: readonly ReasonsItem[];
   /** One way to go deeper, composed by the caller: in practice a link `Button` with an arrow. */
   action?: ReactNode;
+  /**
+   * A closing note under the set, in the band (the limit on an offer: "We are at our best when there is
+   * real thinking to do…", product-design Ways to work with us, owner 26 Oct 2026). A slot.
+   */
+  note?: ReactNode;
   /** Default `open`. See `ReasonsArrangement`. */
   arrangement?: ReasonsArrangement;
   /**
@@ -94,6 +100,7 @@ export function Reasons({
   headingId,
   items,
   action,
+  note,
   arrangement = 'open',
   surface = 'paper',
 }: ReasonsProps) {
@@ -168,7 +175,15 @@ export function Reasons({
     </Layout>
   );
 
-  const framed = arrangement === 'boxed' ? <div className={styles.frame}>{set}</div> : set;
+  const boxed = arrangement === 'boxed' ? <div className={styles.frame}>{set}</div> : set;
+  const framed = note ? (
+    <Layout rowGap="stack">
+      {boxed}
+      {note}
+    </Layout>
+  ) : (
+    boxed
+  );
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="reasons">
@@ -187,7 +202,12 @@ export function Reasons({
       ) : (
         <Layout rowGap="stack">
           {action ? (
-            <Layout columns={{ base: 1, md: [1, 'auto'] }} colGap="column" rowGap="stack" align="baseline">
+            <Layout
+              columns={{ base: 1, md: [1, 'auto'] }}
+              colGap="column"
+              rowGap="stack"
+              align="baseline"
+            >
               {head}
               <div>{action}</div>
             </Layout>

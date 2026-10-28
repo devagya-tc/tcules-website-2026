@@ -4,27 +4,19 @@
    tokens/components/case-spread.css. Paddings are the inside of an element's own edge (the claim's
    rule, a story item's ruled top), always a gap-scale step. No margins. */
 
+.eyebrow {
+  font: var(--csp-eyebrow-text);
+  letter-spacing: var(--csp-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--csp-eyebrow-ink);
+}
+
 .heading {
   font: var(--csp-heading-text);
   letter-spacing: var(--csp-heading-tracking);
   text-wrap: var(--text-title-wrap);
   color: var(--csp-heading-ink);
   max-inline-size: var(--csp-heading-measure);
-}
-
-/* The story's rail: each step hangs a gutter inside a hairline down its start edge, and the steps
-   meet with no gap so the rail is one line; a step's air is its own end inset (a `block`). The
-   result's segment is the blue rule, heavier: the line arrives at the payoff. */
-.step,
-.result {
-  padding-inline-start: var(--gap-gutter);
-  padding-block-end: var(--gap-block);
-  border-inline-start: var(--csp-rule-width) solid var(--csp-rule-ink);
-}
-
-.result {
-  padding-block-end: 0;
-  border-inline-start: var(--csp-claim-rule-width) solid var(--csp-claim-rule-ink);
 }
 
 .claimTitle {
@@ -71,4 +63,47 @@
   overflow: hidden;
   border: var(--csp-media-rule-width) solid var(--csp-media-rule-ink);
   border-radius: var(--csp-media-radius);
+}
+
+/* ── The strip (`scenes`) ─────────────────────────────────────────────────────────
+   Each step's picture over its words, on three equal tracks. The join is the drawings' own route, a
+   line in their accent ending on their one arrowhead, centred in the seam between two pictures and
+   level with their middle. Below 1024 the steps stack and the joins go: the order reads down. */
+.picture {
+  position: relative;
+}
+
+.join {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .join {
+    display: block;
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 100%;
+    inline-size: var(--gap-column);
+  }
+
+  /* The line and its head, centred together in the seam. */
+  .join::before,
+  .join::after {
+    content: '';
+    position: absolute;
+    translate: 0 -50%;
+  }
+
+  .join::before {
+    inset-inline-start: calc(50% - (var(--csp-join-length) + var(--csp-join-head-length)) / 2);
+    inline-size: var(--csp-join-length);
+    block-size: var(--csp-join-width);
+    background: var(--csp-join-ink);
+  }
+
+  .join::after {
+    inset-inline-start: calc(50% + (var(--csp-join-length) - var(--csp-join-head-length)) / 2);
+    border-block: var(--csp-join-head-width) solid transparent;
+    border-inline-start: var(--csp-join-head-length) solid var(--csp-join-ink);
+  }
 }

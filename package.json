@@ -24,7 +24,7 @@
     "guide:dist": "node scripts/guide-dist.mjs",
     "ds:build": "npm run vocabulary && node scripts/ds-artifact/build.mjs",
     "ds:check": "node scripts/ds-artifact/check.mjs",
-    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check && npm run corpus:check && npm run corpus:assets -- --check && npm run placeholders -- --check && npm run illustrations:situations -- --check && npm run decisions",
+    "verify": "npm run lint && npm run typecheck && npm run tokens:check && npm run classes:check && npm run specimens:check && npm run design:check && npm run photos:check && npm run corpus:check && npm run corpus:assets -- --check && npm run placeholders -- --check && npm run illustrations:situations -- --check && npm run illustrations:engagement -- --check && npm run decisions",
     "format": "prettier --write .",
     "texture": "node scripts/texture.mjs",
     "photos:tone": "node scripts/photos-tone.mjs",
@@ -33,7 +33,8 @@
     "illustrations:phone": "node scripts/illustrations-phone.mjs",
     "illustrations": "node scripts/illustrations/build.mjs",
     "illustrations:situations": "node scripts/illustrations/situations.mjs",
-    "decisions": "node scripts/decisions.mjs"
+    "decisions": "node scripts/decisions.mjs",
+    "illustrations:engagement": "node scripts/illustrations/engagement.mjs"
   },
   "engines": {
     "node": ">=20.11.1"

@@ -4,6 +4,7 @@ import { cx } from '@/lib/cx';
 
 import styles from './Sketch.module.css';
 import { KIT } from './kit';
+import { OFFER, OFFER_DRAWN } from './offer';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
 import type { SketchName } from '@/lib/sketches';
@@ -24,7 +25,8 @@ import type { SketchName } from '@/lib/sketches';
  * one exists (owner, 13 Oct 2026; @/lib/sketches `ArticleSceneName`): code-review,
  * security-checklist, prototype-to-production. And the KIT scenes (./kit): EngagementOptions' scopes
  * (`scope-*`) and TracePlates' stages (`trace-*`), so every flat drawing is drawn by this one component
- * (owner, 26 Oct 2026, S2).
+ * (owner, 26 Oct 2026, S2). And the OFFER scenes (./offer): a service page's items, each drawn from its
+ * own words (owner, 26 Oct 2026, product-design page).
  */
 export type { SketchName };
 
@@ -74,9 +76,16 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   const storyDrawing = STORY[name];
   /* A story scene moves only where it is asked to, in the bare frame; anywhere else it is held solved. */
   const moving = storyDrawing !== undefined && story && bare;
-  const Still = STILL[name] ?? (name in KIT ? KIT[name as keyof typeof KIT] : undefined);
+  const Still =
+    STILL[name] ??
+    (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
+    (name in OFFER ? OFFER[name as keyof typeof OFFER] : undefined);
   const [x, y, w, h] =
-    (bare && (storyDrawing ? STORY_DRAWN[name] : DRAWN[name])) || ([0, 0, W, H] as const);
+    (bare &&
+      (storyDrawing
+        ? STORY_DRAWN[name]
+        : (DRAWN[name] ?? OFFER_DRAWN[name as keyof typeof OFFER_DRAWN]))) ||
+    ([0, 0, W, H] as const);
   return (
     <svg
       className={cx(

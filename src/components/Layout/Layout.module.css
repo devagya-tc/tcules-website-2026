@@ -57,37 +57,85 @@
 }
 
 /* rowGap — the block-axis seam, between rows. Every step is a --gap-* usage token. */
-.rowgap-none { --layout-row-gap: 0; }                             /*  0   flush, on purpose — rows share an edge */
-.rowgap-inline        { --layout-row-gap: var(--gap-inline); }    /*   4  inside a key and its value */
-.rowgap-tight         { --layout-row-gap: var(--gap-tight); }     /*   8  icon to label, chip padding */
-.rowgap-text          { --layout-row-gap: var(--gap-text); }      /*  16  paragraph to paragraph */
-.rowgap-block         { --layout-row-gap: var(--gap-block); }     /*  24  head to body inside a block — the most used step */
-.rowgap-gutter        { --layout-row-gap: var(--gap-gutter); }    /*  32  container gutter, cards in a set */
-.rowgap-stack         { --layout-row-gap: var(--gap-stack); }     /*  48  block to block inside a section */
-.rowgap-column        { --layout-row-gap: var(--gap-column); }    /*  64  column gutter where two halves read as separate */
-.rowgap-section       { --layout-row-gap: var(--gap-section); }   /*  96  section padding, tight */
-.rowgap-section-open  { --layout-row-gap: var(--gap-section-open); }/* 128  section padding, open */
+.rowgap-none {
+  --layout-row-gap: 0;
+} /*  0   flush, on purpose — rows share an edge */
+.rowgap-inline {
+  --layout-row-gap: var(--gap-inline);
+} /*   4  inside a key and its value */
+.rowgap-tight {
+  --layout-row-gap: var(--gap-tight);
+} /*   8  icon to label, chip padding */
+.rowgap-text {
+  --layout-row-gap: var(--gap-text);
+} /*  16  paragraph to paragraph */
+.rowgap-block {
+  --layout-row-gap: var(--gap-block);
+} /*  24  head to body inside a block — the most used step */
+.rowgap-gutter {
+  --layout-row-gap: var(--gap-gutter);
+} /*  32  container gutter, cards in a set */
+.rowgap-stack {
+  --layout-row-gap: var(--gap-stack);
+} /*  48  block to block inside a section */
+.rowgap-column {
+  --layout-row-gap: var(--gap-column);
+} /*  64  column gutter where two halves read as separate */
+.rowgap-section {
+  --layout-row-gap: var(--gap-section);
+} /*  96  section padding, tight */
+.rowgap-section-open {
+  --layout-row-gap: var(--gap-section-open);
+} /* 128  section padding, open */
 
 /* colGap — the inline-axis seam, between columns. Same scale; no tracks, nothing to act on. */
-.colgap-none { --layout-col-gap: 0%; }                            /* 0%, not 0: see .layout */
-.colgap-inline        { --layout-col-gap: var(--gap-inline); }
-.colgap-tight         { --layout-col-gap: var(--gap-tight); }
-.colgap-text          { --layout-col-gap: var(--gap-text); }
-.colgap-block         { --layout-col-gap: var(--gap-block); }
-.colgap-gutter        { --layout-col-gap: var(--gap-gutter); }
-.colgap-stack         { --layout-col-gap: var(--gap-stack); }
-.colgap-column        { --layout-col-gap: var(--gap-column); }
-.colgap-section       { --layout-col-gap: var(--gap-section); }
-.colgap-section-open  { --layout-col-gap: var(--gap-section-open); }
+.colgap-none {
+  --layout-col-gap: 0%;
+} /* 0%, not 0: see .layout */
+.colgap-inline {
+  --layout-col-gap: var(--gap-inline);
+}
+.colgap-tight {
+  --layout-col-gap: var(--gap-tight);
+}
+.colgap-text {
+  --layout-col-gap: var(--gap-text);
+}
+.colgap-block {
+  --layout-col-gap: var(--gap-block);
+}
+.colgap-gutter {
+  --layout-col-gap: var(--gap-gutter);
+}
+.colgap-stack {
+  --layout-col-gap: var(--gap-stack);
+}
+.colgap-column {
+  --layout-col-gap: var(--gap-column);
+}
+.colgap-section {
+  --layout-col-gap: var(--gap-section);
+}
+.colgap-section-open {
+  --layout-col-gap: var(--gap-section-open);
+}
 
 /* minTrack — track width for the content-driven modes ("fit" floor / "tile" actual). Component
    GEOMETRY, not spacing rhythm, which is why these take t-shirt names from layout.css rather
    than a gap-scale role (same reasoning as Section's inset ramp). Consumed by the inline
    --tmpl-base that columns="fit"/"tile" emits. */
-.mintrack-xs { --layout-min-track: var(--lay-track-xs); } /* 192 — small tiles, logo cells */
-.mintrack-sm { --layout-min-track: var(--lay-track-sm); } /* 256 — compact cards */
-.mintrack-md { --layout-min-track: var(--lay-track-md); } /* 320 — standard cards (default) */
-.mintrack-lg { --layout-min-track: var(--lay-track-lg); } /* 384 — feature cards */
+.mintrack-xs {
+  --layout-min-track: var(--lay-track-xs);
+} /* 192 — small tiles, logo cells */
+.mintrack-sm {
+  --layout-min-track: var(--lay-track-sm);
+} /* 256 — compact cards */
+.mintrack-md {
+  --layout-min-track: var(--lay-track-md);
+} /* 320 — standard cards (default) */
+.mintrack-lg {
+  --layout-min-track: var(--lay-track-lg);
+} /* 384 — feature cards */
 
 /* PLACEMENT — three axes, because a grid genuinely has three distinct questions:
      align        = block axis, each item within its row      (align-items)
@@ -96,25 +144,53 @@
    `align` and `justify` mean the same thing here as on Cluster, so the two primitives read
    alike; `justifyItems` is named for the CSS property because it is a genuinely different
    question and any shorter name would blur it into `justify`. */
-.align-stretch { --layout-align: stretch; }
-.align-start   { --layout-align: start; }
-.align-center  { --layout-align: center; }
-.align-end     { --layout-align: end; }
-.align-baseline { --layout-align: last baseline; } /* items share their last line */
-.align-first-baseline { --layout-align: first baseline; } /* items share their first line */
+.align-stretch {
+  --layout-align: stretch;
+}
+.align-start {
+  --layout-align: start;
+}
+.align-center {
+  --layout-align: center;
+}
+.align-end {
+  --layout-align: end;
+}
+.align-baseline {
+  --layout-align: last baseline;
+} /* items share their last line */
+.align-first-baseline {
+  --layout-align: first baseline;
+} /* items share their first line */
 
-.justifyitems-stretch { --layout-justify-items: stretch; }
-.justifyitems-start   { --layout-justify-items: start; }
-.justifyitems-center  { --layout-justify-items: center; }
-.justifyitems-end     { --layout-justify-items: end; }
+.justifyitems-stretch {
+  --layout-justify-items: stretch;
+}
+.justifyitems-start {
+  --layout-justify-items: start;
+}
+.justifyitems-center {
+  --layout-justify-items: center;
+}
+.justifyitems-end {
+  --layout-justify-items: end;
+}
 
 /* Track distribution. No class is emitted when `justify` is omitted, so the browser default
    stands. Only bites when the tracks leave slack — auto-width tracks, or a "fit" grid with room
    to spare; with 1fr tracks there is nothing to distribute. */
-.justify-start   { justify-content: start; }
-.justify-center  { justify-content: center; }
-.justify-end     { justify-content: end; }
-.justify-between { justify-content: space-between; }
+.justify-start {
+  justify-content: start;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-end {
+  justify-content: end;
+}
+.justify-between {
+  justify-content: space-between;
+}
 
 /* equalRows — every item the same height. Two parts: grid-auto-rows:1fr makes wrapped rows
    equal to the tallest, and align-items:stretch makes each item FILL its row (so the card
@@ -174,12 +250,19 @@
     grid-column: 1;
   }
 
-  .lead-tall:has(> :last-child:nth-child(3)) > :first-child { grid-row: 1 / span 2; }
-  .lead-tall:has(> :last-child:nth-child(4)) > :first-child { grid-row: 1 / span 3; }
-  .lead-tall:has(> :last-child:nth-child(5)) > :first-child { grid-row: 1 / span 4; }
-  .lead-tall:has(> :last-child:nth-child(6)) > :first-child { grid-row: 1 / span 5; }
+  .lead-tall:has(> :last-child:nth-child(3)) > :first-child {
+    grid-row: 1 / span 2;
+  }
+  .lead-tall:has(> :last-child:nth-child(4)) > :first-child {
+    grid-row: 1 / span 3;
+  }
+  .lead-tall:has(> :last-child:nth-child(5)) > :first-child {
+    grid-row: 1 / span 4;
+  }
+  .lead-tall:has(> :last-child:nth-child(6)) > :first-child {
+    grid-row: 1 / span 5;
+  }
 }
-
 
 /* reverse — the tracks read right to left, visually only (see the prop in Layout.tsx for the a11y
    rule). Child k ends on the k-th line from the END, so child 1 takes the last track, child 2 the
@@ -198,17 +281,39 @@
 
    Each family is written once per breakpoint. The base set is here; md / lg / xl live in the
    media blocks at the foot of the file so they come after it in the cascade. */
-.reverse-base { grid-auto-flow: dense; }
-.reverse-base > :nth-child(1) { grid-column: span 1 / -1; }
-.reverse-base > :nth-child(2) { grid-column: span 1 / -2; }
-.reverse-base > :nth-child(3) { grid-column: span 1 / -3; }
-.reverse-base > :nth-child(4) { grid-column: span 1 / -4; }
-.forward-base { grid-auto-flow: row; }
-.forward-base > :nth-child(-n + 4) { grid-column: auto; }
-.offset-base-0 > :first-child { grid-column-start: auto; }
-.offset-base-1 > :first-child { grid-column-start: 2; }
-.offset-base-2 > :first-child { grid-column-start: 3; }
-.offset-base-3 > :first-child { grid-column-start: 4; }
+.reverse-base {
+  grid-auto-flow: dense;
+}
+.reverse-base > :nth-child(1) {
+  grid-column: span 1 / -1;
+}
+.reverse-base > :nth-child(2) {
+  grid-column: span 1 / -2;
+}
+.reverse-base > :nth-child(3) {
+  grid-column: span 1 / -3;
+}
+.reverse-base > :nth-child(4) {
+  grid-column: span 1 / -4;
+}
+.forward-base {
+  grid-auto-flow: row;
+}
+.forward-base > :nth-child(-n + 4) {
+  grid-column: auto;
+}
+.offset-base-0 > :first-child {
+  grid-column-start: auto;
+}
+.offset-base-1 > :first-child {
+  grid-column-start: 2;
+}
+.offset-base-2 > :first-child {
+  grid-column-start: 3;
+}
+.offset-base-3 > :first-child {
+  grid-column-start: 4;
+}
 
 /* pinLast — the last child sits on the foot of a stretched stack. The flexible space is a TRACK,
    not a margin: one auto row per child, the last row 1fr, and the last child aligned to that
@@ -220,15 +325,33 @@
 /* fillLast (19 Oct 2026) shares the template and drops the pin: the last row still takes the spare
    height, and its child keeps the default stretch, so it GROWS into the row instead of sitting on
    its foot. */
-.pin-last > :last-child { align-self: end; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(1)) { grid-template-rows: 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(2)) { grid-template-rows: auto 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(3)) { grid-template-rows: repeat(2, auto) 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(4)) { grid-template-rows: repeat(3, auto) 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(5)) { grid-template-rows: repeat(4, auto) 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(6)) { grid-template-rows: repeat(5, auto) 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(7)) { grid-template-rows: repeat(6, auto) 1fr; }
-:is(.pin-last, .fill-last):has(> :last-child:nth-child(8)) { grid-template-rows: repeat(7, auto) 1fr; }
+.pin-last > :last-child {
+  align-self: end;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(1)) {
+  grid-template-rows: 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(2)) {
+  grid-template-rows: auto 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(3)) {
+  grid-template-rows: repeat(2, auto) 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(4)) {
+  grid-template-rows: repeat(3, auto) 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(5)) {
+  grid-template-rows: repeat(4, auto) 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(6)) {
+  grid-template-rows: repeat(5, auto) 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(7)) {
+  grid-template-rows: repeat(6, auto) 1fr;
+}
+:is(.pin-last, .fill-last):has(> :last-child:nth-child(8)) {
+  grid-template-rows: repeat(7, auto) 1fr;
+}
 
 /* fillFirst — the mirror of pin-last: the first row takes the spare height of a stretched stack and
    every later row is content-sized (implicit, `auto`). A 1fr row never shrinks below its item's
@@ -239,46 +362,121 @@
 }
 
 @media (min-width: 768px) {
-  .layout { grid-template-columns: var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))); }
-  .reverse-md { grid-auto-flow: dense; }
-  .reverse-md > :nth-child(1) { grid-column: span 1 / -1; }
-  .reverse-md > :nth-child(2) { grid-column: span 1 / -2; }
-  .reverse-md > :nth-child(3) { grid-column: span 1 / -3; }
-  .reverse-md > :nth-child(4) { grid-column: span 1 / -4; }
-  .forward-md { grid-auto-flow: row; }
-  .forward-md > :nth-child(-n + 4) { grid-column: auto; }
-  .offset-md-0 > :first-child { grid-column-start: auto; }
-  .offset-md-1 > :first-child { grid-column-start: 2; }
-  .offset-md-2 > :first-child { grid-column-start: 3; }
-  .offset-md-3 > :first-child { grid-column-start: 4; }
+  .layout {
+    grid-template-columns: var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr)));
+  }
+  .reverse-md {
+    grid-auto-flow: dense;
+  }
+  .reverse-md > :nth-child(1) {
+    grid-column: span 1 / -1;
+  }
+  .reverse-md > :nth-child(2) {
+    grid-column: span 1 / -2;
+  }
+  .reverse-md > :nth-child(3) {
+    grid-column: span 1 / -3;
+  }
+  .reverse-md > :nth-child(4) {
+    grid-column: span 1 / -4;
+  }
+  .forward-md {
+    grid-auto-flow: row;
+  }
+  .forward-md > :nth-child(-n + 4) {
+    grid-column: auto;
+  }
+  .offset-md-0 > :first-child {
+    grid-column-start: auto;
+  }
+  .offset-md-1 > :first-child {
+    grid-column-start: 2;
+  }
+  .offset-md-2 > :first-child {
+    grid-column-start: 3;
+  }
+  .offset-md-3 > :first-child {
+    grid-column-start: 4;
+  }
 }
 @media (min-width: 1024px) {
-  .layout { grid-template-columns: var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr)))); }
-  .reverse-lg { grid-auto-flow: dense; }
-  .reverse-lg > :nth-child(1) { grid-column: span 1 / -1; }
-  .reverse-lg > :nth-child(2) { grid-column: span 1 / -2; }
-  .reverse-lg > :nth-child(3) { grid-column: span 1 / -3; }
-  .reverse-lg > :nth-child(4) { grid-column: span 1 / -4; }
-  .forward-lg { grid-auto-flow: row; }
-  .forward-lg > :nth-child(-n + 4) { grid-column: auto; }
-  .offset-lg-0 > :first-child { grid-column-start: auto; }
-  .offset-lg-1 > :first-child { grid-column-start: 2; }
-  .offset-lg-2 > :first-child { grid-column-start: 3; }
-  .offset-lg-3 > :first-child { grid-column-start: 4; }
+  .layout {
+    grid-template-columns: var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))));
+  }
+  .reverse-lg {
+    grid-auto-flow: dense;
+  }
+  .reverse-lg > :nth-child(1) {
+    grid-column: span 1 / -1;
+  }
+  .reverse-lg > :nth-child(2) {
+    grid-column: span 1 / -2;
+  }
+  .reverse-lg > :nth-child(3) {
+    grid-column: span 1 / -3;
+  }
+  .reverse-lg > :nth-child(4) {
+    grid-column: span 1 / -4;
+  }
+  .forward-lg {
+    grid-auto-flow: row;
+  }
+  .forward-lg > :nth-child(-n + 4) {
+    grid-column: auto;
+  }
+  .offset-lg-0 > :first-child {
+    grid-column-start: auto;
+  }
+  .offset-lg-1 > :first-child {
+    grid-column-start: 2;
+  }
+  .offset-lg-2 > :first-child {
+    grid-column-start: 3;
+  }
+  .offset-lg-3 > :first-child {
+    grid-column-start: 4;
+  }
 }
 @media (min-width: 1440px) {
-  .layout { grid-template-columns: var(--tmpl-xl, var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))))); }
-  .reverse-xl { grid-auto-flow: dense; }
-  .reverse-xl > :nth-child(1) { grid-column: span 1 / -1; }
-  .reverse-xl > :nth-child(2) { grid-column: span 1 / -2; }
-  .reverse-xl > :nth-child(3) { grid-column: span 1 / -3; }
-  .reverse-xl > :nth-child(4) { grid-column: span 1 / -4; }
-  .forward-xl { grid-auto-flow: row; }
-  .forward-xl > :nth-child(-n + 4) { grid-column: auto; }
-  .offset-xl-0 > :first-child { grid-column-start: auto; }
-  .offset-xl-1 > :first-child { grid-column-start: 2; }
-  .offset-xl-2 > :first-child { grid-column-start: 3; }
-  .offset-xl-3 > :first-child { grid-column-start: 4; }
+  .layout {
+    grid-template-columns: var(
+      --tmpl-xl,
+      var(--tmpl-lg, var(--tmpl-md, var(--tmpl-base, minmax(0, 1fr))))
+    );
+  }
+  .reverse-xl {
+    grid-auto-flow: dense;
+  }
+  .reverse-xl > :nth-child(1) {
+    grid-column: span 1 / -1;
+  }
+  .reverse-xl > :nth-child(2) {
+    grid-column: span 1 / -2;
+  }
+  .reverse-xl > :nth-child(3) {
+    grid-column: span 1 / -3;
+  }
+  .reverse-xl > :nth-child(4) {
+    grid-column: span 1 / -4;
+  }
+  .forward-xl {
+    grid-auto-flow: row;
+  }
+  .forward-xl > :nth-child(-n + 4) {
+    grid-column: auto;
+  }
+  .offset-xl-0 > :first-child {
+    grid-column-start: auto;
+  }
+  .offset-xl-1 > :first-child {
+    grid-column-start: 2;
+  }
+  .offset-xl-2 > :first-child {
+    grid-column-start: 3;
+  }
+  .offset-xl-3 > :first-child {
+    grid-column-start: 4;
+  }
 }
 
 /* stagger — from lg, every even child drops by the section step (references § 3.4 item 12). Three
@@ -293,8 +491,12 @@
     row-gap: 0;
   }
 
-  .stagger > :nth-child(odd) { grid-row: 1 / span 2; }
-  .stagger > :nth-child(even) { grid-row: 2 / span 2; }
+  .stagger > :nth-child(odd) {
+    grid-row: 1 / span 2;
+  }
+  .stagger > :nth-child(even) {
+    grid-row: 2 / span 2;
+  }
 }
 
 /* scroll — the row scrolls sideways instead of wrapping (fdn-scroll, 6 Oct 2026). Written LAST on
@@ -452,5 +654,13 @@
 @media (min-width: 1440px) {
   .scroll-always {
     --layout-view: var(--view-xl, var(--view-lg, var(--view-md, var(--view-base, 1))));
+  }
+}
+
+/* `peek="always"`: from md up the next item still shows, inside the column, its own seam and
+   --lay-scroll-peek-wide of itself at the end edge. After the md rule, so it wins there. */
+@media (min-width: 768px) {
+  .scroll-always.peek-always {
+    --layout-peek: calc(var(--layout-col-gap) + var(--lay-scroll-peek-wide));
   }
 }

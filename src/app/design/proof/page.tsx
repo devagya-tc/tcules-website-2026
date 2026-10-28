@@ -315,6 +315,18 @@ function GSurface({ surface }: { surface: SectionSurface }) {
         <Specimen title={`${surface} · display, centred`}>
           <Proof quote={{ ...inesVoice, tag: undefined }} align="center" />
         </Specimen>
+        <Specimen
+          title={`${surface} · display, centred, with the client's stars`}
+          note="`stars` (owner, 26 Oct 2026): the client's rating opens the quote, in the rule's place. Every quote shows its marks, authored or not."
+        >
+          <Proof quote={{ ...inesVoice, tag: undefined, stars: 5 }} align="center" />
+        </Specimen>
+        <Specimen
+          title={`${surface} · featured, reversed, with the client's stars`}
+          note="The stars sit on the quote's first letter, over its rule; a half star where the rating has one. The service pages' second voice."
+        >
+          <Proof arrangement="featured" reverse quote={{ ...tobias, stars: 4.5 }} />
+        </Specimen>
         <Specimen title={`${surface} · display, start, a tag in the image's place`}>
           <Proof quote={tobiasVoice} />
         </Specimen>

@@ -28,18 +28,22 @@ export type BentoProps = {
   items: readonly BentoItem[];
   /** The tiles' heading element. Default h3, under a band's h2. */
   titleAs?: 'h2' | 'h3';
+  /**
+   * Tracks from 1024. `4` (default): home's two sizes. `3`: a set of PEERS, every tile one size, three
+   * a row (owner, 26 Oct 2026, the specialist services: "we can't weigh any 2 items heavier"); spans
+   * are ignored.
+   */
+  tracks?: 3 | 4;
 };
-
-const TRACKS = 4;
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
 
-/** Each tile's row and first track on the four-track grid, read from the spans in order. */
-function place(items: readonly BentoItem[]): Placed[] {
+/** Each tile's row and first track on the grid, read from the spans in order. */
+function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
   let row = 0;
   let col = 0;
   return items.map((item) => {
-    const span = item.span ?? 1;
+    const span = TRACKS === 3 ? 1 : (item.span ?? 1);
     if (col + span > TRACKS) {
       if (process.env.NODE_ENV !== 'production') {
         console.warn(
@@ -77,15 +81,16 @@ function place(items: readonly BentoItem[]): Placed[] {
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3' }: BentoProps) {
+export function Bento({ items, titleAs: Title = 'h3', tracks = 4 }: BentoProps) {
   if (items.length === 0) return null;
-  const placed = place(items);
+  const placed = place(items, tracks);
 
   return (
     <Layout
       as="ul"
       className={styles.set}
-      columns={{ base: 1, md: 2, lg: 4 }}
+      data-tracks={tracks}
+      columns={{ base: 1, md: 2, lg: tracks }}
       colGap="gutter"
       rowGap="gutter"
     >

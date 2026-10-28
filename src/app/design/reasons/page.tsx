@@ -70,7 +70,8 @@ const all = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] =>
   WORDS.map((w) => ({ title: w.title, body: w.body, figure: figure(w.figure, ground) }));
 
 /** The shape: four reasons, a 2×2. */
-const items = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] => all(ground).slice(0, 4);
+const items = (ground: 'paper' | 'paper-deep' = 'paper'): ReasonsItem[] =>
+  all(ground).slice(0, 4);
 
 /** The ceilings P48 sets: a five-word title of long words, a sentence of twenty words. */
 const LONGEST: ReasonsItem[] = items().map((item, index) =>
@@ -84,7 +85,13 @@ const LONGEST: ReasonsItem[] = items().map((item, index) =>
 );
 
 const ACTION = (
-  <Button as="a" href="#how-we-work" emphasis="link" size="md" icon={<Icon name="arrow-right" />}>
+  <Button
+    as="a"
+    href="#how-we-work"
+    emphasis="link"
+    size="md"
+    icon={<Icon name="arrow-right" />}
+  >
     How we work
   </Button>
 );
@@ -97,11 +104,11 @@ export default function ReasonsSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>Reasons</h1>
           <p className={t.lead}>
-            Why a buyer should choose the studio: argued reasons, each a title, one sentence and an
-            isometric drawing of its claim from the ch05 kit, facing its words. Built for four, set
-            2×2. Three ways to hold them without boxing a reason: open (the gap scale alone), boxed (the set in
-            LogoGrid&rsquo;s rounded frame) and beside (the head in a third, rules between columns).
-            Every arrangement fits one fold at 1440.
+            Why a buyer should choose the studio: argued reasons, each a title, one sentence and
+            an isometric drawing of its claim from the ch05 kit, facing its words. Built for
+            four, set 2×2. Three ways to hold them without boxing a reason: open (the gap scale
+            alone), boxed (the set in LogoGrid&rsquo;s rounded frame) and beside (the head in a
+            third, rules between columns). Every arrangement fits one fold at 1440.
           </p>
         </Layout>
       </Section>
@@ -118,6 +125,47 @@ export default function ReasonsSpecimen() {
         headingId="rsn-open"
         items={items()}
         action={ACTION}
+      />
+
+      <Variation
+        id="engagement"
+        title="1b · Ways to work with us — a body with links, and a closing note"
+        note="The service pages' engagement options drawn as reasons (owner, 26 Oct 2026): four in a 2×2, each with its isometric figure (scripts/illustrations/engagement.mjs), a body that may carry a link, and `note` closing the set: the limit on the offer."
+      />
+      <Reasons
+        heading="Ways to work with us"
+        headingId="rsn-engagement"
+        items={(
+          [
+            ['feature', 'A single workflow or feature.', 'One problem, solved properly.'],
+            [
+              'area',
+              'A product area or a whole new product.',
+              'From research to designs ready to build.',
+            ],
+            [
+              'embedded',
+              'A designer in your team.',
+              'An experienced designer working in your tools and meetings.',
+            ],
+            ['build', 'Design and build.', null],
+          ] as const
+        ).map(([scope, title, body]) => ({
+          title,
+          body: body ?? (
+            <>
+              We design it, then our <a href="#build">engineering team</a> builds it.
+            </>
+          ),
+          figure: {
+            src: `/illustrations/engagement/${scope}.paper.svg`,
+            width: 380,
+            height: 379,
+            alt: '',
+            kind: 'illustration' as const,
+          },
+        }))}
+        note={<p className={t.body}>We are at our best when there is real thinking to do.</p>}
       />
 
       <Variation

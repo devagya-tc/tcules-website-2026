@@ -1,7 +1,7 @@
 ---
 title: "No card is hidden behind an interaction"
 date: 2026-10-16
-status: active
+status: superseded
 area: [cards, layout]
 source: "Owner, 16 Oct 2026 (case-card directions)"
 supersedes: []
@@ -18,3 +18,5 @@ Cards are never hidden behind sliders, tabs, carousels or any interaction the us
 **The mistake it prevents.** The tabbed "Exhibit" and slider "Annotated" case-card directions, both rejected.
 
 **How to apply.** When the fold rule and a full set collide, shrink or rearrange the cards, never hide them. A scroll-snap row on phones still hides cards, so stack instead.
+
+Superseded 26 Oct 2026 by `2026-10-26-sliders-allowed-off-homepage`: the rule now holds on the homepage; other pages may use a slider search can read.

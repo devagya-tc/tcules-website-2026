@@ -1,7 +1,8 @@
-import { Layout } from '@/components';
+import { Layout, Section } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
+  Bento,
   Callout,
   CaseSpread,
   ContentSection,
@@ -11,8 +12,10 @@ import {
   EngagementOptions,
   ListCard,
   OfferSheet,
+  Proof,
+  Reasons,
+  Slider,
   TestimonialBeside,
-  TestimonialCard,
   Thread,
   TracePlates,
   VoiceLedger,
@@ -31,6 +34,7 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { offerSceneKey, type OfferSceneName, type OfferScenes } from '@/lib/sketches';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
@@ -41,11 +45,13 @@ import {
   ListTiles,
   bodyOf,
   head,
+  proofQuote,
   testimonialItem,
+  type AvatarsById,
   type RatingsById,
 } from './blocks';
 import { bindingNamed, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
-import type { OfferUnit } from './plan';
+import { kindOf, type OfferUnit } from './plan';
 import {
   bandLinks,
   blocksOf,
@@ -77,7 +83,23 @@ export type OfferContext = {
    * today: fixtures/testimonial-ratings.ts). A quote with none shows no stars.
    */
   ratings?: RatingsById;
+  /** Portraits for the page's testimonials, by testimonial id (PLACEHOLDERS today, as on home). */
+  avatars?: AvatarsById;
+  /** The drawings the page's items carry, assigned item by item at the content seam (owner, 26 Oct 2026). */
+  scenes?: OfferScenes;
 };
+
+/** The scene assigned to one item of a band, by the item's title (or a router item's href). */
+function sceneFor(
+  ctx: OfferContext,
+  band: CorpusBand,
+  key: string,
+): OfferSceneName | undefined {
+  return ctx.scenes?.items[band.id]?.[offerSceneKey(key)] ?? ctx.scenes?.items[band.id]?.[key];
+}
+
+/** The engagement drawings (scripts/illustrations/engagement.mjs), one per scope, on each ground. */
+const ENGAGEMENT_FIGURE = { width: 380, height: 379 } as const;
 
 type Lead = { title: string; body: readonly InlineRun[] };
 
@@ -188,16 +210,30 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
 
     case 'enquiry':
-      return <EnquiryBand page={page} band={band} surface={unit.surface} />;
+      /* Home's close (owner, 26 Oct 2026: every page closes the way home does): the blue island in
+         halves, the sketch-to-shipped drawing over the words, the untitled card beside them. */
+      return (
+        <EnquiryBand
+          page={page}
+          band={band}
+          island={{ surface: 'blue', dress: 'card-untitled', arrangement: 'halves' }}
+        />
+      );
 
-    /* What you get — the outcomes as ONE offer, the client's words anchored beside it (OfferSheet;
-       product-design round 6, 11 Oct 2026, page-mapping § 23). The promises are the primary object:
-       the h2 and two rows of two in the leading 2 of [2, 1]; the rated testimonial card fills the
-       trailing 1 from the heading's top to the last promise's foot, so the voice shares the offer's
-       edges and reads as its proof. Round 2 set four text cards under a centred head with the quote
-       unboxed beneath them: four equal rectangles, nothing to guide the eye. */
-    case 'outcomes': {
-      const quote = quoteOf(band);
+    /* The client's words, a band of their own on tint, right after the offer or the cases they
+       support (owner, 26 Oct 2026). With a portrait, the featured testimonial: the portrait beside the
+       quote, the voices' portraits alternating sides; without one, the quote alone, centred. Stars and
+       quote marks always (owner, 12 and 26 Oct 2026). A voice after a set of cases links to the case
+       its client is from. */
+    case 'voice':
+      return <Voice unit={unit} ctx={ctx} />;
+
+    /* What you get — the outcomes as ONE offer (OfferSheet; product-design round 6, 11 Oct 2026,
+       page-mapping § 23), each promise beside its own drawing where the page assigns one (owner,
+       26 Oct 2026). The client's words that close the band in the corpus follow it as a band of their
+       own (`voice`, plan.ts), so the offer stands alone: the quote as a third column, or a line under
+       the set, "reads as noise". */
+    case 'outcomes':
       return (
         <OfferSheet
           {...head(band)}
@@ -206,15 +242,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
               ? { bodyHtml: inlineToHtml(row.body) }
               : { body: plain(row.body) }),
+            scene: sceneFor(ctx, band, row.title),
           }))}
-          aside={
-            quote ? (
-              <TestimonialCard item={testimonialItem(quote, ctx.ratings)} fill />
-            ) : undefined
-          }
         />
       );
-    }
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
        product-design round 6, page-mapping § 23). The reader knows what is going wrong before they
@@ -229,6 +260,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           items={leads(band).map((row) => ({
             voice: row.title,
             reply: renderInline(row.body),
+            scene: sceneFor(ctx, band, row.title),
           }))}
         />
       );
@@ -250,9 +282,16 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       const claim = rows[claimAt];
       if (!claim) return null;
       const [link] = bandLinks(band);
+      /* "Example: Dealpath": the kind of band as the eyebrow, the case as the heading (owner, 26 Oct
+         2026). Typesetting the authored heading, never rewording it. */
+      const named = /^(example):\s*(.+)$/i.exec(band.headingText);
+      const story = ctx.scenes?.stories[band.id];
       return (
         <CaseSpread
           {...head(band)}
+          {...(named ? { eyebrow: named[1], heading: named[2] } : {})}
+          {...(story ? { scenes: story } : {})}
+          surface={unit.surface}
           claim={{ title: claim.title, body: renderInline(claim.body) }}
           action={
             link ? (
@@ -281,6 +320,39 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        placeholder photograph: "boring and plain", and nothing showed how the four differ. */
     case 'tiles': {
       const note = trailingParagraphs(band);
+      const options = leads(band).map((row) => ({ row, scope: scopeOf(row.title) }));
+      const noteNode =
+        note.length > 0 ? (
+          <Layout rowGap="text">
+            {note.map((runs, index) => (
+              <Callout key={index} html={`<p>${inlineToHtml(runs)}</p>`} />
+            ))}
+          </Layout>
+        ) : undefined;
+      /* Drawn like Why Tcules (owner, 26 Oct 2026): the Reasons band, an isometric figure per
+         engagement (scripts/illustrations/engagement.mjs), four in a 2×2. Isometric so the page's
+         drawing styles alternate: the bands either side are flat. A set with an option no figure
+         draws keeps EngagementOptions. */
+      if (options.length >= 3 && options.every((option) => option.scope)) {
+        const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
+        return (
+          <Reasons
+            {...head(band)}
+            surface={unit.surface}
+            items={options.map(({ row, scope }) => ({
+              title: row.title,
+              body: renderInline(row.body),
+              figure: {
+                src: `/illustrations/engagement/${scope}.${ground}.svg`,
+                ...ENGAGEMENT_FIGURE,
+                alt: '',
+                kind: 'illustration',
+              },
+            }))}
+            note={noteNode}
+          />
+        );
+      }
       return (
         <EngagementOptions
           {...head(band)}
@@ -306,7 +378,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'router':
       return (
         <ContentSection {...head(band)} data-band="C-icon">
-          <Router band={band} />
+          <Router band={band} ctx={ctx} />
         </ContentSection>
       );
 
@@ -646,13 +718,31 @@ function CorpusTable({ table, labelledBy }: { table: TableBlock; labelledBy: str
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
-function Router({ band }: { band: CorpusBand }) {
+function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   const rows = band.blocks.flatMap((block) => {
     const lead = linkLead(block);
     return lead
       ? [{ href: lead.link.href, title: plain(lead.link.children), body: plain(lead.body) }]
       : [];
   });
+  /* Destinations the page draws (owner, 26 Oct 2026, the specialist services): home's bento, every
+     tile one size on three tracks, because the destinations are peers. The line after each name is
+     authored as a clause after a colon ("find out how…"); a tile sets it as a sentence. */
+  const scenes = rows.map((row) => sceneFor(ctx, band, row.href));
+  if (rows.length >= 3 && scenes.every(Boolean)) {
+    return (
+      <Bento
+        tracks={3}
+        items={rows.map((row, index) => ({
+          id: row.href,
+          title: row.title,
+          body: row.body.charAt(0).toUpperCase() + row.body.slice(1),
+          href: row.href,
+          scene: scenes[index] as OfferSceneName,
+        }))}
+      />
+    );
+  }
   const glyphs = rows.map((row) => glyphForRoute(row.href));
   const items: BlockCardSetItem[] = rows.map((row, index) => ({
     id: row.href,
@@ -733,10 +823,9 @@ function quotedGroup(groups: readonly CaseGroup[], company: string): number {
  * where a link is authored (the trailing "Read the case" becomes the card's cta, so no card holds a
  * link in its body).
  *
- * A set that ends on a client's quote is FEATURED, THEN LISTED (home round 2, 10 Oct 2026): the case
- * the quote is about leads as a large card with the rated quote in its own card beside it
- * (TestimonialBeside), and the other cases follow as the set, two or three across. Round 1 sent the
- * quote to a tint band after the set, where it read as a testimonial about nothing in particular.
+ * Cases are peers, so no card is featured, and none holds the client's quote (22 Oct 2026): a quote
+ * the set ends on follows it as a band of its own (`voice`, owner 26 Oct 2026), linking to the case
+ * its client is from. Four or more linked cases run in the kit Slider; fewer sit as one grid.
  */
 function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
   const groups = caseGroups(band);
@@ -767,49 +856,92 @@ function CaseSet({ ctx, band }: { ctx: OfferContext; band: CorpusBand }) {
       ...(href ? { href, ...(ctaLabel ? { ctaLabel } : {}) } : {}),
     };
   });
-  const quote = quoteOf(band);
-  const testimonial = quote ? testimonialItem(quote, ctx.ratings) : undefined;
-  const featuredAt = testimonial ? quotedGroup(groups, testimonial.company) : -1;
-  const featured = featuredAt >= 0 ? items[featuredAt] : undefined;
-  const rest = items.filter((_, index) => index !== featuredAt);
-  const linked = rest.every((item) => item.href);
+  const linked = items.every((item) => item.href);
   /* A set whose cards all carry a cta wording reads its cta; one whose links were all found by name
      has no authored wording, so its titles are the cue. */
-  const labelled = rest.every((item) => item.ctaLabel);
-  const set =
-    rest.length > 0 ? (
-      <BlockCardSet
-        lead="none"
-        across={rest.length === 4 ? 4 : undefined}
-        scroll="never"
-        cue={linked ? (labelled ? 'cta' : 'title') : undefined}
-        label={linked ? undefined : band.headingText}
-        items={rest}
-      />
-    ) : null;
-  if (!featured || !testimonial) return set;
-  const card = featured;
+  const labelled = items.every((item) => item.ctaLabel);
+  const cue = linked ? (labelled ? 'cta' : 'title') : undefined;
+  /* Four or more cases: the kit Slider, three in view and the next peeking inside the column (Slider
+     `peek`, owner 26 Oct 2026: the bled row "just shows the overflow"; sliders are allowed off the homepage while every card is in the page
+     as it loads, with real links and no autoplay). The client's words left the set for a band of their
+     own (`voice`); a case card never holds a quote (22 Oct 2026). */
+  if (items.length >= 4 && linked) {
+    return (
+      <Slider label={band.headingText} peek>
+        {items.map((item) => (
+          <BlockCard
+            key={item.id}
+            title={item.title}
+            {...('bodyHtml' in item && item.bodyHtml
+              ? { bodyHtml: item.bodyHtml }
+              : { body: item.body })}
+            media={item.media}
+            href={item.href}
+            ctaLabel={item.ctaLabel}
+            cue={cue}
+            tracks={3}
+          />
+        ))}
+      </Slider>
+    );
+  }
   return (
-    <Layout rowGap="section">
-      <TestimonialBeside
-        work={
-          <ul>
-            <BlockCard
-              title={card.title}
-              {...('bodyHtml' in card && card.bodyHtml
-                ? { bodyHtml: card.bodyHtml }
-                : { body: card.body })}
-              media={card.media}
-              href={card.href}
-              ctaLabel={card.ctaLabel}
-              size="lg"
-              cue={card.href ? (card.ctaLabel ? 'cta' : 'title') : undefined}
-            />
-          </ul>
+    <BlockCardSet
+      lead="none"
+      scroll="never"
+      cue={cue}
+      label={linked ? undefined : band.headingText}
+      items={items}
+    />
+  );
+}
+
+/**
+ * A client's words as a band of their own (owner, 26 Oct 2026). Proof `featured` where the speaker has a
+ * portrait (the unit's `side` says which side it takes), else Proof centred; the stars come from the
+ * page's ratings and the marks from Proof. After a set of cases, the quote links to its client's case.
+ */
+function Voice({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
+  const block = quoteOf(unit.band);
+  if (!block) return null;
+  const id = block.testimonialId;
+  const rating = id ? ctx.ratings?.[id]?.value : undefined;
+  const avatar = id ? ctx.avatars?.[id] : undefined;
+  const quote = {
+    ...proofQuote(block),
+    ...(rating !== undefined ? { stars: rating } : {}),
+    ...(avatar
+      ? {
+          portrait: {
+            src: avatar.src,
+            width: avatar.width,
+            height: avatar.height,
+            sources: avatar.sources,
+          },
         }
-        item={testimonial}
-      />
-      {set}
-    </Layout>
+      : {}),
+  };
+  const groups = kindOf(unit.band) === 'cases' ? caseGroups(unit.band) : [];
+  const group = groups.length > 0 ? groups[quotedGroup(groups, quote.company)] : undefined;
+  const found = group && !group.link ? caseStudyLink(group.title) : undefined;
+  const href = group?.link?.href ?? found?.href;
+  const name = group ? group.title.replace(/[.:]$/, '').trim() : undefined;
+  const footer =
+    href && name ? (
+      <CtaRow rule={false} actions={[{ label: `Read the ${name} case`, href }]} />
+    ) : undefined;
+  return (
+    <Section id={unit.id} surface={unit.surface} data-band="G">
+      {avatar ? (
+        <Proof
+          arrangement="featured"
+          quote={quote}
+          reverse={unit.side === 'end'}
+          footer={footer}
+        />
+      ) : (
+        <Proof quote={quote} align="center" />
+      )}
+    </Section>
   );
 }

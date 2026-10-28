@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, type SectionSurface } from '@/components';
+import { Layout, Section, Sketch, type SectionSurface, type SketchName } from '@/components';
 
 import styles from './VoiceLedger.module.css';
 
@@ -10,6 +10,11 @@ export type VoiceLedgerItem = {
   voice: string;
   /** Where we start: plain text, or inline content the caller renders (a link, emphasis). */
   reply: ReactNode;
+  /**
+   * The complaint drawn as the problem turning into its fix, a Sketch scene drawn for this row
+   * (owner, 26 Oct 2026, product-design page). Set on every row or on none; drawn, it closes the row.
+   */
+  scene?: SketchName;
 };
 
 export type VoiceLedgerProps = {
@@ -86,6 +91,12 @@ export function VoiceLedger({
   surface = 'paper',
 }: VoiceLedgerProps) {
   const shown = items.filter((item) => item.voice.trim().length > 0);
+  /* Drawn (owner, 26 Oct 2026): every row closes on its own drawing, so all the complaints stay in view
+     at once, each with its fix, and the rows still read down one edge. */
+  const drawn = shown.length > 0 && shown.every((item) => item.scene);
+  if (process.env.NODE_ENV !== 'production' && !drawn && shown.some((item) => item.scene)) {
+    console.warn('VoiceLedger: some rows carry a scene and some do not; drawing none.');
+  }
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="voice-ledger">
       <Layout rowGap="stack">
@@ -99,15 +110,22 @@ export function VoiceLedger({
           {shown.map((item) => (
             <li key={item.voice} className={styles.row}>
               <Layout
-                columns={{ base: 1, lg: [7, 5] }}
-                colGap="column"
+                columns={
+                  drawn ? { base: 1, md: [1, 1], lg: [6, 5, 'auto'] } : { base: 1, lg: [7, 5] }
+                }
+                colGap={drawn ? 'gutter' : 'column'}
                 rowGap="text"
-                align="first-baseline"
+                align={drawn ? 'center' : 'first-baseline'}
               >
                 <h3 className={styles.voice}>
                   <Voice text={item.voice} />
                 </h3>
                 <p className={styles.reply}>{item.reply}</p>
+                {drawn && item.scene ? (
+                  <div className={styles.art}>
+                    <Sketch name={item.scene} />
+                  </div>
+                ) : null}
               </Layout>
             </li>
           ))}

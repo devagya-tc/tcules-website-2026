@@ -16,10 +16,10 @@ import { boldLead, linkLead, plain } from './text';
  *      (`complex-products` and `proof` are both "labelled claims ending in a quote", but one names
  *      products and the other names cases).
  *   2. SPLIT. One band may become two units (page-mapping § 0 rule 3): a head and its closing
- *      sentence; the first principles and the rest. A case set and the quote it ends on are NOT split
- *      (home round 2, 10 Oct 2026): the quote sits beside its own case inside the band, and a story's
- *      quote beside its story. A split's second
- *      part keeps the reading order, so no word moves.
+ *      sentence; the first principles and the rest. An offer or a case set and the quote it ends on
+ *      ARE split (owner, 26 Oct 2026): the quote follows as a `voice` band of its own on tint. A
+ *      story's quote stays beside its story. A split's second part keeps the reading order, so no
+ *      word moves.
  *   3. RHYTHM. Media sides alternate (the first is at the start); a third media split in a row
  *      becomes a read-down with the photograph aside; the close is tint unless the band above is, and
  *      two tints never touch. (The tint quote bands, and the horizon texture that announced them,
@@ -45,6 +45,7 @@ export type OfferKind =
   | 'caseStories'
   | 'faq'
   | 'enquiry'
+  | 'voice'
   | 'generic';
 
 /** Which half of a split a unit is. `whole` is a band that did not split. */
@@ -59,7 +60,10 @@ export type OfferUnit = {
   /** For `caseStories`, which `###` item this unit shows. */
   itemIndex?: number;
   surface: 'paper' | 'tint';
-  /** The side a media-carrying unit's photograph sits on, alternating down the page. */
+  /**
+   * The side a media-carrying unit's photograph sits on, alternating down the page. For a `voice`, the
+   * side its portrait takes: the voices alternate among themselves, so two never mirror each other.
+   */
   side?: 'start' | 'end';
   /** `reasons` is a media split (`B`) unless a third in a row would follow, then a read-down (`D`). */
   variant?: 'B' | 'D';
@@ -227,13 +231,17 @@ function drafts(page: CorpusPage): Draft[] {
 
   for (const band of formBeforeFaq(page.bands)) {
     const kind = kindOf(band);
+    const quoted = band.blocks.some((block) => block.type === 'quote');
     switch (kind) {
+      /* The client's words get a band of their own, on tint, right after the band they support
+         (owner, 26 Oct 2026, product-design page): a quote beside an offer or a set of cases, or a
+         line under it, "reads as noise", and a case card never holds one (22 Oct). The offer and the
+         cases keep their order; the voice follows them. */
+      case 'outcomes':
       case 'cases':
-        /* M6: a set of cases and the quote it ends on stay ONE band (home round 2, 10 Oct 2026). The
-           quote's case is featured with the quote beside it, and the other cases follow as the list
-           (OfferBands CaseSet). Round 1 sent the quote to a tint band of its own after the set, where
-           it no longer sat with the case it was about. */
-        unit(band, 'cases', 'whole');
+        unit(band, kind, 'whole');
+        /* A quote at display size is the band's one picture, not a body of words (§ 3). */
+        if (quoted) unit(band, 'voice', 'whole', { id: `${band.id}-voice`, visual: true });
         break;
       case 'personas':
         unit(band, 'personas', 'a');
@@ -274,10 +282,18 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
      media unit for the sides but ends the run, as does any band with no photograph. */
   let bRun = 0;
 
+  /* Which side the next voice's portrait takes: the first at the start, then they alternate. */
+  let voiceSide: 'start' | 'end' = 'start';
+
   for (const draft of raw) {
-    const prevTint = planned.at(-1)?.surface === 'tint';
-    const surface: OfferUnit['surface'] =
-      draft.kind === 'enquiry' && !prevTint ? 'tint' : 'paper';
+    /* Tint is the proof band (page-mapping § 1.7): a voice always sits on it. The close is home's
+       island on a paper band (owner, 26 Oct 2026), so it takes no tint of its own. */
+    const surface: OfferUnit['surface'] = draft.kind === 'voice' ? 'tint' : 'paper';
+    if (draft.kind === 'voice') {
+      planned.push({ ...draft, surface, side: voiceSide });
+      voiceSide = voiceSide === 'start' ? 'end' : 'start';
+      continue;
+    }
 
     const carriesMedia =
       MEDIA_KINDS.has(draft.kind) && !(draft.kind === 'principles' && draft.part === 'b');
@@ -296,6 +312,14 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
 
     planned.push({ ...draft, surface, side: unitSide, variant });
   }
+
+  /* A worked example is a story on its own ground: tint, unless a neighbour is already tint (two tints
+     never touch). */
+  planned.forEach((unit, index) => {
+    if (unit.kind !== 'record') return;
+    const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
+    if (!touches) unit.surface = 'tint';
+  });
 
   /* Rhythm: never two text-heavy bands adjacent (page-mapping § 3). A warning, not a refusal: the
      page renders as written and the fault is visible on it. */

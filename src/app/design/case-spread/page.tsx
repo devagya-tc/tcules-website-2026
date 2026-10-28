@@ -41,10 +41,11 @@ export default function CaseSpreadSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>CaseSpread</h1>
           <p className={t.lead}>
-            A worked example argues one thing: we changed a real product and this is what it got. The
-            story runs in the order it happened — the problem, what we did, the result — as one line
-            down a rail that turns blue at the result, the payoff, with the action closing it; the
-            evidence sits beside it at 16:9 and holds in view while the story is read.
+            A worked example argues one thing: we changed a real product and this is what it
+            got. The story runs in the order it happened — the problem, what we did, the result
+            — read down one column, held by type and spacing alone (no rail, no rules), with the
+            action closing it; the evidence sits beside it at 16:9 and holds in view while the
+            story is read.
           </p>
         </Layout>
       </Section>
@@ -52,7 +53,7 @@ export default function CaseSpreadSpecimen() {
       <Variation
         id="shape"
         title="1 · Problem, what we did, the result — the shape"
-        note="The heading across the band, then [5, 7] from 1024: the story on one rail (hairline, then the blue rule at the result), the action on the rail's inset | the image at 16:9, its top on the problem's, sticky. Below 1024: heading, story, action, image."
+        note="The heading across the band, then [5, 7] from 1024: the story read down, the steps a `block` apart with no rail or rules, the action under it | the image at 16:9, its top on the problem's, sticky. Below 1024: heading, story, action, image."
       />
       <CaseSpread
         heading="Example: a staffing product"
@@ -66,7 +67,7 @@ export default function CaseSpreadSpecimen() {
       <Variation
         id="three"
         title="2 · Three story parts, no action"
-        note="Three steps before the result run down the same rail. Without an action the result ends the column."
+        note="Three steps before the result read down the same column. Without an action the result ends the column."
       />
       <CaseSpread
         heading="Example: a staffing product"
@@ -76,14 +77,17 @@ export default function CaseSpreadSpecimen() {
         story={[
           PROBLEM,
           DID,
-          { title: 'What stayed.', body: 'The screens people already knew, wherever they worked.' },
+          {
+            title: 'What stayed.',
+            body: 'The screens people already knew, wherever they worked.',
+          },
         ]}
       />
 
       <Variation
         id="tint"
         title="3 · Tint ground"
-        note="Every --csp-* token restated on tint; the claim's rule stays the accent."
+        note="Every --csp-* token restated on tint."
       />
       <CaseSpread
         heading="Example: a staffing product"
@@ -92,6 +96,33 @@ export default function CaseSpreadSpecimen() {
         action={ACTION}
         image={IMAGE}
         story={[PROBLEM, DID]}
+        surface="tint"
+      />
+
+      <Variation
+        id="strip"
+        title="4 · The strip — the problem and what we did drawn, the result shown"
+        note="`scenes` (owner, 26 Oct 2026, product-design page): an eyebrow over the case's name, the action at the head's end; the problem and what we did drawn on the same screen (a Sketch scene each) and the evidence as the result's picture, three on one ground joined in reading order; each step's words under its picture, no rules. Paper here; tint below, where the drawings' own plates are the panels."
+      />
+      <CaseSpread
+        eyebrow="Example"
+        heading="Dealpath"
+        headingId="csp-strip"
+        claim={CLAIM}
+        action={ACTION}
+        image={IMAGE}
+        story={[PROBLEM, DID]}
+        scenes={['case-dealpath-problem', 'case-dealpath-did']}
+      />
+      <CaseSpread
+        eyebrow="Example"
+        heading="Dealpath"
+        headingId="csp-strip-tint"
+        claim={CLAIM}
+        action={ACTION}
+        image={IMAGE}
+        story={[PROBLEM, DID]}
+        scenes={['case-dealpath-problem', 'case-dealpath-did']}
         surface="tint"
       />
     </>

@@ -1,7 +1,7 @@
 ---
 title: A project cover or banner may be product UI as a cut-out, or an illustration
 date: 2026-09-24
-status: active
+status: superseded
 area: [imagery, illustration]
 source: Owner correction, 24 Sep 2026, during the DBF consistency pass; written into ch05 v1.0 §9a
 supersedes: []
@@ -24,3 +24,5 @@ a full-screen screenshot standing in as the cover.
 **How to apply.** Use §9a's decision order: product UI when UI is available, what changed is part of
 the product, and the cut-out passes both checks (nameable at 326px, one shape at 160px). Otherwise
 an illustration from the archetype registry.
+
+Superseded 26 Oct 2026 by `2026-10-26-case-cards-use-the-case-image`: a case study card shows the case's own image, never an illustration.

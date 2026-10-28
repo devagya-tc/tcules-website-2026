@@ -61,10 +61,10 @@ export default function OfferSheetSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>OfferSheet</h1>
           <p className={t.lead}>
-            What the buyer gets, read as one offer: the h2, then the promises two up in the leading 2
-            of [2, 1], each opening on a hairline with a blue mark, its title at the h3 role. The
-            caller&rsquo;s testimonial fills the trailing 1 and shares the promises&rsquo; top and
-            bottom edges. No cards: only the voice takes a panel.
+            What the buyer gets, read as one offer: the h2, then the promises two up in the
+            leading 2 of [2, 1], each opening on a hairline with a blue mark, its title at the
+            h3 role. The caller&rsquo;s testimonial fills the trailing 1 and shares the
+            promises&rsquo; top and bottom edges. No cards: only the voice takes a panel.
           </p>
         </Layout>
       </Section>
@@ -82,6 +82,22 @@ export default function OfferSheetSpecimen() {
       />
 
       <Variation
+        id="drawn"
+        title="1b · Drawn — every promise beside its own drawing"
+        note="`scene` on every item (owner, 26 Oct 2026, product-design page): two rows of two at full width, each drawing (a Sketch scene drawn for that promise) beside its words. A drawn sheet takes no aside: the client's words get a band of their own after it. Below 768 each drawing heads its words."
+      />
+      <OfferSheet
+        heading="What you get"
+        headingId="ofs-drawn"
+        items={FOUR.map((item, index) => ({
+          ...item,
+          scene: (
+            ['outcome-explain', 'outcome-rules', 'outcome-build', 'outcome-finished'] as const
+          )[index],
+        }))}
+      />
+
+      <Variation
         id="no-aside"
         title="2 · No aside"
         note="Without a voice the promises take the full column, still two up: a sheet, not a row of four."
@@ -96,7 +112,13 @@ export default function OfferSheetSpecimen() {
       <OfferSheet
         heading="How we design"
         headingId="ofs-three"
-        items={[...FOUR, { title: 'Your reviewers can follow our reasoning.', body: 'The thinking behind each flow, in writing.' }]}
+        items={[
+          ...FOUR,
+          {
+            title: 'Your reviewers can follow our reasoning.',
+            body: 'The thinking behind each flow, in writing.',
+          },
+        ]}
         across={3}
       />
 

@@ -38,6 +38,8 @@
    that and cancels the padding with an equal negative margin, so a focused first, last, top or
    bottom edge is never cut and the items still sit on the column's edges. */
 --lay-scroll-peek:24px;
+/* From md up, a Slider's `peek`: enough of the next card to read as one, inside the column. */
+--lay-scroll-peek-wide:var(--space-96);
 --lay-scroll-ring-room:calc(var(--focus-ring-offset) + var(--focus-ring-width));
 
 /* How far a phone scroll row reaches past the content column on each side, to the viewport edge:

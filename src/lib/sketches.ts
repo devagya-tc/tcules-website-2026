@@ -43,13 +43,34 @@ export type ScopeSceneName =
   | 'scope-overlap'
   | 'scope-commercial';
 export type TraceSceneName =
-  | 'trace-design'
-  | 'trace-handoff'
-  | 'trace-code'
-  | 'trace-product'
-  | 'trace-signoff';
+  'trace-design' | 'trace-handoff' | 'trace-code' | 'trace-product' | 'trace-signoff';
 
-export type SketchName = ServiceSceneName | ArticleSceneName | ScopeSceneName | TraceSceneName;
+/**
+ * OFFER scenes (owner, 26 Oct 2026, product-design page): drawn for one item of a service page's
+ * band from that item's own words, and assigned item by item at the content seam
+ * (src/content/sources/offer-scenes.ts). `outcome-*` for "What you get", `symptom-*` for "Where we
+ * start", `specialist-*` for the specialist services bento, `case-*` for a worked example's story.
+ */
+export type OfferSceneName =
+  | 'outcome-explain'
+  | 'outcome-rules'
+  | 'outcome-build'
+  | 'outcome-finished'
+  | 'symptom-stuck'
+  | 'symptom-messy'
+  | 'symptom-test'
+  | 'symptom-consistent'
+  | 'symptom-match'
+  | 'specialist-research'
+  | 'specialist-ia'
+  | 'specialist-ui'
+  | 'specialist-dataviz'
+  | 'specialist-prototype'
+  | 'case-dealpath-problem'
+  | 'case-dealpath-did';
+
+export type SketchName =
+  ServiceSceneName | ArticleSceneName | ScopeSceneName | TraceSceneName | OfferSceneName;
 
 const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
   '/services/new-product-design-first-release': 'new-product',
@@ -64,4 +85,24 @@ const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
 /** The scene for a service page's route, or undefined for a route that has none. */
 export function sketchForRoute(href: string): ServiceSceneName | undefined {
   return BY_ROUTE[href.split('#')[0] ?? href];
+}
+
+/**
+ * Which offer scene draws which item of a corpus page's band (owner, 26 Oct 2026), keyed by band id,
+ * then by the item's title as authored (or a router item's href), and a worked example's two story
+ * scenes by its band id. Assigned item by item at the content seam (content/sources/offer-scenes.ts);
+ * an item with no row is drawn by nothing, and a band draws only when every item has one.
+ */
+export type OfferScenes = {
+  items: Readonly<Record<string, Readonly<Record<string, OfferSceneName>>>>;
+  stories: Readonly<Record<string, readonly [OfferSceneName, OfferSceneName]>>;
+};
+
+/** An item's key in `OfferScenes.items`: its words without case, quote marks or end punctuation. */
+export function offerSceneKey(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[“”"‘’'.!?]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }

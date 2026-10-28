@@ -8,7 +8,7 @@
    quote marks disliked).
 
    Naming: --vlg-{part}-{role}
-     parts  heading · lead · voice · reply · rule
+     parts  heading · lead · voice · reply · rule · art
      roles  text · tracking · measure · ink · width
 
    No boxes, no icons in discs, no arrows, no accent: rows on hairlines and type alone. No state tokens: nothing responds to a pointer. Every surface block
@@ -35,6 +35,9 @@
   /* The opening quote mark's hang into the margin: about its own advance at the voice size. An
      optical correction in the voice's own em (gap rule 1), not a layout distance. */
   --vlg-hang: 0.42em;
+  /* A component SIZE: a drawn row's plate (owner, 26 Oct 2026), wide enough for the drawing to read,
+     narrow enough that five rows stay close to a fold. */
+  --vlg-art-width: 200px;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
