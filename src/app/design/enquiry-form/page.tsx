@@ -48,8 +48,6 @@ const SENT = {
 const DRESS = {
   card: {
     kind: 'card',
-    title: 'Start a project',
-    prompt: 'A link, a Figma file, or two lines about the problem.',
     reply: 'We reply in 1 business day',
   },
   message: {
@@ -89,7 +87,7 @@ const ISLAND_CASES: readonly IslandCase[] = [
     island: 'blue',
     dress: 'card',
     title: 'Blue island · dress “card” — what home carries',
-    note: 'dress={{ kind: “card”, title, prompt?, reply?, writeTo?, note? }}. A structured card: its own h3 (title), VISIBLE labels over filled fields with “Optional” at the end of the link’s label row, the prompt as the example in the big field, and a foot under a hairline: the send with the reply promise beside it, led by a check, and optionally one line under, “or write to {writeTo} · {note}”. A send’s status replaces the promise in the same live region. Use it where the form is the band’s primary object and a visitor should see what each field is for: the home close.',
+    note: 'dress={{ kind: “card”, reply?, writeTo?, note? }}. A structured card with no heading of its own and no placeholders (Jatin, 26 Oct 2026): VISIBLE labels over empty filled fields with “Optional” at the end of the link’s label row, and a foot under a hairline: the send with the reply promise beside it, led by a bolt in a disc (speed, not a tick), and optionally one line under, “or write to {writeTo} · {note}”. A send’s status replaces the promise in the same live region. Use it where the form is the band’s primary object and a visitor should see what each field is for: the home close.',
   },
   {
     island: 'blue',

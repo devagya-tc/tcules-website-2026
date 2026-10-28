@@ -111,10 +111,14 @@ export type EnquiryChoiceGroup = {
  * form's — the same fields, names, send-only validation, statuses and success view — and only its
  * presentation changes. Absent, the plain set: hidden labels, the noun as the cue.
  *
- *   card     a structured card: the form's own heading, visible labels over filled fields, an
- *            example in the big field, and a foot under a hairline: the send with the reply promise
- *            beside it, led by a check, and optionally a line under ("or write to …", a note). The
- *            status of a send replaces the promise, in the same live region.
+ * The card's fields carry NO placeholder (Jatin, 26 Oct 2026: "so much cleaner"): the visible
+ * label already names each one, and grey text inside the box is a second thing to read past.
+ *
+ *   card     a structured card with no heading of its own (Jatin, 26 Oct 2026: the band's heading
+ *            already asks): visible labels over filled fields, and a foot under a hairline:
+ *            the send with the reply promise beside it, led by a bolt in a disc, and optionally a line
+ *            under ("or write to …", a note). The status of a send replaces the promise, in the
+ *            same live region.
  *   message  the reply to a note: a person's portrait, name and role with their one-line note in a
  *            bubble, then a composer — the big field first, name, email and link as its details,
  *            and the send in its foot beside "or write to …". With `needs` (19 Oct 2026), the
@@ -130,19 +134,11 @@ export type EnquiryChoiceGroup = {
 export type EnquiryDress =
   | {
       kind: 'card';
-      /**
-       * The form's own heading, an h3 under the band's h2: "Start a project". Optional (owner,
-       * 25 Oct 2026): where the band's heading already asks, the card opens on its first field. The
-       * form's accessible name is its own label either way.
-       */
-      title?: string;
-      /** The example in the big field: "A link, a Figma file, or two lines about the problem." */
-      prompt?: string;
       /** The address offered in the foot as "or write to …", linked as mailto. */
       writeTo?: string;
       /** A closing clause after it: "We never share your details." */
       note?: string;
-      /** The promise beside the send, led by a check: "We reply in 1 business day". */
+      /** The promise beside the send, led by a bolt in a disc (speed, not a tick): "We reply in 1 business day". */
       reply?: string;
     }
   | {
@@ -603,7 +599,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
     spec: FieldSpec,
     dressed: {
       visibleLabel?: boolean;
-      placeholder?: string;
+      placeholder?: string | null;
       look?: 'box' | 'line' | 'bare' | 'fill';
       /** The control fills its stretched group (the chip form's message). */
       fill?: boolean;
@@ -616,8 +612,8 @@ export function EnquiryForm(props: EnquiryFormProps) {
       name: spec.name,
       autoComplete: spec.autoComplete,
       /* The visible cue (r7-form): the label's own words, since the label is hidden. A dress
-         passes its own example instead. */
-      placeholder: dressed.placeholder ?? spec.label,
+         passes its own example instead, or `null` for none (the card). */
+      placeholder: dressed.placeholder === null ? undefined : (dressed.placeholder ?? spec.label),
       required: true,
       disabled: submitting,
       appearance: dressed.look ?? appearance,
@@ -659,7 +655,7 @@ export function EnquiryForm(props: EnquiryFormProps) {
   }
 
   /** The optional link field in a dress: the same control and normalising as the plain set's. */
-  function renderDressedUrl(look: 'fill' | 'bare', visibleLabel: boolean, placeholder: string) {
+  function renderDressedUrl(look: 'fill' | 'bare', visibleLabel: boolean, placeholder?: string) {
     return (
       <FieldGroup key="url" id={urlId} label={urlLabel} optional visibleLabel={visibleLabel}>
         <Input
@@ -1129,9 +1125,9 @@ export function EnquiryForm(props: EnquiryFormProps) {
           ) : dress.reply ? (
             <Cluster nowrap colGap="tight" align="center">
               <span className={styles.dressReplyMark}>
-                <Icon name="check-circle" />
+                <Icon name="bolt-circle" />
               </span>
-              <span>{dress.reply}</span>
+              <span className={styles.dressReplyText}>{dress.reply}</span>
             </Cluster>
           ) : null}
         </div>
@@ -1140,15 +1136,10 @@ export function EnquiryForm(props: EnquiryFormProps) {
       return (
         <form {...formAttrs}>
           <Layout rowGap="block">
-            {dress.title?.trim() ? <h3 className={styles.dressTitle}>{dress.title}</h3> : null}
             <Layout rowGap="text">
-              {renderField(email, { visibleLabel: true, placeholder: 'you@company.com', look: 'fill' })}
-              {renderField(FIELD.work, {
-                visibleLabel: true,
-                placeholder: dress.prompt ?? FIELD.work.label,
-                look: 'fill',
-              })}
-              {renderDressedUrl('fill', true, 'https://')}
+              {renderField(email, { visibleLabel: true, placeholder: null, look: 'fill' })}
+              {renderField(FIELD.work, { visibleLabel: true, placeholder: null, look: 'fill' })}
+              {renderDressedUrl('fill', true)}
             </Layout>
             <div className={styles.dressFoot}>
               <Layout rowGap="text">

@@ -179,12 +179,6 @@
 /* ── The dressed forms (owner, 16 Oct 2026; see EnquiryDress) ─────────────────────────
    Type and ink only, plus the composer's own box. Every colour is an --enq-* surface token, so a
    dressed form reads on paper, tint, ink and blue as the plain set does. */
-.dressTitle {
-  font: var(--text-h4);
-  letter-spacing: var(--text-h4-tracking);
-  color: var(--enq-title-ink);
-}
-
 .labelVisible {
   font: var(--text-label);
   letter-spacing: var(--text-label-tracking);
@@ -212,7 +206,7 @@
   color: inherit;
 }
 
-/* The promise beside the send: body-sm in the caption ink, its check in the accent. */
+/* The promise beside the send: body-sm in the caption ink, its bolt in the accent. */
 .dressReply {
   font: var(--text-body-sm);
   color: var(--enq-caption-ink);
@@ -221,6 +215,15 @@
 .dressReplyMark {
   display: inline-flex;
   color: var(--enq-accent-ink);
+}
+
+/* The promise's words trimmed to cap height over the alphabetic baseline, so the bolt centres on
+   the capitals rather than on a line box whose descender room sits empty below them (owner, 28 Oct
+   2026; ch04: an icon centres on the text beside it, not on the line box; RatingBadge, Tag and
+   FilterPanel make the same correction). Where text-box is unsupported the line box remains. */
+.dressReplyText {
+  display: block;
+  text-box: trim-both cap alphabetic;
 }
 
 /* A send's status takes the promise's place; an error keeps the error ink (this rule follows
