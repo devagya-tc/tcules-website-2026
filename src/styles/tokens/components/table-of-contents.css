@@ -29,11 +29,13 @@
 
 :root {
   /* Two roles: the eyebrow for the rail's title and the bar's resting label, the entries' sans
-     at h6. The same pair IndexRail sets, so the two rails read as one family. */
+     at 14 (owner, 29 Oct 2026; decisions/2026-10-29-toc-items-14-and-wrap): body-sm, its regular
+     weight and its open 1.55 leading, because an entry now wraps to a second line rather than being
+     cut, and two lines of a 14 name read as one name at that leading. IndexRail keeps h6. */
   --toc-title-text: var(--text-eyebrow);
   --toc-title-tracking: var(--text-eyebrow-tracking);
-  --toc-item-text: var(--text-h6);
-  --toc-item-tracking: var(--text-h6-tracking);
+  --toc-item-text: var(--text-body-sm);
+  --toc-item-tracking: var(--letter-spacing-none);
 
   /* Where the rail sticks from 1024: the nav bar's 72 (--space-72, the primitive
      --nav-bar-height resolves to — read directly, never through Nav's token) plus a gutter of

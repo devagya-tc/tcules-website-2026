@@ -509,10 +509,9 @@ export function ListCard({
     </Layout>
   );
 
-  const trailing =
-    markerPosition === 'end' &&
-    marker !== undefined &&
-    (marker.type === 'thumbnail' || marker.type === 'sketch');
+  const hasPicture =
+    marker !== undefined && (marker.type === 'thumbnail' || marker.type === 'sketch');
+  const trailing = markerPosition === 'end' && hasPicture;
   const markerNode = marker ? <Marker marker={marker} form={form} /> : null;
   const row = (
     <Cluster colGap="block" rowGap="block" align="start">
@@ -543,6 +542,11 @@ export function ListCard({
         action !== null && styles.withAction,
         trailing && styles.markerEnd,
       )}
+      /* A row with a picture (a thumbnail or a drawn scene beside its copy) is a horizontal media
+         row: it takes a whole row of any grid it is set in (owner, 29 Oct 2026: "either 1 item takes
+         one row and then it takes this form or it uses the vertical card"). A tile stacks its
+         picture above its copy, so it is the vertical card and keeps its track. */
+      data-media-row={!isTile && hasPicture ? true : undefined}
     >
       {destination ? (
         /* `data-btn-link-group` is Button's published contract: this anchor's states are the

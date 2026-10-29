@@ -1,7 +1,7 @@
 ---
 title: The article outline is drawn in IndexRail's grammar, with one sliding marker
 date: 2026-10-26
-status: active
+status: superseded
 area: [components]
 source: Owner, 26 Oct 2026, after the hi-fi mocks in the "Article TOC Directions" canvas (approved "build it")
 supersedes: []

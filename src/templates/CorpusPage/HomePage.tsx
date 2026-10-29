@@ -1,6 +1,12 @@
 import type { ComponentType } from 'react';
 
-import { isSituationFigureName, Layout, SituationFigure, Sketch } from '@/components';
+import {
+  isSituationFigureName,
+  Layout,
+  SituationFigure,
+  Sketch,
+  type IconName,
+} from '@/components';
 import {
   Banner,
   Bento,
@@ -13,6 +19,8 @@ import {
   Gateway,
   GatewayPaths,
   Teaser,
+  TEASER_FORMAT_ICON,
+  type TeaserFormat,
   type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
@@ -650,6 +658,11 @@ function Expertise({ page, b }: BandProps) {
 const formatLabel = (pageType: string) =>
   pageType.charAt(0).toUpperCase() + pageType.slice(1).replace(/_/g, ' ');
 
+/** A piece's format glyph (owner, 29 Oct 2026: the resource rows "can have format icons"), from the
+    one format map; a format it does not know shows no glyph rather than a wrong one. */
+const formatIcon = (pageType: string): IconName | undefined =>
+  pageType in TEASER_FORMAT_ICON ? TEASER_FORMAT_ICON[pageType as TeaserFormat] : undefined;
+
 /**
  * "Selected thinking from the studio" as a resource listing (owner, 29 Oct 2026): ONE piece per row
  * at the column's full width, the rows ruled, each row one link (Teaser `row`, `metaAside`, `ruled`,
@@ -687,6 +700,7 @@ function Insights({ b, insightRefs = {} }: BandProps) {
               href={href}
               body={entry.body}
               label={ref ? formatLabel(ref.format) : undefined}
+              icon={ref ? formatIcon(ref.format) : undefined}
               meta={ref?.length ? [ref.length] : undefined}
             />
           );

@@ -525,12 +525,16 @@ export function insightsIndexProps(
   const lede = page.hero.description?.trim();
   const all = page.resources.items;
 
-  /* The finder (owner, 28 Oct 2026): Type, then the CMS's groups, each read out of the URL. */
+  /* The finder (owner, 28 Oct 2026): Type, then the CMS's groups, each read out of the URL. Type
+     lists EVERY format the site routes, in picker order, not only the ones the CMS has filled
+     (owner, 29 Oct 2026: "type interviews filter item missing"): each retired format page redirects
+     to `?type=<format>` (FORMAT_PAGE_REDIRECTS), so each format must be an option to land on, and a
+     format with nothing published yet says so in the finder's empty state rather than vanishing. */
   const groups: FilterGroupOf[] = [
     {
       name: TYPE_KEY,
       label: 'Type',
-      options: formatsWithContent(page).map((kind) => ({
+      options: KINDS.map((kind) => ({
         id: kind,
         value: typeValue(kind),
         label: formatTitle(page, kind),

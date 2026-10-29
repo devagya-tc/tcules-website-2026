@@ -46,9 +46,11 @@ import {
  *   hero                 the eyebrow, title and lede; the studio record ("Founded 2017 · …") as the
  *                        masthead's figures
  *   client-recognition   the client wall, under the opening (C13)
- *   featured             three `###` cases, the page's featured cases (CaseCard)
+ *   featured             three `###` cases, the page's featured cases: each the listing's card-less
+ *                        horizontal lead, one to a row (never home's CaseCard; owner, 29 Oct 2026)
  *   four stage tables    the BY STAGE view: one group per table, a card per row ("Case | What we did
- *                        | Best for"); "Best for" is kept as the card's second line (Q9)
+ *                        | Best for") in the listing's three-track grid, as /insights sets its
+ *                        cards; "Best for" is kept as the card's second line (Q9)
  *   testimonials         the proof wall after the list (decisions/2026-10-29-case-index-carries-
  *                        testimonials, superseding the 22 Oct ruling)
  *   enquiry              the close: home's halves island (2026-10-29-listing-close-is-home-halves)
@@ -56,8 +58,8 @@ import {
  *
  * Covers come from the live case's Strapi thumbnail. A live case no table names (three today) is not
  * dropped: it is filed in the BY INDUSTRY view, under "Other industries" where the proposed filing
- * has no sector for it. It decides no layout: which arrangement a group takes is the template's
- * call (`caseViews`), from its position and its count.
+ * has no sector for it. It decides no layout: every group takes the template's one shape
+ * (`caseViews`).
  *
  * `_corpus` is underscore-prefixed, so Next does not route it.
  */

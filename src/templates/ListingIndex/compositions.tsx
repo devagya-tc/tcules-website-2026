@@ -6,6 +6,7 @@ import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
   Teaser,
+  TEASER_FORMAT_ICON,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,
@@ -57,16 +58,9 @@ export const LABEL: Record<InsightKind, { one: string; many: string }> = {
   interview: { one: 'Interview', many: 'Interviews' },
 };
 
-/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026). */
-const GLYPH: Record<InsightKind, IconName> = {
-  article: 'document-text',
-  guide: 'notebook',
-  research: 'graph-up',
-  interview: 'chat-round-dots',
-  podcast: 'microphone',
-  video: 'videocamera-record',
-  event: 'calendar',
-};
+/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026): the one map, Teaser's,
+    which the resource rows read too (owner, 29 Oct 2026). */
+const GLYPH: Record<InsightKind, IconName> = TEASER_FORMAT_ICON;
 
 const DAY = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -264,7 +258,7 @@ export function CardGrid({
 }) {
   if (cards.length === 0 && !after) return null;
   return (
-    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
+    <ListingGrid id={id}>
       {cards.map((item) => {
         const pictured = Boolean(pictureOf(item));
         const panel = pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] };
@@ -290,6 +284,21 @@ export function CardGrid({
         );
       })}
       {after}
+    </ListingGrid>
+  );
+}
+
+/**
+ * Every listing's card grid (owner, 29 Oct 2026: "/case-studies … what happened to using the same
+ * 3 card grid?"): three tracks from md, a `gutter` across and a `column` down (a borderless set's row
+ * seam), one column on a phone. The insights hub's shelves and the case-study index's groups both set
+ * their cards in THIS, so the two listings cannot drift into two grids again
+ * (decisions/2026-10-22-listings-share-one-structure). Its children are BlockCards at `tracks={3}`.
+ */
+export function ListingGrid({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
+      {children}
     </Layout>
   );
 }

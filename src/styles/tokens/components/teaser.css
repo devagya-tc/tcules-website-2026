@@ -149,6 +149,7 @@
   --tsr-ring-color: var(--color-brandeis-500);
   --tsr-rule-ink: var(--color-neutral-200); /* decoration: the row's edge */
   --tsr-arrow-ink: var(--color-brandeis-500); /* 6.17:1, the link cue */
+  --tsr-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the format glyph, the card icon's accent */
 }
 
 /* Tint: the quiet ink steps to 700 — 600 is 4.39:1 on paper-deep. */
@@ -167,6 +168,7 @@
   --tsr-ring-color: var(--color-brandeis-500);
   --tsr-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on paper-deep */
   --tsr-arrow-ink: var(--color-brandeis-600);
+  --tsr-glyph-ink: var(--color-brandeis-600);
 }
 
 [data-surface='ink'] {
@@ -184,6 +186,7 @@
   --tsr-ring-color: var(--color-brandeis-300);
   --tsr-rule-ink: var(--color-neutral-700); /* decoration */
   --tsr-arrow-ink: var(--color-brandeis-300);
+  --tsr-glyph-ink: var(--color-brandeis-300);
 }
 
 /* Blue: declared for self-containment; every ink lifts to white or the lightest Brandeis steps. */
@@ -202,4 +205,5 @@
   --tsr-ring-color: var(--color-white);
   --tsr-rule-ink: var(--color-brandeis-300); /* decoration */
   --tsr-arrow-ink: var(--color-white);
+  --tsr-glyph-ink: var(--color-white);
 }
