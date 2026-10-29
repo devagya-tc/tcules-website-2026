@@ -112,7 +112,7 @@ function CasePage({
 
       {peers ? <ImpactBand band={peers} /> : null}
       {related ? <RelatedBand page={page} band={related} caseRefs={caseRefs} /> : null}
-      {close ? <EnquiryBand page={page} band={close} surface="tint" /> : null}
+      {close ? <EnquiryBand page={page} band={close} /> : null}
     </>
   );
 }

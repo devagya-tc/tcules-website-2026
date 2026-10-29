@@ -120,6 +120,9 @@ const REJECTIONS = [
   'twoUpPoints — makes the point tracks too narrow inside the content column',
   'withProofPanel — introduces the measured nested-surface contrast failure',
   'compact — splits the difference between Section densities that already have clear jobs',
+  'plain split — the copy beside a paper form panel on a tint band: retired 29 Oct 2026, a form sits only on a blue or ink island',
+  'offer with a form — retired 29 Oct 2026 with the plain split',
+  'open on a bare band, or on a paper or tint island — retired 29 Oct 2026, the open close is always an ink island with the field',
 ] as const;
 
 const PROOF_FIGURES = [
@@ -206,23 +209,25 @@ export default function CtaSectionSpecimenPage() {
           <Layout rowGap="block">
             <h2>1 · Arrangement matrix</h2>
             <p>
-              One size. Split requires a form and rejects proof, open requires actions, and
-              offer accepts either a form or actions while rejecting proof. The renderings
-              immediately below are the matrix, not three separately styled components.
+              One size. Split requires a form, rejects proof and always sits on an island, blue by
+              default or ink (owner, 29 Oct 2026). Open requires actions and is always an ink
+              island with the moving field. Offer takes actions only and rejects proof. The
+              renderings immediately below are the matrix, not three separately styled
+              components.
             </p>
           </Layout>
           <Layout columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter">
             <Box>
               <strong>split</strong>
-              <p>form required · proof forbidden · standard band · vertical points</p>
+              <p>form required · proof forbidden · blue (default) or ink island · vertical points</p>
             </Box>
             <Box>
               <strong>open</strong>
-              <p>actions required · proof optional · standard band · three-up points</p>
+              <p>actions required · proof optional · ink island with the field · three-up points</p>
             </Box>
             <Box>
               <strong>offer</strong>
-              <p>form or actions · proof forbidden · tight band · wrapping points</p>
+              <p>actions only · proof forbidden · tight band · ruled points</p>
             </Box>
           </Layout>
           <Layout columns="fit" minTrack="md" colGap="gutter" rowGap="text">
@@ -233,18 +238,19 @@ export default function CtaSectionSpecimenPage() {
         </Layout>
       </Section>
 
+      <SpecimenNote
+        title="1a · The split close with no island named"
+        note="A split close names no island here, so it takes the default: brandeis (blue). There is no split close off an island: the copy beside a paper panel on a tint band was retired (owner, 29 Oct 2026). The second instance is ink, without a drawing, with the full EnquiryForm."
+      />
       <CtaSection
         eyebrow="Next step"
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         points={STANDARD_POINTS}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
-        surface="paper"
       />
-      {/* `mark`: a bare blue glyph above the lede, the eye's entry into the close (the corpus pages'
-          enquiry band, owner 11 Oct 2026). */}
       <CtaSection
-        mark={<Icon name="chat-round-dots" size="xl" />}
+        island="ink"
         heading="Tell us what you are trying to ship"
         body={SPLIT_BODY}
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} />}
@@ -359,7 +365,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="2 · Form ladder"
-        note="Five corpus shapes follow: project form, audit form, offer with audit form, offer with actions only, and open with two actions. Every form instance also renders See available times."
+        note="Four corpus shapes follow: project form, audit form (each on its island), offer with actions only, and open with two actions. Every form instance also renders See available times."
       />
       <CtaSection
         heading="Start a product engagement"
@@ -374,15 +380,6 @@ export default function CtaSectionSpecimenPage() {
         form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
         surface="tint"
       />
-      <FoldExempt reason="the offer with the FULL form: cmp-form's compact-form offer is the page shape">
-        <CtaSection
-          arrangement="offer"
-          heading="See what your current experience is costing"
-          body={OFFER_BODY}
-          points={STANDARD_POINTS}
-          form={<EnquiryForm {...AUDIT_FORM_PROPS} />}
-        />
-      </FoldExempt>
       <CtaSection
         arrangement="offer"
         heading="Get an outside view before you commit"
@@ -739,7 +736,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="14 · Falsy slots render nothing"
-        note="proof={false} and proof={null} on open, and form={false} on the offer: each slot is absent, so no column, no 48 seam and no empty div is reserved (spec § 12 row 6). Both opens render the centred close; the offer falls through to its actions shape, which with no actions and no points is the lede alone."
+        note="proof={false} and proof={null} on open: each slot is absent, so no column, no 48 seam and no empty div is reserved (spec § 12 row 6). Both render the centred close."
       />
       <CtaSection
         arrangement="open"
@@ -756,12 +753,6 @@ export default function CtaSectionSpecimenPage() {
         proof={null}
         surface="tint"
       />
-      <CtaSection
-        arrangement="offer"
-        heading="Offer with form={false}"
-        body={OFFER_BODY}
-        form={false}
-      />
 
       <SpecimenNote
         title="15 · The kit's props"
@@ -769,12 +760,11 @@ export default function CtaSectionSpecimenPage() {
       />
 
       <SpecimenNote
-        title="16 · The island close, open"
-        note="island: the open close on a floating box of its own ground (Island), the band's ground around it on every side. The value is the island's surface; without surface the band takes the other light ground, so island=&quot;tint&quot; keeps the close's tint and drops the band to paper. Four blocks: the flagship (tint island, paper band, points and the solid + ghost pair), the bright island (paper on tint, no points), the proof shape inside an island, and the surface proof on ink. island on offer does not compile; island on split is the enquiry close (§ 1b, since 16 Oct 2026)."
+        title="16 · The open close is an ink island"
+        note="Every open close (a heading, a line and an ask) is an ink island with the moving field (TextureFlow) on it, the words on still water (owner, 29 Oct 2026). There is no island prop: the band takes paper unless surface says otherwise, and on an ink band the island takes paper. Four blocks: the flagship (points and the solid + ghost pair), the mark and one ask, the proof shape, and the surface proof on a tint band. island on open or offer does not compile."
       />
       <CtaSection
         arrangement="open"
-        island="tint"
         eyebrow="Work with us"
         heading="Bring the problem as it is"
         body={OPEN_BODY}
@@ -786,7 +776,6 @@ export default function CtaSectionSpecimenPage() {
       />
       <CtaSection
         arrangement="open"
-        island="paper"
         mark={<Icon name="chat-round-dots" size="xl" />}
         heading="Tell us what you are trying to ship"
         body={OPEN_BODY}
@@ -794,7 +783,6 @@ export default function CtaSectionSpecimenPage() {
       />
       <CtaSection
         arrangement="open"
-        island="tint"
         eyebrow="Work with us"
         heading="Choose the next useful move"
         body={OPEN_BODY}
@@ -807,10 +795,9 @@ export default function CtaSectionSpecimenPage() {
       />
       <CtaSection
         arrangement="open"
-        island="tint"
-        surface="ink"
+        surface="tint"
         eyebrow="Surface proof"
-        heading="The island keeps its own tokens on ink"
+        heading="The island keeps its own tokens on tint"
         body={OPEN_BODY}
         actions={[
           { label: 'Start a project', href: ROUTES.contact },

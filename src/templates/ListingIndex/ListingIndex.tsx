@@ -108,7 +108,8 @@ export type ListingClosing = {
    * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band,
    * in home's halves with the moving field across it (owner, 28 Oct 2026: "the one with the moving
    * texture is preferred").
-   * Taken only with a `form`.
+   * Taken only with a `form`, and a form is ALWAYS on it (owner, 29 Oct 2026;
+   * decisions/2026-10-29-forms-only-on-the-island): absent, the island is blue with no drawing.
    */
   island?: { surface: 'blue' | 'ink'; art?: ReactElement };
 };
@@ -297,24 +298,14 @@ export function ListingIndex({
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
           action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
           A conversation glyph is the eye's entry into it, as every corpus close has. */}
-      {closing?.form && closing.island ? (
+      {closing?.form ? (
         <CtaSection
           id={closing.id}
-          island={closing.island.surface}
+          island={closing.island?.surface ?? 'blue'}
           islandArrangement="halves"
           islandTexture="flow"
-          art={closing.island.art}
+          art={closing.island?.art}
           eyebrow={closing.eyebrow || undefined}
-          heading={closing.heading}
-          body={closing.body?.trim() ? [closing.body] : undefined}
-          form={closing.form}
-        />
-      ) : closing?.form ? (
-        <CtaSection
-          id={closing.id}
-          surface={offer?.image ? 'paper' : 'tint'}
-          eyebrow={closing.eyebrow || undefined}
-          mark={<Icon name="chat-round-dots" size="xl" />}
           heading={closing.heading}
           body={closing.body?.trim() ? [closing.body] : undefined}
           form={closing.form}

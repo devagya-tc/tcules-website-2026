@@ -113,6 +113,12 @@ export function TextureFlow({ fade }: TextureFlowProps) {
     if (!canvas || !host) return;
     const gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false, alpha: true });
     if (!gl) return;
+    /* A lost context (a GPU reset, or the browser's cap on live contexts when a page carries many
+       fields, as the CtaSection specimen does) leaves the canvas painting the browser's own
+       placeholder over the island. The field is decoration: it steps aside and the ground stands
+       plain, as it does without WebGL. */
+    const lost = () => canvas.setAttribute('data-lost', '');
+    canvas.addEventListener('webglcontextlost', lost);
 
     const shader = (type: number, src: string) => {
       const s = gl.createShader(type);
@@ -198,6 +204,7 @@ export function TextureFlow({ fade }: TextureFlowProps) {
     document.addEventListener('visibilitychange', run);
     reduce.addEventListener('change', run);
     return () => {
+      canvas.removeEventListener('webglcontextlost', lost);
       cancelAnimationFrame(raf);
       resize.disconnect();
       seen.disconnect();
