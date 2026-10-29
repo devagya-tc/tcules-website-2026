@@ -1,3 +1,6 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -6,6 +9,7 @@ import {
   getCorpusBindings,
   getCorpusPage,
   getOfferScenes,
+  getReasonFigure,
   getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
@@ -48,6 +52,17 @@ export async function offerMetadata(route: string): Promise<Metadata | null> {
   return page ? corpusMetadata(page) : null;
 }
 
+/**
+ * A Why Tcules reason's drawing (component-map C1), only once its file is in `public/`: the drawings
+ * are filed by title at the content seam and exported on their own branch, so a reason whose drawing
+ * has not landed yet resolves to nothing and the band keeps its undrawn form (OfferBands `reasons`)
+ * rather than pointing at a missing file.
+ */
+function landedReasonFigure(title: string, ground: 'paper' | 'paper-deep') {
+  const figure = getReasonFigure(title, ground);
+  return figure && existsSync(join(process.cwd(), 'public', figure.src)) ? figure : undefined;
+}
+
 export async function OfferRoute({ route }: { route: string }) {
   const page = await getCorpusPage(route);
   if (!page) notFound();
@@ -66,6 +81,7 @@ export async function OfferRoute({ route }: { route: string }) {
       ratings={ratings}
       avatars={avatars}
       scenes={scenes}
+      reasonFigure={landedReasonFigure}
     />
   );
 }

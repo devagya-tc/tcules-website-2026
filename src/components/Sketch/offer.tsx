@@ -13,7 +13,8 @@ import { CURSOR, Focus, Glyph, Hatched } from './scenes';
  * what is not built, one focal point. Still, like every plate.
  *
  *   outcome-*     "What you get": the change each promise makes (a manual set aside, the rules behind
- *                 one switch, the awkward cases designed and handed to code, a card in every state)
+ *                 one switch, the awkward cases designed and handed to code, a card in every state, a
+ *                 brief sorted into in, waiting and out against the person who uses the product)
  *   symptom-*     "Where we start": each complaint drawn as the problem turning into its fix
  *   specialist-*  the specialist services, drawn bare on the bento's tiles
  *   case-*        a worked example's problem and what we did, drawn on the same screen so the change
@@ -227,6 +228,30 @@ function OutcomeFinished() {
       <Rect x={244} y={74} w={40} h={24} className={styles.region} />
       <Copy x={244} y={110} w={36} />
       <Copy x={244} y={122} w={24} quiet />
+    </>
+  );
+}
+
+/**
+ * A tested brief: what goes in, what waits and what stays out, checked against the person who uses the
+ * product. The person's route arrives at the brief's settled scope, which carries the one check; what
+ * waits sits in a quiet panel with its clock, and what stays out is hatched, never built.
+ */
+function OutcomeBrief() {
+  return (
+    <>
+      <Glyph name="user" cx={40} cy={90} size={20} className={styles.glyph} />
+      <Hop x1={60} x2={100} y={90} />
+      <Rect x={100} y={30} w={72} h={120} rx={8} className={styles.frame} />
+      <Copy x={114} y={46} w={28} quiet />
+      <Rect x={114} y={58} w={44} h={14} className={styles.tile} />
+      <Rect x={114} y={80} w={44} h={14} className={styles.tile} />
+      <Focus x={136} y={124} glyph="check-circle" size={12} />
+      <Rect x={188} y={40} w={52} h={100} rx={8} className={styles.frameQuiet} />
+      <Glyph name="clock-circle" cx={214} cy={60} size={14} className={styles.glyphQuiet} />
+      <Rect x={198} y={80} w={32} h={12} className={styles.tile} />
+      <Rect x={198} y={100} w={32} h={12} className={styles.tile} />
+      <Hatched x={256} y={50} w={40} h={80} />
     </>
   );
 }
@@ -583,6 +608,7 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-rules': OutcomeRules,
   'outcome-build': OutcomeBuild,
   'outcome-finished': OutcomeFinished,
+  'outcome-brief': OutcomeBrief,
   'symptom-stuck': SymptomStuck,
   'symptom-messy': SymptomMessy,
   'symptom-test': SymptomTest,

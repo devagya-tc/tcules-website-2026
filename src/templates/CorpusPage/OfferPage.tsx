@@ -4,8 +4,27 @@ import { placeholderImage } from '@/lib/placeholders';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { CorpusHero } from './blocks';
+import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer } from './plan';
+import { plain } from './text';
+
+/**
+ * The hero's record line ("Founded 2017 · More than 90 projects · …"), as home's figures: the line of
+ * facts with no label, never a labelled proof line ("Selected work: …"). Figures live in the hero
+ * (2026-10-11-figures-live-in-the-hero), so the offer pages that author the studio's record set it
+ * the way home does, from the same table.
+ */
+function heroRecord(page: CorpusPage) {
+  const record = page.hero.proofLines.find((line) => {
+    const text = plain(line);
+    return text.includes(' · ') && !/^[^·]*:/.test(text);
+  });
+  return {
+    record,
+    stats: record ? recordStats({ ...page, hero: { ...page.hero, proofLines: [record] } }) : [],
+  };
+}
 
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
@@ -36,9 +55,11 @@ export function OfferPage({
   ratings,
   avatars,
   scenes,
+  reasonFigure,
 }: OfferPageProps) {
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes };
+  const { record, stats } = heroRecord(page);
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure };
 
   const drawing = page.route.startsWith('/services/')
     ? serviceIllustration(page.slug)
@@ -72,7 +93,11 @@ export function OfferPage({
         page={page}
         arrangement="beside"
         media={media}
-        proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
+        proofLine={
+          page.hero.proofLines[0] !== record &&
+          !units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')
+        }
+        stats={stats.length > 0 ? stats : undefined}
       />
       {units.map((unit) => (
         <UnitView key={unit.id} unit={unit} ctx={ctx} />

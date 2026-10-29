@@ -105,9 +105,9 @@ page_composition:
     role: demonstrate
     supports_section: selected-work
     card: auxentios
-    asset_uri: null
-    status: IMAGE_ASSET_REQUIRED
-    source: Auxentios case has no bound screen; pull one from the live case media
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766140498/660bd75ce27b3355165af8d8_1_7_59f1667d2c.webp
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (the live Auxentios case's first section image, the Repair Builder coverage screen; pulled 29 Oct 2026)
     alt_intent: Auxentios shared quotation screen used by six specialist roles
   - id: product_design_doodle
     role: demonstrate

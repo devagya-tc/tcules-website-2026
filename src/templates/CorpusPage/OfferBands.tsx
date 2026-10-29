@@ -105,6 +105,15 @@ export type OfferContext = {
   avatars?: AvatarsById;
   /** The drawings the page's items carry, assigned item by item at the content seam (owner, 26 Oct 2026). */
   scenes?: OfferScenes;
+  /**
+   * A Why Tcules reason's drawing by the reason's title as authored, exported on the band's ground
+   * (component-map C1; the content seam's `getReasonFigure`). Undefined for a reason not drawn yet:
+   * the band draws only when every reason resolves.
+   */
+  reasonFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
 };
 
 /** The scene assigned to one item of a band, by the item's title (or a router item's href). */
@@ -582,13 +591,48 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
            parser files it under that reason: read it from what follows the items, which holds the
            band's own link rows too. */
         const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+        const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
+        /* Drawn once every reason resolves to its figure (owner, 29 Oct 2026, Q1): the Reasons band,
+           in the arrangement the plan gives it (`beside` where it is the page's second Reasons band,
+           as on every offer page, under the engagements). */
+        const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
+        const drawn = parts.items.map((item) => ({
+          item,
+          figure: ctx.reasonFigure?.(item.title, ground),
+        }));
+        if (drawn.length > 0 && drawn.every(({ figure }) => figure)) {
+          return (
+            <Reasons
+              {...head(band)}
+              surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              arrangement={unit.arrangement ?? 'open'}
+              lead={parts.lead}
+              action={action}
+              items={drawn.flatMap(({ item, figure }) =>
+                figure
+                  ? [
+                      {
+                        title: item.title,
+                        body: item.bodyHtml ? (
+                          <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                        ) : (
+                          (item.body ?? '')
+                        ),
+                        figure: { ...figure, alt: '', kind: 'illustration' as const },
+                      },
+                    ]
+                  : [],
+              )}
+            />
+          );
+        }
         return (
           <OfferSheet
             {...head(band)}
             lead={parts.lead}
             items={parts.items}
             across={parts.items.length === 4 ? 2 : 3}
-            note={links.length > 0 ? <LinkActions links={links} /> : undefined}
+            note={action}
           />
         );
       }
