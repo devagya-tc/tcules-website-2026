@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { Layout, Section, SituationFigure } from '@/components';
+import { Layout, Section } from '@/components';
 import { ContentSection, Gateway, GatewayPaths } from '@/patterns';
 import { getCorpusPage, getProposedEyebrows } from '@/content';
 import { ROUTES } from '@/lib/routes';
@@ -57,14 +57,11 @@ export default async function KitGatewayPage() {
 
       <Variation
         id="paths"
-        title="G.P · Two paths, one drawing — home (29 Oct 2026)"
-        note="GatewayPaths, home’s band since the 26 Oct copy, in the owner’s “one drawing, two states” direction (29 Oct 2026). One static isometric drawing across the content column (SituationFigure product-paths, fit width): the same product, a first release taking shape on the left and in use at scale, extended, on the right, on one continuous base. Under it, a block below, the two paths as equal peers from 1024 (64 apart), each under its half: the title (h3, serif), its paragraphs, its links stacked. No box, no ground, no rule. Below 1024 the drawing stays one piece, scaled, above the two paths stacked."
+        title="G.P · Two paths, service rows — home (owner, 29 Oct 2026)"
+        note="GatewayPaths, home’s band since the 26 Oct copy: two EQUAL paths side by side from 1024 (64 apart), stacked below. Each reads down: its own SituationFigure in a 180 box (both titles on one line), the title (h3, serif), its paragraphs, then its services as compact service rows, one per line, 16 apart: the service’s own flat Sketch scene on its 112 plate, the action’s authored words (h6), an arrow; the whole row is the link. No container, no button. Two rows against three makes one column a row longer. Hover a row: its arrow moves 4 (transform only). Point anywhere on a path: its drawing plays rest → end. The Prototype Readiness Review has no scene of its own yet, so its row shows the empty plate."
       />
       <ContentSection heading={heading} headingId="gw-paths" eyebrow={eyebrow} align="center">
-        <GatewayPaths
-          paths={paths}
-          visual={<SituationFigure name="product-paths" fit="width" />}
-        />
+        <GatewayPaths paths={paths} />
       </ContentSection>
 
       <Variation

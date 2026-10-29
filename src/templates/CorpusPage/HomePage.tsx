@@ -42,7 +42,7 @@ import type {
 } from '@/lib/corpus-types';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
-import { sketchForRoute } from '@/lib/sketches';
+import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { recordFigures } from '@/lib/studio-record';
 
 import {
@@ -276,8 +276,9 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
 /**
  * The 26 Oct copy's two paths as GatewayPaths items: each `###` path, its paragraphs (plain: the copy
  * authors no inline link in a path), and its links in the authored order, whether written as a list
- * of links or as link lines. The band's one drawing is set on the pair, not per path (Situations).
- * Exported so /design/kit/gateway proves the paths form on the real words.
+ * of links or as link lines, each with its service's own scene for its service row. The path's drawing
+ * is the SituationFigure of the first link that has one (owner, 29 Oct 2026: each path keeps its own
+ * drawing; decisions/2026-10-29-paths-service-rows). Exported so /design/kit/gateway proves the paths form on the real words.
  */
 export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
@@ -295,12 +296,23 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
       return [];
     });
     if (links.length === 0) return [];
+    const figure = links
+      .map((link) => sketchForRoute(link.href))
+      .find((scene) => scene && isSituationFigureName(scene));
     return [
       {
         id: slugOf(path.headingText),
         title: path.headingText,
         body: paragraphRuns(path.blocks).map((runs) => plain(runs)),
-        links,
+        /* Each service's own scene, the one its service tile draws; none borrowed (owner, 29 Oct
+           2026; decisions/2026-10-29-paths-service-rows). */
+        links: links.map((link) => {
+          const scene = serviceSceneFor(link.href);
+          return scene ? { ...link, scene } : link;
+        }),
+        ...(figure && isSituationFigureName(figure)
+          ? { visual: <SituationFigure name={figure} /> }
+          : {}),
       },
     ];
   });
@@ -314,11 +326,6 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
  * the board's two-door form, GatewayPaths (component-map C10): the same drawings and the same
  * unboxed paper, the head a proposed eyebrow over the centred heading (P49). A band still written as
  * six single-link situations keeps the board.
- *
- * Since 29 Oct 2026 (owner: "one drawing, two states"; decisions/2026-10-29-paths-one-drawing-two-states)
- * the pair carries ONE wide drawing, `product-paths`: the same product, a first release taking shape
- * over the new-product path and in use at scale, extended, over the established one. It is drawn for
- * these two paths in this order, so it is set only when the band is the two-path form.
  */
 function Situations({ b, eyebrows }: BandProps) {
   const paths = gatewayPaths(b);
@@ -326,10 +333,7 @@ function Situations({ b, eyebrows }: BandProps) {
   return (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
       {multi ? (
-        <GatewayPaths
-          paths={paths}
-          visual={<SituationFigure name="product-paths" fit="width" />}
-        />
+        <GatewayPaths paths={paths} />
       ) : (
         <Gateway items={gatewayBoardItems(b)} arrangement="board" />
       )}

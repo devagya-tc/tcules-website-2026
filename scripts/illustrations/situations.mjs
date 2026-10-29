@@ -14,7 +14,7 @@
  */
 import { writeFileSync } from 'node:fs';
 
-import { HEX, Scene, onBlue, rgba } from './lib.mjs';
+import { HEX, Scene, rgba } from './lib.mjs';
 
 const K = 0.7071, H = 0.3536, V = 0.866;
 const G = HEX.paper;
@@ -218,83 +218,6 @@ function ships() {
   return s;
 }
 
-/* ── Home · "Start where your product is" — one drawing, two states (owner, 29 Oct 2026) ──────
-   Not a situation of the six: home's two-path band (GatewayPaths) sets ONE wide drawing across
-   both paths, each half over its own path's words (decisions/2026-10-29-paths-one-drawing-two-states).
-   Static: it is not inside a link, so nothing plays.
-
-   Message line: the product you start is the product that grows — the same screen, first taking
-   shape, then in use at scale and extended, on one continuous base.
-   Concept: ONE PRODUCT (no annotation layer: the drawing sits beside words, ch05 §4b).
-   Item: the screen's one action, spec'd on the left (echo: pale peridot, dashed ink) and solid on
-   the right, where it is real to its users (§4b: solid once).
-   System: one low paper plinth, stepped so its two halves sit level side by side (a flat plane is
-   always 2:1, so a wide, level ground has to step along the diagonal), continuous under both. The
-   solid blue plane is the slab the established product stands on.
-   Left (the new product): the screen still part raw (dots, §4a: unresolved), its action spec'd, the
-   next release a dashed outline behind it (planned: "choices that still hold when the second release
-   arrives"), and one customer's place in front.
-   Right (the established product): the SAME screen, resolved; what was added since stands behind it;
-   the next step is a dashed outline on the same base (proposed); four customers' places in front
-   (a person is their place, §4a Figures). Every line is an edge on the x / y / z axes. */
-const PW = 150, PH = 96;
-/** The one screen, the same on both halves (landscape: a product's working screen). */
-function pathsScreen(s, x0, y, z, built) {
-  const at = s.panel(x0, x0 + PW, y, z, PH, { fill: G });
-  s.panelBar(at, 14, 74, 56, { solid: true });
-  s.panelBar(at, 14, 60, 100, { h: 6 });
-  s.panelBar(at, 14, 50, 76, { h: 6 });
-  if (built) {
-    s.panelBar(at, 92, 30, 40, { h: 6 });
-    s.panelBar(at, 92, 20, 30, { h: 6 });
-    s.itemSolidOnPanel(at, 14, 14, 64, 26);
-  } else {
-    s.panelDots(at, 92, 12, 44, 30, { pitch: 22 });
-    s.echoOnPanel(at, 14, 14, 64, 26);
-  }
-}
-/** A customer's place: a tile on the ground with its mark (§4b UI shorthand: an avatar). */
-function place(s, x, y, z) {
-  s.plane(x, y, 28, 24, z, { fill: G });
-  s.plane(x + 10, y + 8, 8, 8, z, { fill: HEX.blue, stroke: 'none' });
-}
-function productPaths() {
-  const s = new Scene({ id: 'pp' });
-  // A (left, new): x [0, S], y [0, S]. B (right, established): x [-S, 0], y [O - S, O]. They share
-  // the edge x = 0 for y [0, O], so the ground is one plinth; the shared edge sits at the drawing's
-  // horizontal centre, between the two columns. A short shared edge keeps the two halves nearly
-  // level, so the drawing stays wide and low over its two columns.
-  const S = 240, T = 16, O = 50;
-  const b0 = O - S;
-  s.poly([[-S, O, 0], [0, O, 0], [0, O, T], [-S, O, T]], { fill: HEX.b200 }); // B front, shaded
-  s.poly([[-S, b0, 0], [-S, O, 0], [-S, O, T], [-S, b0, T]], { fill: HEX.b100 }); // B side, lit
-  s.poly([[0, S, 0], [S, S, 0], [S, S, T], [0, S, T]], { fill: HEX.b200 }); // A front, shaded
-  s.poly([[0, O, 0], [0, S, 0], [0, S, T], [0, O, T]], { fill: HEX.b100 }); // A side, lit, its open part
-  s.poly([[S, 0, T], [S, S, T], [0, S, T], [0, O, T], [-S, O, T], [-S, b0, T], [0, b0, T], [0, 0, T]], { fill: G });
-
-  // left: the first release taking shape
-  s.panel(130, 230, 70, T, 76, { fill: 'none', dash: '6 4' });
-  pathsScreen(s, 40, 150, T, false);
-  place(s, 120, S - 44, T);
-
-  // right: the same product, in use and extended
-  const z = s.slab(-230, b0 + 20, 210, 160, T, 12);
-  // It stands on the blue plane, where a blue line vanishes: drawn in blue, then again in paper
-  // clipped to the blue plane's top (§4a: detail on the blue plane is paper), on the same dash phase.
-  s.panel(-228, -168, b0 + 40, z, 76, { fill: 'none', dash: '6 4' });
-  const top = [[-230, b0 + 20, z], [-20, b0 + 20, z], [-20, b0 + 180, z], [-230, b0 + 180, z]];
-  s.defs.push(`<clipPath id="{{id}}-blue"><polygon points="${s.pts(top)}"/></clipPath>`);
-  s.art.push('<g clip-path="url(#{{id}}-blue)">');
-  s.panel(-228, -168, b0 + 40, z, 76, { fill: 'none', dash: '6 4', stroke: onBlue(0.8) });
-  s.art.push('</g>');
-  const added = s.panel(-150, -30, b0 + 80, z, PH, { fill: G });
-  s.panelBar(added, 14, 74, 46, { solid: true });
-  s.onPanel(added, 14, 22, 70, 36, { fill: G, stroke: quiet });
-  pathsScreen(s, -190, b0 + 160, z, true);
-  for (let i = 0; i < 4; i++) place(s, -200 + i * 44, O - 36, T);
-  return s;
-}
-
 const FIGS = {
   'new-product': launch,
   'product-design': easier,
@@ -302,26 +225,15 @@ const FIGS = {
   'ai-product-ux': ai,
   'design-systems': system,
   'design-engineering': ships,
-  'product-paths': productPaths,
-};
-
-/** Drawings framed on their own extent, not the six's shared box, and kept at the kit's 1.5 stroke
- *  (ch05 §4a): set wide across a band, they are not part of the six's one scale. */
-const OWN_FRAME = new Set(['product-paths']);
-const own = (s, m = 4) => {
-  const [x0, y0, x1, y1] = s.box;
-  return [x0 - m, y0 - m, x1 - x0 + m * 2, y1 - y0 + m * 2].map((n) => Math.round(n * 100) / 100);
 };
 
 const out = {};
 for (const [name, fn] of Object.entries(FIGS)) {
   const s = fn();
-  const wide = OWN_FRAME.has(name);
-  const art = s.art.join('');
   out[name] = {
-    viewBox: (wide ? own(s) : frame(s)).join(' '),
+    viewBox: frame(s).join(' '),
     markup: (s.defs.length ? `<defs>${s.defs.join('')}</defs>` : '') +
-      (wide ? art : art.replaceAll('stroke-width="1.5"', 'stroke-width="1.25"')),
+      s.art.join('').replaceAll('stroke-width="1.5"', 'stroke-width="1.25"'),
   };
 }
 const ts = `/* GENERATED by scripts/illustrations/situations.mjs — do not edit. Run \`npm run illustrations:situations\`. */

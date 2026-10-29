@@ -285,12 +285,11 @@
 }
 
 /* ── paths (GatewayPaths, home, 29 Oct 2026) ───────────────────────────────────
-   Two equal paths on paper, each read down: title, sentences, links. No ground, no box, no rule. One
-   drawing over both, across the content column (the figure fills its width and keeps its ratio, so
-   it scales whole at every width). Sizing, not arrangement. */
-.pathsVisual {
+   Two paths on paper, each read down: drawing, title, sentences, links. No ground and no box. The
+   drawing's box is one height for both, so the titles share a line. Sizing, not arrangement. */
+.pathVisual {
   display: block;
-  min-inline-size: 0;
+  block-size: var(--gwy-path-visual-height);
 }
 
 .pathTitle {
@@ -304,4 +303,71 @@
   font: var(--gwy-path-body-text);
   text-wrap: var(--text-running-wrap);
   color: var(--gwy-body-ink);
+}
+
+/* A path's services as compact service rows (owner, 29 Oct 2026): the whole row is the anchor;
+   `display: block` de-inlines it so the hit area is the row, and its one child, a Layout, arranges
+   the scene, the words and the arrow. No ground, no box, no rule. */
+.serviceRow {
+  display: block;
+  color: var(--gwy-title-ink);
+  text-decoration: none;
+  border-radius: var(--gwy-ring-radius);
+}
+
+.serviceRow:hover,
+.serviceRow:focus-visible {
+  text-decoration: none;
+}
+
+.serviceRow:focus {
+  outline: none;
+}
+
+.serviceRow:focus-visible {
+  box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
+}
+
+/* The service's own scene on its plate, at one width for every row, so every label starts on one
+   edge. Sizing, not arrangement. */
+.serviceArt {
+  display: block;
+  inline-size: var(--gwy-service-art-width);
+}
+
+.serviceLabel {
+  font: var(--gwy-service-label-text);
+  letter-spacing: var(--gwy-service-label-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* The arrow: the accent, at a lg button glyph's size, inline after the label's last word, set off it
+   by its side bearing (an optical inset, not a layout distance); on hover or focus it moves toward
+   its destination and back, on transform only (decisions/2026-10-19-hover-is-a-move). */
+.serviceArrow {
+  display: inline-block;
+  vertical-align: middle;
+  padding-inline-start: var(--gwy-service-arrow-inset);
+  box-sizing: content-box;
+  inline-size: var(--gwy-service-arrow-size);
+  block-size: var(--gwy-service-arrow-size);
+  color: var(--gwy-arrow-ink);
+  transition: transform var(--gwy-quick-duration) var(--gwy-easing);
+}
+
+.serviceArrow > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.serviceRow:hover .serviceArrow,
+.serviceRow:focus-visible .serviceArrow {
+  transform: translateX(var(--gwy-service-arrow-shift));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceArrow {
+    transition-duration: var(--duration-instant);
+  }
 }

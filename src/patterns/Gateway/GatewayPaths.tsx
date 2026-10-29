@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 
-import { Button, Icon, Layout } from '@/components';
+import { Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
+import type { SketchName } from '@/lib/sketches';
 
 import styles from './Gateway.module.css';
 
@@ -13,19 +14,25 @@ export type GatewayPath = {
   title: string;
   /** Its sentences, one string per paragraph, as authored. */
   body: readonly string[];
-  /** Where it leads, in the authored order. Pass the authored case; the link label sets it. */
-  links: readonly { label: string; href: string }[];
+  /**
+   * Where it leads, in the authored order: each a service, as a compact service row. `label` is the
+   * action's authored words ("Design and launch your MVP"), never the service's name; `scene` is the
+   * service's own flat Sketch scene, the one its service tile draws (`serviceSceneFor`). A service with
+   * no scene of its own yet takes no other subject's: its row shows the empty plate until one is drawn.
+   */
+  links: readonly GatewayPathLink[];
+  /**
+   * The situation's drawing (a `SituationFigure`), composed by the caller. It stands in a box of one
+   * height for both paths and plays when the path is pointed at. Decorative: aria-hidden.
+   */
+  visual?: ReactNode;
 };
+
+/** One of a path's services: the action's words, where it goes and the service's own scene. */
+export type GatewayPathLink = { label: string; href: string; scene?: SketchName };
 
 export type GatewayPathsProps = {
   paths: readonly GatewayPath[];
-  /**
-   * ONE drawing across both paths (owner, 29 Oct 2026: "one drawing, two states"), composed by the
-   * caller: the same product drawn in the paths' two states, each half over its own path. It spans
-   * the content column above the paths and is scaled whole at every width. Decorative: aria-hidden;
-   * the paths' words carry the meaning.
-   */
-  visual?: ReactNode;
   /** The element each path's title renders as. h3 under a band's h2 (the default). */
   titleAs?: 'h3' | 'h4';
   className?: string;
@@ -40,30 +47,33 @@ export type GatewayPathsProps = {
  * cannot be one link, so the path is not a card: its title and words are read, and its links are
  * the actions.
  *
- * One drawing, two states (owner, 29 Oct 2026; decisions/2026-10-29-paths-one-drawing-two-states;
- * references: Figma home's second band, one wide image over two equal columns, and Vanta's "Built for
- * you", one drawn subject in a setting per path). The drawing runs across the content column; under
- * it the two paths are EQUAL peers side by side from 1024, `column` (64) apart, each under its half
- * of the drawing, and one above the other below 1024 with the drawing still one piece above them.
- * Each path reads down: the title (h3, the serif: the path's hero), its paragraphs, then its links
- * stacked as link buttons. No box, no ground, no rule: the space separates them.
- *
- * The drawing sits a `block` above the paths, the step from a head to its body: it is the paths'
- * picture, read with them, not a band of its own.
+ * Two EQUAL peers side by side from 1024, `column` (64) apart like the board (no box, no ground: the
+ * space is what separates them), one above the other below it. Each path reads down: its own drawing
+ * in a box of one height (so the two titles sit on one line), the title (h3, the serif: the path's
+ * hero), its paragraphs, then its services as COMPACT SERVICE ROWS, one per line (owner, 29 Oct 2026;
+ * decisions/2026-10-29-paths-service-rows): the service's small flat Sketch scene on its plate, the
+ * action's authored words, an arrow, the whole row the link. No container and no button: two rows
+ * against three only makes one column a row longer. Pointing anywhere on a path plays its drawing
+ * (SituationFigure's own rest → end move); pointing at a row moves its arrow (transform only).
  */
-export function GatewayPaths({ paths, visual, titleAs = 'h3', className }: GatewayPathsProps) {
+export function GatewayPaths({ paths, titleAs = 'h3', className }: GatewayPathsProps) {
   const Title = titleAs;
-  const list = (
+  return (
     <Layout
       as="ul"
       columns={{ lg: 2 }}
       colGap="column"
       rowGap="stack"
-      className={cx(styles.root, visual == null ? className : undefined)}
+      className={cx(styles.root, className)}
     >
       {paths.map((path) => (
-        <li key={path.id}>
+        <li key={path.id} data-sfig-host="">
           <Layout rowGap="block">
+            {path.visual != null ? (
+              <span className={styles.pathVisual} aria-hidden="true">
+                {path.visual}
+              </span>
+            ) : null}
             <Layout rowGap="text">
               <Title className={styles.pathTitle}>{path.title}</Title>
               {path.body.map((paragraph, index) => (
@@ -72,34 +82,30 @@ export function GatewayPaths({ paths, visual, titleAs = 'h3', className }: Gatew
                 </p>
               ))}
             </Layout>
-            <Layout rowGap="text" justifyItems="start">
+            <Layout as="ul" rowGap="text">
               {path.links.map((link) => (
-                <Button
-                  key={link.href}
-                  as="a"
-                  href={link.href}
-                  emphasis="link"
-                  tone="primary"
-                  size="md"
-                  extendHitArea
-                  icon={<Icon name="arrow-right" />}
-                >
-                  {link.label}
-                </Button>
+                <li key={link.href}>
+                  <a href={link.href} className={styles.serviceRow}>
+                    <Layout columns={{ base: ['auto', 1] }} colGap="text" align="center">
+                      <span className={styles.serviceArt} aria-hidden="true">
+                        <Sketch name={link.scene} />
+                      </span>
+                      {/* The arrow follows the words inline, so it stays with the last one when the
+                          label wraps, rather than standing apart at the column's far edge. */}
+                      <span className={styles.serviceLabel}>
+                        {link.label}
+                        <span className={styles.serviceArrow} aria-hidden="true">
+                          <Icon name="arrow-right" />
+                        </span>
+                      </span>
+                    </Layout>
+                  </a>
+                </li>
               ))}
             </Layout>
           </Layout>
         </li>
       ))}
-    </Layout>
-  );
-  if (visual == null) return list;
-  return (
-    <Layout rowGap="block" className={cx(styles.root, className)}>
-      <span className={styles.pathsVisual} aria-hidden="true">
-        {visual}
-      </span>
-      {list}
     </Layout>
   );
 }

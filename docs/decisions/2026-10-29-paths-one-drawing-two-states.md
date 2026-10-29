@@ -1,7 +1,7 @@
 ---
 title: "Home's two paths share one drawing: the same product in two states, over two equal columns"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, illustration, components]
 source: "Owner (Devagya), 29 Oct 2026, on the site rebuilt from the 26 Oct copy (home `product-situations`); references Figma home's second band and Vanta \"Built for you\""
 supersedes: []
