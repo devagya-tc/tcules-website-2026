@@ -1,26 +1,27 @@
 ---
-title: "Paper-deep ground belongs to case study cards only"
+title: "The paper-deep case card is a home-only variant"
 date: 2026-10-29
 status: active
-area: [colour, cards]
-source: "Owner home review, 29 Oct 2026 (feat/new-copy)"
+area: [cards]
+source: "Owner home review, 29 Oct 2026 (feat/new-copy); scope clarified by the owner the same day"
 supersedes: []
-dbf: [ch02 §6]
-dbf_status: pending
+dbf: []
+dbf_status: none
 enforced_by: review
 ---
 
-The paper-deep ground belongs to case study cards only (`CaseCard`, `--ccd-ground`): no other container
-takes it.
+The horizontal case card on its paper-deep ground (`CaseCard`) is used on the home page only. It is a
+rule about that card variant, not about the colour: anything else may still sit on paper-deep (the tint
+band, Island, panels).
 
-**Why.** The owner's ruling at the home review: the horizontal case card on its paper-deep ground is
-what marks a case study, and the ground stops meaning that the moment another container shares it.
+**Why.** Home is the page that leads with case studies, so it alone gets the heavy, grounded case card.
+Everywhere else a case is a path to more content and takes the 3-column card grid; the case index takes
+the shared listing grid, with the card-less horizontal form for a featured row.
 
-**The mistake it prevents.** A new card, panel or tile reaching for paper-deep because it "reads as a
-quiet ground", so a case study's card no longer looks like a case study's.
+**The mistake it prevents.** The home case card spreading to service, expertise or listing pages
+because it is the "nicer" case card, and the first version of this entry, which read the ruling as
+"paper-deep belongs to case cards" and would have forced every tinted band and panel off its ground.
 
-**How to apply.** New containers do not take `--color-paper-deep` as their ground. Logged as the
-owner gave it; containers that already read paper-deep as a ground are NOT changed in this edit and
-need the owner's scoping before anything moves: the `tint` Section surface (`--sec-ground`), Island,
-ProfileCard, FilterPanel, the nav panel, CtaSection's form panel and the boxed-card hover grounds
-(BlockCard, ListCard). Chapter 02 states where paper-deep is used, so it is pending there.
+**How to apply.** `CaseCard` renders from the home template only. Selected work on every other page is
+the 3-column card grid (2026-10-29-home-selected-work-is-case-cards); /case-studies uses the listing
+grid (2026-10-29-case-index-is-the-listing-grid). Paper-deep as a ground is unaffected.
