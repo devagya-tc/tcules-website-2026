@@ -95,6 +95,20 @@ export default function BannerSpecimen() {
         actions={CTA}
         image={getKitPhoto('team-laptops-table')}
       />
+      <Label title="2b · below, a lead in two paragraphs">
+        An array lead (home&rsquo;s people band): each paragraph at the lead role and measure, 16
+        apart, the action a stack under them.
+      </Label>
+      <Banner
+        heading="The people behind the work"
+        headingId="bnr-below-two-paragraphs"
+        lead={[
+          'Before anything is drawn, we sit with the people doing the work and map the decisions they make, then put every draft on the wall where anyone can question it.',
+          'The same people run the lab, where new ways of working are tried before they reach a client.',
+        ]}
+        actions={CTA}
+        image={getKitPhoto('team-laptops-table')}
+      />
       <Banner
         eyebrow="The studio"
         heading="Quiet rooms, slow decisions"

@@ -578,7 +578,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
          the drawn engagements band beside it. */
       if (blocksOf(band, 'list').length > 0 || band.blocks.some((b) => b.type === 'item')) {
         const parts = sheetParts(band);
-        const links = bandLinks(band);
+        /* The closing link row ("Why teams choose Tcules") follows the last `###` reason, so the
+           parser files it under that reason: read it from what follows the items, which holds the
+           band's own link rows too. */
+        const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
         return (
           <OfferSheet
             {...head(band)}

@@ -89,8 +89,12 @@ type BannerHeadProps = {
    * One sentence under the heading, ≤ 18 words (below) or ≤ 3 lines in 477 (beside). A node so a
    * sentence that names a case can carry the case's link (owner, 11 Oct 2026); inline content only,
    * since it renders inside the lead's `<p>`.
+   *
+   * An array is a lead written as several paragraphs (home's "The people behind Tcules", 26 Oct
+   * copy): each its own `<p>` at the lead role and measure, `text` (16) apart, so the second
+   * paragraph reads as the lead going on rather than as a body at another measure and ink.
    */
-  lead?: ReactNode;
+  lead?: ReactNode | readonly ReactNode[];
   /**
    * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
    * one blue link is the caller's composition and a pattern never imports a pattern.
@@ -249,7 +253,17 @@ export function Banner(props: BannerProps) {
     </Heading>
   );
   const supportEl = support ?? null;
-  const leadEl = lead ? (
+  const leadEl = Array.isArray(lead) ? (
+    lead.length > 0 ? (
+      <Layout rowGap="text">
+        {lead.map((paragraph, index) => (
+          <p key={index} className={styles.lead} data-copy="lead">
+            {paragraph}
+          </p>
+        ))}
+      </Layout>
+    ) : null
+  ) : lead ? (
     <p className={styles.lead} data-copy="lead">
       {lead}
     </p>
