@@ -179,7 +179,6 @@ function groupOf(items: readonly InsightItem[]): Group {
 /** How many events the hub's dated rows hold. */
 const EVENT_TAKE = 3;
 
-
 function TypeShape({
   kind,
   items,
@@ -298,7 +297,12 @@ export function insightFinder({
     picks: (
       /* "Showing results for", then each pick as a held filter chip with its close, then the way
          back to the curated page. */
-      <Layout columns={{ base: 1, md: ['auto', 1] }} colGap="text" rowGap="tight" align="center">
+      <Layout
+        columns={{ base: 1, md: ['auto', 1] }}
+        colGap="text"
+        rowGap="tight"
+        align="center"
+      >
         <p className={styles.count} role="status">
           {total === 0
             ? 'Nothing matches'

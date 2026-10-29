@@ -323,7 +323,8 @@ function firstLink(runs: readonly InlineRun[]): Link | undefined {
   return undefined;
 }
 
-const lastSegment = (href: string) => href.split(/[?#]/)[0]?.split('/').filter(Boolean).at(-1) ?? '';
+const lastSegment = (href: string) =>
+  href.split(/[?#]/)[0]?.split('/').filter(Boolean).at(-1) ?? '';
 const words = (value: string) =>
   value
     .toLowerCase()
@@ -350,7 +351,9 @@ function recordFor(
   if (bySeg && !KIND_BY_SEGMENT[seg]) return bySeg;
   const longer = items.find((item) => {
     const other = lastSegment(item.href);
-    return seg.length >= 12 && (other.startsWith(seg) || seg.startsWith(other)) && other.length >= 12;
+    return (
+      seg.length >= 12 && (other.startsWith(seg) || seg.startsWith(other)) && other.length >= 12
+    );
   });
   if (longer && !KIND_BY_SEGMENT[seg]) return longer;
   return items.find((item) => words(item.title) === words(title));
@@ -392,7 +395,10 @@ function shelfOf(band: CorpusBand, records: readonly InsightItem[]): InsightShel
   );
   const note = band.blocks
     .slice(lastPiece + 1)
-    .find((block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph');
+    .find(
+      (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+        block.type === 'paragraph',
+    );
   return {
     id: band.id,
     heading: band.headingText,
@@ -449,7 +455,9 @@ function fromCopy(copy: CorpusPage, records: readonly InsightItem[], base: strin
     return shelf ? [shelf] : [];
   });
   const formatsBand = copy.bands.find(
-    (band) => !shelves.some((shelf) => shelf.id === band.id) && band.blocks.some((b) => b.type === 'table'),
+    (band) =>
+      !shelves.some((shelf) => shelf.id === band.id) &&
+      band.blocks.some((b) => b.type === 'table'),
   );
   const formats = formatsBand ? formatTable(formatsBand, base) : null;
   const view: ListingView = {
@@ -509,7 +517,10 @@ export function insightsIndexProps(
   ];
   const chosen = groups.map((group) => {
     const values = valuesOf(query[group.name]);
-    return { ...group, picked: group.options.filter((option) => values.includes(option.value)) };
+    return {
+      ...group,
+      picked: group.options.filter((option) => values.includes(option.value)),
+    };
   });
   const q = first(query[SEARCH_KEY]).trim();
   const needle = q.toLowerCase();
@@ -520,7 +531,9 @@ export function insightsIndexProps(
         (group) =>
           group.picked.length === 0 ||
           group.picked.some((option) =>
-            group.name === TYPE_KEY ? item.kind === option.id : item.filterIds.includes(option.id),
+            group.name === TYPE_KEY
+              ? item.kind === option.id
+              : item.filterIds.includes(option.id),
           ),
       ) &&
       (!needle || `${item.title} ${item.description ?? ''}`.toLowerCase().includes(needle)),

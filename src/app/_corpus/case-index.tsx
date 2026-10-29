@@ -235,7 +235,8 @@ function liveRoute(route: string): string {
  */
 function byIndustry(cases: readonly CaseItem[], filing: readonly CaseIndustry[]): CaseGroup[] {
   const byRoute = new Map<string, CaseItem>();
-  for (const item of cases) if (item.href && !byRoute.has(item.href)) byRoute.set(item.href, item);
+  for (const item of cases)
+    if (item.href && !byRoute.has(item.href)) byRoute.set(item.href, item);
   const done = new Set<string>();
   const grouped = filing.map((group) => {
     const items = group.cases.flatMap((planned) => {
@@ -251,7 +252,9 @@ function byIndustry(cases: readonly CaseItem[], filing: readonly CaseIndustry[])
   const other = 'Other industries';
   return [
     ...grouped,
-    ...(rest.length > 0 ? [{ id: anchorOf('industry', other), heading: other, items: rest }] : []),
+    ...(rest.length > 0
+      ? [{ id: anchorOf('industry', other), heading: other, items: rest }]
+      : []),
   ].filter((group) => group.items.length > 0);
 }
 
@@ -359,7 +362,9 @@ export async function caseIndexProps(
   const quotesBand = bandById(TESTIMONIALS);
   const proof = quotesBand ? await withTestimonialIds(page, quotesBand) : undefined;
   const ids = proof
-    ? quotesOf(proof.blocks).flatMap((quote) => (quote.testimonialId ? [quote.testimonialId] : []))
+    ? quotesOf(proof.blocks).flatMap((quote) =>
+        quote.testimonialId ? [quote.testimonialId] : [],
+      )
     : [];
 
   const [refs, ratings, avatars, industries, listing] = await Promise.all([
@@ -392,7 +397,9 @@ export async function caseIndexProps(
 
   const views: CaseView[] = [
     { id: 'stage', label: 'By stage', groups },
-    ...(industry.length > 0 ? [{ id: 'industry', label: 'By industry', groups: industry }] : []),
+    ...(industry.length > 0
+      ? [{ id: 'industry', label: 'By industry', groups: industry }]
+      : []),
   ];
 
   const requested = query.view;
