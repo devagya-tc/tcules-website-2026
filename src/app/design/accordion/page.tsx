@@ -1,4 +1,4 @@
-import { Cluster, Layout, Section, type SectionSurface } from '@/components';
+import { Chip, Cluster, Icon, Layout, Section, type SectionSurface } from '@/components';
 import { Accordion, type AccordionItem } from '@/patterns';
 
 import { Box, Specimen, specimenStyles as s } from '../_specimen/Specimen';
@@ -32,6 +32,38 @@ const CORE_ITEMS: readonly AccordionItem[] = [
 ] as const;
 
 const SURFACE_ITEMS = CORE_ITEMS.slice(0, 3);
+
+/** sm: a rail's filter groups (the insights finder, 28 Oct 2026) — each body composed of index chips. */
+const FILTER_GROUPS = [
+  { label: 'Type', options: ['Articles', 'Events', 'Videos', 'Guides'], picked: ['Events'] },
+  { label: 'Topic', options: ['Design systems', 'MVPs & prototypes', 'Product design'], picked: [] },
+  { label: 'Stage', options: ['New products', 'Growth stage products'], picked: [] },
+  { label: 'Industry', options: ['B2B SaaS', 'Fintech', 'Commerce', 'Edtech'], picked: [] },
+] as const;
+
+function filterItems(surface: string): AccordionItem[] {
+  return FILTER_GROUPS.map((group, index) => ({
+    question: group.label,
+    open: index === 0,
+    content: (
+      <Layout rowGap="text">
+        {group.options.map((option) => (
+          <Chip
+            key={option}
+            look="index"
+            type="checkbox"
+            name={`${surface}-${group.label.toLowerCase()}`}
+            value={option}
+            tick={<Icon name="chrome-check" />}
+            defaultChecked={(group.picked as readonly string[]).includes(option)}
+          >
+            {option}
+          </Chip>
+        ))}
+      </Layout>
+    ),
+  }));
+}
 
 const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
   {
@@ -437,9 +469,30 @@ export default function AccordionSpecimenPage() {
         </Layout>
       </Section>
 
+      {(['paper', 'ink'] as const).map((surface, index) => (
+        <Section key={`sm-${surface}`} surface={surface}>
+          <Layout rowGap="block">
+            <Layout rowGap="tight">
+              {index === 0 ? <h2>14 · sm · a rail&rsquo;s filter groups</h2> : null}
+              <p className={s.specTitle}>size=&quot;sm&quot; · surface=&quot;{surface}&quot;</p>
+              <p className={s.specNote}>
+                The insights finder&rsquo;s groups (owner, 28 Oct 2026): each head in the 12 mono
+                label voice and the chevron neutral (&ldquo;blue is too much for them&rdquo;), both
+                quiet and darkening on hover and open; insets one step down. Bodies are composed
+                (<code>content</code>): index chips, so the body takes no measure. Type opens (<code>open</code>), the
+                rest shut. Set in a rail-width track.
+              </p>
+            </Layout>
+            <Layout columns={{ base: 1, md: [1, 3] }} colGap="column">
+              <Accordion size="sm" items={filterItems(surface)} />
+            </Layout>
+          </Layout>
+        </Section>
+      ))}
+
       <Section>
         <Layout rowGap="block">
-          <h2>14 · What this static page cannot force</h2>
+          <h2>15 · What this static page cannot force</h2>
           <p>
             Point for hover, hold for pressed, Tab for the keyboard ring, and use Enter and
             Space to toggle. Watch the question AND its mark on each: there is no ground to look

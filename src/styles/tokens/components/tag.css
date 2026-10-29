@@ -41,8 +41,11 @@
    A state token exists in the set only if the value MOVES on at least one surface. That
    is why there is no --tag-mark-ink-hover: an inert mark has no states at all, on any
    surface, and a hover added for symmetry would be a lie about whether the thing can be
-   operated — on ten routes at once. --tag-filter-bg-pressed moves on all four surfaces:
-   pressed and held are a reversed fill everywhere, on blue's model. Once a token is in the set, EVERY surface declares it, even where that surface's
+   operated — on ten routes at once. --tag-filter-bg-pressed moves on all four surfaces.
+   Pressed and held are QUIET (owner, 28 Oct 2026, the insights finder's picks: "too heavy with
+   the dark fill" … "not blue chips … paper bg, but with a slight border and the 'x'"): the
+   paper ground under the ink label and a hairline-light edge; what says held is the close glyph,
+   permanence and aria-current. On ink, the band's own deep ground; blue keeps its white fill. Once a token is in the set, EVERY surface declares it, even where that surface's
    value equals its own rest.
 
    ── Every surface restates every token ──────────────────────────────────────────
@@ -85,9 +88,9 @@
   --tag-size-md: 24px; /* the minimum in BOTH axes; see above */
   --tag-radius: var(--radius-4);
   --tag-edge-width: var(--border-width-hairline);
-  --tag-glyph-size: var(
-    --icon-size-16
-  ); /* the 16px floor for a glyph with a counter — see Icon.md */
+  /* The held chip's close, the plain chrome cross at 12 (owner, 28 Oct 2026: "'x' can be made
+     12x12px"). It has no counter, so the 16 floor for close-circle's cut-out cross does not bind. */
+  --tag-glyph-size: var(--icon-size-12);
   --tag-shadow: var(--shadow-none);
   --tag-transition-duration: var(--duration-fast);
   --tag-transition-easing: var(--easing-standard);
@@ -141,11 +144,12 @@
   --tag-mark-bg: var(--color-paper-deep); /*  1.12:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  8.14:1 */
   --tag-filter-ink-hover: var(--color-brandeis-600); /*  7.53:1 */
-  --tag-filter-ink-pressed: var(--color-paper); /* 17.10:1 on the held fill */
+  --tag-filter-ink-pressed: var(--color-neutral-900);
   --tag-filter-edge: var(--color-neutral-600); /*  4.92:1 — outline floor is 3:1 */
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  6.17:1 */
-  --tag-filter-edge-pressed: var(--color-neutral-950); /* 17.10:1 — one silhouette */
-  --tag-filter-bg-pressed: var(--color-neutral-950); /* 17.10:1 vs the section */
+  --tag-filter-edge-pressed: var(--color-neutral-300);
+  --tag-filter-bg-pressed: var(--color-paper);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-500); /*  6.17:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper);
 }
@@ -171,11 +175,12 @@
   --tag-mark-bg: var(--color-neutral-200); /*  1.19:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-700); /*  7.27:1 */
   --tag-filter-ink-hover: var(--color-brandeis-600); /*  6.72:1 */
-  --tag-filter-ink-pressed: var(--color-paper); /* 17.10:1 on the held fill */
+  --tag-filter-ink-pressed: var(--color-neutral-900);
   --tag-filter-edge: var(--color-neutral-700); /*  7.27:1 — 500 is 2.82:1 here */
   --tag-filter-edge-hover: var(--color-brandeis-500); /*  5.51:1 */
-  --tag-filter-edge-pressed: var(--color-neutral-950); /* 15.27:1 — one silhouette */
-  --tag-filter-bg-pressed: var(--color-neutral-950); /* 15.27:1 vs the section */
+  --tag-filter-edge-pressed: var(--color-neutral-400);
+  --tag-filter-bg-pressed: var(--color-paper);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-500); /*  5.51:1 vs its gap */
   --tag-ring-gap-color: var(--color-paper-deep);
 }
@@ -203,11 +208,12 @@
   --tag-mark-bg: var(--color-neutral-800); /*  1.45:1 vs the section — decoration */
   --tag-filter-ink: var(--color-neutral-200); /* 12.83:1 */
   --tag-filter-ink-hover: var(--color-brandeis-200); /* 10.48:1 — 950 is 1.07:1 here */
-  --tag-filter-ink-pressed: var(--color-neutral-950); /* 17.10:1 on the held fill */
+  --tag-filter-ink-pressed: var(--color-white);
   --tag-filter-edge: var(--color-neutral-500); /*  5.41:1 — firmer is lighter here */
   --tag-filter-edge-hover: var(--color-brandeis-300); /*  7.32:1 */
-  --tag-filter-edge-pressed: var(--color-paper); /* 17.10:1 — one silhouette */
-  --tag-filter-bg-pressed: var(--color-paper); /* 17.10:1 vs the section */
+  --tag-filter-edge-pressed: var(--color-neutral-700);
+  --tag-filter-bg-pressed: var(--color-neutral-900);
+  --tag-filter-glyph-ink-pressed: var(--color-neutral-500); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-brandeis-300); /*  7.32:1 vs its gap */
   --tag-ring-gap-color: var(--color-neutral-950);
 }
@@ -249,6 +255,7 @@
   --tag-filter-edge-hover: var(--color-white); /*  6.23:1 */
   --tag-filter-edge-pressed: var(--color-white); /*  6.23:1 — constant; fill carries it */
   --tag-filter-bg-pressed: var(--color-white); /*  6.23:1 — forced, and the model */
+  --tag-filter-glyph-ink-pressed: var(--color-brandeis-300); /* the held close, a step under its label (owner, 28 Oct 2026: "make the 'x' lighter") */
   --tag-ring-color: var(--color-white); /*  6.23:1 vs its gap */
   --tag-ring-gap-color: var(--color-brandeis-500);
 }

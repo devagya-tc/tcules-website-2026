@@ -1,11 +1,11 @@
 /* ══ Component layer — ListingIndex (templates) ══════════════════════════════════
-   Tier 3. The listing page type (22 Oct 2026: the insights hub, its format pages and the case-study
-   index are one structure): what the template draws itself — a section's one-line head, an events
-   page's group label, and a format page's count beside "Show more". Every piece is a card pattern
-   and draws its own; the rail is IndexRail's.
+   Tier 3. The listing page type (22 Oct 2026: the insights hub and the case-study index are one
+   structure): what the template draws itself — a section's one-line head, and the finder's counts
+   ("12 results for", beside "Show more"). Every piece is a card pattern and draws its own; the rail
+   is IndexRail's.
 
    Naming: --lix-{part}-{role}
-     parts  section-title · group-title · count
+     parts  section-title · count
      roles  text · tracking · ink
 
    Every surface block declares every surface-dependent token. Every band these templates paint is
@@ -13,22 +13,14 @@
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* A visually hidden name (a filter group's legend): the one-pixel box assistive tech still reads. */
+  --lix-hidden-size: 1px;
   /* A section's head: the h2 role (listings round, 23 Oct 2026). At h3 it tied with the h3 serif of
      the horizontal lead under it, and the two competed; claude.com/resources sets its group heads at
      44 over 32 leads, and it is the air between groups (section-open, 128) — not a smaller head —
      that keeps the page calm. The test of 2026-10-22-listing-group-heads-h3 (proposed). */
   --lix-section-title-text: var(--text-h2);
   --lix-section-title-tracking: var(--text-h2-tracking);
-  /* An events page's group label: the eyebrow, the date column's voice. */
-  --lix-group-title-text: var(--text-eyebrow);
-  --lix-group-title-tracking: var(--text-eyebrow-tracking);
-  /* A plain page head (owner, 23 Oct 2026): the h1 role, not display — display is the masthead's —
-     and the hero's lead under it, at a lead's measure. */
-  --lix-page-title-text: var(--text-h1);
-  --lix-page-title-tracking: var(--text-h1-tracking);
-  --lix-page-lede-text: var(--text-lead);
-  --lix-page-lede-tracking: var(--text-lead-tracking);
-  --lix-page-lede-measure: var(--measure-lead);
   /* The count beside "Show more": the label voice. */
   --lix-count-text: var(--text-eyebrow);
   --lix-count-tracking: var(--text-eyebrow-tracking);
@@ -38,35 +30,23 @@
 :root,
 [data-surface='paper'] {
   --lix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
-  --lix-group-title-ink: var(--color-neutral-600);
   --lix-count-ink: var(--color-neutral-600); /* 4.92:1 */
-  --lix-page-title-ink: var(--color-neutral-900);
-  --lix-page-lede-ink: var(--color-neutral-700);
 }
 
 /* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
 [data-surface='tint'] {
   --lix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
-  --lix-group-title-ink: var(--color-neutral-700);
   --lix-count-ink: var(--color-neutral-700); /* 7.27:1 */
-  --lix-page-title-ink: var(--color-neutral-900);
-  --lix-page-lede-ink: var(--color-neutral-700);
 }
 
 /* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
 [data-surface='ink'] {
   --lix-section-title-ink: var(--color-white);
-  --lix-group-title-ink: var(--color-neutral-400);
   --lix-count-ink: var(--color-neutral-400); /* 8.05:1 */
-  --lix-page-title-ink: var(--color-white);
-  --lix-page-lede-ink: var(--color-neutral-300);
 }
 
 /* ── Surface: blue ── declared for self-containment ─────────────────────────── */
 [data-surface='blue'] {
   --lix-section-title-ink: var(--color-white); /* 6.23:1 */
-  --lix-group-title-ink: var(--color-brandeis-100);
   --lix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --lix-page-title-ink: var(--color-white);
-  --lix-page-lede-ink: var(--color-brandeis-50);
 }

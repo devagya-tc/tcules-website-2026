@@ -342,6 +342,55 @@
   background-color: var(--bcrd-box-ground-pressed);
 }
 
+/* ── The panel (`frame="panel"`, owner 28 Oct 2026) ───────────────────────────────────
+   A text-only card drawn as an object: the drawn covers' plate (--bcrd-panel-ground, the media
+   rule, the media radius) with the copy a `block` inside on every side — an inner inset, the frame
+   being the card's one box. It fills the height its grid row gives it, and from md stands at least
+   as tall as it is wide, roughly a covered card's cover and copy together, so a row of panels alone
+   still reads as a row of objects. The standfirst stops at three lines: the plate is a shape, not a
+   column of reading. */
+.panel .frame {
+  block-size: 100%;
+  padding: var(--gap-block);
+  border: var(--bcrd-media-rule-width) solid var(--bcrd-media-rule-ink);
+  border-radius: var(--bcrd-media-radius);
+  background-color: var(--bcrd-panel-ground);
+}
+
+.panel .body {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--bcrd-panel-body-lines);
+  line-clamp: var(--bcrd-panel-body-lines);
+  overflow: hidden;
+}
+
+/* The topic tag keeps its own width at the stack's start (a grid item stretches; the wrapper only
+   holds the Tag). */
+.tag {
+  justify-self: start;
+}
+
+/* The panel's glyph leads its label at the label's scale, centred on its capitals (ch04): the label
+   is trimmed to cap height so the glyph centres on the letters, not the line box. */
+.panel .icon,
+.panel .icon > svg {
+  inline-size: var(--bcrd-panel-glyph);
+  block-size: var(--bcrd-panel-glyph);
+}
+
+.panel .eyebrow,
+.panel .meta {
+  display: block;
+  text-box: trim-both cap alphabetic;
+}
+
+@media (min-width: 768px) {
+  .panel .frame {
+    aspect-ratio: var(--bcrd-panel-ratio);
+  }
+}
+
 /* The play mark: a round chip in the cover's top-end corner, outside the zoom (23 Oct 2026). */
 .play {
   position: absolute;

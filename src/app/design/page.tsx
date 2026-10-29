@@ -60,7 +60,7 @@ const SPECIMENS = [
       {
         href: '/design/chip',
         name: 'Chip',
-        note: 'one choice in a set — a real checkbox or radio drawn as a pill; edge at rest, blue fill and tick when checked, a lift on hover; rest · checked · disabled on 4 surfaces, long labels wrapping',
+        note: 'one choice in a set — a real checkbox or radio drawn as a pill; edge at rest, blue fill and tick when checked, a lift on hover; rest · checked · disabled on 4 surfaces, long labels wrapping; and look=index, the rail entry (no pill, the blue start-edge bar when checked) the insights finder’s filters are, on 4 surfaces',
       },
       {
         href: '/design/tag',
@@ -135,7 +135,7 @@ const SPECIMENS = [
       {
         href: '/design/index-rail',
         name: 'IndexRail',
-        note: 'a curated listing page’s rail beside its content — views (BY TYPE / BY TOPIC switching the whole column, held in ?view=) and a picker of sibling pages',
+        note: 'a curated listing page’s rail beside its content — views (switching the whole column, held in ?view=; the case-study index’s BY STAGE / BY INDUSTRY), a picker of sibling pages, and controls: the insights finder’s search and filter groups in the rail’s place, one Filters button on a phone',
       },
       {
         href: '/design/teaser',
@@ -215,7 +215,7 @@ const SPECIMENS = [
       {
         href: '/design/block-card',
         name: 'BlockCard',
-        note: 'the borderless card — cover media via Media, text-only sets, the featured set, the set-stated crop and the phone pair, 4 surfaces',
+        note: 'the borderless card — cover media via Media, text-only sets, the featured set, the set-stated crop and the phone pair, 4 surfaces; the panel (a piece with no picture), the date at the label line’s end and the topic tag under the copy',
       },
       {
         href: '/design/contrast',
@@ -225,7 +225,7 @@ const SPECIMENS = [
       {
         href: '/design/accordion',
         name: 'Accordion',
-        note: 'the native disclosure set — multi-open behavior, rich answers, 4 surfaces',
+        note: 'the native disclosure set — multi-open behavior, rich answers, 4 surfaces; size=sm with composed bodies, the insights finder’s filter groups (label heads, neutral chevrons)',
       },
       {
         href: '/design/proof',
@@ -335,7 +335,7 @@ const SPECIMENS = [
       {
         href: '/design/listing-index',
         name: 'ListingIndex',
-        note: 'the one listing page type: the insights hub (BY TYPE / BY TOPIC in the rail, ?view=topic), a format’s own page (?format=article …: the rail as a picker, Show more) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group shaped by its count) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
+        note: 'the one listing page type: the insights hub, curated BY TYPE until something is picked in the finder (the filters in the rail: ?type=articles&topic=… — the picks as chips over a three-track grid of results, Show more in place, Nothing matches keeps the picks) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group shaped by its count) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
       },
       {
         href: '/design/case-story',

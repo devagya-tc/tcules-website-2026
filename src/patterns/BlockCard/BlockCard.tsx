@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   Media,
   type MediaImage,
   Sketch,
+  Tag,
   Texture,
   TextureShape,
 } from '@/components';
@@ -116,10 +117,17 @@ export type BlockCardCue = 'title' | 'cta' | 'download';
  *         a ground at the 8 radius under the pointer, which is what the inset is for. For a set
  *         whose cards must read as separate targets: an icon router of four to six destinations.
  *         A text-only card draws no top hairline inside a box.
+ *   panel the text-only card as an OBJECT (owner, 28 Oct 2026, the insights finder's grid: a piece
+ *         with no picture beside pieces with one): at rest, the drawn covers' plate — their ground,
+ *         hairline and 8 radius — with the label at its head and the title and standfirst at its
+ *         foot, filling its row's height (from md, never less than a square), so a row of covered
+ *         and uncovered pieces ends on one line. Title-cued; no top hairline. In place of a picture
+ *         it carries what the piece has: its `icon` before the label, its `meta` under the title.
  *
- * A set's decision, like the type step: BlockCardSet `frame` states it for every card.
+ * A set's decision, like the type step: BlockCardSet `frame` states it for every card. `panel` is
+ * the one a caller may set per card, for the card that has no cover.
  */
-export type BlockCardFrame = 'none' | 'box';
+export type BlockCardFrame = 'none' | 'box' | 'panel';
 
 /**
  * Which axis the card arranges on. A PRESENTATION choice, never a CMS field.
@@ -305,9 +313,22 @@ export type BlockCardProps = {
   /**
    * One short format line for an artefact — "PDF · 12 pages", "Template · Figma" — in the mono
    * label voice, after the copy: on the action row beside a `download` or `cta` cue, or on its own
-   * row when the card has none. Facts about the file, never a second description.
+   * row when the card has none. Facts about the file, never a second description. As a list, each
+   * fact is its own word-group, a `text` apart, so a line that wraps breaks between facts and never
+   * starts on a separator (a panel's "Design system  27 Oct 2026  12 min read").
    */
-  meta?: string;
+  meta?: string | readonly string[];
+  /**
+   * One fact at the END of the label line, on its baseline: a listing's date (owner, 28 Oct 2026,
+   * after claude.com/resources: "the date to the top right"). In the label voice, quiet.
+   */
+  aside?: string;
+  /**
+   * The piece's topic as an inert Tag at the card's FOOT (owner, 28 Oct 2026, after
+   * claude.com/resources: "the topic to the bottom"). The card fills its row and the tag holds the
+   * foot, so a row of cards ends on one line of tags.
+   */
+  tag?: string;
   /**
    * A play mark on the cover: the piece is watched or heard, not read (the insights hub, 23 Oct
    * 2026). A round chip in the cover's top-end corner; it does not zoom with the cover. Ignored
@@ -478,6 +499,8 @@ export function BlockCard({
   play = false,
   compact = false,
   split = 'even',
+  aside,
+  tag,
 }: BlockCardProps) {
   if (title.trim().length === 0) {
     warn('title is blank; rendering nothing.');
@@ -538,8 +561,13 @@ export function BlockCard({
      it would be a double rule. */
   const textOnly = !imageNode && !iconNode;
   const boxed = frame === 'box';
+  /* The panel is an uncovered card's own frame: a cover outranks it. Its icon, if any, leads its
+     label line rather than heading the card on a row of its own. */
+  const panel = frame === 'panel' && !imageNode && !horizontal;
   const ruleNode =
-    textOnly && !boxed ? <span className={styles.textRule} aria-hidden="true" /> : null;
+    textOnly && !boxed && !panel ? (
+      <span className={styles.textRule} aria-hidden="true" />
+    ) : null;
 
   /* Which cue a linked card carries. The caller's, or the shape's default: a covered or icon card
      is title-cued, a text-only card carries the cta (every live route's shape). */
@@ -547,7 +575,7 @@ export function BlockCard({
   const cueKind: BlockCardCue | undefined = destination
     ? ctaScoped
       ? 'cta'
-      : (cue ?? (textOnly ? 'cta' : 'title'))
+      : (cue ?? (textOnly && !panel ? 'cta' : 'title'))
     : undefined;
 
   const download = cueKind === 'download';
@@ -575,8 +603,21 @@ export function BlockCard({
 
      The tone is primary: a text link is blue at rest, label and arrow (visual-direction § 4, owner
      6 Oct 2026 — blue is the recurring foreground accent; fdn-colour's neutral tone was reversed). */
-  const hasMeta = meta !== undefined && meta.trim().length > 0;
-  const metaNode = hasMeta ? <span className={styles.meta}>{meta}</span> : null;
+  const metaParts = (typeof meta === 'string' ? [meta] : (meta ?? [])).filter(
+    (part) => part.trim().length > 0,
+  );
+  const metaNode =
+    metaParts.length > 1 ? (
+      <Cluster colGap="text" rowGap="inline">
+        {metaParts.map((part) => (
+          <span key={part} className={styles.meta}>
+            {part}
+          </span>
+        ))}
+      </Cluster>
+    ) : metaParts.length === 1 ? (
+      <span className={styles.meta}>{metaParts[0]}</span>
+    ) : null;
   /* The action row: the cta, with the format line a `block` after it on the same row when there is
      one, so "DOWNLOAD   PDF · 12 PAGES" reads as one statement about the file. */
   const ctaButton =
@@ -626,6 +667,13 @@ export function BlockCard({
     ) : (
       (indexNode ?? eyebrowText)
     );
+  const hasAside = aside !== undefined && aside.trim().length > 0;
+  const tagNode = tag?.trim() ? (
+    <span className={styles.tag}>
+      <Tag>{tag}</Tag>
+    </span>
+  ) : null;
+
   /* A title-cued card's title is its affordance (owner, 7 Oct 2026): no glyph after it — the blue
      arrow that stood here on nearly every card read as bulky — and on hover and focus it takes the
      accent ink while a cover leans in. The whole card is the one anchor, so the title needs no
@@ -656,19 +704,34 @@ export function BlockCard({
      leads the head, above any eyebrow or index. Icon to its copy is `text` (16): the step the head
      group already uses between its rows, because the glyph is a row of the head sized from the
      title's role, not a label it decorates (`tight` would weld it to the title as a bullet). */
+  /* The label line: the label at its start and, where there is one, the aside (a date) at its end,
+     centred on each other. Absent an aside, the label alone, as every card had it. */
+  const withAside = (node: ReactNode) =>
+    hasAside ? (
+      <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
+        {node ?? <span />}
+        <span className={styles.meta}>{aside}</span>
+      </Layout>
+    ) : (
+      node
+    );
+  const labelLine = withAside(eyebrowNode);
   const head = (
     <>
       {iconNode}
-      {eyebrowNode}
+      {labelLine}
       {titleNode}
     </>
   );
+  /* The topic tag follows the copy, a block under it and over any cta, in every arrangement
+     (owner, 28 Oct 2026: "go with the tag under the title"). */
   const content = (
     <Layout rowGap="block" className={styles.content}>
       <Layout rowGap="text">
         {head}
         {bodyNode}
       </Layout>
+      {tagNode}
       {cta}
     </Layout>
   );
@@ -693,9 +756,7 @@ export function BlockCard({
   if (horizontal && imageNode) {
     frameContent = (
       <Layout
-        columns={
-          split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]
-        }
+        columns={split === 'grid' ? { md: imageSide === 'right' ? [1, 2] : [2, 1] } : [1, 1]}
         colGap="column"
         rowGap="block"
         align="center"
@@ -725,6 +786,31 @@ export function BlockCard({
             {bodyNode}
             {cta}
           </Layout>
+        </Layout>
+      </Layout>
+    );
+  } else if (panel) {
+    /* The panel: the label at its head, the title and standfirst pinned to its foot, the plate's
+       spare height between them. A cta, where one is asked for, closes the foot group. */
+    frameContent = (
+      <Layout rowGap="block" pinLast className={styles.grow}>
+        {withAside(
+          iconNode ? (
+            <Cluster colGap="tight" align="center" nowrap>
+              {iconNode}
+              {eyebrowNode}
+            </Cluster>
+          ) : (
+            eyebrowNode
+          ),
+        ) ?? <span />}
+        <Layout rowGap="block" className={styles.content}>
+          <Layout rowGap="text">
+            {titleNode}
+            {bodyNode}
+          </Layout>
+          {tagNode}
+          {cta}
         </Layout>
       </Layout>
     );
@@ -780,6 +866,7 @@ export function BlockCard({
         SIZE_CLASS[step],
         horizontal && styles.horizontal,
         boxed && styles.boxed,
+        panel && styles.panel,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}
     >

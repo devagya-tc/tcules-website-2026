@@ -50,6 +50,9 @@
      step under a band's h4. Was h5 (18), the card-title size. */
   --acc-question-text: var(--text-h5-lg);
   --acc-question-tracking: var(--text-h5-lg-tracking);
+  /* The `sm` set's head: the label voice at the eyebrow step (a filter rail's group, 28 Oct 2026). */
+  --acc-label-text: var(--text-eyebrow);
+  --acc-label-tracking: var(--text-eyebrow-tracking);
 }
 
 /* Paper: the question at full ink, the answer a clear step under it. The mark rests at the accent
@@ -59,6 +62,9 @@
 [data-surface='paper'] {
   --acc-question-ink: var(--color-neutral-950); /* 17.10:1 — full ink, the top of the ladder */
   --acc-answer-ink: var(--color-neutral-700); /* 7.27:1 — one clear step under the question */
+  --acc-label-ink: var(--color-neutral-600); /* the sm head: a label, quiet (owner, 28 Oct 2026) */
+  --acc-label-mark-ink: var(--color-neutral-600); /* the sm chevron: neutral, as its label (owner, 28 Oct 2026) */
+  --acc-label-mark-ink-hover: var(--color-neutral-900);
   --acc-mark-ink: var(--color-brandeis-500); /* 6.17:1 — the chevron carries the accent */
   --acc-mark-ink-hover: var(--color-brandeis-700); /* 10.07:1 */
   --acc-rule-ink: var(--color-neutral-200); /* decoration; 1.33:1 */
@@ -70,6 +76,9 @@
 [data-surface='tint'] {
   --acc-question-ink: var(--color-neutral-950); /* 15.27:1 */
   --acc-answer-ink: var(--color-neutral-700); /* 6.49:1 on paper-deep */
+  --acc-label-ink: var(--color-neutral-700); /* the sm head: a label, quiet (owner, 28 Oct 2026) */
+  --acc-label-mark-ink: var(--color-neutral-700); /* the sm chevron: neutral, as its label (owner, 28 Oct 2026) */
+  --acc-label-mark-ink-hover: var(--color-neutral-950);
   --acc-mark-ink: var(--color-brandeis-500); /* 5.51:1 */
   --acc-mark-ink-hover: var(--color-brandeis-700); /* 8.99:1 */
   --acc-rule-ink: var(--color-neutral-300); /* decoration; 1.38:1 */
@@ -81,6 +90,9 @@
 [data-surface='ink'] {
   --acc-question-ink: var(--color-white); /* 17.26:1 */
   --acc-answer-ink: var(--color-neutral-400); /* 8.05:1 */
+  --acc-label-ink: var(--color-neutral-400); /* the sm head: a label, quiet (owner, 28 Oct 2026) */
+  --acc-label-mark-ink: var(--color-neutral-400); /* the sm chevron: neutral, as its label (owner, 28 Oct 2026) */
+  --acc-label-mark-ink-hover: var(--color-white);
   --acc-mark-ink: var(--color-brandeis-300); /* 7.32:1 */
   --acc-mark-ink-hover: var(--color-brandeis-100); /* 13.61:1 */
   --acc-rule-ink: var(--color-neutral-800); /* decoration; 1.45:1 */
@@ -92,6 +104,9 @@
 [data-surface='blue'] {
   --acc-question-ink: var(--color-white); /* 6.23:1 */
   --acc-answer-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --acc-label-ink: var(--color-brandeis-100); /* the sm head: a label, quiet (owner, 28 Oct 2026) */
+  --acc-label-mark-ink: var(--color-brandeis-100); /* the sm chevron: neutral, as its label (owner, 28 Oct 2026) */
+  --acc-label-mark-ink-hover: var(--color-white);
   --acc-mark-ink: var(--color-brandeis-200); /* decoration; 3.78:1 */
   --acc-mark-ink-hover: var(--color-white); /* 6.23:1 */
   --acc-rule-ink: var(--color-brandeis-400); /* decoration; 1.62:1 */

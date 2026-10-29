@@ -1,9 +1,8 @@
-import { Layout } from '@/components';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
+import { Layout, type IconName } from '@/components';
+import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
-  ListCard,
   Teaser,
   type TeaserImage,
   type TeaserMedia,
@@ -13,9 +12,8 @@ import {
 
 /* ── An insight as a listing places it ──────────────────────────────────────────
    A template may not import @/content, so the route maps the view model onto these and the
-   template never learns whether the CMS or the specimen's fixture answered. The insights hub and a
-   format page take the same compositions (insights.tsx), the hub's smaller, a format page's larger;
-   ListingIndex places whatever they compose. */
+   template never learns whether the CMS or the specimen's fixture answered. The insights hub takes
+   these compositions (insights.tsx); ListingIndex places whatever they compose. */
 
 /** The seven formats. The templates decide each one's shape and position from this. */
 export type InsightKind =
@@ -55,6 +53,17 @@ export const LABEL: Record<InsightKind, { one: string; many: string }> = {
   video: { one: 'Video', many: 'Videos' },
   event: { one: 'Event', many: 'Events' },
   interview: { one: 'Interview', many: 'Interviews' },
+};
+
+/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026). */
+const GLYPH: Record<InsightKind, IconName> = {
+  article: 'document-text',
+  guide: 'notebook',
+  research: 'graph-up',
+  interview: 'chat-round-dots',
+  podcast: 'microphone',
+  video: 'videocamera-record',
+  event: 'calendar',
 };
 
 const DAY = new Intl.DateTimeFormat('en-GB', {
@@ -179,7 +188,7 @@ export function partition(items: readonly InsightItem[]) {
    Every group on the hub opens on its lead, the horizontal card (owner, 23 Oct 2026, after
    claude.com/resources), its cover across two thirds and its copy in the third, centred on the cover,
    with an action. Under it, its cards in rows of three — one row, or two where there are six — or two
-   as halves. No list beside or under them (owner, 23 Oct 2026: the boxed list was dropped): a piece
+   in two of three tracks (owner, 29 Oct 2026; halves before). No list beside or under them (owner, 23 Oct 2026: the boxed list was dropped): a piece
    with no picture is not a card here, and its format page holds it.
 
    The cards are the site's one card, BlockCard, so a piece looks the same here as under an article.
@@ -195,7 +204,11 @@ function cardOf(item: InsightItem, meta: MetaOptions = {}) {
     title: item.title,
     href: item.href,
     body: item.description?.trim() || undefined,
-    eyebrow: meta.withKind ? LABEL[item.kind].one : item.subject?.trim() || undefined,
+    /* The topic is a tag under the title, the same shape in the curated view and the finder's
+       results (owner, 29 Oct 2026: "why not just hide the eyebrow in the curated view and show the
+       tag?"). The curated card carries no eyebrow: its section already names the format. */
+    eyebrow: meta.withKind ? LABEL[item.kind].one : undefined,
+    tag: meta.withKind ? undefined : item.subject?.trim() || undefined,
     media: picture
       ? picture.type === 'image'
         ? { type: 'image' as const, image: picture.image }
@@ -216,86 +229,48 @@ const ACTION: Record<InsightKind, string> = {
   event: 'See the event',
 };
 
-/** The cards: rows of three, or two as halves, at the small step — an 18 title under the lead's serif
+/** The cards: rows of three, always — two pieces take two of the three tracks, never halves (owner,
+    29 Oct 2026: "the grid should never be 2 cols") — at the small step — an 18 title under the lead's serif
     (owner, 23 Oct 2026). A format page sets one grid per page of its pieces, each its own jump target. */
 export function CardGrid({
   cards,
   meta,
   titleAs = 'h3',
   id,
+  facts = false,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
   id?: string;
+  /**
+   * The finder's results (owner, 28 Oct 2026, after claude.com/resources): each card says its date
+   * at the label line's end and its topic as a tag at its foot, and a piece with no picture stands
+   * as a panel led by its format's glyph, so a row of mixed pieces ends level.
+   */
+  facts?: boolean;
 }) {
   if (cards.length === 0) return null;
-  const halves = cards.length === 2;
   return (
-    <Layout as="ul" id={id} columns={{ md: halves ? 2 : 3 }} colGap="gutter" rowGap="column">
-      {cards.map((item) => (
-        <BlockCard
-          key={item.id}
-          {...cardOf(item, meta)}
-          size="sm"
-          titleAs={titleAs}
-          tracks={halves ? 2 : 3}
-          cue="title"
-          compact
-        />
-      ))}
-    </Layout>
-  );
-}
-
-/**
- * The ROWS: a format page's pieces after its cards (owner, 23 Oct 2026), one ruled row each — its
- * eyebrow, title and standfirst, and its picture at the row's end where it has one, so every title
- * starts on one edge. A piece without a picture is never a card; here it is a row among rows.
- */
-export function Rows({
-  items,
-  meta,
-  titleAs = 'h3',
-  id,
-}: {
-  items: readonly InsightItem[];
-  meta?: MetaOptions;
-  titleAs?: 'h3' | 'h4';
-  id?: string;
-}) {
-  if (items.length === 0) return null;
-  return (
-    <Layout as="ul" id={id} rowGap="none">
-      {items.map((item) => {
-        const picture = pictureOf(item);
+    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
+      {cards.map((item) => {
+        const pictured = Boolean(pictureOf(item));
         return (
-          <ListCard
+          <BlockCard
             key={item.id}
-            title={item.title}
-            href={item.href}
-            eyebrow={cardOf(item, meta).eyebrow}
-            body={item.description?.trim() || undefined}
-            arrangement="stacked"
+            {...cardOf(item, meta)}
             size="sm"
             titleAs={titleAs}
-            marker={
-              picture
-                ? picture.type === 'image'
-                  ? /* The thumbnail fills its own box, so a cover the CMS sent without its size
-                       reserves the 16:9 the row draws it at. */
-                    {
-                      type: 'thumbnail',
-                      image: {
-                        ...picture.image,
-                        width: picture.image.width ?? 1600,
-                        height: picture.image.height ?? 900,
-                      },
-                    }
-                  : { type: 'sketch', name: picture.name }
-                : undefined
-            }
-            markerPosition="end"
+            tracks={3}
+            cue="title"
+            compact={!facts}
+            {...(facts
+              ? {
+                  aside: dateOf(item.publishedAt),
+                  tag: item.subject,
+                  ...(pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] }),
+                }
+              : {})}
           />
         );
       })}
@@ -321,6 +296,9 @@ export function Feature({
         <ul>
           <BlockCard
             {...cardOf(lead, meta)}
+            /* The lead carries no topic tag (owner, 29 Oct 2026: on the horizontal card "the tag
+               feels like an impediment"): its title and action are the whole of its copy column. */
+            tag={undefined}
             orientation="horizontal"
             size="lg"
             titleAs={titleAs}
@@ -362,26 +340,5 @@ export function Dates({ items, titleAs = 'h3', size = 'lg' }: Shape & { size?: T
         />
       ))}
     </Layout>
-  );
-}
-
-/** The SHOWCASE: one event featured, its picture beside the day at its largest, then its words. */
-export function Showcase({ items, titleAs = 'h3' }: Shape) {
-  const [lead] = items;
-  if (!lead) return null;
-  return (
-    <ul>
-      <Teaser
-        {...teaserOf(lead)}
-        date={dateMarkerOf(lead)}
-        meta={lead.event?.place}
-        arrangement="beside"
-        weight="picture"
-        size="xl"
-        titleAs={titleAs}
-        sizes={CARD_TWO_TRACKS}
-        graphic
-      />
-    </ul>
   );
 }

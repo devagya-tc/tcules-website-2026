@@ -9,7 +9,7 @@ import {
   longformMetadata,
   longformSlugs,
 } from '@/app/_corpus/longform';
-import { getBlogPage, type BlogBlock, type BlogImage } from '@/content';
+import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/content';
 import { blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
@@ -164,39 +164,20 @@ function displayDate(date: string | undefined): string {
       }).format(parsed);
 }
 
-const ACRONYMS: Record<string, string> = {
-  ai: 'AI',
-  api: 'API',
-  b2b: 'B2B',
-  saas: 'SaaS',
-  ui: 'UI',
-  ux: 'UX',
+/** The format a piece sits under, as the podcast and event pages name theirs: Home / Insights / Articles. */
+const FORMAT_CRUMB: Record<BlogPage['kind'], BreadcrumbItem> = {
+  article: { label: 'Articles', href: ROUTES.articles },
+  guide: { label: 'Guides', href: ROUTES.guides },
+  research: { label: 'Research', href: ROUTES.research },
+  video: { label: 'Videos', href: ROUTES.videos },
 };
 
-function breadcrumbLabel(segment: string): string {
-  return segment
-    .split('-')
-    .filter(Boolean)
-    .map((word, index) => {
-      const acronym = ACRONYMS[word.toLowerCase()];
-      if (acronym) return acronym;
-      return index === 0 ? `${word.charAt(0).toUpperCase()}${word.slice(1)}` : word;
-    })
-    .join(' ');
-}
-
-function blogBreadcrumbs(slug: string, title: string): BreadcrumbItem[] {
-  const segments = slug.split('/').filter(Boolean);
-  const parents = segments.slice(0, -1).map((segment, index) => ({
-    label: breadcrumbLabel(segment),
-    href: blogPath(segments.slice(0, index + 1).join('/')),
-  }));
-
+function blogBreadcrumbs(blog: BlogPage): BreadcrumbItem[] {
   return [
     { label: 'Home', href: ROUTES.home },
     { label: 'Insights', href: ROUTES.insights },
-    ...parents,
-    { label: title, href: blogPath(slug) },
+    FORMAT_CRUMB[blog.kind],
+    { label: blog.title, href: blogPath(blog.slug) },
   ];
 }
 
@@ -316,7 +297,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
       ) : null}
 
       <PageHero
-        trail={heroTrail(blogBreadcrumbs(blog.slug, blog.title), blog.title, (t) => (
+        trail={heroTrail(blogBreadcrumbs(blog), blog.title, (t) => (
           <Breadcrumbs {...t} />
         ))}
         title={blog.title}

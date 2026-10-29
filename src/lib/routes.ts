@@ -61,7 +61,9 @@ export const ROUTES = {
   proptech: '/expertise/proptech-contech-field-operations',
   climatetech: '/expertise/climatetech-energy',
 
-  /* Insights — formats are index pages, not tags. */
+  /* Insights. A format's path is the parent of its pieces' pages; as a page of its own it is retired
+     (owner, 28 Oct 2026; decisions/2026-10-29-insights-hub-is-the-finder) and redirects to the hub's
+     finder with the format picked (FORMAT_PAGE_REDIRECTS). */
   insights: '/insights',
   articles: '/insights/articles',
   guides: '/insights/guides',
@@ -272,6 +274,21 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
 export function caseStudyPlaceholderPath(slug: string): string {
   return `${ROUTES.caseStudies}#placeholder-case-${encodeURIComponent(slug)}`;
 }
+
+/**
+ * The retired format pages, each to the insights hub with its type picked (`/insights/articles` →
+ * `/insights?type=articles`): the breadcrumbs of a podcast's or an event's page and any old link
+ * still land. The type's value is the path's last segment, the slug the hub's Type group uses.
+ */
+export const FORMAT_PAGE_REDIRECTS: readonly { from: string; to: string }[] = [
+  ROUTES.articles,
+  ROUTES.guides,
+  ROUTES.research,
+  ROUTES.podcasts,
+  ROUTES.videos,
+  ROUTES.events,
+  ROUTES.interviews,
+].map((from) => ({ from, to: `${ROUTES.insights}?type=${from.split('/').pop()}` }));
 
 /** Build one canonical podcast-detail path from the named insights family. */
 export function podcastPath(slug: string): string {

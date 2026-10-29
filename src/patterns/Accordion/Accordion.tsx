@@ -1,4 +1,7 @@
+import type { ReactNode } from 'react';
+
 import { Cluster, Icon, Layout, Prose } from '@/components';
+import { cx } from '@/lib/cx';
 
 import styles from './Accordion.module.css';
 
@@ -14,7 +17,14 @@ export type AccordionItem = {
   /** Plain-text native summary label. Whitespace-only values invalidate the record. */
   question: string;
   /** Trusted, content-seam-sanitised rich text. Whitespace-only values invalidate the record. */
-  answerHtml: string;
+  answerHtml?: string;
+  /**
+   * What the disclosure holds when it is not rich text, composed by the caller (a filter group's
+   * options, 28 Oct 2026). Takes the place of `answerHtml`; one of the two is required.
+   */
+  content?: ReactNode;
+  /** Open at load. Absent, the first record opens and the rest are shut. */
+  open?: boolean;
 };
 
 export type AccordionProps = {
@@ -22,6 +32,12 @@ export type AccordionProps = {
   items: readonly AccordionItem[];
   /** Heading level for every question. Defaults to `h3`. */
   questionAs?: AccordionQuestionElement;
+  /**
+   * `md` (default): the FAQ, a 20 question over its answer. `sm` (a listing's filter rail, 28 Oct
+   * 2026): the same disclosure set at a rail's scale, each head in the label voice (the 12 mono
+   * eyebrow) and the rows at the text step, so a column of groups reads as one index.
+   */
+  size?: 'md' | 'sm';
 };
 
 function warn(message: string) {
@@ -45,14 +61,17 @@ function warn(message: string) {
  * entire FAQ is absent from the heading tree with no way to jump to it or scan it. The summary
  * keeps its role, its expanded state and its accessible name either way; the heading is additive.
  */
-export function Accordion({ items, questionAs: Question = 'h3' }: AccordionProps) {
+export function Accordion({ items, questionAs: Question = 'h3', size = 'md' }: AccordionProps) {
   const validItems = items.filter((item, index) => {
     if (typeof item.question !== 'string' || item.question.trim().length === 0) {
       warn(`item ${index + 1} has a blank question; omitting the item.`);
       return false;
     }
 
-    if (typeof item.answerHtml !== 'string' || item.answerHtml.trim().length === 0) {
+    if (
+      item.content == null &&
+      (typeof item.answerHtml !== 'string' || item.answerHtml.trim().length === 0)
+    ) {
       warn(`item ${index + 1} has a blank answer; omitting the item.`);
       return false;
     }
@@ -74,9 +93,13 @@ export function Accordion({ items, questionAs: Question = 'h3' }: AccordionProps
   }
 
   return (
-    <Layout rowGap="none" className={styles.root}>
+    <Layout rowGap="none" className={cx(styles.root, size === 'sm' && styles.sm)}>
       {validItems.map((item, index) => (
-        <details className={styles.item} open={index === 0} key={`${index}-${item.question}`}>
+        <details
+          className={styles.item}
+          open={item.open ?? index === 0}
+          key={`${index}-${item.question}`}
+        >
           <Cluster
             as="summary"
             colGap="block"
@@ -92,11 +115,15 @@ export function Accordion({ items, questionAs: Question = 'h3' }: AccordionProps
                 Down at rest, up when open: a right chevron is the convention for "this row
                 navigates", and a disclosure does not leave the page. */}
             <span className={styles.mark}>
-              <Icon name="alt-arrow-down" size="lg" />
-              <Icon name="alt-arrow-up" size="lg" />
+              <Icon name="alt-arrow-down" size={size === 'sm' ? 'sm' : 'lg'} />
+              <Icon name="alt-arrow-up" size={size === 'sm' ? 'sm' : 'lg'} />
             </span>
           </Cluster>
-          <Prose html={item.answerHtml} className={styles.answer} />
+          {item.content != null ? (
+            <div className={styles.answer}>{item.content}</div>
+          ) : (
+            <Prose html={item.answerHtml ?? ''} className={styles.answer} />
+          )}
         </details>
       ))}
     </Layout>
