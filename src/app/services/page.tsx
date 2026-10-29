@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { ComposedRoute, composedMetadata, isComposedRoute } from '@/app/_corpus/composed';
+
 import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getServicesMasterPage, type ServicesMasterAction } from '@/content';
 import { ROUTES } from '@/lib/routes';
@@ -23,6 +25,10 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  /* The 26 Oct copy, where the composed allowlist names this route (component-map C12). */
+  const composed = await composedMetadata(ROUTES.services);
+  if (composed) return composed;
+
   const page = await getServicesMasterPage(SERVICES_SLUG);
 
   if (!page) {
@@ -58,6 +64,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ServicesPage() {
+  if (isComposedRoute(ROUTES.services)) return <ComposedRoute route={ROUTES.services} />;
+
   const page = await getServicesMasterPage(SERVICES_SLUG);
 
   if (!page) notFound();

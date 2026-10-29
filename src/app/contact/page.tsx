@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { ComposedRoute, composedMetadata, isComposedRoute } from '@/app/_corpus/composed';
+
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
 import { getContactPage, type ContactAction } from '@/content';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
@@ -18,6 +20,10 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  /* The 26 Oct copy, where the composed allowlist names this route (component-map C12). */
+  const composed = await composedMetadata(ROUTES.contact);
+  if (composed) return composed;
+
   const page = await getContactPage(CONTACT_SLUG);
 
   if (!page) {
@@ -51,6 +57,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
+  if (isComposedRoute(ROUTES.contact)) return <ComposedRoute route={ROUTES.contact} />;
+
   const page = await getContactPage(CONTACT_SLUG);
 
   if (!page) notFound();
