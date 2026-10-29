@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Icon, Layout, Prose } from '@/components';
+import { Button, Icon, Layout, Media, Prose } from '@/components';
 import {
   Bento,
   BlockCardSet,
@@ -414,6 +414,9 @@ export function SheetBand({
  * its paragraphs, the "Example:" line included, its body. A band with its own photograph reads down
  * beside it; four or more without one read in two columns (component-map § A `hard-parts`).
  */
+/** An image across the content column (1240 cap, 32 gutters). */
+const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+
 export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
   const rows: ReadDownRow[] = [];
@@ -448,10 +451,20 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
   });
   flush();
   const photo = hasSlot(page, band.id) ? slotImage(page, band.id) : undefined;
-  const set = photo ? (
+  /* ReadDown's photo form is built for exactly three rows (it warns otherwise) and crops the image to
+     their height. Any other count takes the image across the column at its own ratio, the rows two up
+     under it: product-design's four hard parts beside the Doodle object model cropped the model to a
+     tall slice and cut its words mid-line. */
+  const readBeside = photo && rows.length === 3;
+  const set = !photo ? (
+    <ReadDown rows={rows} columns={rows.length >= 4 ? 2 : 1} />
+  ) : readBeside ? (
     <ReadDown rows={rows} columns={1} photo={{ ...photo, alt: '' }} />
   ) : (
-    <ReadDown rows={rows} columns={rows.length >= 4 ? 2 : 1} />
+    <Layout rowGap="stack">
+      <Media image={photo} sizes={WIDE_IMAGE} />
+      <ReadDown rows={rows} columns={rows.length >= 4 ? 2 : 1} />
+    </Layout>
   );
   return (
     <ContentSection {...head(band)} data-band="D" lead={leadText}>

@@ -98,6 +98,33 @@ export default function OfferSheetSpecimen() {
       />
 
       <Variation
+        id="drawn-three"
+        title="1c · Drawn, five three across"
+        note="`scene` on every item and `across={3}` (the 26 Oct copy's five deliverables on /services/product-design, 29 Oct 2026): from 1024 each drawing heads its words, three to a row, 3 + 2; below 1024 one column, each drawing beside its words from 768. The first scene, outcome-brief, is drawn for a tested brief: what goes in, what waits, what stays out."
+      />
+      <OfferSheet
+        heading="What you get"
+        headingId="ofs-drawn-three"
+        items={[
+          {
+            title: 'A tested brief',
+            body: 'What goes in, what waits and what stays out, checked against the people who use the product.',
+            scene: 'outcome-brief',
+          },
+          ...FOUR.slice(1).map((item, index) => ({
+            ...item,
+            scene: (['outcome-rules', 'outcome-build', 'outcome-finished'] as const)[index],
+          })),
+          {
+            title: 'Proof before the build.',
+            body: 'The riskiest idea put in front of the people who will use it, before engineers start.',
+            scene: 'symptom-test',
+          },
+        ]}
+        across={3}
+      />
+
+      <Variation
         id="no-aside"
         title="2 · No aside"
         note="Without a voice the promises take the full column, still two up: a sheet, not a row of four."

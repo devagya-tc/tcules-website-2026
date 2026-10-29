@@ -44,6 +44,14 @@ const SPECIALIST: readonly SketchName[] = [
   'specialist-new-product',
   'specialist-audit',
 ];
+/** The offer scenes What you get draws, one per promise. */
+const OUTCOME: readonly SketchName[] = [
+  'outcome-explain',
+  'outcome-rules',
+  'outcome-build',
+  'outcome-finished',
+  'outcome-brief',
+];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 /** The scenes with a STORY drawing: the six the home bento shows. */
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
@@ -131,6 +139,19 @@ export default function SketchSpecimen() {
                     </a>
                     <Sketch name={name} frame="bare" story end />
                   </Layout>
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.6 · the What you get scenes · ${surface}`}
+            note="The offer scenes a service page's promises carry (owner, 26 Oct 2026). outcome-brief was drawn 29 Oct 2026 for the 26 Oct copy's first deliverable on /services/product-design, a tested brief: the person's route arrives at what goes in (the one check), what waits sits in a quiet panel with its clock, what stays out is hatched."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {OUTCOME.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
                   <code>{name}</code>
                 </Layout>
               ))}

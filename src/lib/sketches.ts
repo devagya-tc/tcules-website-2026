@@ -56,6 +56,7 @@ export type OfferSceneName =
   | 'outcome-rules'
   | 'outcome-build'
   | 'outcome-finished'
+  | 'outcome-brief'
   | 'symptom-stuck'
   | 'symptom-messy'
   | 'symptom-test'

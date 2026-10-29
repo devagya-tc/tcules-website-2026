@@ -138,12 +138,21 @@ export function OfferSheet({
       ) : null}
     </Layout>
   );
+  /* Drawn three across (five or six promises, `across={3}`): from 1024 each drawing heads its words,
+     as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
+     again. Two across keeps the approved form, the drawing beside its words from 768. */
+  const drawnThree = drawn && across === 3;
   const promises = drawn ? (
-    <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="stack">
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: drawnThree ? 3 : 2 }}
+      colGap="gutter"
+      rowGap="stack"
+    >
       {shown.map((item) => (
         <li key={item.title}>
           <Layout
-            columns={{ base: 1, md: [5, 6] }}
+            columns={drawnThree ? { base: 1, md: [5, 6], lg: 1 } : { base: 1, md: [5, 6] }}
             colGap="gutter"
             rowGap="block"
             align="center"
