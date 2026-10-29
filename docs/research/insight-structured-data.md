@@ -50,7 +50,7 @@ These are emitted once, not per format, and every format below links to them by 
 | The company | `Organization` (`@id` `…/#organization`): name, url, logo, `sameAs` (LinkedIn, Clutch, Dribbble, YouTube) | root layout | **missing** |
 | The site | `WebSite` with `publisher` → organization | root layout | **missing** |
 | Breadcrumbs | `BreadcrumbList`, from the same items `Breadcrumbs` renders | every detail route | **missing** (crumbs render, markup does not) |
-| People | `Person` (`@id` per person): name, jobTitle, image, url, `sameAs` | the author's page | **missing**: no person or team page exists (`ROUTES.team` names `/team`, which has no route) |
+| People | `Person` (`@id` per person): name, jobTitle, image, url, `sameAs` | the author's page | **missing in code**: the 26 Oct copy carries `/insights/authors` and eight author pages (`ProfilePage` + `Person`), with no template or route yet |
 
 **People are the gap with the most design consequence.** Google's author guidance asks that every
 author have a `url` or `sameAs` that identifies them, and the GEO evidence rewards named, credentialed
@@ -59,7 +59,7 @@ levels, smallest first:
 
 - **Floor:** author `sameAs` → LinkedIn, plus a visible byline with role and photo.
 - **Better:** a short bio on the page (one sentence, "what this person has done").
-- **Best:** a person page (`ProfilePage` with `mainEntity: Person`, a Google rich-result feature)
+- **Best, and what ships (§ 5):** a person page (`ProfilePage` with `mainEntity: Person`, a Google rich-result feature)
   listing everything they wrote, spoke at or were interviewed in. One page serves authors, podcast
   hosts, event speakers and guests, and becomes the `url` every format points at.
 
@@ -250,59 +250,78 @@ one route:
 5. **Breadcrumbs as markup** as well as on screen.
 6. **Images in 16:9, 4:3 and 1:1**, as both Article and Event ask.
 
-## 5. Open questions for design
+## 5. Decided, 29 Oct 2026
 
-- **Which formats need a template of their own, and which a variant?** The evidence suggests three
-  shapes:
-  - **read**: article, guide, research, interview;
-  - **watch / listen**: video, podcast, past event;
-  - **attend**: upcoming event.
-  Case studies already have `CaseStory`. Research and interview are variants of *read* that add a
-  findings block or Q&A body.
-- **People pages:** do we build `/team/[person]` for launch, or ship the floor (LinkedIn `sameAs` and
-  an on-page byline) and add pages after 6 Nov?
-- **Transcripts:** do we have them for past podcasts and videos? YouTube's auto-captions are a
-  starting point, but they need an edit before they go on the page.
-- **Guides' FAQ:** worth the editorial effort now that Google shows nothing for it? It is defensible
-  only where the questions are real ones readers ask.
-- **Online events:** accept that they earn no Google event result (the markup still goes in), or
-  treat them as video premieres instead?
+| Question | Ruling |
+|---|---|
+| Templates per format | Three shapes: **read**, **watch / listen** and **attend**. *Proposed* until they are designed and seen (decisions/2026-10-29-insight-details-take-three-shapes) |
+| People pages | **Ship at launch.** They are already in the copy and the build plan, so the timeline does not change (decisions/2026-10-29-author-pages-ship-at-launch) |
+| Transcripts, FAQ on guides and other new content | **Nothing is written that the content does not carry.** A slot renders only when filled (decisions/2026-10-29-launch-writes-nothing-beyond-the-content) |
+| Online events | **Keep the Event markup** with `VirtualLocation` (decisions/2026-10-29-online-events-keep-event-markup) |
 
-## 6. Content model asks (for `docs/strapi-changes.md`, once the design settles)
+## 6. What ships at launch, against what the content carries
 
-These are drafted here and get logged as one entry when the page designs are picked, so the CMS is
-asked for what the pages actually use:
+At launch there are three populations, and each brings different content:
 
-- **Person:** a collection (name, role, company, photo, bio, LinkedIn, url). It is referenced by
-  authors, hosts, guests, speakers and interviewees, replacing name strings.
-- **Every format:**
-  - `takeaways` (short list);
-  - `updatedAt` shown;
-  - `references` (optional).
-- **Video and podcast:**
-  - `duration` (seconds);
-  - `chapters` (start, label);
-  - `transcript` (rich text);
-  - podcast also: `episodeNumber`, `series`, `listenLinks`.
-- **Research:**
-  - `findings` (value, unit, sentence);
-  - `methodology`;
-  - `download`.
+| Population | Formats | Content it carries | So the page shows |
+|---|---|---|---|
+| **26 Oct copy** (24 pieces plus 8 authors) | 12 articles, 10 guides, 2 podcasts and the author pages | byline (author, role), published and updated dates, reading time, **key takeaways** (all 24), question-shaped H2s, an **FAQ** block, podcast host and guests (in prose) and a YouTube link | byline linked to the author page, dates, takeaways, FAQ. Podcast: the recording, and guests as a card *if* the CMS separates them (cms-templates.md already proposes `podcast.guest[]`) |
+| **Live Strapi insights** (~70, as is) | articles, videos, events and interviews | title, description, authors (name, designation, image), dates, YouTube id, event date and place as free text | byline, dates, the player. **No** takeaways, FAQ, chapters or transcript, so those slots collapse |
+| **Live case studies** (20, as is) | case study | the current Strapi case content | `CaseStory`. Outcomes stay prose |
+
+Nobody publishes research before launch, and there is no interview content in the copy, so neither
+variant is designed for launch. Live interviews take the plain **read** shape.
+
+**The copy already specifies structured data per page** (`structured_data.types` in each file's
+frontmatter, carried to the CMS as `structuredData.types[]`, `docs/page-build/cms-templates.md` § 2).
+Here is where this research differs from it:
+
+1. **Podcasts: add `VideoObject`.** The copy claims `PodcastEpisode` only, which earns nothing in
+   Google. Embed the recording the copy already links (a design change, not new content), and the page
+   gets video results. Every required field already exists:
+   - `thumbnailUrl` comes from the YouTube id;
+   - `uploadDate` comes from `published_at`.
+2. **FAQPage on every page:** keep it. The FAQ is real, visible content, and the markup is harmless,
+   even though Google no longer shows FAQ results.
+3. **Organization:** the copy's home claims `Organization` and `WebSite`, and every page refers to
+   `https://www.tcules.com/#organization`. The root layout must emit that node once, or every reference
+   dangles.
+4. **Live Strapi pages have no `structured_data` spec.** Their markup is generated from their view
+   model by the same builders, which replace the pasted `seo.structuredData`.
+
+## 7. Recommendations for the rebuilt Strapi
+
+Strapi is being rebuilt for the new site, so `docs/strapi-changes.md` (written against the old model)
+is no longer where these go. The page-type templates Mihir builds from are
+`docs/page-build/cms-templates.md` (on `feat/new-copy`). It already proposes:
+- one `insight` type with a `format` field;
+- an `editorial` group with authors as a relation, dates, reading time and `keyTakeaways`;
+- `podcast.host[]` / `guest[]` / `recordingUrl`;
+- an `author` collection.
+
+That is most of what this research asks for. The additions, as recommendations for after the launch
+content (none of them blocks 6 Nov):
+
+- **One Person record for every role.** Authors, podcast hosts and guests, event speakers and
+  interviewees all relate to it. A guest who is not on staff is still a Person, without a page.
+  Fields: name, jobTitle, worksFor, image, `sameAs` (LinkedIn).
+- **Insight `format`** extended to `video`, `research`, `interview` and `event`, so the live content can
+  move onto the same model later.
+- **Video and podcast:** `duration` (seconds), `chapters[]` (start, label), `transcript` (rich text).
+  All optional, and empty at launch.
 - **Event:**
-  - `startsAt` and `endsAt` (datetime with timezone);
+  - `startsAt` / `endsAt` (datetime with timezone);
   - `attendanceMode`;
   - `status`;
   - `location` (place or URL);
   - `registrationUrl`;
   - `speakers` → Person;
   - `recording` → video.
-- **Interview:**
-  - its own detail model;
-  - `interviewee` → Person;
-  - Q&A pairs.
-- **Case study:**
-  - `outcomes` (value, unit, label, period);
-  - `client` (§ 13) and `stage` (§ 21) as already asked.
+- **Research:** `findings[]` (value, unit, sentence), `methodology`, `download`.
+- **Interview:** `interviewee` → Person; the body's questions as headings.
+- **Case study:** `outcomes[]` (value, unit, label, period), `client`, `stage`.
+- **`structuredData.types[]` stays an enum**, and the site generates the JSON-LD from the fields. No
+  free JSON field in the CMS.
 
 ## Sources
 
