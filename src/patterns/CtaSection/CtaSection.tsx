@@ -218,6 +218,13 @@ type CtaSplitProps = {
    */
   contact?: readonly CtaContact[];
   /**
+   * An independent score, composed by the caller — in practice one `RatingBadge` (owner, 29 Oct
+   * 2026: a rating is always the badge, never a key and a link in the contact strip). It closes the
+   * words' column, a `block` under the lede and the contact strip, at its own width. A node, so a
+   * pattern composes no sibling's control.
+   */
+  rating?: ReactNode;
+  /**
    * The island close (owner, 16 Oct 2026, the home enquiry close): the copy and the form on a
    * floating island of this surface, the form on a paper panel inside it. Blue and ink are the
    * close's grounds (Island.md amendment); the band takes the other ground unless `surface` says
@@ -269,6 +276,7 @@ type CtaOpenProps = {
   proof?: ReactNode;
   media?: never;
   contact?: never;
+  rating?: never;
   /**
    * The island variant (13 Oct 2026): the close on a floating box of its own ground inside the
    * band, the band's ground around it on every side (`Island`). The value is the island's surface,
@@ -294,6 +302,7 @@ type CtaOfferWithFormProps = {
   proof?: never;
   media?: never;
   contact?: never;
+  rating?: never;
   island?: never;
   art?: never;
   islandTexture?: never;
@@ -319,6 +328,7 @@ type CtaOfferWithActionsProps = {
    */
   media?: CtaMedia;
   contact?: never;
+  rating?: never;
   island?: never;
   art?: never;
   islandTexture?: never;
@@ -1017,6 +1027,9 @@ export function CtaSection(props: CtaSectionProps) {
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
   const hasForm = isValidElement(props.form);
+  /* The score at its own width: a Cluster row, so the pill never stretches to the column. */
+  const ratingRow =
+    'rating' in props && present(props.rating) ? <Cluster>{props.rating}</Cluster> : null;
 
   /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
      The copy and the form on a blue or ink island, the form on a paper panel inside it. [5, 7] at
@@ -1069,6 +1082,7 @@ export function CtaSection(props: CtaSectionProps) {
                       {lede({ scale: 'halves' })}
                       <CtaPoints shape="stack" markers={markers} points={points} />
                       {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                      {ratingRow}
                     </Layout>
                   </div>
                 </Layout>
@@ -1106,6 +1120,7 @@ export function CtaSection(props: CtaSectionProps) {
                   {lede({ scale: 'offer' })}
                   <CtaPoints shape="stack" markers={markers} points={points} />
                   {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
+                  {ratingRow}
                 </Layout>
               </Layout>
               {panel}
@@ -1132,6 +1147,7 @@ export function CtaSection(props: CtaSectionProps) {
               {lede({ scale: 'offer' })}
               <CtaPoints shape="stack" markers={markers} points={points} />
               {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+              {ratingRow}
             </Layout>
             {panel}
           </Layout>
@@ -1158,6 +1174,7 @@ export function CtaSection(props: CtaSectionProps) {
           {lede({ scale: hasForm ? 'offer' : 'close' })}
           <CtaPoints shape="stack" markers={markers} points={points} />
           {hasContact ? <CtaContactStrip contact={contact} besideForm={hasForm} /> : null}
+          {ratingRow}
         </Layout>
         {hasForm ? (
           <div

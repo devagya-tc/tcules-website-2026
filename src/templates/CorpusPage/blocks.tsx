@@ -23,6 +23,7 @@ import {
   LogoGrid,
   PageHero,
   Proof,
+  Slider,
   type AccordionItem,
   type CtaContact,
   type HeroActions,
@@ -276,13 +277,28 @@ export function QuoteCompact({ block }: { block: QuoteBlock }) {
 
 /* ── Quotes only (M5) ─────────────────────────────────────────────────────────── */
 
+/** From this many quotes a band is the wall; fewer turn one at a time (owner, 29 Oct 2026). */
+const WALL_FROM = 6;
+
 /**
- * M5 — a band that is only client quotes, shown as ONE composed group of rated testimonial cards
- * (home round 2, 10 Oct 2026: "a better component so we can show the testimonial and a star rating
- * alongside"). Never a slider: a slider hides every quote but the first from most readers (round 1).
- * On the page's tint under a centred head, with the band's lead when it authors one; the cards are
- * paper on the tint. The wall decides its own shape from the count (TestimonialWall): up to three is
- * one row of peers, four a 2 × 2, five or six three columns of stacks in authored order.
+ * M5 — a band that is only client quotes, on the page's tint under a centred head, with the band's
+ * lead when it authors one. Its shape is decided by the count (owner, 29 Oct 2026):
+ *
+ *   6 or more  the wall of rated testimonial cards (TestimonialWall: three columns of stacks).
+ *   fewer      ONE quote at a time: the centred italic quote with its stars, speaker and role
+ *              (Proof `display`, `align="center"`), in the kit's one-up Slider with its plain bars
+ *              (2026-10-09-testimonial-slider-controls). Five, four or three cards made a wall with
+ *              holes and a row of equal boxes; one voice at a time is the band's one idea. The owner's
+ *              explicit exception to "no hidden cards", for testimonials only: every slide is in the
+ *              page as it loads.
+ *
+ * The independent score the copy closes the band on ("**4.8 on Clutch** from 13 reviews. [Read the
+ * reviews](…)") is the band's footer as the RatingBadge ALONE (owner, 29 Oct 2026): the badge is the
+ * link to the reviews, and "from 13 reviews. Read the reviews" is its accessible name, not visible
+ * text. Under the slider it sits BELOW the quotes in a fixed place, outside the turning row, so it
+ * never moves with a slide: the head then the voice is the band's path, a badge between them would
+ * stack its star over the quote's five, and below it is where the wall already carries it, so the
+ * score has one place whatever the count.
  *
  * A quote awaiting client sign-off renders as written; the flag is a comment in the source.
  */
@@ -303,13 +319,7 @@ export function QuoteGroupBand({
     (block, index): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
       block.type === 'paragraph' && index < firstQuote && !ratingOf(block),
   );
-  const items = band.blocks.flatMap((block) =>
-    block.type === 'quote' ? [testimonialItem(block, ratings, avatars)] : [],
-  );
-  /* The independent score the copy closes the band on ("**4.8 on Clutch** from 13 reviews. [Read the
-     reviews](…)"), as the band's footer: the badge carries the score, the platform and the link to
-     the reviews (it IS that link, as on home: owner, home round 2), the count follows it in words
-     (component-map C5). */
+  const quotes = band.blocks.filter((block): block is QuoteBlock => block.type === 'quote');
   const ratingBlock = band.blocks.find(
     (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
       block.type === 'paragraph' && ratingOf(block) !== undefined,
@@ -317,14 +327,7 @@ export function QuoteGroupBand({
   const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
   const footer = rating ? (
     <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
-      <RatingBadge
-        score={rating.score}
-        platform={rating.platform}
-        href={rating.href}
-        icon={<Icon name="star" size="sm" />}
-        mark={<BrandMark name="clutch" />}
-      />
-      {rating.detail ? <p className={styles.ratingDetail}>{rating.detail}</p> : null}
+      <ScoreBadge rating={rating} />
     </Cluster>
   ) : undefined;
   return (
@@ -336,20 +339,107 @@ export function QuoteGroupBand({
       lead={lead ? plain(lead.runs) : undefined}
       footer={footer}
     >
-      <TestimonialWall items={items} />
+      {quotes.length >= WALL_FROM ? (
+        <TestimonialWall
+          items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
+        />
+      ) : (
+        <QuoteSlider
+          label={band.headingText}
+          quotes={quotes}
+          ratings={ratings}
+          avatars={avatars}
+        />
+      )}
     </ContentSection>
+  );
+}
+
+/**
+ * The one-up quote slider: each slide the centred Proof with the client's stars. A portrait shows on
+ * every slide or on none, the wall's rule (review 29 Oct: some faces and some not read as unevenly
+ * finished). One quote is no slider: it stands alone.
+ */
+function QuoteSlider({
+  label,
+  quotes,
+  ratings,
+  avatars,
+}: {
+  label: string;
+  quotes: readonly QuoteBlock[];
+  ratings?: RatingsById;
+  avatars?: AvatarsById;
+}) {
+  const portraits = quotes.map((block) =>
+    block.testimonialId ? avatars?.[block.testimonialId] : undefined,
+  );
+  const withPortraits = portraits.every(Boolean);
+  const slides: ProofQuote[] = quotes.map((block, index) => {
+    const stars = block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined;
+    const portrait = withPortraits ? portraits[index] : undefined;
+    return {
+      ...proofQuote(block),
+      ...(stars !== undefined ? { stars } : {}),
+      ...(portrait
+        ? {
+            portrait: {
+              src: portrait.src,
+              width: portrait.width,
+              height: portrait.height,
+              sources: portrait.sources,
+            },
+          }
+        : {}),
+    };
+  });
+  const [only] = slides;
+  if (slides.length === 1 && only) return <Proof quote={only} align="center" />;
+  return (
+    <Slider label={label} slideName="testimonial" perView={1} align="center" autoplay>
+      {slides.map((quote, index) => (
+        <li key={`${index}-${quote.name}`}>
+          <Proof quote={quote} align="center" />
+        </li>
+      ))}
+    </Slider>
+  );
+}
+
+/** An independent score as the copy authors it, parsed by `ratingOf`. */
+export type ScoreLine = NonNullable<ReturnType<typeof ratingOf>>;
+
+/**
+ * The Clutch score as the RatingBadge, the ONLY form a rating takes (owner, 29 Oct 2026: never text
+ * and a link). The copy's words after the score ("from 13 reviews.") and its link's words ("Read the
+ * reviews") are not shown: they follow the badge's visible words in its accessible name, so a
+ * screen reader and a crawler read the whole authored line and the eye reads the badge.
+ */
+export function ScoreBadge({ rating }: { rating: ScoreLine }) {
+  const detail = [rating.detail, rating.linkLabel].filter(Boolean).join(' ');
+  return (
+    <RatingBadge
+      score={rating.score}
+      platform={rating.platform}
+      href={rating.href}
+      icon={<Icon name="star" size="sm" />}
+      mark={<BrandMark name="clutch" />}
+      {...(detail ? { detail } : {})}
+    />
   );
 }
 
 /**
  * An independent score line: "**4.8 out of 5 on Clutch** across 13 independent client reviews.
  * [Read the reviews](…)" (earlier copy) or "**4.8 on Clutch** from 13 reviews. [Read the reviews](…)"
- * (26 Oct copy). The score, the platform, the reviews' link, and the words between the claim and the
- * link ("from 13 reviews.") as `detail`.
+ * (26 Oct copy). The score, the platform, the reviews' link and its words, and the words between the
+ * claim and the link ("from 13 reviews.") as `detail`.
  */
 export function ratingOf(
   block: CorpusBlock,
-): { score: string; platform: string; href: string; detail?: string } | undefined {
+):
+  | { score: string; platform: string; href: string; detail?: string; linkLabel?: string }
+  | undefined {
   if (block.type !== 'paragraph') return undefined;
   const link = block.runs.find((run) => run.type === 'link');
   if (!link || link.type !== 'link') return undefined;
@@ -361,11 +451,13 @@ export function ratingOf(
     /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+)/.exec(sentence);
   if (!match) return undefined;
   const detail = claim ? plain(rest.filter((run) => run !== link)).trim() : undefined;
+  const linkLabel = plain(link.children).trim();
   return {
     score: match[1] ?? '',
     platform: (match[2] ?? '').replace(/\.$/, ''),
     href: link.href,
     ...(detail ? { detail } : {}),
+    ...(linkLabel ? { linkLabel } : {}),
   };
 }
 
@@ -398,17 +490,7 @@ export function RecognitionBand({ band }: { band: CorpusBand }) {
     <Section id={band.id} data-band="H" aria-labelledby={id}>
       <LogoGrid
         marks={marks}
-        badge={
-          rating ? (
-            <RatingBadge
-              score={rating.score}
-              platform={rating.platform}
-              href={rating.href}
-              icon={<Icon name="star" size="sm" />}
-              mark={<BrandMark name="clutch" />}
-            />
-          ) : undefined
-        }
+        badge={rating ? <ScoreBadge rating={rating} /> : undefined}
         context={band.headingText}
         contextAs="h2"
         headingId={id}
@@ -605,12 +687,17 @@ export function EnquiryBand({
 )) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
   const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
-  /* The band's other lines, kept in the copy half as the close's contact strip (component-map § A
-     `enquiry`): the independent score ("**4.8 on Clutch** from 13 reviews. [Read the reviews]") and
-     the other way in ("Or email [hello@tcules.com]"), each its words as the key and its link as the
-     value. Text never crosses the island edge. */
+  /* The band's other lines, kept in the copy half: the independent score ("**4.8 on Clutch** from 13
+     reviews. [Read the reviews]") as the RatingBadge alone (owner, 29 Oct 2026: a rating is always
+     the badge, never a key and a link), and the other ways in ("Or email [hello@tcules.com]") as the
+     close's contact strip, each its words as the key and its link as the value. Text never crosses
+     the island edge. */
+  const score = band.blocks.flatMap((block) => {
+    const found = block === lead ? undefined : ratingOf(block);
+    return found ? [found] : [];
+  })[0];
   const contact = band.blocks.flatMap((block): CtaContact[] => {
-    if (block === lead || block.type !== 'paragraph') return [];
+    if (block === lead || block.type !== 'paragraph' || ratingOf(block)) return [];
     const link = block.runs.find(
       (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
     );
@@ -621,7 +708,10 @@ export function EnquiryBand({
       .trim();
     return [{ label: words, value: plain(link.children), href: link.href }];
   });
-  const contactProps = contact.length > 0 ? { contact } : {};
+  const contactProps = {
+    ...(contact.length > 0 ? { contact } : {}),
+    ...(score ? { rating: <ScoreBadge rating={score} /> } : {}),
+  };
   if (island?.arrangement === 'halves') {
     return (
       <CtaSection

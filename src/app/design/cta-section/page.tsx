@@ -1,6 +1,15 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Media, Prose, Section } from '@/components';
+import {
+  BrandMark,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  Prose,
+  RatingBadge,
+  Section,
+} from '@/components';
 import {
   CtaSection,
   EnquiryForm,
@@ -10,7 +19,7 @@ import {
   type ProofFigure,
 } from '@/patterns';
 import { getKitPhoto } from '@/lib/photos';
-import { ENDPOINTS, ROUTES } from '@/lib/routes';
+import { ENDPOINTS, EXTERNAL, ROUTES } from '@/lib/routes';
 
 import { CHOICE_DRESS } from '../_specimen/enquiry-chips';
 import { Box, specimenStyles as s } from '../_specimen/Specimen';
@@ -243,7 +252,7 @@ export default function CtaSectionSpecimenPage() {
 
       <SpecimenNote
         title="1b · The island close"
-        note="island='blue' | 'ink' on a split close (home, owner 16 Oct 2026): the desk drawing, heading and lede as one group centred against the form, all on the island; the form on a paper panel inside it, in one of EnquiryForm's two dresses; islandTexture='frame' framing the form. Four instances: card on blue (what home carries), message on blue, card on ink, message on ink. Send any of them empty to see send-only validation. The fifth has no drawing, points and a contact strip: a copy group taller than the form."
+        note="island='blue' | 'ink' on a split close (home, owner 16 Oct 2026): the desk drawing, heading and lede as one group centred against the form, all on the island; the form on a paper panel inside it, in one of EnquiryForm's two dresses; islandTexture='frame' framing the form. Four instances: card on blue (what home carries), message on blue, card on ink, message on ink. Send any of them empty to see send-only validation. The fifth has no drawing, points, a contact strip and the `rating` slot (owner, 29 Oct 2026: a score is always the RatingBadge, never a key and a link): a copy group taller than the form."
       />
       {(['blue', 'ink'] as const).map((surface) =>
         (['card', 'message'] as const).map((kind) => (
@@ -269,6 +278,16 @@ export default function CtaSectionSpecimenPage() {
           { label: 'Write to', value: 'hello@tcules.com', href: 'mailto:hello@tcules.com' },
           { label: 'Reply', value: 'Within one business day' },
         ]}
+        rating={
+          <RatingBadge
+            score="4.8"
+            platform="Clutch"
+            href={EXTERNAL.clutch}
+            icon={<Icon name="star" size="sm" />}
+            mark={<BrandMark name="clutch" />}
+            detail="from 13 reviews. Read the reviews"
+          />
+        }
         form={<EnquiryForm {...ENQUIRY_FORM_PROPS} dress={DRESS.card} />}
       />
 
