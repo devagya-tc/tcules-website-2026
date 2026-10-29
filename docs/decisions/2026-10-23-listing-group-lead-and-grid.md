@@ -1,7 +1,7 @@
 ---
 title: "A listing group is its lead as the horizontal card, then its cards in rows of three"
 date: 2026-10-23
-status: active
+status: superseded
 area: [layout, cards, type]
 source: "Owner, 23 Oct 2026 (listings round, checklist S3)"
 supersedes: ["2026-10-22-listing-group-heads-h3"]

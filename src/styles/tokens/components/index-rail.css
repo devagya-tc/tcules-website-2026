@@ -72,6 +72,10 @@
   --irl-ring-width: var(--focus-ring-width);
   --irl-ring-offset: var(--space-4);
   --irl-ring-radius: var(--radius-4);
+  /* An OPTICAL ALLOWANCE, as Layout's --lay-scroll-ring-room: the controls scroll, and a scroll box
+     clips at its edge, so it is grown by a focus ring's reach on every side (padding, cancelled by an
+     equal negative margin) and a field flush to the column keeps its whole ring. */
+  --irl-controls-ring-room: calc(var(--focus-ring-offset) + var(--focus-ring-width));
   --irl-duration: var(--duration-fast);
   /* The switch's rule sliding between labels, and the arriving view's rise (8, an optical
      distance from the ramp) — a re-sort, not a page change. */

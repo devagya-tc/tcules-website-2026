@@ -15,7 +15,7 @@ import { Specimen, specimenStyles as s } from '../_specimen/Specimen';
  *
  * `selected` IS a real prop and is printed on every surface, because the held chip is the one
  * state this component's argument turns on: a REVERSED FILL on every surface — blue's model carried
- * to all four (tracker 2.17) — with the label and a `close-circle` glyph turned to the opposite end.
+ * to all four (tracker 2.17) — with the label and a `chrome-close` glyph turned to the opposite end.
  */
 
 /* Eight labels spanning the measured range: 3 characters to 32, including both 31-character
@@ -67,7 +67,7 @@ const FILTER_GROUPS = [
   },
 ] as const;
 
-const CLEAR = <Icon name="close-circle" label="Clear filter" />;
+const CLEAR = <Icon name="chrome-close" label="Clear filter" />;
 
 /** A row of marks. The row is always a Cluster — the component owns no distance outside its box. */
 function Marks({ items }: { items: readonly string[] }) {

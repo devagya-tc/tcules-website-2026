@@ -396,6 +396,11 @@
    the offset the rule sits at; it does not move the line box. */
 .link .labelInk {
   display: inline;
+  /* No letter-space pull-back on a link (28 Oct 2026): as inline content the negative end-margin
+     makes the label's own size a pixel short of its ink, so a link in a row sized to fit it ("Clear
+     all" over the insights results) broke onto two lines. A bare link has no box to centre in, so
+     the correction bought nothing here. */
+  margin-inline-end: 0;
   padding-block-end: var(--btn-link-rule-offset);
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;

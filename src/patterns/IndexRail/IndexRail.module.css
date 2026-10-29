@@ -314,6 +314,30 @@
   .name {
     white-space: normal;
   }
+
+  /* The controls (a listing's filters) stand in the sticky column; taller than the screen under
+     the nav, they scroll within it rather than running off its foot. */
+  .controls {
+    max-block-size: calc(100dvh - var(--irl-sticky-top) - var(--gap-stack));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding-block: var(--irl-controls-ring-room);
+    margin-block: calc(-1 * var(--irl-controls-ring-room));
+  }
+}
+
+/* The controls scroll (in the column from 1024, in the opened sheet below it), and a scroll box
+   clips: room for a focus ring on the inline sides, cancelled so the fields stay on the column's
+   edges (the search field's ring was cut on three sides, 28 Oct 2026). The block sides are below. */
+.controls {
+  padding-inline: var(--irl-controls-ring-room);
+  margin-inline: calc(-1 * var(--irl-controls-ring-room));
+}
+
+/* The controls' phone button sits at the bar's start: it is the bar's only control. */
+.controlsToggle .toggleLabel {
+  text-align: start;
 }
 
 /* Below 1024 the rail is a slim bar of one line, stuck under the site nav, its ground running edge
@@ -370,6 +394,8 @@
 
   .pop[data-open] {
     display: block;
+    max-block-size: calc(100dvh - var(--irl-sticky-top-compact) - var(--gap-stack));
+    overflow-y: auto;
     position: absolute;
     /* Under the bar: the bar's own inset below the row it hangs from. */
     inset-block-start: calc(100% + var(--irl-bar-inset));
@@ -380,7 +406,6 @@
     filter: drop-shadow(
       0 var(--irl-pop-shadow-y) var(--irl-pop-shadow-blur) var(--irl-pop-shadow-ink)
     );
-    overflow: visible;
   }
 
   /* In a picker's line the current entry's mark is the switch's: a rule under the label, and the

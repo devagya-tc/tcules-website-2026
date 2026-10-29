@@ -75,6 +75,16 @@ export type IndexRailProps = {
    * so the reader can step back up without the breadcrumb (owner, 25 Oct 2026). Menu only.
    */
   parent?: IndexRailItem;
+  /**
+   * The rail as CONTROLS instead of a list (a listing's filters, 28 Oct 2026, after Jatin's review:
+   * "keep the filters there itself"): composed by the caller and set in the rail's place, the
+   * modes' lists and switch not drawn. From 1024 they stand in the sticky column, scrolling within
+   * it when taller than the screen; below it the bar holds one button (`controlsLabel`) that opens
+   * them under the bar.
+   */
+  controls?: ReactNode;
+  /** The phone bar's button for the controls ("Filters · 2"). Authored case. */
+  controlsLabel?: string;
   /** The nav's accessible name. */
   ariaLabel: string;
   /** The content column, when the modes carry no panels (a picker of pages beside one listing). */
@@ -117,6 +127,8 @@ export function IndexRail({
   label = 'Jump to',
   menu = false,
   parent,
+  controls,
+  controlsLabel = 'Filters',
   ariaLabel,
   children,
   className,
@@ -260,7 +272,34 @@ export function IndexRail({
 
   const picked = active.items.find((item) => item.current) ?? active.items[0];
   const rail =
-    menu && !views ? (
+    controls != null ? (
+      <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
+        <div className={styles.bar}>
+          {/* Below 1024 only: the one button that opens the controls under the bar. */}
+          <button
+            type="button"
+            className={cx(styles.toggle, styles.controlsToggle)}
+            aria-expanded={open}
+            aria-controls={`${uid}-controls`}
+            onClick={() => setOpen((was) => !was)}
+          >
+            <Layout columns={{ base: ['auto', 'auto'] }} colGap="tight" align="center">
+              <span className={styles.toggleLabel}>{controlsLabel}</span>
+              <span className={styles.toggleMark} aria-hidden="true">
+                <Icon name="alt-arrow-down" size="sm" />
+              </span>
+            </Layout>
+          </button>
+          <div
+            id={`${uid}-controls`}
+            className={cx(styles.row, styles.pop, styles.controls)}
+            data-open={open ? '' : undefined}
+          >
+            {controls}
+          </div>
+        </div>
+      </nav>
+    ) : menu && !views ? (
       <nav aria-label={ariaLabel} className={cx(styles.root, className)}>
         <details
           className={styles.menu}

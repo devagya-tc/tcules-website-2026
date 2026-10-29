@@ -43,6 +43,14 @@
   --chip-transition-easing: var(--easing-standard);
   --chip-ring-width: var(--focus-ring-width);
   --chip-ring-offset: var(--focus-ring-offset);
+  /* The `index` look (a listing's filter rail, owner 28 Oct 2026): the rail entry's own type and
+     geometry — the h6 role, the start tick's width and the inset that makes its room (optical, from
+     the ramp) — duplicated from the rail on purpose (a component never reads another's tokens). */
+  --chip-index-text: var(--text-h6);
+  --chip-index-tracking: var(--text-h6-tracking);
+  --chip-index-inset: var(--space-12);
+  --chip-index-marker-width: var(--border-width-2);
+  --chip-index-ring-radius: var(--radius-4);
 }
 
 /* Paper. The rest edge is neutral-300 at 1.54:1, the approved mock's own: the label (11.81:1)
@@ -61,6 +69,10 @@
   --chip-bg-checked-disabled: var(--color-neutral-200);
   --chip-fg-checked-disabled: var(--color-neutral-600);
   --chip-ring-color: var(--color-brandeis-500); /* 6.17:1 */
+  /* The index look: the rail entry's inks, quiet at rest, the ink when picked, the blue tick. */
+  --chip-index-fg: var(--color-neutral-600);
+  --chip-index-fg-checked: var(--color-neutral-900);
+  --chip-index-marker: var(--color-brandeis-500);
 }
 
 /* Tint: the edge firms one step so the outline survives the deeper ground (300 nearly vanishes). */
@@ -75,6 +87,10 @@
   --chip-bg-checked-disabled: var(--color-neutral-300);
   --chip-fg-checked-disabled: var(--color-neutral-600);
   --chip-ring-color: var(--color-brandeis-500); /* 5.51:1 */
+  /* The index look: the rail entry's inks, quiet at rest, the ink when picked, the blue tick. */
+  --chip-index-fg: var(--color-neutral-700);
+  --chip-index-fg-checked: var(--color-neutral-900);
+  --chip-index-marker: var(--color-brandeis-600);
 }
 
 /* Ink: the label lifts and the edge firms by going lighter. The checked fill stays the accent blue,
@@ -91,6 +107,10 @@
   --chip-bg-checked-disabled: var(--color-neutral-800);
   --chip-fg-checked-disabled: var(--color-neutral-500);
   --chip-ring-color: var(--color-brandeis-300); /* 7.32:1 */
+  /* The index look: the rail entry's inks, quiet at rest, the ink when picked, the blue tick. */
+  --chip-index-fg: var(--color-neutral-400);
+  --chip-index-fg-checked: var(--color-white);
+  --chip-index-marker: var(--color-brandeis-300);
 }
 
 /* Blue: every value is a blue or white because the ground is. Checked reverses to a white fill
@@ -106,4 +126,8 @@
   --chip-bg-checked-disabled: var(--color-brandeis-400);
   --chip-fg-checked-disabled: var(--color-brandeis-200);
   --chip-ring-color: var(--color-white); /* 6.23:1 */
+  /* The index look: the rail entry's inks, quiet at rest, the ink when picked, the blue tick. */
+  --chip-index-fg: var(--color-brandeis-100);
+  --chip-index-fg-checked: var(--color-white);
+  --chip-index-marker: var(--color-white);
 }

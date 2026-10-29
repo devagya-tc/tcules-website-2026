@@ -2109,6 +2109,79 @@ export default function BlockCardSpecimenPage() {
           </Specimen>
         </Layout>
       </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <BandHead title="24 · The panel, the date and the topic tag (the insights finder, 28–29 Oct)">
+            A piece with no picture stands as a panel (<code>frame=&quot;panel&quot;</code>): the paper plate in the
+            cover&rsquo;s place, its hairline the box, its format&rsquo;s glyph and label at its head,
+            the title and standfirst pinned to its foot, so a row of mixed pieces ends level. The date
+            sits at the label line&rsquo;s end (<code>aside</code>) and the topic is a tag under the copy (<code>tag</code>),
+            on a pictured card too. A horizontal lead carries no tag.
+          </BandHead>
+          <Specimen
+            title="Three tracks · a pictured card beside two panels"
+            note="size='sm', cue='title'. Left: the cover, the label with the date at its end, the title, the tag. Middle: a panel with a long title. Right: a panel with a standfirst (clamped to three lines). Every card's tag follows its own copy, a block under it."
+          >
+            <Cards columns={{ base: 1, md: 3 }}>
+              <BlockCard
+                size="sm"
+                tracks={3}
+                cue="title"
+                eyebrow="Article"
+                aside="28 Oct 2026"
+                tag="Design Systems"
+                title="Design systems for SaaS: what to build, in what order"
+                media={cover(COVER_SEAM)}
+                href={ROUTES.insights}
+              />
+              <BlockCard
+                size="sm"
+                tracks={3}
+                cue="title"
+                frame="panel"
+                icon="document-text"
+                eyebrow="Article"
+                aside="27 Oct 2026"
+                tag="Design Systems"
+                title="Best design system agencies and consultants: an honest shortlist by what you need"
+                href={ROUTES.insights}
+              />
+              <BlockCard
+                size="sm"
+                tracks={3}
+                cue="title"
+                frame="panel"
+                icon="notebook"
+                eyebrow="Guide"
+                aside="6 Aug 2026"
+                tag="Product Design"
+                title="How do you audit a design system?"
+                body="A checklist for the first week: what to inventory, who to ask, and which gaps to name before anyone redesigns a single component, so the audit ends in decisions rather than a slide deck."
+                href={ROUTES.insights}
+              />
+            </Cards>
+          </Specimen>
+          <Specimen
+            title="The lead · horizontal, no tag"
+            note="orientation='horizontal', split='grid', cue='cta'. The hub's lead takes no topic tag (owner, 29 Oct 2026: on the horizontal card 'the tag feels like an impediment'); the caller leaves tag off."
+          >
+            <Rows>
+              <BlockCard
+                orientation="horizontal"
+                size="lg"
+                tracks={2}
+                split="grid"
+                cue="cta"
+                ctaLabel="Read more"
+                title="Design Thinking vs CX vs UX: Explained"
+                media={cover(COVER_FLOW)}
+                href={ROUTES.insights}
+              />
+            </Rows>
+          </Specimen>
+        </Layout>
+      </Section>
     </>
   );
 }

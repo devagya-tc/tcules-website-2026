@@ -9,6 +9,7 @@ import type {
   PageOutlineEntry,
 } from '../../types';
 import { mapUploadImage } from './image';
+import { blogKind } from './insights';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
   StrapiBlog,
@@ -516,6 +517,7 @@ function mapBlog(
   return {
     documentId: value(rawBlog.documentId) || slug,
     slug,
+    kind: blogKind(slug),
     title,
     description: value(rawBlog.seo?.metaDescription) || contentSummary(rawBlog),
     ...(value(rawBlog.createdAt) ? { createdAt: value(rawBlog.createdAt) } : {}),

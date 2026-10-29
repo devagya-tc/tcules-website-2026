@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next';
 
-import { CASE_SLUG_REDIRECTS, EXPERTISE_SLUG_REDIRECTS, caseStudyPath } from './src/lib/routes';
+import {
+  CASE_SLUG_REDIRECTS,
+  EXPERTISE_SLUG_REDIRECTS,
+  caseStudyPath,
+  FORMAT_PAGE_REDIRECTS,
+} from './src/lib/routes';
 
 const nextConfig: NextConfig = {
   /**
@@ -23,8 +28,9 @@ const nextConfig: NextConfig = {
    * this machine. Adjust the subnet if this repo is checked out somewhere on a different one.
    */
   allowedDevOrigins: ['192.168.1.*', '*.local'],
-  /** The corpus's planned case slugs → the live Strapi slugs (routes.ts § CASE_SLUG_REDIRECTS).
-      Temporary, so nothing caches the planned slug as moved for good. */
+  /** The corpus's planned case slugs → the live Strapi slugs (routes.ts § CASE_SLUG_REDIRECTS), and
+      the retired format pages → the insights finder (§ FORMAT_PAGE_REDIRECTS). Temporary, so nothing
+      caches either as moved for good. */
   async redirects() {
     return [
       ...Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => ({
@@ -36,6 +42,11 @@ const nextConfig: NextConfig = {
       ...Object.entries(EXPERTISE_SLUG_REDIRECTS).map(([from, to]) => ({
         source: `/expertise/${from}`,
         destination: `/expertise/${to}`,
+        permanent: false,
+      })),
+      ...FORMAT_PAGE_REDIRECTS.map(({ from, to }) => ({
+        source: from,
+        destination: to,
         permanent: false,
       })),
     ];

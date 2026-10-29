@@ -106,6 +106,72 @@
   color: var(--chip-fg-checked-disabled);
 }
 
+/* ── The index look: the rail's entry, one option per line (owner, 28 Oct 2026) ─────────────
+   The face loses its pill (no edge, no ground, no floor, no tick) and becomes the listing rail's
+   entry: the name, quiet at rest; picked, in the ink with the blue tick at its own start edge,
+   inside the entry's inset so nothing crosses the column's edge. The pointer darkens the name, as
+   it does on every rail entry. The tick grows from its centre, as the rail's does. */
+.index {
+  display: flex;
+}
+
+.index .face {
+  position: relative;
+  display: block;
+  min-block-size: 0;
+  padding: 0 0 0 var(--chip-index-inset);
+  border: 0;
+  border-radius: var(--chip-index-ring-radius);
+  color: var(--chip-index-fg);
+  font: var(--chip-index-text);
+  letter-spacing: var(--chip-index-tracking);
+  text-wrap: pretty;
+  transition: color var(--chip-transition-duration) var(--chip-transition-easing);
+}
+
+.index .tick {
+  display: none;
+}
+
+.index .face::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--chip-index-marker-width);
+  background-color: var(--chip-index-marker);
+  transform: scaleY(0);
+  transition: transform var(--chip-transition-duration) var(--chip-transition-easing);
+}
+
+.index:hover .input:not(:disabled) + .face {
+  transform: none;
+  color: var(--chip-index-fg-checked);
+}
+
+.index .input:checked + .face {
+  border-color: transparent;
+  background: none;
+  color: var(--chip-index-fg-checked);
+}
+
+.index .input:checked + .face::before {
+  transform: scaleY(1);
+}
+
+.index .input:disabled + .face,
+.index .input:disabled:checked + .face {
+  background: none;
+  color: var(--chip-fg-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index .face,
+  .index .face::before {
+    transition-duration: var(--duration-instant);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .face,
   .tick {
