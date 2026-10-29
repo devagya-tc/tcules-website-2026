@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
-import { Icon, Layout, Section } from '@/components';
+import { Chip, Icon, Input, Layout, Section } from '@/components';
 import { ROUTES } from '@/lib/routes';
-import { IndexRail } from '@/patterns';
+import { Accordion, IndexRail } from '@/patterns';
 
 import { Box, Specimen } from '../_specimen/Specimen';
 
@@ -38,6 +38,51 @@ function View({ prefix, names }: { prefix: string; names: readonly string[] }) {
 const TYPES = ['Articles', 'Events', 'Videos', 'Guides'] as const;
 const TOPICS = ['Design systems', 'Prototypes', 'Modernisation'] as const;
 
+/** The finder's controls (the insights hub, 28 Oct 2026): a search, then the filter groups. */
+const GROUPS = [
+  { label: 'Type', options: TYPES, picked: ['Events'] },
+  { label: 'Topic', options: TOPICS, picked: [] },
+  { label: 'Industry', options: ['B2B SaaS', 'Fintech', 'Edtech'], picked: [] },
+] as const;
+
+function Controls() {
+  return (
+    <Layout rowGap="block">
+      <Input
+        type="search"
+        name="q"
+        placeholder="Search insights"
+        aria-label="Search insights"
+        enterKeyHint="search"
+      />
+      <Accordion
+        size="sm"
+        items={GROUPS.map((group, index) => ({
+          question: group.label,
+          open: index === 0,
+          content: (
+            <Layout rowGap="text">
+              {group.options.map((option) => (
+                <Chip
+                  key={option}
+                  look="index"
+                  type="checkbox"
+                  name={`rail-${group.label.toLowerCase()}`}
+                  value={option}
+                  tick={<Icon name="chrome-check" />}
+                  defaultChecked={(group.picked as readonly string[]).includes(option)}
+                >
+                  {option}
+                </Chip>
+              ))}
+            </Layout>
+          ),
+        }))}
+      />
+    </Layout>
+  );
+}
+
 /**
  * IndexRail — a curated listing page's rail beside its content, in its two modes:
  *
@@ -46,6 +91,8 @@ const TOPICS = ['Design systems', 'Prototypes', 'Modernisation'] as const;
  *           and switch: the URL follows without a reload). The list marks the section in view.
  *   picker  one list of pages, the current one marked; the content is the children.
  *   menu    a picker as one control naming the current page, its siblings opening under it.
+ *   controls the rail holds the caller's controls (the insights finder's search and filter groups)
+ *           in place of a list; below 1024 the bar is one button (`controlsLabel`) opening them.
  *
  * Below 1024 the rail sits above the content and an in-page jump list is dropped.
  */
@@ -163,6 +210,28 @@ export default async function IndexRailSpecimen({ searchParams }: Props) {
             ]}
           >
             <Layout columns={{ md: 2 }} colGap="gutter" rowGap="gutter">
+              <Box tall />
+              <Box tall />
+            </Layout>
+          </IndexRail>
+        </Specimen>
+      </Section>
+      <Section aria-label="Controls">
+        <Specimen
+          title="controls — the finder's search and filter groups in the rail's place"
+          note="controls (the insights hub, 28 Oct 2026): the caller's controls stand in the sticky column, scrolling within it when taller than the screen, with room for a focus ring at its edges (Tab to the search field: the ring is whole). Below 1024 the bar holds one button, controlsLabel ('Filters · 1'), that opens them as a sheet. Here a search and Accordion size='sm' groups of index chips, Type open."
+        >
+          <IndexRail
+            ariaLabel="Browse insights"
+            modes={[{ id: 'finder', label: 'Browse insights', items: [] }]}
+            controls={<Controls />}
+            controlsLabel="Filters · 1"
+          >
+            <Layout columns={{ md: 3 }} colGap="gutter" rowGap="gutter">
+              <Box tall />
+              <Box tall />
+              <Box tall />
+              <Box tall />
               <Box tall />
               <Box tall />
             </Layout>

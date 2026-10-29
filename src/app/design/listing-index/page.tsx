@@ -1,16 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsFixturePage, type InsightResourceKind, type InsightsPage } from '@/content';
+import { getInsightsFixturePage, type InsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { ListingIndex, type CaseView } from '@/templates';
 
 import { caseIndexProps } from '../../_corpus/case-index';
-import {
-  formatsWithContent,
-  insightsFormatProps,
-  insightsIndexProps,
-} from '../../_insights/hub';
+import { insightsIndexProps } from '../../_insights/hub';
 
 export const metadata: Metadata = {
   title: 'ListingIndex · both listings | Design',
@@ -86,11 +82,10 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *                         insights.ts): all seven formats, more items than any section shows, the
  *                         longest titles and an unbroken one, missing covers and descriptions, an
  *                         event without a date
- *   ?view=topic           the hub's BY TOPIC view
+ *   ?type=articles&topic=… the finder: its picks over the results (any of the live page's
+ *                         parameters); ticks, chips and "Show more" stay here, the state kept
  *   ?state=sparse         the live CMS's shape
  *   ?state=empty          nothing published
- *   ?format=article …     a format's own page: the rail as a picker; its picker and "Show more"
- *                         stay here
  *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
  *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
@@ -113,13 +108,7 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   const fixture = await getInsightsFixturePage();
   const page =
     state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
-  const format = one(query.format) as InsightResourceKind | undefined;
-
-  if (format && formatsWithContent(page).includes(format)) {
-    const pathFor = (kind: InsightResourceKind) =>
-      `${PATH}?${new URLSearchParams({ ...(state ? { state } : {}), format: kind }).toString()}`;
-    return <ListingIndex {...insightsFormatProps(page, format, query, pathFor)} />;
-  }
-
-  return <ListingIndex {...insightsIndexProps(page, query)} />;
+  /* The finder's links and form come back to the specimen, the state kept. */
+  const path = state ? `${PATH}?${new URLSearchParams({ state }).toString()}` : PATH;
+  return <ListingIndex {...insightsIndexProps(page, query, path)} />;
 }

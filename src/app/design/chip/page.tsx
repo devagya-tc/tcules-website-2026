@@ -6,7 +6,8 @@ import { ROUTES } from '@/lib/routes';
 import { Specimen } from '../_specimen/Specimen';
 
 /**
- * Chip specimen — one control, two input types, three static states on four surfaces.
+ * Chip specimen — one control, two input types, three static states on four surfaces, and two looks
+ * (the pill, and `index`: the rail entry).
  *
  * Hover and focus have no props: hover is :hover (the pill lifts 2, transform only) and focus is
  * :focus-visible (the ring). Point at a chip and Tab to one on each surface. Checked and disabled
@@ -47,6 +48,39 @@ const SURFACES = [
     note: 'Every value is a blue or white. Rest is a brandeis-300 edge under a white label; checked reverses to a white fill under a brandeis-600 label at 7.59:1. The ring is white.',
   },
 ] as const;
+
+const TYPES = ['Articles', 'Events', 'Videos', 'Guides'] as const;
+
+/** The index look: the rail's entries, one per line (a filter group's options, IndexRail). */
+function IndexRow({
+  type,
+  name,
+  labels,
+  checked,
+}: {
+  type: 'checkbox' | 'radio';
+  name: string;
+  labels: readonly string[];
+  checked: readonly string[];
+}) {
+  return (
+    <Layout rowGap="text">
+      {labels.map((label) => (
+        <Chip
+          key={label}
+          look="index"
+          type={type}
+          name={name}
+          value={label}
+          tick={TICK}
+          defaultChecked={checked.includes(label)}
+        >
+          {label}
+        </Chip>
+      ))}
+    </Layout>
+  );
+}
 
 function Row({
   type,
@@ -171,6 +205,20 @@ export default function ChipSpecimenPage() {
                 checked={['Product design']}
                 disabled
               />
+            </Layout>
+          </Specimen>
+        </Section>
+      ))}
+
+      {SURFACES.map(({ surface }) => (
+        <Section key={`index-${surface}`} surface={surface}>
+          <Specimen
+            title={`Index look · ${surface}`}
+            note="look='index' (owner, 28 Oct 2026: “checkboxes look old school”): the rail’s entry, as the old “Jump to” list was set — no pill, no tick, the h6 name grey at rest, ink on hover and checked, and a checked entry carries the blue start-edge bar. The input is still a real checkbox or radio; the insights finder’s filter groups are sets of these. Left, a checkbox set with one picked; right, a radio set."
+          >
+            <Layout columns={{ base: 1, md: 2 }} colGap="column" rowGap="stack">
+              <IndexRow type="checkbox" name={`type-${surface}`} labels={TYPES} checked={['Events']} />
+              <IndexRow type="radio" name={`stage-index-${surface}`} labels={STAGES} checked={['A prototype']} />
             </Layout>
           </Specimen>
         </Section>

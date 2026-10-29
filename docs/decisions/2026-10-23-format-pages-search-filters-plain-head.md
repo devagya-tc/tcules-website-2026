@@ -1,7 +1,7 @@
 ---
 title: "Format pages: a plain head, the formats as one menu, and search with a filter panel"
 date: 2026-10-23
-status: active
+status: superseded
 area: [layout, components, content]
 source: "Owner, 23 Oct 2026 (listings round, after claude.com/resources/product-announcements)"
 supersedes: ["2026-10-16-insights-hub-is-curated"]

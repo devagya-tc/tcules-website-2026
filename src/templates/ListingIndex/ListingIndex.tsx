@@ -9,7 +9,6 @@ import {
   PageHero,
   type BreadcrumbItem,
   type HeroAction,
-  type IndexRailItem,
 } from '@/patterns';
 
 import { FinderForm, FinderLinks } from './Finder';
@@ -33,14 +32,6 @@ export type ListingHero = {
   eyebrow?: string;
   /** One mono line under the lede: how many there are and how fresh ("42 published · Latest …"). */
   record?: readonly string[];
-  /** `mark` for a page named by one word (a format page's "Articles"); default `display`. */
-  titleSize?: 'display' | 'mark';
-  /**
-   * `masthead` (default): the hero band over the listing. `plain` (owner, 23 Oct 2026, after
-   * claude.com/resources/product-announcements: "keep it simple"): no hero band — the title as an h1
-   * and the lede under it, at the head of the content column beside the rail. With a `picker` only.
-   */
-  arrangement?: 'masthead' | 'plain';
 };
 
 /**
@@ -68,21 +59,6 @@ export type ListingView = {
   /** The switch's label ("By type"). */
   label: string;
   sections: readonly ListingSection[];
-};
-
-/**
- * The rail as a PICKER instead of a switch of views: a format page lists its siblings, the current
- * one marked, and its own content runs beside it.
- */
-export type ListingPicker = {
-  label: string;
-  items: readonly IndexRailItem[];
-  /** The rail as one menu naming the current page (IndexRail `menu`), not a list. */
-  menu?: boolean;
-  /** The menu's way back up ("All insights"), first in the list over a rule (IndexRail `parent`). */
-  parent?: IndexRailItem;
-  /** The page's pieces, composed by the caller. */
-  content: ReactNode;
 };
 
 /**
@@ -144,12 +120,10 @@ export type ListingIndexProps = {
   label: string;
   /** The rail's accessible name ("Browse insights"). */
   railLabel: string;
-  /** The curated views, switched in the rail and held in `?view=`. Exclusive with `picker`. */
+  /** The curated views, switched in the rail and held in `?view=`. */
   views?: readonly ListingView[];
   /** The view the page opens on: the route reads it from `?view=`. Absent, the first. */
   view?: string;
-  /** The rail as a picker beside the page's own content. Exclusive with `views`. */
-  picker?: ListingPicker;
   /** The rail as the finder; the first view is the curated content while nothing is picked. */
   finder?: ListingFinder;
   /** What the band says when there is nothing to list ("Nothing has been published yet."). */
@@ -166,19 +140,17 @@ const FOLD_EXEMPT =
   "Index list: the page's whole content, grows with the CMS and is read by scrolling (visual-direction § 1.3).";
 
 /**
- * ListingIndex — the listing page type: the insights hub, a format's own page and the case-study
- * index, after claude.com/resources (owner, 16 Oct 2026; one structure, 22 Oct 2026).
+ * ListingIndex — the listing page type: the insights hub and the case-study index, after
+ * claude.com/resources (owner, 16 Oct 2026; one structure, 22 Oct 2026).
  *
  *   A  hero     the trail, the title, the lede and record beside it (`masthead`), the texture
  *   B  listing  the rail beside the column: a switch of curated VIEWS (each a run of sections, every
- *               section a one-line head over its pieces, a `section` apart) or a PICKER beside the
- *               page's own content. Every view is in the HTML; the switch shows one and holds it in
- *               `?view=`.
+ *               section a one-line head over its pieces, a `section` apart; every view is in the HTML,
+ *               the switch shows one and holds it in `?view=`), or the FINDER — the filters in the
+ *               rail, the curated view until something is picked, then the picks over the results
+ *               (2026-10-29-insights-hub-is-the-finder)
  *   C  offer    another offer, on tint — only with its picture
- *   D  close    the ask: the copy and the form, on tint (paper when the offer took the tint)
- *
- * There is no in-page filtering and no full feed: a listing is curated, and everything of a kind
- * lives on its own page (2026-10-16-insights-hub-is-curated).
+ *   D  close    the ask: the copy and the form (the island close where the caller asks for one)
  */
 export function ListingIndex({
   breadcrumbs,
@@ -187,7 +159,6 @@ export function ListingIndex({
   railLabel,
   views = [],
   view,
-  picker,
   finder,
   empty,
   offer,
@@ -197,8 +168,6 @@ export function ListingIndex({
   const shown = views
     .map((v) => ({ ...v, sections: v.sections.filter((section) => section.content) }))
     .filter((v) => v.sections.length > 0);
-
-  const plain = Boolean(picker) && hero.arrangement === 'plain';
 
   let listing: ReactNode;
   if (finder) {
@@ -237,33 +206,6 @@ export function ListingIndex({
         </div>
       </IndexRail>
     );
-  } else if (picker) {
-    listing = (
-      <IndexRail
-        ariaLabel={railLabel}
-        menu={picker.menu}
-        parent={picker.parent}
-        modes={[{ id: 'picker', label: picker.label, items: picker.items }]}
-      >
-        {plain ? (
-          /* The plain head: the title and its line, then the page — the stack's air under the
-             head, as a section's head over its body. */
-          <Layout rowGap="stack">
-            <Layout rowGap="block">
-              <h1 className={styles.pageTitle}>{hero.title}</h1>
-              {lede.map((paragraph) => (
-                <p key={paragraph} className={styles.pageLede}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-            {picker.content}
-          </Layout>
-        ) : (
-          picker.content
-        )}
-      </IndexRail>
-    );
   } else if (shown.length > 0) {
     listing = (
       <IndexRail
@@ -295,32 +237,24 @@ export function ListingIndex({
 
   return (
     <>
-      {plain ? null : (
-        <PageHero
-          data-fold-hero=""
-          trail={heroTrail(breadcrumbs, hero.title, (t) => (
-            <Breadcrumbs {...t} />
-          ))}
-          eyebrow={hero.eyebrow}
-          title={hero.title}
-          titleSize={hero.titleSize}
-          body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
-          record={hero.record}
-          arrangement="masthead"
-          texture
-          surface="paper"
-        />
-      )}
+      <PageHero
+        data-fold-hero=""
+        trail={heroTrail(breadcrumbs, hero.title, (t) => (
+          <Breadcrumbs {...t} />
+        ))}
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
+        record={hero.record}
+        arrangement="masthead"
+        texture
+        surface="paper"
+      />
 
       {/* The fold rule's one exception on a listing: the list is the page's whole content, grows with
           the CMS and is read by scrolling, so no height could hold it. fold:check reports it with this
-          reason and still measures the hero and the close. Plain, the band is the page's opening. */}
-      <Section
-        surface="paper"
-        aria-label={label}
-        data-fold-exempt={FOLD_EXEMPT}
-        data-fold-hero={plain ? '' : undefined}
-      >
+          reason and still measures the hero and the close. */}
+      <Section surface="paper" aria-label={label} data-fold-exempt={FOLD_EXEMPT}>
         {listing}
       </Section>
 

@@ -1,9 +1,8 @@
 import { Layout, type IconName } from '@/components';
-import { CARD_THREE_TRACKS, CARD_TWO_TRACKS } from '@/lib/image-sizes';
+import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
-  ListCard,
   Teaser,
   type TeaserImage,
   type TeaserMedia,
@@ -13,9 +12,8 @@ import {
 
 /* ── An insight as a listing places it ──────────────────────────────────────────
    A template may not import @/content, so the route maps the view model onto these and the
-   template never learns whether the CMS or the specimen's fixture answered. The insights hub and a
-   format page take the same compositions (insights.tsx), the hub's smaller, a format page's larger;
-   ListingIndex places whatever they compose. */
+   template never learns whether the CMS or the specimen's fixture answered. The insights hub takes
+   these compositions (insights.tsx); ListingIndex places whatever they compose. */
 
 /** The seven formats. The templates decide each one's shape and position from this. */
 export type InsightKind =
@@ -280,61 +278,6 @@ export function CardGrid({
   );
 }
 
-/**
- * The ROWS: a format page's pieces after its cards (owner, 23 Oct 2026), one ruled row each — its
- * eyebrow, title and standfirst, and its picture at the row's end where it has one, so every title
- * starts on one edge. A piece without a picture is never a card; here it is a row among rows.
- */
-export function Rows({
-  items,
-  meta,
-  titleAs = 'h3',
-  id,
-}: {
-  items: readonly InsightItem[];
-  meta?: MetaOptions;
-  titleAs?: 'h3' | 'h4';
-  id?: string;
-}) {
-  if (items.length === 0) return null;
-  return (
-    <Layout as="ul" id={id} rowGap="none">
-      {items.map((item) => {
-        const picture = pictureOf(item);
-        return (
-          <ListCard
-            key={item.id}
-            title={item.title}
-            href={item.href}
-            eyebrow={cardOf(item, meta).eyebrow}
-            body={item.description?.trim() || undefined}
-            arrangement="stacked"
-            size="sm"
-            titleAs={titleAs}
-            marker={
-              picture
-                ? picture.type === 'image'
-                  ? /* The thumbnail fills its own box, so a cover the CMS sent without its size
-                       reserves the 16:9 the row draws it at. */
-                    {
-                      type: 'thumbnail',
-                      image: {
-                        ...picture.image,
-                        width: picture.image.width ?? 1600,
-                        height: picture.image.height ?? 900,
-                      },
-                    }
-                  : { type: 'sketch', name: picture.name }
-                : undefined
-            }
-            markerPosition="end"
-          />
-        );
-      })}
-    </Layout>
-  );
-}
-
 /** The FEATURE: the lead, then its cards under it (see above). */
 export function Feature({
   lead,
@@ -397,26 +340,5 @@ export function Dates({ items, titleAs = 'h3', size = 'lg' }: Shape & { size?: T
         />
       ))}
     </Layout>
-  );
-}
-
-/** The SHOWCASE: one event featured, its picture beside the day at its largest, then its words. */
-export function Showcase({ items, titleAs = 'h3' }: Shape) {
-  const [lead] = items;
-  if (!lead) return null;
-  return (
-    <ul>
-      <Teaser
-        {...teaserOf(lead)}
-        date={dateMarkerOf(lead)}
-        meta={lead.event?.place}
-        arrangement="beside"
-        weight="picture"
-        size="xl"
-        titleAs={titleAs}
-        sizes={CARD_TWO_TRACKS}
-        graphic
-      />
-    </ul>
   );
 }

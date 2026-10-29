@@ -1,10 +1,9 @@
 /* ListingIndex — the marks the listing template draws itself. Layout, Cluster and IndexRail own
    every arrangement; every value is an --lix-* token. */
 
-/* A section, or a format page's page: a jump target in the rail's column. IndexRail clears the
-   sticky nav for every id in its content, so the template only keeps the track from overflowing. */
-.section,
-.page {
+/* A section: a jump target in the rail's column. IndexRail clears the sticky nav for every id in
+   its content, so the template only keeps the track from overflowing. */
+.section {
   min-inline-size: 0;
 }
 
@@ -16,35 +15,11 @@
   text-wrap: var(--text-title-wrap);
 }
 
-/* An events page's group ("Next", "Upcoming", "Past"): a label in the date column's voice, not a
-   heading competing with the titles under it. */
-.groupTitle {
-  color: var(--lix-group-title-ink);
-  font: var(--lix-group-title-text);
-  letter-spacing: var(--lix-group-title-tracking);
-  text-transform: var(--text-mono-case);
-}
-
 .count {
   color: var(--lix-count-ink);
   font: var(--lix-count-text);
   letter-spacing: var(--lix-count-tracking);
   text-transform: var(--text-mono-case);
-}
-
-/* A plain page head (owner, 23 Oct 2026): the h1 and the lede under it, the lede quieter. */
-.pageTitle {
-  color: var(--lix-page-title-ink);
-  font: var(--lix-page-title-text);
-  letter-spacing: var(--lix-page-title-tracking);
-  text-wrap: var(--text-title-wrap);
-}
-
-.pageLede {
-  max-inline-size: var(--lix-page-lede-measure);
-  color: var(--lix-page-lede-ink);
-  font: var(--lix-page-lede-text);
-  letter-spacing: var(--lix-page-lede-tracking);
 }
 
 /* A filter group's options: the fieldset names the set for assistive tech and draws nothing. The
