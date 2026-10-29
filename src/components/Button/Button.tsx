@@ -241,6 +241,8 @@ export function Button({
      order (see `as`). It takes the disabled look and loses its click, and nothing else changes. */
   const held = rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
   const off = disabled || held;
+  /* A bare link's last word and trailing glyph never part (see GluedLabel). */
+  const glued = emphasis === 'link' && Boolean(icon) && !iconOnly && lastSpace(children) > 0;
 
   return (
     <Tag
@@ -264,6 +266,7 @@ export function Button({
         off ? styles.disabled : busy ? styles.busy : styles.live,
         held && styles.held,
         extendHitArea && styles.hit,
+        glued && styles.glued,
         className,
       )}
     >
@@ -273,11 +276,35 @@ export function Button({
         <>
           {iconLeft}
           <span className={styles.label}>
-            <span className={styles.labelInk}>{children}</span>
+            <span className={styles.labelInk}>
+              {glued ? <GluedLabel text={children as string} /> : children}
+            </span>
           </span>
           {icon}
         </>
       )}
     </Tag>
+  );
+}
+
+/** Where a plain-string label's last word starts (its last space), else -1. */
+const lastSpace = (label: ReactNode) =>
+  typeof label === 'string' ? label.trimEnd().lastIndexOf(' ') : -1;
+
+/**
+ * A link's label with its LAST word kept on the trailing glyph's line (owner, 29 Oct 2026: the
+ * case lead's "Read the … case" broke its arrow off onto a line of its own at 1440). A bare link
+ * flows as inline content and the glyph is an atomic inline, so a line could break between the
+ * label's last word and the glyph. `.glued` sets `nowrap` on the link; everything before the last
+ * word sits in `.labelHead`, which restores normal wrapping, so a long label still wraps between its
+ * words and only the last word and the glyph are inseparable.
+ */
+function GluedLabel({ text }: { text: string }) {
+  const at = lastSpace(text);
+  return (
+    <>
+      <span className={styles.labelHead}>{text.slice(0, at + 1)}</span>
+      {text.slice(at + 1).trimEnd()}
+    </>
   );
 }

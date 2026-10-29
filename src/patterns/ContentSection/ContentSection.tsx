@@ -162,11 +162,17 @@ export type ContentSectionMediaHeight = 'ratio' | 'copy';
  *   md  the same `h2` element at the h3 role (34), for a band whose large thing would be out-sized
  *       even by an h2: the S stats band, where a 43 head over 54 mono figures read as a heading over
  *       its captions (final fix round, 6 Oct 2026 — § 3.3 "one large thing per band").
+ *   eyebrow  the same `h2` element in the EYEBROW voice (mono, small, uppercase in presentation only),
+ *       for a band whose large thing is one voice: the testimonial slider, where the quote carries the
+ *       emphasis and a 43 head above it competed with it (owner, 29 Oct 2026;
+ *       decisions/2026-10-29-quote-slider-head-is-an-eyebrow). Still the band's heading for the
+ *       outline and `aria-labelledby`; the authored words are kept, only their look changes. Not with
+ *       an `eyebrow` as well: two label lines would stack.
  *
  * `display` (the hero's role, ≈ 67) was a fourth step until round 5 and is retired: display belongs
  * to PageHero alone.
  */
-export type ContentSectionHeadingSize = 'xl' | 'lg' | 'md';
+export type ContentSectionHeadingSize = 'xl' | 'lg' | 'md' | 'eyebrow';
 
 type ContentSectionBaseProps = {
   /**
@@ -600,6 +606,7 @@ export function ContentSection(props: ContentSectionProps) {
         styles.heading,
         (xlHead || headingSize === 'xl') && styles.headingXl,
         headingSize === 'md' && styles.headingMd,
+        headingSize === 'eyebrow' && styles.headingEyebrow,
         centredAll && styles.centred,
         centredLg && styles.centredLg,
       )}

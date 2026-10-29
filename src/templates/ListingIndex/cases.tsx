@@ -34,8 +34,8 @@ export type CaseItem = {
   ctaLabel?: string;
   /**
    * A case the page features: the group's FIRST featured case leads it as the listing's horizontal
-   * card (the insights hub's lead: cover across two thirds, copy in the third, no ground); the
-   * others open the grid under it (owner, 29 Oct 2026). Never CaseCard on its paper-deep ground, which is home's
+   * card (the insights hub's lead: cover across two thirds, copy in the third, no ground); without
+   * one, the group's first case leads; the others open the grid under it (owner, 29 Oct 2026). Never CaseCard on its paper-deep ground, which is home's
    * alone (owner, 29 Oct 2026). The card carries no testimonial (owner, 22 Oct 2026: "case study
    * cards never hold testimonials in them").
    */
@@ -58,11 +58,11 @@ export type CaseView = {
 };
 
 /**
- * The case-study index's views as listing views. Every group is the insights hub's shape (owner,
- * 29 Oct 2026: "the /case-studies page is horrible. what happened to using the same 3 card grid?";
- * decisions/2026-10-29-case-index-is-the-listing-grid, decisions/2026-10-29-case-index-takes-the-finder):
- * one featured case as the card-less horizontal lead, then every other case as a card in the
- * listing's one three-track grid (`ListingGrid`, the same the hub's shelves use). No arrangement is chosen by a
+ * The case-study index's views as listing views. Every group is one shape (owner, 29 Oct 2026:
+ * "the /case-studies page is horrible. what happened to using the same 3 card grid?";
+ * decisions/2026-10-29-case-listing-groups-lead-horizontal): one case as the card-less horizontal lead, then
+ * every other case as a card in the listing's one three-track grid (`ListingGrid`, the same the
+ * insights hub's shelves use). No arrangement is chosen by a
  * group's id, position or count any more: the varied shapes (a featured set, two columns of
  * thumbnail rows, 2-up large covers) were the problem, not a feature.
  */
@@ -76,7 +76,7 @@ export function caseViews(views: readonly CaseView[]): ListingView[] {
         id: group.id,
         heading: group.heading,
         count: group.items.length,
-        content: <CaseGroupShape items={group.items} />,
+        content: <CaseRun items={group.items} />,
       })),
   }));
 }
@@ -96,15 +96,22 @@ const sized = (cover: BlockCardImage) => ({
 });
 
 /**
- * One group's cases: the curated opening the insights hub has (owner, 29 Oct 2026;
- * decisions/2026-10-29-case-index-takes-the-finder) — ONE featured case leads, the card-less horizontal
- * card with its cover across two of the grid's three tracks, and every other case is a card in the
- * listing's three-track grid under it, the group's other featured cases first. One card shape
- * repeated down the page was the problem; one lead per group, at most, is the hub's rhythm.
+ * One run of cases, the listing's ONE shape for every group and for the finder's results (owner,
+ * 29 Oct 2026; decisions/2026-10-29-case-listing-groups-lead-horizontal): the first case is the card-less
+ * horizontal card across the full row, its cover across two of the grid's three tracks, and every
+ * other case is a card in the listing's three-track grid under it. The lead is the group's first
+ * featured case, else its first; it needs its cover and its page to lead, so a case without them
+ * joins the grid and the next one that has them leads instead. No other card shape.
  */
-function CaseGroupShape({ items }: { items: readonly CaseItem[] }) {
-  /* A featured case needs its cover and its page to lead: without them it joins the grid. */
-  const lead = items.find((item) => item.featured && item.cover && item.href);
+function CaseRun({
+  items,
+  titleAs = 'h3',
+}: {
+  items: readonly CaseItem[];
+  titleAs?: 'h2' | 'h3';
+}) {
+  const canLead = (item: CaseItem) => Boolean(item.cover && item.href);
+  const lead = items.find((item) => item.featured && canLead(item)) ?? items.find(canLead);
   const rest = items.filter((item) => item !== lead);
 
   return (
@@ -121,14 +128,14 @@ function CaseGroupShape({ items }: { items: readonly CaseItem[] }) {
             orientation="horizontal"
             size="lg"
             tracks={2}
-            titleAs="h3"
+            titleAs={titleAs}
             cue="cta"
             ctaLabel={lead.ctaLabel ?? 'Read the case'}
             split="grid"
           />
         </ul>
       ) : null}
-      {rest.length > 0 ? <CaseCards items={rest} /> : null}
+      {rest.length > 0 ? <CaseCards items={rest} titleAs={titleAs} /> : null}
     </Layout>
   );
 }
@@ -181,6 +188,7 @@ export function caseFinder({
     ...rest,
     shown,
     total: items.length,
-    results: <CaseCards items={items.slice(0, shown)} titleAs="h2" />,
+    /* The results take the groups' shape: the first horizontal, the rest in the grid. */
+    results: <CaseRun items={items.slice(0, shown)} titleAs="h2" />,
   });
 }

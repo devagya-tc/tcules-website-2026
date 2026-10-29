@@ -187,8 +187,26 @@ const VOICES: readonly ProofQuote[] = [
   },
 ];
 
-function voiceSlides() {
-  return VOICES.map((quote) => (
+/** Quotes of very different lengths, for `slideAlign="center"`: the slot keeps the tallest. */
+const UNEVEN: readonly ProofQuote[] = [
+  {
+    quoteHtml: '<p>Calm, fast and right.</p>',
+    name: 'Mira Castellan',
+    role: 'Head of Product',
+    company: 'Dunmere',
+  },
+  {
+    quoteHtml:
+      '<p>Decisions arrived in writing every Friday, with the reason beside each one and the screens it changed. Engineering never opened a file and found a surprise waiting inside it, and when a question did come up, the answer was already in the log, dated, with the evidence that had settled it the first time round.</p>',
+    name: 'Tomasz Ellery',
+    role: 'Engineering Lead',
+    company: 'Aldermoor',
+  },
+  VOICES[2] as ProofQuote,
+];
+
+function voiceSlides(quotes: readonly ProofQuote[] = VOICES) {
+  return quotes.map((quote) => (
     <li key={quote.name}>
       <Proof quote={quote} align="center" />
     </li>
@@ -418,13 +436,15 @@ export default function SliderSpecimen() {
           <Layout rowGap="block">
             <h2>7 · Autoplay</h2>
             <p className={s.specNote}>
-              One per view only (7 Oct 2026). The rail becomes a stepper — a numbered step per
-              slide, the current line filling over the eight-second hold — and a rotation
-              control leads it. Rest the pointer on a quote, or Tab into the slides, and the
-              turn holds with the line frozen; leave and it resumes from there. The control row
-              does not hold it, so Play under the pointer plays. With reduced motion it waits on
-              Play. It wraps from the last slide to the first, and it never speaks: the status
-              line follows a press.
+              One per view only (7 Oct 2026). The rail becomes a stepper — one bar per slide, the
+              current bar starting full and emptying from its start to its end over the
+              eight-second hold, a countdown (29 Oct 2026) — and under <code>start</code> a
+              rotation control leads it. Rest the pointer on a quote, or Tab into the slides, and
+              the turn holds with the bar frozen; leave and it resumes from there. Press a bar or a
+              previous / next control and the rotation STOPS: the chosen bar stays full, the others
+              empty. With reduced motion nothing drains: the current bar is simply full. It wraps
+              from the last slide to the first, and it never speaks: the status line follows a
+              press.
             </p>
           </Layout>
           <Specimen
@@ -441,6 +461,20 @@ export default function SliderSpecimen() {
           >
             <Slider label="Client stories, turning" perView={1} autoplay>
               {storySlides()}
+            </Slider>
+          </Specimen>
+          <Specimen
+            title={'autoplay · slideAlign="center" · quotes of different lengths'}
+            note="The testimonial band's slider: the row keeps the tallest quote's height, so the bars never move, and each quote is centred in it, its stars and speaker with it."
+          >
+            <Slider
+              label="Client quotes, uneven"
+              perView={1}
+              align="center"
+              slideAlign="center"
+              autoplay
+            >
+              {voiceSlides(UNEVEN)}
             </Slider>
           </Specimen>
         </Layout>

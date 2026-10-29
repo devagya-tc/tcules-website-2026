@@ -130,11 +130,13 @@
 
 /* ── The autoplay stepper (7 Oct 2026) ───────────────────────────────────────────
    One step per slide: a plain bar, the rail's line and its thumb at a step's length (9 Oct 2026:
-   the numerals went — bars only). The current step's line fills — wholly at rest, and over the
-   hold while rotating, from --slider-step-progress, which the clock writes on the root each frame
-   (the thumb's technique). A pause stops the writes, so the fill freezes where it was: the hold is
-   visible. Under reduced motion nothing rotates unless the reader presses Play; the fill is then
-   the clock they asked for. The arrangement — steps in a row — is Cluster's; this module sizes the parts and paints them. */
+   the numerals went — bars only). The current step's line is FULL — the selected state, at rest
+   and once a press has stopped the rotation — and while rotating it EMPTIES from its start to its
+   end over the hold, a countdown (owner, 29 Oct 2026; decisions/2026-10-29-slider-bar-counts-down):
+   scaleX from --slider-step-progress, which the clock writes on the root each frame (the thumb's
+   technique), so the motion is a transform and nothing else. A hover or focus hold stops the
+   writes, so the bar freezes where it was: the hold is visible. Under reduced motion the bar never
+   drains: it is simply full. The arrangement — steps in a row — is Cluster's; this module sizes the parts and paints them. */
 /* A control keeps its 48 circle in a crowded row: the steps give way, never the buttons. */
 .control {
   flex: none;
@@ -201,16 +203,23 @@
 
 .stepFill {
   position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  inline-size: 0;
+  inset: 0;
   background: var(--sld-progress-thumb);
+  transform: scaleX(0);
+  /* Anchored at the end, so the bar empties from its start towards its end. */
+  transform-origin: right center;
 }
 
 .step[aria-current='true'] .stepFill {
-  inline-size: 100%;
+  transform: none;
 }
 
 .playing .step[aria-current='true'] .stepFill {
-  inline-size: calc(var(--slider-step-progress) * 100%);
+  transform: scaleX(calc(1 - var(--slider-step-progress)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing .step[aria-current='true'] .stepFill {
+    transform: none;
+  }
 }
