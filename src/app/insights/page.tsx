@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getInsightsPage } from '@/content';
+import { getCorpusPage, getInsightsPage } from '@/content';
+import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { ListingIndex } from '@/templates';
 
@@ -14,6 +15,9 @@ type InsightsPageProps = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
+  /* The 26 Oct 2026 copy's title, description and social card where it has them. */
+  const copy = await getCorpusPage(ROUTES.insights);
+  if (copy) return corpusMetadata(copy);
   const page = await getInsightsPage(INSIGHTS_SLUG);
 
   if (!page) {
@@ -52,14 +56,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * The insights hub: a curated page, BY TYPE or BY TOPIC (ListingIndex). The route reads the CMS and
- * the URL (`?view=topic`); `insightsIndexProps` maps both onto the template, and the specimen at
- * /design/listing-index runs the same mapping over the stress fixture.
+ * The insights hub: the finder (ListingIndex), curated by the copy's problem shelves while nothing is
+ * picked. The route reads the CMS (every piece), the copy (_pages/insights.md: the hub's words and
+ * bands) and the URL (the picks); `insightsIndexProps` maps all three onto the template, and the
+ * specimen at /design/listing-index runs the same mapping over the stress fixture.
  */
 export default async function InsightsPage({ searchParams }: InsightsPageProps) {
-  const [page, query] = await Promise.all([getInsightsPage(INSIGHTS_SLUG), searchParams]);
+  const [page, copy, query] = await Promise.all([
+    getInsightsPage(INSIGHTS_SLUG),
+    getCorpusPage(ROUTES.insights),
+    searchParams,
+  ]);
 
   if (!page) notFound();
 
-  return <ListingIndex {...insightsIndexProps(page, query)} />;
+  return <ListingIndex {...insightsIndexProps(page, query, ROUTES.insights, copy)} />;
 }

@@ -16,7 +16,9 @@ import type { ListingView } from './ListingIndex';
  */
 export type CaseItem = {
   id: string;
-  href: string;
+  /** The case's page. Absent for a case the copy lists before its page exists ("Case study coming
+      soon"): its card is shown, unlinked, and it never leads a group. */
+  href?: string;
   title: string;
   /** The one line under the title: 8–15 words (strapi-changes.md §13). */
   description: string;
@@ -97,7 +99,7 @@ const sized = (cover: BlockCardImage) => ({
 /** One group's cases: its featured cases, then the rest in the shape their position and count call for. */
 function CaseGroupShape({ items, first }: { items: readonly CaseItem[]; first: boolean }) {
   /* A featured case needs its cover to be the one card: without one it joins the set. */
-  const featured = items.filter((item) => item.featured && item.cover);
+  const featured = items.filter((item) => item.featured && item.cover && item.href);
   const rest = items.filter((item) => !featured.includes(item));
 
   return (
@@ -109,7 +111,7 @@ function CaseGroupShape({ items, first }: { items: readonly CaseItem[]; first: b
               key={item.id}
               {...splitClaim(item.title)}
               {...bodyOf(item)}
-              href={item.href}
+              href={item.href!}
               ctaLabel={item.ctaLabel ?? 'Read the case'}
               image={sized(item.cover!)}
               reverse={row % 2 === 1}

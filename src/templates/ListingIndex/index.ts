@@ -1,5 +1,6 @@
 export { ListingIndex } from './ListingIndex';
 export type {
+  ListingBands,
   ListingClosing,
   ListingFinder,
   ListingHero,
@@ -8,12 +9,13 @@ export type {
   ListingSection,
   ListingView,
 } from './ListingIndex';
-export { insightFinder, insightViews } from './insights';
+export { insightFinder, insightViews, shelfSections } from './insights';
 export type {
   FinderGroup,
   FinderOption,
   FinderPick,
   InsightFormat,
+  InsightShelf,
 } from './insights';
 export type { InsightItem, InsightKind } from './compositions';
 export { caseViews } from './cases';

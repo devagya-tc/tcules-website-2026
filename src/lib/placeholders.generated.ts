@@ -220,6 +220,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "Auxentios' industrial quoting product: one shared quoting workflow where six specialist roles contribute to the same quote.",
   },
+  'case-cover:curamcare': {
+    src: '/placeholders/case-cover--curamcare.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "CuramCare's web platform and its two apps, side by side: a family member and a carer each seeing their own part of the same care arrangement. The case study is coming soon; the index lists it unlinked.",
+  },
   'case-cover:gold-image-printing': {
     src: '/placeholders/case-cover--gold-image-printing.svg',
     width: 1600,
@@ -291,5 +299,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "The Wandering Raven's creative-writing world for young learners inside Moodle, as the case's cover wherever another page cites it. The case binds no cover yet (`ASSET_REQUIRED`); the same first approved screen serves home's why-tcules panel and the case index slot.",
+  },
+  'case-cover:vovisto': {
+    src: '/placeholders/case-cover--vovisto.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "Vovisto's healthcare event and travel platform: a travel coordinator's view of one congress trip (budget, approval, flights, hotel). The case study is coming soon; the index lists it unlinked.",
   },
 };

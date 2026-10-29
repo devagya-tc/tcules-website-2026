@@ -238,6 +238,7 @@ export function CardGrid({
   titleAs = 'h3',
   id,
   facts = false,
+  shelf = false,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
@@ -249,12 +250,19 @@ export function CardGrid({
    * as a panel led by its format's glyph, so a row of mixed pieces ends level.
    */
   facts?: boolean;
+  /**
+   * A curated SHELF (the hub's problem sections, 26 Oct 2026 copy): every piece the copy names is a
+   * card, so a piece with no picture stands as the results' panel led by its format's glyph rather
+   * than dropping out; no topic tag, because the section's head already names the problem.
+   */
+  shelf?: boolean;
 }) {
   if (cards.length === 0) return null;
   return (
     <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
       {cards.map((item) => {
         const pictured = Boolean(pictureOf(item));
+        const panel = pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] };
         return (
           <BlockCard
             key={item.id}
@@ -268,9 +276,11 @@ export function CardGrid({
               ? {
                   aside: dateOf(item.publishedAt),
                   tag: item.subject,
-                  ...(pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] }),
+                  ...panel,
                 }
-              : {})}
+              : shelf
+                ? { tag: undefined, ...panel }
+                : {})}
           />
         );
       })}
@@ -284,11 +294,14 @@ export function Feature({
   cards,
   meta,
   titleAs = 'h3',
+  shelf = false,
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
+  /** The cards under the lead as a curated shelf's (CardGrid `shelf`). */
+  shelf?: boolean;
 }) {
   return (
     <Layout rowGap="column">
@@ -309,7 +322,7 @@ export function Feature({
           />
         </ul>
       ) : null}
-      <CardGrid cards={cards} meta={meta} titleAs={titleAs} />
+      <CardGrid cards={cards} meta={meta} titleAs={titleAs} shelf={shelf} />
     </Layout>
   );
 }

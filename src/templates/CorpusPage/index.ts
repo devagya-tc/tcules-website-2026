@@ -17,3 +17,5 @@ export type { ContactPageProps } from './ContactPage';
 export { PlainPage } from './PlainPage';
 export type { PlainPageProps } from './PlainPage';
 export type { AboutPageProps } from './AboutPage';
+export { CorpusBandView } from './BandView';
+export type { CorpusBandViewProps } from './BandView';
