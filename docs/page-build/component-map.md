@@ -391,6 +391,14 @@ Still lacks: C1 figures, C3, C4 (scene reassignment; "What you receive" is 5 ite
 
 ## F · Open questions for the owner
 
+**Answered 29 Oct 2026 (owner).** Q1: both stay drawn Reasons bands; the first Reasons band on a page is
+`open`, the second `beside` (plan.ts `reasonsArrangements`; decisions/2026-10-29-second-reasons-band-sits-beside,
+proposed). Q4: the /case-studies listing renders its testimonials band (decisions/2026-10-29-case-index-carries-testimonials,
+supersedes 2026-10-22-no-testimonial-on-listing-index). Q5: PR #165 is merged; /insights is the finder. Q7:
+`Bento tracks={4}`, 4 + 3, the closing paragraph in the eighth cell, two new specialist scenes
+(decisions/2026-10-29-seven-services-bento-four-plus-three, proposed). Every other question takes the default stated
+after the critic pass. The cut list (§ D) is not approved yet: nothing is deleted.
+
 1. **BLOCKING · How we work together sits directly above Why Tcules on all 54 offer pages.** The 26 Oct ruling draws engagements as the Reasons band with isometric figures, and Why Tcules is the Reasons band too: the same shape twice in a row. Options: (a) keep both as Reasons, the first band on the page `open` and the second `beside` (the builder's default after the critic pass: offer pages keep engagements `open` as approved in PR #161 and set Why Tcules `beside`; home keeps Why Tcules `open` as approved and sets engagements `beside`); (b) engagements go back to `EngagementOptions grid` (flat scope drawings), which supersedes part of the 26 Oct ruling; (c) Why Tcules becomes an OfferSheet with no drawings. (`boxed` is not offered: a ruled frame around a set is the one thing the cards rulings keep for logos and the bento.)
 2. Home selected work: three unquoted cases as a 3-across card set (default), or three `CaseCard` rows (heavier, past one fold)? And the roadmap's "selected work as a slider off the home page": it is not applied, because the copy authors exactly 3 cases on every page and home never hides a card. Does the owner mean a slider of *more* cases on the offer pages (allowed by 2026-10-26-sliders-allowed-off-homepage from 4 cases), which would need the content team to author a fourth case per page?
 3. The Clutch line inside every testimonial band mixes an aggregate rating with testimonials (ruling 2026-10-09-one-proof-type-per-section). Default: render it as the band's `RatingBadge` footer, because words are never dropped. Confirm, or ask the content team to move it.
