@@ -55,6 +55,7 @@ export {
   coverFor,
   gatewayBoardItems,
   gatewayItems,
+  gatewayPaths,
   kindOf,
   planOffer,
   proofQuote,

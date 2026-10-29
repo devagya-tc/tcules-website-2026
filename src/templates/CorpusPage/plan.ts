@@ -449,6 +449,13 @@ type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
 };
 
+/**
+ * Bands their template always sets with a photograph, bound or not (HomePage's `ai-native-practice`
+ * Banner takes its placeholder studio photo until the shoot), so the rhythm check reads them as the
+ * visual band they render as.
+ */
+const PHOTOGRAPH_BANDS: ReadonlySet<string> = new Set(['ai-native-practice']);
+
 function drafts(page: CorpusPage): Draft[] {
   const units: Draft[] = [];
   const arrangements = reasonsArrangements(page.bands);
@@ -468,6 +475,7 @@ function drafts(page: CorpusPage): Draft[] {
         kind === 'generic'
           ? false
           : VISUAL.has(kind) ||
+            PHOTOGRAPH_BANDS.has(band.id) ||
             ((kind === 'challenges' || kind === 'text') &&
               page.composition.mediaBindings.some((m) => m.bound && m.supportsSection === band.id)),
       ...(arrangements[band.id] ? { arrangement: arrangements[band.id] } : {}),

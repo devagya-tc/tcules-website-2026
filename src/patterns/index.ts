@@ -371,6 +371,8 @@ export {
 /* Gateway — the situation selector: six reader situations, one lit, its answer beside it (home
    "What do you need next?", round 6, 11 Oct 2026). */
 export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';
+/* GatewayPaths — the two-door form: two paths, each its drawing, words and links (home, 29 Oct 2026). */
+export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gateway';
 
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */

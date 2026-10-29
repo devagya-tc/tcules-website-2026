@@ -283,3 +283,24 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* ── paths (GatewayPaths, home, 29 Oct 2026) ───────────────────────────────────
+   Two paths on paper, each read down: drawing, title, sentences, links. No ground and no box. The
+   drawing's box is one height for both, so the titles share a line. Sizing, not arrangement. */
+.pathVisual {
+  display: block;
+  block-size: var(--gwy-path-visual-height);
+}
+
+.pathTitle {
+  font: var(--gwy-path-title-text);
+  letter-spacing: var(--gwy-path-title-tracking);
+  text-wrap: balance;
+  color: var(--gwy-title-ink);
+}
+
+.pathBody {
+  font: var(--gwy-path-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--gwy-body-ink);
+}

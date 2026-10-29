@@ -11,9 +11,11 @@ import {
   ContentSectionText,
   CtaRow,
   Gateway,
+  GatewayPaths,
   type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
+  type GatewayPath,
   type HeroStat,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
@@ -285,71 +287,64 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
  * SituationFigure that tells its situation in two states and plays on hover; no link line, the
  * whole item links. The head is a proposed eyebrow over the centred heading (P49). One fold at 1440.
  */
+/**
+ * The 26 Oct copy's two paths as GatewayPaths items: each `###` path, its paragraphs (plain: the copy
+ * authors no inline link in a path), and its links in the authored order, whether written as a list
+ * of links or as link lines. The drawing is the SituationFigure of the first link that has one.
+ * Exported so /design/kit/gateway proves the paths form on the real words.
+ */
+export function gatewayPaths(b: CorpusBand): GatewayPath[] {
+  return items(b).flatMap((path) => {
+    const links = path.blocks.flatMap((block) => {
+      if (block.type === 'links') {
+        return block.links.map((link) => ({ label: link.labelText, href: link.href }));
+      }
+      if (block.type === 'list') {
+        return block.items.flatMap((item) =>
+          item.length === 1 && item[0]?.type === 'link'
+            ? [{ label: plain(item[0].children), href: item[0].href }]
+            : [],
+        );
+      }
+      return [];
+    });
+    if (links.length === 0) return [];
+    const figure = links
+      .map((link) => sketchForRoute(link.href))
+      .find((scene) => scene && isSituationFigureName(scene));
+    return [
+      {
+        id: slugOf(path.headingText),
+        title: path.headingText,
+        body: paragraphRuns(path.blocks).map((runs) => plain(runs)),
+        links,
+        ...(figure && isSituationFigureName(figure)
+          ? { visual: <SituationFigure name={figure} /> }
+          : {}),
+      },
+    ];
+  });
+}
+
+/**
+ * The page's gateway: "which of these is me?" (owner, round 6, 11 Oct 2026: "i may not know if i
+ * need product design service or design system service, but i'll probably know if i want to launch
+ * a new product"). Round 11 (19 Oct 2026) locked Gateway's `board`, six single-link situations each
+ * with its SituationFigure. The 26 Oct copy has TWO paths, each with two or three links, so it takes
+ * the board's two-door form, GatewayPaths (component-map C10): the same drawings and the same
+ * unboxed paper, the head a proposed eyebrow over the centred heading (P49). A band still written as
+ * six single-link situations keeps the board.
+ */
 function Situations({ b, eyebrows }: BandProps) {
-  /* The 26 Oct copy has two paths, each a situation, its sentences and two or three links to the
-     services that fit it. Gateway's board was drawn for six single-link situations, so two paths
-     take the composition component-map C10 names: two peer halves, each its SituationFigure, its h3
-     and words, its links stacked. (Mock owed: C10.) */
-  const paths = items(b);
-  const listLinked = (item: ItemBlock) =>
-    item.blocks.some(
-      (block) => block.type === 'list' && block.items.some((i) => i[0]?.type === 'link'),
-    );
-  if (paths.some((item) => linkLines(item).length > 0 || listLinked(item))) {
-    return (
-      <ContentSection
-        {...head(b)}
-        eyebrow={eyebrows?.[b.id]}
-        align="center"
-        data-band="C-router"
-      >
-        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
-          {paths.map((path) => {
-            const links = path.blocks.flatMap((block) =>
-              block.type === 'links' ? block.links : [],
-            );
-            const listLinks = path.blocks.flatMap((block) =>
-              block.type === 'list'
-                ? block.items.flatMap((item) =>
-                    item.length === 1 && item[0]?.type === 'link'
-                      ? [
-                          {
-                            href: item[0].href,
-                            label: item[0].children,
-                            labelText: plain(item[0].children),
-                          },
-                        ]
-                      : [],
-                  )
-                : [],
-            );
-            const all = [...listLinks, ...links];
-            const figure = all
-              .map((link) => sketchForRoute(link.href))
-              .find((scene) => scene && isSituationFigureName(scene));
-            return (
-              <Layout key={path.headingText} rowGap="block" justifyItems="start">
-                {figure && isSituationFigureName(figure) ? (
-                  <SituationFigure name={figure} />
-                ) : null}
-                <Layout rowGap="text">
-                  <h3>{path.headingText}</h3>
-                  {paragraphRuns(path.blocks).map((runs, index) => (
-                    <p key={index}>{plain(runs)}</p>
-                  ))}
-                </Layout>
-                <LinkActions links={all} />
-              </Layout>
-            );
-          })}
-        </Layout>
-      </ContentSection>
-    );
-  }
-  const boardItems = gatewayBoardItems(b);
+  const paths = gatewayPaths(b);
+  const multi = paths.some((path) => path.links.length > 1);
   return (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
-      <Gateway items={boardItems} arrangement="board" />
+      {multi ? (
+        <GatewayPaths paths={paths} />
+      ) : (
+        <Gateway items={gatewayBoardItems(b)} arrangement="board" />
+      )}
     </ContentSection>
   );
 }
@@ -358,39 +353,50 @@ function Situations({ b, eyebrows }: BandProps) {
 
 /**
  * "One studio, from the first question to working software": two paragraphs and a link row of the
- * four disciplines. The approved What-we-do Bento, four equal tiles on four tracks, each the service's
- * name and its scene (the copy writes no line per service, so the tiles carry none: Bento `body` is
- * optional, component-map C11/C17), under a full-width head (clickable cards sit under their head).
- * (Mock owed: C11.)
+ * four disciplines (component-map C11, built straight to hi-fi 29 Oct 2026).
+ *
+ * The heading runs the full width and the four disciplines sit under it as the approved What-we-do
+ * Bento, four equal tiles on four tracks, each the service's name and its scene (the copy writes no
+ * line per service, so the tiles carry none: Bento `body` is optional). Clickable cards sit under
+ * their full-width head (2026-10-09), so the head is never a `beside` track.
+ *
+ * The two paragraphs are the band's argument in two beats, the centre and what sits around it, so
+ * they are set as two columns on the bento's own grid: the first over the first two tracks, the
+ * second over the last two, one `gutter` apart exactly as the tiles are. Stacked as a lead over a
+ * body paragraph they read as two voices at two measures; side by side they read as one spread, and
+ * the row of tiles under them answers both. One column below 1024.
  */
 function OneStudio({ b }: BandProps) {
   const paras = paragraphRuns(b.blocks);
-  const [first, ...rest] = paras;
   const tiles: BentoItem[] = bandLinks(b).flatMap((link) => {
     const scene = sketchForRoute(link.href);
     return scene ? [{ id: link.href, title: link.labelText, href: link.href, scene }] : [];
   });
   return (
-    <ContentSection {...head(b)} data-band="C-bento" lead={first ? plain(first) : undefined}>
-      <Layout rowGap="stack">
-        {rest.length > 0 ? (
-          <ContentSectionText>
-            {rest.map((runs, index) => (
-              <p key={index}>{plain(runs)}</p>
-            ))}
-          </ContentSectionText>
-        ) : null}
-        <Bento items={tiles} tracks={4} />
-      </Layout>
+    <ContentSection {...head(b)} data-band="C-bento">
+      {paras.length > 0 ? (
+        <Layout columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="text">
+          {paras.map((runs, index) => (
+            <ContentSectionText key={index}>
+              <p>{plain(runs)}</p>
+            </ContentSectionText>
+          ))}
+        </Layout>
+      ) : null}
+      <Bento items={tiles} tracks={4} />
     </ContentSection>
   );
 }
 
 /* ── 2c · the people, and how the designers use AI ─────────────────────────────── */
 
-/** The studio's people: the team photograph under the two paragraphs, its two links stacked. */
+/**
+ * The studio's people: the team photograph under the head (Banner `below`, component-map Q17
+ * default). The band's two paragraphs are its lead, both at the lead's role and measure, and the
+ * two links stack under them.
+ */
 function People({ page, b }: BandProps) {
-  const [first, ...rest] = paragraphRuns(b.blocks);
+  const paras = paragraphRuns(b.blocks);
   const binding = page.composition.mediaBindings.find(
     (m) => m.bound && m.supportsSection === b.id,
   );
@@ -400,20 +406,8 @@ function People({ page, b }: BandProps) {
       id={b.id}
       headingId={headingIdOf(b)}
       heading={b.headingText}
-      lead={first ? plain(first) : undefined}
-      /* The words in their order: the second paragraph, then the two links (stacked). */
-      support={
-        <Layout rowGap="stack">
-          {rest.length > 0 ? (
-            <Layout rowGap="text">
-              {rest.map((runs, index) => (
-                <p key={index}>{plain(runs)}</p>
-              ))}
-            </Layout>
-          ) : null}
-          <LinkActions links={bandLinks(b)} />
-        </Layout>
-      }
+      lead={paras.map((runs) => plain(runs))}
+      actions={<LinkActions links={bandLinks(b)} />}
       image={
         binding
           ? { ...corpusImage(binding), kind: 'photograph' }
@@ -651,21 +645,14 @@ function AiPractice({ page, b }: BandProps) {
       mediaSide="start"
       headingId={headingIdOf(b)}
       heading={b.headingText}
-      lead={lead ? plain(lead) : undefined}
-      /* The words in their order: the sentence before the link, then the link as the action. */
-      support={
-        <Layout rowGap="stack">
-          {support.length > 0 ? (
-            <Layout rowGap="text">
-              {support.map((runs, index) => (
-                <p key={index}>{plain(runs)}</p>
-              ))}
-            </Layout>
-          ) : null}
-          {link ? (
-            <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
-          ) : null}
-        </Layout>
+      /* The words in their order: both paragraphs as the lead, at one role and measure (the
+         sentence before the link is the lead going on, not a body at another ink), then the link
+         as the action. */
+      lead={[...(lead ? [plain(lead)] : []), ...support.map((runs) => plain(runs))]}
+      actions={
+        link ? (
+          <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+        ) : undefined
       }
       image={{ ...placeholderImage(page.route, b.id), kind: 'photograph' }}
     />
