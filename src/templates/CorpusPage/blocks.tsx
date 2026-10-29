@@ -49,6 +49,7 @@ import { linkProofLine } from '@/lib/case-links';
 import { renderInline } from '@/lib/inline-render';
 import { HEAD_TRACK } from '@/lib/image-sizes';
 import { ENDPOINTS } from '@/lib/routes';
+import { isStudioRecord, recordFigures } from '@/lib/studio-record';
 import { heroTrail } from '@/lib/trail';
 
 import styles from './CorpusPage.module.css';
@@ -143,9 +144,15 @@ export function CorpusHero({
   const byline = editorialByline(page);
   /* The authored byline line is the same record the byline strip now presents, so it is not shown
      twice; any other proof line still is. */
-  const [firstProof] = byline
+  const proofs = byline
     ? hero.proofLines.filter((line) => !plain(line).includes(byline.author))
     : hero.proofLines;
+  /* The studio's record line is figures wherever it is authored, never a line of facts (owner,
+     29 Oct 2026; decisions/2026-10-29-studio-record-is-figures): a template that passes no `stats`
+     still gets them from the hero's own record, and the record is never also printed as a line. */
+  const recordLine = proofs.find((line) => isStudioRecord(plain(line)));
+  const figures = stats ?? (recordLine ? recordFigures(plain(recordLine)) : undefined);
+  const [firstProof] = proofs.filter((line) => line !== recordLine);
   return (
     <PageHero
       data-band="A"
@@ -162,7 +169,7 @@ export function CorpusHero({
       titleAcross={long(hero.titleText)}
       media={media}
       tags={tags}
-      stats={stats}
+      stats={figures && figures.length > 0 ? figures : undefined}
       texture={texture}
       credits={byline?.credits}
       dates={byline?.dates}

@@ -9,6 +9,7 @@ import {
   PageHero,
   type BreadcrumbItem,
   type HeroAction,
+  type HeroStat,
 } from '@/patterns';
 
 import { FinderForm, FinderLinks } from './Finder';
@@ -23,15 +24,18 @@ import styles from './ListingIndex.module.css';
    insights compositions (insights.tsx) and the case groups (cases.tsx) are two answers to "what goes
    in a section", built beside it in this folder. */
 
-/** The listing's opening: the title alone, the lede and the record beside it (PageHero `masthead`). */
+/** The listing's opening: the title alone, the lede and its figures beside it (PageHero `masthead`). */
 export type ListingHero = {
   title: string;
   /** The opening paragraphs, beside the title's last baseline from 1024. */
   lede?: readonly string[];
   /** The line above the title, as authored. */
   eyebrow?: string;
-  /** One mono line under the lede: how many there are and how fresh ("42 published · Latest …"). */
-  record?: readonly string[];
+  /**
+   * The record as figures under the lede (PageHero `stats`): the number large, what it counts small.
+   * Never a mono line of facts (owner, 29 Oct 2026; decisions/2026-10-29-studio-record-is-figures).
+   */
+  stats?: readonly HeroStat[];
 };
 
 /**
@@ -160,7 +164,7 @@ const FOLD_EXEMPT =
  * ListingIndex — the listing page type: the insights hub and the case-study index, after
  * claude.com/resources (owner, 16 Oct 2026; one structure, 22 Oct 2026).
  *
- *   A  hero     the trail, the title, the lede and record beside it (`masthead`), the texture
+ *   A  hero     the trail, the title, the lede and figures beside it (`masthead`), the texture
  *   B  listing  the rail beside the column: a switch of curated VIEWS (each a run of sections, every
  *               section a one-line head over its pieces, a `section` apart; every view is in the HTML,
  *               the switch shows one and holds it in `?view=`), or the FINDER — the filters in the
@@ -266,7 +270,7 @@ export function ListingIndex({
         eyebrow={hero.eyebrow}
         title={hero.title}
         body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
-        record={hero.record}
+        stats={hero.stats}
         arrangement="masthead"
         texture
         surface="paper"

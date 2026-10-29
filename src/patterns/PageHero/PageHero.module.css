@@ -342,15 +342,6 @@
   white-space: nowrap;
 }
 
-/* A listing's record: one line that may wrap, but only between its facts (each holds together). */
-.record {
-  white-space: normal;
-}
-
-.recordFact {
-  white-space: nowrap;
-}
-
 /* ── numeral · the legend's markers, the drawing's discs in HTML ─────────────────────
    A disc holding one glyph. inline-grid + place-content centres that glyph in its own box; it
    arranges nothing (the same reason Button centres its label), and the legend row is a Cluster.

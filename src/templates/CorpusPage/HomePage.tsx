@@ -35,6 +35,7 @@ import type {
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { sketchForRoute } from '@/lib/sketches';
+import { recordFigures } from '@/lib/studio-record';
 
 import {
   CorpusHero,
@@ -175,51 +176,17 @@ type BandProps = {
 /* ── 0 · the studio's record, as three figures in the hero ───────────────────────── */
 
 /**
- * The hero's record line ("Founded 2017 · More than 90 projects · Clients in 19 countries · Based in
- * Ahmedabad, India") is the page's first credibility, so it is set as figures rather than a bullet
- * line (owner, 10 Oct 2026, note 1): one Stat per fact, the figure large and blue, what it counts
- * under it. The split designs the words and never rewords the information: "More than 90" is set as
- * "90+" (proposal P33 asks the content team to confirm the form).
- *
- * THREE figures, not four (owner, home round 2: "remove the 'based in India' stat"). A place is not a
- * measure of the studio; the FAQ and the footer still name India. A `null` form is a fact the record
- * deliberately leaves out.
+ * The hero's record line is the page's first credibility, so it is set as figures rather than a
+ * bullet line (owner, 10 Oct 2026, note 1; 29 Oct 2026, decisions/2026-10-29-studio-record-is-figures):
+ * one Stat per fact, the figure large and blue, what it counts under it. The split is one table for
+ * every page (src/lib/studio-record.ts).
  *
  * INSIDE THE HERO (owner, home round 3, 11 Oct 2026: "could the facts/figures section be integrated
  * into the hero so it doesn't take one entire section"): PageHero's `stats` row, under the actions.
- * Rounds 1 and 2 gave it a tint band of its own (~330 at 1440) between the hero and the logo wall.
  */
-const RECORD_FORMS: Readonly<Record<string, HeroStat | null>> = {
-  'Founded 2017': { value: '2017', label: 'Founded' },
-  'More than 90 projects': { value: '90+', label: 'Projects' },
-  'Clients in 19 countries': { value: '19', label: 'Countries with clients' },
-  'Based in Ahmedabad, India': null,
-  /* The 26 Oct copy's wording of the same fact (component-map § E home 1). */
-  'Studio in Ahmedabad, India': null,
-};
-
-function recordFact(fact: string): HeroStat | null {
-  const known = RECORD_FORMS[fact];
-  if (known !== undefined) return known;
-  /* A fact the table does not know still renders, its number as the figure and its words as the
-     line, and says so in development so the table catches up. */
-  if (process.env.NODE_ENV !== 'production') {
-    console.warn(`HomePage: record fact "${fact}" has no figure form; add it to RECORD_FORMS.`);
-  }
-  return { value: /\d[\d.,]*/.exec(fact)?.[0] ?? fact, label: fact };
-}
-
-/** The hero's record line as figures (home, and About from the same line). */
 export function recordStats(page: CorpusPage): HeroStat[] {
   const [line] = page.hero.proofLines;
-  if (!line) return [];
-  return plain(line)
-    .split(' · ')
-    .map((fact) => fact.trim())
-    .flatMap((fact) => {
-      const form = recordFact(fact);
-      return form ? [form] : [];
-    });
+  return line ? recordFigures(plain(line)) : [];
 }
 
 /* ── 1 · who has worked with us, led by the one independent score ─────────────────── */

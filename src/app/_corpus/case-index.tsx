@@ -23,6 +23,7 @@ import type {
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { caseStudyPath, CASE_SLUG_REDIRECTS } from '@/lib/routes';
+import { recordFigures } from '@/lib/studio-record';
 import {
   CorpusBandView,
   ENQUIRY_DRESS,
@@ -43,7 +44,7 @@ import {
  * page's shapes are read onto its props:
  *
  *   hero                 the eyebrow, title and lede; the studio record ("Founded 2017 · …") as the
- *                        masthead's record line
+ *                        masthead's figures
  *   client-recognition   the client wall, under the opening (C13)
  *   featured             three `###` cases, the page's featured cases (CaseCard)
  *   four stage tables    the BY STAGE view: one group per table, a card per row ("Case | What we did
@@ -406,13 +407,11 @@ export async function caseIndexProps(
   const view = Array.isArray(requested) ? requested[0] : requested;
   const lead = closeBand?.blocks.find((block) => block.type === 'paragraph');
   /* The studio record the copy sets in bold under the lede ("Founded 2017 · More than 90 projects
-     · …"): the masthead's record line, each fact its own word-group. */
-  const record = page.hero.proofLines
-    .map((line) => text(line).trim())
-    .find((line) => line.includes(' · '))
-    ?.split(' · ')
-    .map((fact) => fact.trim())
-    .filter(Boolean);
+     · …"): the masthead's figures, the number large and what it counts small (owner, 29 Oct 2026;
+     decisions/2026-10-29-studio-record-is-figures). */
+  const stats = page.hero.proofLines
+    .map((line) => recordFigures(text(line)))
+    .find((figures) => figures.length > 0);
 
   /* The listing's opening takes no ask (PageHero `masthead`: a listing's ask is its list; the
      29 Sep ruling kept a button off the index), so the hero's "Tell us about your product" is not
@@ -423,7 +422,7 @@ export async function caseIndexProps(
       title: page.hero.titleText.trim() || page.name,
       eyebrow: page.hero.eyebrow ? text(page.hero.eyebrow) : undefined,
       lede: page.hero.lede.map(text),
-      record,
+      ...(stats ? { stats } : {}),
     },
     label: 'Case studies',
     railLabel: 'Browse case studies',
