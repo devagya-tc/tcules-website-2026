@@ -1,0 +1,279 @@
+{
+  "template": "guide",
+  "route": "/insights/guides/how-to-use-a-ux-product-audit",
+  "slug": "how-to-use-a-ux-product-audit",
+  "name": "How to use a UX audit: from first question to ranked plan",
+  "pageType": "guide",
+  "editorial": {
+    "authors": [
+      "author:yash-bhatt"
+    ],
+    "authorRole": "Product Designer, Tcules",
+    "reviewer": null,
+    "publishedAt": "2025-05-02",
+    "modifiedAt": "2026-10-26",
+    "dateAsDisplayed": "Updated 26 October 2026",
+    "readingTimeAsDisplayed": "8 min read",
+    "topicTags": [],
+    "standfirst": null,
+    "keyTakeaways": [
+      "A vague brief produces a vague audit. Start with a question your team has to answer.",
+      "A useful audit combines workflows, analytics, support feedback, existing research, accessibility review and a comparison of design and code.",
+      "Every finding should say what happens, who it affects, why it matters, how sure the team is and what to do next.",
+      "Rank findings by consequence and confidence, then sort each into an action such as fix now, research, redesign or defer.",
+      "On our Dealpath audit, one structural finding changed the workflow, and three working actions on the same screen stayed as they were."
+    ],
+    "series": null
+  },
+  "subscription": {
+    "form": "insights_newsletter",
+    "anchor": "subscribe",
+    "visibleFields": [
+      "Email"
+    ],
+    "submitLabel": "Subscribe",
+    "consent": {
+      "type": "explicit_opt_in_checkbox",
+      "confirmation": "none, simple opt-in",
+      "unsubscribe": "one_click_link_in_every_email"
+    },
+    "onSuccess": {
+      "heading": "You are subscribed",
+      "body": "A few times a month, and one click unsubscribes from any email."
+    },
+    "processor": "cms_record_and_notify"
+  },
+  "relatedContent": [
+    {
+      "anchor": "See the UX & Product Audit",
+      "target": "/audits/ux-product-audit"
+    }
+  ],
+  "seo": {
+    "title": "How to Use a UX Audit, With a Report Template | Tcules",
+    "description": "How to use a UX audit: set the question first, check what to inspect, write each finding in a report template and turn the findings into a ranked plan.",
+    "canonical": "https://www.tcules.com/insights/guides/how-to-use-a-ux-product-audit",
+    "robots": "index,follow",
+    "ogImageAlt": "Tcules social card headed Insights, on a white background with the Tcules wordmark."
+  },
+  "social": {
+    "og_title": "How to Use a UX Audit, With a Report Template | Tcules",
+    "og_description": "How to use a UX audit: set the question first, check what to inspect, write each finding in a report template and turn the findings into a ranked plan.",
+    "og_image": "https://www.tcules.com/assets/og/insights.png",
+    "og_image_alt": "Tcules social card headed Insights, on a white background with the Tcules wordmark.",
+    "og_type": "article",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Insights",
+      "url": "/insights"
+    },
+    {
+      "name": "Guides",
+      "url": "/insights/guides"
+    },
+    {
+      "name": "How to use a UX audit: from first question to ranked plan",
+      "url": "/insights/guides/how-to-use-a-ux-product-audit"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "Learn how to use a UX audit and act on its findings",
+    "primaryBuyerQuestion": "How should a team commission an audit and turn its findings into product decisions?",
+    "supportingQuestions": [],
+    "primaryQuery": "how to use a UX audit",
+    "secondaryQueries": [
+      "what is a UX audit",
+      "how to do a UX audit",
+      "UX audit checklist",
+      "UX audit report template",
+      "UX audit example",
+      "act on UX audit findings",
+      "UX audit report"
+    ],
+    "keyEntities": [
+      "UX product audit",
+      "product diagnosis",
+      "audit recommendations"
+    ]
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Article",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "CONTENT_READY",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": null,
+  "hero": {
+    "eyebrow": "Insights · Guide",
+    "title": "How to use a UX audit: from first question to ranked plan",
+    "lede": [
+      "To get value from a UX audit, set the question it must answer and inspect more than the screens. Then write every finding in the same five fields and rank the fixes by consequence and confidence. This guide covers each step, with a report template, a worked example and a finding from one of our own audits.",
+      "A list of inconsistent screens can be accurate and still leave your team stuck. A useful audit names the cause. It can be local usability, the product's structure, drift between design and code, company policy or a gap in what the team knows."
+    ],
+    "actions": [],
+    "proofLines": [
+      "Key takeaways"
+    ],
+    "studioFacts": false,
+    "media": null,
+    "bylineDerivedFromEditorial": "By [Yash Bhatt](/insights/authors/yash-bhatt) · Published 2 May 2025 · Updated 26 October 2026 · 8 min read"
+  },
+  "sections": [
+    {
+      "block": "Rich section",
+      "id": "what-is-a-ux-audit",
+      "heading": "What is a UX audit?",
+      "body": "A UX audit is a structured review of a live product that finds where people struggle, explains why and ranks what to change. It draws on expert review and on what the product already knows: workflows, analytics, support feedback, earlier research, accessibility and the gap between design and code.\n\nUsability testing watches people attempt tasks, and a good audit often includes some. The audit then sets those sessions beside every other source and ends in a ranked report your team can act on, finding by finding."
+    },
+    {
+      "block": "Rich section",
+      "id": "choose-the-audit-question",
+      "heading": "How to do a UX audit: choose the question first",
+      "body": "An audit turns vague when it is commissioned as “review our UX”. Start with a question your team has to answer, such as:\n\n- Which workflow failures should enter the next roadmap?\n- Is the product ready for a redesign, or does it need structural modernisation?\n- Where does the shipped product differ from the design?\n- Can roles and permissions support the next market?\n- Is an AI feature clear and controllable enough for wider release, and can people recover when it gets something wrong?\n- Which gaps in the design system keep costing the team rework?\n\nThe question sets what the audit inspects and who needs to take part. When a redesign and structural modernisation both look plausible, the [Product Modernisation Assessment](/audits/product-modernisation-assessment) compares them capability by capability."
+    },
+    {
+      "block": "Rich section",
+      "id": "inspect-more-than-the-interface",
+      "heading": "UX audit checklist: what to inspect beyond the screens",
+      "body": "A useful audit combines several sources:\n\n- the workflows people actually run, including unusual cases;\n- product analytics, read with their limits in mind;\n- support and sales feedback;\n- research the team already holds;\n- interviews or usability testing;\n- an accessibility review;\n- a comparison of design and code;\n- how the product's information is organised, and the objects users work with;\n- business rules, permissions and handoffs between teams.\n\nA heuristic review finds likely usability problems quickly. Add other sources to learn how many users meet them, what they cost and what those users were trying to do."
+    },
+    {
+      "block": "Comparison",
+      "id": "every-finding-has-to-answer-the-same-questions",
+      "heading": "UX audit report template: five fields for every finding",
+      "intro": "Each substantial finding should answer the same questions.",
+      "table": {
+        "columns": [
+          "Field",
+          "The question it answers"
+        ],
+        "rows": [
+          [
+            "What happens",
+            "What did we see, hear or measure, in which workflow, screen or device? Is the cause the interface, the product structure, the build, a policy or a gap in what we know?"
+          ],
+          [
+            "Who it affects",
+            "Which role or task is involved?"
+          ],
+          [
+            "Why it matters",
+            "What can go wrong for the person or the organisation?"
+          ],
+          [
+            "How sure we are",
+            "Where did it come from, and how strong is it?"
+          ],
+          [
+            "What to do next",
+            "What should change, be tested or stay as it is? Who takes responsibility, and what would show the change helped?"
+          ]
+        ]
+      },
+      "after": "Written this way, severity stays tied to how sure we are and why it matters."
+    },
+    {
+      "block": "Rich section",
+      "id": "prioritise-by-consequence-and-confidence",
+      "heading": "How to rank UX audit findings by consequence and confidence",
+      "body": "Rank each finding by how much it matters and how sure you are. High consequence with weak support may call for quick research first, with any redesign after it. High confidence with low consequence may belong in routine product maintenance. A structural finding can be urgent even when it appears in one workflow, because one underlying model affects many screens and situations.\n\nThen sort every finding into one of these actions:\n\n- fix now;\n- measure and watch;\n- research;\n- redesign;\n- modernise the underlying product structure;\n- bring design and code back into line;\n- accept, with the reason written down;\n- defer, with a trigger to revisit.\n\nThe [UX & Product Audit](/audits/ux-product-audit) applies this structure to your product, from what happens to what to do next. Your team ends with a ranked list of actions and can fund the change customers will notice first."
+    },
+    {
+      "block": "Rich section",
+      "id": "a-finding-written-the-way-it-should-arrive",
+      "heading": "UX audit example: one finding written the way it should arrive",
+      "body": "Here is one finding, written the way it should arrive.\n\n**What happens:** an administrator cannot tell whether removing a person will cancel their scheduled approvals. The screen does not show who has authority, or what is in progress, at the moment of confirming.\n\n**Who it affects:** administrators removing a person from the product.\n\n**Why it matters:** the administrator may keep inappropriate access or disrupt active work.\n\n**How sure we are:** workflow review and two support examples supplied by the product team. No prevalence data.\n\n**What to do next:** show affected approvals before confirmation and offer reassignment where permitted. Check the change with task-based testing with administrators, production event logging and support review after release."
+    },
+    {
+      "block": "Rich section",
+      "id": "how-much-can-the-sample-prove",
+      "heading": "Act on UX audit findings: state the sample and name the owners",
+      "body": "A useful audit names the workflow, roles, screens and sample behind each finding, then records what that sample cannot show. Automated checks can find repeatable failures. Knowledgeable human review belongs alongside them, and so do the affected users where lived experience matters.\n\nEvery finding separates what was observed from the proposed explanation. It states confidence, names competing explanations and says what to look at next. Before the audit begins, name who can accept a finding, who investigates it and who carries out the fix. With owners named, the findings move into your team's plan."
+    },
+    {
+      "block": "Comparison",
+      "id": "dealpath-audit-finding",
+      "heading": "From our work: the finding that shaped the Dealpath redesign",
+      "intro": "Dealpath makes deal-management software for real-estate acquisitions teams. Tcules audited the product, then redesigned the one workflow the audit pointed to. Here is the central finding, set out in the template above.",
+      "table": {
+        "columns": [
+          "Field",
+          "The Dealpath finding"
+        ],
+        "rows": [
+          [
+            "What happens",
+            "Selecting Add to pipeline on a listing opened Create deal straight away, as if every listing were a new opportunity."
+          ],
+          [
+            "Who it affects",
+            "Acquisitions team members moving a listing into the pipeline, including deals the team already tracks."
+          ],
+          [
+            "Why it matters",
+            "The default invites a duplicate deal whenever the opportunity is already being tracked."
+          ],
+          [
+            "How sure we were",
+            "The audit and research pointed to this action alone. Of the four actions on a listing, only this one carried the structural problem."
+          ],
+          [
+            "What to do next",
+            "Search for and attach an existing deal first, with a new deal kept as a deliberate fallback. Dealpath's own team owned implementation."
+          ]
+        ]
+      },
+      "after": "The other three actions, viewing a listing, marking a comparable and passing on it, went into the \"accept\" pile and stayed as they were. Changing them would have made people relearn working habits for no gain. The [Dealpath case study](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) covers the listing layout and the rest of the redesign."
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "UX audit questions teams ask",
+      "items": [
+        {
+          "question": "How do I get value from a UX audit?",
+          "answer": "Commission it against a question your team has to answer, such as which workflow failures belong in the next roadmap. Ask for findings in a fixed format, with a cause, a consequence, a confidence level and a next step. Then name, before the audit starts, who accepts each finding and who carries out the fix."
+        },
+        {
+          "question": "What should a UX audit report contain?",
+          "answer": "Every substantial finding should say what happens, who it affects, why it matters, how sure the team is and what to do next. The report should also rank the findings and sort each into an action, from fix now to defer with a trigger. Without the ranking, a report reads as a list."
+        },
+        {
+          "question": "How do we turn UX audit findings into decisions?",
+          "answer": "Rank each finding by consequence and confidence, then give it one action: fix, measure, research, redesign, modernise the structure, realign design and code, accept or defer. Give each action an owner and a sign that would show it worked. Findings with owners move into the roadmap."
+        },
+        {
+          "question": "Can our own team do a UX audit?",
+          "answer": "Yes, if someone has time set aside and enough distance from the product to question what it assumes. Use the checklist and template in this guide so the findings stay comparable. Outside reviewers help most when the team built the screens under review or when a structural cause is suspected."
+        },
+        {
+          "question": "Is a heuristic review the same as a UX audit?",
+          "answer": "A heuristic review is one part of a UX audit. It finds likely usability problems quickly against known principles. A full audit adds analytics, support feedback, research, accessibility and a design-to-code comparison, so it can say how many people meet each problem and what it costs them."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "related-reading",
+      "heading": "The audit this guide supports, and related reading",
+      "intro": "This guide supports our [UX & Product Audit](/audits/ux-product-audit), which applies the same template and ranking to your product. When the open question is whether to redesign or modernise the structure underneath, the [Product Modernisation Assessment](/audits/product-modernisation-assessment) compares the two options capability by capability. For problems that slip past release checks, read [why customers can finish a task and still lose confidence](/insights/articles/silent-ui-regression-debt).",
+      "entries": []
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/insights__guides__how-to-use-a-ux-product-audit.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

@@ -1,0 +1,359 @@
+{
+  "template": "service-l2",
+  "route": "/services/product-design/ux-research",
+  "slug": "ux-research",
+  "name": "UX Research",
+  "pageType": "service",
+  "seo": {
+    "title": "UX Research Company for SaaS and Complex Software | Tcules",
+    "description": "UX research company for SaaS and complex software: interviews, observation and usability sessions that show what to build, fix or drop next.",
+    "canonical": "https://www.tcules.com/services/product-design/ux-research",
+    "robots": "index,follow",
+    "ogImageAlt": "IMAGE_ASSET_REQUIRED"
+  },
+  "social": {
+    "og_title": "UX Research Company for SaaS and Complex Software | Tcules",
+    "og_description": "UX research company for SaaS and complex software: interviews, observation and usability sessions that show what to build, fix or drop next.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "IMAGE_ASSET_REQUIRED",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Services",
+      "url": "/services"
+    },
+    {
+      "name": "Product Design",
+      "url": "/services/product-design"
+    },
+    {
+      "name": "UX Research",
+      "url": "/services/product-design/ux-research"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "UX research services for B2B SaaS and complex software",
+    "primaryBuyerQuestion": "What evidence is strong enough to change the product decision we are about to make?",
+    "supportingQuestions": [
+      "Can you research one workflow instead of the whole product?",
+      "Are interviews enough?",
+      "Should we start with research or an audit?"
+    ],
+    "primaryQuery": "UX research company",
+    "secondaryQueries": [
+      "UX research services",
+      "user research services",
+      "UX research for SaaS",
+      "B2B user research",
+      "user interviews for SaaS",
+      "UX research or UX audit first",
+      "are interviews enough",
+      "research one workflow instead of the whole product",
+      "UX research deliverables",
+      "UX research cost",
+      "how long does UX research take"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "BATCH4_DRAFT_2026-10-08",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": {
+    "form": "project_enquiry",
+    "anchor": "enquiry",
+    "visibleFields": [
+      "Email",
+      "What are you working on?",
+      "Product or company URL"
+    ],
+    "optionalFields": [
+      "Product or company URL"
+    ],
+    "submitLabel": "Send enquiry",
+    "hiddenContext": [
+      "origin_route",
+      "placement",
+      "family",
+      "service_or_audit",
+      "referrer",
+      "campaign"
+    ],
+    "onSuccess": {
+      "heading": "Your enquiry has reached us.",
+      "body": "We'll reply within one business day.",
+      "retainEnteredData": true
+    },
+    "processor": "cms_record_and_notify",
+    "schedulingLabel": null
+  },
+  "hero": {
+    "eyebrow": "Product Design · UX research",
+    "title": "UX research company for SaaS: what users say, and what they do",
+    "lede": [
+      "UX research is for the roadmap meeting where half the room blames onboarding and half blames pricing, and for the first release you are about to fund. Tcules is a UX research company for SaaS and complex software, answering one product question at a time from interviews, observation and the data you already hold."
+    ],
+    "actions": [
+      {
+        "label": "Bring us the question your team can't agree on",
+        "href": "#enquiry"
+      }
+    ],
+    "proofLines": [
+      "Selected work: [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Merchant payments](/case-studies/ux-research-for-kirana-store-payment-app)"
+    ],
+    "studioFacts": true,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "What you get",
+      "id": "what-you-get",
+      "heading": "What you get from our UX research services",
+      "intro": "Every study starts from one question your team needs answered and ends with what to change, what to test next and what to leave alone.",
+      "itemsLabel": "What you receive",
+      "items": [
+        {
+          "title": "The question, written down.",
+          "body": "What the research must answer, and what your team would do differently depending on the answer."
+        },
+        {
+          "title": "A plan that starts from what you hold.",
+          "body": "Analytics, support tickets and past studies come first. New research fills only the gaps they leave."
+        },
+        {
+          "title": "Interviews and observation.",
+          "body": "Sessions with people in the middle of real tasks, at their desks or on their own screens, including the specialists and admins who are hardest to book."
+        },
+        {
+          "title": "Every source checked against the others.",
+          "body": "Words against behaviour, interviews against analytics, so you learn how often a problem happens as well as why."
+        },
+        {
+          "title": "A readout you can act on.",
+          "body": "Findings tied to your question and the choices they point to. Depending on the study, it also includes a research synthesis, personas, experience maps or a UX strategy."
+        }
+      ],
+      "whoDoesTheWork": "A senior designer leads the study and does the work, with a researcher for interviews and sessions and an account lead keeping it on track. Researchers and designers work as one team, so findings can go straight into prototypes and screens.",
+      "whatWeNeedFromYou": "The question and what hangs on it; the analytics, tickets and past studies you already have; and help reaching the people who use the product, from long-time customers to trial users.",
+      "whereOurPartStops": "You get the findings and the choices they point to, and the product calls stay with you. If you want the findings designed, our designers carry them into [Product Design](/services/product-design). Once you have a direction to check, [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing) tests it."
+    },
+    {
+      "block": "Selected work",
+      "id": "selected-work",
+      "heading": "Selected UX research work",
+      "intro": "Three studies, from a scheduling MVP to a payment concept tested before any code.",
+      "cases": [
+        {
+          "case": "doodle-case-study-automating-enterprise-meeting-scheduling",
+          "copySlug": null,
+          "heading": "Doodle: meeting priority, found in one interview",
+          "body": "Doodle wanted enterprise scheduling to propose times that would hold across companies. We reviewed its research and competitors, surveyed stakeholders and meeting coordinators, then ran interviews. One showed that people busy for a routine call still make time for a review or a customer, and the MVP direction followed.",
+          "linkLabel": "Read the Doodle case",
+          "media": {
+            "id": "ux_research_doodle_object_model",
+            "role": "demonstrate",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp",
+            "altIntent": "Doodle product model connecting meeting priority, availability and scheduling behaviour after research changed the product direction.",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media"
+          }
+        },
+        {
+          "case": "consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software",
+          "copySlug": "auxentios-cpq-product-mvp-design",
+          "heading": "Auxentios: six roles mapped before the first screen",
+          "body": "Auxentios was defining an industrial quoting product. Eight interviews across six roles, from sales representatives to pricing and maintenance experts, showed who adds what to a quote and where it changes hands. That map set the structure of the MVP.",
+          "linkLabel": "Read the Auxentios case",
+          "media": {
+            "id": "ux_research_auxentios_card",
+            "role": "demonstrate",
+            "status": "SCREEN_REQUIRED"
+          }
+        },
+        {
+          "case": "ux-research-for-kirana-store-payment-app",
+          "copySlug": null,
+          "heading": "Merchant payments: twenty interviews before anyone paid for code",
+          "body": "A client exploring a payment app for kirana store owners, who run India's neighbourhood grocery shops, wanted the idea tested first. Twenty interviews, alongside stakeholder, competitor and app-store research, gave product and marketing shared priorities, concept material and a UX strategy.",
+          "linkLabel": "Read the merchant payments case",
+          "media": {
+            "id": "ux_research_merchant_payments_card",
+            "role": "demonstrate",
+            "status": "SCREEN_REQUIRED"
+          }
+        }
+      ]
+    },
+    {
+      "block": "Rich section",
+      "id": "cross-check",
+      "heading": "When interviews, analytics and support tickets disagree",
+      "body": "A SaaS team rarely starts research from nothing. There are dashboards, a support queue, a sales team with firm views and perhaps a study from last year. They often point in different directions, and the useful finding usually sits in the gap between them.\n\n| What you need to know | How we find out |\n|---|---|\n| What do people actually do, step by step? | Observation and interviews in the middle of their real work |\n| Why do people stall, drop off or call support? | Analytics, support tickets and task walkthroughs |\n| Will a new idea make sense to the people it's for? | Concept interviews and early prototypes |\n| What will a change break for experienced users? | Sessions with long-time users on their own tasks |\n\nInterviews explain why people work the way they do. Analytics and observation count how often it happens. Where the two disagree, we keep digging until one account explains both.\n\nBusiness software adds its own difficulty: specialist users, several roles on one account and buyers who never touch the product. We recruit for every role the question touches.\n\nExample: for [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), user interviews, product analytics, stakeholder conversations, competitor analysis and a heuristic review were read together, and they put reporting first."
+    },
+    {
+      "block": "Routes",
+      "id": "routes",
+      "heading": "UX research, a UX audit or usability testing: which do you need?",
+      "intro": "Each starts from a different place. Pick by what you have in hand today.",
+      "rowHeader": "Service",
+      "columns": [
+        "What it covers",
+        "Best for"
+      ],
+      "rows": [
+        {
+          "page": null,
+          "label": "UX research",
+          "cells": [
+            "New information from users, through interviews and observation of real work",
+            "A question nobody inside the company can answer, such as why adoption is weak"
+          ]
+        },
+        {
+          "page": "/audits/ux-product-audit",
+          "label": "UX & Product Audit",
+          "cells": [
+            "A diagnosis of the live product from what already exists",
+            "Finding what's wrong in a product people already use"
+          ]
+        },
+        {
+          "page": "/services/product-design/prototyping-usability-testing",
+          "label": "Prototyping & Usability Testing",
+          "cells": [
+            "A specific design tested with people who match your users",
+            "Checking a direction you already have"
+          ]
+        },
+        {
+          "page": "/services/product-design/information-architecture-workflow-design",
+          "label": "Information Architecture & Workflow Design",
+          "cells": [
+            "The records, roles and hand-offs that findings often point to",
+            "Research showing that work gets lost between roles"
+          ]
+        },
+        {
+          "page": null,
+          "label": "Your own research team",
+          "cells": [
+            "Ongoing interviews and analytics run in-house",
+            "Teams with a researcher who has time, and questions that come back every quarter"
+          ]
+        }
+      ]
+    },
+    {
+      "block": "Testimonials",
+      "id": "testimonials",
+      "heading": "What clients say",
+      "testimonials": [
+        "DRAFT-DOODLE-RESEARCH",
+        "SSOT-RUSSELL-MILER-COO-RYZEO",
+        "DRAFT-CURAMCARE-ONEILL"
+      ],
+      "showPlatformRating": true
+    },
+    {
+      "block": "How we work together",
+      "id": "how-we-work-together",
+      "heading": "How we work together",
+      "intro": "For UX research, a good first piece of work is one question, such as why adoption is weak, answered from interviews and the data you already hold.",
+      "shared": "how-we-work-together:default"
+    },
+    {
+      "block": "Why Tcules",
+      "id": "why-tcules",
+      "heading": "Why teams choose Tcules",
+      "shared": "why-tcules:default",
+      "reasons": [
+        {
+          "reason": 1,
+          "evidence": "For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), some intended users had yet to use the product, so we studied the staffing work itself and modelled clients, candidates and jobs before redesigning four workflows."
+        },
+        {
+          "reason": 2,
+          "evidence": "For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), the research pointed to the Add to pipeline action alone, so our redesign changed that step and left the other three listing actions largely as users knew them."
+        },
+        {
+          "reason": 3,
+          "evidence": "For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we turned the questions operators, finance leaders and sustainability leads ask into eight scenarios, then proved them in a coded demo on sample data."
+        }
+      ]
+    },
+    {
+      "block": "Industries",
+      "id": "industries",
+      "heading": "Industries we know well",
+      "expertise": [
+        "b2b-saas-workflow-software",
+        "data-analytics-decision-products",
+        "ai-products-developer-tools",
+        "content-knowledge-discovery-platforms",
+        "martech-salestech",
+        "commerce-transactional-products",
+        "edtech-learning",
+        "fintech",
+        "healthtech",
+        "marketplaces-multi-sided-platforms"
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Questions about working with a UX research company",
+      "items": [
+        {
+          "question": "How do we choose a UX research company for B2B SaaS?",
+          "answer": "Choose one that can reach your real users, including specialists and admins who are hard to recruit, and that ties each study to a product choice. Tcules does both, and its designers work from the findings, so the research carries into the product."
+        },
+        {
+          "question": "Can you research one workflow instead of the whole product?",
+          "answer": "Yes. Tcules treats one workflow as a good-sized study. We also look at the parts of the product that workflow touches, so the findings still make sense in the wider product."
+        },
+        {
+          "question": "Are user interviews enough for product decisions?",
+          "answer": "Interviews usually explain why people work the way they do. To learn how often something happens, Tcules pairs them with analytics, support data or observation, which can count what interviews describe."
+        },
+        {
+          "question": "What are the deliverables of UX research?",
+          "answer": "Findings tied to the question you started with, and the choices they point to. Depending on the study, that can include a research synthesis, personas, experience maps and a UX strategy, as on the Auxentios and merchant payments projects."
+        },
+        {
+          "question": "How long does UX research take?",
+          "answer": "Most studies start with one workflow, on a timeline agreed before work starts. For research across a whole product, we start recruiting while the plan is agreed, so recruiting is already under way when sessions are due to begin."
+        },
+        {
+          "question": "How much does UX research cost?",
+          "answer": "The cost depends on how many people and roles you need to hear from, and which methods the question calls for. Tcules prices research up front once the scope is agreed, and one workflow is a sensible size to start with. [How pricing works](/how-we-work#engagement-shapes)"
+        }
+      ]
+    },
+    {
+      "block": "Enquiry",
+      "id": "enquiry",
+      "heading": "Tell us what you need to find out",
+      "intro": "Share the question, what you know so far and what you'll do with the answer.",
+      "form": "conversion"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/services__product-design__ux-research.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}
