@@ -15,16 +15,20 @@ import styles from './Button.module.css';
  *            uses the neutral ghost; that is a control, not an action in content.)
  *   link     every other action, which navigates: a band's "Start with an audit", a card's foot, a
  *            line of text. No box at all, so it can sit in a paragraph.
- *   outline  a round, hairline-ruled ICON control that steps through something — a slider's
- *            previous / next (fdn-scroll, 6 Oct 2026). Icon-only and primary-only, by type.
+ *   outline  a hairline-ruled control, primary only. Icon alone, round: a stepper through a set —
+ *            a slider's previous / next (fdn-scroll, 6 Oct 2026). Labelled, at the button's own
+ *            radius: the FIRST of a band's two actions, where no solid is in view (a Banner's
+ *            "Meet the studio" before its quieter "Careers at Tcules" link; owner, 29 Oct 2026;
+ *            decisions/2026-10-29-banner-two-actions-one-row). A labelled outline never sits
+ *            beside a solid: there it would read as a second action of the solid's rank.
  *
- * None of the three LABELLED emphases carries an outline. Separation comes from fill and from the
- * space around it, and a labelled outline beside a solid would read as a second action of the same
- * rank. `outline` is not that: it never carries a label, so it never competes with a solid for the
- * view's one ask, and it exists because a bare ghost glyph at rest is indistinguishable from the
- * decorative icons in a card (visual-direction § 3.1 lets a slider control keep its box). It is a
- * Button variant rather than a pattern's own control so the next stepper — a gallery, a pager —
- * takes the same states, ring, hit area and per-surface colour instead of copying them.
+ * Solid, ghost and link carry no outline. Separation comes from fill and from the space around it,
+ * and a labelled outline beside a solid would read as a second action of the same rank. `outline`
+ * never stands beside a solid: as a stepper it carries no label (a bare ghost glyph at rest is
+ * indistinguishable from the decorative icons in a card, visual-direction § 3.1), and labelled it
+ * leads an in-band pair whose second is a link, where the band has no solid at all. It is a Button
+ * variant rather than a pattern's own control so every use takes the same states, ring, hit area
+ * and per-surface colour instead of copying them.
  */
 export type ButtonEmphasis = 'solid' | 'ghost' | 'link' | 'outline';
 
@@ -150,7 +154,7 @@ type NeutralTone<E extends ButtonEmphasis> = {
 type WithLabel = {
   iconOnly?: false;
   children: ReactNode;
-} & (PrimaryTone<'solid' | 'ghost' | 'link'> | NeutralTone<'ghost' | 'link'>);
+} & (PrimaryTone<'solid' | 'ghost' | 'link' | 'outline'> | NeutralTone<'ghost' | 'link'>);
 
 /* One icon, one side — never both. A trailing glyph means the click changes where you are; a
    leading glyph names the KIND of action. Together they read as two claims about one action, and

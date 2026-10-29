@@ -18,7 +18,7 @@ import styles from './Banner.module.css';
  * The three forms of the banner family (visual-direction § 3.4, I and the strip).
  *
  *   below   a stacked head over a 3:1 photograph at the full column (1240 × 413 at 1470): eyebrow →
- *           heading → lead in one column at `block`, the action a `stack` under the lead, then the
+ *           heading → lead in one column at `block`, the action a `block` under the lead, then the
  *           photograph a `stack` beneath. One column at every width (owner, 7 Oct 2026: the H-row,
  *           heading in a 1 track and lead + action in a 2 track, is retired — a text-only head is
  *           never split left/right). Below 1024 the photograph crops 3:2 — a 3:1 at the 326 phone
@@ -96,12 +96,13 @@ type BannerHeadProps = {
    */
   lead?: ReactNode | readonly ReactNode[];
   /**
-   * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
-   * one blue link is the caller's composition and a pattern never imports a pattern.
+   * The head's actions, a `block` under the text they finish (owner, 29 Oct 2026;
+   * decisions/2026-10-29-banner-two-actions-one-row) — in practice a `CtaRow` with `rule={false}`,
+   * so the actions are the caller's composition and a pattern never imports a pattern.
    *
-   * ONE link, never a solid (r7-buttons, 8 Oct 2026): a banner is in-band, and the page's one main
-   * action — the blue solid and its ghost — belongs to the hero and the close. Until then a solid
-   * CtaRow that took `converts` was allowed here.
+   * One link, or a pair in ONE row with a hierarchy: an outlined button, then the quieter link
+   * (CtaRow's pair). Never a solid (r7-buttons, 8 Oct 2026): a banner is in-band, and the page's
+   * one main action — the blue solid and its ghost — belongs to the hero and the close.
    */
   actions?: ReactNode;
   /**
@@ -125,7 +126,7 @@ type BelowProps = BannerHeadProps & {
   mediaSide?: never;
   /**
    * Where the head's action sits (owner, 7 Oct 2026) — ContentSection's `actionsAt`, the same
-   * decision. `below` (default) a `stack` under the lead; `end` at the inline end of the heading's
+   * decision. `below` (default) a `block` under the lead; `end` at the inline end of the heading's
    * row from 1024, its top on the heading's top, in a content-sized track a `column` (64) from the
    * text, the eyebrow on its own line above both. Below 1024 it falls back under the lead.
    */
@@ -295,8 +296,9 @@ export function Banner(props: BannerProps) {
     );
   } else if (form === 'below') {
     /* The head is one column, the ContentSection stacked head (owner, 7 Oct 2026): eyebrow →
-       heading → lead at `block`, the action a `stack` under the lead (§ 1.2), the photograph a
-       `stack` under the head. It was the H-row — heading | lead + action — and with no image beside
+       heading → lead at `block`, the actions a `block` under the text they finish (owner, 29 Oct
+       2026; decisions/2026-10-29-banner-two-actions-one-row), the photograph a `stack` under the
+       head. It was the H-row — heading | lead + action — and with no image beside
        the text the reading order was unclear and the action floated in a mostly empty track. */
     arranged = (
       <Layout rowGap="stack">
@@ -304,8 +306,8 @@ export function Banner(props: BannerProps) {
           {eyebrowEl}
           {headingEl}
           {leadEl}
+          {actions}
         </Layout>
-        {actions}
         {supportEl}
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
       </Layout>
@@ -329,8 +331,8 @@ export function Banner(props: BannerProps) {
             {eyebrowEl}
             {headingEl}
             {leadEl}
+            {actions}
           </Layout>
-          {actions}
           {supportEl}
         </Layout>
         {/* A plain wrapper so the image keeps its crop in a row that centres it. A photograph crops

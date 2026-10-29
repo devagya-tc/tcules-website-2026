@@ -326,20 +326,27 @@
   border-radius: var(--btn-radius-round);
 }
 
+/* Labelled (owner, 29 Oct 2026): the first of an in-band pair. The button's own radius, not the
+   stepper's circle, so it reads as the solid's shape drawn in line, and its trailing glyph keeps a
+   labelled button's size. */
+.outline:not(.iconOnly) {
+  border-radius: var(--btn-radius);
+}
+
 /* The stepper's glyph steps up a size from a labelled button's (--btn-outline-icon-size-*): the
    arrow is the whole control. After the size rules, so it wins at md by source order and at sm
    and lg by the extra class. */
-.outline > svg {
+.outline.iconOnly > svg {
   width: var(--btn-outline-icon-size-md);
   height: var(--btn-outline-icon-size-md);
 }
 
-.outline.sm > svg {
+.outline.iconOnly.sm > svg {
   width: var(--btn-outline-icon-size-sm);
   height: var(--btn-outline-icon-size-sm);
 }
 
-.outline.lg > svg {
+.outline.iconOnly.lg > svg {
   width: var(--btn-outline-icon-size-lg);
   height: var(--btn-outline-icon-size-lg);
 }

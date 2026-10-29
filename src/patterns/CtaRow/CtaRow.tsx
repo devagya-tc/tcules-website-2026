@@ -52,13 +52,18 @@ export type CtaRowProps = CtaRowCommon & {
    * slot — and an in-band action is a LINK (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct): the
    * blue solid is the page's one main action and belongs to the hero (PageHero) and the bottom
    * close (CtaSection), never to a band's foot. "Start with a UX Product Audit" inside a band is a
-   * link, not a button. One, because two links side by side are two actions of the same emphasis,
-   * which a group never is: a second destination is a second band's. The tuple makes that a type.
+   * link, not a button. Never two links side by side: two actions of the same emphasis, which a
+   * group never is. The tuple makes that a type.
+   *
+   * A PAIR is one action and its quieter second, in one row (owner, 29 Oct 2026;
+   * decisions/2026-10-29-banner-two-actions-one-row): the first a labelled `outline` Button, the
+   * second the link. A Banner's "Meet the studio" and "Careers at Tcules". Never a solid: the blue
+   * solid stays the page's one main action.
    *
    * Until r7-buttons the row also took `emphasis="solid"` (a solid, blue when it `converts` and ink
    * when not, with a ghost partner). Both props are gone: there is no in-band solid to render.
    */
-  actions: readonly [CtaRowAction];
+  actions: readonly [CtaRowAction] | readonly [CtaRowAction, CtaRowAction];
 };
 
 /**
@@ -97,21 +102,33 @@ export function CtaRow(props: CtaRowProps) {
   /* Whitespace-only is absent, so a bad record cannot put an empty paragraph in front of the
      actions and turn a start row into a "between" row around nothing. */
   const hasNote = Boolean(note?.trim());
-  const [action] = actions;
+  const [action, second] = actions;
 
-  /* The one link: blue, trailing arrow — the link cue. An anchor, because it navigates. The label
-     line is ~22 tall; the touch floor is 44, so the hit area is extended past it. */
-  const link = (
+  /* The link: blue, trailing arrow — the link cue. An anchor, because it navigates. The label line
+     is ~22 tall; the touch floor is 44, so the hit area is extended past it. */
+  const linkTo = (to: CtaRowAction) => (
     <Button
       as="a"
-      href={action.href}
+      href={to.href}
       emphasis="link"
       size="md"
       extendHitArea
       icon={<Icon name="arrow-right" />}
     >
-      {action.label}
+      {to.label}
     </Button>
+  );
+  /* A pair: the first an outlined button, the second the link, `block` apart in one row (a
+     Cluster, so a narrow column wraps the link under the button rather than off the page). */
+  const link = second ? (
+    <Cluster colGap="block" rowGap="text" align="center">
+      <Button as="a" href={action.href} emphasis="outline" size="md">
+        {action.label}
+      </Button>
+      {linkTo(second)}
+    </Cluster>
+  ) : (
+    linkTo(action)
   );
 
   return (

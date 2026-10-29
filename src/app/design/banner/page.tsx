@@ -19,6 +19,17 @@ import { specimenStyles as s } from '../_specimen/Specimen';
 const CTA = (
   <CtaRow actions={[{ label: 'See how we work', href: ROUTES.howWeWork }]} rule={false} />
 );
+/* Two actions: one row with a hierarchy, the outlined button then the quieter link (owner, 29 Oct
+   2026; decisions/2026-10-29-banner-two-actions-one-row). */
+const PAIR = (
+  <CtaRow
+    actions={[
+      { label: 'Meet the studio', href: ROUTES.about },
+      { label: 'Careers at Tcules', href: ROUTES.careers },
+    ]}
+    rule={false}
+  />
+);
 /* No blue band (fix round 1): blue is never a ground (owner ruling, § 4.3), and a specimen that
    paints one is the one place the branch would show it. The blue token block stays declared for
    self-containment, which tokens:check proves without a render. */
@@ -96,8 +107,10 @@ export default function BannerSpecimen() {
         image={getKitPhoto('team-laptops-table')}
       />
       <Label title="2b · below, a lead in two paragraphs">
-        An array lead (home&rsquo;s people band): each paragraph at the lead role and measure, 16
-        apart, the action a stack under them.
+        An array lead (home&rsquo;s people band): each paragraph at the lead role and measure,
+        16 apart, and its two actions one row a block under them: the outlined button
+        (&ldquo;Meet the studio&rdquo;), then the quieter link (&ldquo;Careers at
+        Tcules&rdquo;). Never a solid: the page&rsquo;s blue solid is its one main action.
       </Label>
       <Banner
         heading="The people behind the work"
@@ -106,7 +119,7 @@ export default function BannerSpecimen() {
           'Before anything is drawn, we sit with the people doing the work and map the decisions they make, then put every draft on the wall where anyone can question it.',
           'The same people run the lab, where new ways of working are tried before they reach a client.',
         ]}
-        actions={CTA}
+        actions={PAIR}
         image={getKitPhoto('team-laptops-table')}
       />
       <Banner
@@ -124,9 +137,10 @@ export default function BannerSpecimen() {
       />
 
       <Label title="2b · below, the action at the end of the heading's row">
-        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the eyebrow on its own line, the heading and
-        lead on the left, the action at the row&rsquo;s end with its top on the heading&rsquo;s top,
-        from 1024. Below 1024 it falls back under the lead. The service page&rsquo;s I banner.
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the eyebrow on its own line, the heading
+        and lead on the left, the action at the row&rsquo;s end with its top on the
+        heading&rsquo;s top, from 1024. Below 1024 it falls back under the lead. The service
+        page&rsquo;s I banner.
       </Label>
       <Banner
         eyebrow="Coded prototyping"
@@ -232,10 +246,10 @@ export default function BannerSpecimen() {
         <Layout rowGap="tight">
           <p className={s.specTitle}>A run · bandHead, h3 claims, a supporting quote, footer</p>
           <p className={s.specNote}>
-            Home round 3 (11 Oct 2026): a band whose reasons each need a screen is a RUN of beside
-            banners, alternating sides, one Section each. The run&rsquo;s h1 heading opens the
-            first banner (<code>bandHead</code>) and its closing action ends the last (
-            <code>footer</code>); each claim is an h3 at the h2 role (<code>headingAs</code>),
+            Home round 3 (11 Oct 2026): a band whose reasons each need a screen is a RUN of
+            beside banners, alternating sides, one Section each. The run&rsquo;s h1 heading
+            opens the first banner (<code>bandHead</code>) and its closing action ends the last
+            (<code>footer</code>); each claim is an h3 at the h2 role (<code>headingAs</code>),
             and the client&rsquo;s words support it as the quiet unboxed card (
             <code>support</code>). The owner&rsquo;s ruling overrides &ldquo;never two beside
             banners in sight&rdquo; for a run.

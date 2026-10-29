@@ -53,7 +53,8 @@ type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
 type TableBlock = Extract<CorpusBlock, { type: 'table' }>;
 type LinkRun = Extract<InlineRun, { type: 'link' }>;
 
-const content = (band: CorpusBand) => band.blocks.filter((block) => block.type !== 'comment');
+export const content = (band: CorpusBand) =>
+  band.blocks.filter((block) => block.type !== 'comment');
 
 /** Runs as a card or row body: plain text, or one paragraph of HTML when they carry markup. */
 function bodyFields(runs: readonly InlineRun[]): { body: string } | { bodyHtml: string } {
@@ -89,14 +90,32 @@ const isBareLabel = (block: CorpusBlock): boolean => {
 export function LinkActions({
   links,
   rule = false,
+  pair = false,
 }: {
   links: readonly CorpusLink[];
   rule?: boolean;
+  /**
+   * Two links as one row with a hierarchy, the first an outlined button and the second the link
+   * (CtaRow's pair): a Banner's two actions (owner, 29 Oct 2026;
+   * decisions/2026-10-29-banner-two-actions-one-row). Off, two or more links stack as links.
+   */
+  pair?: boolean;
 }): ReactNode {
-  const [first] = links;
+  const [first, second] = links;
   if (!first) return null;
   if (links.length === 1) {
     return <CtaRow rule={rule} actions={[{ label: first.labelText, href: first.href }]} />;
+  }
+  if (pair && second && links.length === 2) {
+    return (
+      <CtaRow
+        rule={rule}
+        actions={[
+          { label: first.labelText, href: first.href },
+          { label: second.labelText, href: second.href },
+        ]}
+      />
+    );
   }
   return (
     <Layout rowGap="text" justifyItems="start">
@@ -608,7 +627,12 @@ export function TableBand({ band }: { band: CorpusBand }) {
 
 /* ── Related reading, term indexes, roles ────────────────────────────────────── */
 
-type Entry = { title: string; href?: string; body?: string; bodyHtml?: readonly string[] };
+export type Entry = {
+  title: string;
+  href?: string;
+  body?: string;
+  bodyHtml?: readonly string[];
+};
 
 /**
  * A paragraph that names a page by its link and then describes it in the next sentence ("[Prototype
@@ -627,7 +651,10 @@ function linkSentence(block: CorpusBlock): { link: LinkRun; body: InlineRun[] } 
 }
 
 /** The entries of a reading list: link-led lines, bold-linked list items, or `###` items. */
-function entriesOf(blocks: readonly CorpusBlock[]): { entries: Entry[]; rest: CorpusBlock[] } {
+export function entriesOf(blocks: readonly CorpusBlock[]): {
+  entries: Entry[];
+  rest: CorpusBlock[];
+} {
   const entries: Entry[] = [];
   const rest: CorpusBlock[] = [];
   for (const block of blocks) {
