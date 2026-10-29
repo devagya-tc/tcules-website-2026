@@ -37,7 +37,7 @@ export default function RatingBadgeSpecimen() {
             {index === 0 ? <h2>1 · Four surfaces · identical markup</h2> : null}
             <Specimen
               title={surface}
-              note="with the Clutch mark, without a mark, showScore={false} (the score set large beside it; the name still carries it), and frame plain (no outline: the hero eyebrow, r7-hero)"
+              note="with the Clutch mark, without a mark, showScore={false} (the score set large beside it; the name still carries it), frame plain (no outline: the hero eyebrow, r7-hero), and with `detail` (the copy's words after the score, read but not shown). Text 14, marks 16 (owner, 29 Oct 2026)"
             >
               <Cluster colGap="block" rowGap="block">
                 <RatingBadge
@@ -64,6 +64,14 @@ export default function RatingBadgeSpecimen() {
                   mark={<BrandMark name="clutch" />}
                   frame="plain"
                 />
+                <RatingBadge
+                  score={SCORE}
+                  platform="Clutch"
+                  href={EXTERNAL.clutch}
+                  icon={<Icon name="star" size="sm" />}
+                  mark={<BrandMark name="clutch" />}
+                  detail="from 13 reviews. Read the reviews"
+                />
               </Cluster>
             </Specimen>
           </Layout>
@@ -75,8 +83,12 @@ export default function RatingBadgeSpecimen() {
           <p>
             Hover and keyboard focus move the ink and the rule together; the star holds. Tab to
             the badge to see the ring. Its accessible name is the score, the platform and
-            &ldquo;(opens in a new tab)&rdquo;; with <code>showScore=&#123;false&#125;</code> it is
-            &ldquo;Rated on Clutch, 4.8 (opens in a new tab)&rdquo; — the visible words first.
+            &ldquo;(opens in a new tab)&rdquo;; with <code>showScore=&#123;false&#125;</code> it
+            is &ldquo;Rated on Clutch, 4.8 (opens in a new tab)&rdquo; — the visible words
+            first. With <code>detail</code> the copy&rsquo;s words follow the visible ones,
+            unseen: &ldquo;4.8 on Clutch from 13 reviews. Read the reviews (opens in a new
+            tab)&rdquo; (owner, 29 Oct 2026: a rating is always this badge, never text and a
+            link).
           </p>
         </Layout>
       </Section>
