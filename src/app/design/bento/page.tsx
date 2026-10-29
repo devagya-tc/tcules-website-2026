@@ -142,6 +142,62 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="seven-four"
+        title="2c · Seven peers on four tracks (product-design services, 4 + 3)"
+        note="The 26 Oct copy's seven services you can hire on their own, every tile one size (owner, 29 Oct 2026, Q7: Bento tracks={4}, 4 + 3). The body is each row's Best for line, as authored. New Product Design & First Release and the UX & Product Audit carry their own specialist scenes (specialist-new-product, specialist-audit). The eighth cell is left for the band's closing paragraph."
+      />
+      <Section>
+        <Bento
+          items={(
+            [
+              [
+                'ux-research',
+                'UX Research',
+                'Teams about to spend on an assumption nobody has tested',
+                'specialist-research',
+              ],
+              [
+                'ia',
+                'Information Architecture & Workflow Design',
+                'Products where work passes between people, or the menu keeps growing',
+                'specialist-ia',
+              ],
+              [
+                'ui',
+                'Interaction & UI Design',
+                'Products whose structure works but whose screens confuse people',
+                'specialist-ui',
+              ],
+              [
+                'dataviz',
+                'Data Visualisation',
+                'Dashboards that people export to a spreadsheet',
+                'specialist-dataviz',
+              ],
+              [
+                'prototyping',
+                'Prototyping & Usability Testing',
+                'Choosing between directions before engineers start',
+                'specialist-prototype',
+              ],
+              [
+                'new-product',
+                'New Product Design & First Release',
+                'Founders turning an idea or prototype into an MVP',
+                'specialist-new-product',
+              ],
+              [
+                'ux-audit',
+                'UX & Product Audit',
+                'Teams who know something is wrong but not yet what',
+                'specialist-audit',
+              ],
+            ] as const
+          ).map(([id, title, body, scene]) => ({ id, title, body, scene, href: `#${id}` }))}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

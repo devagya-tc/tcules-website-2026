@@ -10,6 +10,17 @@ const NAMES: readonly SketchName[] = [
   'ai-product-ux',
   'design-engineering',
   'software-development',
+  'audits',
+];
+/** The OFFER scenes drawn for the 26 Oct copy's specialist services (owner, 29 Oct 2026, Q7). */
+const SPECIALIST: readonly SketchName[] = [
+  'specialist-research',
+  'specialist-ia',
+  'specialist-ui',
+  'specialist-dataviz',
+  'specialist-prototype',
+  'specialist-new-product',
+  'specialist-audit',
 ];
 /** The article scenes: each drawn for one insight, its cover until a real one exists. */
 const ARTICLE: readonly SketchName[] = [
@@ -35,7 +46,7 @@ const KIT: readonly SketchName[] = [
   'trace-signoff',
 ];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
-/** The scenes with a STORY drawing: the six the home bento shows. */
+/** The scenes with a STORY drawing: the six the home bento shows, and Audits (About's eighth tile). */
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
 
 export default function SketchSpecimen() {
@@ -54,7 +65,7 @@ export default function SketchSpecimen() {
       </Section>
       {SURFACES.map((surface) => (
         <Section key={surface} surface={surface}>
-          <Specimen title={`S.1 · the seven service scenes · ${surface}`}>
+          <Specimen title={`S.1 · the service scenes · ${surface}`}>
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {NAMES.map((name) => (
                 <Layout key={name} rowGap="tight">
@@ -70,6 +81,19 @@ export default function SketchSpecimen() {
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {ARTICLE.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.5 · the specialist services · ${surface}`}
+            note="Owner, 26 Oct 2026, and 29 Oct 2026 (Q7): the product-design page's services you can hire on their own, each drawn from its own Best for line, drawn bare on the bento's tiles and held still. New Product Design (the prototype that holds everything made the release that holds one job for one person, what it leaves out hatched) and the UX & Product Audit (the lens finding what is wrong on the screen) joined the five."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {SPECIALIST.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
                   <code>{name}</code>

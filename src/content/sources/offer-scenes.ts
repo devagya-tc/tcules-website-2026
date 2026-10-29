@@ -34,6 +34,17 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         '/services/product-design/data-visualisation': 'specialist-dataviz',
         '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
       },
+      /* The 26 Oct copy's band: the five specialists, then New Product Design and the UX & Product
+         Audit (owner, 29 Oct 2026, Q7: Bento tracks={4}, 4 + 3, every tile drawn). */
+      'services-on-their-own': {
+        '/services/product-design/ux-research': 'specialist-research',
+        '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
+        '/services/product-design/interaction-ui-design': 'specialist-ui',
+        '/services/product-design/data-visualisation': 'specialist-dataviz',
+        '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
+        '/services/new-product-design-first-release': 'specialist-new-product',
+        '/audits/ux-product-audit': 'specialist-audit',
+      },
     },
     stories: {
       'worked-example': ['case-dealpath-problem', 'case-dealpath-did'],

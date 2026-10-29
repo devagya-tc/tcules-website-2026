@@ -433,6 +433,49 @@ function SpecialistPrototype() {
   );
 }
 
+/** New Product Design & First Release: the prototype that holds everything, made the release that
+ *  holds one job for one person; what it leaves out is hatched, not built. */
+function SpecialistNewProduct() {
+  const widths = [52, 64, 40, 70, 46, 58, 36];
+  return (
+    <>
+      <Rect x={30} y={40} w={100} h={100} rx={8} className={styles.trailFrame} />
+      {[56, 68, 80, 92, 104, 116, 128].map((y, i) => (
+        <Copy key={y} x={44} y={y} w={widths[i] ?? 40} quiet />
+      ))}
+      <Hop x1={130} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={188} cy={50} size={14} className={styles.glyph} />
+      <Copy x={202} y={50} w={40} quiet />
+      <Rect x={180} y={66} w={100} h={36} rx={12} className={styles.halo} />
+      <Rect x={186} y={72} w={88} h={24} className={styles.region} />
+      <path className={styles.regionCopy} d="M196,84 L250,84" />
+      <Hatched x={186} y={112} w={88} h={14} />
+      <Hatched x={186} y={132} w={56} h={10} />
+    </>
+  );
+}
+
+/** UX & Product Audit: the team knows something is wrong somewhere on the screen; the lens finds what. */
+function SpecialistAudit() {
+  return (
+    <>
+      <Rect x={30} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      <Copy x={46} y={50} w={60} quiet />
+      <Copy x={46} y={62} w={100} />
+      {[46, 110, 174].map((x) => (
+        <g key={x}>
+          <Rect x={x} y={84} w={52} h={44} className={styles.tile} />
+          <Copy x={x + 8} y={96} w={28} quiet />
+          <Copy x={x + 8} y={108} w={20} quiet />
+        </g>
+      ))}
+      <Lens x={136} y={106} r={24} />
+      <Focus x={136} y={106} glyph="danger-triangle" size={12} />
+    </>
+  );
+}
+
 /* ── A worked example: Dealpath ──────────────────────────────────────────────────
    Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.82, so the listing card, its
    "Add to pipeline" action and the pipeline column read at the plate's size. The two drawings share
@@ -550,6 +593,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-ui': SpecialistUi,
   'specialist-dataviz': SpecialistDataviz,
   'specialist-prototype': SpecialistPrototype,
+  'specialist-new-product': SpecialistNewProduct,
+  'specialist-audit': SpecialistAudit,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -563,4 +608,6 @@ export const OFFER_DRAWN: Partial<
   'specialist-ui': [36, 26, 208, 128],
   'specialist-dataviz': [36, 26, 248, 128],
   'specialist-prototype': [26, 30, 280, 116],
+  'specialist-new-product': [26, 26, 268, 128],
+  'specialist-audit': [26, 26, 228, 128],
 };

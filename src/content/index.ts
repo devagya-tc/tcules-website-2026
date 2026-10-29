@@ -43,6 +43,7 @@ export {
   getTestimonialRatings,
   getTestimonialAvatars,
   getOfferScenes,
+  getReasonFigure,
   getPlaceholderReasons,
   getProposedEyebrows,
   getCaseIndustries,
