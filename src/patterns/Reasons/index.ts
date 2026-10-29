@@ -1,2 +1,9 @@
 export { Reasons } from './Reasons';
-export type { ReasonsArrangement, ReasonsItem, ReasonsProps } from './Reasons';
+export type {
+  ReasonsArrangement,
+  ReasonsFigure,
+  ReasonsItem,
+  ReasonsMark,
+  ReasonsProof,
+  ReasonsProps,
+} from './Reasons';

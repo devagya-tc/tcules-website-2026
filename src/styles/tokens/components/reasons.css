@@ -41,6 +41,19 @@
   /* The set's framing sentence (component-map C1): the lead role, its own measure. */
   --rsn-lead-text: var(--text-lead);
   --rsn-lead-measure: var(--measure-lead);
+  /* `proof` (owner, 29 Oct 2026, home): a reason's evidence as its visual. One box height for the
+     set, a component size: a 16:9 case cover at ~300 wide over its figure fills it, and the marks
+     and figures centre in it. The figure is the h5-lg role in the accent, its label the mono eyebrow
+     voice; the cover's corners are the photograph radius. */
+  --rsn-proof-height: 224px;
+  /* The cover's height inside it: the box less its figure (h5-lg over an eyebrow, 52) and the `text`
+     seam (16) between them. */
+  --rsn-cover-height: 156px;
+  --rsn-proof-value-text: var(--text-h5-lg);
+  --rsn-proof-value-tracking: var(--text-h5-lg-tracking);
+  --rsn-proof-label-text: var(--text-eyebrow);
+  --rsn-proof-label-tracking: var(--text-eyebrow-tracking);
+  --rsn-cover-radius: var(--radius-8);
 }
 
 @media (max-width: 767px) {
@@ -61,6 +74,10 @@
   --rsn-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --rsn-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --rsn-rule-ink: var(--color-neutral-200); /* decoration */
+  --rsn-proof-value-ink: var(--color-brandeis-500); /* 5.6:1 */
+  --rsn-proof-label-ink: var(--color-neutral-600); /* 4.92:1 */
+  --rsn-wordmark-ink: var(--color-neutral-600); /* the client marks' ink (ClientMark), 4.92:1 */
+  --rsn-cover-ground: var(--color-paper-deep);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -72,6 +89,10 @@
   --rsn-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on the deeper ground */
+  --rsn-proof-value-ink: var(--color-brandeis-500); /* 5.51:1 */
+  --rsn-proof-label-ink: var(--color-neutral-700); /* 7.27:1 */
+  --rsn-wordmark-ink: var(--color-neutral-600); /* the client marks' ink, 4.39:1 */
+  --rsn-cover-ground: var(--color-paper);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -83,6 +104,10 @@
   --rsn-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --rsn-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --rsn-rule-ink: var(--color-neutral-700); /* decoration */
+  --rsn-proof-value-ink: var(--color-brandeis-300); /* 7.32:1 */
+  --rsn-proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
+  --rsn-wordmark-ink: var(--color-neutral-300); /* the client marks' ink, 11.07:1 */
+  --rsn-cover-ground: var(--color-neutral-900);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
@@ -94,4 +119,8 @@
   --rsn-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --rsn-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --rsn-rule-ink: var(--color-brandeis-400); /* decoration */
+  --rsn-proof-value-ink: var(--color-white); /* 6.23:1 */
+  --rsn-proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
+  --rsn-wordmark-ink: var(--color-brandeis-200); /* the client marks' ink, 3.78:1 */
+  --rsn-cover-ground: var(--color-brandeis-600);
 }

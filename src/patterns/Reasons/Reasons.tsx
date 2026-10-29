@@ -1,9 +1,46 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Media, Section, type MediaImage, type SectionSurface } from '@/components';
+import {
+  ClientMark,
+  Layout,
+  Media,
+  Section,
+  type ClientMarkProps,
+  type MediaImage,
+  type SectionSurface,
+} from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './Reasons.module.css';
+
+/** A figure set from a reason's own sentence: the fact large, what it belongs to under it. */
+export type ReasonsFigure = {
+  /** The fact as the owner set it from the sentence ("3 years", "Live since late 2025"). */
+  value: string;
+  /** Whose it is ("Primelis"). Mono label voice; pass it as authored. */
+  label?: string;
+};
+
+/**
+ * A client in a reason's mark cluster: its approved mark (ClientMark's own record, density included),
+ * or, for a client with no approved mark, its NAME, typeset as a wordmark in the marks' ink — never
+ * an invented mark (ch05 §10).
+ */
+export type ReasonsMark = Omit<ClientMarkProps, 'className'> | { name: string; src?: undefined };
+
+/**
+ * A reason's EVIDENCE as its visual, in place of a drawing (owner, 29 Oct 2026, home's "A product design
+ * partner for ambitious SaaS teams"; decisions/2026-10-29-home-reasons-show-their-proof). Each is set
+ * from what the reason's own sentence names; the sentence still renders in full under the title.
+ *
+ *   marks    the named clients' marks as a small cluster, two across
+ *   cover    the case's own cover, with one figure under it
+ *   figures  two to four figures, one under the other
+ */
+export type ReasonsProof =
+  | { kind: 'marks'; marks: readonly ReasonsMark[] }
+  | { kind: 'cover'; image: MediaImage; figure: ReasonsFigure }
+  | { kind: 'figures'; figures: readonly ReasonsFigure[] };
 
 /** One reason: the claim in the reader's words, the sentence that argues it, and its drawing. */
 export type ReasonsItem = {
@@ -16,9 +53,16 @@ export type ReasonsItem = {
    * The drawing of the claim: an isometric figure from the ch05 §4a kit, facing left toward its
    * words, exported on the band's ground (`.paper.svg` on paper, `.paper-deep.svg` on tint). It
    * illustrates the sentence and carries no data, so it is decorative: `alt` is empty, because the
-   * title and body beside it already say everything it shows.
+   * title and body beside it already say everything it shows. Give a reason a `figure` or a `proof`.
    */
-  figure: MediaImage;
+  figure?: MediaImage;
+  /**
+   * The reason's evidence set as its visual, in place of a drawing: where the sentence names checkable
+   * proof (clients, a live case, tenures), the proof is the picture. Every item of a set takes the
+   * same kind of visual, figures or proofs, and the proofs share one box height so the row reads
+   * level. It restates the sentence below it, so it is hidden from assistive technology.
+   */
+  proof?: ReasonsProof;
 };
 
 /**
@@ -86,6 +130,64 @@ export type ReasonsProps = {
 /** The drawing's rendered width: its box is --rsn-figure-height tall at the set's widest ratio (6:5),
  *  so 168 at the 140 step. */
 const FIGURE_SIZES = '170px';
+
+/** The case cover's rendered width: the proof box's height less its figure, at 16:9, ~300 at most. */
+const COVER_SIZES = '(min-width: 768px) 320px, 100vw';
+
+/** One figure: the fact over whose it is, at `tight` (8), a stat and its unit. */
+function ProofFigure({ value, label }: ReasonsFigure) {
+  return (
+    <Layout rowGap="tight">
+      <p className={styles.proofValue}>{value}</p>
+      {label ? <p className={styles.proofLabel}>{label}</p> : null}
+    </Layout>
+  );
+}
+
+/** A reason's proof in its box of one height for the set, its content centred in it (the cover and
+ *  its figure fill it). */
+function Proof({ proof }: { proof: ReasonsProof }) {
+  let inner: ReactNode;
+  if (proof.kind === 'marks') {
+    inner = (
+      <Layout columns={{ base: [1, 1] }} colGap="gutter" rowGap="stack" align="center">
+        {proof.marks.map((mark) =>
+          mark.src ? (
+            <ClientMark key={mark.name} {...mark} />
+          ) : (
+            <span key={mark.name} className={styles.wordmark}>
+              {mark.name}
+            </span>
+          ),
+        )}
+      </Layout>
+    );
+  } else if (proof.kind === 'cover') {
+    inner = (
+      <Layout rowGap="text">
+        <div className={styles.cover}>
+          <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
+        </div>
+        <ProofFigure {...proof.figure} />
+      </Layout>
+    );
+  } else {
+    inner = (
+      <Layout rowGap="text">
+        {proof.figures.map((figure) => (
+          <ProofFigure key={`${figure.value}-${figure.label ?? ''}`} {...figure} />
+        ))}
+      </Layout>
+    );
+  }
+  return (
+    <div className={styles.proof} aria-hidden="true">
+      <Layout fillFirst align="center" className={styles.proofFill}>
+        {inner}
+      </Layout>
+    </div>
+  );
+}
 
 /** The drawing anchored at its box's start, so a figure narrower than the box begins on the same
  *  edge as its title and body. */
@@ -197,14 +299,18 @@ export function Reasons({
       {shown.map((item, index) => (
         <li key={`${index}-${item.title}`} className={styles.item}>
           <Layout rowGap="block" justifyItems="start">
-            <div className={styles.figure}>
-              <Media
-                image={{ ...item.figure, alt: '' }}
-                sizes={FIGURE_SIZES}
-                fit="contain"
-                focus={FIGURE_START}
-              />
-            </div>
+            {item.proof ? (
+              <Proof proof={item.proof} />
+            ) : item.figure ? (
+              <div className={styles.figure}>
+                <Media
+                  image={{ ...item.figure, alt: '' }}
+                  sizes={FIGURE_SIZES}
+                  fit="contain"
+                  focus={FIGURE_START}
+                />
+              </div>
+            ) : null}
             <Layout rowGap="tight">
               <h3 className={styles.title}>{item.title}</h3>
               <p className={styles.body}>{item.body}</p>

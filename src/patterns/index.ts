@@ -379,7 +379,15 @@ export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gatewa
 export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
 
 /* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
-export { Reasons, type ReasonsArrangement, type ReasonsItem, type ReasonsProps } from './Reasons';
+export {
+  Reasons,
+  type ReasonsArrangement,
+  type ReasonsFigure,
+  type ReasonsItem,
+  type ReasonsMark,
+  type ReasonsProof,
+  type ReasonsProps,
+} from './Reasons';
 
 /* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
 export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';

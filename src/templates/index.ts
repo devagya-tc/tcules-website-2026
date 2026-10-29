@@ -61,6 +61,7 @@ export {
   gatewayBoardItems,
   gatewayItems,
   gatewayPaths,
+  whyTcules,
   kindOf,
   planOffer,
   proofQuote,

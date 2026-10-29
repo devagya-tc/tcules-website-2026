@@ -111,3 +111,62 @@
   border-radius: var(--rsn-frame-radius);
   overflow: hidden;
 }
+
+/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home) ─────────
+   The full width of the track. From 1024, where the reasons stand side by side, one box height for
+   the set (--rsn-proof-height), so the three titles sit on one line and the row reads level: a Layout
+   fills the box and its content centres in it. Below 1024 the reasons are one column, so each proof
+   is its own height and no reason carries air another needed. Sizing, not arrangement. */
+.proof {
+  inline-size: 100%;
+}
+
+@media (min-width: 1024px) {
+  .proof {
+    block-size: var(--rsn-proof-height);
+  }
+}
+
+.proofFill {
+  block-size: 100%;
+}
+
+/* The case's own cover: 16:9 at a set height (what the box leaves over its figure), never wider than
+   the track; the image fills it with Media's anchored crop. Its corners are the photograph radius.
+   Sized from its height, so it starts on the track's edge with the words under it. */
+.cover {
+  position: relative;
+  justify-self: start;
+  inline-size: auto;
+  block-size: var(--rsn-cover-height);
+  aspect-ratio: 16 / 9;
+  max-inline-size: 100%;
+  border-radius: var(--rsn-cover-radius);
+  overflow: hidden;
+  background: var(--rsn-cover-ground);
+}
+
+/* The fact, large and in the accent, the way a figure is (numerals are a foreground mark). */
+.proofValue {
+  font: var(--rsn-proof-value-text);
+  letter-spacing: var(--rsn-proof-value-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-proof-value-ink);
+}
+
+/* Whose it is: the mono label voice, uppercase in presentation only. */
+.proofLabel {
+  font: var(--rsn-proof-label-text);
+  letter-spacing: var(--rsn-proof-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-proof-label-ink);
+}
+
+/* A client with no approved mark: its name typeset in the wordmark role, in the marks' ink, so it sits
+   among drawn marks as a mark does (ch05 §10: never an invented logo). */
+.wordmark {
+  font: var(--text-wordmark);
+  letter-spacing: var(--text-wordmark-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-wordmark-ink);
+}

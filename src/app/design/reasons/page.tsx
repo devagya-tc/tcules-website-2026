@@ -1,8 +1,13 @@
 import type { ReactNode } from 'react';
 
 import { Button, Icon, Layout, Section, type MediaImage } from '@/components';
-import { getReasonFigure } from '@/content';
+import { getCaseRefs, getCorpusPage, getReasonFigure } from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
+import { inlineToText } from '@/lib/inline';
+import { placeholderCover } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
 import { Reasons, type ReasonsItem } from '@/patterns';
+import { whyTcules } from '@/templates';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -209,7 +214,50 @@ const WHY_LINKS = (
   </Button>
 );
 
-export default function ReasonsSpecimen() {
+/** Stress for the proof form: names only (no approved mark), a long figure, two figures. */
+const PROOF_STRESS: ReasonsItem[] = [
+  {
+    title: 'Products customers rely on',
+    body: 'Four clients named in one sentence, none of them with an approved mark yet.',
+    proof: {
+      kind: 'marks',
+      marks: [
+        { name: 'Dealpath' },
+        { name: 'Gold Image Printing' },
+        { name: 'Benchmark Gensuite' },
+        { name: 'Ringier Media Switzerland' },
+      ],
+    },
+  },
+  {
+    title: 'AI that reached production',
+    body: 'A register placeholder cover, with its one long figure under it.',
+    proof: {
+      kind: 'cover',
+      image: placeholderCover('gold-image-printing'),
+      figure: { value: 'Live in production since early 2026', label: 'A client with a long name' },
+    },
+  },
+  {
+    title: 'Relationships that last',
+    body: 'Two tenures, so the column is shorter than its neighbours and centres in the box.',
+    proof: {
+      kind: 'figures',
+      figures: [
+        { value: '7 years', label: 'Primelis' },
+        { value: 'Since the first coded prototypes', label: 'Benchmark Gensuite' },
+      ],
+    },
+  },
+];
+
+export default async function ReasonsSpecimen() {
+  const home = await getCorpusPage(ROUTES.home);
+  const band = home?.bands.find((b) => b.id === 'why-tcules');
+  const caseRefs = home ? await getCaseRefs(caseRoutesIn(home)) : {};
+  const proofs = home && band ? whyTcules(home, band, caseRefs) : undefined;
+  const opening = band?.blocks.find((block) => block.type === 'paragraph');
+  const lead = opening?.type === 'paragraph' ? inlineToText(opening.runs) : undefined;
   return (
     <>
       <Section>
@@ -462,6 +510,34 @@ export default function ReasonsSpecimen() {
           [COPY_REASONS[1]!, COPY_REASONS[2]!, COPY_REASONS[4]!, COPY_REASONS[6]!],
           'paper-deep',
         )}
+        surface="tint"
+      />
+
+      <Variation
+        id="home-proof"
+        title="15 · Home's three reasons, each its proof (owner, 29 Oct 2026)"
+        note="Home's Why Tcules on the real words: the content is evidence, so each reason's visual is its proof, above its title. The four named clients as a mark cluster, two across (an approved mark, else the name typeset in the marks' ink, never an invented mark); the ConnectX case's own cover with “Live since late 2025” set as a figure; the three tenures as figures. From 1024 one box height (224) for the three, so the titles sit on one line; below 1024 each proof is its own height. No drawing, no hairline, no container. Offer pages keep the drawn reasons (13, 14)."
+      />
+      {proofs && band ? (
+        <Reasons
+          heading={band.headingText}
+          headingId="rsn-home-proof"
+          lead={lead}
+          items={proofs}
+          action={WHY_LINKS}
+        />
+      ) : null}
+
+      <Variation
+        id="proof-stress"
+        title="16 · Proof under stress, on tint"
+        note="Every client a typeset name, a long cover figure and label, two figures against three. Every --rsn-proof-* ink is restated on tint."
+      />
+      <Reasons
+        heading="A product design partner for ambitious SaaS teams"
+        headingId="rsn-proof-stress"
+        items={PROOF_STRESS}
+        action={WHY_LINKS}
         surface="tint"
       />
     </>
