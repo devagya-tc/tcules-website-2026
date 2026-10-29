@@ -138,9 +138,9 @@ export default function BannerSpecimen() {
 
       <Label title="2b · below, the action at the end of the heading's row">
         actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the eyebrow on its own line, the heading
-        and lead on the left, the action at the row&rsquo;s end with its top on the
-        heading&rsquo;s top, from 1024. Below 1024 it falls back under the lead. The service
-        page&rsquo;s I banner.
+        and the action share one row from 1024, centred on each other, the lead under that row
+        (owner, 29 Oct 2026). Below 1024 the action sits under the heading, above the lead. The
+        service page&rsquo;s I banner.
       </Label>
       <Banner
         eyebrow="Coded prototyping"

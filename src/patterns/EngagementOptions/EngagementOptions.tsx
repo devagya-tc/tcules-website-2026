@@ -70,14 +70,22 @@ export type EngagementOptionsProps = {
   /**
    * The band's closing terms, each one paragraph's inline content (what we stop at; where the studio
    * is), set side by side as equal terms under the options, each on its hairline: the terms-tile
-   * grammar of a What you get band (owner, 29 Oct 2026; decisions/2026-10-29-how-we-work-together-band).
+   * grammar of a What you get band (owner, 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head).
    * Two or three; one column below 768.
    */
   terms?: readonly ReactNode[];
   /**
-   * The band's actions at its end, composed by the caller: in practice a `CtaRow` pair (an outlined
-   * button, then the link), a `stack` under the terms. Never on the heading's line at the far end:
-   * there they floated away from the words they finish.
+   * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
+   * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
+   * decisions/2026-10-29-how-we-work-together-link-in-head): at the inline end of the heading's
+   * row from 1024, vertically centred on the heading, a `column` (64) from it, the lead under that
+   * row; below 1024 a `block` under the heading. One action only: two links at the heading's end
+   * floated away from the words (decisions/2026-10-29-how-we-work-together-band).
+   */
+  action?: ReactNode;
+  /**
+   * Any further action, closing the band a `stack` under the terms: in practice a single-link
+   * `CtaRow` (on the offer pages "Tell us what you're working on").
    */
   actions?: ReactNode;
   /** Default `paper`. */
@@ -114,6 +122,7 @@ export function EngagementOptions({
   options,
   note,
   terms = [],
+  action,
   actions,
   surface = 'paper',
   arrangement = 'grid',
@@ -132,10 +141,18 @@ export function EngagementOptions({
       data-band="engagement-options"
     >
       <Layout rowGap="stack">
-        <Layout rowGap="block">
+        {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
+            `actionsAt="end"`, the one rule for every head's end action), the lead under that row. */}
+        <Layout
+          columns={action ? { lg: [1, 'auto'] } : undefined}
+          colGap={action ? 'column' : undefined}
+          rowGap="block"
+          align={action ? 'center' : undefined}
+        >
           <h2 id={headingId} className={styles.heading}>
             {heading}
           </h2>
+          {action ? <div>{action}</div> : null}
           {leads.length > 0 ? (
             <Layout rowGap="text">
               {leads.map((paragraph, index) => (

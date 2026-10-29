@@ -231,7 +231,7 @@ export default function ReasonsSpecimen() {
       <Variation
         id="open"
         title="1 · Open — four reasons 2×2, no rules (the default; home)"
-        note="Mock S1, the set as home shows it. The gap scale draws the grid: column (64) between columns and rows. Each drawing heads its title and body, which take the track's full width. The head reads across with the action at the heading row's end, its top on the heading's first line, the eyebrow above. Two across from 768 (a 2×2), one below."
+        note="Mock S1, the set as home shows it. The gap scale draws the grid: column (64) between columns and rows. Each drawing heads its title and body, which take the track's full width. The head reads across with the action at the heading row's end, vertically centred on the heading, the lead under that row and the eyebrow above (owner, 29 Oct 2026). Two across from 768 (a 2×2), one below."
       />
       <Reasons
         eyebrow="Why Tcules"

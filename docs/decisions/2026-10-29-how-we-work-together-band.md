@@ -1,7 +1,7 @@
 ---
 title: "How we work together: flat options under a stacked lead, closing terms side by side, one action pair at the end"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, illustration, components]
 source: "Owner second review, 29 Oct 2026 (feat/new-copy, /services: \"objectively wrong\"; \"i argue against your logic for #4. both read as different drawings\")"
 supersedes: [2026-10-26-service-items-drawn-per-item]

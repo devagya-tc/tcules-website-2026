@@ -814,11 +814,10 @@ export default function ContentSectionSpecimen() {
         passes rule=&#123;false&#125;: the ladder&rsquo;s last rule already closes the body, and
         a second hairline 48 under it reads as a double rule. Otherwise: a card set still spans
         the column, a capped block (the accordion in ContentSectionText, a centred CtaRow) sits
-        in the middle at its cap, and text inside every block stays start-aligned, except a short coda
-        after a set (ContentSectionText align=&quot;center&quot;, the first band), which closes on the
-        head&rsquo;s axis. Always
-        stacked; actions never sit in a centred head (the type refuses them) — a centred
-        band&rsquo;s ask is its footer.
+        in the middle at its cap, and text inside every block stays start-aligned, except a
+        short coda after a set (ContentSectionText align=&quot;center&quot;, the first band),
+        which closes on the head&rsquo;s axis. Always stacked; actions never sit in a centred
+        head (the type refuses them) — a centred band&rsquo;s ask is its footer.
       </Label>
       <ContentSection
         align="center"
@@ -1017,13 +1016,13 @@ export default function ContentSectionSpecimen() {
 
       {/* ── 13b · actions at the end of the heading's row ─────────────────────────────── */}
       <Label title="13b · Actions at the end of the heading's row">
-        actionsAt=&quot;end&quot; (owner, 7 Oct 2026): the text stays in one column on the left
-        and the actions sit at the row&rsquo;s end from 1024, their top on the heading&rsquo;s
-        top — the eyebrow keeps its own line above both. A content-sized track, 64 from the
-        text. Below 1024 the actions fall back a stack under the lead. Stacked heads only; the
-        link row on paper and on tint, then the longest heading and lead against it. An in-band
-        action is always a link (r7-buttons, 8 Oct 2026): the solid pair is the hero&rsquo;s and
-        the close&rsquo;s.
+        actionsAt=&quot;end&quot; (owner, 7 Oct 2026; centred 29 Oct 2026): the heading and the
+        actions share one row from 1024, vertically centred on each other, and the lead sits
+        under that row — the eyebrow keeps its own line above. A content-sized track, 64 from
+        the heading. Below 1024 the actions sit a block under the heading, above the lead.
+        Stacked heads only; the link row on paper and on tint, then the longest heading and lead
+        against it. An in-band action is always a link (r7-buttons, 8 Oct 2026): the solid pair
+        is the hero&rsquo;s and the close&rsquo;s.
       </Label>
       <ContentSection
         eyebrow="Actions at the end · link"
@@ -1248,14 +1247,13 @@ export default function ContentSectionSpecimen() {
       />
 
       <Label title='16 · headingSize="xl" and asideFill'>
-        headingSize=&quot;xl&quot; sets the same h2 at the display role on the display
-        measure: a head that opens an argument, at the ~70 of the references against cards at 22
-        to 28, so the scale gap between head and set is unmistakable. It changes the scale,
-        never the element. Shown centred and start-aligned. asideFill (beside, photo aside only)
-        makes the head-track photograph end on the body&rsquo;s last line: the two tracks
-        stretch to one height and the photo, a fit=&quot;fill&quot; Media, takes what the head
-        text leaves, never below about 3:2. Without it (section 12) the 3:2 photo keeps its own
-        height.
+        headingSize=&quot;xl&quot; sets the same h2 at the display role on the display measure:
+        a head that opens an argument, at the ~70 of the references against cards at 22 to 28,
+        so the scale gap between head and set is unmistakable. It changes the scale, never the
+        element. Shown centred and start-aligned. asideFill (beside, photo aside only) makes the
+        head-track photograph end on the body&rsquo;s last line: the two tracks stretch to one
+        height and the photo, a fit=&quot;fill&quot; Media, takes what the head text leaves,
+        never below about 3:2. Without it (section 12) the 3:2 photo keeps its own height.
       </Label>
       <ContentSection
         align="center"

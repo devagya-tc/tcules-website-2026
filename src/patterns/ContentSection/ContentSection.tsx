@@ -303,10 +303,11 @@ type WithActionsProps = {
   actions: ReactNode;
   /**
    * Where the head's actions sit (owner, 7 Oct 2026). `below` (default) is the row a `stack` under
-   * the lead. `end` sets them at the inline end of the heading's row from 1024, their top on the
-   * heading's top (the eyebrow stays above, on its own line, so it is the TITLE the actions align
-   * with), in a content-sized track a `column` (64) from the heading and lead. Below 1024 they fall
-   * back under the lead. Stacked only: under `beside` the head track is too narrow for a row.
+   * the lead. `end` sets them at the inline end of the heading's row from 1024, vertically centred
+   * on the heading (owner, 29 Oct 2026; decisions/2026-10-29-head-end-action-centred-on-heading),
+   * in a content-sized track a `column` (64) from it; the eyebrow stays above on its own line and
+   * the lead sits under the row. Below 1024 they sit a `block` under the heading, above the lead.
+   * Stacked only: under `beside` the head track is too narrow for a row.
    */
   actionsAt?: 'below';
   aside?: never;
@@ -692,38 +693,31 @@ export function ContentSection(props: ContentSectionProps) {
        The head group is the head text, then the actions or the aside a `stack` beneath it — lead →
        actions and head → aside are both block-to-block seams (§ 1.2). */
     const headGroup = actionsAtEnd ? (
-      /* Actions at the end (owner, 7 Oct 2026): the eyebrow on its own line, then the heading and
-         lead in the fractional track and the actions in a content-sized one from 1024, both
-         starting on the heading's top. `column` (64) between them: two kinds of thing that must
-         read as separate. Below 1024 one track, the actions a `stack` (48) under the lead — the
-         `below` placement exactly. */
+      /* Actions at the end (owner, 7 Oct 2026; centred, 29 Oct 2026 —
+         decisions/2026-10-29-head-end-action-centred-on-heading): the eyebrow on its own line, then
+         the heading in the fractional track and the actions in a content-sized one from 1024, ONE
+         row, centred on each other; the lead under that row in the heading's track. `column` (64)
+         between the tracks: two kinds of thing that must read as separate. Below 1024 one track:
+         heading, actions, lead, each a `block` apart. */
       <Layout rowGap="block">
         {eyebrowEl}
-        <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
-          <Layout rowGap="block">
-            {headingEl}
-            {leadEl}
-          </Layout>
+        <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
+          {headingEl}
           {actions}
+          {leadEl}
         </Layout>
       </Layout>
     ) : hasActions || hasAside ? (
-        /* asideFill: the head group is `auto 1fr` (pinLast) and the aside's box fills the 1fr row,
+      /* asideFill: the head group is `auto 1fr` (pinLast) and the aside's box fills the 1fr row,
            so it ends where the stretched track ends — on the body's last line. */
-        <Layout rowGap="stack" pinLast={asideFill}>
-          {headText}
-          {hasActions ? actions : null}
-          {hasAside ? (
-            asideFill ? (
-              <div className={styles.asideFill}>{aside}</div>
-            ) : (
-              aside
-            )
-          ) : null}
-        </Layout>
-      ) : (
-        headText
-      );
+      <Layout rowGap="stack" pinLast={asideFill}>
+        {headText}
+        {hasActions ? actions : null}
+        {hasAside ? asideFill ? <div className={styles.asideFill}>{aside}</div> : aside : null}
+      </Layout>
+    ) : (
+      headText
+    );
 
     arranged = (
       <Layout
@@ -848,12 +842,7 @@ function MediaSplit({
       align={pinned ? 'stretch' : 'center'}
     >
       <div className={styles.photoTrack}>
-        <div
-          className={cx(
-            styles.photo,
-            photoLeads && styles.photoLeads,
-          )}
-        >
+        <div className={cx(styles.photo, photoLeads && styles.photoLeads)}>
           <Media
             image={media.image}
             fit="fill"

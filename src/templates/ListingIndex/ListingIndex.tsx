@@ -342,7 +342,9 @@ function ListingSectionView({ section }: { section: ListingSection }) {
   return (
     <section id={section.id} aria-labelledby={headingId} className={styles.section}>
       <Layout rowGap="stack">
-        <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="baseline">
+        {/* The link at the heading's end, vertically centred on it, as every head's end action
+            (owner, 29 Oct 2026; decisions/2026-10-29-head-end-action-centred-on-heading). */}
+        <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
           <h2 id={headingId} className={styles.sectionTitle}>
             {section.heading}
           </h2>

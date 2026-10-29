@@ -127,8 +127,9 @@ type BelowProps = BannerHeadProps & {
   /**
    * Where the head's action sits (owner, 7 Oct 2026) — ContentSection's `actionsAt`, the same
    * decision. `below` (default) a `block` under the lead; `end` at the inline end of the heading's
-   * row from 1024, its top on the heading's top, in a content-sized track a `column` (64) from the
-   * text, the eyebrow on its own line above both. Below 1024 it falls back under the lead.
+   * row from 1024, vertically centred on the heading (owner, 29 Oct 2026), in a content-sized track
+   * a `column` (64) from it, the eyebrow on its own line above and the lead under the row. Below
+   * 1024 it sits a `block` under the heading, above the lead.
    */
   actionsAt?: 'below' | 'end';
 };
@@ -276,19 +277,19 @@ export function Banner(props: BannerProps) {
     form === 'below' && Boolean(actions) && 'actionsAt' in props && props.actionsAt === 'end';
 
   if (form === 'below' && actionsAtEnd) {
-    /* Actions at the end (owner, 7 Oct 2026): the eyebrow on its own line, then heading and lead
-       in the 1fr track and the action in a content-sized one from 1024, both on the heading's
-       top, `column` (64) apart. Below 1024 one track, the action a `stack` under the lead. */
+    /* Actions at the end (owner, 7 Oct 2026; centred, 29 Oct 2026 —
+       decisions/2026-10-29-head-end-action-centred-on-heading): the eyebrow on its own line, then
+       the heading in the 1fr track and the action in a content-sized one from 1024, one row,
+       centred on each other, `column` (64) apart; the lead under that row. Below 1024 one track:
+       heading, action, lead, each a `block` apart. */
     arranged = (
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
-          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
-            <Layout rowGap="block">
-              {headingEl}
-              {leadEl}
-            </Layout>
+          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
+            {headingEl}
             {actions}
+            {leadEl}
           </Layout>
         </Layout>
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />

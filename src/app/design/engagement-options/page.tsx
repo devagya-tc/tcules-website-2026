@@ -76,7 +76,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead. The three options take three tracks from 768, each the flat scope drawing above its name and words. The closing paragraphs are equal terms side by side on their hairlines, a stack under the options. The two links are one pair at the end: the outlined button, then the link. Nothing sits at the heading's far end."
+        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead. The three options take three tracks from 768, each the flat scope drawing above its name and words. The closing paragraphs are equal terms side by side on their hairlines, a stack under the options. The band's own link (How we work together) is the head's end action, centred on the heading from 1024 with the lead under that row (owner, 29 Oct 2026); the other link closes the band, a stack under the terms."
       />
       <EngagementOptions
         heading="How we work together"
@@ -90,13 +90,16 @@ export default function EngagementOptionsSpecimen() {
           'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
           'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
         ]}
+        action={
+          <CtaRow
+            rule={false}
+            actions={[{ label: 'How we work together', href: '#together' }]}
+          />
+        }
         actions={
           <CtaRow
             rule={false}
-            actions={[
-              { label: 'How we work together', href: '#together' },
-              { label: "Tell us what you're working on", href: '#enquiry' },
-            ]}
+            actions={[{ label: "Tell us what you're working on", href: '#enquiry' }]}
           />
         }
       />

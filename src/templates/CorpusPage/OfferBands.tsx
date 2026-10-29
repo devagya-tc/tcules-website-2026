@@ -414,12 +414,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
 
     /* How we work together / Ways to work with us — peers a reader chooses between (EngagementOptions,
-       owner 29 Oct 2026; decisions/2026-10-29-how-we-work-together-band). The head is the heading and
+       owner 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head). The head is the heading and
        the band's opening paragraphs as its lead (the page's own line, then the shared "Bring what you
        have…"); each option is drawn in the FLAT grammar (Sketch `scope-*`), the drawing above its
        name and words, so the band never reads as Why Tcules' isometric reasons beside it; the closing
        paragraphs (what we stop at; where the studio is) are equal terms side by side under the
-       options; the two links are one action pair at the end, an outlined button then the link. */
+       options; the band's own link is the head's end action and any other closes the band. */
     case 'tiles': {
       const opening = leadingParagraphs(band);
       const terms = trailingParagraphs(band);
@@ -435,7 +435,11 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             scope: scopeOf(row.title),
           }))}
           terms={terms.map((runs) => renderInline(runs))}
-          actions={links.length > 0 ? <LinkActions links={links} pair /> : undefined}
+          /* The band's own link ("How we work together") is the head's end action; any other link
+             ("Tell us what you're working on") closes the band (owner, 29 Oct 2026;
+             decisions/2026-10-29-how-we-work-together-link-in-head). */
+          action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+          actions={links.length > 1 ? <LinkActions links={links.slice(1)} /> : undefined}
         />
       );
     }
@@ -556,7 +560,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
            reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
            Isometric, so it never reads as How we work together's flat options beside it
-           (decisions/2026-10-29-how-we-work-together-band). */
+           (decisions/2026-10-29-how-we-work-together-link-in-head). */
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const drawn = parts.items.map((item) => ({
           item,

@@ -102,9 +102,9 @@ const FIGURE_START = { x: 0, y: 0.5 } as const;
  * the track's full width (owner, 29 Oct 2026). Beside its words the drawing left the text a narrow
  * column that wrapped a short title onto three lines.
  *
- * The action sits at the end of the heading's row from 1024, its top on the heading's first line,
- * the eyebrow on its own line above (owner, 29 Oct 2026; ContentSection `actionsAt="end"`): aligned
- * to the head's baseline it floated at the lead's last line.
+ * The action sits at the end of the heading's row from 1024, vertically centred on the heading, the
+ * lead under that row and the eyebrow on its own line above (owner, 29 Oct 2026;
+ * decisions/2026-10-29-head-end-action-centred-on-heading; ContentSection `actionsAt="end"`).
  */
 export function Reasons({
   id,
@@ -149,17 +149,16 @@ export function Reasons({
     ) : null;
 
   /* The head: eyebrow → heading → lead at `block`. With an action, the eyebrow keeps its own line and
-     the heading and lead share a row with the action from 1024, both tracks starting on the
-     heading's top, `column` (64) apart; below 1024 the action is a `stack` under the lead. */
+     the heading and the action share one row from 1024, centred on each other, `column` (64) apart,
+     the lead under that row in the heading's track. Below 1024 one track: heading, action, lead,
+     each a `block` apart. */
   const head = action ? (
     <Layout rowGap="block">
       {eyebrowEl}
-      <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
-        <Layout rowGap="block">
-          {headingEl}
-          {leadEl}
-        </Layout>
+      <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
+        {headingEl}
         <div>{action}</div>
+        {leadEl}
       </Layout>
     </Layout>
   ) : (

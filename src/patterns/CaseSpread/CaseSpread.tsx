@@ -96,16 +96,17 @@ export function CaseSpread({
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="case-spread">
         <Layout rowGap="stack">
           {action ? (
-            /* The action at the heading's end, its top on the heading's FIRST line (owner, 29 Oct
-               2026, home review; ContentSection `actionsAt="end"`): the eyebrow on its own line
-               above, so it is the title the action aligns with, never the head's foot. */
+            /* The action at the heading's end, vertically centred on the heading (owner, 29 Oct
+               2026; decisions/2026-10-29-head-end-action-centred-on-heading; ContentSection
+               `actionsAt="end"`): the eyebrow on its own line above, so it is the title the action
+               centres on, never the head's foot. */
             <Layout rowGap="tight">
               {eyebrowEl}
               <Layout
                 columns={{ base: 1, md: [1, 'auto'] }}
                 colGap="column"
                 rowGap="block"
-                align="start"
+                align="center"
               >
                 {headingEl}
                 {action}
