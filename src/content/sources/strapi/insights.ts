@@ -1,4 +1,5 @@
 import type {
+  BlogPage,
   ContentSeo,
   InsightAction,
   InsightFilterGroup,
@@ -228,7 +229,7 @@ function eventDetails(resource: StrapiInsightsResource): InsightResource['event'
  * articles, and says which in the slug's first segment ("guides/saas-onboarding-…", the path the site
  * routes on). An unprefixed slug, or `articles/`, is an article.
  */
-function blogKind(slug: string | null | undefined): InsightResourceKind {
+export function blogKind(slug: string | null | undefined): BlogPage['kind'] {
   const first = normaliseSlug(slug).split('/')[0];
   if (first === 'guides') return 'guide';
   if (first === 'research') return 'research';

@@ -1633,6 +1633,8 @@ export type BlogResource = {
 export type BlogPage = {
   documentId: string;
   slug: string;
+  /** Which format the entry is: the blog collection carries guides, research and videos too. */
+  kind: Extract<InsightResourceKind, 'article' | 'guide' | 'research' | 'video'>;
   title: string;
   description: string;
   createdAt?: string;
