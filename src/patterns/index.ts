@@ -429,4 +429,12 @@ export {
 
 /* Bento — linked tiles of two sizes on four tracks, each a name, a line and its drawing, over one
    continuous texture per row (home "What we do", owner 19 Oct 2026). */
-export { Bento, type BentoItem, type BentoProps } from './Bento';
+/* ServiceTile is one bento tile on its own, for a named service sitting as a card in another set
+   (an insights shelf's related service), 29 Oct 2026. */
+export {
+  Bento,
+  ServiceTile,
+  type BentoItem,
+  type BentoProps,
+  type ServiceTileProps,
+} from './Bento';

@@ -34,7 +34,13 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
-import { offerSceneKey, type OfferSceneName, type OfferScenes } from '@/lib/sketches';
+import {
+  offerSceneKey,
+  serviceSceneFor,
+  type OfferSceneName,
+  type OfferScenes,
+  type SketchName,
+} from '@/lib/sketches';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
@@ -860,8 +866,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   );
   /* Destinations the page draws (owner, 26 Oct 2026, the specialist services): home's bento, every
      tile one size, because the destinations are peers. Seven or eight take four tracks, 4 + 3 with
-     the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. */
-  const scenes = rows.map((row) => sceneFor(ctx, band, row.href));
+     the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. Services
+     named as a set are always the service tile, each with its own scene, wherever they are named
+     (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
+  const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
   if (rows.length >= 3 && scenes.every(Boolean)) {
     const four = rows.length === 7 || rows.length === 8 || rows.length === 4;
     const note =
@@ -885,7 +893,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
           href: row.href,
-          scene: scenes[index] as OfferSceneName,
+          scene: scenes[index] as SketchName,
         }))}
       />,
       inCell ? undefined : closingFooter,

@@ -2,6 +2,7 @@ import type { InsightResource, InsightResourceKind, InsightsPage } from '@/conte
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { blogPath, ENDPOINTS, FORMAT_PAGE_REDIRECTS, ROUTES } from '@/lib/routes';
+import { serviceSceneFor } from '@/lib/sketches';
 import { Media } from '@/components';
 import { DataTable, EnquiryForm } from '@/patterns';
 import {
@@ -399,11 +400,33 @@ function shelfOf(band: CorpusBand, records: readonly InsightItem[]): InsightShel
       (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
         block.type === 'paragraph',
     );
+  /* A closing line that names one service ("Our related service: [AI Product UX](…).") is that
+     service's tile in the shelf's grid, its words as the tile's line (owner, 29 Oct 2026;
+     decisions/2026-10-29-named-services-are-service-tiles). A service with no scene stays a line. */
+  const service = note ? relatedService(note.runs) : undefined;
   return {
     id: band.id,
     heading: band.headingText,
     items: pieces,
-    ...(note ? { noteHtml: inlineToHtml(note.runs) } : {}),
+    ...(service ? { service } : note ? { noteHtml: inlineToHtml(note.runs) } : {}),
+  };
+}
+
+/** "Label: [Service](/route)." as the service's tile: its name, route, scene and the label as its line. */
+function relatedService(runs: readonly InlineRun[]): InsightShelf['service'] {
+  const links = runs.filter((run) => run.type === 'link');
+  const [link] = links;
+  if (links.length !== 1 || link?.type !== 'link') return undefined;
+  const at = runs.indexOf(link);
+  const before = inlineToText(runs.slice(0, at)).trim();
+  const after = inlineToText(runs.slice(at + 1)).trim();
+  const scene = serviceSceneFor(link.href);
+  if (!scene || !before.endsWith(':') || !/^[.]?$/.test(after)) return undefined;
+  return {
+    label: before.slice(0, -1).trim(),
+    title: inlineToText(link.children).trim(),
+    href: link.href,
+    scene,
   };
 }
 
