@@ -62,14 +62,6 @@ export type OfferKind =
   /** No rule names this band: it renders every block plainly and warns (a planning gap). */
   | 'generic';
 
-/**
- * How a drawn Reasons band is held (Reasons `arrangement`). The FIRST Reasons band on a page keeps the
- * approved `open`; the SECOND takes `beside`, so two drawn sets never read as one idea twice (owner,
- * 29 Oct 2026, Q1: offer pages keep How we work together open and set Why Tcules beside; home keeps
- * Why Tcules open and sets How we work together beside).
- */
-export type ReasonsArrangement = 'open' | 'beside';
-
 /** Which half of a split a unit is. `whole` is a band that did not split. */
 export type OfferPart = 'whole' | 'a' | 'b';
 
@@ -91,8 +83,6 @@ export type OfferUnit = {
   variant?: 'B' | 'D';
   /** Visual (a photograph, artefact, drawing, boxed table, icon set) or text-heavy: page-mapping § 3. */
   visual: boolean;
-  /** For `reasons` and `tiles`: open or beside, from the band's place among the page's Reasons bands. */
-  arrangement?: ReasonsArrangement;
 };
 
 /* ── Shape signatures ───────────────────────────────────────────────────────────── */
@@ -168,9 +158,6 @@ const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'related' 
  * (for the few ids the copy spells in more than one shape) a rule over the shape. A band whose id is
  * not here falls back to `kindByShape`, and one that matches neither is `generic`, which renders every
  * block plainly and warns, in development and in the census.
- *
- * The arrangement is the plan's, not the table's: which Reasons band is `open` and which `beside` is
- * decided by the band's place on the page (`reasonsArrangements`).
  */
 export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   /* ── § A · common bands ── */
@@ -346,6 +333,7 @@ export const TEMPLATE_BANDS = {
     'people',
     'ai-native-practice',
     'expertise',
+    'insights',
   ],
   '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record'],
   /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
@@ -418,26 +406,6 @@ export function kindByShape(band: CorpusBand, sig: string = signature(band)): Of
   return 'generic';
 }
 
-/**
- * Which drawn Reasons band is `open` and which `beside`, by band id (owner, 29 Oct 2026, Q1): the
- * first Reasons band on the page (`reasons` or `tiles`) keeps the approved `open`, the second takes
- * `beside`, in the order the reader meets them. Read by planOffer and by HomePage, so the rule is
- * applied in one place and never by hand.
- */
-export function reasonsArrangements(
-  bands: readonly CorpusBand[],
-): Readonly<Record<string, ReasonsArrangement>> {
-  const out: Record<string, ReasonsArrangement> = {};
-  let seen = 0;
-  for (const band of bands) {
-    const kind = kindOf(band);
-    if (kind !== 'reasons' && kind !== 'tiles') continue;
-    out[band.id] = seen === 0 ? 'open' : 'beside';
-    seen += 1;
-  }
-  return out;
-}
-
 /* ── Planning ───────────────────────────────────────────────────────────────────── */
 
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): `symptoms` (VoiceLedger), `record`
@@ -483,7 +451,6 @@ const PHOTOGRAPH_BANDS: ReadonlySet<string> = new Set(['ai-native-practice']);
 
 function drafts(page: CorpusPage): Draft[] {
   const units: Draft[] = [];
-  const arrangements = reasonsArrangements(page.bands);
   const unit = (
     band: CorpusBand,
     kind: OfferKind,
@@ -505,7 +472,6 @@ function drafts(page: CorpusPage): Draft[] {
               page.composition.mediaBindings.some(
                 (m) => m.bound && m.supportsSection === band.id,
               )),
-      ...(arrangements[band.id] ? { arrangement: arrangements[band.id] } : {}),
       ...extra,
     });
   };

@@ -1,4 +1,4 @@
-/* Reasons — type, ink, the drawing's box and the three ways the set is ruled.
+/* Reasons — type, ink, the drawing's box and the `boxed` frame's rules.
 
    Section paints the band; Layout owns every seam and every track. Every value is an --rsn-* token
    (tokens/components/reasons.css) or a gap-scale step. No margins: a cell's padding is the inside of
@@ -46,19 +46,11 @@
   max-inline-size: var(--rsn-body-measure);
 }
 
-/* The drawing's box beside its words: a fixed size, the figure contained in it (Media `contain`). */
+/* The drawing's box, heading its words (owner, 29 Oct 2026): a fixed height, as wide as the set's
+   widest ratio (the figures run 1.05–1.2), so it starts at the track's edge with its words; the
+   figure is contained in it (Media `contain`). */
 .figure {
-  inline-size: var(--rsn-figure-width);
   block-size: var(--rsn-figure-height);
-}
-
-/* `beside`: the drawing heads its words at every width (on a phone too, so `beside` never reads as
-   `open` there). Its box is shorter and as wide as the drawing's own ratio (the set's figures run
-   1.05–1.2), so it starts at the column's edge with its words rather than floating in the middle of
-   a 206 track. */
-.figureAbove {
-  inline-size: auto;
-  block-size: var(--rsn-figure-height-sm);
   aspect-ratio: var(--rsn-figure-ratio);
 }
 
@@ -118,29 +110,4 @@
   border: var(--rsn-rule-width) solid var(--rsn-rule-ink);
   border-radius: var(--rsn-frame-radius);
   overflow: hidden;
-}
-
-/* ── beside: hairline verticals between columns only ──────────────────────────
-   From 768 the set is three across, or two for four reasons (`.two`). Every reason but the first
-   in its row rules its inline-start edge and opens on the `block` inset; every reason but the last
-   closes on it. So the first column starts flush with the band and the last ends flush, and the
-   only lines are the ones between columns: one for two across, two for three.
-   Placement of this unit's own cells inside the Layout it renders, at the breakpoint where it
-   applies (LogoGrid's precedent). Layout's breakpoints: md 768. */
-@media (min-width: 768px) {
-  .ruled > .item {
-    padding-inline: var(--gap-block);
-    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
-  }
-
-  .ruled:not(.two) > .item:nth-child(3n + 1),
-  .two > .item:nth-child(odd) {
-    padding-inline-start: 0;
-    border-inline-start: 0;
-  }
-
-  .ruled:not(.two) > .item:nth-child(3n),
-  .two > .item:nth-child(even) {
-    padding-inline-end: 0;
-  }
 }

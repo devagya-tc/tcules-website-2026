@@ -151,8 +151,8 @@ const COPY_REASONS: readonly (readonly [string, ReactNode])[] = [
   [
     'We tell you what is really wrong.',
     <>
-      At Dealpath, our audit placed the fault in a single assumption, that every listing becomes a
-      new deal, and the redesign asks people to find the existing deal first.{' '}
+      At Dealpath, our audit placed the fault in a single assumption, that every listing becomes
+      a new deal, and the redesign asks people to find the existing deal first.{' '}
       <a href="#dealpath">Read the Dealpath case</a>
     </>,
   ],
@@ -171,8 +171,8 @@ const HOME_REASONS: readonly (readonly [string, ReactNode])[] = [
   [
     'AI that reached production',
     <>
-      The AI dashboard we designed for ConnectX, first proved in a coded demo, has been live as a
-      production-ready module since late 2025.{' '}
+      The AI dashboard we designed for ConnectX, first proved in a coded demo, has been live as
+      a production-ready module since late 2025.{' '}
       <a href="#connectx">See how ConnectX got there</a>
     </>,
   ],
@@ -219,9 +219,11 @@ export default function ReasonsSpecimen() {
           <p className={t.lead}>
             Why a buyer should choose the studio: argued reasons, each a title, one sentence and
             an isometric drawing of its claim from the ch05 kit, facing its words. Built for
-            four, set 2×2. Three ways to hold them without boxing a reason: open (the gap scale
-            alone), boxed (the set in LogoGrid&rsquo;s rounded frame) and beside (the head in a
-            third, rules between columns). Every arrangement fits one fold at 1440.
+            four, set 2×2. Each reason is the drawing above, then its title, then its body, at
+            the full width of its track, and the head always reads across the top (owner, 29 Oct
+            2026). Two ways to hold the set without boxing a reason: open (the gap scale alone)
+            and boxed (the set in LogoGrid&rsquo;s rounded frame). Beside was retired on 29 Oct
+            2026.
           </p>
         </Layout>
       </Section>
@@ -229,7 +231,7 @@ export default function ReasonsSpecimen() {
       <Variation
         id="open"
         title="1 · Open — four reasons 2×2, no rules (the default; home)"
-        note="Mock S1, the set as home shows it. The gap scale draws the grid: column (64) between columns and rows. Each drawing sits beside its words, facing them; the head reads across with the action at its end. Two across from 1024 (a 2×2), one below."
+        note="Mock S1, the set as home shows it. The gap scale draws the grid: column (64) between columns and rows. Each drawing heads its title and body, which take the track's full width. The head reads across with the action at the heading row's end, its top on the heading's first line, the eyebrow above. Two across from 768 (a 2×2), one below."
       />
       <Reasons
         eyebrow="Why Tcules"
@@ -297,23 +299,8 @@ export default function ReasonsSpecimen() {
       />
 
       <Variation
-        id="beside"
-        title="3 · Beside — the head in a third, the set 2×2"
-        note="Mock C2b with four. From 1440 a split (section, 96): the argued heading in the leading third with the action pinned to its foot; the four reasons 2×2 in the trailing two thirds, each drawing above its words, one hairline vertical between the two columns. Below 1440 the head stacks above the set (two across from 768); below 768 each drawing returns beside its words."
-      />
-      <Reasons
-        eyebrow="Why Tcules"
-        heading="A studio built for what ships."
-        headingTail="Senior people, work that lands as code, and a number we answer to."
-        headingId="rsn-beside"
-        items={items()}
-        action={ACTION}
-        arrangement="beside"
-      />
-
-      <Variation
         id="longest"
-        title="4 · The longest copy, beside"
+        title="3 · The longest copy, open"
         note="Every other reason at P48's ceilings: a five-word title of long words and a twenty-word sentence. Still one fold at 1440."
       />
       <Reasons
@@ -323,24 +310,22 @@ export default function ReasonsSpecimen() {
         headingId="rsn-longest"
         items={LONGEST}
         action={ACTION}
-        arrangement="beside"
       />
 
       <Variation
         id="three"
-        title="5 · Three reasons, beside, no eyebrow"
-        note="Another count that fills whole rows. Three in open or boxed go three across from 1440 and one column below it; in beside, three across from 768. Counts other than three, four or six warn in development."
+        title="4 · Three reasons, open, no eyebrow"
+        note="Another count that fills whole rows. Three in open go three across from 1024 and one column below it; in boxed, three across from 1440. Counts other than three, four or six warn in development."
       />
       <Reasons
         heading="Why teams pick a studio that ships."
         headingId="rsn-three"
         items={items().slice(0, 3)}
-        arrangement="beside"
       />
 
       <Variation
         id="six-boxed"
-        title="6 · Six reasons, boxed"
+        title="5 · Six reasons, boxed"
         note="The shape before 22 Oct 2026, still accepted because it fills whole rows: three across from 1440, two from 1024, the frame ruled for each count."
       />
       <Reasons
@@ -354,30 +339,29 @@ export default function ReasonsSpecimen() {
       />
 
       <Variation
-        id="six-beside"
-        title="7 · Six reasons, beside"
-        note="Six in beside: three across from 768 in two rows, two hairline verticals between the columns."
+        id="six-open"
+        title="6 · Six reasons, open"
+        note="Six in open: two across from 768, three from 1440, in two rows."
       />
       <Reasons
         eyebrow="Why Tcules"
         heading="A studio built for what ships."
         headingTail="Senior people, work that lands as code, and a number we answer to."
-        headingId="rsn-six-beside"
+        headingId="rsn-six-open"
         items={all()}
         action={ACTION}
-        arrangement="beside"
       />
 
       <Variation
         id="bare"
-        title="8 · Boxed, a bare head"
+        title="7 · Boxed, a bare head"
         note="No eyebrow, no tail, no action: the heading alone over the frame."
       />
       <Reasons heading="Why Tcules" headingId="rsn-bare" items={items()} arrangement="boxed" />
 
       <Variation
         id="tint"
-        title="9 · Tint ground, open"
+        title="8 · Tint ground, open"
         note="Every --rsn-* token is restated on tint: the tail steps to neutral-600 and the rule to neutral-300. The figures are the paper-deep exports, so their occluding faces are the ground's own colour (§4a)."
       />
       <Reasons
@@ -392,7 +376,7 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="tint-boxed"
-        title="10 · Tint ground, boxed"
+        title="9 · Tint ground, boxed"
         note="The tint rule (neutral-300) on the frame and between the cells. Paper or tint only: the figures are exported for those two grounds, so `surface` takes no other."
       />
       <Reasons
@@ -407,8 +391,8 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="lead-open"
-        title="11 · A lead, open (the first Reasons band on a page)"
-        note="`lead`: the sentence that frames the set, under the heading at the lead role (component-map C1). Three items fill one row from 1440. The first Reasons band on a page is `open` (owner, 29 Oct 2026, Q1)."
+        title="10 · A lead, open"
+        note="`lead`: the sentence that frames the set, under the heading at the lead role (component-map C1). Three items fill one row from 1024."
       />
       <Reasons
         heading="How we work together"
@@ -419,13 +403,13 @@ export default function ReasonsSpecimen() {
       />
 
       <Variation
-        id="lead-beside"
-        title="12 · A lead, beside (the second Reasons band on a page)"
-        note="In `beside` the lead reads in the head third between the heading and the action, the three items in the trailing two thirds. The plan sets the second Reasons band on a page `beside` (Q1), so two drawn sets never read as one idea twice. A lead of two paragraphs is passed as nodes."
+        id="lead-two"
+        title="11 · A lead of two paragraphs, with an action"
+        note="A lead of two paragraphs is passed as nodes. The action sits at the end of the heading's row from 1024, its top on the heading's first line, never at the lead's foot; below 1024 it is a stack under the lead."
       />
       <Reasons
         heading="How we work together"
-        headingId="rsn-lead-beside"
+        headingId="rsn-lead-two"
         lead={
           <Layout rowGap="text">
             <p>
@@ -440,13 +424,12 @@ export default function ReasonsSpecimen() {
         }
         items={items().slice(0, 3)}
         action={ACTION}
-        arrangement="beside"
       />
 
       <Variation
         id="home-copy"
-        title="13 · Home's three reasons, open, drawn"
-        note="Home's Why Tcules as the 26 Oct copy authors it, each reason with its own drawing (scripts/illustrations/reasons.mjs, home set): every day's work running through the product; the feature proved in a coded demo and live in production; the same seat on the product as it grows, year on year. Open, because it is the first Reasons band on home (owner, 29 Oct 2026, Q1)."
+        title="12 · Home's three reasons, drawn"
+        note="Home's Why Tcules as the 26 Oct copy authors it, each reason with its own drawing (scripts/illustrations/reasons.mjs, home set): every day's work running through the product; the feature proved in a coded demo and live in production; the same seat on the product as it grows, year on year."
       />
       <Reasons
         heading="A product design partner for ambitious SaaS teams"
@@ -457,20 +440,19 @@ export default function ReasonsSpecimen() {
 
       <Variation
         id="offer-copy"
-        title="14 · An offer page's three, beside, drawn (FinTech: 1, 6, 4)"
-        note="The second Reasons band on an offer page takes beside (owner, 29 Oct 2026, Q1). Each of the seven reasons the offer pages draw from has its own drawing (offer set, one world box): this is FinTech's selection."
+        title="13 · An offer page's three, drawn (FinTech: 1, 6, 4)"
+        note="Each of the seven reasons the offer pages draw from has its own drawing (offer set, one world box): this is FinTech's selection."
       />
       <Reasons
         heading="Why teams choose Tcules"
         headingId="rsn-offer-copy"
         items={drawn([COPY_REASONS[0]!, COPY_REASONS[5]!, COPY_REASONS[3]!])}
         action={WHY_LINKS}
-        arrangement="beside"
       />
 
       <Variation
         id="offer-rest"
-        title="15 · The other four offer reasons (2, 3, 5, 7), open, on tint"
+        title="14 · The other four offer reasons (2, 3, 5, 7), open, on tint"
         note="So all seven offer drawings are in view: the part replaced in a product kept as it is; the hard part built in code across the seam from the open design; the AI answer held at a person's station before it counts; the problems on the screen traced down to one cause. Paper-deep exports on tint."
       />
       <Reasons

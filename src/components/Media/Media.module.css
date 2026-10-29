@@ -69,12 +69,14 @@
 }
 
 /* `contain`: the parent's box again, but nothing is cut — the whole asset at the largest size that
-   fits, centred. For an illustration or a cut-out in a card, where a cover crop took the label off
-   the drawing and the edge off the part. The parent supplies the air around it. */
+   fits, centred, or anchored at the placement's `focus` where one is passed (a drawing that must
+   start at its words' edge: Reasons, 29 Oct 2026). For an illustration or a cut-out in a card, where
+   a cover crop took the label off the drawing and the edge off the part. The parent supplies the air
+   around it. */
 .contain {
   block-size: 100%;
   object-fit: contain;
-  object-position: center;
+  object-position: var(--media-focus, center);
 }
 
 /* `ratio`: a photograph cut to one of § 5.4's ratios in its own box — the full inline size, the

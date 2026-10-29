@@ -7,23 +7,19 @@
      parts  heading · heading-tail · eyebrow · title · body · figure · rule · frame
      roles  text · tracking · measure · ink · width · height · radius
 
-   Three arrangements share one item: `open` (no rules: the gap scale alone holds the set),
-   `boxed` (LogoGrid's closed frame: cells ruled between, the whole set in one rounded box) and
-   `beside` (the head in a third beside the set; hairline verticals between columns only). No state
+   Two arrangements share one item, the drawing above its title and body (owner, 29 Oct 2026):
+   `open` (no rules: the gap scale alone holds the set) and `boxed` (LogoGrid's closed frame: cells
+   ruled between, the whole set in one rounded box). `beside` was retired on 29 Oct 2026. No state
    tokens: nothing responds to a pointer. Every surface block declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Geometry · identical on every surface ─────────────────────────────────────
-   --rsn-figure-width   a component SIZE: the drawing's track where it sits beside its words
-                        (`open`, `boxed`, and every arrangement below 768). 156 holds a figure whose
-                        ~1.1 ratio fills 140 of height, about the height of a title and a
-                        three-line body, so words and drawing read as one row.
-   --rsn-figure-height  the same drawing's box height beside its words.
-   --rsn-figure-height-sm
-                        `beside` from 768: the drawing heads its words, so it is shorter (112),
-                        which keeps two rows (four 2×2, or six 3×2) inside the 830 fold at 1440.
-   --rsn-figure-height-xs
-                        the phone step: 92 beside a body that wraps to three or four lines.       */
+   --rsn-figure-height  a component SIZE: the drawing's box height where it heads its words. 140
+                        keeps two rows of four (a 2×2) inside the fold at 1440.
+   --rsn-figure-ratio   the box's ratio, 6:5, the widest of the set (1.2): the box is as wide as the
+                        widest drawing, so every drawing starts at its track's edge; a narrower one
+                        centres in it by a few pixels.
+   Below 768 the box steps to 112: the phone stacks the four, so each is shorter.               */
 :root {
   --rsn-heading-text: var(--text-h2);
   --rsn-heading-tracking: var(--text-h2-tracking);
@@ -36,12 +32,7 @@
   --rsn-body-measure: var(--measure-lead);
   --rsn-eyebrow-text: var(--text-eyebrow);
   --rsn-eyebrow-tracking: var(--text-eyebrow-tracking);
-  --rsn-figure-width: 156px;
   --rsn-figure-height: 140px;
-  --rsn-figure-height-sm: 112px;
-  --rsn-figure-height-xs: 92px;
-  /* `beside` from 768: the box's ratio, so a drawing heads its column from the column's edge. 6:5
-     is the widest of the set (1.2); a narrower figure centres in it by a few pixels. */
   --rsn-figure-ratio: 6 / 5;
   --rsn-rule-width: var(--border-width-hairline);
   /* The `boxed` frame's corners: the photograph radius, LogoGrid's (owner, 16 Oct 2026: "use the
@@ -54,8 +45,7 @@
 
 @media (max-width: 767px) {
   :root {
-    --rsn-figure-width: var(--rsn-figure-height-xs);
-    --rsn-figure-height: var(--rsn-figure-height-xs);
+    --rsn-figure-height: 112px;
   }
 }
 

@@ -449,7 +449,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           <Reasons
             {...head(band)}
             surface={unit.surface}
-            arrangement={unit.arrangement ?? 'open'}
             lead={tilesLead}
             action={tilesAction}
             items={options.map(({ row, scope }) => ({
@@ -600,9 +599,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           block.type === 'links' ? block.links : [],
         );
         const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
-        /* Drawn once every reason resolves to its figure (owner, 29 Oct 2026, Q1): the Reasons band,
-           in the arrangement the plan gives it (`beside` where it is the page's second Reasons band,
-           as on every offer page, under the engagements). */
+        /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
+           reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
+           TODO(owner): how How we work together and Why Tcules, two drawn Reasons bands back to back
+           on every offer page, are told apart is the owner's open decision (component-map § F). */
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const drawn = parts.items.map((item) => ({
           item,
@@ -613,7 +613,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
-              arrangement={unit.arrangement ?? 'open'}
               lead={parts.lead}
               action={action}
               items={drawn.flatMap(({ item, figure }) =>

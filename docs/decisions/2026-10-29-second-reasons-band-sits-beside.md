@@ -1,7 +1,7 @@
 ---
 title: "Two drawn Reasons bands on a page: the first open, the second beside"
 date: 2026-10-29
-status: proposed
+status: superseded
 area: [layout]
 source: "Owner, 29 Oct 2026, component-map § F Q1 (feat/new-copy)"
 supersedes: []

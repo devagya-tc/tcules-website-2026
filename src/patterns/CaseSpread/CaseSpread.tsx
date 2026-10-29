@@ -76,12 +76,16 @@ export function CaseSpread({
   surface = 'paper',
 }: CaseSpreadProps) {
   const parts = story.filter((part) => part.title.trim().length > 0);
+  const eyebrowEl = eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null;
+  const headingEl = (
+    <h2 id={headingId} className={styles.heading}>
+      {heading}
+    </h2>
+  );
   const head = (
     <Layout rowGap="tight">
-      {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-      <h2 id={headingId} className={styles.heading}>
-        {heading}
-      </h2>
+      {eyebrowEl}
+      {headingEl}
     </Layout>
   );
 
@@ -92,14 +96,20 @@ export function CaseSpread({
       <Section id={id} surface={surface} aria-labelledby={headingId} data-band="case-spread">
         <Layout rowGap="stack">
           {action ? (
-            <Layout
-              columns={{ base: 1, md: [1, 'auto'] }}
-              colGap="column"
-              rowGap="block"
-              align="end"
-            >
-              {head}
-              {action}
+            /* The action at the heading's end, its top on the heading's FIRST line (owner, 29 Oct
+               2026, home review; ContentSection `actionsAt="end"`): the eyebrow on its own line
+               above, so it is the title the action aligns with, never the head's foot. */
+            <Layout rowGap="tight">
+              {eyebrowEl}
+              <Layout
+                columns={{ base: 1, md: [1, 'auto'] }}
+                colGap="column"
+                rowGap="block"
+                align="start"
+              >
+                {headingEl}
+                {action}
+              </Layout>
             </Layout>
           ) : (
             head

@@ -22,23 +22,23 @@ export type ReasonsItem = {
 };
 
 /**
- * How the set is held together (owner, 16 Oct 2026, why-us mocks rounds 3–4). One item shape, three
- * ways of ordering the set without making it read as boxed cards. Four reasons (the shape since
- * 22 Oct 2026) go two across in every arrangement: a 2×2.
+ * How the set is held together (owner, 16 Oct 2026, why-us mocks rounds 3–4). One item shape — the
+ * drawing above, then the title, then the body, at the full width of its track (owner, 29 Oct 2026;
+ * decisions/2026-10-29-set-reasons-head-above-drawing-above) — and two ways of ordering the set without
+ * making it read as boxed cards. The head always reads across the top with the items below. Four
+ * reasons (the shape since 22 Oct 2026) go two across: a 2×2.
  *
  *   open    no rules at all: the gap scale alone draws the grid, `column` (64) between columns and
  *           rows — the row seam of a borderless set, and between columns because each reason is a
- *           peer that must read as separate: at `gutter` one reason's drawing ran into the next
- *           one's words. Each drawing sits beside its words, facing them.
- *           The head reads across the top with the action at its end. (Mock S1.)
+ *           peer that must read as separate. (Mock S1.)
  *   boxed   LogoGrid's closed frame: the cells are ruled between, the whole set sits in one rounded
- *           box, and each cell holds its words and drawing at the gutter inset. The frame makes four
+ *           box, and each cell holds its drawing and words at the gutter inset. The frame makes four
  *           different reasons read as one set of equals, as it does for nine marks. (Mock C2a.)
- *   beside  a split: the head takes the leading third as an argued sentence, the action pinned to
- *           its foot, and the set sits in the trailing two thirds, three across (two for four), each
- *           drawing above its words, hairline verticals between the columns only. (Mock C2b.)
+ *
+ * `beside` (the head in a leading third, hairlines between the columns) was retired on 29 Oct 2026:
+ * every Reasons band puts its head above.
  */
-export type ReasonsArrangement = 'open' | 'boxed' | 'beside';
+export type ReasonsArrangement = 'open' | 'boxed';
 
 export type ReasonsProps = {
   /** The band's anchor. */
@@ -57,9 +57,8 @@ export type ReasonsProps = {
   /**
    * The sentence that frames the set, under the heading at the lead role (component-map C1: Why
    * Tcules and How we work together both open on one: "Bring what you have: an idea, a prototype…").
-   * A string, or inline content the caller renders (a link inside it). In `beside` it reads in the
-   * head third, between the heading and the action; in `open` and `boxed`, under the heading across
-   * the top.
+   * A string, or inline content the caller renders (a link inside it). It reads under the heading
+   * across the top.
    */
   lead?: ReactNode;
   /**
@@ -84,23 +83,28 @@ export type ReasonsProps = {
   surface?: Extract<SectionSurface, 'paper' | 'tint'>;
 };
 
-/** The drawing's rendered width: one figure box, the side step being the widest (156). */
-const FIGURE_SIZES = '160px';
+/** The drawing's rendered width: its box is --rsn-figure-height tall at the set's widest ratio (6:5),
+ *  so 168 at the 140 step. */
+const FIGURE_SIZES = '170px';
+
+/** The drawing anchored at its box's start, so a figure narrower than the box begins on the same
+ *  edge as its title and body. */
+const FIGURE_START = { x: 0, y: 0.5 } as const;
 
 /**
  * Reasons — why a buyer should choose the studio, as argued reasons each with a drawing of its claim
  * (why-us, owner 16 Oct 2026). The band fits one fold at 1440 with four reasons in every arrangement.
  *
  * The reasons are not cards: nobody clicks or compares them, so no arrangement frames one on its
- * own. `open` uses no line, `beside` divides columns, and `boxed` frames the SET (LogoGrid's
- * device), never a reason.
+ * own. `open` uses no line, and `boxed` frames the SET (LogoGrid's device), never a reason.
  *
- * Each item is one Layout: the drawing first in the DOM (it is decorative and hidden, so source
- * order is the words' order), placed visually after its words wherever the two share a row —
- * `reverse` mirrors the `['auto', 1]` tracks, so the drawing's auto track sits at the end. In
- * `beside` the item is one track at every width and the drawing heads its words: on a phone the two
- * arrangements must not collapse to one silhouette, because the offer pages set an `open` band
- * directly on a `beside` one (review 29 Oct; owner Q1).
+ * Each item is one Layout, one track: the drawing heads its words, then the title and the body at
+ * the track's full width (owner, 29 Oct 2026). Beside its words the drawing left the text a narrow
+ * column that wrapped a short title onto three lines.
+ *
+ * The action sits at the end of the heading's row from 1024, its top on the heading's first line,
+ * the eyebrow on its own line above (owner, 29 Oct 2026; ContentSection `actionsAt="end"`): aligned
+ * to the head's baseline it floated at the lead's last line.
  */
 export function Reasons({
   id,
@@ -122,64 +126,85 @@ export function Reasons({
     );
   }
 
-  const above = arrangement === 'beside';
   /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. */
   const four = shown.length === 4;
 
-  const head = (
-    <Layout rowGap="block">
-      {eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
-      <h2 id={headingId} className={styles.heading}>
-        {heading}
-        {headingTail ? (
-          <>
-            {' '}
-            <span className={styles.headingTail}>{headingTail}</span>
-          </>
-        ) : null}
-      </h2>
-      {typeof lead === 'string' ? (
-        <p className={styles.lead}>{lead}</p>
-      ) : lead ? (
-        <div className={styles.lead}>{lead}</div>
+  const eyebrowEl = eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null;
+  const headingEl = (
+    <h2 id={headingId} className={styles.heading}>
+      {heading}
+      {headingTail ? (
+        <>
+          {' '}
+          <span className={styles.headingTail}>{headingTail}</span>
+        </>
       ) : null}
+    </h2>
+  );
+  const leadEl =
+    typeof lead === 'string' ? (
+      <p className={styles.lead}>{lead}</p>
+    ) : lead ? (
+      <div className={styles.lead}>{lead}</div>
+    ) : null;
+
+  /* The head: eyebrow → heading → lead at `block`. With an action, the eyebrow keeps its own line and
+     the heading and lead share a row with the action from 1024, both tracks starting on the
+     heading's top, `column` (64) apart; below 1024 the action is a `stack` under the lead. */
+  const head = action ? (
+    <Layout rowGap="block">
+      {eyebrowEl}
+      <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
+        <Layout rowGap="block">
+          {headingEl}
+          {leadEl}
+        </Layout>
+        <div>{action}</div>
+      </Layout>
+    </Layout>
+  ) : (
+    <Layout rowGap="block">
+      {eyebrowEl}
+      {headingEl}
+      {leadEl}
     </Layout>
   );
 
+  const open = arrangement === 'open';
   const set = (
     <Layout
       as="ul"
       className={cx(
-        arrangement === 'boxed' && styles.cells,
-        arrangement === 'boxed' && shown.length === 3 && styles.three,
-        arrangement === 'boxed' && four && styles.four,
-        arrangement === 'beside' && styles.ruled,
-        arrangement === 'beside' && four && styles.two,
+        !open && styles.cells,
+        !open && shown.length === 3 && styles.three,
+        !open && four && styles.four,
       )}
       columns={
-        above
-          ? { base: 1, md: four ? 2 : 3 }
+        open
+          ? shown.length === 3
+            ? { base: 1, lg: 3 }
+            : four
+              ? { base: 1, md: 2 }
+              : { base: 1, md: 2, xl: 3 }
           : shown.length === 3
             ? { base: 1, xl: 3 }
             : four
               ? { base: 1, lg: 2 }
               : { base: 1, lg: 2, xl: 3 }
       }
-      colGap={arrangement === 'open' ? 'column' : 'none'}
-      rowGap={arrangement === 'open' ? 'column' : arrangement === 'beside' ? 'stack' : 'none'}
+      colGap={open ? 'column' : 'none'}
+      rowGap={open ? 'column' : 'none'}
     >
       {shown.map((item, index) => (
         <li key={`${index}-${item.title}`} className={styles.item}>
-          <Layout
-            columns={above ? 1 : { base: ['auto', 1] }}
-            reverse={above ? false : { base: true }}
-            colGap="block"
-            rowGap="block"
-            align="center"
-            justifyItems="start"
-          >
-            <div className={cx(styles.figure, above && styles.figureAbove)}>
-              <Media image={{ ...item.figure, alt: '' }} sizes={FIGURE_SIZES} fit="contain" />
+          <Layout rowGap="block" justifyItems="start">
+            <div className={styles.figure}>
+              <Media
+                image={{ ...item.figure, alt: '' }}
+                sizes={FIGURE_SIZES}
+                fit="contain"
+                focus={FIGURE_START}
+              />
             </div>
             <Layout rowGap="tight">
               <h3 className={styles.title}>{item.title}</h3>
@@ -203,36 +228,10 @@ export function Reasons({
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="reasons">
-      {arrangement === 'beside' ? (
-        <Layout columns={{ base: 1, xl: [1, 2] }} colGap="section" rowGap="stack">
-          {action ? (
-            <Layout rowGap="stack" pinLast>
-              {head}
-              <div>{action}</div>
-            </Layout>
-          ) : (
-            head
-          )}
-          {framed}
-        </Layout>
-      ) : (
-        <Layout rowGap="stack">
-          {action ? (
-            <Layout
-              columns={{ base: 1, md: [1, 'auto'] }}
-              colGap="column"
-              rowGap="stack"
-              align="baseline"
-            >
-              {head}
-              <div>{action}</div>
-            </Layout>
-          ) : (
-            head
-          )}
-          {framed}
-        </Layout>
-      )}
+      <Layout rowGap="stack">
+        {head}
+        {framed}
+      </Layout>
     </Section>
   );
 }
