@@ -1,7 +1,7 @@
 ---
 title: "A resource row carries its format's glyph"
 date: 2026-10-29
-status: active
+status: superseded
 area: [iconography, cards]
 source: "Owner second review of the 26 Oct copy pages, 29 Oct 2026 (feat/new-copy, home \"Selected thinking\")"
 supersedes: []

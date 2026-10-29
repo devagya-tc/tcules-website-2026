@@ -242,7 +242,7 @@ export default function TeaserSpecimen() {
 
           <Specimen
             title="row · lg · metaAside + ruled + arrow + icon — a resource listing"
-            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column is headed by the format's glyph (`icon`, from TEASER_FORMAT_ICON: Solar Bold content icons, in the accent), then the format and the length as the piece's own page displays them; the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the glyph leads the meta line over the title and the arrow keeps the row's end."
+            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column sets the format's glyph (`icon`, from TEASER_FORMAT_ICON: Solar Bold content icons, in the accent) inline before the format, tight, on one line, and the length a text (16) under it, as the piece's own page displays them (owner, 29 Oct 2026); the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the glyph leads the meta line, a text (16) over the title, and the arrow keeps the row's end."
           >
             <Layout as="ul" rowGap="none">
               <Teaser

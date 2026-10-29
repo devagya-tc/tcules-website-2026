@@ -1,4 +1,12 @@
-import { Cluster, Icon, type IconName, Layout, Media, type MediaImage, Sketch } from '@/components';
+import {
+  Cluster,
+  Icon,
+  type IconName,
+  Layout,
+  Media,
+  type MediaImage,
+  Sketch,
+} from '@/components';
 import { cx } from '@/lib/cx';
 import { CARD_TWO_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
@@ -123,8 +131,10 @@ export type TeaserProps = {
   arrow?: boolean;
   /**
    * The piece's FORMAT glyph (owner, 29 Oct 2026: a resource row "can have format icons"), from the
-   * content icon set (`TEASER_FORMAT_ICON` holds the one glyph per format). It heads the meta: the
-   * first row of a ledger's meta column (`metaAside`), else before the meta line. Decorative: the
+   * content icon set (`TEASER_FORMAT_ICON` holds the one glyph per format). It leads the meta,
+   * inline before the format word on one line: in a ledger's meta column (`metaAside`, the length a
+   * `text` under that line; decisions/2026-10-29-resource-rows-meta-format-then-length), else before
+   * the meta line. Decorative: the
    * format is said in words beside it (`label`), so the glyph is aria-hidden. Ignored with no meta
    * line, because a glyph with no format word beside it would be the only statement of the format.
    */
@@ -279,23 +289,41 @@ export function Teaser({
     </p>
   ) : null;
 
-  const copy = (
+  const metaRow =
+    metaLine && glyph ? (
+      <Cluster
+        colGap="tight"
+        rowGap="inline"
+        className={asideMeta ? styles.metaInline : undefined}
+      >
+        {glyph}
+        {metaLine}
+      </Cluster>
+    ) : (
+      metaLine
+    );
+  const titleEl = <Title className={styles.title}>{title}</Title>;
+  const bodyEl = bodyText ? <p className={styles.body}>{bodyText}</p> : null;
+
+  /* A ledger row's meta line, where it shows (below md), is the row's eyebrow: a `text` (16) over
+     the title, the title and its summary a `tight` pair under it (owner, 29 Oct 2026;
+     decisions/2026-10-29-resource-rows-meta-format-then-length). Every other teaser keeps its meta
+     a `tight` line in the copy's one stack. From md the line is not drawn (the meta column holds
+     it), and a `display: none` item takes no row and no gap. */
+  const copy = asideMeta ? (
+    <Layout rowGap="text">
+      {metaRow}
+      <Layout rowGap="tight">
+        {titleEl}
+        {bodyEl}
+      </Layout>
+    </Layout>
+  ) : (
     <Layout rowGap="tight">
       {!row ? dateBlock : null}
-      {metaLine && glyph ? (
-        <Cluster
-          colGap="tight"
-          rowGap="inline"
-          className={asideMeta ? styles.metaInline : undefined}
-        >
-          {glyph}
-          {metaLine}
-        </Cluster>
-      ) : (
-        metaLine
-      )}
-      <Title className={styles.title}>{title}</Title>
-      {bodyText ? <p className={styles.body}>{bodyText}</p> : null}
+      {metaRow}
+      {titleEl}
+      {bodyEl}
     </Layout>
   );
 
@@ -316,6 +344,7 @@ export function Teaser({
        measure, the thumbnail's track at the end where the list holds one. Below md the column is
        not drawn and the meta line is over the title, as in every other row. */
     const facts = [...(label ? [label] : []), ...metaParts];
+    const [firstFact, ...moreFacts] = facts;
     const thumb = picture || slot;
     const end = thumb || arrowEl;
     inner = (
@@ -326,15 +355,25 @@ export function Teaser({
         colGap="gutter"
         align="start"
       >
-        <Layout rowGap="tight" className={styles.markerAside}>
-          {glyph}
-          <Layout rowGap="inline">
-            {facts.map((fact, i) => (
-              <span key={i} className={cx(styles.meta, i === 0 && label && styles.label)}>
-                {fact}
-              </span>
-            ))}
-          </Layout>
+        {/* The meta column (owner, 29 Oct 2026; decisions/2026-10-29-resource-rows-meta-format-then-length):
+            the format's glyph inline before the format on ONE line, `tight` (8) glyph to label, as
+            the phone's meta line sets it; the length under it a `text` (16) down — a second fact
+            about the piece, not the format's unit, so it reads as its own line, never stacked
+            glyph above label. */}
+        <Layout rowGap="text" className={styles.markerAside}>
+          <Cluster colGap="tight" rowGap="inline" align="center">
+            {glyph}
+            <span className={cx(styles.meta, label && styles.label)}>{firstFact}</span>
+          </Cluster>
+          {moreFacts.length > 0 ? (
+            <Layout rowGap="inline">
+              {moreFacts.map((fact, i) => (
+                <span key={i} className={styles.meta}>
+                  {fact}
+                </span>
+              ))}
+            </Layout>
+          ) : null}
         </Layout>
         {copy}
         {thumb ? (

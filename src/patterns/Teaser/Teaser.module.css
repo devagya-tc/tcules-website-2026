@@ -237,9 +237,9 @@
   text-transform: var(--text-mono-case);
 }
 
-/* The format's glyph (`icon`, owner 29 Oct 2026): the content icon in the accent, heading the meta.
-   Its own box, so the glyph sits on the meta line's centre in the inline form and heads the column
-   in the ledger's. */
+/* The format's glyph (`icon`, owner 29 Oct 2026): the content icon in the accent, leading the meta.
+   Its own box, so the glyph sits on the meta line's centre, inline before the format word, in the
+   copy's meta line and in the ledger's meta column alike. */
 .glyph {
   display: inline-flex;
   color: var(--tsr-glyph-ink);
