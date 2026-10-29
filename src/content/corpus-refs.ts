@@ -1,4 +1,6 @@
 import type { CorpusCaseRef, CorpusMediaBinding } from './corpus-types';
+import { CASE_SLUG_REDIRECTS } from '@/lib/routes';
+
 import { getCorpusPage, listCorpusPages } from './source';
 
 /**
@@ -14,8 +16,14 @@ export async function getCaseRefs(
   routes: readonly string[],
 ): Promise<Record<string, CorpusCaseRef>> {
   const refs: Record<string, CorpusCaseRef> = {};
+  /* Links reach a case by its live slug (the seam rewrites them); a case's own page in the copy may
+     still sit at the slug it was planned under, so that is looked up too. */
+  const planned = new Map(
+    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [`/case-studies/${to}`, `/case-studies/${from}`]),
+  );
   for (const route of routes) {
-    const page = await getCorpusPage(route);
+    const alias = planned.get(route);
+    const page = (await getCorpusPage(route)) ?? (alias ? await getCorpusPage(alias) : null);
     if (!page) continue;
     refs[route] = {
       route,

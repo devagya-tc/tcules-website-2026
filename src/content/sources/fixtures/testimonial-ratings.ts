@@ -53,4 +53,18 @@ export const TESTIMONIAL_RATINGS: Readonly<Record<string, TestimonialRating>> = 
   'DRAFT-CURAMCARE-ONEILL': rating(5),
   /* /case-studies */
   'SSOT-TRISHANYA-RAJU-FOUNDER-THE-WANDERING-RAV': rating(5),
+  /* The 26 Oct copy's review routes (/, /about, /contact, /services, /services/product-design,
+     /expertise, /audits), 29 Oct 2026: same brief, same floor, same P36 replacement. */
+  'DRAFT-CONNECTX-SCENARIOS': rating(5),
+  'DRAFT-EDENAI-SPECS': rating(4.5),
+  'CLUTCH-RINGIER-SAILER': rating(5),
+  'FP-AUXENTIOS-RESEARCH': rating(4.5),
+  'SSOT-ASHOK-MOHANTY-FOUNDER-AUXENTIOS': rating(5),
+  'DRAFT-VOVISTO-GOMES': rating(4.5),
+  'DRAFT-CURAMCARE-APPS': rating(5),
+  'FP-GOLDIMAGE-NAVIGATION': rating(4.5),
+  'FP-WANDERING-PICTURE': rating(5),
+  'DRAFT-NOVUS-RESEARCHER': rating(4.5),
+  'CL-KNOVOS-CANDOUR': rating(5),
+  'UW-RAZEO-METHOD': rating(4.5),
 };

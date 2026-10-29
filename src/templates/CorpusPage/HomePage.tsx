@@ -1,16 +1,6 @@
 import type { ComponentType } from 'react';
 
-import {
-  BrandMark,
-  Button,
-  Icon,
-  isSituationFigureName,
-  Layout,
-  RatingBadge,
-  Section,
-  SituationFigure,
-  Sketch,
-} from '@/components';
+import { isSituationFigureName, Layout, SituationFigure, Sketch } from '@/components';
 import {
   Banner,
   Bento,
@@ -21,15 +11,11 @@ import {
   ContentSectionText,
   CtaRow,
   Gateway,
-  LogoGrid,
-  Reasons,
   type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
   type HeroStat,
-  type LogoGridMark,
 } from '@/patterns';
-import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
 import { splitClaim } from '@/lib/claim';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -47,18 +33,19 @@ import { sketchForRoute } from '@/lib/sketches';
 
 import {
   CorpusHero,
-  EnquiryBand,
-  FaqItems,
   QuoteGroupBand,
+  RecognitionBand,
   bodyOf,
   head,
   headingIdOf,
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { bindingNamed, slugOf } from './images';
-import { formBeforeFaq, isFaqBand, isFormBand } from './order';
-import { bandLinks, labelTitle, leadOf, plain } from './text';
+import { LinkActions } from './CopyBands';
+import { bindingNamed, coverFor, slugOf } from './images';
+import { UnitView, type OfferContext } from './OfferBands';
+import { planOffer, TEMPLATE_BANDS } from './plan';
+import { bandLinks, labelTitle, leadOf, plain, trimEnd } from './text';
 
 export type HomePageProps = {
   page: CorpusPage;
@@ -119,7 +106,19 @@ const linkLines = (item: ItemBlock | undefined) =>
  * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
  * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
-export function HomePage({ page, ratings, avatars, reasons, eyebrows }: HomePageProps) {
+export function HomePage({
+  page,
+  caseRefs = {},
+  shared = {},
+  ratings,
+  avatars,
+  reasons,
+  eyebrows,
+}: HomePageProps) {
+  /* The plan decides every band's kind, surface and arrangement (the Reasons bands' open/beside
+     included, owner 29 Oct 2026, Q1), and the form sits right before the questions. */
+  const units = planOffer(page);
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars };
   return (
     <>
       <CorpusHero
@@ -129,32 +128,15 @@ export function HomePage({ page, ratings, avatars, reasons, eyebrows }: HomePage
         proofLine={false}
         stats={recordStats(page)}
       />
-      {formBeforeFaq(page.bands).map((b) => {
-        if (isFormBand(b))
-          return (
-            <EnquiryBand
-              key={b.id}
-              page={page}
-              band={b}
-              island={{ surface: 'blue', dress: 'card', arrangement: 'halves' }}
-            />
-          );
-        if (isFaqBand(b)) {
-          return (
-            <ContentSection key={b.id} {...head(b)} data-band="D-faq" align="center">
-              <ContentSectionText>
-                <FaqItems band={b} />
-              </ContentSectionText>
-            </ContentSection>
-          );
-        }
-        const Band = BANDS[b.id];
-        if (!Band && process.env.NODE_ENV !== 'production') {
-          console.warn(`HomePage: band "${b.id}" has no renderer; it is not shown.`);
-        }
-        return Band ? (
+      {units.map((unit) => {
+        const b = unit.band;
+        const Band = unit.part === 'b' ? undefined : BANDS[b.id];
+        /* Home composes its own bands (the table below); every other band of the copy renders as
+           the plan names it, so no band is ever skipped (component-map § E, 29 Oct 2026). */
+        if (!Band) return <UnitView key={unit.id} unit={unit} ctx={ctx} />;
+        return (
           <Band
-            key={b.id}
+            key={unit.id}
             page={page}
             b={b}
             ratings={ratings}
@@ -162,7 +144,7 @@ export function HomePage({ page, ratings, avatars, reasons, eyebrows }: HomePage
             reasons={reasons}
             eyebrows={eyebrows}
           />
-        ) : null;
+        );
       })}
     </>
   );
@@ -199,6 +181,8 @@ const RECORD_FORMS: Readonly<Record<string, HeroStat | null>> = {
   'More than 90 projects': { value: '90+', label: 'Projects' },
   'Clients in 19 countries': { value: '19', label: 'Countries with clients' },
   'Based in Ahmedabad, India': null,
+  /* The 26 Oct copy's wording of the same fact (component-map § E home 1). */
+  'Studio in Ahmedabad, India': null,
 };
 
 function recordFact(fact: string): HeroStat | null {
@@ -212,7 +196,8 @@ function recordFact(fact: string): HeroStat | null {
   return { value: /\d[\d.,]*/.exec(fact)?.[0] ?? fact, label: fact };
 }
 
-function recordStats(page: CorpusPage): HeroStat[] {
+/** The hero's record line as figures (home, and About from the same line). */
+export function recordStats(page: CorpusPage): HeroStat[] {
   const [line] = page.hero.proofLines;
   if (!line) return [];
   return plain(line)
@@ -243,53 +228,7 @@ function recordStats(page: CorpusPage): HeroStat[] {
  * NO LINE UNDER THE GRID (owner, home round 2): the badge IS the link to the Clutch profile.
  */
 function Recognition({ b }: BandProps) {
-  const [namesBlock, ratingBlock] = b.blocks.filter(
-    (block): block is ParagraphBlock => block.type === 'paragraph',
-  );
-  const names = namesBlock ? plain(namesBlock.runs).split(' · ') : [];
-  const named = names.flatMap((name) => {
-    const mark = clientMark(name);
-    return mark ? [mark] : [];
-  });
-  const marks: LogoGridMark[] = [
-    ...named,
-    ...CLIENT_MARKS.filter((mark) => !named.includes(mark)),
-  ];
-  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
-  const id = headingIdOf(b);
-  return (
-    <Section id={b.id} data-band="H" aria-labelledby={id}>
-      <LogoGrid
-        marks={marks}
-        badge={
-          rating ? (
-            <RatingBadge
-              score={rating.score}
-              platform={rating.platform}
-              href={rating.href}
-              icon={<Icon name="star" size="sm" />}
-              mark={<BrandMark name="clutch" />}
-            />
-          ) : undefined
-        }
-        context={b.headingText}
-        contextAs="h2"
-        headingId={id}
-        align="center"
-        edges="closed"
-      />
-    </Section>
-  );
-}
-
-/** "**4.8 out of 5 on Clutch** across 13 independent client reviews. [Read the reviews](…)" */
-function ratingOf(block: ParagraphBlock) {
-  const link = block.runs.find((run) => run.type === 'link');
-  if (!link || link.type !== 'link') return undefined;
-  const sentence = plain(block.runs.filter((run) => run !== link)).trim();
-  const match = /^(\d+(?:\.\d+)?)\s+out of \d+\s+on\s+(\S+)/.exec(sentence);
-  if (!match) return undefined;
-  return { score: match[1] ?? '', platform: match[2] ?? '', href: link.href };
+  return <RecognitionBand band={b} />;
 }
 
 /* ── 2 · six situations, the gateway to the services ──────────────────────────────── */
@@ -347,11 +286,140 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
  * whole item links. The head is a proposed eyebrow over the centred heading (P49). One fold at 1440.
  */
 function Situations({ b, eyebrows }: BandProps) {
-  const items = gatewayBoardItems(b);
+  /* The 26 Oct copy has two paths, each a situation, its sentences and two or three links to the
+     services that fit it. Gateway's board was drawn for six single-link situations, so two paths
+     take the composition component-map C10 names: two peer halves, each its SituationFigure, its h3
+     and words, its links stacked. (Mock owed: C10.) */
+  const paths = items(b);
+  const listLinked = (item: ItemBlock) =>
+    item.blocks.some(
+      (block) => block.type === 'list' && block.items.some((i) => i[0]?.type === 'link'),
+    );
+  if (paths.some((item) => linkLines(item).length > 0 || listLinked(item))) {
+    return (
+      <ContentSection
+        {...head(b)}
+        eyebrow={eyebrows?.[b.id]}
+        align="center"
+        data-band="C-router"
+      >
+        <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+          {paths.map((path) => {
+            const links = path.blocks.flatMap((block) =>
+              block.type === 'links' ? block.links : [],
+            );
+            const listLinks = path.blocks.flatMap((block) =>
+              block.type === 'list'
+                ? block.items.flatMap((item) =>
+                    item.length === 1 && item[0]?.type === 'link'
+                      ? [
+                          {
+                            href: item[0].href,
+                            label: item[0].children,
+                            labelText: plain(item[0].children),
+                          },
+                        ]
+                      : [],
+                  )
+                : [],
+            );
+            const all = [...listLinks, ...links];
+            const figure = all
+              .map((link) => sketchForRoute(link.href))
+              .find((scene) => scene && isSituationFigureName(scene));
+            return (
+              <Layout key={path.headingText} rowGap="block" justifyItems="start">
+                {figure && isSituationFigureName(figure) ? (
+                  <SituationFigure name={figure} />
+                ) : null}
+                <Layout rowGap="text">
+                  <h3>{path.headingText}</h3>
+                  {paragraphRuns(path.blocks).map((runs, index) => (
+                    <p key={index}>{plain(runs)}</p>
+                  ))}
+                </Layout>
+                <LinkActions links={all} />
+              </Layout>
+            );
+          })}
+        </Layout>
+      </ContentSection>
+    );
+  }
+  const boardItems = gatewayBoardItems(b);
   return (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
-      <Gateway items={items} arrangement="board" />
+      <Gateway items={boardItems} arrangement="board" />
     </ContentSection>
+  );
+}
+
+/* ── 2b · one studio: the four disciplines as a row of drawn tiles ───────────────── */
+
+/**
+ * "One studio, from the first question to working software": two paragraphs and a link row of the
+ * four disciplines. The approved What-we-do Bento, four equal tiles on four tracks, each the service's
+ * name and its scene (the copy writes no line per service, so the tiles carry none: Bento `body` is
+ * optional, component-map C11/C17), under a full-width head (clickable cards sit under their head).
+ * (Mock owed: C11.)
+ */
+function OneStudio({ b }: BandProps) {
+  const paras = paragraphRuns(b.blocks);
+  const [first, ...rest] = paras;
+  const tiles: BentoItem[] = bandLinks(b).flatMap((link) => {
+    const scene = sketchForRoute(link.href);
+    return scene ? [{ id: link.href, title: link.labelText, href: link.href, scene }] : [];
+  });
+  return (
+    <ContentSection {...head(b)} data-band="C-bento" lead={first ? plain(first) : undefined}>
+      <Layout rowGap="stack">
+        {rest.length > 0 ? (
+          <ContentSectionText>
+            {rest.map((runs, index) => (
+              <p key={index}>{plain(runs)}</p>
+            ))}
+          </ContentSectionText>
+        ) : null}
+        <Bento items={tiles} tracks={4} />
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/* ── 2c · the people, and how the designers use AI ─────────────────────────────── */
+
+/** The studio's people: the team photograph under the two paragraphs, its two links stacked. */
+function People({ page, b }: BandProps) {
+  const [first, ...rest] = paragraphRuns(b.blocks);
+  const binding = page.composition.mediaBindings.find(
+    (m) => m.bound && m.supportsSection === b.id,
+  );
+  return (
+    <Banner
+      form="below"
+      id={b.id}
+      headingId={headingIdOf(b)}
+      heading={b.headingText}
+      lead={first ? plain(first) : undefined}
+      /* The words in their order: the second paragraph, then the two links (stacked). */
+      support={
+        <Layout rowGap="stack">
+          {rest.length > 0 ? (
+            <Layout rowGap="text">
+              {rest.map((runs, index) => (
+                <p key={index}>{plain(runs)}</p>
+              ))}
+            </Layout>
+          ) : null}
+          <LinkActions links={bandLinks(b)} />
+        </Layout>
+      }
+      image={
+        binding
+          ? { ...corpusImage(binding), kind: 'photograph' }
+          : { ...placeholderImage(page.route, b.id), kind: 'photograph' }
+      }
+    />
   );
 }
 
@@ -441,33 +509,53 @@ function SelectedWork({ page, b }: BandProps) {
   const featured = indexed.filter((entry) => entry.quote);
   const listed = indexed.filter((entry) => !entry.quote);
 
-  const body = (
-    <Layout rowGap="section">
-      <Layout rowGap="gutter">
-        {featured.map(({ item, index }, row) => {
-          const { link, story, image } = parts(item, index);
-          /* A featured case without its link or cover falls back to the plain card. */
-          if (!link || !image) return <ul key={item.headingText}>{card(item, index)}</ul>;
-          return (
-            <CaseCard
-              key={item.headingText}
-              {...splitClaim(item.headingText)}
-              {...story}
-              href={link.href}
-              ctaLabel={link.labelText}
-              image={image}
-              reverse={row % 2 === 1}
-            />
-          );
-        })}
-      </Layout>
-      {listed.length > 0 ? (
-        <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
-          {listed.map(({ item, index }) => card(item, index))}
+  /* The 26 Oct copy quotes no case (component-map § E home 5, Q2 default): three peers, one covered
+     set three across at md, never a phone scroll (home never hides a card). */
+  const peers: BlockCardSetItem[] = cases.map((item, index) => {
+    const { link, story, image } = parts(item, index);
+    return {
+      id: item.headingText,
+      title: item.headingText,
+      ...story,
+      ...(link ? { href: link.href, ctaLabel: link.labelText } : {}),
+      /* Every card its case's cover (a peer set is all-covered or none): the page's binding that
+         names the case, else the case's own cover, else its placeholder (coverFor). */
+      media: {
+        type: 'image' as const,
+        image: image ?? coverFor(page, item.headingText.split(':')[0] ?? item.headingText),
+      },
+    };
+  });
+  const body =
+    featured.length === 0 ? (
+      <BlockCardSet items={peers} lead="none" across={3} size="md" cue="cta" scroll="never" />
+    ) : (
+      <Layout rowGap="section">
+        <Layout rowGap="gutter">
+          {featured.map(({ item, index }, row) => {
+            const { link, story, image } = parts(item, index);
+            /* A featured case without its link or cover falls back to the plain card. */
+            if (!link || !image) return <ul key={item.headingText}>{card(item, index)}</ul>;
+            return (
+              <CaseCard
+                key={item.headingText}
+                {...splitClaim(item.headingText)}
+                {...story}
+                href={link.href}
+                ctaLabel={link.labelText}
+                image={image}
+                reverse={row % 2 === 1}
+              />
+            );
+          })}
         </Layout>
-      ) : null}
-    </Layout>
-  );
+        {listed.length > 0 ? (
+          <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
+            {listed.map(({ item, index }) => card(item, index))}
+          </Layout>
+        ) : null}
+      </Layout>
+    );
   return closing ? (
     <ContentSection
       {...head(b)}
@@ -532,52 +620,7 @@ function Capabilities({ b }: BandProps) {
   );
 }
 
-/* ── 5 · why Tcules: four reasons 2×2, each beside its drawing ───────────────────── */
-
-/**
- * The Reasons band, `open` (owner, 19 Oct 2026): four short reasons 2×2 (owner, 22 Oct 2026) with
- * no rules, each drawing beside its words, one fold at 1440. It replaces the round-3 run of four photo banners, which took
- * four screens and put three quotes next to the client-voices band. No proof inside the band: the
- * quotes stay in "What clients say" (P48).
- *
- * The reasons are PLACEHOLDERS (P48's length guide) until the content team writes four; the heading
- * and the closing link stay the corpus's.
- */
-function WhyTcules({ b, reasons }: BandProps) {
-  if (!reasons || reasons.band !== b.id) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(`HomePage: "${b.id}" has no reasons to show; the band is not rendered.`);
-    }
-    return null;
-  }
-  /* The band's closing link is authored after the last reason, so the parser files it there. */
-  const closing = linkLines(items(b).at(-1))[0];
-  return (
-    <Reasons
-      id={b.id}
-      heading={b.headingText}
-      headingId={headingIdOf(b)}
-      items={reasons.items.map((item) => ({
-        title: item.title,
-        body: item.body,
-        figure: { ...item.figure, alt: '', kind: 'illustration' },
-      }))}
-      action={
-        closing ? (
-          <Button
-            as="a"
-            href={closing.href}
-            emphasis="link"
-            size="md"
-            icon={<Icon name="arrow-right" />}
-          >
-            {closing.labelText}
-          </Button>
-        ) : undefined
-      }
-    />
-  );
-}
+/* ── 5 · why Tcules: the plan's Reasons band (OfferBands `reasons`, component-map C1) ──── */
 
 /* ── 6 · what clients say: the voices as one wall of rated cards ─────────────────── */
 
@@ -588,19 +631,41 @@ function ClientVoices({ b, ratings, avatars }: BandProps) {
 /* ── 7 · how we use AI: one idea and one link ────────────────────────────────────── */
 
 function AiPractice({ page, b }: BandProps) {
-  const lead = b.blocks.find((x): x is ParagraphBlock => x.type === 'paragraph');
-  const link = bandLinks(b)[0];
+  const [lead, ...rest] = paragraphRuns(b.blocks);
+  /* The band's link closes its last paragraph ("… [See a typical AI-assisted design run](…)"): the
+     link is the banner's action, and the sentence before it stays, under the lead. */
+  const last = rest.at(-1);
+  const trailing = last?.at(-1)?.type === 'link' ? last.at(-1) : undefined;
+  const link =
+    trailing && trailing.type === 'link'
+      ? { href: trailing.href, labelText: plain(trailing.children) }
+      : bandLinks(b)[0];
+  const support = rest
+    .map((runs, index) =>
+      index === rest.length - 1 && trailing ? trimEnd(runs.slice(0, -1)) : runs,
+    )
+    .filter((runs) => plain(runs).trim().length > 0);
   return (
     <Banner
       form="beside"
       mediaSide="start"
       headingId={headingIdOf(b)}
       heading={b.headingText}
-      lead={lead ? plain(lead.runs) : undefined}
-      actions={
-        link ? (
-          <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
-        ) : undefined
+      lead={lead ? plain(lead) : undefined}
+      /* The words in their order: the sentence before the link, then the link as the action. */
+      support={
+        <Layout rowGap="stack">
+          {support.length > 0 ? (
+            <Layout rowGap="text">
+              {support.map((runs, index) => (
+                <p key={index}>{plain(runs)}</p>
+              ))}
+            </Layout>
+          ) : null}
+          {link ? (
+            <CtaRow rule={false} actions={[{ label: link.labelText, href: link.href }]} />
+          ) : null}
+        </Layout>
       }
       image={{ ...placeholderImage(page.route, b.id), kind: 'photograph' }}
     />
@@ -639,13 +704,23 @@ function Expertise({ page, b }: BandProps) {
 
 /* ── The band table: the content team's ids, each to its renderer ─────────────────── */
 
-const BANDS: Readonly<Record<string, ComponentType<BandProps>>> = {
+/** Home's own bands (plan.ts `TEMPLATE_BANDS['/']`); every other band renders as the plan names it. */
+const HOME_BANDS: Readonly<
+  Record<(typeof TEMPLATE_BANDS)['/'][number], ComponentType<BandProps>>
+> = {
   'client-recognition': Recognition,
   'product-situations': Situations,
+  'product-design': OneStudio,
   'selected-work': SelectedWork,
-  capabilities: Capabilities,
-  'why-tcules': WhyTcules,
-  'client-voices': ClientVoices,
+  testimonials: ClientVoices,
+  people: People,
   'ai-native-practice': AiPractice,
   expertise: Expertise,
+};
+
+const BANDS: Readonly<Record<string, ComponentType<BandProps>>> = {
+  ...HOME_BANDS,
+  /* The earlier copy's ids, for a page that still carries them. */
+  capabilities: Capabilities,
+  'client-voices': ClientVoices,
 };

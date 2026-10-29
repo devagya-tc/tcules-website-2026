@@ -1,3 +1,5 @@
+import { Fragment, type ReactNode } from 'react';
+
 import { Layout, Prose } from '@/components';
 import {
   Banner,
@@ -32,7 +34,10 @@ import {
 } from './blocks';
 import { coverFor, slotImage, slugOf } from './images';
 import styles from './CorpusPage.module.css';
-import { PlainPage } from './PlainPage';
+import { LinkActions } from './CopyBands';
+import { recordStats as homeRecordStats } from './HomePage';
+import { UnitView, type OfferContext } from './OfferBands';
+import { planOffer, TEMPLATE_BANDS } from './plan';
 import { bandLinks, blocksOf, boldLead, html, labelTitle, plain, trimStart } from './text';
 
 export type AboutPageProps = {
@@ -46,7 +51,7 @@ export type AboutPageProps = {
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
 
 /** Every band id the About composition reads by name. */
-const ABOUT_BANDS = [
+const LEGACY_ABOUT_BANDS = [
   'ahmedabad-is-part-of-how-we-work',
   'the-practice-keeps-moving',
   'what-we-do',
@@ -68,7 +73,114 @@ const ABOUT_BANDS = [
  * reshaped About, so the template checks this and falls back to `PlainPage` rather than crash.
  */
 const aboutPageFits = (page: CorpusPage): boolean =>
-  ABOUT_BANDS.every((id) => page.bands.some((b) => b.id === id));
+  LEGACY_ABOUT_BANDS.every((id) => page.bands.some((b) => b.id === id));
+
+type AboutBandProps = { page: CorpusPage; band: CorpusBand };
+
+/**
+ * The 26 Oct copy's About (component-map § E /about, 29 Oct 2026): the ids About composes itself.
+ * Every other band renders through the plan's id table (plan.ts `BAND_KINDS`) and OfferBands, so no
+ * band of the copy is skipped: what-we-do as destinations, difference / who-uses-tcules / how-we-work
+ * as sheets, testimonials as the wall, the questions, the close.
+ */
+const ABOUT_BANDS: Readonly<
+  Record<(typeof TEMPLATE_BANDS)['/about'][number], (props: AboutBandProps) => ReactNode>
+> = {
+  leadership: LeadershipBand,
+  'company-record': ({ page }) => <CompanyRecord page={page} />,
+};
+
+/** The 26 Oct copy's About: the hero with the record as figures, then every band in order. */
+function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
+  const units = planOffer(page);
+  const ctx: OfferContext = { page, caseRefs: caseRefs ?? {}, shared: {}, ratings };
+  return (
+    <>
+      <CorpusHero page={page} proofLine={false} stats={homeRecordStats(page)} />
+      {units.map((unit) => {
+        const Band =
+          unit.part === 'b'
+            ? undefined
+            : (ABOUT_BANDS as Readonly<Record<string, (props: AboutBandProps) => ReactNode>>)[
+                unit.band.id
+              ];
+        return Band ? (
+          <Fragment key={unit.id}>
+            <Band page={page} band={unit.band} />
+          </Fragment>
+        ) : (
+          <UnitView key={unit.id} unit={unit} ctx={ctx} />
+        );
+      })}
+    </>
+  );
+}
+
+/**
+ * Who founded Tcules (G17): the founders as profile cards under the head and its lead (ruling
+ * 2026-10-12-people-get-profile-cards); then the studio's two `###` (The Ahmedabad studio, The
+ * practice keeps moving) as a part of their own beside the team photograph, with the closing links.
+ */
+function LeadershipBand({ page, band: b }: AboutBandProps) {
+  const blocks = b.blocks.filter((block) => block.type !== 'comment');
+  const lead = blocks[0]?.type === 'paragraph' ? plain(blocks[0].runs) : undefined;
+  const people = items(b).filter((item) =>
+    item.blocks.some(
+      (block) =>
+        block.type === 'links' && block.links.some((l) => /linkedin\.com\/in\//.test(l.href)),
+    ),
+  );
+  const studio = items(b).filter((item) => !people.includes(item));
+  const closing = studio.flatMap((item) => {
+    const lines = item.blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
+    return lines;
+  });
+  return (
+    <>
+      <ContentSection {...head(b)} data-band="P" lead={lead}>
+        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+          {people.map((item) => {
+            const [name = item.headingText, ...role] = item.headingText.split(', ');
+            const link = item.blocks.flatMap((block) =>
+              block.type === 'links' ? block.links : [],
+            )[0];
+            const bio = paragraphRuns(item.blocks).map(plain).join(' ');
+            return (
+              <ProfileCard
+                key={item.headingText}
+                name={name}
+                role={role.join(', ') || undefined}
+                bio={bio || undefined}
+                portrait={placeholderImage(page.route, b.id, slugOf(name))}
+                linkedin={link ? { label: link.labelText, href: link.href } : undefined}
+              />
+            );
+          })}
+        </Layout>
+      </ContentSection>
+      {studio.length > 0 ? (
+        <ContentSection
+          id={`${b.id}-2`}
+          data-band="B"
+          arrangement="media"
+          media={{ image: slotImage(page, b.id), side: 'end', weight: 'photo' }}
+        >
+          <Layout rowGap="stack">
+            {studio.map((item) => (
+              <Layout key={item.headingText} rowGap="block">
+                <h3>{item.headingText}</h3>
+                <ContentSectionText>
+                  <Prose html={paragraphRuns(item.blocks).map(html).join('')} />
+                </ContentSectionText>
+              </Layout>
+            ))}
+            {closing.length > 0 ? <LinkActions links={closing} /> : null}
+          </Layout>
+        </ContentSection>
+      ) : null}
+    </>
+  );
+}
 
 const band = (page: CorpusPage, id: string): CorpusBand => {
   const found = page.bands.find((b) => b.id === id);
@@ -110,8 +222,10 @@ function Text({
  * `studio`, so the first viewport is not a wall of text.
  */
 export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
-  /* The 26 Oct 2026 copy reshaped About's bands: until this composition is redone, the fallback. */
-  if (!aboutPageFits(page)) return <PlainPage page={page} />;
+  /* The 26 Oct 2026 copy reshaped About's bands: it composes from the plan (AboutCopy). The earlier
+     composition below stays for a page that still carries the earlier bands. */
+  if (!aboutPageFits(page))
+    return <AboutCopy page={page} caseRefs={caseRefs} ratings={ratings} />;
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>
@@ -143,7 +257,10 @@ export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
  */
 const RECORD_FIGURES: Readonly<Record<string, (value: string) => HeroStat>> = {
   Founded: (value) => ({ value, label: 'Founded' }),
-  Projects: (value) => ({ value: value.replace(/^More than (\d+)$/u, '$1+'), label: 'Projects' }),
+  Projects: (value) => ({
+    value: value.replace(/^More than (\d+)$/u, '$1+'),
+    label: 'Projects',
+  }),
   'Client reach': (value) => ({
     value: /\d+/u.exec(value)?.[0] ?? value,
     label: 'Countries with clients',
@@ -306,7 +423,13 @@ function Difference({ page }: { page: CorpusPage }) {
 /* ── 6 · how Tcules works: five principles, closed ───────────────────────────── */
 
 /* Each principle's drawing, in the authored order (EngagementOptions' scopes). */
-const HOW_SCOPES: readonly EngagementScope[] = ['start', 'direct', 'inside', 'overlap', 'commercial'];
+const HOW_SCOPES: readonly EngagementScope[] = [
+  'start',
+  'direct',
+  'inside',
+  'overlap',
+  'commercial',
+];
 
 /**
  * Five working principles as the "Ways to work with us" cards (owner, 11 Oct 2026): a drawing each on
@@ -367,7 +490,9 @@ function Leadership({ page }: { page: CorpusPage }) {
               bio={leader.bio.length > 0 ? leader.bio.map(plain).join(' ') : undefined}
               portrait={placeholderImage(page.route, b.id, slugOf(leader.name))}
               linkedin={
-                leader.link ? { label: leader.link.labelText, href: leader.link.href } : undefined
+                leader.link
+                  ? { label: leader.link.labelText, href: leader.link.href }
+                  : undefined
               }
             />
           ))}
@@ -455,7 +580,9 @@ function Lab({
   band: CorpusBand;
   runs: readonly InlineRun[];
 }) {
-  const link = runs.find((run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link');
+  const link = runs.find(
+    (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
+  );
   const name = link ? plain(link.children) : 'Future Interfaces Lab';
   return (
     <Banner

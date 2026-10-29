@@ -23,6 +23,12 @@
   text-wrap: var(--text-running-wrap);
 }
 
+/* The words after an independent score ("from 13 reviews."), beside its badge under a proof wall. */
+.ratingDetail {
+  font: var(--text-body-sm);
+  color: var(--cpg-ink-muted);
+}
+
 /* The persona legend: the set's two header words once, above the cards, in the eyebrow voice.
    Mono is always uppercase and in presentation only, so the case is the stylesheet's. */
 .legend {

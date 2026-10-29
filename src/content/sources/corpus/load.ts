@@ -12,6 +12,7 @@ import type {
   CorpusMediaBinding,
   CorpusPage,
 } from '../../corpus-types.ts';
+import { CASE_SLUG_REDIRECTS } from '../../../lib/routes.ts';
 import { parseBody } from './parse-body.ts';
 
 /** The corpus directory: `_pages/` at the repo root, one markdown file per page. */
@@ -154,6 +155,31 @@ function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string
 }
 
 /** Parse one corpus file's text into a page. Throws with the file name on a malformed file. */
+/**
+ * Every link to a case study points at its LIVE slug (component-map C3, 29 Oct 2026). The copy links
+ * the slugs its own case pages were planned under; the 20 live cases keep Strapi's (owner, 11 Oct
+ * 2026), and `CASE_SLUG_REDIRECTS` names the move. Rewritten here, at the seam, so no page reaches a
+ * case through a redirect and no template learns that two slugs exist. Pure: a new tree, the words
+ * untouched.
+ */
+const CASE_PATH = /^\/case-studies\/([^/#?]+)(.*)$/;
+function liveHref(href: string): string {
+  const match = CASE_PATH.exec(href);
+  const live = match ? CASE_SLUG_REDIRECTS[match[1] ?? ''] : undefined;
+  return live ? `/case-studies/${live}${match?.[2] ?? ''}` : href;
+}
+function liveCaseLinks<T>(node: T): T {
+  if (Array.isArray(node)) return node.map(liveCaseLinks) as T;
+  if (node && typeof node === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node)) {
+      out[key] = key === 'href' && typeof value === 'string' ? liveHref(value) : liveCaseLinks(value);
+    }
+    return out as T;
+  }
+  return node;
+}
+
 export function parseCorpusFile(file: string, text: string): CorpusPage {
   try {
     const { data, body } = splitFrontmatter(text);
@@ -166,7 +192,7 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const release = dict(data.release);
     const search = dict(data.search_context);
     const structured = dict(data.structured_data);
-    const { hero, bands } = parseBody(body);
+    const { hero, bands } = liveCaseLinks(parseBody(body));
     const comp = composition(data.page_composition);
     assignTestimonialIds(bands, comp.testimonialIds);
     return {

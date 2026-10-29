@@ -1,6 +1,15 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Media, type SectionSurface } from '@/components';
+import {
+  BrandMark,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  RatingBadge,
+  Section,
+  type SectionSurface,
+} from '@/components';
 import {
   Accordion,
   Breadcrumbs,
@@ -11,9 +20,11 @@ import {
   EnquiryForm,
   type EnquiryDress,
   ListCard,
+  LogoGrid,
   PageHero,
   Proof,
   type AccordionItem,
+  type CtaContact,
   type HeroActions,
   type HeroCredit,
   type HeroDates,
@@ -22,7 +33,9 @@ import {
   type ProofQuote,
   TestimonialWall,
   type TestimonialItem,
+  type LogoGridMark,
 } from '@/patterns';
+import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
 import { parseAttribution } from '@/lib/attribution';
 import type {
   CorpusBand,
@@ -254,25 +267,132 @@ export function QuoteGroupBand({
   band,
   ratings,
   avatars,
+  surface = 'tint',
 }: {
   band: CorpusBand;
   ratings?: RatingsById;
   avatars?: AvatarsById;
+  /** Default tint (the proof band). The plan passes paper where a neighbour is already tint. */
+  surface?: 'paper' | 'tint';
 }) {
-  const lead = band.blocks.find((block) => block.type === 'paragraph');
+  const firstQuote = band.blocks.findIndex((block) => block.type === 'quote');
+  const lead = band.blocks.find(
+    (block, index): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+      block.type === 'paragraph' && index < firstQuote && !ratingOf(block),
+  );
   const items = band.blocks.flatMap((block) =>
     block.type === 'quote' ? [testimonialItem(block, ratings, avatars)] : [],
   );
+  /* The independent score the copy closes the band on ("**4.8 on Clutch** from 13 reviews. [Read the
+     reviews](…)"), as the band's footer: the badge carries the score, the platform and the link to
+     the reviews (it IS that link, as on home: owner, home round 2), the count follows it in words
+     (component-map C5). */
+  const ratingBlock = band.blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+      block.type === 'paragraph' && ratingOf(block) !== undefined,
+  );
+  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const footer = rating ? (
+    <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
+      <RatingBadge
+        score={rating.score}
+        platform={rating.platform}
+        href={rating.href}
+        icon={<Icon name="star" size="sm" />}
+        mark={<BrandMark name="clutch" />}
+      />
+      {rating.detail ? <p className={styles.ratingDetail}>{rating.detail}</p> : null}
+    </Cluster>
+  ) : undefined;
   return (
     <ContentSection
       {...head(band)}
       data-band="G"
-      surface="tint"
+      surface={surface}
       align="center"
-      lead={lead?.type === 'paragraph' ? plain(lead.runs) : undefined}
+      lead={lead ? plain(lead.runs) : undefined}
+      footer={footer}
     >
       <TestimonialWall items={items} />
     </ContentSection>
+  );
+}
+
+/**
+ * An independent score line: "**4.8 out of 5 on Clutch** across 13 independent client reviews.
+ * [Read the reviews](…)" (earlier copy) or "**4.8 on Clutch** from 13 reviews. [Read the reviews](…)"
+ * (26 Oct copy). The score, the platform, the reviews' link, and the words between the claim and the
+ * link ("from 13 reviews.") as `detail`.
+ */
+export function ratingOf(
+  block: CorpusBlock,
+): { score: string; platform: string; href: string; detail?: string } | undefined {
+  if (block.type !== 'paragraph') return undefined;
+  const link = block.runs.find((run) => run.type === 'link');
+  if (!link || link.type !== 'link') return undefined;
+  const [first, ...rest] = block.runs;
+  const claim = first?.type === 'strong' ? plain(first.children) : '';
+  const sentence = plain(block.runs.filter((run) => run !== link)).trim();
+  const match =
+    /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+?)\.?$/.exec(claim) ??
+    /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+)/.exec(sentence);
+  if (!match) return undefined;
+  const detail = claim ? plain(rest.filter((run) => run !== link)).trim() : undefined;
+  return {
+    score: match[1] ?? '',
+    platform: (match[2] ?? '').replace(/\.$/, ''),
+    href: link.href,
+    ...(detail ? { detail } : {}),
+  };
+}
+
+/* ── Client recognition (home, and every hub that opens on it) ───────────────── */
+
+/**
+ * Who has worked with us: the boxed LogoGrid, centred, its heading the band's (kit home 2; owner,
+ * 10 Oct 2026). The clients the copy names lead, in its order, where the studio holds their file;
+ * the rest of the approved wall follows. A rating authored in the band leads the grid as its badge.
+ * Shared by home and the hubs (component-map § A `client-recognition`).
+ */
+export function RecognitionBand({ band }: { band: CorpusBand }) {
+  const paragraphsIn = band.blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const namesBlock = paragraphsIn.find((block) => !ratingOf(block));
+  const ratingBlock = paragraphsIn.find((block) => ratingOf(block));
+  const names = namesBlock ? plain(namesBlock.runs).split(' · ') : [];
+  const named = names.flatMap((name) => {
+    const mark = clientMark(name);
+    return mark ? [mark] : [];
+  });
+  const marks: LogoGridMark[] = [
+    ...named,
+    ...CLIENT_MARKS.filter((mark) => !named.includes(mark)),
+  ];
+  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const id = headingIdOf(band);
+  return (
+    <Section id={band.id} data-band="H" aria-labelledby={id}>
+      <LogoGrid
+        marks={marks}
+        badge={
+          rating ? (
+            <RatingBadge
+              score={rating.score}
+              platform={rating.platform}
+              href={rating.href}
+              icon={<Icon name="star" size="sm" />}
+              mark={<BrandMark name="clutch" />}
+            />
+          ) : undefined
+        }
+        context={band.headingText}
+        contextAs="h2"
+        headingId={id}
+        align="center"
+        edges="closed"
+      />
+    </Section>
   );
 }
 
@@ -462,6 +582,23 @@ export function EnquiryBand({
 )) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
   const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
+  /* The band's other lines, kept in the copy half as the close's contact strip (component-map § A
+     `enquiry`): the independent score ("**4.8 on Clutch** from 13 reviews. [Read the reviews]") and
+     the other way in ("Or email [hello@tcules.com]"), each its words as the key and its link as the
+     value. Text never crosses the island edge. */
+  const contact = band.blocks.flatMap((block): CtaContact[] => {
+    if (block === lead || block.type !== 'paragraph') return [];
+    const link = block.runs.find(
+      (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
+    );
+    if (!link) return [];
+    const words = plain(block.runs.filter((run) => run !== link))
+      .replace(/\s+([.,])/g, '$1')
+      .replace(/[.\s]+$/, '')
+      .trim();
+    return [{ label: words, value: plain(link.children), href: link.href }];
+  });
+  const contactProps = contact.length > 0 ? { contact } : {};
   if (island?.arrangement === 'halves') {
     return (
       <CtaSection
@@ -473,6 +610,7 @@ export function EnquiryBand({
         art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
         heading={band.headingText}
         body={body}
+        {...contactProps}
         form={corpusEnquiryForm(page, band, { dress: ENQUIRY_DRESS[island.dress] })}
       />
     );

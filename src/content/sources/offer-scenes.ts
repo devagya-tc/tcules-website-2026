@@ -27,6 +27,18 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         '"Every screen looks slightly different."': 'symptom-consistent',
         '"What ships doesn\'t match the design."': 'symptom-match',
       }),
+      /* The 26 Oct copy's seven services you can hire on their own (owner, 29 Oct 2026, Q7): the five
+         specialist scenes, and two drawn for this band, New Product Design and the UX & Product
+         Audit. */
+      'services-on-their-own': {
+        '/services/product-design/ux-research': 'specialist-research',
+        '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
+        '/services/product-design/interaction-ui-design': 'specialist-ui',
+        '/services/product-design/data-visualisation': 'specialist-dataviz',
+        '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
+        '/services/new-product-design-first-release': 'specialist-new-product',
+        '/audits/ux-product-audit': 'specialist-audit',
+      },
       'specialist-capabilities': {
         '/services/product-design/ux-research': 'specialist-research',
         '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
