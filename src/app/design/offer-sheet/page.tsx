@@ -132,6 +132,31 @@ export default function OfferSheetSpecimen() {
       <OfferSheet heading="What you get" headingId="ofs-none" items={FOUR} />
 
       <Variation
+        id="statements"
+        title="2b · Statements, no titles"
+        note="Promises authored as one sentence with no lead: each in the body role, no h3. A set is titled throughout or not at all (review 29 Oct, product-design What you get)."
+      />
+      <OfferSheet
+        heading="What you receive"
+        headingId="ofs-statements"
+        across={3}
+        items={[
+          {
+            id: 's1',
+            body: 'A tested brief: what goes in, what waits and what stays out, checked against the people who use the product.',
+          },
+          {
+            id: 's2',
+            body: 'A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.',
+          },
+          {
+            id: 's3',
+            body: 'Clickable or coded prototypes, tested with people who match your users.',
+          },
+        ]}
+      />
+
+      <Variation
         id="three-across"
         title="2c · Five, three across"
         note="`across={3}` with no aside: five principles read 3 + 2 instead of two up to a lonely fifth (healthtech's &ldquo;How we design health products&rdquo;)."

@@ -3,6 +3,11 @@ import type { InlineRun } from './inline';
 
 const CASE_PATH = /^\/case-studies\/[^/#?]+/;
 
+/** The case route a link opens, without its fragment or query (the key `getCaseRefs` files it under). */
+export function caseRouteOf(href: string): string {
+  return CASE_PATH.exec(href)?.[0] ?? href;
+}
+
 function linksIn(runs: readonly InlineRun[], out: Set<string>) {
   for (const run of runs) {
     if (run.type === 'link') {

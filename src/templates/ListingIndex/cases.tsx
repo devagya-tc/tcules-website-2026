@@ -100,7 +100,14 @@ const sized = (cover: BlockCardImage) => ({
 function CaseGroupShape({ items, first }: { items: readonly CaseItem[]; first: boolean }) {
   /* A featured case needs its cover to be the one card: without one it joins the set. */
   const featured = items.filter((item) => item.featured && item.cover && item.href);
-  const rest = items.filter((item) => !featured.includes(item));
+  /* A case listed before its page exists ("Case study coming soon") has no link and no real cover:
+     as a cover card it was the largest placeholder on the page (CuramCare, review 29 Oct). It reads
+     as a plain row under its group's cards until its page and cover publish. In a group of rows it
+     keeps its place among them. */
+  const others = items.filter((item) => !featured.includes(item));
+  const asRows = others.length >= 5 && !(first && others.length >= 4);
+  const pending = asRows ? [] : others.filter((item) => !item.href);
+  const rest = others.filter((item) => !pending.includes(item));
 
   return (
     <Layout rowGap="stack">
@@ -120,6 +127,13 @@ function CaseGroupShape({ items, first }: { items: readonly CaseItem[]; first: b
         </Layout>
       ) : null}
       {rest.length > 0 ? <CaseSet items={rest} first={first} /> : null}
+      {pending.length > 0 ? (
+        <Layout as="ul" rowGap="none">
+          {pending.map((item) => (
+            <ListCard key={item.id} titleAs="h3" title={item.title} {...bodyOf(item)} />
+          ))}
+        </Layout>
+      ) : null}
     </Layout>
   );
 }

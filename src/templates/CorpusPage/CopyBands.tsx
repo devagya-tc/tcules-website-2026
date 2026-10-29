@@ -3,7 +3,6 @@ import { Fragment, type ReactNode } from 'react';
 import { Button, Icon, Layout, Media, Prose } from '@/components';
 import {
   Bento,
-  BlockCard,
   BlockCardSet,
   Callout,
   ContentSection,
@@ -31,8 +30,17 @@ import { sketchForRoute } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import { hasSlot, slotImage, slugOf } from './images';
-import { kindOf, signature } from './plan';
-import { boldLead, hasLink, labelTitle, leadOf, linkLead, plain, trimStart } from './text';
+import { signature } from './plan';
+import {
+  boldLead,
+  hasLink,
+  labelTitle,
+  leadOf,
+  linkLead,
+  plain,
+  sentenceLead,
+  trimStart,
+} from './text';
 
 /**
  * The 26 Oct 2026 copy's band renderers (docs/page-build/component-map.md § A, § B; 29 Oct 2026),
@@ -264,8 +272,8 @@ function sheetItem(runs: readonly InlineRun[]): OfferSheetItem {
       body: body.charAt(0).toUpperCase() + body.slice(1),
     };
   }
-  const link = linkIn(runs);
-  return link ? { title: text, href: link.href } : { title: text };
+  /* No lead: the sentence is a statement, never a title (OfferSheetItem `title`). */
+  return { id: text, ...bodyFields(trimStart(runs)) };
 }
 
 export type SheetParts = {
@@ -303,6 +311,11 @@ export function sheetParts(band: CorpusBand): SheetParts {
   const at = blocks[start];
   if (at?.type === 'list') {
     items = at.items.map(sheetItem);
+    /* A set is titled throughout or not at all (review 29 Oct): where any promise is authored with
+       no lead of its own, every promise is a statement, its words whole in the body role. */
+    if (items.some((item) => !item.title)) {
+      items = at.items.map((runs) => ({ id: plain(runs), ...bodyFields(trimStart(runs)) }));
+    }
     end = start + 1;
   } else if (at?.type === 'item') {
     while (blocks[end]?.type === 'item') {
@@ -376,7 +389,9 @@ export function SheetBand({
 }) {
   const parts = sheetParts(band);
   const items = parts.items.map((item) => {
-    const scene = scenes?.(item.title);
+    /* A statement's scene is filed under its words, or under the words before its colon. */
+    const key = item.title ?? item.id ?? '';
+    const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);
     return scene ? { ...item, scene } : item;
   });
   const note =
@@ -385,7 +400,7 @@ export function SheetBand({
     ) : undefined;
   if (items.length > 6) {
     const rows: ReadDownRow[] = items.map((item) => ({
-      title: item.title,
+      title: item.title ?? item.id ?? '',
       ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : item.body ? { body: item.body } : {}),
     }));
     return (
@@ -488,7 +503,8 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
 const stepTitle = (label: readonly InlineRun[]) => labelTitle(label).replace(/^\d+\.\s*/, '');
 
 function stepOf(runs: readonly InlineRun[]): Step {
-  const lead = boldLead(runs);
+  const found = boldLead(runs);
+  const lead = found ? sentenceLead(found) : null;
   if (lead) {
     const body = trimStart(lead.body);
     return {
@@ -533,6 +549,25 @@ export function MethodBand({ band }: { band: CorpusBand }) {
     steps = list.items.map(stepOf);
     from = listAt;
     to = listAt + 1;
+  } else if (
+    blocks.length >= 2 &&
+    blocks.length <= 5 &&
+    blocks.every((block) => block.type === 'paragraph' && !hasLink(block.runs))
+  ) {
+    /* Instructions authored as plain paragraphs, one each (/glossary `how-to-use`, review 29 Oct:
+       the first of seven text bands in a row): each paragraph a step, its first sentence the title
+       and the rest its body. Every word kept; no lead is taken, because the first paragraph is the
+       first instruction. */
+    steps = blocks.map((block) => {
+      const text = block.type === 'paragraph' ? plain(block.runs).trim() : '';
+      const match = /^(.+?[.?!])\s+([\s\S]+)$/.exec(text);
+      return match ? { title: match[1] ?? text, body: match[2] ?? '' } : { title: text };
+    });
+    return (
+      <ContentSection {...head(band)} data-band="F">
+        <Steps steps={steps} />
+      </ContentSection>
+    );
   }
   const before = rest.slice(0, from);
   const after = rest.slice(to);
@@ -662,7 +697,15 @@ export function RelatedBand({ band }: { band: CorpusBand }) {
      and two by their counts (29 Oct 2026). Other lists keep one column under four. */
   const termIndex = entries.length >= 2 && /^A+P?$/.test(signature(band));
   return (
-    <ContentSection {...head(band)} data-band="K" lead={leadText} footer={footer}>
+    /* One entry under a full-width head was a stub: ~500px of band for one row (/audits `prototype`,
+       review 29 Oct). A single entry reads beside its head instead, the band a head's height. */
+    <ContentSection
+      {...head(band)}
+      data-band="K"
+      lead={leadText}
+      footer={footer}
+      {...(entries.length === 1 ? { arrangement: 'beside' as const } : {})}
+    >
       <Layout
         as="ul"
         columns={entries.length >= 4 || termIndex ? { base: 1, md: 2 } : { base: 1 }}
@@ -857,14 +900,10 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
  * A tool hub group: each tool's bold linked name and the paragraph after it as one card, under the
  * head; a table or a closing paragraph follows the cards.
  *
- * Every tool is a worksheet with no cover yet, which is what BlockCard's texture cover is for (an
- * artefact's stand-in: the brand's pixel grid, the tool's glyph on it, never a stock photograph), so
- * each card has a shape (29 Oct 2026; a set of bare text cards read as one grey rectangle per band).
- * Two tools sit two across. A group of ONE is a horizontal card across the column, its cover beside
- * its words, where a single tile in a two-track grid left half the band empty; consecutive single
- * groups alternate the cover's side and field, so they read as placed, not repeated.
+ * Every tool is a worksheet with no cover yet, so each card is led by its tool's glyph (the icon
+ * set), until the tools are drawn in the kit's Sketch style. Two across in every group.
  */
-export function DirectoryBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+export function DirectoryBand({ band }: { page?: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
   const cards: BlockCardSetItem[] = [];
   const rest: CorpusBlock[] = [];
@@ -892,33 +931,11 @@ export function DirectoryBand({ page, band }: { page: CorpusPage; band: CorpusBa
       rest.push(block);
     }
   }
-  /* Which single group this is, among the page's directory bands, so neighbours alternate. */
-  const nth = page.bands
-    .filter((other) => kindOf(other) === 'directory')
-    .findIndex((other) => other.id === band.id);
-  const [only] = cards;
-  const set =
-    cards.length === 1 && only ? (
-      <ul>
-        <BlockCard
-          {...only}
-          orientation="horizontal"
-          imageSide={nth % 2 === 0 ? 'left' : 'right'}
-          size="md"
-          cue="title"
-          media={{ type: 'texture', recipe: ((nth + 1) % 3) as 0 | 1 | 2 }}
-        />
-      </ul>
-    ) : (
-      <BlockCardSet
-        items={cards}
-        lead="none"
-        across={2}
-        cue="title"
-        scroll="never"
-        standIns="texture"
-      />
-    );
+  /* The tools as the borderless icon set (glyph, then title, then body), as /expertise `services`:
+     a texture stand-in cover read as unfinished art (review 29 Oct), and a group of one took a
+     horizontal box-beside-words shape its siblings did not. Every group is two across, so a single
+     tool is the same card at the same track width as its neighbours. */
+  const set = <BlockCardSet items={cards} lead="none" across={2} cue="title" scroll="never" />;
   return (
     <ContentSection {...head(band)} data-band="C-cards">
       {rest.length > 0 ? (

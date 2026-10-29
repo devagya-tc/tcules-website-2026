@@ -98,7 +98,9 @@ const FIGURE_SIZES = '160px';
  * Each item is one Layout: the drawing first in the DOM (it is decorative and hidden, so source
  * order is the words' order), placed visually after its words wherever the two share a row —
  * `reverse` mirrors the `['auto', 1]` tracks, so the drawing's auto track sits at the end. In
- * `beside` from 768 the item is one track and the drawing heads its words.
+ * `beside` the item is one track at every width and the drawing heads its words: on a phone the two
+ * arrangements must not collapse to one silhouette, because the offer pages set an `open` band
+ * directly on a `beside` one (review 29 Oct; owner Q1).
  */
 export function Reasons({
   id,
@@ -169,8 +171,8 @@ export function Reasons({
       {shown.map((item, index) => (
         <li key={`${index}-${item.title}`} className={styles.item}>
           <Layout
-            columns={above ? { base: ['auto', 1], md: 1 } : { base: ['auto', 1] }}
-            reverse={above ? { base: true, md: false } : { base: true }}
+            columns={above ? 1 : { base: ['auto', 1] }}
+            reverse={above ? false : { base: true }}
             colGap="block"
             rowGap="block"
             align="center"

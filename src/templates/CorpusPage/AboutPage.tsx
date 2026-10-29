@@ -39,7 +39,7 @@ import {
   headingIdOf,
   type RatingsById,
 } from './blocks';
-import { coverFor, slotImage, slugOf } from './images';
+import { coverFor, slotImage } from './images';
 import styles from './CorpusPage.module.css';
 import { LinkActions } from './CopyBands';
 import { recordStats as homeRecordStats } from './HomePage';
@@ -311,7 +311,6 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
                 name={name}
                 role={role.join(', ') || undefined}
                 bio={bio || undefined}
-                portrait={placeholderImage(page.route, b.id, slugOf(name))}
                 linkedin={link ? { label: link.labelText, href: link.href } : undefined}
               />
             );
@@ -657,7 +656,6 @@ function Leadership({ page }: { page: CorpusPage }) {
               name={leader.name}
               role={leader.role || undefined}
               bio={leader.bio.length > 0 ? leader.bio.map(plain).join(' ') : undefined}
-              portrait={placeholderImage(page.route, b.id, slugOf(leader.name))}
               linkedin={
                 leader.link
                   ? { label: leader.link.labelText, href: leader.link.href }

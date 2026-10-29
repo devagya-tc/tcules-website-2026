@@ -596,7 +596,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         /* The closing link row ("Why teams choose Tcules") follows the last `###` reason, so the
            parser files it under that reason: read it from what follows the items, which holds the
            band's own link rows too. */
-        const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
+        const links = parts.after.flatMap((block) =>
+          block.type === 'links' ? block.links : [],
+        );
         const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
         /* Drawn once every reason resolves to its figure (owner, 29 Oct 2026, Q1): the Reasons band,
            in the arrangement the plan gives it (`beside` where it is the page's second Reasons band,
@@ -604,7 +606,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const drawn = parts.items.map((item) => ({
           item,
-          figure: ctx.reasonFigure?.(item.title, ground),
+          figure: item.title ? ctx.reasonFigure?.(item.title, ground) : undefined,
         }));
         if (drawn.length > 0 && drawn.every(({ figure }) => figure)) {
           return (
@@ -615,7 +617,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               lead={parts.lead}
               action={action}
               items={drawn.flatMap(({ item, figure }) =>
-                figure
+                figure && item.title
                   ? [
                       {
                         title: item.title,

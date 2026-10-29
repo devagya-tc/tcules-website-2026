@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067" role="img" aria-label="Image to come · studio photo">
 <rect width="1600" height="1067" fill="#EEF0F3"/>
 <rect x="1" y="1" width="1598" height="1065" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="32 32"/>
-<text x="395" y="416" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="32" letter-spacing="3.2" fill="#4A5361">IMAGE TO COME · STUDIO PHOTO</text>
-<text x="395" y="506" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" fill="#2B323D"><tspan x="395" dy="0">FALLBACK, not a slot: what a page</tspan><tspan x="395" dy="59">shows where its copy (26 Oct 2026)</tspan><tspan x="395" dy="59">needs an image this register has no</tspan><tspan x="395" dy="59">row for yet.</tspan></text>
+<text x="395" y="550" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="32" letter-spacing="3.2" fill="#4A5361">IMAGE TO COME · STUDIO PHOTO</text>
+<text x="395" y="640" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="41" fill="#2B323D"></text>
 </svg>

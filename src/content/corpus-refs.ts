@@ -1,7 +1,7 @@
 import type { CorpusCaseRef, CorpusMediaBinding } from './corpus-types';
-import { CASE_SLUG_REDIRECTS } from '@/lib/routes';
+import { CASE_SLUG_REDIRECTS, caseStudyPath } from '@/lib/routes';
 
-import { getCorpusPage, listCorpusPages } from './source';
+import { getCaseStudyListingPage, getCorpusPage, listCorpusPages } from './source';
 
 /**
  * The cases a page cites, as each case's OWN corpus page describes it (page-mapping M8, rule 5.2).
@@ -19,16 +19,44 @@ export async function getCaseRefs(
   /* Links reach a case by its live slug (the seam rewrites them); a case's own page in the copy may
      still sit at the slug it was planned under, so that is looked up too. */
   const planned = new Map(
-    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [`/case-studies/${to}`, `/case-studies/${from}`]),
+    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [
+      `/case-studies/${to}`,
+      `/case-studies/${from}`,
+    ]),
+  );
+  /* The live list, by live route: a case's thumbnail is its cover wherever its corpus page binds
+     none, the same picture the /case-studies listing shows. Without the list, refs carry none. */
+  const listing = routes.length
+    ? await getCaseStudyListingPage('case-studies').catch(() => null)
+    : null;
+  const live = new Map(
+    (listing?.items ?? []).map((record) => [caseStudyPath(record.slug), record] as const),
+  );
+  const liveSlug = new Map(
+    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [
+      `/case-studies/${from}`,
+      `/case-studies/${to}`,
+    ]),
   );
   for (const route of routes) {
     const alias = planned.get(route);
     const page = (await getCorpusPage(route)) ?? (alias ? await getCorpusPage(alias) : null);
     if (!page) continue;
+    const thumb = (live.get(route) ?? live.get(liveSlug.get(route) ?? ''))?.thumbnail;
     refs[route] = {
       route,
       title: page.hero.titleText,
       cover: page.composition.mediaBindings.find((b) => b.bound) ?? null,
+      thumbnail: thumb?.src
+        ? {
+            src: thumb.src,
+            alt: thumb.alt,
+            /* A record without a measured size is drawn at the cover's 16:9. */
+            width: thumb.width ?? 1600,
+            height: thumb.height ?? 900,
+            ...(thumb.sources ? { sources: thumb.sources } : {}),
+          }
+        : null,
     };
   }
   return refs;

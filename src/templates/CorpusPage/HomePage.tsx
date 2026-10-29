@@ -19,6 +19,7 @@ import {
   type HeroStat,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
+import { caseRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
@@ -148,6 +149,7 @@ export function HomePage({
             avatars={avatars}
             reasons={reasons}
             eyebrows={eyebrows}
+            caseRefs={caseRefs}
           />
         );
       })}
@@ -162,6 +164,7 @@ type BandProps = {
   avatars?: AvatarsById;
   reasons?: PlaceholderReasons | null;
   eyebrows?: ProposedEyebrows;
+  caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
 };
 
 /* ── 0 · the studio's record, as three figures in the hero ───────────────────────── */
@@ -378,7 +381,9 @@ function OneStudio({ b }: BandProps) {
   return (
     <ContentSection {...head(b)} data-band="C-bento">
       {paras.length > 0 ? (
-        <Layout columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="text">
+        /* One lead column, the paragraphs stacked: set two across, they read as a split rather than
+           as the band's lead (review 29 Oct). */
+        <Layout rowGap="text">
           {paras.map((runs, index) => (
             <ContentSectionText key={index}>
               <p>{plain(runs)}</p>
@@ -457,7 +462,7 @@ const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
  * A HOME shape (page-mapping § 19): a service or expertise page features one case with its quote as
  * the [7, 5] card (TestimonialBeside `card`), because there the case serves the offer.
  */
-function SelectedWork({ page, b }: BandProps) {
+function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
   const cases = items(b);
   /* Each case ends on its own "Read the … case" line. The band's closing link ("See all case
      studies") is authored after the last case, so the parser files it under that case: the last link
@@ -519,7 +524,13 @@ function SelectedWork({ page, b }: BandProps) {
          names the case, else the case's own cover, else its placeholder (coverFor). */
       media: {
         type: 'image' as const,
-        image: image ?? coverFor(page, item.headingText.split(':')[0] ?? item.headingText),
+        image:
+          image ??
+          coverFor(
+            page,
+            item.headingText.split(':')[0] ?? item.headingText,
+            link ? caseRefs[caseRouteOf(link.href)] : undefined,
+          ),
       },
     };
   });

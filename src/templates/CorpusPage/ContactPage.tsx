@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, type IconName } from '@/components';
+import { Icon, Layout, Section, type IconName } from '@/components';
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import {
@@ -19,7 +19,7 @@ import { BandBody } from './CopyBands';
 import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, type TEMPLATE_BANDS } from './plan';
-import { boldLead, hasLink, labelTitle, leadOf, plain, trimStart } from './text';
+import { boldLead, hasLink, labelTitle, leadOf, plain, sentenceLead, trimStart } from './text';
 
 export type ContactPageProps = Omit<OfferContext, 'page'> & { page: CorpusPage };
 
@@ -51,7 +51,10 @@ const rowBody = (runs: readonly InlineRun[]) =>
 function capitalised(runs: InlineRun[]): InlineRun[] {
   const [first, ...rest] = runs;
   return first?.type === 'text'
-    ? [{ type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) }, ...rest]
+    ? [
+        { type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) },
+        ...rest,
+      ]
     : runs;
 }
 
@@ -108,7 +111,8 @@ function NextStepsHalf({ band }: { band: CorpusBand }) {
   const steps: Step[] = [];
   const rest: CorpusBlock[] = [];
   for (const block of blocks) {
-    const lead = leadOf(block);
+    const found = leadOf(block);
+    const lead = found ? sentenceLead(found) : null;
     if (lead) {
       const body = trimStart(lead.body);
       steps.push({
@@ -156,7 +160,7 @@ function Confidentiality({ band }: { band: CorpusBand }) {
   return (
     <ContentSection {...head(band)} data-band="C-note" arrangement="beside">
       <ContentSectionText>
-        <Callout html={html} />
+        <Callout html={html} icon={<Icon name="shield-check" size="xl" />} />
       </ContentSectionText>
     </ContentSection>
   );

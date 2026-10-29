@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import {
+  getCaseRefs,
   getCorpusPage,
   getPlaceholderReasons,
   getProposedEyebrows,
   getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { HomePage } from '@/templates';
@@ -30,11 +32,12 @@ export default async function Home() {
   /* "Why teams choose Tcules" shows stand-in reasons (PLACEHOLDER, P48) until the content team
      writes the six the Reasons band is built for. */
   /* Bands the owner asked to carry an eyebrow the corpus does not author (PROPOSED, P49). */
-  const [ratings, avatars, reasons, eyebrows] = await Promise.all([
+  const [ratings, avatars, reasons, eyebrows, caseRefs] = await Promise.all([
     getTestimonialRatings(ids),
     getTestimonialAvatars(ids),
     getPlaceholderReasons(page.route),
     getProposedEyebrows(page.route),
+    getCaseRefs(caseRoutesIn(page)),
   ]);
   return (
     <HomePage
@@ -43,6 +46,7 @@ export default async function Home() {
       avatars={avatars}
       reasons={reasons}
       eyebrows={eyebrows}
+      caseRefs={caseRefs}
       reasonFigure={landedReasonFigure}
     />
   );

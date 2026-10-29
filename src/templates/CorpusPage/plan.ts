@@ -301,7 +301,9 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   knowledge: 'text',
   'build-loop': 'text',
   studio: 'text',
-  'how-to-use': 'text',
+  /* Three instructions as plain paragraphs: numbered steps (MethodBand), so the glossary opens on a
+     shape before its five term groups (review 29 Oct). */
+  'how-to-use': 'method',
   /* ── G20 · closes and notes ── */
   'work-with-tcules': 'close',
   lab: 'close',

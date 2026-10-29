@@ -15,8 +15,16 @@ import styles from './OfferSheet.module.css';
 
 /** One promise: what the buyer gets, then what it means. */
 export type OfferSheetItem = {
-  /** The promise in a few words, as authored, its full stop kept ("Complex rules, simple screens."). */
-  title: string;
+  /**
+   * The promise in a few words, as authored, its full stop kept ("Complex rules, simple screens.").
+   * Optional: a promise authored as one sentence with no lead of its own is a STATEMENT, set whole in
+   * the body role under its drawing or rule, never promoted to the title role (review 29 Oct: four
+   * 20px five-line "titles" on product-design). A set is titled throughout or not at all; the caller
+   * decides, because only it knows how the items were authored.
+   */
+  title?: string;
+  /** A stable key for the item, where it has no title (React key). */
+  id?: string;
   /** The sentence that says what the promise means. Plain text. */
   body?: string;
   /** Or trusted HTML from the content seam, for a body that carries a link or emphasis. */
@@ -108,7 +116,10 @@ export function OfferSheet({
   across = 2,
   surface = 'paper',
 }: OfferSheetProps) {
-  const shown = items.filter((item) => item.title.trim().length > 0);
+  const shown = items.filter(
+    (item) => (item.title ?? item.body ?? item.bodyHtml ?? '').trim().length > 0,
+  );
+  const keyOf = (item: OfferSheetItem) => item.id ?? item.title ?? item.body ?? item.bodyHtml;
   if (process.env.NODE_ENV !== 'production' && (shown.length < 2 || shown.length > 6)) {
     console.warn(`OfferSheet: ${shown.length} promises; the sheet is built for two to six.`);
   }
@@ -122,15 +133,17 @@ export function OfferSheet({
   }
   const words = (item: OfferSheetItem) => (
     <Layout rowGap="text">
-      <h3 className={styles.title}>
-        {item.href ? (
-          <a href={item.href} className={styles.titleLink}>
-            {item.title}
-          </a>
-        ) : (
-          item.title
-        )}
-      </h3>
+      {item.title ? (
+        <h3 className={styles.title}>
+          {item.href ? (
+            <a href={item.href} className={styles.titleLink}>
+              {item.title}
+            </a>
+          ) : (
+            item.title
+          )}
+        </h3>
+      ) : null}
       {item.bodyHtml ? (
         <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
       ) : item.body ? (
@@ -150,7 +163,7 @@ export function OfferSheet({
       rowGap="stack"
     >
       {shown.map((item) => (
-        <li key={item.title}>
+        <li key={keyOf(item)}>
           <Layout
             columns={drawnThree ? { base: 1, md: [5, 6], lg: 1 } : { base: 1, md: [5, 6] }}
             colGap="gutter"
@@ -171,7 +184,7 @@ export function OfferSheet({
       rowGap="stack"
     >
       {shown.map((item) => (
-        <li key={item.title} className={styles.item}>
+        <li key={keyOf(item)} className={styles.item}>
           {words(item)}
         </li>
       ))}

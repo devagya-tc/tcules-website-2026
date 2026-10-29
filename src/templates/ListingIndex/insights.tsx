@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout, Prose, Tag } from '@/components';
-import { Accordion, ListCard } from '@/patterns';
+import { Accordion } from '@/patterns';
 
 import styles from './ListingIndex.module.css';
 import type { ListingFinder, ListingSection, ListingView } from './ListingIndex';
@@ -121,31 +121,12 @@ export function shelfSections(shelves: readonly InsightShelf[]): ListingSection[
 function Shelf({ items, noteHtml }: { items: readonly InsightItem[]; noteHtml?: string }) {
   const [first, ...rest] = items;
   const led = first && items.length >= 3 && hasPicture(first);
-  /* No piece on the shelf has a picture yet: a row of empty panels reads as a missing grid, so the
-     shelf is typographic — hairline tiles, each its format, title and line — until covers arrive. */
-  const typographic = !items.some(hasPicture);
+  /* A shelf with no pictured piece is a row of panels, the results' card for a piece without a
+     picture (2026-10-29-pictureless-piece-is-a-panel-card): the ruled text tiles it took before were
+     a third card look on one page, the rows that ruling dropped (review 29 Oct). */
   return (
     <Layout rowGap="block">
-      {typographic ? (
-        <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="stack">
-          {items.map((item) => (
-            <ListCard
-              key={item.id}
-              form="tile"
-              size="sm"
-              titleAs="h3"
-              eyebrow={LABEL[item.kind].one}
-              title={item.title}
-              href={item.href}
-              body={item.description}
-            />
-          ))}
-        </Layout>
-      ) : led ? (
-        <Feature lead={first} cards={rest} shelf />
-      ) : (
-        <CardGrid cards={items} shelf />
-      )}
+      {led ? <Feature lead={first} cards={rest} shelf /> : <CardGrid cards={items} shelf />}
       {noteHtml ? <Prose html={`<p>${noteHtml}</p>`} /> : null}
     </Layout>
   );

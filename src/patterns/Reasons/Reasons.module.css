@@ -52,15 +52,14 @@
   block-size: var(--rsn-figure-height);
 }
 
-/* `beside` from 768: the drawing heads its words. Its box is shorter and as wide as the drawing's
-   own ratio (the set's figures run 1.05–1.2), so it starts at the column's edge with its words
-   rather than floating in the middle of a 206 track. */
-@media (min-width: 768px) {
-  .figureAbove {
-    inline-size: auto;
-    block-size: var(--rsn-figure-height-sm);
-    aspect-ratio: var(--rsn-figure-ratio);
-  }
+/* `beside`: the drawing heads its words at every width (on a phone too, so `beside` never reads as
+   `open` there). Its box is shorter and as wide as the drawing's own ratio (the set's figures run
+   1.05–1.2), so it starts at the column's edge with its words rather than floating in the middle of
+   a 206 track. */
+.figureAbove {
+  inline-size: auto;
+  block-size: var(--rsn-figure-height-sm);
+  aspect-ratio: var(--rsn-figure-ratio);
 }
 
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────

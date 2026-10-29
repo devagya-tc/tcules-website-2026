@@ -707,6 +707,24 @@ export default async function PageHeroSpecimenPage() {
         />
       </div>
 
+      {/* ── 2c · A long title read across the split ──────────────────────────────── */}
+      <div>
+        <PageHero
+          title="UI/UX design services and software development for new and established products"
+          titleAcross
+          body={paragraphs(2)}
+          arrangement="beside"
+          media={{
+            type: 'image',
+            image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+          }}
+        />
+        <Note
+          title="2c · titleAcross — a long title over the beside split"
+          note="A title that would set five or more display lines in half the column (CorpusHero's estimate) reads across it at display, and the lead, actions and figures sit beside the media under it (review 29 Oct, /services)."
+        />
+      </div>
+
       {/* ── 3 · The paragraph ladder ───────────────────────────────────────────── */}
       {([1, 2, 3, 4, 5, 6, 12] as const).map((count) => (
         <div key={count}>
@@ -954,7 +972,11 @@ export default async function PageHeroSpecimenPage() {
 
       {/* ── 9b · masthead · a listing's opening ─────────────────────────────────── */}
       <PageHero
-        trail={heroTrail(TRAIL, 'Insights from building products at the edge of design', crumbs)}
+        trail={heroTrail(
+          TRAIL,
+          'Insights from building products at the edge of design',
+          crumbs,
+        )}
         title="Insights from building products at the edge of design"
         body={[PARAS[0]]}
         arrangement="masthead"

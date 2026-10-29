@@ -21,7 +21,8 @@ import {
  * (`HOME_SECTOR_PHOTOS`, 19 Oct 2026); that band reads them itself.
  */
 
-export type SlotImage = CorpusImage | PlaceholderImage;
+export type SlotImage =
+  CorpusImage | PlaceholderImage | NonNullable<CorpusCaseRef['thumbnail']>;
 
 export const slugOf = (text: string): string =>
   text
@@ -64,7 +65,8 @@ export function hasSlot(page: CorpusPage, bandId: string, qualifier?: string): b
 
 /**
  * A cited case's cover: this page's binding that names it, then the case page's own cover, then the
- * case's placeholder (one asset for every page that cites it).
+ * live case's thumbnail (the /case-studies listing's picture), then the case's placeholder (one asset
+ * for every page that cites it). A caller passes the case's ref, or the case resolves by name alone.
  *
  * `bandId`: where a placement crops the cover to a shape its 16:9 master cannot survive (the index's
  * one-case story, a 4:5 media split), the register gives that slot a row of its own, keyed by the band
@@ -81,6 +83,7 @@ export function coverFor(
   const named = bindingNamed(page, name);
   if (named) return corpusImage(named);
   if (caseRef?.cover) return corpusImage(caseRef.cover);
+  if (caseRef?.thumbnail) return caseRef.thumbnail;
   const slug = slugOf(name.replace(/\.$/, ''));
   if (bandId && hasPlaceholder(page.route, bandId, slug)) {
     return placeholderImage(page.route, bandId, slug);

@@ -251,3 +251,136 @@ the ListCard `cue` so it is clear they open term pages.
 - The cut list (§ D) is untouched, as instructed.
 - The Reasons `open` cramping (cross-site 4) belongs to an approved composition, so it is shown for a decision, not
   changed.
+
+## Fixes applied
+
+Applied on `feat/new-copy` on 29 Oct, after the critic pass. Each must-fix item is fixed where it is caused
+(a component, a token, the content seam or a plan rule), with the smallest change that fixes it. Approved
+compositions are unchanged. Format: note → cause → fix. Items that were not changed are listed afterwards,
+each with the reason.
+
+### Cross-site
+
+1. **Developer text in image slots** (hub heroes, Industries, product types, PropTech, Gold Image Printing) →
+   `scripts/placeholders.mjs` drew the register's FALLBACK row note as the panel's brief → the generator
+   now draws only the head on a FALLBACK row (`IMAGE TO COME · STUDIO PHOTO`), regenerated. Every
+   unregistered slot now shows the same plain panel as a registered row. The sector photographs are still
+   owed (§ E).
+2. **One case, two covers** (Auxentios on home, Gold Image Printing on /services) → case refs carried only
+   the case page's corpus binding, and home passed no refs at all → `getCaseRefs` (content seam) now also
+   reads the live case's Strapi thumbnail, matched through `CASE_SLUG_REDIRECTS`, and adds it as
+   `CorpusCaseRef.thumbnail`. `coverFor` resolves in this order: the page's binding, the case's binding,
+   the case's thumbnail, then the placeholder. The home route now reads its case refs, and `SelectedWork`
+   passes each case's ref (`caseRouteOf`, lib). Both covers now render: Auxentios on home and the tablet
+   photograph on /services.
+3. **`beside` Reasons looked like `open` on a phone** → `Reasons` set the `beside` item as copy with the
+   drawing at its side below `md` → a `beside` item is one track at every width, with the drawing above
+   its words (`.figureAbove` is no longer behind a media query). On every offer page and hub, the phone
+   now shows two different shapes.
+
+### Per route
+
+- **`/` One studio**: the lead's two paragraphs sat side by side → `OneStudio` set them in a 2-track
+  Layout → they are now one stacked column (`rowGap="text"`).
+- **`/` testimonials**: 3 of 6 cards had portraits → `TestimonialWall` showed whatever each card had →
+  a wall now shows portraits on every card or on none, so all six show none until the last portrait
+  lands. This rule is global to every wall.
+- **`/about` leadership**: 80px placeholder panels with unreadable labels → the template passed a
+  labelled register panel at avatar size → `ProfileCard` with no portrait now shows the person's initials
+  on a plain ground in the portrait square (new tokens `--pfc-initials-*` on every surface). The about
+  template no longer passes a placeholder there.
+- **`/contact` next-steps**: "We read your message" was a title over the lowercase body "and a senior
+  designer…" → Steps promoted a bold fragment to the title → new `sentenceLead` (text.ts). Where a bold
+  lead has no end punctuation and the body runs on in lower case, the title takes the rest of that first
+  sentence: "We read your message and a senior designer writes back." The words are unchanged. This
+  applies to every Steps mapping (`ContactPage`, `stepOf`).
+- **`/contact` rhythm**: confidentiality was a muted sentence, the third text band in a row → `Callout`
+  had no way to carry a mark → new `Callout icon` slot (glyph, then key, then sentence, each on its own
+  row). The confidentiality note now carries `shield-check`. It is a light touch. If the owner wants a
+  heavier object, that is a design call.
+- **`/contact` nav**: ABOUT was lit → About's `matchPaths` in the nav fixture included `/contact` → it no
+  longer does. The bar's own "Start a project" action is the way to the contact page.
+- **`/services/product-design` what-you-get**: four 20px five-line "titles" → `sheetItem` promoted an
+  un-led item's whole sentence to the title → `OfferSheetItem.title` is now optional. A list item with no
+  lead is a statement in the body role, and a set is titled throughout or not at all (`sheetParts`). The
+  drawings stay, matched by the item's words. This applies to every OfferSheet built from a list.
+- **`/services`, `/expertise`, `/glossary` heroes**: a 7-line (and a 5-line) display h1 in the half-width
+  track → CorpusHero always put the title in the copy track → new `PageHero titleAcross`. The eyebrow and
+  title read across the column above the `beside` split, still at display (owner, 29 Sep: display on
+  every hero), with the lead, actions and figures beside the media under it. CorpusHero turns it on when
+  a title would set five or more display lines in the half track (a word-wrap estimate at 18 characters
+  a line, measured against /services 7, /expertise 5, /glossary 5, product-design 4, /tools 4, /audits 4).
+  Results at 1440: /services 7 → 3 lines (hero 1262 → 1007), /expertise 5 → 3, /glossary 5 → 3. The
+  approved product-design hero (4 lines) is unchanged. Other offer pages whose titles cross the line,
+  e.g. /expertise/healthtech, now take the across head too.
+- **`/insights` shelves**: three card looks → a shelf with no pictured piece fell back to ruled
+  ListCard tiles, the rows that 2026-10-29-pictureless-piece-is-a-panel-card dropped → every shelf now
+  uses CardGrid, so a piece without a picture is the ruled panel card in every shelf. One look for a
+  covered piece and one for an uncovered piece, as that ruling sets.
+- **`/case-studies` CuramCare**: the largest placeholder on the page, unlinked → a case listed before its
+  page exists took a cover card → in a covers group, an unlinked case now reads as a plain row under the
+  group's cards (`CaseGroupShape`). The built group is now three real covers, then the CuramCare row.
+  In a group of rows it keeps its place. Vovisto, in the rows group, is unchanged.
+- **`/audits` prototype**: one row under a full-width head (~500px for one item) → `RelatedBand` always
+  set the head above → a related band with a single entry now sets it beside its head
+  (`ContentSection arrangement="beside"`), so the band is one head tall.
+- **`/tools` card art and modernisation**: a boxed Solar glyph on a texture, and a single card in a
+  box-left/text-right split → `DirectoryBand` used texture stand-in covers and a horizontal card for a
+  group of one → every tool group is now the borderless icon set (glyph, then title, then body), as
+  /expertise `services` is, two across. A single tool is the same card at the same track width. The
+  tool scenes are still to be drawn in the Sketch style, which would also fix the run of one shape.
+- **`/glossary` how-to-use**: the first of seven text bands → the band was planned as `text` → it is
+  planned as `method`, and `MethodBand` now sets 2–5 plain, link-free paragraphs as numbered Steps (first
+  sentence as the title, the rest as the body, every word kept). Only this band takes that path today;
+  every other method band has a list or bold claims.
+
+Specimens: `/design/callout` (icon), `/design/offer-sheet` (2b statements), `/design/page-hero` (2c
+titleAcross), and `/design/profile-card` (P.2 now the initials state).
+
+### Declined, with why
+
+- **Home hero illustration**: Bhumika's illustration is in progress. Nothing to change in code.
+- **`/about` difference as a DataTable**: an owner call. § E's default (OfferSheet) holds until the owner
+  rules.
+- **`/about` GT Tools cover, Omny AI cover, `/case-studies` Vovisto**: content. A GT Tools crop and the
+  covers are owed.
+- **`/insights` two pieces in three tracks**: 2026-10-29-listing-cards-topic-tag-three-tracks (active) says
+  "a card grid is always three tracks: two pieces take two of the three, never halves" ("The grid should
+  never be 2 cols").
+- **`/insights` a no-cover piece as a borderless tile with a placeholder cover**: 2026-10-29-pictureless-piece-is-a-panel-card
+  (active) makes the panel the card for a piece without a picture beside covered ones. The third look (the
+  ruled rows) is what was removed above.
+- **`/insights` formats table on a phone**: DataTable's contract is "a table at every width … the body is
+  never re-laid out as a stack" (owner, 7 Oct, tables are boxed). It scrolls sideways with an edge fade,
+  and two columns would drop a column of authored words.
+- **`/case-studies` hero record as figures**: the masthead's one mono record line is the approved
+  listing opening (beauty round 4, 16 Oct). It conflicts with the standing "stats → figures" rule, so it
+  is left for the owner to decide.
+- **`/audits` prototype as a BlockCard with "the Prototype Readiness scene"**: no such scene exists. The
+  tools cards were glyphs, and the only prototype drawing is an article cover (`prototype-to-production`).
+  Reusing it is a keyword-mapped stand-in, which the owner has ruled out. The beside head above is the
+  fix without new art.
+- **`/glossary` link cue on term rows**: ListCard has "no arrow cue (owner, 7 Oct 2026)". The row's hover
+  is the link cue. A group glyph on each term head needs new glyph assignments: an owner decision for a
+  tier-B page.
+- **Reasons `open` cramping (cross-site 4), the Q17 photo pair, the contact hero with no image**: owner
+  notes on approved compositions. Not changed.
+- **`sentenceLead` on OfferSheet bold leads** ("**Questions for your specialists** on accuracy…" on the
+  audit pages): not applied. There the bold lead is a noun phrase that reads as a title. The critic's item
+  was the Steps fragment only.
+
+### Gates
+
+`npm run verify` passes (lint 0 errors / 31 pre-existing warnings, typecheck, tokens, classes, specimens,
+design, photos, placeholders current, decisions valid). `npm run build` passes, and `npm run aria:check`
+passes (112 pages, 1953 idrefs, all resolve). `npm run shots` on all eleven review routes at 1440 and
+390 found 22 captures with 0 overflow and 0 page errors. A second run on the changed specimens and on
+/contact, /glossary, /tools and /expertise/healthtech also found 0 problems. Band crops were checked by
+eye for home selected-work, One studio and testimonials, about leadership, contact next-steps and
+confidentiality, the product-design what-you-get, Why Tcules at 390 and Industries, the /services hero and
+selected-work, the /expertise hero, the /audits prototype, the /tools bands, the /glossary how-to-use,
+the insights SaaS shelf and the case-studies built group.
+
+The new presentation rules (portraits all or none, statement items, the long-title head, a single
+related entry beside its head, an unlinked case as a row) are not logged as rulings. They are for the
+owner to see in the browser tomorrow, and the owner can promote them with `/decide`.

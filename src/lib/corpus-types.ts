@@ -244,6 +244,19 @@ export type CorpusCaseRef = {
   route: string;
   title: string;
   cover: CorpusMediaBinding | null;
+  /**
+   * The live case's own Strapi thumbnail, the picture its record carries, for a case whose corpus
+   * page binds no asset. Read at the seam, so a case shows ONE cover on every route that cites it
+   * (review 29 Oct: Auxentios on home, Gold Image Printing on /services). Null when the live list
+   * has no record or no thumbnail for it.
+   */
+  thumbnail: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    sources?: readonly { src: string; width: number }[];
+  } | null;
 };
 
 /**

@@ -298,6 +298,14 @@ type PageHeroBaseProps = {
    */
   titleSize?: 'display' | 'mark';
   /**
+   * `beside` only: the eyebrow and title read ACROSS the column above the split, at their own
+   * measure, and the lead, actions and figures sit in the copy track beside the media. For a title
+   * too long for half the column at display (review 29 Oct: /services set seven display lines in
+   * the 572 track and its hero ran 1262 tall). The title keeps display (owner, 29 Sep 2026). Ignored
+   * by every other arrangement.
+   */
+  titleAcross?: boolean;
+  /**
    * The paragraphs, in order. Optional (cmp-feature, 6 Oct 2026): an index page whose h1 is the
    * whole opening — the case-study index — has none, and passed `['']` to satisfy the type, a
    * workaround the filter below made render nothing. Absent and all-blank now mean the same thing.
@@ -609,6 +617,7 @@ type BylinePair = { id: string; label: string; value: ReactNode };
 export function PageHero({
   title,
   titleSize = 'display',
+  titleAcross = false,
   body,
   eyebrow,
   rating,
@@ -692,6 +701,7 @@ export function PageHero({
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
   const masthead = arrangement === 'masthead';
+  const across = titleAcross && split && !wide;
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
@@ -832,9 +842,7 @@ export function PageHero({
   const copyNode =
     lead === undefined && recordNode === null ? null : (
       <Layout rowGap="text">
-        {lead !== undefined ? (
-          <p className={styles.lead}>{lead}</p>
-        ) : null}
+        {lead !== undefined ? <p className={styles.lead}>{lead}</p> : null}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}
@@ -1089,12 +1097,21 @@ export function PageHero({
       justifyItems={justify}
       className={centredHead ? styles.centred : undefined}
     >
-      <Layout rowGap="block" justifyItems={justify}>
-        {eyebrowNode}
-        {titleNode}
-        {copyNode}
-        {labelsNode}
-      </Layout>
+      {across ? (
+        copyNode || labelsNode ? (
+          <Layout rowGap="block" justifyItems={justify}>
+            {copyNode}
+            {labelsNode}
+          </Layout>
+        ) : null
+      ) : (
+        <Layout rowGap="block" justifyItems={justify}>
+          {eyebrowNode}
+          {titleNode}
+          {copyNode}
+          {labelsNode}
+        </Layout>
+      )}
       {bylineNode}
       {extrasNode}
       {actionsNode}
@@ -1224,7 +1241,20 @@ export function PageHero({
         {mediaTrack}
       </Layout>
     );
-    top = centred ? content : withTrail(content);
+    /* `titleAcross`: the head across the column, then the split under it, a `stack` apart, as the
+       split's own copy blocks are. */
+    const headed = across ? (
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
+          {eyebrowNode}
+          {titleNode}
+        </Layout>
+        {content}
+      </Layout>
+    ) : (
+      content
+    );
+    top = centred ? headed : withTrail(headed);
   }
 
   return (
