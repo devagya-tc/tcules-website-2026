@@ -187,6 +187,9 @@ label sits on true centre rather than half a pixel left of it.
   so it never stands beside a solid as a second rank. Round (`--btn-radius-round`), a hairline rule
   (`--btn-outline-rule-width`, `--btn-outline-primary-rule`), the glyph in `--btn-outline-primary-fg`,
   filling with `--btn-outline-primary-bg-hover` on hover and focus and `-bg-pressed` on press.
+  *Amended 29 Oct 2026* (decisions/2026-10-29-outline-hover-is-secondary): the outline never fills on
+  hover; the rule firms (`--btn-outline-primary-rule-hover`) and the label takes the link's step
+  (`-fg-hover`). Press alone takes a pale ground (`-bg-pressed`) with `-rule-pressed`.
   Its glyph is one step above a labelled button's at each size — `--btn-outline-icon-size-sm` 16,
   `-md` 18, `-lg` 24 (cmp-testimonials fix round 2: the arrow is the whole control) — and the
   Slider uses `lg`, a 48 circle. Unavailable, it keeps its circle in `--btn-disabled-rule`:

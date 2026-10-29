@@ -625,7 +625,7 @@ export default function ButtonSpecimenPage() {
       {/* ── 09 · Outline stepper ────────────────────────────────────────────────────────────── */}
       <Band
         id="stepper"
-        note="The fourth emphasis, and the only one with an edge. Icon alone, a round hairline control that steps through a set, a slider’s previous and next; hover fills the disc, and at the end of its row it keeps its circle, off. Labelled (owner, 29 Oct 2026), at the button’s own radius, it leads an in-band pair whose second is the link — a Banner’s two actions — and never stands beside a solid."
+        note="The fourth emphasis, and the only one with an edge. Icon alone, a round hairline control that steps through a set, a slider’s previous and next. It is the secondary control (owner, 29 Oct 2026): hover never fills it — the line firms one step and the label takes the link’s step, colour only — and only a press takes a pale ground, so it never competes with the solid. At the end of its row it keeps its circle, off. Labelled (owner, 29 Oct 2026), at the button’s own radius, it leads an in-band pair whose second is the link — a Banner’s two actions — and never stands beside a solid."
       >
         {/* Varied on purpose: the sizes as a ladder in the head track, and the stepper where it
             lives, a Slider of case cards, in the body track — the one image row in the anatomy. */}
@@ -647,6 +647,19 @@ export default function ButtonSpecimenPage() {
                   icon={<Icon name="arrow-right" />}
                 >
                   Careers at Tcules
+                </Button>
+              </Cluster>
+            </Cell>
+            <Cell
+              label="State · rest, then pressed"
+              note="Point at the first: the rule firms, no fill. The second is held: the pale ground is the press, the one ground it ever takes."
+            >
+              <Cluster colGap="block" rowGap="text" align="center">
+                <Button as="a" href={ROUTES.about} emphasis="outline">
+                  Meet the studio
+                </Button>
+                <Button as="a" href={ROUTES.about} emphasis="outline" active>
+                  Meet the studio
                 </Button>
               </Cluster>
             </Cell>

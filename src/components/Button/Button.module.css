@@ -317,10 +317,13 @@
    stays the size's height and the glyph stays centred — and it is the whole difference from a
    ghost icon at rest, which is a bare glyph.
 
-   Hover and focus FILL the circle and take the rule with them, so the filled control is one disc
-   rather than a disc inside a ring. Pressed deepens the fill one step. The glyph moves ONCE, onto
-   the fill, and pressed reads that same -fg-hover: a pressed token whose value equals hover on
-   every surface would be a state that does not move (button.css header), so there is none. */
+   It is the SECONDARY control (owner, 29 Oct 2026; decisions/2026-10-29-outline-hover-is-secondary):
+   hover and focus never fill it, because a blue disc or box is the solid's state and the outline
+   then competes with the page's one main action. Hover firms the line one step and the label takes
+   the link's step, both colour, on the button's one transition; nothing fades. Press is the only
+   ground it ever takes, a ghost's pale tint, with the line one step firmer again. The label does
+   not move a second time on press, so pressed reads -fg-hover: a pressed fg equal to hover on every
+   surface would be a state that does not move (button.css header), so there is none. */
 .outline {
   border: var(--btn-outline-rule-width) solid var(--btn-outline-primary-rule);
   border-radius: var(--btn-radius-round);
@@ -357,15 +360,14 @@
 
 .outline.primary.live:hover,
 .outline.primary.live:focus-visible {
-  background: var(--btn-outline-primary-bg-hover);
-  border-color: var(--btn-outline-primary-bg-hover);
+  border-color: var(--btn-outline-primary-rule-hover);
   color: var(--btn-outline-primary-fg-hover);
 }
 
 .outline.primary.live:active,
 .outline.primary.live.active {
   background: var(--btn-outline-primary-bg-pressed);
-  border-color: var(--btn-outline-primary-bg-pressed);
+  border-color: var(--btn-outline-primary-rule-pressed);
   color: var(--btn-outline-primary-fg-hover);
 }
 
