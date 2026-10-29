@@ -140,7 +140,7 @@ type Group = { lead?: InsightItem; cards: InsightItem[] };
 /**
  * A group from a set of pieces, in the order they should be shown (owner, 23 Oct 2026). The best
  * pictured piece leads; under it, the pictured pieces in rows of three (six where there are six),
- * or two as halves. Pieces without a picture stay on their format page. `avoidLead` keeps a piece
+ * or two in two of three tracks. Pieces without a picture stay on their format page. `avoidLead` keeps a piece
  * from leading (the topic view's first section must not open on the type view's lead).
  */
 function groupOf(

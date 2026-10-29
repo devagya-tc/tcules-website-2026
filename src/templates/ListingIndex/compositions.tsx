@@ -190,7 +190,7 @@ export function partition(items: readonly InsightItem[]) {
    Every group on the hub opens on its lead, the horizontal card (owner, 23 Oct 2026, after
    claude.com/resources), its cover across two thirds and its copy in the third, centred on the cover,
    with an action. Under it, its cards in rows of three — one row, or two where there are six — or two
-   as halves. No list beside or under them (owner, 23 Oct 2026: the boxed list was dropped): a piece
+   in two of three tracks (owner, 29 Oct 2026; halves before). No list beside or under them (owner, 23 Oct 2026: the boxed list was dropped): a piece
    with no picture is not a card here, and its format page holds it.
 
    The cards are the site's one card, BlockCard, so a piece looks the same here as under an article.
@@ -231,7 +231,8 @@ const ACTION: Record<InsightKind, string> = {
   event: 'See the event',
 };
 
-/** The cards: rows of three, or two as halves, at the small step — an 18 title under the lead's serif
+/** The cards: rows of three, always — two pieces take two of the three tracks, never halves (owner,
+    29 Oct 2026: "the grid should never be 2 cols") — at the small step — an 18 title under the lead's serif
     (owner, 23 Oct 2026). A format page sets one grid per page of its pieces, each its own jump target. */
 export function CardGrid({
   cards,
@@ -252,9 +253,8 @@ export function CardGrid({
   facts?: boolean;
 }) {
   if (cards.length === 0) return null;
-  const halves = cards.length === 2;
   return (
-    <Layout as="ul" id={id} columns={{ md: halves ? 2 : 3 }} colGap="gutter" rowGap="column">
+    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
       {cards.map((item) => {
         const pictured = Boolean(pictureOf(item));
         return (
@@ -263,7 +263,7 @@ export function CardGrid({
             {...cardOf(item, meta)}
             size="sm"
             titleAs={titleAs}
-            tracks={halves ? 2 : 3}
+            tracks={3}
             cue="title"
             compact={!facts}
             {...(facts
