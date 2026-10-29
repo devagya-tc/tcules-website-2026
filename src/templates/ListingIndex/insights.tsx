@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
-import { Button, Chip, Cluster, Icon, Input, Layout, Tag } from '@/components';
-import { Accordion } from '@/patterns';
+import { Button, Chip, Cluster, Icon, Input, Layout, Prose, Tag } from '@/components';
+import { Accordion, ListCard } from '@/patterns';
 
 import styles from './ListingIndex.module.css';
 import type { ListingFinder, ListingSection, ListingView } from './ListingIndex';
@@ -9,6 +9,7 @@ import { FinderMore } from './Finder';
 import {
   byEventDate,
   CardGrid,
+  hasPicture,
   Dates,
   Feature,
   followCount,
@@ -81,6 +82,73 @@ export function insightViews({
     content: <TypeShape kind={section.kind} items={section.items} />,
   }));
   return [{ id: 'type', label: 'By type', sections: typeSections }];
+}
+
+/* ── BY PROBLEM · the copy's shelves ─────────────────────────────────────────────
+   The 26 Oct 2026 copy curates the hub by the problem a reader is working on ("sorted by the problem
+   you are working on"): five shelves of two or three pieces, each closing on the related service.
+   The view the hub opens on while nothing is picked; the finder still holds every piece. */
+
+/** One shelf: the problem as its head, the pieces the copy names, and its closing line. */
+export type InsightShelf = {
+  /** The section's anchor (the copy's band id). */
+  id: string;
+  heading: string;
+  /** The pieces, in the copy's order, each as the copy titles and describes it. */
+  items: readonly InsightItem[];
+  /** The shelf's closing line ("Our related service: …") as trusted inline HTML, its link kept. */
+  noteHtml?: string;
+};
+
+/**
+ * The shelves as listing sections. Three pieces led by a pictured one open on the horizontal lead
+ * with the other two under it (the hub's group, 2026-10-29-listing-cards-topic-tag-three-tracks);
+ * two pieces, or three without a pictured first, are cards in two or three of the three tracks. A
+ * piece with no picture is still a card: the panel led by its format's glyph. The closing line
+ * follows the cards, a `block` under them: it answers the shelf, it does not head it.
+ */
+export function shelfSections(shelves: readonly InsightShelf[]): ListingSection[] {
+  return shelves
+    .filter((shelf) => shelf.items.length > 0)
+    .map((shelf) => ({
+      id: shelf.id,
+      heading: shelf.heading,
+      count: shelf.items.length,
+      content: <Shelf items={shelf.items} noteHtml={shelf.noteHtml} />,
+    }));
+}
+
+function Shelf({ items, noteHtml }: { items: readonly InsightItem[]; noteHtml?: string }) {
+  const [first, ...rest] = items;
+  const led = first && items.length >= 3 && hasPicture(first);
+  /* No piece on the shelf has a picture yet: a row of empty panels reads as a missing grid, so the
+     shelf is typographic — hairline tiles, each its format, title and line — until covers arrive. */
+  const typographic = !items.some(hasPicture);
+  return (
+    <Layout rowGap="block">
+      {typographic ? (
+        <Layout as="ul" columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="stack">
+          {items.map((item) => (
+            <ListCard
+              key={item.id}
+              form="tile"
+              size="sm"
+              titleAs="h3"
+              eyebrow={LABEL[item.kind].one}
+              title={item.title}
+              href={item.href}
+              body={item.description}
+            />
+          ))}
+        </Layout>
+      ) : led ? (
+        <Feature lead={first} cards={rest} shelf />
+      ) : (
+        <CardGrid cards={items} shelf />
+      )}
+      {noteHtml ? <Prose html={`<p>${noteHtml}</p>`} /> : null}
+    </Layout>
+  );
 }
 
 /* ── A group: its lead, then its cards ──────────────────────────────────────────── */

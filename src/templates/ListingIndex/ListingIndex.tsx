@@ -130,6 +130,23 @@ export type ListingIndexProps = {
   empty: string;
   offer?: ListingOffer;
   closing?: ListingClosing;
+  /**
+   * The page's own bands around the listing, composed by the caller (component-map C13): what a
+   * listing's copy authors besides its list — the client wall under the opening, the proof wall and
+   * the FAQ after it. Placed, never shaped, here: each arrives a whole band (its Section, its ground),
+   * so the template learns no listing's words. The caller keeps two tints from touching.
+   */
+  bands?: ListingBands;
+};
+
+/** Where a listing's own bands sit: under the opening, after the list, after the close. */
+export type ListingBands = {
+  /** Between the opening and the list (a client wall). */
+  afterHero?: ReactNode;
+  /** Between the list (and any offer) and the close (a proof wall, an FAQ before a link-only close). */
+  afterListing?: ReactNode;
+  /** After the close (the FAQ, where the enquiry form comes before it: `formBeforeFaq`). */
+  afterClose?: ReactNode;
 };
 
 /** The finder's content column: where a change of picks brings a reader scrolled past it back to. */
@@ -151,6 +168,9 @@ const FOLD_EXEMPT =
  *               (2026-10-29-insights-hub-is-the-finder)
  *   C  offer    another offer, on tint — only with its picture
  *   D  close    the ask: the copy and the form (the island close where the caller asks for one)
+ *
+ * The listing's own bands (`bands`: a client wall, a proof wall, an FAQ) sit after A, after B/C and
+ * after D, in the copy's order.
  */
 export function ListingIndex({
   breadcrumbs,
@@ -163,6 +183,7 @@ export function ListingIndex({
   empty,
   offer,
   closing,
+  bands,
 }: ListingIndexProps) {
   const lede = (hero.lede ?? []).filter((paragraph) => paragraph.trim());
   const shown = views
@@ -251,6 +272,8 @@ export function ListingIndex({
         surface="paper"
       />
 
+      {bands?.afterHero}
+
       {/* The fold rule's one exception on a listing: the list is the page's whole content, grows with
           the CMS and is read by scrolling, so no height could hold it. fold:check reports it with this
           reason and still measures the hero and the close. */}
@@ -268,6 +291,8 @@ export function ListingIndex({
           media={{ image: offer.image }}
         />
       ) : null}
+
+      {bands?.afterListing}
 
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
           action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
@@ -306,6 +331,8 @@ export function ListingIndex({
           actions={[closing.action]}
         />
       ) : null}
+
+      {bands?.afterClose}
     </>
   );
 }

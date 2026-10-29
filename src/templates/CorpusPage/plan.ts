@@ -344,6 +344,25 @@ export const TEMPLATE_BANDS = {
     'expertise',
   ],
   '/about': ['leadership', 'company-record'],
+  /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,
+     proof wall, FAQ, enquiry) render by the plan's kind around it (component-map C13). */
+  '/insights': [
+    'new-product',
+    'ai-product-ux',
+    'design-systems',
+    'modernisation',
+    'saas-ux',
+    'formats',
+    'talk',
+  ],
+  '/case-studies': [
+    'featured',
+    'new-products',
+    'established-products',
+    'ai-products',
+    'designed-and-built',
+    'enquiry',
+  ],
 } as const satisfies Readonly<Record<string, readonly string[]>>;
 
 /** The kind the id table gives a band, or undefined when its id is not in the table. */
@@ -469,7 +488,9 @@ function drafts(page: CorpusPage): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             ((kind === 'challenges' || kind === 'text') &&
-              page.composition.mediaBindings.some((m) => m.bound && m.supportsSection === band.id)),
+              page.composition.mediaBindings.some(
+                (m) => m.bound && m.supportsSection === band.id,
+              )),
       ...(arrangements[band.id] ? { arrangement: arrangements[band.id] } : {}),
       ...extra,
     });

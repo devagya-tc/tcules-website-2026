@@ -136,9 +136,14 @@ const COMPOSED = new Set(
   ].map((m) => ROUTES[m[1]]),
 );
 /* Every page whose bands the plan's id table classifies: the offer families, the composed routes,
-   and home and About (which compose a few ids themselves, TEMPLATE_BANDS, and the rest by the plan). */
+   home and About (which compose a few ids themselves, TEMPLATE_BANDS, and the rest by the plan), and
+   the two listings (ListingIndex composes the list; the bands around it by the plan). */
 const isPlanned = (route) =>
-  isOfferFamily(route) || COMPOSED.has(route) || route === '/' || route === '/about';
+  isOfferFamily(route) ||
+  COMPOSED.has(route) ||
+  ['/', '/about', '/insights', '/case-studies'].includes(route);
+/* A listing's own bands are ListingIndex's sections (shelves, case groups, its close), not a plan kind. */
+const LISTINGS = new Set(['/insights', '/case-studies']);
 const templateBand = (route, id) => (TEMPLATE_BANDS[route] ?? []).includes(id);
 
 /* Live on OfferPage today (PASS_1_OFFER_ROUTES); read from the route file so the census never drifts. */
@@ -225,7 +230,9 @@ for (const page of pages) {
   const bandRows = page.bands.map((band) => {
     const kind = offer
       ? templateBand(page.route, band.id)
-        ? `template:${kindOf(band)}`
+        ? LISTINGS.has(page.route)
+          ? 'template:listing'
+          : `template:${kindOf(band)}`
         : kindOf(band)
       : 'n/a';
     const media = page.composition.mediaBindings

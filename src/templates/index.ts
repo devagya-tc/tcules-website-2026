@@ -14,6 +14,7 @@ export {
   caseViews,
   insightFinder,
   insightViews,
+  shelfSections,
 } from './ListingIndex';
 export type {
   CaseGroup,
@@ -24,7 +25,9 @@ export type {
   FinderPick,
   InsightFormat,
   InsightItem,
+  InsightShelf,
   InsightKind,
+  ListingBands,
   ListingClosing,
   ListingFinder,
   ListingHero,
@@ -46,6 +49,7 @@ export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {
   AboutPage,
+  CorpusBandView,
   HomePage,
   PlainPage,
   LongformPage,
@@ -66,6 +70,7 @@ export {
 } from './CorpusPage';
 export type {
   AboutPageProps,
+  CorpusBandViewProps,
   HomePageProps,
   PlainPageProps,
   LongformFamily,

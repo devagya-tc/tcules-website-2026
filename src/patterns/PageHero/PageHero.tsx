@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 import {
   BrandMark,
@@ -814,7 +814,21 @@ export function PageHero({
      never reordered, and two paragraphs may be identical strings. */
   const recordParts = record.map((part) => part.trim()).filter(Boolean);
   const recordNode =
-    recordParts.length === 0 ? null : <p className={styles.tag}>{recordParts.join(' · ')}</p>;
+    recordParts.length === 0 ? null : (
+      /* Each fact holds together and the line breaks only BETWEEN facts, the dot staying with the
+         fact before it, so a long record wraps in the lede's column instead of running past it (the
+         case index's four studio facts did, 29 Oct 2026). */
+      <p className={cx(styles.tag, styles.record)}>
+        {recordParts.map((part, index) => (
+          <Fragment key={`${index}-${part}`}>
+            {index > 0 ? ' ' : null}
+            <span className={styles.recordFact}>
+              {index < recordParts.length - 1 ? `${part} ·` : part}
+            </span>
+          </Fragment>
+        ))}
+      </p>
+    );
   const copyNode =
     lead === undefined && recordNode === null ? null : (
       <Layout rowGap="text">
