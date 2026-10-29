@@ -1,4 +1,5 @@
-import { Layout, Section } from '@/components';
+import { Layout, Media, Section } from '@/components';
+import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
 import { Bento, BlockCard, ServiceTile, type BentoItem } from '@/patterns';
 
@@ -9,7 +10,8 @@ import t from '../_specimen/typeroles.module.css';
  * /design/bento — linked tiles of two sizes on four tracks over one continuous texture per row
  * (home "What we do", owner 19 Oct 2026, mocks S3). The six-tile diagonal home ships, the even
  * four-up row, a two-wide row, the tint, ink and blue grounds, and one tile on its own as a card in
- * another set (ServiceTile, 29 Oct 2026). Hover a tile: it lifts 2px, its hairline and
+ * another set (ServiceTile, 29 Oct 2026): a related service, a related expertise with its photo, and
+ * the wide tile that takes a row it would otherwise sit alone on. Hover a tile: it lifts 2px, its hairline and
  * texture turn blue and its title takes the accent.
  */
 
@@ -256,8 +258,8 @@ export default function BentoSpecimen() {
 
       <Variation
         id="service-tile"
-        title="7 · ServiceTile — a named service as a card in another set"
-        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, texture, drawing and hover, its wave fitted to itself. The line is the copy's own words before the link (&ldquo;Our related service&rdquo;)."
+        title="7 · ServiceTile — a related service as a card in another set"
+        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, texture and hover, its wave fitted to itself. As a card (owner, 29 Oct 2026): the copy's own words before the link as its mono eyebrow (&ldquo;Our related service&rdquo;), the title, the flat drawing centred in the spare height, &ldquo;Explore the service&rdquo; at the foot."
       />
       <Section>
         <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
@@ -267,6 +269,7 @@ export default function BentoSpecimen() {
             href="#service-tile"
             frame="panel"
             icon="notebook"
+            eyebrow="Guide"
             size="sm"
             tracks={3}
             cue="title"
@@ -278,6 +281,7 @@ export default function BentoSpecimen() {
             href="#service-tile"
             frame="panel"
             icon="document-text"
+            eyebrow="Article"
             size="sm"
             tracks={3}
             cue="title"
@@ -286,9 +290,110 @@ export default function BentoSpecimen() {
           <li>
             <ServiceTile
               title="New Product Design & First Release"
-              body="Our related service"
+              eyebrow="Our related service"
               href={ROUTES.services}
               scene="new-product"
+              action="Explore the service"
+            />
+          </li>
+        </Layout>
+      </Section>
+
+      <Variation
+        id="expertise-tile"
+        title="8 · ServiceTile — a related expertise, with its sector photograph"
+        note="The same card for an expertise (&ldquo;Our related expertise&rdquo;): the expertise's sector photograph in the drawing's place, as home shows it, or its labelled placeholder, never another subject's picture; &ldquo;Explore the expertise&rdquo; at the foot."
+      />
+      <Section>
+        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+          <BlockCard
+            title="CPQ UX design: quoting software sales reps choose over spreadsheets"
+            body="Design quoting software around the quote that several roles contribute to."
+            href="#expertise-tile"
+            frame="panel"
+            icon="document-text"
+            eyebrow="Article"
+            size="sm"
+            tracks={3}
+            cue="title"
+            compact
+          />
+          <BlockCard
+            title="SaaS user engagement: measure the behaviour that shows customers getting value"
+            body="Why fewer sessions can mean a better product."
+            href="#expertise-tile"
+            frame="panel"
+            icon="notebook"
+            eyebrow="Guide"
+            size="sm"
+            tracks={3}
+            cue="title"
+            compact
+          />
+          <li>
+            <ServiceTile
+              title="B2B SaaS and workflow software"
+              eyebrow="Our related expertise"
+              href={ROUTES.b2bSaasWorkflow}
+              picture={
+                <Media
+                  image={getKitPhoto(HOME_SECTOR_PHOTOS[ROUTES.b2bSaasWorkflow]!)}
+                  ratio="16/9"
+                  sizes="400px"
+                />
+              }
+              action="Explore the expertise"
+            />
+          </li>
+        </Layout>
+      </Section>
+
+      <Variation
+        id="tile-wide"
+        title="9 · ServiceTile wide — the row's last card would sit alone"
+        note="Where a shelf's pieces fill whole rows, the related card would be alone on a row, so it takes the whole row (`wide`, its li `data-media-row`): eyebrow, title and action beside the visual, a section apart, as every horizontal media item."
+      />
+      <Section>
+        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+          {['Article', 'Guide', 'Guide'].map((format, index) => (
+            <BlockCard
+              key={index}
+              title="Does my SaaS need a mobile app? A moment-by-moment test"
+              body="The answer lies in the work that happens away from a desk and cannot wait."
+              href="#tile-wide"
+              frame="panel"
+              icon={format === 'Article' ? 'document-text' : 'notebook'}
+              eyebrow={format}
+              size="sm"
+              tracks={3}
+              cue="title"
+              compact
+            />
+          ))}
+          <li data-media-row="">
+            <ServiceTile
+              title="B2B SaaS and workflow software"
+              eyebrow="Our related expertise"
+              href={ROUTES.b2bSaasWorkflow}
+              picture={
+                <Media
+                  image={getKitPhoto(HOME_SECTOR_PHOTOS[ROUTES.b2bSaasWorkflow]!)}
+                  ratio="16/9"
+                  sizes="600px"
+                />
+              }
+              action="Explore the expertise"
+              wide
+            />
+          </li>
+          <li data-media-row="">
+            <ServiceTile
+              title="Design Systems"
+              eyebrow="Our related service"
+              href={ROUTES.designSystems}
+              scene="design-systems"
+              action="Explore the service"
+              wide
             />
           </li>
         </Layout>

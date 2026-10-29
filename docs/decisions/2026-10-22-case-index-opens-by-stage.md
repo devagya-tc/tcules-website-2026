@@ -1,7 +1,7 @@
 ---
 title: "The case-study index opens by stage"
 date: 2026-10-22
-status: active
+status: superseded
 area: [content, components]
 source: "Jatin review, 22 Oct 2026 (triage checklist S5 and Q11; PR feat/case-cards-stage)"
 supersedes: []

@@ -261,7 +261,11 @@ export function CardGrid({
     <ListingGrid id={id}>
       {cards.map((item) => {
         const pictured = Boolean(pictureOf(item));
-        const panel = pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] };
+        /* A panel says its format: the glyph with the format's name beside it, on every panel, as
+           the resource rows set it (owner, 29 Oct 2026; decisions/2026-10-29-panel-names-its-format). */
+        const panel = pictured
+          ? {}
+          : { frame: 'panel' as const, icon: GLYPH[item.kind], eyebrow: LABEL[item.kind].one };
         return (
           <BlockCard
             key={item.id}

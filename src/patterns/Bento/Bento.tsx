@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Sketch } from '@/components';
+import { Button, Cluster, Icon, Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
 import type { SketchName } from '@/lib/sketches';
 
@@ -122,23 +122,116 @@ function TileLink({
   );
 }
 
-export type ServiceTileProps = Omit<BentoItem, 'id' | 'span'> & {
+export type ServiceTileProps = {
+  /** The destination's name ("Design Systems", "B2B SaaS and workflow software"). The tile's heading. */
+  title: string;
+  /** The whole tile is the link. */
+  href: string;
+  /**
+   * The line over the title, in the mono label voice: the copy's own words for what the tile is to
+   * the set it sits in ("Our related service", "Our related expertise"). Authored case; the role
+   * sets the case.
+   */
+  eyebrow?: string;
+  /** The service's own flat Sketch scene, drawn bare on the tile's texture. */
+  scene?: SketchName;
+  /**
+   * A picture in the drawing's place, composed by the caller (an expertise's sector photograph, or
+   * its labelled placeholder): for a destination that has no flat drawing of its own. Exclusive with
+   * `scene`; never another subject's drawing borrowed.
+   */
+  picture?: ReactNode;
+  /**
+   * The action at the tile's foot, one wording for every tile of its kind ("Explore the service").
+   * The whole tile is the one anchor, so the action is the link Button rendered as a span, which
+   * takes the tile's hover. Authored case; Button sets the case.
+   */
+  action?: string;
+  /**
+   * The tile takes a whole row (it would otherwise sit alone on its row): its words and action on
+   * one side, the visual on the other, as every horizontal media item does
+   * (decisions/2026-10-29-media-rows-take-a-whole-row). The caller's `li` declares `data-media-row`.
+   */
+  wide?: boolean;
   /** The tile's heading element. Default h3. */
   titleAs?: 'h2' | 'h3' | 'h4';
 };
 
 /**
- * ServiceTile — ONE bento tile on its own, for a named service that sits as a card in another set
- * (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
- * related service as the third card beside its two pieces. The same tile as the bento's (its hairline,
- * texture, drawing and hover), with the texture's wave fitted to the tile itself, since it shares no
- * row with other tiles. It renders a `div`; the caller's set supplies the `li`. A set of services is
- * a `Bento`, never a row of these.
+ * ServiceTile — ONE bento tile on its own, for a named destination that sits as a card in another
+ * set (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
+ * related service or related expertise beside its pieces. The same tile as the bento's (its hairline,
+ * texture and hover), with the texture's wave fitted to the tile itself, since it shares no row with
+ * other tiles. As a card it reads top to bottom (owner, 29 Oct 2026;
+ * decisions/2026-10-29-related-destination-is-a-card): the eyebrow, the title, the visual in the
+ * middle of the spare height, the action at the foot. `wide`, the words and action beside the visual.
+ * It renders a `div`; the caller's set supplies the `li`. A set of services is a `Bento`, never a row
+ * of these.
  */
-export function ServiceTile({ titleAs: Title = 'h3', ...item }: ServiceTileProps) {
+export function ServiceTile({
+  title,
+  href,
+  eyebrow,
+  scene,
+  picture,
+  action,
+  wide = false,
+  titleAs: Title = 'h3',
+}: ServiceTileProps) {
+  const words = (
+    <Layout rowGap="tight">
+      {eyebrow?.trim() ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+      <Title className={styles.title}>{title}</Title>
+    </Layout>
+  );
+  const visual = picture ? (
+    <div className={styles.picture}>{picture}</div>
+  ) : scene ? (
+    <div className={cx(styles.art, styles.artCentred)}>
+      <Sketch name={scene} frame="bare" story />
+    </div>
+  ) : null;
+  const button = action?.trim() ? (
+    <Cluster colGap="tight">
+      <Button
+        as="span"
+        emphasis="link"
+        tone="primary"
+        icon={<Icon name="arrow-right" />}
+      >
+        {action}
+      </Button>
+    </Cluster>
+  ) : null;
   return (
     <div className={cx(styles.cell, styles.solo)}>
-      <TileLink item={{ ...item, id: item.href }} wide={false} Title={Title} />
+      <a href={href} className={cx(styles.tile, wide && styles.tileWide)} data-btn-link-group>
+        {wide ? (
+          /* Words, visual, action in reading order, so a phone stacks them as the card does; from
+             768 the visual takes the second track across both rows, the words over the action
+             beside it (each child places itself: `.wideWords`, `.wideVisual`, `.wideAction`). */
+          <Layout
+            className={styles.fill}
+            columns={{ base: 1, md: [1, 1] }}
+            colGap="section"
+            rowGap="block"
+          >
+            <div className={styles.wideWords}>{words}</div>
+            {visual ? <div className={styles.wideVisual}>{visual}</div> : null}
+            {button ? <div className={styles.wideAction}>{button}</div> : null}
+          </Layout>
+        ) : (
+          /* Words at the head, then a stack that takes the spare height: the visual centred in it,
+             the action pinned under it. */
+          <Layout className={styles.fill} rowGap="block" fillLast>
+            {words}
+            <Layout rowGap="block" fillFirst>
+              {visual ?? <span />}
+              {button}
+            </Layout>
+          </Layout>
+        )}
+      </a>
     </div>
   );
 }

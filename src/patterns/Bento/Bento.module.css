@@ -236,6 +236,55 @@
   }
 }
 
+/* ── The lone tile as a card (ServiceTile) ─────────────────────────────────────
+   Its eyebrow in the mono label voice; the drawing centred in the spare height between the words
+   and the action (self-alignment of the child in its own row); a picture in the drawing's place
+   fills the tile's width at 16:9 with the card crop box's radius. A wide tile takes the wide
+   tile's inset. */
+.eyebrow {
+  color: var(--bnt-eyebrow-ink);
+  font: var(--bnt-eyebrow-text);
+  letter-spacing: var(--bnt-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.artCentred {
+  align-self: center;
+  justify-self: center;
+}
+
+.picture {
+  align-self: center;
+  overflow: hidden;
+  border-radius: var(--bnt-picture-radius);
+}
+
+@media (min-width: 768px) {
+  .tileWide {
+    padding: var(--gap-gutter);
+  }
+
+  .wideWords {
+    align-self: end;
+  }
+
+  .wideVisual {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .wideAction {
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .tileWide .title {
+    font: var(--bnt-title-text-wide);
+    letter-spacing: var(--bnt-title-tracking-wide);
+  }
+}
+
 /* ── States ─────────────────────────────────────────────────────────────────
    Hover and keyboard focus, one curve both ways: the tile lifts, its hairline and texture turn blue,
    its title takes the accent. Keyboard gets the ring as well. */
