@@ -263,7 +263,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   principles: (_band, sig) => (/I/.test(sig) ? 'outcomes' : 'text'),
   /* ── G16 · destinations ── */
   'what-we-do': 'destinations',
-  'product-types': 'table',
+  /* Two titled card sets with the pages' photographs (G16, § E /expertise; HubBands). */
+  'product-types': 'destinations',
   'design-work': 'destinations',
   'ai-interfaces': 'destinations',
   'product-situations': 'destinations',
@@ -279,7 +280,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   modernisation: termsOrTools,
   prototypes: 'directory',
   /* ── G19 · prose bands on composed pages ── */
-  prototype: 'text',
+  /* /audits: the sixth audit, one linked row under its lead (§ E /audits). */
+  prototype: 'related',
   ahmedabad: 'text',
   'product-work': 'text',
   'ai-fluency': 'text',

@@ -3,6 +3,7 @@ import { Fragment, type ReactNode } from 'react';
 import { Button, Icon, Layout, Media, Prose } from '@/components';
 import {
   Bento,
+  BlockCard,
   BlockCardSet,
   Callout,
   ContentSection,
@@ -30,6 +31,7 @@ import { sketchForRoute } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import { hasSlot, slotImage, slugOf } from './images';
+import { kindOf, signature } from './plan';
 import { boldLead, hasLink, labelTitle, leadOf, linkLead, plain, trimStart } from './text';
 
 /**
@@ -573,12 +575,28 @@ export function TableBand({ band }: { band: CorpusBand }) {
 
 type Entry = { title: string; href?: string; body?: string; bodyHtml?: readonly string[] };
 
+/**
+ * A paragraph that names a page by its link and then describes it in the next sentence ("[Prototype
+ * Readiness Review]. For working prototypes …", /audits `prototype`): the link is the entry's title
+ * and the sentence its body, as a colon-led line is. Only a whole sentence after the stop counts.
+ */
+function linkSentence(block: CorpusBlock): { link: LinkRun; body: InlineRun[] } | null {
+  if (block.type !== 'paragraph') return null;
+  const [first, second, ...rest] = block.runs;
+  if (first?.type !== 'link' || second?.type !== 'text' || !/^\.\s+\S/.test(second.text))
+    return null;
+  return {
+    link: first,
+    body: [{ type: 'text', text: second.text.replace(/^\.\s*/, '') }, ...rest],
+  };
+}
+
 /** The entries of a reading list: link-led lines, bold-linked list items, or `###` items. */
 function entriesOf(blocks: readonly CorpusBlock[]): { entries: Entry[]; rest: CorpusBlock[] } {
   const entries: Entry[] = [];
   const rest: CorpusBlock[] = [];
   for (const block of blocks) {
-    const led = linkLead(block);
+    const led = linkLead(block) ?? linkSentence(block);
     if (led) {
       entries.push({
         title: plain(led.link.children),
@@ -639,11 +657,15 @@ export function RelatedBand({ band }: { band: CorpusBand }) {
       : undefined;
   const { entries, rest } = entriesOf(leadText ? blocks.slice(1) : blocks);
   const footer = rest.length > 0 ? <BandBody blocks={rest} /> : undefined;
+  /* A term index (every entry a link-led line, /glossary's five groups) is two columns from two
+     entries, so the groups share one grid down the page instead of switching between one column
+     and two by their counts (29 Oct 2026). Other lists keep one column under four. */
+  const termIndex = entries.length >= 2 && /^A+P?$/.test(signature(band));
   return (
     <ContentSection {...head(band)} data-band="K" lead={leadText} footer={footer}>
       <Layout
         as="ul"
-        columns={entries.length >= 4 ? { base: 1, md: 2 } : { base: 1 }}
+        columns={entries.length >= 4 || termIndex ? { base: 1, md: 2 } : { base: 1 }}
         colGap="gutter"
         rowGap="none"
       >
@@ -832,10 +854,17 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
 /* ── Tool groups (G23) ───────────────────────────────────────────────────────── */
 
 /**
- * A tool hub group: each tool's bold linked name and the paragraph after it as one card, two across
- * under the head; a table or a closing paragraph follows the cards.
+ * A tool hub group: each tool's bold linked name and the paragraph after it as one card, under the
+ * head; a table or a closing paragraph follows the cards.
+ *
+ * Every tool is a worksheet with no cover yet, which is what BlockCard's texture cover is for (an
+ * artefact's stand-in: the brand's pixel grid, the tool's glyph on it, never a stock photograph), so
+ * each card has a shape (29 Oct 2026; a set of bare text cards read as one grey rectangle per band).
+ * Two tools sit two across. A group of ONE is a horizontal card across the column, its cover beside
+ * its words, where a single tile in a two-track grid left half the band empty; consecutive single
+ * groups alternate the cover's side and field, so they read as placed, not repeated.
  */
-export function DirectoryBand({ band }: { band: CorpusBand }) {
+export function DirectoryBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
   const cards: BlockCardSetItem[] = [];
   const rest: CorpusBlock[] = [];
@@ -847,10 +876,12 @@ export function DirectoryBand({ band }: { band: CorpusBand }) {
     if (lead) {
       const link = linkIn(lead.label);
       const body = trimStart(lead.body);
+      const icon = link ? glyphForRoute(link.href) : undefined;
       open = {
         id: link?.href ?? labelTitle(lead.label),
         title: labelTitle(lead.label),
         ...(link ? { href: link.href } : {}),
+        ...(icon ? { icon } : {}),
         ...(body.length > 0 ? { body: plain(body) } : {}),
       };
       cards.push(open);
@@ -861,7 +892,33 @@ export function DirectoryBand({ band }: { band: CorpusBand }) {
       rest.push(block);
     }
   }
-  const set = <BlockCardSet items={cards} lead="none" across={2} cue="title" scroll="never" />;
+  /* Which single group this is, among the page's directory bands, so neighbours alternate. */
+  const nth = page.bands
+    .filter((other) => kindOf(other) === 'directory')
+    .findIndex((other) => other.id === band.id);
+  const [only] = cards;
+  const set =
+    cards.length === 1 && only ? (
+      <ul>
+        <BlockCard
+          {...only}
+          orientation="horizontal"
+          imageSide={nth % 2 === 0 ? 'left' : 'right'}
+          size="md"
+          cue="title"
+          media={{ type: 'texture', recipe: ((nth + 1) % 3) as 0 | 1 | 2 }}
+        />
+      </ul>
+    ) : (
+      <BlockCardSet
+        items={cards}
+        lead="none"
+        across={2}
+        cue="title"
+        scroll="never"
+        standIns="texture"
+      />
+    );
   return (
     <ContentSection {...head(band)} data-band="C-cards">
       {rest.length > 0 ? (

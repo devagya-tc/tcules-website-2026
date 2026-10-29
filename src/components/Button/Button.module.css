@@ -45,7 +45,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--btn-height-md);
+  /* The size's height is a FLOOR, not a fixed box (29 Oct 2026): a label longer than its container
+     (the 26 Oct copy's hero asks, "Describe your product, and we'll suggest the mix", ran 89px past a
+     390 viewport) wraps to a second line and the box grows, where `nowrap` pushed it off the page. A
+     one-line label renders exactly as before: its line plus the padding sits inside the floor.
+     `flex-shrink: 0` keeps the old behaviour beside siblings (a button never squeezes to make room);
+     only a container narrower than the whole label makes it wrap. */
+  min-block-size: var(--btn-height-md);
+  max-inline-size: 100%;
+  flex-shrink: 0;
+  padding-block: var(--btn-padding-y);
   padding-inline: var(--btn-padding-x);
   gap: var(--btn-gap);
   border: 0;
@@ -55,7 +64,7 @@
   letter-spacing: var(--btn-text-tracking);
   text-transform: var(--text-mono-case);
   text-decoration: none;
-  white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   box-shadow: var(--btn-shadow);
   /* Colour only — the one thing in this system that transitions. There is no elevation to
@@ -87,7 +96,7 @@
    not restated — the `font` shorthand does not reset it, so all three sizes track alike from the
    base rule, which is what --btn-text-tracking asserts by being a single value. */
 .sm {
-  height: var(--btn-height-sm);
+  min-block-size: var(--btn-height-sm);
   font: var(--btn-text-sm);
 }
 
@@ -97,7 +106,7 @@
 }
 
 .lg {
-  height: var(--btn-height-lg);
+  min-block-size: var(--btn-height-lg);
   font: var(--btn-text-lg);
 }
 
@@ -131,7 +140,7 @@
 .link {
   /* A bare link has no box and no fixed height, so it may wrap: a 44-character label ("How AI-native
      Product Design works at Tcules") held on one line ran 54px past a 390 viewport. A boxed button
-     keeps `nowrap`, because its height is fixed.
+     wraps too (29 Oct 2026), its height a floor that grows by a line (see `.button`).
 
      A wrapping link FLOWS rather than flexes. In a flex row a wrapped label is a block as wide as
      the space it was given, so the arrow after it was pushed to the far edge of the column, a
@@ -143,6 +152,8 @@
   white-space: normal;
   text-align: start;
   height: auto;
+  min-block-size: 0;
+  padding-block: 0;
   padding-inline: 0;
   border-radius: var(--btn-radius-bare);
 }

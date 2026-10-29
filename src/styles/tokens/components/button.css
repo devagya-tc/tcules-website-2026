@@ -64,6 +64,7 @@
    is how a control ends up with no line-height at all and inherits body's 1.6.   */
 :root {
   --btn-padding-x: var(--space-8); /* optical, not --gap-tight */
+  --btn-padding-y: var(--space-8); /* optical: the air above and below a label that wraps to two lines */
   --btn-label-margin: var(--space-4); /* optical, not --gap-inline */
   --btn-gap: var(--space-4); /* optical, not --gap-inline */
   --btn-gap-bare: var(--space-8); /* link emphasis has no box and no label margin */
