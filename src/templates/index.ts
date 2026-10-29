@@ -10,13 +10,11 @@
  * page reads content and passes it in.
  */
 export {
-  FormatTiles,
   ListingIndex,
   caseFinder,
   caseViews,
   insightFinder,
   insightViews,
-  shelfSections,
 } from './ListingIndex';
 export type {
   CaseGroup,
@@ -25,12 +23,9 @@ export type {
   FinderGroup,
   FinderOption,
   FinderPick,
-  FormatTileRow,
   InsightFormat,
   InsightItem,
-  InsightShelf,
   InsightKind,
-  ShelfRelated,
   ListingBands,
   ListingClosing,
   ListingFinder,

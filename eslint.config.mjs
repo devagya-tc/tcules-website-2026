@@ -126,6 +126,8 @@ const eslintConfig = defineConfig([
      output is measuring the wrong thing, and it was the only thing making `npm run verify` red. */
   globalIgnores([
     '.next/**',
+    // A captured page's built chunks (see its README.md): minified output, not source.
+    'public/_frozen/**',
     'out/**',
     'build/**',
     'next-env.d.ts',
