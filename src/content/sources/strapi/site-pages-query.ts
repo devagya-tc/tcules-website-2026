@@ -8,38 +8,47 @@ export const SITE_PAGES_QUERY = /* GraphQL */ `
   query SitePages {
     services(status: DRAFT, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     audits(status: DRAFT, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     expertises(status: DRAFT, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     glossaries(status: DRAFT, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     tools(status: DRAFT, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     blogs(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     podcasts(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     events(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
     caseStudies(status: PUBLISHED, pagination: { limit: -1 }) {
       slug
+      title
       updatedAt
     }
   }
