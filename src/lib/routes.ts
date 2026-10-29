@@ -214,8 +214,10 @@ export const CASE_STUDY_SLUGS = {
   Benchmark: 'legacy-saas-modernisation-information-architecture',
   'Eden AI': 'unifying-workflow-creation-through-intelligent-search',
   Auxentios: 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-  'Auxentios Technology': 'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
-  Scissors: 'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
+  'Auxentios Technology':
+    'consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software',
+  Scissors:
+    'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
   'GT Tools': 'redesigning-for-a-shopify-website-ux-design',
   ConnectX: 'ai-native-building-energy-product-connectx',
   BuildTwin: 'ai-quality-control-expert-review-buildtwin',
@@ -223,7 +225,8 @@ export const CASE_STUDY_SLUGS = {
   'Omny AI': 'designing-trust-how-tcules-helped-omnyai-reframe-their-ai-human-relationship',
   OctiFi: 'optimising-microlending-fintech-app-for-a-y-combinator-batch-startup',
   Ryzeo: 'ux-revamp-for-a-saas-product-in-marketing-automation-vertical',
-  'Gold Image Printing': 'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
+  'Gold Image Printing':
+    'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
   'The Wandering Raven': 'transforming-an-edtech-platform-into-an-engaging-learning-experience',
   'The Chain Hut': 'ux-ui-design-and-development-for-magento-of-a-silver-chain-store',
   'Kirana store payments': 'ux-research-for-kirana-store-payment-app',
@@ -254,8 +257,7 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
     'unifying-workflow-creation-through-intelligent-search',
   'gold-image-printing-web-to-print-erp-modernisation':
     'boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux',
-  'gt-tools-shopify-product-discovery':
-    'redesigning-for-a-shopify-website-ux-design',
+  'gt-tools-shopify-product-discovery': 'redesigning-for-a-shopify-website-ux-design',
   'novus-insights-ai-survey-product-design':
     'saas-ux-ui-case-study-ai-for-market-research-automation',
   'octifi-mobile-lending-product-design':
@@ -268,6 +270,17 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
     'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
   'wandering-raven-edtech-moodle-experience':
     'transforming-an-edtech-platform-into-an-engaging-learning-experience',
+};
+
+/**
+ * A path the copy links → the path the piece lives at on Strapi today, for an insight the copy files
+ * under another format or slug. The home page's Eden AI episode is linked as a podcast; the live page
+ * is a video (review 29 Oct 2026). The corpus seam rewrites every link to the live path, and
+ * next.config.ts serves the copy's path as a temporary redirect, the way it does a case's slug.
+ */
+export const INSIGHT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
+  '/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo':
+    '/insights/videos/do-ai-not-for-ai-sake-but-for-your-user-insights-from-eden-ai-ctpo',
 };
 
 /**

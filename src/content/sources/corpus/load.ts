@@ -12,7 +12,7 @@ import type {
   CorpusMediaBinding,
   CorpusPage,
 } from '../../corpus-types.ts';
-import { CASE_SLUG_REDIRECTS } from '../../../lib/routes.ts';
+import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS } from '../../../lib/routes.ts';
 import { parseBody } from './parse-body.ts';
 
 /** The corpus directory: `_pages/` at the repo root, one markdown file per page. */
@@ -156,7 +156,8 @@ function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string
 
 /** Parse one corpus file's text into a page. Throws with the file name on a malformed file. */
 /**
- * Every link to a case study points at its LIVE slug (component-map C3, 29 Oct 2026). The copy links
+ * Every link to a case study points at its LIVE slug (component-map C3, 29 Oct 2026), and every link
+ * to an insight the copy files elsewhere at its live path (INSIGHT_PATH_REDIRECTS, 29 Oct 2026). The copy links
  * the slugs its own case pages were planned under; the 20 live cases keep Strapi's (owner, 11 Oct
  * 2026), and `CASE_SLUG_REDIRECTS` names the move. Rewritten here, at the seam, so no page reaches a
  * case through a redirect and no template learns that two slugs exist. Pure: a new tree, the words
@@ -164,6 +165,10 @@ function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string
  */
 const CASE_PATH = /^\/case-studies\/([^/#?]+)(.*)$/;
 function liveHref(href: string): string {
+  /* An insight the copy files under another format or slug (INSIGHT_PATH_REDIRECTS), likewise. */
+  const [path = '', ...rest] = href.split('#');
+  const insight = INSIGHT_PATH_REDIRECTS[path];
+  if (insight) return [insight, ...rest].join('#');
   const match = CASE_PATH.exec(href);
   const live = match ? CASE_SLUG_REDIRECTS[match[1] ?? ''] : undefined;
   return live ? `/case-studies/${live}${match?.[2] ?? ''}` : href;

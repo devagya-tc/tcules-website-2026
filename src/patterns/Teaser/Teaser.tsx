@@ -110,6 +110,17 @@ export type TeaserProps = {
    * (beauty round 4). On a phone the line stays over the title.
    */
   metaAside?: boolean;
+  /**
+   * `row` only: a resource listing's ruled row (home's "Selected thinking", owner 29 Oct 2026). A
+   * hairline above the row (and below the last row of its list), the row's copy a `block` inside
+   * it, so a list of them reads as one ledger down the full column. Set on every row of the list.
+   */
+  ruled?: boolean;
+  /**
+   * `row` only: an arrow at the row's end, in the thumbnail's place, the cue that the whole row is
+   * one link. It moves toward its destination on hover. Not with a picture.
+   */
+  arrow?: boolean;
 };
 
 const SIZE_CLASS: Record<TeaserSize, string | undefined> = {
@@ -163,6 +174,8 @@ export function Teaser({
   slot = false,
   graphic = false,
   metaAside = false,
+  ruled = false,
+  arrow = false,
 }: TeaserProps) {
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
@@ -194,6 +207,13 @@ export function Teaser({
   const bodyText = body?.trim() ? body : undefined;
 
   const row = arrangement === 'row';
+  /* The row's end cue: an arrow where the row has no picture of its own. */
+  const arrowEl =
+    row && arrow && !picture ? (
+      <span className={styles.arrow} aria-hidden="true">
+        <Icon name="arrow-right" />
+      </span>
+    ) : null;
   const asideMeta =
     row && metaAside && !date && !index && (Boolean(label) || metaParts.length > 0);
   const dateBlock = date ? (
@@ -250,10 +270,11 @@ export function Teaser({
        not drawn and the meta line is over the title, as in every other row. */
     const facts = [...(label ? [label] : []), ...metaParts];
     const thumb = picture || slot;
+    const end = thumb || arrowEl;
     inner = (
       <Layout
         columns={
-          thumb ? { base: [1, 'auto'], md: ['auto', 1, 'auto'] } : { base: 1, md: ['auto', 1] }
+          end ? { base: [1, 'auto'], md: ['auto', 1, 'auto'] } : { base: 1, md: ['auto', 1] }
         }
         colGap="gutter"
         align="start"
@@ -270,7 +291,9 @@ export function Teaser({
           <span className={styles.thumb} aria-hidden={picture ? undefined : 'true'}>
             {picture}
           </span>
-        ) : null}
+        ) : (
+          arrowEl
+        )}
       </Layout>
     );
   } else if (!picture && row && slot) {
@@ -280,6 +303,13 @@ export function Teaser({
       <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="start">
         {marked}
         <span className={styles.thumb} aria-hidden="true" />
+      </Layout>
+    );
+  } else if (!picture && arrowEl) {
+    inner = (
+      <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="start">
+        {marked}
+        {arrowEl}
       </Layout>
     );
   } else if (!picture) {
@@ -357,6 +387,7 @@ export function Teaser({
         styles.root,
         SIZE_CLASS[size],
         row && styles.row,
+        row && ruled && styles.ruled,
         arrangement === 'beside' && styles.beside,
         compact && arrangement === 'stack' && styles.compact,
         graphic && styles.graphic,

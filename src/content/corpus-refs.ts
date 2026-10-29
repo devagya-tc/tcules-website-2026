@@ -1,7 +1,12 @@
-import type { CorpusCaseRef, CorpusMediaBinding } from './corpus-types';
-import { CASE_SLUG_REDIRECTS, caseStudyPath } from '@/lib/routes';
+import type { CorpusCaseRef, CorpusInsightRef, CorpusMediaBinding } from './corpus-types';
+import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS, caseStudyPath } from '@/lib/routes';
 
-import { getCaseStudyListingPage, getCorpusPage, listCorpusPages } from './source';
+import {
+  getCaseStudyListingPage,
+  getCorpusPage,
+  getCorpusRecord,
+  listCorpusPages,
+} from './source';
 
 /**
  * The cases a page cites, as each case's OWN corpus page describes it (page-mapping M8, rule 5.2).
@@ -78,4 +83,36 @@ export async function getCorpusBindings(
     }
   }
   return found;
+}
+
+/**
+ * The insights a page links, as each piece's OWN corpus page describes it: its format and its length
+ * as displayed (CorpusInsightRef). Links reach a piece at its live path (the seam rewrites them); a
+ * piece's own page in the copy may sit at the path the copy filed it under, so that is looked up too.
+ * A route with no page in the corpus is absent from the result.
+ */
+export async function getInsightRefs(
+  routes: readonly string[],
+): Promise<Record<string, CorpusInsightRef>> {
+  const planned = new Map(
+    Object.entries(INSIGHT_PATH_REDIRECTS).map(([from, to]) => [to, from]),
+  );
+  const refs: Record<string, CorpusInsightRef> = {};
+  for (const route of routes) {
+    const alias = planned.get(route);
+    const page =
+      (await getCorpusRecord(route)) ?? (alias ? await getCorpusRecord(alias) : null);
+    if (!page) continue;
+    const editorial = page.frontmatter.editorial;
+    const length =
+      editorial && typeof editorial === 'object' && 'reading_time_as_displayed' in editorial
+        ? (editorial as Record<string, unknown>).reading_time_as_displayed
+        : null;
+    refs[route] = {
+      route,
+      format: page.pageType,
+      length: typeof length === 'string' && length.trim() ? length.trim() : null,
+    };
+  }
+  return refs;
 }

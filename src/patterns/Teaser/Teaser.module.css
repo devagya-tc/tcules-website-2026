@@ -1,7 +1,8 @@
 /* Teaser — one linked piece held without an edge. Layout owns every arrangement (the stack, the
    beside in two equal halves, the row with its marker and end thumbnail, the date's two lines); this
    module owns the picture's unruled 16:9 box and its zoom, the marker column's width, the play mark's position on it, the type roles per size and the link states. Every
-   value is a --tsr-* token. No margin, no ground at rest, no rule between items. */
+   value is a --tsr-* token. No margin, no ground at rest, and no rule between items except a
+   resource listing's ruled rows (`ruled`). */
 
 .root {
   min-inline-size: 0;
@@ -107,6 +108,37 @@
   .metaInline {
     display: none;
   }
+}
+
+/* A resource listing's ruled row (`ruled`, owner 29 Oct 2026): a hairline above each row and below
+   the last, the copy a `block` inside its own rules — the inside of the row, not a distance to a
+   neighbour, so the list around it sets no gap. */
+.ruled {
+  border-block-start: var(--tsr-rule-width) solid var(--tsr-rule-ink);
+  padding-block: var(--gap-block);
+}
+
+.ruled:last-child {
+  border-block-end: var(--tsr-rule-width) solid var(--tsr-rule-ink);
+}
+
+/* The row's end cue (`arrow`): the link's arrow, in the accent, moving toward its destination on
+   hover and focus — a move on transform, on the title's own curve, and back. */
+.arrow {
+  display: block;
+  color: var(--tsr-arrow-ink);
+  transition: transform var(--tsr-title-ink-duration) var(--tsr-title-ink-easing);
+}
+
+.arrow > svg {
+  display: block;
+  inline-size: var(--tsr-arrow-size);
+  block-size: var(--tsr-arrow-size);
+}
+
+.link:hover .arrow,
+.link:focus-visible .arrow {
+  transform: translateX(var(--tsr-arrow-shift));
 }
 
 /* A row's title and standfirst read at a measure, not across a wide column. */

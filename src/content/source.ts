@@ -167,6 +167,7 @@ export const getTermsOfUsePage =
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
 export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
 export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
+export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPagesSource);
 
 /**
  * Star ratings for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER values today

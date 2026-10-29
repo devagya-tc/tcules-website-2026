@@ -241,6 +241,49 @@ export default function TeaserSpecimen() {
           </Specimen>
 
           <Specimen
+            title="row · lg · metaAside + ruled + arrow — a resource listing"
+            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column holds the format and the length as the piece's own page displays them; the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the meta line sits over the title and the arrow keeps the row's end."
+          >
+            <Layout as="ul" rowGap="none">
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Article"
+                meta={['10 min read']}
+                title="AI confidence scores in UX: design the review step people control"
+                body="Why a number on an AI answer earns little trust, and the review step that does, drawn from three AI products we designed."
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Guide"
+                meta={['13 min read']}
+                title={LONG}
+                body="A long title at the row measure, with two lines of standfirst under it, so the arrow is seen holding the row's end beside a wrapped title."
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Podcast"
+                meta={['6 min read']}
+                title="Eden AI's Samy Melaine on building AI products for users: podcast"
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="row · lg · date + graphic — an event card on white"
             note="`graphic`: the picture's white takes the box's pale ground (multiply), so a card drawn on white keeps an edge on paper. The day is zero-padded and tabular, so titles start on one edge."
           >
@@ -282,7 +325,13 @@ export default function TeaserSpecimen() {
                 media={PHOTO}
                 href={HREF}
               />
-              <Teaser size="sm" meta="Design System" title="Short title" media={SCENE} href={HREF} />
+              <Teaser
+                size="sm"
+                meta="Design System"
+                title="Short title"
+                media={SCENE}
+                href={HREF}
+              />
               <Teaser
                 size="sm"
                 meta="Information Design"

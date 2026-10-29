@@ -3,6 +3,7 @@ import type { NextConfig } from 'next';
 import {
   CASE_SLUG_REDIRECTS,
   EXPERTISE_SLUG_REDIRECTS,
+  INSIGHT_PATH_REDIRECTS,
   caseStudyPath,
   FORMAT_PAGE_REDIRECTS,
 } from './src/lib/routes';
@@ -42,6 +43,12 @@ const nextConfig: NextConfig = {
       ...Object.entries(EXPERTISE_SLUG_REDIRECTS).map(([from, to]) => ({
         source: `/expertise/${from}`,
         destination: `/expertise/${to}`,
+        permanent: false,
+      })),
+      /* An insight the copy links at another path → its live path (routes.ts § INSIGHT_PATH_REDIRECTS). */
+      ...Object.entries(INSIGHT_PATH_REDIRECTS).map(([from, to]) => ({
+        source: from,
+        destination: to,
         permanent: false,
       })),
       ...FORMAT_PAGE_REDIRECTS.map(({ from, to }) => ({

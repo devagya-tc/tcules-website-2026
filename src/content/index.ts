@@ -49,7 +49,7 @@ export {
   getCaseIndustries,
   getCaseStages,
 } from './source';
-export { getCaseRefs, getCorpusBindings } from './corpus-refs';
+export { getCaseRefs, getCorpusBindings, getInsightRefs } from './corpus-refs';
 export type {
   Page,
   PageBlock,
@@ -221,5 +221,6 @@ export type {
   CorpusBlock,
   CorpusBand,
   CorpusCaseRef,
+  CorpusInsightRef,
   CorpusContentSource,
 } from './corpus-types';

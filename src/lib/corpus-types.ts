@@ -232,6 +232,12 @@ export interface CorpusContentSource {
   getCorpusPage(route: string): Promise<CorpusPage | null>;
   /** Every page, in route order, optionally only one `pageType`. */
   listCorpusPages(type?: string): Promise<CorpusPage[]>;
+  /**
+   * One page's RECORD by route, including a piece filed under a format (`/insights/podcasts/…`),
+   * which the corpus authors but no corpus route renders: a page that links it reads its format and
+   * length from it (`getInsightRefs`). Null when the corpus has no file for the route.
+   */
+  getCorpusRecord(route: string): Promise<CorpusPage | null>;
 }
 
 /**
@@ -257,6 +263,21 @@ export type CorpusCaseRef = {
     height: number;
     sources?: readonly { src: string; width: number }[];
   } | null;
+};
+
+/**
+ * An insight a page links, as that piece's OWN corpus page describes it (home's "Selected thinking",
+ * 29 Oct 2026): its format, from `page_type`, and its length as the piece displays it
+ * (`editorial.reading_time_as_displayed`, "12 min read"). Read at the seam (`getInsightRefs`), so a
+ * template never reads another page and never writes a length nobody authored. Null where the piece
+ * authors none.
+ */
+export type CorpusInsightRef = {
+  route: string;
+  /** `article`, `guide`, `podcast`, `research`, `video`: the piece's `page_type`, verbatim. */
+  format: string;
+  /** "12 min read", as authored; null when the piece's page carries none. */
+  length: string | null;
 };
 
 /**
