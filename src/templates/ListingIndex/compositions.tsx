@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { Layout, type IconName } from '@/components';
 import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
@@ -239,6 +241,7 @@ export function CardGrid({
   id,
   facts = false,
   shelf = false,
+  after,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
@@ -256,8 +259,10 @@ export function CardGrid({
    * than dropping out; no topic tag, because the section's head already names the problem.
    */
   shelf?: boolean;
+  /** One more card after the pieces, its own `li` (a shelf's related service tile). */
+  after?: ReactNode;
 }) {
-  if (cards.length === 0) return null;
+  if (cards.length === 0 && !after) return null;
   return (
     <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
       {cards.map((item) => {
@@ -284,6 +289,7 @@ export function CardGrid({
           />
         );
       })}
+      {after}
     </Layout>
   );
 }
@@ -295,6 +301,7 @@ export function Feature({
   meta,
   titleAs = 'h3',
   shelf = false,
+  after,
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
@@ -302,6 +309,8 @@ export function Feature({
   titleAs?: 'h2' | 'h3' | 'h4';
   /** The cards under the lead as a curated shelf's (CardGrid `shelf`). */
   shelf?: boolean;
+  /** One more card after the cards (CardGrid `after`). */
+  after?: ReactNode;
 }) {
   return (
     <Layout rowGap="column">
@@ -322,7 +331,7 @@ export function Feature({
           />
         </ul>
       ) : null}
-      <CardGrid cards={cards} meta={meta} titleAs={titleAs} shelf={shelf} />
+      <CardGrid cards={cards} meta={meta} titleAs={titleAs} shelf={shelf} after={after} />
     </Layout>
   );
 }

@@ -1,17 +1,40 @@
 import { Layout, Section } from '@/components';
-import { Callout, EngagementOptions, type EngagementOption } from '@/patterns';
+import { Callout, CtaRow, EngagementOptions, type EngagementOption } from '@/patterns';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
 
 /**
  * /design/engagement-options — ways to work with us, comparable at a glance (product-design round 6,
- * 11 Oct 2026; page-mapping § 23). Every arrangement: the four scopes with a note (the shape), three
- * options, an option with no drawing, and the paper and tint grounds. Sample words.
+ * 11 Oct 2026; page-mapping § 23). Every arrangement: How we work together as every offer page and
+ * home set it (owner, 29 Oct 2026), the four scopes with a note, three options, an option with no
+ * drawing, and the paper and tint grounds. Sample words.
  */
 
+const TOGETHER: EngagementOption[] = [
+  {
+    title: 'A focused engagement.',
+    body: 'One flow, one hard question or an audit, at a fixed price agreed before we start.',
+    scope: 'feature',
+  },
+  {
+    title: 'A defined project.',
+    body: 'A first release, a redesign or a design system, with the scope and the price agreed before we begin.',
+    scope: 'area',
+  },
+  {
+    title: 'An ongoing partnership.',
+    body: 'A senior designer joins your team, with specialists as the work needs them.',
+    scope: 'embedded',
+  },
+];
+
 const FOUR: EngagementOption[] = [
-  { title: 'One workflow or feature.', body: 'One problem, solved properly.', scope: 'feature' },
+  {
+    title: 'One workflow or feature.',
+    body: 'One problem, solved properly.',
+    scope: 'feature',
+  },
   {
     title: 'A product area or a new product.',
     body: 'From research to designs ready to build.',
@@ -22,7 +45,11 @@ const FOUR: EngagementOption[] = [
     body: 'One of our designers in your tools and meetings, specialists joining when needed.',
     scope: 'embedded',
   },
-  { title: 'Design and build.', body: 'We design it, then our engineers build it.', scope: 'build' },
+  {
+    title: 'Design and build.',
+    body: 'We design it, then our engineers build it.',
+    scope: 'build',
+  },
 ];
 
 const NOTE = (
@@ -37,13 +64,42 @@ export default function EngagementOptionsSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>EngagementOptions</h1>
           <p className={t.lead}>
-            Peers a reader chooses between, so each carries a scope drawing on the same dot field —
-            one line, a region, one blue node among yours, a drawn region becoming a built one — in
-            the EngagementModel chart&rsquo;s language. The drawings make the four comparable before
-            a word is read. No icons, no discs, no boxes; none is featured.
+            Peers a reader chooses between, so each carries a scope drawing on the same dot
+            field — one line, a region, one blue node among yours, a drawn region becoming a
+            built one — in the EngagementModel chart&rsquo;s language. The drawings make the
+            four comparable before a word is read. No icons, no discs, no boxes; none is
+            featured.
           </p>
         </Layout>
       </Section>
+
+      <Variation
+        id="together"
+        title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
+        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead. The three options take three tracks from 768, each the flat scope drawing above its name and words. The closing paragraphs are equal terms side by side on their hairlines, a stack under the options. The two links are one pair at the end: the outlined button, then the link. Nothing sits at the heading's far end."
+      />
+      <EngagementOptions
+        heading="How we work together"
+        headingId="eop-together"
+        lead={[
+          'When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.',
+          'Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.',
+        ]}
+        options={TOGETHER}
+        terms={[
+          'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
+          'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+        ]}
+        actions={
+          <CtaRow
+            rule={false}
+            actions={[
+              { label: 'How we work together', href: '#together' },
+              { label: "Tell us what you're working on", href: '#enquiry' },
+            ]}
+          />
+        }
+      />
 
       <Variation
         id="four"
@@ -73,7 +129,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="three-blank"
         title="2 · Three options, one with no drawing"
-        note="Three take three tracks. An option whose name fits no scope shows its words alone rather than a wrong picture."
+        note="Three take three tracks from 768, so no track is left open. An option whose name fits no scope shows its words alone rather than a wrong picture."
       />
       <EngagementOptions
         heading="Ways to work with us"
@@ -82,7 +138,10 @@ export default function EngagementOptionsSpecimen() {
         options={[
           FOUR[0] as EngagementOption,
           FOUR[1] as EngagementOption,
-          { title: 'A review of what you have.', body: 'A fixed-scope look before anything is designed.' },
+          {
+            title: 'A review of what you have.',
+            body: 'A fixed-scope look before anything is designed.',
+          },
         ]}
       />
 

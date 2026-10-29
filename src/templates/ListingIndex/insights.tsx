@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 
 import { Button, Chip, Cluster, Icon, Input, Layout, Prose, Tag } from '@/components';
-import { Accordion } from '@/patterns';
+import { Accordion, ServiceTile } from '@/patterns';
+import type { SketchName } from '@/lib/sketches';
 
 import styles from './ListingIndex.module.css';
 import type { ListingFinder, ListingSection, ListingView } from './ListingIndex';
@@ -98,6 +99,12 @@ export type InsightShelf = {
   items: readonly InsightItem[];
   /** The shelf's closing line ("Our related service: …") as trusted inline HTML, its link kept. */
   noteHtml?: string;
+  /**
+   * The related service the closing line names, when it has its own scene: the service tile, a card
+   * in the shelf's grid (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles).
+   * `label` is the line's own words before the link ("Our related service"), set as the tile's line.
+   */
+  service?: { label: string; title: string; href: string; scene: SketchName };
 };
 
 /**
@@ -114,19 +121,43 @@ export function shelfSections(shelves: readonly InsightShelf[]): ListingSection[
       id: shelf.id,
       heading: shelf.heading,
       count: shelf.items.length,
-      content: <Shelf items={shelf.items} noteHtml={shelf.noteHtml} />,
+      content: <Shelf items={shelf.items} noteHtml={shelf.noteHtml} service={shelf.service} />,
     }));
 }
 
-function Shelf({ items, noteHtml }: { items: readonly InsightItem[]; noteHtml?: string }) {
+function Shelf({
+  items,
+  noteHtml,
+  service,
+}: {
+  items: readonly InsightItem[];
+  noteHtml?: string;
+  service?: InsightShelf['service'];
+}) {
   const [first, ...rest] = items;
   const led = first && items.length >= 3 && hasPicture(first);
+  /* The related service is a card in the grid, after the pieces: the service tile, its drawing on
+     its texture (2026-10-29-named-services-are-service-tiles). */
+  const after = service ? (
+    <li>
+      <ServiceTile
+        title={service.title}
+        href={service.href}
+        scene={service.scene}
+        body={service.label}
+      />
+    </li>
+  ) : undefined;
   /* A shelf with no pictured piece is a row of panels, the results' card for a piece without a
      picture (2026-10-29-pictureless-piece-is-a-panel-card): the ruled text tiles it took before were
      a third card look on one page, the rows that ruling dropped (review 29 Oct). */
   return (
     <Layout rowGap="block">
-      {led ? <Feature lead={first} cards={rest} shelf /> : <CardGrid cards={items} shelf />}
+      {led ? (
+        <Feature lead={first} cards={rest} shelf after={after} />
+      ) : (
+        <CardGrid cards={items} shelf after={after} />
+      )}
       {noteHtml ? <Prose html={`<p>${noteHtml}</p>`} /> : null}
     </Layout>
   );

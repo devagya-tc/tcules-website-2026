@@ -79,6 +79,70 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
   });
 }
 
+/** One tile's link: its words and its drawing, stacked, or side by side when it is wide. */
+function TileLink({
+  item,
+  wide,
+  Title,
+}: {
+  item: BentoItem;
+  wide: boolean;
+  Title: 'h2' | 'h3' | 'h4';
+}) {
+  const words = (
+    <Layout rowGap="tight">
+      <Title className={styles.title}>{item.title}</Title>
+      {item.body ? <p className={styles.body}>{item.body}</p> : null}
+    </Layout>
+  );
+  const art = (
+    <div className={styles.art}>
+      <Sketch name={item.scene} frame="bare" story />
+    </div>
+  );
+  return (
+    <a href={item.href} className={styles.tile}>
+      {wide ? (
+        <Layout
+          className={styles.fill}
+          columns={{ base: 1, md: [1, 1] }}
+          colGap="gutter"
+          rowGap="block"
+        >
+          {words}
+          {art}
+        </Layout>
+      ) : (
+        <Layout className={styles.fill} rowGap="block" pinLast>
+          {words}
+          {art}
+        </Layout>
+      )}
+    </a>
+  );
+}
+
+export type ServiceTileProps = Omit<BentoItem, 'id' | 'span'> & {
+  /** The tile's heading element. Default h3. */
+  titleAs?: 'h2' | 'h3' | 'h4';
+};
+
+/**
+ * ServiceTile — ONE bento tile on its own, for a named service that sits as a card in another set
+ * (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles): an insights shelf's
+ * related service as the third card beside its two pieces. The same tile as the bento's (its hairline,
+ * texture, drawing and hover), with the texture's wave fitted to the tile itself, since it shares no
+ * row with other tiles. It renders a `div`; the caller's set supplies the `li`. A set of services is
+ * a `Bento`, never a row of these.
+ */
+export function ServiceTile({ titleAs: Title = 'h3', ...item }: ServiceTileProps) {
+  return (
+    <div className={cx(styles.cell, styles.solo)}>
+      <TileLink item={{ ...item, id: item.href }} wide={false} Title={Title} />
+    </div>
+  );
+}
+
 /**
  * Bento — a set of linked tiles of two sizes on four tracks, each its destination's name, one line
  * and its drawing (home "What we do", owner 19 Oct 2026, after Supabase's product grid). The sizes
@@ -105,7 +169,9 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
     items.some((item) => item.body) &&
     items.some((item) => !item.body)
   ) {
-    console.warn('Bento: some tiles carry a body and some do not; give every tile one or none.');
+    console.warn(
+      'Bento: some tiles carry a body and some do not; give every tile one or none.',
+    );
   }
   /* The tracks the last row leaves open, which the text cell fills (a full row when none are). */
   const last = placed.at(-1);
@@ -121,47 +187,16 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
       colGap="gutter"
       rowGap="gutter"
     >
-      {placed.map(({ item, row, col, span }) => {
-        const wide = span === 2;
-        const words = (
-          <Layout rowGap="tight">
-            <Title className={styles.title}>{item.title}</Title>
-            {item.body ? <p className={styles.body}>{item.body}</p> : null}
-          </Layout>
-        );
-        const art = (
-          <div className={styles.art}>
-            <Sketch name={item.scene} frame="bare" story />
-          </div>
-        );
-        return (
-          <li
-            key={item.id}
-            className={cx(styles.cell, wide && styles.wide)}
-            data-row={row % 2 === 0 ? 'a' : 'b'}
-            data-col={col}
-          >
-            <a href={item.href} className={styles.tile}>
-              {wide ? (
-                <Layout
-                  className={styles.fill}
-                  columns={{ base: 1, md: [1, 1] }}
-                  colGap="gutter"
-                  rowGap="block"
-                >
-                  {words}
-                  {art}
-                </Layout>
-              ) : (
-                <Layout className={styles.fill} rowGap="block" pinLast>
-                  {words}
-                  {art}
-                </Layout>
-              )}
-            </a>
-          </li>
-        );
-      })}
+      {placed.map(({ item, row, col, span }) => (
+        <li
+          key={item.id}
+          className={cx(styles.cell, span === 2 && styles.wide)}
+          data-row={row % 2 === 0 ? 'a' : 'b'}
+          data-col={col}
+        >
+          <TileLink item={item} wide={span === 2} Title={Title} />
+        </li>
+      ))}
       {note ? (
         <li className={styles.note} data-span={noteSpan}>
           <p className={styles.noteText}>{note}</p>

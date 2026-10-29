@@ -95,6 +95,30 @@ export function sketchForRoute(href: string): ServiceSceneName | undefined {
 }
 
 /**
+ * The specialist services' own scenes, each drawn for that one service from its own words (owner,
+ * 26 Oct 2026; the UX & Product Audit's on 29 Oct). A service page's specialist band assigns the same
+ * drawings at the content seam; this is the same drawing for the same service wherever it is named.
+ */
+const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName>> = {
+  '/services/product-design/ux-research': 'specialist-research',
+  '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
+  '/services/product-design/interaction-ui-design': 'specialist-ui',
+  '/services/product-design/data-visualisation': 'specialist-dataviz',
+  '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
+  '/audits/ux-product-audit': 'specialist-audit',
+};
+
+/**
+ * The SERVICE TILE's scene for a named service (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles):
+ * the service line's own scene, else the specialist service's. Undefined for a service with no
+ * drawing of its own: a set naming one is not drawn, never given another subject's scene.
+ */
+export function serviceSceneFor(href: string): ServiceSceneName | OfferSceneName | undefined {
+  const route = href.split('#')[0] ?? href;
+  return BY_ROUTE[route] ?? SPECIALIST_BY_ROUTE[route];
+}
+
+/**
  * Which offer scene draws which item of a corpus page's band (owner, 26 Oct 2026), keyed by band id,
  * then by the item's title as authored (or a router item's href), and a worked example's two story
  * scenes by its band id. Assigned item by item at the content seam (content/sources/offer-scenes.ts);

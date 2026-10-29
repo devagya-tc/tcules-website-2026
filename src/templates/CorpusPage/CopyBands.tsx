@@ -26,7 +26,7 @@ import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
-import { sketchForRoute } from '@/lib/sketches';
+import { serviceSceneFor } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import { hasSlot, slotImage, slugOf } from './images';
@@ -874,7 +874,7 @@ export function DestinationsBand({ band }: { band: CorpusBand }) {
             ctaLabel: undefined,
             bodyHtml: [] as string[],
           }));
-  const scenes = dest.map((d) => (d.href ? sketchForRoute(d.href) : undefined));
+  const scenes = dest.map((d) => (d.href ? serviceSceneFor(d.href) : undefined));
   const introNode = intro.length > 0 ? <BandBody blocks={intro} /> : null;
   let set: ReactNode;
   if (dest.length >= 3 && scenes.every(Boolean) && dest.every((d) => d.href)) {

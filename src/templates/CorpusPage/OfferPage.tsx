@@ -4,27 +4,8 @@ import { placeholderImage } from '@/lib/placeholders';
 import { serviceIllustration } from '@/lib/service-illustrations';
 
 import { CorpusHero } from './blocks';
-import { recordStats } from './HomePage';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer } from './plan';
-import { plain } from './text';
-
-/**
- * The hero's record line ("Founded 2017 · More than 90 projects · …"), as home's figures: the line of
- * facts with no label, never a labelled proof line ("Selected work: …"). Figures live in the hero
- * (2026-10-11-figures-live-in-the-hero), so the offer pages that author the studio's record set it
- * the way home does, from the same table.
- */
-function heroRecord(page: CorpusPage) {
-  const record = page.hero.proofLines.find((line) => {
-    const text = plain(line);
-    return text.includes(' · ') && !/^[^·]*:/.test(text);
-  });
-  return {
-    record,
-    stats: record ? recordStats({ ...page, hero: { ...page.hero, proofLines: [record] } }) : [],
-  };
-}
 
 export type OfferPageProps = Omit<OfferContext, 'page'> & {
   page: CorpusPage;
@@ -58,7 +39,6 @@ export function OfferPage({
   reasonFigure,
 }: OfferPageProps) {
   const units = planOffer(page);
-  const { record, stats } = heroRecord(page);
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure };
 
   const drawing = page.route.startsWith('/services/')
@@ -86,18 +66,15 @@ export function OfferPage({
 
   return (
     <>
-      {/* The hero's "Selected … work:" line names the cases the page lists further down; where it
+      {/* The studio's record line is the hero's figures: CorpusHero reads it from the hero itself
+          (decisions/2026-10-29-studio-record-is-figures). The hero's "Selected … work:" line names the cases the page lists further down; where it
           does list them (a case band), the line only repeats that list and read as unfinished
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
       <CorpusHero
         page={page}
         arrangement="beside"
         media={media}
-        proofLine={
-          page.hero.proofLines[0] !== record &&
-          !units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')
-        }
-        stats={stats.length > 0 ? stats : undefined}
+        proofLine={!units.some((unit) => unit.kind === 'cases' || unit.kind === 'caseStories')}
       />
       {units.map((unit) => (
         <UnitView key={unit.id} unit={unit} ctx={ctx} />

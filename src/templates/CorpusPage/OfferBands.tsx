@@ -5,7 +5,6 @@ import {
   BlockCard,
   BlockCardSet,
   Bento,
-  Callout,
   CaseSpread,
   ContentSection,
   ContentSectionText,
@@ -35,7 +34,13 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
-import { offerSceneKey, type OfferSceneName, type OfferScenes } from '@/lib/sketches';
+import {
+  offerSceneKey,
+  serviceSceneFor,
+  type OfferSceneName,
+  type OfferScenes,
+  type SketchName,
+} from '@/lib/sketches';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { renderInline } from '@/lib/inline-render';
 
@@ -125,9 +130,6 @@ function sceneFor(
 ): OfferSceneName | undefined {
   return ctx.scenes?.items[band.id]?.[offerSceneKey(key)] ?? ctx.scenes?.items[band.id]?.[key];
 }
-
-/** The engagement drawings (scripts/illustrations/engagement.mjs), one per scope, on each ground. */
-const ENGAGEMENT_FIGURE = { width: 380, height: 379 } as const;
 
 type Lead = { title: string; body: readonly InlineRun[] };
 
@@ -411,77 +413,29 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* Ways to work with us — four peers, comparable at a glance (EngagementOptions; product-design
-       round 6, page-mapping § 23): each option's scope drawn on one dot field, its name, what it is;
-       the limit on the claim closes the band as a note. Round 1 set four hairline tiles beside a
-       placeholder photograph: "boring and plain", and nothing showed how the four differ. */
+    /* How we work together / Ways to work with us — peers a reader chooses between (EngagementOptions,
+       owner 29 Oct 2026; decisions/2026-10-29-how-we-work-together-band). The head is the heading and
+       the band's opening paragraphs as its lead (the page's own line, then the shared "Bring what you
+       have…"); each option is drawn in the FLAT grammar (Sketch `scope-*`), the drawing above its
+       name and words, so the band never reads as Why Tcules' isometric reasons beside it; the closing
+       paragraphs (what we stop at; where the studio is) are equal terms side by side under the
+       options; the two links are one action pair at the end, an outlined button then the link. */
     case 'tiles': {
-      const note = trailingParagraphs(band);
-      const options = leads(band).map((row) => ({ row, scope: scopeOf(row.title) }));
-      /* The paragraphs before the options are the set's lead; the link line closing the band is its
-         action (component-map C1). */
       const opening = leadingParagraphs(band);
-      const tilesLead =
-        opening.length > 0 ? (
-          <Layout rowGap="text">
-            {opening.map((runs, index) => (
-              <p key={index}>{renderInline(runs)}</p>
-            ))}
-          </Layout>
-        ) : undefined;
-      const tilesAction =
-        bandLinks(band).length > 0 ? <LinkActions links={bandLinks(band)} /> : undefined;
-      const noteNode =
-        note.length > 0 ? (
-          <Layout rowGap="text">
-            {note.map((runs, index) => (
-              <Callout key={index} html={`<p>${inlineToHtml(runs)}</p>`} />
-            ))}
-          </Layout>
-        ) : undefined;
-      /* Drawn like Why Tcules (owner, 26 Oct 2026): the Reasons band, an isometric figure per
-         engagement (scripts/illustrations/engagement.mjs), four in a 2×2. Isometric so the page's
-         drawing styles alternate: the bands either side are flat. A set with an option no figure
-         draws keeps EngagementOptions. */
-      if (options.length >= 3 && options.every((option) => option.scope)) {
-        const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
-        return (
-          <Reasons
-            {...head(band)}
-            surface={unit.surface}
-            lead={tilesLead}
-            action={tilesAction}
-            items={options.map(({ row, scope }) => ({
-              title: row.title,
-              body: renderInline(row.body),
-              figure: {
-                src: `/illustrations/engagement/${scope}.${ground}.svg`,
-                ...ENGAGEMENT_FIGURE,
-                alt: '',
-                kind: 'illustration',
-              },
-            }))}
-            note={noteNode}
-          />
-        );
-      }
+      const terms = trailingParagraphs(band);
+      const links = bandLinks(band);
       return (
         <EngagementOptions
           {...head(band)}
+          surface={unit.surface}
+          lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
           options={leads(band).map((row) => ({
             title: row.title,
             body: renderInline(row.body),
             scope: scopeOf(row.title),
           }))}
-          note={
-            note.length > 0 ? (
-              <Layout rowGap="text">
-                {note.map((runs, index) => (
-                  <Callout key={index} html={`<p>${inlineToHtml(runs)}</p>`} />
-                ))}
-              </Layout>
-            ) : undefined
-          }
+          terms={terms.map((runs) => renderInline(runs))}
+          actions={links.length > 0 ? <LinkActions links={links} pair /> : undefined}
         />
       );
     }
@@ -601,8 +555,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
         /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
            reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
-           TODO(owner): how How we work together and Why Tcules, two drawn Reasons bands back to back
-           on every offer page, are told apart is the owner's open decision (component-map § F). */
+           Isometric, so it never reads as How we work together's flat options beside it
+           (decisions/2026-10-29-how-we-work-together-band). */
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const drawn = parts.items.map((item) => ({
           item,
@@ -912,8 +866,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   );
   /* Destinations the page draws (owner, 26 Oct 2026, the specialist services): home's bento, every
      tile one size, because the destinations are peers. Seven or eight take four tracks, 4 + 3 with
-     the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. */
-  const scenes = rows.map((row) => sceneFor(ctx, band, row.href));
+     the band's closing words in the eighth cell (owner, 29 Oct 2026, Q7); others three. Services
+     named as a set are always the service tile, each with its own scene, wherever they are named
+     (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
+  const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
   if (rows.length >= 3 && scenes.every(Boolean)) {
     const four = rows.length === 7 || rows.length === 8 || rows.length === 4;
     const note =
@@ -937,7 +893,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           title: row.title,
           ...(row.body ? { body: sentence(row.body) } : {}),
           href: row.href,
-          scene: scenes[index] as OfferSceneName,
+          scene: scenes[index] as SketchName,
         }))}
       />,
       inCell ? undefined : closingFooter,

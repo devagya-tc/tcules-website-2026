@@ -181,6 +181,16 @@
   }
 }
 
+/* A lone tile (`ServiceTile`): it shares no row, so at every width its wave is fitted to itself, the
+   form a bento tile takes below 1024. Two classes, so it outranks the row's window from 1024. Sizing. */
+.cell.solo {
+  --bnt-wave: url('/textures/bento-wave-tile.svg');
+  --bnt-wave-size: 100% 100%;
+  --bnt-wave-x: 0%;
+
+  block-size: 100%;
+}
+
 /* ── Words and drawing ──────────────────────────────────────────────────────── */
 .title {
   color: var(--bnt-title-ink);

@@ -1,6 +1,6 @@
 import { Layout, Section } from '@/components';
 import { ROUTES } from '@/lib/routes';
-import { Bento, type BentoItem } from '@/patterns';
+import { Bento, BlockCard, ServiceTile, type BentoItem } from '@/patterns';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
@@ -8,7 +8,8 @@ import t from '../_specimen/typeroles.module.css';
 /**
  * /design/bento — linked tiles of two sizes on four tracks over one continuous texture per row
  * (home "What we do", owner 19 Oct 2026, mocks S3). The six-tile diagonal home ships, the even
- * four-up row, a two-wide row, and the tint, ink and blue grounds. Hover a tile: it lifts 2px, its hairline and
+ * four-up row, a two-wide row, the tint, ink and blue grounds, and one tile on its own as a card in
+ * another set (ServiceTile, 29 Oct 2026). Hover a tile: it lifts 2px, its hairline and
  * texture turn blue and its title takes the accent.
  */
 
@@ -251,6 +252,46 @@ export default function BentoSpecimen() {
       />
       <Section surface="blue">
         <Bento items={SIX} />
+      </Section>
+
+      <Variation
+        id="service-tile"
+        title="7 · ServiceTile — a named service as a card in another set"
+        note="Services named as a set are always the service tile (owner, 29 Oct 2026). One named beside other cards, as an insights shelf's related service, is ONE bento tile in that grid: the same hairline, texture, drawing and hover, its wave fitted to itself. The line is the copy's own words before the link (&ldquo;Our related service&rdquo;)."
+      />
+      <Section>
+        <Layout as="ul" columns={{ md: 3 }} colGap="gutter" rowGap="column">
+          <BlockCard
+            title="How to choose a product design agency and test the fit"
+            body="What to check before you hire, and how a studio compares with a freelancer, an in-house hire or a development company."
+            href="#service-tile"
+            frame="panel"
+            icon="notebook"
+            size="sm"
+            tracks={3}
+            cue="title"
+            compact
+          />
+          <BlockCard
+            title="Does my SaaS need a mobile app? A moment-by-moment test"
+            body="The answer lies in the work that happens away from a desk and cannot wait."
+            href="#service-tile"
+            frame="panel"
+            icon="document-text"
+            size="sm"
+            tracks={3}
+            cue="title"
+            compact
+          />
+          <li>
+            <ServiceTile
+              title="New Product Design & First Release"
+              body="Our related service"
+              href={ROUTES.services}
+              scene="new-product"
+            />
+          </li>
+        </Layout>
       </Section>
     </>
   );
