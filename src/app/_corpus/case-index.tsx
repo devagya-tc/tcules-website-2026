@@ -22,13 +22,16 @@ import type {
 } from '@/lib/corpus-types';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
-import { caseStudyPath, CASE_SLUG_REDIRECTS } from '@/lib/routes';
+import { caseStudyPath, CASE_SLUG_REDIRECTS, ROUTES } from '@/lib/routes';
 import { recordFigures } from '@/lib/studio-record';
+
+import { readFinder, slugOf, type FinderGroupDef, type Query } from '../_listing/finder-query';
 import {
   CorpusBandView,
   ENQUIRY_DRESS,
   ENQUIRY_SKETCH_TO_SHIPPED,
   ListingIndex,
+  caseFinder,
   caseViews,
   corpusEnquiryForm,
   coverFor,
@@ -46,20 +49,25 @@ import {
  *   hero                 the eyebrow, title and lede; the studio record ("Founded 2017 · …") as the
  *                        masthead's figures
  *   client-recognition   the client wall, under the opening (C13)
- *   featured             three `###` cases, the page's featured cases: each the listing's card-less
- *                        horizontal lead, one to a row (never home's CaseCard; owner, 29 Oct 2026)
- *   four stage tables    the BY STAGE view: one group per table, a card per row ("Case | What we did
- *                        | Best for") in the listing's three-track grid, as /insights sets its
+ *   featured             three `###` cases, the page's featured cases: the first the listing's
+ *                        card-less horizontal lead, the other two cards under it (never home's
+ *                        CaseCard; owner, 29 Oct 2026)
+ *   four stage tables    the stage shelves: one group per table, a card per row ("Case | What we
+ *                        did | Best for") in the listing's three-track grid, as /insights sets its
  *                        cards; "Best for" is kept as the card's second line (Q9)
  *   testimonials         the proof wall after the list (decisions/2026-10-29-case-index-carries-
  *                        testimonials, superseding the 22 Oct ruling)
  *   enquiry              the close: home's halves island (2026-10-29-listing-close-is-home-halves)
  *   faq                  after the close: the form comes before the FAQ (`formBeforeFaq`)
  *
- * Covers come from the live case's Strapi thumbnail. A live case no table names (three today) is not
- * dropped: it is filed in the BY INDUSTRY view, under "Other industries" where the proposed filing
- * has no sector for it. It decides no layout: every group takes the template's one shape
- * (`caseViews`).
+ * The rail is the FINDER, as /insights has it (owner, 29 Oct 2026;
+ * decisions/2026-10-29-case-index-takes-the-finder): a search and the groups Stage, Industry and Service. Nothing picked, the curated
+ * view above (featured, then the stage shelves); anything picked, the cases it lets through as one
+ * grid. Every live case is in the finder: a live case no table names (three today) after the copy's.
+ * A case is tagged only from a source, never by guess (`tagsOf`); a case no source files under a
+ * group stays untagged in it.
+ *
+ * Covers come from the live case's Strapi thumbnail.
  *
  * `_corpus` is underscore-prefixed, so Next does not route it.
  */
@@ -218,12 +226,6 @@ function liveItem(sources: Sources, route: string, record: CaseStudyListingItem)
   };
 }
 
-const anchorOf = (prefix: string, label: string) =>
-  `${prefix}-${label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')}`;
-
 /** A case route the filing names by its planned slug, moved to the live one as every link is. */
 function liveRoute(route: string): string {
   const slug = /^\/case-studies\/([^/#?]+)$/.exec(route)?.[1];
@@ -231,34 +233,126 @@ function liveRoute(route: string): string {
   return moved ? caseStudyPath(moved) : route;
 }
 
+/* ── The finder's groups ──────────────────────────────────────────────────────────
+   Each case's tags, from sources only (owner, 29 Oct 2026: "never invent a tag"):
+     stage     the copy's own stage tables: a row of `new-products` is a new product, and so on. The
+               featured cases and the live-only cases sit in no table, so they carry no stage.
+     industry  the filing read off the expertise pages (getCaseIndustries, PROPOSED P50): each case an
+               expertise page cites, under the sector it is cited for. A case none cites, none.
+     service   the case page's own "Related Tcules services:" line, each link rolled up to its service
+               line (/services/ai-product-ux/trust-control-recovery → AI Product UX). A case with no
+               page in the copy, none. */
+
+/** The copy's stage tables, by band id, and the stage each files its cases under (the filter's label). */
+const STAGES: readonly { band: string; label: string }[] = [
+  { band: 'new-products', label: 'New product' },
+  { band: 'established-products', label: 'Established product' },
+  { band: 'ai-products', label: 'AI product' },
+  { band: 'designed-and-built', label: 'Carried into working software' },
+];
+
+/** The six service lines, in the nav's order: the Service group's options, named by their own pages. */
+const SERVICE_LINES = [
+  ROUTES.productDesign,
+  ROUTES.productModernisation,
+  ROUTES.designSystems,
+  ROUTES.aiProductUx,
+  ROUTES.designEngineering,
+  ROUTES.softwareDevelopment,
+] as const;
+
+type Tags = { stage: string[]; industry: string[]; service: string[] };
+
+/** Every link in runs, nested ones included. */
+function linksIn(runs: readonly InlineRun[]): Link[] {
+  return runs.flatMap((run) =>
+    run.type === 'link' ? [run] : 'children' in run ? linksIn(run.children) : [],
+  );
+}
+
+/** A case page's "Related Tcules services:" line as its service lines' routes. */
+function serviceLinesOf(page: CorpusPage): string[] {
+  const lines = new Set<string>();
+  for (const band of page.bands) {
+    for (const block of band.blocks) {
+      if (block.type !== 'paragraph') continue;
+      if (!/^related tcules services:/i.test(text(block.runs).trim())) continue;
+      for (const link of linksIn(block.runs)) {
+        const line = SERVICE_LINES.find(
+          (route) => link.href === route || link.href.startsWith(`${route}/`),
+        );
+        if (line) lines.add(line);
+      }
+    }
+  }
+  return [...lines];
+}
+
 /**
- * BY INDUSTRY (PROPOSED, P50): every published case once, under the sector the filing names, in the
- * filing's order; a case the filing does not name goes under "Other industries" rather than out of
- * the view.
+ * The finder's groups and each case's tags, keyed by the case's live route (or its id, unlinked).
+ * `stageOf` is the copy's own filing; industries and service lines are read here.
  */
-function byIndustry(cases: readonly CaseItem[], filing: readonly CaseIndustry[]): CaseGroup[] {
-  const byRoute = new Map<string, CaseItem>();
-  for (const item of cases)
-    if (item.href && !byRoute.has(item.href)) byRoute.set(item.href, item);
-  const done = new Set<string>();
-  const grouped = filing.map((group) => {
-    const items = group.cases.flatMap((planned) => {
+async function finderData(
+  items: readonly CaseItem[],
+  stageOf: ReadonlyMap<string, string>,
+  industries: readonly CaseIndustry[],
+) {
+  const casePages = (await listCorpusPages()).filter((page) =>
+    page.route.startsWith(`${CASE_INDEX_ROUTE}/`),
+  );
+  const servicesByRoute = new Map(
+    casePages.map((page) => [liveRoute(page.route), serviceLinesOf(page)] as const),
+  );
+  const industryByRoute = new Map<string, string[]>();
+  for (const group of industries) {
+    for (const planned of group.cases) {
       const route = liveRoute(planned);
-      const item = byRoute.get(route);
-      if (!item || done.has(route)) return [];
-      done.add(route);
-      return [item];
-    });
-    return { id: anchorOf('industry', group.label), heading: group.label, items };
-  });
-  const rest = [...byRoute.values()].filter((item) => !done.has(item.href ?? ''));
-  const other = 'Other industries';
-  return [
-    ...grouped,
-    ...(rest.length > 0
-      ? [{ id: anchorOf('industry', other), heading: other, items: rest }]
-      : []),
-  ].filter((group) => group.items.length > 0);
+      industryByRoute.set(route, [...(industryByRoute.get(route) ?? []), group.label]);
+    }
+  }
+  const tags = new Map<string, Tags>(
+    items.map((item) => [
+      item.id,
+      {
+        stage: stageOf.has(item.id) ? [stageOf.get(item.id) as string] : [],
+        industry: item.href ? (industryByRoute.get(item.href) ?? []) : [],
+        service: item.href ? (servicesByRoute.get(item.href) ?? []) : [],
+      },
+    ]),
+  );
+  const used = (group: keyof Tags, id: string) =>
+    [...tags.values()].some((tag) => tag[group].includes(id));
+  const serviceNames = await Promise.all(
+    SERVICE_LINES.map(async (route) => (await getCorpusPage(route))?.name ?? route),
+  );
+  const groups: FinderGroupDef[] = [
+    {
+      name: 'stage',
+      label: 'Stage',
+      options: STAGES.filter((stage) => used('stage', stage.band)).map((stage) => ({
+        id: stage.band,
+        value: slugOf(stage.label),
+        label: stage.label,
+      })),
+    },
+    {
+      name: 'industry',
+      label: 'Industry',
+      options: industries
+        .filter((group) => used('industry', group.label))
+        .map((group) => ({ id: group.label, value: slugOf(group.label), label: group.label })),
+    },
+    {
+      name: 'service',
+      label: 'Service',
+      options: SERVICE_LINES.flatMap((route, index) =>
+        used('service', route)
+          ? [{ id: route, value: slugOf(serviceNames[index] ?? route), label: serviceNames[index] ?? route }]
+          : [],
+      ),
+    },
+  ].filter((group) => group.options.length > 0);
+  return { groups, tags };
 }
 
 /* ── The proof wall's ratings ─────────────────────────────────────────────────────
@@ -343,16 +437,16 @@ async function withTestimonialIds(page: CorpusPage, band: CorpusBand): Promise<C
   };
 }
 
-type Query = Record<string, string | string[] | undefined>;
-
 /**
- * The page's ListingIndex props, from the copy, the Strapi list and the URL (`?view=industry`).
+ * The page's ListingIndex props, from the copy, the Strapi list and the URL (the finder's picks).
  * `adjust` lets the specimen (`/design/listing-index?data=cases`) run this same mapping over a
  * stressed set of views, so the live page and its specimen cannot drift.
  */
 export async function caseIndexProps(
   query: Query = {},
   adjust: (views: CaseView[]) => CaseView[] = (views) => views,
+  /** The page's own path, with any query it always carries (the specimen's `?data=cases`). */
+  path: string = CASE_INDEX_ROUTE,
 ): Promise<ListingIndexProps | null> {
   const page = await getCorpusPage(CASE_INDEX_ROUTE);
   if (!page) return null;
@@ -390,23 +484,54 @@ export async function caseIndexProps(
     .map((band) => groupOf(sources, band))
     .filter((group) => group.items.length > 0);
 
-  /* Every published case for BY INDUSTRY: the copy's, then the live ones it does not name. */
-  const named = groups.flatMap((group) => group.items).filter((item) => item.href);
-  const namedRoutes = new Set(named.map((item) => item.href));
-  const unnamed = [...live.entries()]
-    .filter(([route]) => !namedRoutes.has(route))
-    .map(([route, record]) => liveItem(sources, route, record));
-  const industry = byIndustry([...named, ...unnamed], industries);
+  /* The curated view: the featured cases, then the stage shelves, in the copy's order. */
+  const views = adjust([{ id: 'stage', label: 'By stage', groups }]);
+  const curated = views.flatMap((view) => view.groups);
 
-  const views: CaseView[] = [
-    { id: 'stage', label: 'By stage', groups },
-    ...(industry.length > 0
-      ? [{ id: 'industry', label: 'By industry', groups: industry }]
-      : []),
-  ];
+  /* The finder holds every case once: the copy's, in its order, then the live ones it does not
+     name. A view adjusted to nothing (the specimen's empty state) holds none. */
+  const seen = new Set<string>();
+  const copyCases = curated
+    .flatMap((group) => group.items)
+    .filter((item) => !seen.has(item.id) && Boolean(seen.add(item.id)));
+  const unnamed =
+    curated.length === 0
+      ? []
+      : [...live.entries()]
+          .filter(([route]) => !seen.has(route))
+          .map(([route, record]) => liveItem(sources, route, record));
+  const cases = [...copyCases, ...unnamed];
+  const stageOf = new Map(
+    curated.flatMap((group) =>
+      STAGES.some((stage) => stage.band === group.id)
+        ? group.items.map((item) => [item.id, group.id] as const)
+        : [],
+    ),
+  );
+  const filing = await finderData(cases, stageOf, industries);
+  const read = readFinder({
+    path,
+    query,
+    groups: filing.groups,
+    items: cases,
+    matches: (item, group, id) =>
+      filing.tags.get(item.id)?.[group as keyof Tags]?.includes(id) ?? false,
+    text: (item) =>
+      [item.title, item.description, ...(item.bodyHtml ?? []).map((html) => html.replace(/<[^>]+>/g, ''))]
+        .join(' '),
+  });
+  const finder = caseFinder({
+    action: read.action,
+    query: read.query,
+    search: { value: read.search, label: 'Search case studies' },
+    groups: read.groups,
+    picks: read.picks,
+    clearHref: read.clearHref,
+    items: read.filtered,
+    shown: read.shown,
+    moreHref: read.moreHref,
+  });
 
-  const requested = query.view;
-  const view = Array.isArray(requested) ? requested[0] : requested;
   const lead = closeBand?.blocks.find((block) => block.type === 'paragraph');
   /* The studio record the copy sets in bold under the lede ("Founded 2017 · More than 90 projects
      · …"): the masthead's figures, the number large and what it counts small (owner, 29 Oct 2026;
@@ -428,8 +553,8 @@ export async function caseIndexProps(
     },
     label: 'Case studies',
     railLabel: 'Browse case studies',
-    views: caseViews(adjust(views)),
-    view,
+    views: caseViews(views),
+    finder,
     empty: 'No case studies have been published yet.',
     bands: {
       afterHero: recognition ? <CorpusBandView page={page} band={recognition} /> : undefined,

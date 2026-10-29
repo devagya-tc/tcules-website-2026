@@ -88,10 +88,11 @@ function sparseCases(views: CaseView[]): CaseView[] {
  *                         parameters); ticks, chips and "Show more" stay here, the state kept
  *   ?state=sparse         the live CMS's shape
  *   ?state=empty          nothing published
- *   ?data=cases           the case-study index from the copy and the Strapi list: client wall, featured
- *                         cases, the four stage tables (BY STAGE, ?view=industry), the proof wall,
- *                         the island close, the FAQ after it
- *   ?data=cases&state=sparse   one view, covers missing, a group of one
+ *   ?data=cases           the case-study index from the copy and the Strapi list: client wall, the
+ *                         finder (Stage, Industry, Service) over the curated view — one featured lead,
+ *                         its cards, the four stage shelves — the proof wall, the island close, the
+ *                         FAQ after it; add `&stage=…`, `&industry=…`, `&service=…` for the results
+ *   ?data=cases&state=sparse   covers missing, a group of one
  *   ?data=cases&state=empty    no cases
  *
  * A template's specimen is the page itself rather than Specimen blocks: what is judged is the
@@ -102,8 +103,12 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   const state = one(query.state);
 
   if (one(query.data) === 'cases') {
-    const props = await caseIndexProps(query, (views) =>
-      state === 'empty' ? [] : state === 'sparse' ? sparseCases(views) : views,
+    /* The finder's links and form come back to the specimen, the dataset and state kept. */
+    const casePath = `${PATH}?${new URLSearchParams({ data: 'cases', ...(state ? { state } : {}) }).toString()}`;
+    const props = await caseIndexProps(
+      query,
+      (views) => (state === 'empty' ? [] : state === 'sparse' ? sparseCases(views) : views),
+      casePath,
     );
     if (!props) notFound();
     return <ListingIndex {...props} />;

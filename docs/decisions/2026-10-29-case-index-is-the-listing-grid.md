@@ -1,7 +1,7 @@
 ---
 title: "The case-study index sets its cases in the listing's three-card grid; the paper-deep CaseCard is home's"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, cards, proof]
 source: "Owner second review of the 26 Oct copy pages, 29 Oct 2026 (feat/new-copy → feat/r2-listings)"
 supersedes: []

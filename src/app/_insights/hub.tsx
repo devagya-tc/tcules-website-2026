@@ -2,25 +2,31 @@ import type { InsightResource, InsightResourceKind, InsightsPage } from '@/conte
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { blogPath, ENDPOINTS, FORMAT_PAGE_REDIRECTS, ROUTES } from '@/lib/routes';
+import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
+import { placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor } from '@/lib/sketches';
 import { Media } from '@/components';
-import { DataTable, EnquiryForm } from '@/patterns';
+import { EnquiryForm } from '@/patterns';
 import {
   CorpusBandView,
   ENQUIRY_SKETCH_TO_SHIPPED,
   ENQUIRY_DRESS,
+  FormatTiles,
   insightFinder,
   insightViews,
   shelfSections,
   type InsightItem,
   type InsightKind,
+  type FormatTileRow,
   type InsightShelf,
+  type ShelfRelated,
   type ListingClosing,
   type ListingIndexProps,
   type ListingView,
 } from '@/templates';
 
 import { isCorpusLongform } from '../_corpus/longform';
+import { PAGE_KEY, readFinder, SEARCH_KEY, slugOf, type Query } from '../_listing/finder-query';
 
 /**
  * The insights hub's composition: the view model mapped onto the listing template (ListingIndex) —
@@ -32,13 +38,6 @@ import { isCorpusLongform } from '../_corpus/longform';
  * curated view.
  */
 
-type Query = Record<string, string | string[] | undefined>;
-
-const PAGE_KEY = 'page';
-/** The finder's search. */
-const SEARCH_KEY = 'q';
-/** The results' page: twelve cards, then "Show more". */
-const PAGE_SIZE = 12;
 
 /** The formats in the order the format picker lists them. */
 const KINDS: readonly InsightResourceKind[] = [
@@ -60,14 +59,6 @@ const FORMAT_NAME: Record<InsightResourceKind, string> = {
   event: 'Events',
   interview: 'Interviews',
 };
-
-const first = (value: string | string[] | undefined) =>
-  Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
-/** Every value of a repeated query parameter (`?topic=a&topic=b`). */
-const valuesOf = (value: string | string[] | undefined) =>
-  (Array.isArray(value) ? value : value ? [value] : [])
-    .map((entry) => entry.trim())
-    .filter(Boolean);
 
 /**
  * The CMS's GENERIC covers: the brand's abstract leaf graphic, uploaded as the "cover" of pieces that
@@ -241,14 +232,6 @@ function closingOf(
 /** A filter group's place in the panel: the topic first, the industry last. */
 const rank = (label: string) => (/topic/i.test(label) ? 0 : /industry/i.test(label) ? 2 : 1);
 
-/** A readable URL value from a name: "Modernise & Replatform" → "modernise-replatform". */
-const slugOf = (name: string) =>
-  name
-    .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-
 const topicName = (name: string) => name.replace(/\s*→\s*/g, ' to ').trim();
 
 /** The finder's format group: each format's plural name in the URL (`?type=articles`). */
@@ -400,34 +383,50 @@ function shelfOf(band: CorpusBand, records: readonly InsightItem[]): InsightShel
       (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
         block.type === 'paragraph',
     );
-  /* A closing line that names one service ("Our related service: [AI Product UX](…).") is that
-     service's tile in the shelf's grid, its words as the tile's line (owner, 29 Oct 2026;
-     decisions/2026-10-29-named-services-are-service-tiles). A service with no scene stays a line. */
-  const service = note ? relatedService(note.runs) : undefined;
+  /* A closing line that names one service or one expertise ("Our related service: [AI Product UX](…).")
+     is that destination's card in the shelf's grid, the words before the link its eyebrow (owner,
+     29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles,
+     decisions/2026-10-29-related-destination-is-a-card). A service with no scene stays a line. */
+  const related = note ? relatedOf(note.runs, band.id) : undefined;
   return {
     id: band.id,
     heading: band.headingText,
     items: pieces,
-    ...(service ? { service } : note ? { noteHtml: inlineToHtml(note.runs) } : {}),
+    ...(related ? { related } : note ? { noteHtml: inlineToHtml(note.runs) } : {}),
   };
 }
 
-/** "Label: [Service](/route)." as the service's tile: its name, route, scene and the label as its line. */
-function relatedService(runs: readonly InlineRun[]): InsightShelf['service'] {
+/**
+ * "Label: [Destination](/route)." as its tile: a service with its own scene, or an expertise with its
+ * sector's photograph (the one the expertise is shown with on home), else its labelled placeholder —
+ * never another subject's picture.
+ */
+function relatedOf(runs: readonly InlineRun[], band: string): ShelfRelated | undefined {
   const links = runs.filter((run) => run.type === 'link');
   const [link] = links;
   if (links.length !== 1 || link?.type !== 'link') return undefined;
   const at = runs.indexOf(link);
   const before = inlineToText(runs.slice(0, at)).trim();
   const after = inlineToText(runs.slice(at + 1)).trim();
-  const scene = serviceSceneFor(link.href);
-  if (!scene || !before.endsWith(':') || !/^[.]?$/.test(after)) return undefined;
-  return {
-    label: before.slice(0, -1).trim(),
+  if (!before.endsWith(':') || !/^[.]?$/.test(after)) return undefined;
+  const base = {
+    eyebrow: before.slice(0, -1).trim(),
     title: inlineToText(link.children).trim(),
     href: link.href,
-    scene,
   };
+  if (link.href.startsWith(`${ROUTES.expertise}/`)) {
+    const photo = HOME_SECTOR_PHOTOS[link.href];
+    const image = photo
+      ? getKitPhoto(photo)
+      : placeholderImage(ROUTES.insights, band, link.href.split('/').at(-1));
+    return {
+      kind: 'expertise',
+      ...base,
+      picture: <Media image={image} ratio="16/9" sizes="(min-width: 1024px) 480px, 100vw" />,
+    };
+  }
+  const scene = serviceSceneFor(link.href);
+  return scene ? { kind: 'service', ...base, scene } : undefined;
 }
 
 /**
@@ -442,33 +441,36 @@ function formatHref(href: string, base: string): string | null {
   return href;
 }
 
-/** The copy's format table as the section's content: every word, the key column linked (C6). */
+/**
+ * The copy's format table as the section's content: each row a format tile, every word kept (owner,
+ * 29 Oct 2026; decisions/2026-10-29-format-table-is-tiles). The first column names the format and
+ * links it, the second is what you will find, the third "Best for" under its column's own header.
+ */
 function formatTable(band: CorpusBand, base: string) {
   const table = band.blocks.find(
     (block): block is Extract<CorpusBlock, { type: 'table' }> => block.type === 'table',
   );
   if (!table) return null;
-  const [key = [], ...columns] = table.header;
-  return (
-    <DataTable
-      labelledBy={`${band.id}-heading`}
-      keyColumn={{ heading: inlineToText(key) }}
-      columns={columns.map((cell) => ({ heading: inlineToText(cell) }))}
-      rows={table.rows.map((row) => {
-        const cell = row[0] ?? [];
-        const name = inlineToText(cell).trim();
-        const link = firstLink(cell);
-        const href = link ? formatHref(link.href, base) : null;
-        return {
-          header: name,
-          ...(href
-            ? { headerHtml: inlineToHtml([{ type: 'link', href, children: link!.children }]) }
-            : {}),
-          cellsHtml: row.slice(1).map((value) => inlineToHtml(value)),
-        };
-      })}
-    />
-  );
+  const bestForLabel = inlineToText(table.header[2] ?? []).trim();
+  const rows: FormatTileRow[] = table.rows.flatMap((row) => {
+    const [cell = [], find = [], best = []] = row;
+    const name = inlineToText(cell).trim();
+    if (!name) return [];
+    const link = firstLink(cell);
+    const href = link ? formatHref(link.href, base) : null;
+    const kind = link ? KIND_BY_SEGMENT[lastSegment(link.href)] : undefined;
+    const bestText = inlineToText(best).trim();
+    return [
+      {
+        ...(kind ? { kind: kind as InsightKind } : {}),
+        name,
+        ...(href ? { href } : {}),
+        findHtml: inlineToHtml(find),
+        ...(bestText ? { bestFor: { label: bestForLabel, html: inlineToHtml(best) } } : {}),
+      },
+    ];
+  });
+  return <FormatTiles rows={rows} />;
 }
 
 /** What the copy changes on the hub: its opening, the curated view, its bands and its close. */
@@ -542,74 +544,26 @@ export function insightsIndexProps(
     },
     ...filterGroupsOf(page, all),
   ];
-  const chosen = groups.map((group) => {
-    const values = valuesOf(query[group.name]);
-    return {
-      ...group,
-      picked: group.options.filter((option) => values.includes(option.value)),
-    };
+  const read = readFinder({
+    path,
+    query,
+    groups,
+    items: all,
+    matches: (item, group, id) =>
+      group === TYPE_KEY ? item.kind === id : item.filterIds.includes(id),
+    text: (item) => `${item.title} ${item.description ?? ''}`,
   });
-  const q = first(query[SEARCH_KEY]).trim();
-  const needle = q.toLowerCase();
-  /* Any option within a group, every group at once: "design system for SaaS". */
-  const filtered = all.filter(
-    (item) =>
-      chosen.every(
-        (group) =>
-          group.picked.length === 0 ||
-          group.picked.some((option) =>
-            group.name === TYPE_KEY
-              ? item.kind === option.id
-              : item.filterIds.includes(option.id),
-          ),
-      ) &&
-      (!needle || `${item.title} ${item.description ?? ''}`.toLowerCase().includes(needle)),
-  );
-  const [base = path, own] = path.split('?');
-  const pairs = chosen.flatMap((group) =>
-    group.picked.map((option) => [group.name, option.value] as const),
-  );
-  const searchPair = q ? [[SEARCH_KEY, q] as const] : [];
-  const hrefWith = (next: readonly (readonly [string, string])[], hash = '') => {
-    const params = new URLSearchParams(own);
-    for (const [key, value] of next) if (value) params.append(key, value);
-    const search = params.toString();
-    return `${base}${search ? `?${search}` : ''}${hash}`;
-  };
-  const current = Math.max(1, Number.parseInt(first(query[PAGE_KEY]), 10) || 1);
-  const shown = current * PAGE_SIZE;
+  const base = read.action;
   const finder = insightFinder({
-    action: base,
-    query: new URLSearchParams([...searchPair, ...pairs].map(([k, v]) => [k, v])).toString(),
-    search: { value: q || undefined, label: 'Search insights' },
-    groups: chosen.map((group) => ({
-      name: group.name,
-      label: group.label,
-      options: group.options.map((option) => ({
-        value: option.value,
-        label: option.label,
-        picked: group.picked.includes(option),
-      })),
-    })),
-    picks: [
-      ...(q ? [{ label: `“${q}”`, removeHref: hrefWith(pairs) }] : []),
-      ...pairs.map(([name, value]) => ({
-        label:
-          chosen.find((group) => group.name === name)?.picked.find((o) => o.value === value)
-            ?.label ?? value,
-        removeHref: hrefWith([
-          ...searchPair,
-          ...pairs.filter((pair) => !(pair[0] === name && pair[1] === value)),
-        ]),
-      })),
-    ],
-    clearHref: hrefWith([]),
-    items: filtered.map((item) => toItem(item, subjects)),
-    shown,
-    moreHref:
-      shown < filtered.length
-        ? hrefWith([...searchPair, ...pairs, [PAGE_KEY, String(current + 1)]])
-        : undefined,
+    action: read.action,
+    query: read.query,
+    search: { value: read.search, label: 'Search insights' },
+    groups: read.groups,
+    picks: read.picks,
+    clearHref: read.clearHref,
+    items: read.filtered.map((item) => toItem(item, subjects)),
+    shown: read.shown,
+    moreHref: read.moreHref,
   });
 
   const records = page.resources.items.map((item) => toItem(item, subjects));
