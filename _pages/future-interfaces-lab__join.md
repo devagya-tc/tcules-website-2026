@@ -4,13 +4,13 @@ slug: join
 page_name: Join Future Interfaces Lab
 page_type: page
 seo:
-  title: Join Future Interfaces Lab | Tcules
-  description: 'How to apply to the Future Interfaces Lab at Tcules: who the programme suits, how selection works and what happens after you send your application.'
+  title: 'Future Interfaces Lab fellowship: how to apply | Tcules'
+  description: 'How to apply to the Future Interfaces Lab fellowship at Tcules: who the in-person programme in Ahmedabad suits, how selection works and what happens next.'
   canonical: https://www.tcules.com/future-interfaces-lab/join
   robots: index,follow
 social:
-  og_title: Join Future Interfaces Lab | Tcules
-  og_description: 'How to apply to the Future Interfaces Lab at Tcules: who the programme suits, how selection works and what happens after you send your application.'
+  og_title: 'Future Interfaces Lab fellowship: how to apply | Tcules'
+  og_description: 'How to apply to the Future Interfaces Lab fellowship at Tcules: who the in-person programme in Ahmedabad suits, how selection works and what happens next.'
   og_image: https://www.tcules.com/assets/og/company.png
   og_image_alt: Tcules social card headed Tcules, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Join Future Interfaces Lab | Tcules
-  twitter_description: 'How to apply to the Future Interfaces Lab at Tcules: who the programme suits, how selection works and what happens after you send your application.'
+  twitter_title: 'Future Interfaces Lab fellowship: how to apply | Tcules'
+  twitter_description: 'How to apply to the Future Interfaces Lab fellowship at Tcules: who the in-person programme in Ahmedabad suits, how selection works and what happens next.'
   twitter_image: https://www.tcules.com/assets/og/company.png
 search_context:
   primary_intent: Future Interfaces Lab fellowship application
@@ -34,7 +34,12 @@ search_context:
   - build pods
   - proof-of-work
   - Ahmedabad
-  primary_query: future interfaces lab fellowship
+  primary_query: Future Interfaces Lab fellowship
+  secondary_queries:
+  - join Future Interfaces Lab
+  - FIL application
+  - design fellowship Ahmedabad
+  - Future Interfaces Lab selection
   buyer_question_evidence:
     status: LIVE_PAGE_FAQ_PRESERVED; NO_V7_QUESTION_EVIDENCE
 navigation:
@@ -126,13 +131,15 @@ page_composition:
 
 *R&D hub for building next-gen experiences at Tcules*
 
-# Join Future Interfaces Lab
+# Join the Future Interfaces Lab fellowship: build AI products in Ahmedabad
 
-A space for those who think beyond pixels: in systems, stories and motion. We design and we build. Working with real teams on real products, our creations are seen, credited and celebrated.
+A selective, in-person fellowship for builders who think beyond pixels: in systems, stories and motion. You join a small pod and build under real constraints, expected to ship work you can demonstrate.
 
 [Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
 
-## Why join the Lab? {#why-join}
+## Why join the Future Interfaces Lab {#why-join}
+
+You will contribute directly to the research, design, prototyping and MVP development of products shaped under real constraints. They sit where software is heading: agents, voice, AI-native workflows and interfaces that are still being invented.
 
 ### Real build pressure
 
@@ -140,7 +147,7 @@ Work in short build cycles where execution, iteration and clarity matter every w
 
 ### Direct critique
 
-Get feedback on architecture, trade-offs, product framing, and the quality of what you ship.
+Get feedback on architecture, trade-offs, product framing and the quality of what you ship.
 
 ### Work you can show
 
@@ -148,134 +155,124 @@ Build working prototypes and tools you can demonstrate and explain to your next 
 
 ### Small serious cohort
 
-Build alongside a small group of peers who care about ownership, craft, and follow-through.
+Build alongside a small group of peers who care about ownership, craft and follow-through.
 
 ### Product-level thinking
 
 Learn to think in systems, constraints, decisions and real-world product trade-offs.
 
-Contribute directly to the research, design, prototyping, and MVP development for products shaped under real constraints.
-
-## Who we are looking for {#who-we-are-looking-for}
+## Who we look for: AI builders, product designers and growth operators {#who-we-are-looking-for}
 
 ### AI systems builders
 
-Builders working across AI-native development, agentic workflows, data systems and end-to-end architecture.
+Builders who work across AI-native development, agent workflows, data systems and the architecture of the whole system.
 
 ### Product experience designers
 
-People combining UX research, interface design and motion craft with stronger systems and product judgement.
+Designers who combine UX research, interface design and motion craft with strong systems thinking and product judgement.
 
 ### Growth and brand operators
 
 People who can take a product to market: positioning, launch, distribution and early growth.
 
-## What you'll gain {#what-youll-gain}
+## What you leave the fellowship with {#what-youll-gain}
 
 ### Shipped proof-of-work
 
-Real systems, real decisions and artefacts that show how you think and build.
+Real systems and real product calls, with work that shows how you think and build.
 
 ### Stronger product judgement
 
-Learn to defend trade-offs, handle critique and operate with more clarity under constraints.
+Learn to defend trade-offs, take critique and work clearly under constraints.
 
-## What you'll do in the Lab {#what-youll-do}
+## How the design and AI fellowship in Ahmedabad works {#what-youll-do}
 
-This is not a task-based programme. You enter with proof-of-work, earn your place through practical evaluation, and build inside small pods that are expected to ship.
+You arrive with proof-of-work, earn your place through a practical round and build inside small pods that are expected to ship. Nobody hands you a task list.
 
 ### Apply with shipped work
 
-Show side projects, passion projects, or live experiments that demonstrate independent building ability.
+Show side projects, passion projects or live experiments that prove you can build on your own.
 
 ### Pass the practical round
 
-The final qualifying stage is execution-based. It may take the form of a build test, practical challenge, or hackathon.
+The qualifying stage is execution-based. It can be a build test, a practical challenge or a hackathon.
 
 ### Work on ideas that matter
 
-You may bring your own AI-native idea or build on a Tcules idea. What moves forward is decided on merit, market reality and studio priorities.
+Bring your own AI-native idea or build on one of ours. What moves forward depends on merit, market reality and studio priorities.
 
 ### Join a build pod
 
-Fellows are paired into small pods, often combining design, engineering and GTM strengths.
+Fellows are paired into small pods, often combining design, engineering and go-to-market strengths.
 
 ### Build, review and ship
 
 Pods operate as real product teams. They build continuously, review openly and ship work that can be demonstrated.
 
-## Apply to join the Future Interfaces Lab (FIL) {#apply}
+## Apply to the Future Interfaces Lab (FIL): how selection works {#apply}
 
 Applications for the next cohort are now open.
 
-### Express intent to join
+*FIL is a selective fellowship, run separately from Tcules job openings.*
 
-Submit the form with your background, proof-of-work, and why you want to build in FIL.
+### Send your application
 
-*FIL is a selective programme. It is not a job application.*
+Submit the form with your background, links to your proof-of-work and why you want to build in FIL.
 
-### Apply
+### We review
 
-Share relevant details, links and demonstrable work.
+We assess applications for merit, fit and relevance to Tcules.
 
-### Review
+### Shortlisting
 
-We assess applications for merit, fit and organisational relevance.
-
-### Proceed if shortlisted
-
-Shortlisted applicants move to the next evaluation stage.
+Shortlisted applicants go on to the practical round, followed by a final review.
 
 [Apply to the Lab](https://forms.gle/kFHF6romQj514Jbi7)
 
-## Got questions? Let's clear things up {#frequently-asked-questions}
-
-We've got answers. If it's not covered here, feel free to reach out.
-
-### Is failure viewed negatively in the programme?
-
-No. Weak execution without learning is a problem. Honest failure with documented learning is not. FIL expects builders to test ideas, surface trade-offs, kill weak directions quickly, and learn through iteration under real constraints.
-
-### Who is FIL a poor fit for?
-
-FIL is not for people looking only for résumé padding, passive learning, or constant direction. It is better suited to builders who are comfortable with critique, ownership, ambiguity, and repeated shipping.
-
-### What kind of resources will I get during the fellowship?
-
-Fellows work inside a structured build environment with direct critique, pod-based collaboration, and access to the tools, systems, and workflows needed for the product being built. The exact stack can vary by pod, but Tcules provides the working environment required for serious execution.
-
-### Are academic marks or college brand important for selection?
-
-No. FIL does not optimise for marks, pedigree, or references. The primary filter is whether you can build, think independently, explain trade-offs, and show real proof-of-work.
+## Questions about the Future Interfaces Lab fellowship {#frequently-asked-questions}
 
 ### Who is FIL actually for?
 
-FIL is for serious builders: final-year students, recent graduates, and early professionals who already build beyond coursework and want deeper AI product immersion. It is designed for people who can show independent execution beyond academic intent.
+FIL is for serious builders: final-year students, recent graduates and early professionals who already build beyond coursework and want deeper immersion in AI products. It suits people who can show independent execution, beyond good intentions.
 
-### What should I submit in the application form?
+### Who is FIL a poor fit for?
 
-You should submit links and context that help us understand your building ability. This may include GitHub, live projects, side projects, short explanations of your work, and reflections that show how you think through decisions, trade-offs, and failures.
+FIL is a poor fit for people looking for résumé padding, passive learning or constant direction. It suits builders who are comfortable with critique, ownership, ambiguity and repeated shipping.
 
 ### Is FIL remote or in person?
 
-FIL is an in-person programme based in Ahmedabad. The structure depends on close collaboration, direct critique, weekly demos, and pod-based building, which work best in a shared environment.
-
-### How does the FIL selection process work?
-
-Selection is based on demonstrated execution ability, not marks or references. The process begins with proof-of-work review. Shortlisted applicants move to a practical evaluation stage, followed by founder review for clarity of thinking, ownership, and system-level reasoning.
-
-### Do I need a portfolio to apply?
-
-No. A polished portfolio is not required. What matters more is demonstrable proof-of-work: shipped projects, GitHub, live builds, experiments, and your ability to explain what you built, why you built it, and what you learned.
+FIL is in person, in Ahmedabad. It runs on close collaboration, direct critique, weekly demos and pod-based building, which work best in a shared space.
 
 ### Is FIL a paid opportunity?
 
-Yes. Fellows receive fixed monthly financial support for committed participation. This is structured support for an outcome-driven fellowship. It is not employment compensation, and it does not imply job placement.
+Yes. Fellows receive fixed monthly financial support for committed participation. It is fellowship support, separate from employment, and a place carries no promise of a job.
+
+### How does the FIL selection process work?
+
+Selection is based on demonstrated execution ability, with no weight on marks or references. It begins with a review of your proof-of-work. Shortlisted applicants move to a practical evaluation, followed by a final review of clarity of thinking, ownership and system-level reasoning.
+
+### What should I submit in the application form?
+
+Submit links and context that show how well you build: GitHub, live projects, side projects, short explanations of your work, and reflections on how you think through decisions, trade-offs and failures.
+
+### Do I need a portfolio to apply?
+
+No. Proof-of-work carries more weight than polish: shipped projects, GitHub, live builds and experiments, plus your ability to explain what you built, why you built it and what you learned.
+
+### Are academic marks or college brand important for selection?
+
+No. FIL selects on whether you can build, think independently, explain trade-offs and show real proof-of-work. Marks, pedigree and references are not part of the filter.
+
+### What kind of resources will I get during the fellowship?
+
+Fellows work in a structured build environment with direct critique, pod-based collaboration and access to the tools, systems and workflows their product needs. The exact stack varies by pod, and Tcules provides the working environment for serious execution.
+
+### Is failure viewed negatively in the programme?
+
+No. Weak execution without learning is a problem; honest failure with documented learning is not. FIL expects builders to test ideas, surface trade-offs, drop weak directions quickly and learn through iteration under real constraints.
 
 Still got questions? Drop us a note: [fil@tcules.com](mailto:fil@tcules.com).
 
-## Request artefact access {#artefact-access}
+## Ask to see work from an experiment {#artefact-access}
 
-To see artefacts from an experiment, [contact us](/contact) with what you are evaluating and what you would like to see.
-
-For anything else, [contact Tcules](/contact).
+To see work from one of the Lab's experiments, tell us through the [contact page](/contact) what you are evaluating and what you would like to see. For anything else, [contact Tcules](/contact).

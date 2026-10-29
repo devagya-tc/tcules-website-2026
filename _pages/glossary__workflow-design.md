@@ -4,13 +4,13 @@ slug: workflow-design
 page_name: Workflow Design
 page_type: defined_term
 seo:
-  title: What is workflow design? Meaning and example | Tcules
-  description: Workflow design defines how work moves through roles, rules, statuses, handoffs and exceptions until it is done, in software people use every day.
+  title: 'What is workflow design? Meaning and examples | Tcules'
+  description: 'What is workflow design? The process of designing how work moves through software: roles, rules, handoffs and exceptions, with examples and common patterns.'
   canonical: https://www.tcules.com/glossary/workflow-design
   robots: index,follow
 social:
-  og_title: What is workflow design? Meaning and example | Tcules
-  og_description: Workflow design defines how work moves through roles, rules, statuses, handoffs and exceptions until it is done, in software people use every day.
+  og_title: 'What is workflow design? Meaning and examples | Tcules'
+  og_description: 'What is workflow design? The process of designing how work moves through software: roles, rules, handoffs and exceptions, with examples and common patterns.'
   og_image: https://www.tcules.com/assets/og/glossary.png
   og_image_alt: Tcules social card headed Glossary, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,16 +18,23 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is workflow design? Meaning and example | Tcules
-  twitter_description: Workflow design defines how work moves through roles, rules, statuses, handoffs and exceptions until it is done, in software people use every day.
+  twitter_title: 'What is workflow design? Meaning and examples | Tcules'
+  twitter_description: 'What is workflow design? The process of designing how work moves through software: roles, rules, handoffs and exceptions, with examples and common patterns.'
   twitter_image: https://www.tcules.com/assets/og/glossary.png
 search_context:
+  primary_query: 'what is workflow design'
+  secondary_queries:
+  - 'workflow design meaning'
+  - 'workflow design is the process of'
+  - 'workflow design examples'
+  - 'workflow design pattern'
+  - 'workflow design vs process design'
   primary_intent: what is workflow design
   primary_buyer_question: What is workflow design?
   key_entities:
   - Workflow Design
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -39,12 +46,15 @@ navigation:
 render:
   band_order:
   - practice
+  - patterns
   - comparison
+  - faq
   - next
 structured_data:
   types:
   - WebPage
   - DefinedTerm
+  - FAQPage
   - BreadcrumbList
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
@@ -80,6 +90,8 @@ page_composition:
       practice: argument_thesis
       comparison: argument_thesis
       next: argument_thesis
+      patterns: definition
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -91,36 +103,62 @@ page_composition:
 
 *Glossary · Workflow Design*
 
-# Workflow design
+# What is workflow design? Meaning and examples from business software
 
-Workflow design defines how objects move through roles, rules, states, hand-offs and exceptions toward an intended outcome. When it matters: It matters wherever software carries operational consequence: approvals, hand-offs, exceptions. The honest question is what happens when the normal path fails.
+Workflow design is the process of designing how work moves through a product: between roles, under rules and through handoffs. It also covers what happens when the normal path fails. It matters wherever software carries real consequences, such as approvals and handoffs.
 
-Screens follow; the operating model leads.
+The rules come first. The screens follow.
 
-Workflow design includes the operating model as well as the interface. In Dealpath, a user searches for an existing deal before creating one, with a deliberate fallback when no record exists. The decision depends on object identity, permission and exception handling, not only a sequence of screens.
+Workflow design covers the working rules as well as the interface. In Dealpath, a user searches for an existing deal before creating one, with a deliberate fallback when no record exists. That choice depends on how a deal is identified, who has permission and how exceptions are handled, as much as on the order of screens.
 
-[Information architecture](/glossary/information-architecture) defines the objects and relationships underneath that work. A flowchart can still miss authority, waiting, failure and recovery.
+[Information architecture](/glossary/information-architecture) defines the objects and relationships underneath that work. A flowchart can still miss who has authority, where work waits, and what happens on failure and recovery.
 
 Explore [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design) or [B2B SaaS and Workflow Software](/expertise/b2b-saas-workflow-software).
 
-## How is workflow design used in practice? {#practice}
+## Workflow design examples from staffing and real-estate software {#practice}
 
 Workflow design starts with the work a product must carry across people, records, decisions and exceptions. In [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), Tcules modelled clients, candidates and jobs so staffing work could be designed around the relationships among them. In [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), a search-before-create decision changed one branch of an established real-estate workflow.
 
 The [Information Architecture and Workflow Design service](/services/product-design/information-architecture-workflow-design) makes those product rules explicit before interface detail hides them.
 
-## How does workflow design differ from a user journey map? {#comparison}
+## Common workflow design patterns {#patterns}
 
-The table separates the product's operating structure from the wider experience of one person.
+A handful of patterns recur in most business software. Each one answers a specific moment where work could go wrong.
 
-| Workflow design | User journey mapping |
-|---|---|
-| Defines roles, records, decisions, states, hand-offs and exceptions | Follows a person's goal, actions and experience across touchpoints |
-| Helps the product team decide what the software must represent | Helps the team see where the product fits into a broader experience |
-| Produces implementable product rules and paths | Produces an evidence-oriented view of the person's experience |
+| Pattern | What it handles | Where it appears in Tcules work |
+|---|---|---|
+| **Search before create** | Checks whether a record already exists before a new one is made | Dealpath's add-to-pipeline flow |
+| **Deliberate fallback** | Gives the work a clear route when the expected record or step is missing | Creating a new deal in Dealpath when no match exists |
+| **Enter once, reuse later** | Keeps details entered at the start in use across later steps | Scissors, where organisation details shape every later job and candidate message |
+| **Handoff between roles** | Passes work to someone with different knowledge, and shows who holds it now | The Auxentios quotation, shared across six specialist roles |
+| **Override with a reason** | Lets a person overrule a result and keeps the reason on the record | BuildTwin's review of automated drawing checks |
 
-## Why workflow design matters in product work {#next}
+## Workflow design vs process design and journey mapping {#comparison}
 
-Roles, rules and hand-offs have to work as one product rather than as a set of screens.
+Process design works at the level of the organisation. Workflow design brings that work into the product, and journey mapping looks at one person's experience around it.
+
+| Process design | Workflow design | User journey mapping |
+|---|---|---|
+| Defines how an organisation's work runs across teams and systems, often before any software is chosen | Defines roles, records, decisions, states, handoffs and exceptions | Follows a person's goal, actions and experience across touchpoints |
+| Helps the business agree who does what, in what order and under which policies | Helps the product team decide what the software must represent | Helps the team see where the product fits into a broader experience |
+| Produces process maps, policies and responsibilities | Produces product rules and paths the build can follow | Produces a view of one person's experience, built from what was observed |
+
+## Workflow design questions {#faq}
+
+### Why does workflow design matter in software?
+
+Software that carries real work, such as approvals, quotes or orders, tends to break at the handoffs and exceptions more than on the main screen. Workflow design makes those moments explicit, so the product knows who acts next and what happens when something fails. Otherwise people fill the gaps with email and spreadsheets.
+
+### Where does workflow design start?
+
+It starts with the work, before the screens: who takes part, which records they touch, which rules apply and where things go wrong today. Interviews and observation supply that picture. A map of roles and states then turns it into something the team can design against.
+
+### Who does workflow design in a product team?
+
+Product designers usually lead it, with product managers bringing the business rules and engineers checking what the system can represent. The people who do the work every day are the most important source. In larger products, workflow design and information architecture are worked out together.
+
+## Make the rules explicit before the screens {#next}
+
+Roles, rules and handoffs have to work together as one product, whatever the screens look like. Workflows are also gaining a new kind of participant. An AI agent that drafts, routes or approves part of the work needs the same explicit rules and handoffs as any role, plus a clear point where a person can step in. [User journey mapping](/glossary/user-journey-mapping) looks wider, across stages and channels, and [human in the loop](/glossary/human-in-the-loop) covers the review steps where software proposes and a person decides.
 
 [See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)

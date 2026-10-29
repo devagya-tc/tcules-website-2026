@@ -32,6 +32,7 @@ import {
 } from './blocks';
 import { coverFor, slotImage, slugOf } from './images';
 import styles from './CorpusPage.module.css';
+import { PlainPage } from './PlainPage';
 import { bandLinks, blocksOf, boldLead, html, labelTitle, plain, trimStart } from './text';
 
 export type AboutPageProps = {
@@ -43,6 +44,31 @@ export type AboutPageProps = {
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
+
+/** Every band id the About composition reads by name. */
+const ABOUT_BANDS = [
+  'ahmedabad-is-part-of-how-we-work',
+  'the-practice-keeps-moving',
+  'what-we-do',
+  'who-we-work-with',
+  'difference',
+  'how-we-work',
+  'leadership',
+  'work-you-can-inspect',
+  'testimonials',
+  'company-record',
+  'frequently-asked-questions',
+  'what-remains-constant',
+  'work-with-tcules',
+  'careers',
+] as const;
+
+/**
+ * Whether the corpus page still carries every band this composition names. The 26 Oct 2026 copy
+ * reshaped About, so the template checks this and falls back to `PlainPage` rather than crash.
+ */
+const aboutPageFits = (page: CorpusPage): boolean =>
+  ABOUT_BANDS.every((id) => page.bands.some((b) => b.id === id));
 
 const band = (page: CorpusPage, id: string): CorpusBand => {
   const found = page.bands.find((b) => b.id === id);
@@ -84,6 +110,8 @@ function Text({
  * `studio`, so the first viewport is not a wall of text.
  */
 export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
+  /* The 26 Oct 2026 copy reshaped About's bands: until this composition is redone, the fallback. */
+  if (!aboutPageFits(page)) return <PlainPage page={page} />;
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>

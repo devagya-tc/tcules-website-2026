@@ -5,13 +5,13 @@ page_name: ClimateTech & Energy
 page_type: expertise
 expertise_kind: domain_context
 seo:
-  title: ClimateTech Product Design for Energy Software | Tcules
-  description: 'ClimateTech and energy software design: turn live readings, forecasts and scenarios into screens people can compare and act on. Work for ConnectX.'
+  title: 'ClimateTech Product Design for Energy Software | Tcules'
+  description: 'ClimateTech product design for energy and sustainability software: readings, forecasts and targets that operators, finance and sustainability leads act on.'
   canonical: https://www.tcules.com/expertise/climatetech-energy
   robots: index,follow
 social:
-  og_title: ClimateTech Product Design for Energy Software | Tcules
-  og_description: 'ClimateTech and energy software design: turn live readings, forecasts and scenarios into screens people can compare and act on. Work for ConnectX.'
+  og_title: 'ClimateTech Product Design for Energy Software | Tcules'
+  og_description: 'ClimateTech product design for energy and sustainability software: readings, forecasts and targets that operators, finance and sustainability leads act on.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,8 +19,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: ClimateTech Product Design for Energy Software | Tcules
-  twitter_description: 'ClimateTech and energy software design: turn live readings, forecasts and scenarios into screens people can compare and act on. Work for ConnectX.'
+  twitter_title: 'ClimateTech Product Design for Energy Software | Tcules'
+  twitter_description: 'ClimateTech product design for energy and sustainability software: readings, forecasts and targets that operators, finance and sustainability leads act on.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: ClimateTech and energy software product design
@@ -29,7 +29,18 @@ search_context:
   - Can you design before our live data integrations are ready?
   - How should forecasts and scenarios be shown?
   - Have you worked on sustainability software?
-  primary_query: ClimateTech product design
+  primary_query: 'ClimateTech product design'
+  secondary_queries:
+  - 'energy software design'
+  - 'energy management software UX'
+  - 'building energy software UX'
+  - 'energy dashboard design'
+  - 'sustainability software design'
+  - 'forecast and scenario UX'
+  - 'carbon accounting software design'
+  - 'energy data visualisation'
+  - 'design before live data integrations'
+  - 'climate tech UX design'
 navigation:
   breadcrumb:
   - name: Home
@@ -57,64 +68,89 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: system_state_scenario_explanation_uncertainty_action
+  selected_work:
+  - ai-native-building-energy-product-connectx
+  - benchmark-gensuite-enterprise-suite-modernisation
+  - ai-quality-control-expert-review-buildtwin
+  why_tcules_reasons: [1, 6, 4]
   case_study_slugs:
   - ai-native-building-energy-product-connectx
+  - benchmark-gensuite-enterprise-suite-modernisation
+  - ai-quality-control-expert-review-buildtwin
+  - doodle-case-study-automating-enterprise-meeting-scheduling
   media_bindings:
-  - id: climate_connectx
+  - id: climate_connectx_workspace
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: connectx
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
-    alt_intent: ConnectX coded building-energy workspace showing AI-assisted scenario exploration.
+    source: current public Tcules case media (case-studies__ai-native-building-energy-product-connectx.md, connectx_workspace)
+    alt_intent: ConnectX coded building-energy workspace showing an AI-assisted scenario with the simplified 2.5D twin.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: climate_benchmark_scope_selector
+    role: demonstrate
+    supports_section: selected-work
+    card: benchmark-gensuite
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    source: current public Tcules case media (case-studies__benchmark-gensuite-enterprise-suite-modernisation.md, benchmark_scope_selector)
+    alt_intent: Redesigned Benchmark Gensuite scope selector separating Browse, Recents and Favourites, and Nearby.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: climate_buildtwin_review_feed
+    role: demonstrate
+    supports_section: selected-work
+    card: buildtwin
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
+    source: current public Tcules case media (case-studies__ai-quality-control-expert-review-buildtwin.md, buildtwin_review_feed)
+    alt_intent: BuildTwin continuous review feed keeping each AI check beside its source.
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - DRAFT-CONNECTX-SCENARIOS
-  client_recognition:
-    component_type: curated_client_recognition
-    clients:
-    - ConnectX
-    - Benchmark Gensuite
-    placement: compact_hero_followup
-    label: Selected Tcules client relationships across the practice
-    source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
+  - DRAFT-CONNECTX-EIGHT-SCENARIOS
+  - DRAFT-RYZEO-REPORTING
+  - CL-RINGIER-COLLAB
+  testimonials_general: true
+  testimonial_context: 'GENERAL_BAND: one ClimateTech voice (ConnectX, registered) and two studio voices (Ryzeo, Ringier), said in the band line; Eagles Security quote removed (register: not proof for any industry page)'
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
-  proof_claim_policy: CONNECTX_CODED_DEMO_ONLY;NO_PRODUCTION_INTEGRATION_CLAIM
-  content_composition:
-    primary_intent: ClimateTech product design
-    recognition_count: 3
-    signature_model_type: scenario-comparison
-    proof_component: source_bound_named_case_or_explicit_proof_gap
-    testimonial_component: verbatim_quote_with_source_scope_in_cms
-    form_anchor: enquiry
-    mobile_table_policy: stack_as_labelled_rows
-  signature_explanatory_object:
-    type: scenario-comparison
-    sequence:
-    - Observed state
-    - Baseline
-    - Changed assumption
-    - Consequence
-    - Next action
-    label: Editorial explanatory diagram; not a client artefact
-    media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: GENERAL_STUDIO_ENDORSEMENT_NOT_ROUTE_SPECIFIC
-  source_evidence_boundary: ConnectX is a coded exploration on interim data. It is not proof that Tcules integrated or deployed an operational energy-management platform.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    verified_client_reviews_separately: 12
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - ConnectX
+    - Benchmark Gensuite
+    - BuildTwin
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
+  proof_claim_policy: CONNECTX_CODED_DEMO_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025
+  source_evidence_boundary: ConnectX began as a coded demo on sample data; Tcules then took that demo through to a production-ready module, live since late 2025. Describe it as that module, not as a whole energy-management platform.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: A credible scenario view separates what is observed from what is modelled. The underlying product example remains a coded demonstration, not a live energy platform.
 structured_data:
   types:
   - WebPage
@@ -132,27 +168,65 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
-  - CONNECTX_CODED_DEMO_ONLY;NO_PRODUCTION_INTEGRATION_CLAIM
+  - CONNECTX_CODED_DEMO_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__climatetech-energy.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__climatetech-energy.md; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct, tag ind1; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · ClimateTech and energy*
 
-# ClimateTech product design for energy data people can act on
+# ClimateTech product design for energy software that separates readings, forecasts and targets
 
-ClimateTech and energy products mix live readings, forecasts and targets. We design them so measured figures, modelled scenarios and their assumptions look different, and each role knows which figures to rely on.
+An energy product is read at two speeds. An operator has an hour to act on tonight's peak price, and a sustainability lead has weeks to defend a reported total to an assurer. Tcules is a ClimateTech product design studio for energy management and sustainability software, from an early idea to an established suite.
 
-[Start a conversation](#enquiry)
+[Tell us which numbers your users act on](#enquiry)
 
-*Selected work: ConnectX · Benchmark Gensuite*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Who is asking, and what they need to know {#hard-parts}
+## What we design in ClimateTech and energy software {#what-we-design}
+
+- **Building energy products** with live data and a digital twin · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)
+
+- **Peak-price events and battery suggestions** for building operators · ConnectX
+
+- **Safety and sustainability software** for large organisations · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+- **EV charging and fleet electrification products** · Charging plans for drivers and depots that weigh vehicle readiness against tariffs
+
+- **Renewable and storage asset monitoring** · Live output, forecasts and faults told apart at a glance
+
+- **Carbon accounting and emissions reporting tools** · Every total traceable to its sources and approver
+
+## Selected ClimateTech product design work {#selected-work}
+
+Work closest to ClimateTech: two energy and sustainability products, and one from the built environment, where engineers sign off what the software found.
+
+### ConnectX: a simpler twin that explains the building
+
+ConnectX was shaping an AI building-energy product. A simplified 2.5D twin replaced a detailed 3D model, because highlighting the connected assets explained more than a realistic building did. We proved the direction in a coded demo, and a production-ready module built from it went live in late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### Benchmark Gensuite: a site picker that knows where you stand
+
+Benchmark Gensuite's suite runs environment, health, safety and sustainability programmes across large organisations. We split its scope selector into Browse, Recents and Favourites, and Nearby, so someone on site can find the right site by location, without walking the hierarchy. Benchmark's engineers reviewed the new patterns as coded prototypes. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### BuildTwin: every AI check opens onto its source
+
+At BuildTwin, AI checks structural-engineering drawings and a quality engineer signs off each drawing. In our design, each observation sits in one continuous review feed beside its source, status and conclusion, in place of folding panels that hid them. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+## Where energy software gets hard {#hard-parts}
+
+Energy products serve people who act within minutes and people who report once a year, from the same meters.
+
+### Readings, forecasts and targets that look alike
+
+A meter reading, a forecast and a target can share one chart, one colour and one unit. When they look alike, people act on the wrong one. We mark measured figures apart from modelled ones, and show each scenario against a stated baseline with the changed assumptions in view.
+
+Example of how each view is set: ConnectX's eight scenarios each name the request behind it, the data, the screen modules, the twin's behaviour and the operator's next step. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### Three roles reading one building
 
 | Who | What they want from the product |
 |---|---|
@@ -160,59 +234,124 @@ ClimateTech and energy products mix live readings, forecasts and targets. We des
 | Finance leader | Cost and forecast |
 | Sustainability lead | Progress against an environmental target |
 
-One dashboard for all of them ends up showing too much to everyone. Two other traps are common: readings that look exactly like forecasts, so people act on the wrong one, and 3D buildings that look impressive and explain nothing.
+Building energy software UX has to serve all three. One dashboard for everyone shows too much to each of them, and a fixed dashboard per role breaks whenever a situation crosses roles.
 
-## How we design energy and sustainability products {#approach}
+A peak-price event is one: the operator needs the affected assets and the action tonight, and the finance leader needs the saving and its assumptions next week.
 
-**Start from the question each role brings.** A peak-price alert, a forecast or a progress check against a target opens the data, assets and controls that answer it.
+Example: in ConnectX's product, a question decides which modules and twin view appear, and the workspace stays open for ordinary work afterwards. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
-**Label what is real and what is projected.** Measured readings, modelled scenarios and the assumptions behind them look different, so nobody mistakes a forecast for a meter reading.
+### Emissions totals an assurer will question
 
-**Use the digital twin to explain.** The twin highlights connected assets and dims the rest, so people see what matters in the current situation.
+In the EU, the largest companies report under the Corporate Sustainability Reporting Directive, whose scope was narrowed in 2026. Most emissions reporting follows the GHG Protocol, a voluntary standard with scope 1, 2 and 3 categories. Where figures are assured, the assurer asks where each one came from.
 
-**Compare against a clear baseline.** Scenarios show what changed in the assumptions and what that changes in cost, energy or emissions.
+We design carbon accounting screens where every total opens onto its sources, its estimates and who approved it. Your sustainability and legal teams decide which rules apply.
 
-## Building energy, safety and sustainability products {#proof}
+Example, from related work: in our design for BuildTwin's review, a correction needed a new status and a reason, and the original result stayed on the record beside it. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-### ConnectX: from a question to an energy workspace
+### Automation that acts overnight, inside limits a person set
 
-ConnectX was shaping an AI building-energy product for facilities operators, finance leaders and sustainability teams. An operator asking about a peak-price event needs the affected assets, the data behind a suggested battery action and what that action would change.
+Batteries are dispatched by software, and loads shift overnight within limits someone agreed. The design question is how people set those limits, and how they see in the morning what the system did and what it saved.
 
-With ConnectX, we defined eight situations like this one. Each names the request, the data needed, the screen modules, how the twin behaves and what the operator can do next. A simplified 2.5D twin replaced a detailed 3D model, because highlighting the connected assets explained more than a realistic building did.
+*Illustration, not client work*
 
-<!-- awaiting client sign-off -->
+A product plans overnight charging for a delivery company's vans. The fleet manager needs every van ready by six; finance wants the charging done when power is cheapest. On the night those clash, the product has to choose, and the fleet manager has to know it chose.
+
+So we would design that night first: each van's charge against the price forecast, with the vans where price and readiness pull apart flagged. The fleet manager can pick before the system does. Drivers see one thing: whether their van will be ready.
+
+## What you get when Tcules designs your energy software {#what-you-get}
+
+Energy management software UX starts with the people who act on the numbers. We design for them, from an early idea to a suite customers already run across their sites.
+
+**What you receive**
+
+- each role's view of the same figures, at the depth that role needs
+
+- readings, forecasts and targets marked apart, with scenarios shown against a stated baseline
+
+- a digital twin or site view that shows which assets matter now
+
+- carbon and emissions totals that open onto their sources, estimates and approver
+
+- the limits people set for automated actions, and a morning view of what the system did
+
+- a coded demo on sample data, so the direction is agreed before live integrations exist
+
+- specs your engineers build from, or Tcules developers taking it into production
+
+**Who does the work.** Your energy product gets a senior product designer who leads the design and does it, while an account lead keeps the project moving. Design engineers build the coded demos, and developers join when we build the product.
+
+**What we need from you.** Each role's real questions, from the operator, the finance lead and the sustainability lead. The data you have today, measured or modelled, or a realistic sample of it. Time with your data and engineering leads, and a named person who signs off product choices.
+
+**Where our part stops.** Data pipelines, forecasting models and device integrations stay with your data and engineering teams. Which reporting rules apply is for your sustainability and legal teams to decide.
+
+One misread dashboard may need only [dashboard design](/services/product-design/data-visualisation). A direction to prove on sample data suits [Coded Prototyping](/services/design-engineering/coded-prototyping), and a suite users know by heart, [Product Modernisation](/services/product-modernisation).
+
+## What clients say {#testimonials}
+
+One voice from our energy work, and two from clients in other fields on working with the studio.
+
 > “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
 
-### Benchmark Gensuite: modernising a safety and sustainability suite
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-Benchmark Gensuite's software runs environment, health, safety and sustainability programmes for customers who know it well. We worked out modernised shared screen patterns as coded prototypes and tried them first in one heavily used feature.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-That let Benchmark see what each change would ask of long-time users before it reached the rest of the suite. Its engineers tried the new screens while there was still time to change them.
+## How we work together {#how-we-work-together}
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+For energy software, a good first piece of work is one question a role asks often, such as a peak-price alert, designed end to end on sample data.
 
-## Why ClimateTech teams bring us in {#why-tcules}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-**We make technical data usable by non-specialists.** We design views where finance and sustainability leads read the same figures as engineers, at the level of detail they need.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-**We test ideas in code.** Coded demos, like ConnectX's, let your stakeholders click through a product idea before live data is connected. We later hardened ConnectX's demo into a production-ready module, which went live in late 2025.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-## Questions about energy and sustainability products {#faq}
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-### Can you design before our live data integrations are ready?
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-Yes. ConnectX's coded demo ran on interim data, which let the team judge the whole product direction before connecting live systems. Once the direction held, that same demo became the starting point for the live module.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-### How should forecasts and scenarios be shown?
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-Against a stated baseline, with the changed assumptions visible and measured figures clearly marked apart from modelled ones.
+## Why teams choose Tcules {#why-tcules}
 
-### Have you worked on sustainability software?
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-Yes. We prototyped modernised screen patterns for Benchmark Gensuite's environment, health, safety and sustainability suite. For ConnectX, we defined an AI building-energy product that serves sustainability teams alongside operators and finance leaders.
+- **We work out what the product has to know before we draw it.** For Doodle's scheduling MVP, one interview showed that availability depends on how much a meeting matters, and priority joined the product's model. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+- **Senior people do the work, and clients keep us for years.** Primelis has kept us as its design partner for three years, and we have designed every one of its products.
+
+- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we redesigned a web platform and two apps, and our developers built the frontends from those designs.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about ClimateTech product design {#faq}
+
+### Can design start before our live data integrations are ready?
+
+Yes. For ConnectX, Tcules made a coded demo on sample data, so the team could judge the whole product direction before connecting live systems. The same approach suits any product whose data feeds are still being built.
+
+### What does good forecast and scenario UX look like in energy software?
+
+Each forecast and scenario sits against a stated baseline, with the changed assumptions visible. Measured figures are marked apart from modelled ones, so a reader can see what changed, what it rests on and whether anyone measured it.
+
+### Do you design carbon accounting software?
+
+Yes. We design emissions inventories by scope, the trail behind each figure and the reports that go to auditors and boards. Your sustainability and finance specialists decide the method; we make it readable and traceable on screen.
+
+### How do you make energy data visualisation clear for non-engineers?
+
+Each role sees the same figures at its own depth. A finance leader gets cost and forecast first, with the engineering detail one step away, and every chart says whether it shows a reading, a forecast or a target.
 
 ## Tell us which numbers your users rely on {#enquiry}
 

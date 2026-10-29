@@ -4,13 +4,13 @@ slug: gt-tools-shopify-product-discovery
 page_name: Designing specialist-product discovery in Shopify
 page_type: case_study
 seo:
-  title: 'GT Tools: specialist commerce designed and built | Tcules'
-  description: Tcules redesigned and developed GT Tools' Shopify store so specialist buyers can find equipment, compare options and understand what they are buying.
+  title: 'GT Tools Shopify ecommerce redesign case study | Tcules'
+  description: 'GT Tools Shopify ecommerce redesign case study: a store redesigned and developed so specialist buyers can find equipment, compare options and see what they buy.'
   canonical: https://www.tcules.com/case-studies/gt-tools-shopify-product-discovery
   robots: index,follow
 social:
-  og_title: 'GT Tools: specialist commerce designed and built | Tcules'
-  og_description: Tcules redesigned and developed GT Tools' Shopify store so specialist buyers can find equipment, compare options and understand what they are buying.
+  og_title: 'GT Tools Shopify ecommerce redesign case study | Tcules'
+  og_description: 'GT Tools Shopify ecommerce redesign case study: a store redesigned and developed so specialist buyers can find equipment, compare options and see what they buy.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,17 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'GT Tools: specialist commerce designed and built | Tcules'
-  twitter_description: Tcules redesigned and developed GT Tools' Shopify store so specialist buyers can find equipment, compare options and understand what they are buying.
+  twitter_title: 'GT Tools Shopify ecommerce redesign case study | Tcules'
+  twitter_description: 'GT Tools Shopify ecommerce redesign case study: a store redesigned and developed so specialist buyers can find equipment, compare options and see what they buy.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'GT Tools Shopify ecommerce redesign'
+  secondary_queries:
+  - 'GT Tools Shopify ecommerce redesign case study'
+  - 'Shopify product discovery case study'
+  - 'technical product buying UX'
+  - 'Shopify store redesign and development'
+  - 'specialist ecommerce UX case study'
   primary_intent: Shopify specialist ecommerce redesign case study
   primary_buyer_question: How did Tcules help specialist buyers choose and purchase through GT Tools’ Shopify store?
   key_entities:
@@ -30,7 +37,7 @@ search_context:
   - product discovery
   - purchase information
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +61,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +72,7 @@ render:
   - shopify-constraints-were-part-of-the-work
   - what-this-case-establishes
   - use-this-when-a-page-must-resolve-a-buyer-s-ques
-  - delivery-impact
+  - faq
   - related
   - enquiry
 page_composition:
@@ -96,7 +103,7 @@ page_composition:
       shopify-constraints-were-part-of-the-work: argument_thesis
       what-this-case-establishes: comparison_decision
       use-this-when-a-page-must-resolve-a-buyer-s-ques: argument_thesis
-      delivery-impact: argument_thesis
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   commercial_system:
@@ -107,10 +114,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#gt-tools
 release:
@@ -157,85 +165,107 @@ content_governance:
 
 *Case study · GT Tools*
 
-# Help a specialist buyer choose with confidence
+# GT Tools Shopify ecommerce redesign: buying questions answered beside the price
 
-GT Tools sells specialist equipment for automotive-glass repair and replacement, where buyers may need to confirm compatibility, variant, stock, shipping, warranty, finance and support before purchase. Tcules redesigned and developed the Shopify store around those questions, carrying specialist product discovery and the purchase decision into the implemented storefront.
+GT Tools sells specialist equipment for automotive-glass repair and replacement. Before they buy, specialist buyers need to confirm compatibility, variant, stock, shipping, warranty, finance and support.
+
+Tcules redesigned and developed the Shopify store around those questions. Because one studio designed and built it, the thinking behind product discovery and the purchase went all the way into the store buyers use.
 
 The work covered:
 
-- stakeholder interviews with heuristic and competitor review;
+- stakeholder interviews, with an expert usability (heuristic) review and a competitor review
+- homepage, navigation, search, and category and product-list structures
+- stock and pre-order indicators, SKU display and configurable options
+- product-detail information, support access, and shipping and warranty visibility
+- financing-widget placement and a persistent price and purchase action
 
-- homepage, navigation, search, and category and product-list structures;
-
-- stock and pre-order indicators, SKU display and configurable options;
-
-- product-detail information, support access, and shipping and warranty visibility;
-
-- financing-widget placement and a persistent price and purchase action.
-
-## At a glance {#case-context}
+## GT Tools Shopify project at a glance {#case-context}
 
 | Product | GT Tools' Shopify store for automotive-glass repair and replacement equipment, used by specialist buyers. |
 |---|---|
 | Our role | Product-discovery UX and UI redesign, and development of the Shopify store. |
 | The key question | How can product pages answer a buyer's questions on compatibility, variants, stock, support, shipping, warranty and finance before they buy? |
 | What we delivered | A redesigned and developed Shopify store that keeps specialist product information next to the price and the buy button. |
+| Buyer questions covered | Compatibility, variant, stock, shipping, warranty, finance and support. |
+| Research | Stakeholder interviews, an expert usability (heuristic) review and a competitor review. |
 
 Related Tcules services: [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design) and [Frontend Development](/services/software-development/frontend-development).
 
-## What does a specialist buyer need to know before purchase? {#product-discovery-began-with-buyer-questions}
-A specialist catalogue cannot assume that a product image and price are enough. The interface needs to help a buyer identify the right category, compare viable options and resolve technical or fulfilment uncertainty.
+## Shopify product discovery: helping specialist buyers find the right equipment {#product-discovery-began-with-buyer-questions}
 
-The catalogue needed to work for buyers who knew a part number and buyers still comparing equipment. Tcules reworked navigation, search and product discovery to help both reach a suitable product. Category and product-list pages carried the information needed to narrow choices. Product-detail pages then brought together specification, variant, availability, support and purchase information.
+The store had to help that buyer find the right category, compare viable options and clear up technical or fulfilment doubts.
 
-## The product page became a decision interface {#the-product-page-became-a-decision-interface}
+It also had to work for buyers who knew a part number and buyers still comparing equipment. Tcules reworked navigation, search and product discovery to help both reach a suitable product:
 
-The product page brought descriptions, variants, availability, support, shipping, warranty and finance into the purchase decision. A persistent header kept price and add-to-cart action available as the buyer reviewed longer technical information.
+- Category and product-list pages carried the information needed to narrow choices.
+- Product-detail pages then brought together specification, variant, availability, support and purchase information.
 
-A buyer could keep reading the technical detail without losing the price or having to find the purchase control again.
+## Every buying question answered on the product page {#the-product-page-became-a-decision-interface}
 
-## Shopify constraints were part of the work {#shopify-constraints-were-part-of-the-work}
+The product page brought descriptions, variants, availability, support, shipping, warranty and finance together at the point of purchase. A persistent header kept the price and add-to-cart action in view while the buyer read the longer technical detail.
 
-Tcules carried the design into Shopify, including the custom work needed to fit the proposed experience to the platform. Navigation, product information and the purchase action had to work together in the store buyers would actually use.
+Stock and pre-order indicators, SKU display and configurable options helped the buyer confirm the exact variant. Support access, shipping and warranty details and the financing widget sat on the same page as the purchase action.
 
-## More of the buying decision happens on the product page {#what-this-case-establishes}
+## Shopify store redesign and development, including custom work {#shopify-constraints-were-part-of-the-work}
 
-GT Tools gained a store that helped customers find equipment, understand the available options and see what buying would involve. Technical details and fulfilment information supported the same decision, with price and add-to-cart kept within reach.
+Tcules carried the design into Shopify, including the custom work needed to fit the proposed experience to the platform. Navigation, product information and the purchase action had to work together in the store buyers would use.
 
-For a specialist catalogue, that means fewer reasons to interrupt the purchase just to ask a basic product question.
+## What the new store gave GT Tools' specialist buyers {#what-this-case-establishes}
 
-## Use this when a page must resolve a buyer's question {#use-this-when-a-page-must-resolve-a-buyer-s-ques}
+GT Tools gained a store that helped customers:
 
-For a specialist product, the test of a product page is simple: does it answer the questions that stop someone buying?
+- find equipment
+- understand the available options
+- see what buying would involve
 
-A useful review maps each buyer question to:
+Technical details and fulfilment information supported the same choice, with price and add-to-cart kept within reach.
 
-1. the source of the answer;
-2. the interface state where it appears;
-3. the consequence of getting it wrong;
-4. the support or recovery path; and
-5. the event that can be measured after release.
+For a specialist catalogue, that means fewer reasons to interrupt the purchase just to ask a basic product question. The product page is designed to answer the questions a buyer would otherwise ring up to ask.
 
-The decision-interface approach in this case reflects how Tcules works across [commerce and transactional products](/expertise/commerce-transactional-products).
+## How to help specialist buyers choose online: a product-page test {#use-this-when-a-page-must-resolve-a-buyer-s-ques}
 
-## What reached the implemented storefront {#delivery-impact}
+The test for a specialist catalogue is simple. List the questions that stop someone buying. Check that each one is answered on the product page, next to the price.
 
-| Impact dimension | What changed |
-|---|---|
-| Decision support | Specialist product information was moved closer to the point where a buyer had to decide whether an item was right for the job. |
-| Design-to-build continuity | Tcules carried the storefront direction through Shopify implementation rather than ending at a design handoff. |
-| Platform fit | Product-discovery decisions were shaped around Shopify constraints so the implemented experience remained compatible with the commerce platform. |
+A deeper review follows each question further:
 
-## Related design-to-build work {#related}
+- Where does the answer come from, and in which situation does it appear?
+- What happens if it is wrong, and where does the buyer turn for support?
+- After release, what will show whether the answer did its job?
 
-Two other cases where finding the right thing was the product problem.
+Tcules designs product pages around buyers' questions across [commerce and transactional products](/expertise/commerce-transactional-products).
 
-[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+## Questions about the GT Tools Shopify ecommerce redesign {#faq}
 
-[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+### What did Tcules do for GT Tools?
+
+Tcules redesigned and developed GT Tools' Shopify store, which sells specialist equipment for automotive-glass repair and replacement. The work ran from stakeholder interviews and expert reviews to navigation, search, product pages and the purchase action. The store keeps specialist product information next to the price and the buy button.
+
+### How do you help specialist buyers choose online?
+
+List the questions that stop someone buying, then answer each one on the product page, next to the price. For GT Tools, that meant compatibility, variants, stock, shipping, warranty, finance and support. A persistent header kept the price and add-to-cart action in view while buyers read the technical detail.
+
+### Did Tcules build the GT Tools store on Shopify?
+
+Yes. Tcules carried the design into Shopify, including the custom work needed to fit the proposed experience to the platform. Navigation, product information and the purchase action were developed to work together in the store buyers use.
+
+### How was navigation reworked for different kinds of buyer?
+
+Navigation, search and product discovery were reworked for buyers who know a part number and for those still comparing equipment. Category and product-list pages carry the information needed to narrow choices. Product pages then bring together specification, variant, availability, support and purchase information.
+
+## Two more projects on established platforms: Magento and Moodle {#related}
+
+Both were designed for an established platform: Magento for The Chain Hut, Moodle for The Wandering Raven.
+
+[Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+
+[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
 
 [See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
 
-## Tell us what people are trying to find {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us what your buyers are trying to find {#enquiry}
 
 Describe the catalogue, what people are trying to find in it and where they give up.

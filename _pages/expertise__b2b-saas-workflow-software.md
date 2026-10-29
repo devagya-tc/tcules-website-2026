@@ -5,13 +5,13 @@ page_name: B2B SaaS & Workflow Software
 page_type: expertise
 expertise_kind: product_shape
 seo:
-  title: B2B SaaS Product Design for Workflow Software | Tcules
-  description: 'B2B SaaS product design for multi-role workflow software: clear records, roles and exceptions. Hire SaaS designers who have worked with Dealpath and Doodle.'
+  title: 'SaaS UI/UX Design Agency for B2B Workflow Software | Tcules'
+  description: 'SaaS UI/UX design agency for B2B workflow software: records, roles, rules and exceptions designed so every role, and every AI agent, can follow the work.'
   canonical: https://www.tcules.com/expertise/b2b-saas-workflow-software
   robots: index,follow
 social:
-  og_title: B2B SaaS Product Design for Workflow Software | Tcules
-  og_description: 'B2B SaaS product design for multi-role workflow software: clear records, roles and exceptions. Hire SaaS designers who have worked with Dealpath and Doodle.'
+  og_title: 'SaaS UI/UX Design Agency for B2B Workflow Software | Tcules'
+  og_description: 'SaaS UI/UX design agency for B2B workflow software: records, roles, rules and exceptions designed so every role, and every AI agent, can follow the work.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,18 +19,32 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: B2B SaaS Product Design for Workflow Software | Tcules
-  twitter_description: 'B2B SaaS product design for multi-role workflow software: clear records, roles and exceptions. Hire SaaS designers who have worked with Dealpath and Doodle.'
+  twitter_title: 'SaaS UI/UX Design Agency for B2B Workflow Software | Tcules'
+  twitter_description: 'SaaS UI/UX design agency for B2B workflow software: records, roles, rules and exceptions designed so every role, and every AI agent, can follow the work.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
-  primary_intent: B2B SaaS product design for complex workflow software
-  primary_buyer_question: How do we make a multi-role workflow easier without deleting complexity the work genuinely requires?
+  primary_intent: SaaS product design and UX for B2B workflow software, including workflows that people and AI agents share
+  primary_buyer_question: How do we make a multi-role workflow easier for the people, and now the AI agents, who share it?
   supporting_questions:
-  - Can we hire SaaS designers to work inside our product team?
-  - Can you fix one workflow without redesigning the whole product?
-  - How do you simplify a complex product without removing features?
+  - What product types does Tcules design in B2B SaaS?
+  - How do you design complex workflow software?
+  - How should a SaaS product handle AI agents acting on its records?
+  - Can design help us against simpler AI tools and in-house builds?
+  - What stays with our team or other specialists?
+  - Can a Tcules designer work inside our product team?
+  - Can you start with the one workflow that hurts most?
   - Do you work on new SaaS products as well as established ones?
-  primary_query: B2B SaaS product design
+  primary_query: 'SaaS UI/UX design agency'
+  secondary_queries:
+  - 'B2B SaaS UX design'
+  - 'UX design for multi-role SaaS'
+  - 'B2B workflow software UX'
+  - 'enterprise SaaS UX design'
+  - 'SaaS UX design'
+  - 'design for AI agents acting on SaaS records'
+  - 'compete against simpler SaaS products'
+  - 'SaaS UX design cost'
+  - 'SaaS design agency'
 navigation:
   breadcrumb:
   - name: Home
@@ -58,35 +72,81 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: roles_records_rules_states_exceptions
+  selected_work:
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - scissors-staffing-software-object-oriented-ux
+  - benchmark-gensuite-enterprise-suite-modernisation
+  why_tcules_reasons: [1, 2, 6]
   case_study_slugs:
   - enterprise-workflow-redesign-dealpath-real-estate
   - auxentios-cpq-product-mvp-design
+  - scissors-staffing-software-object-oriented-ux
   - benchmark-gensuite-enterprise-suite-modernisation
   - doodle-case-study-automating-enterprise-meeting-scheduling
   media_bindings:
+  - id: b2b_doodle_object_model
+    role: demonstrate
+    supports_section: selected-work
+    card: doodle
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
+    source: current public Tcules case media
+    alt_intent: Doodle object model linking participants, meeting type, priority and tentative availability to the scheduling behaviour behind a bookability score.
+    status: BOUND_EXISTING_PUBLIC_ASSET
   - id: b2b_dealpath
     role: demonstrate
-    supports_section: proof
+    supports_section: hard-parts
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    source: current public Tcules case media
     alt_intent: Dealpath workflow redesign checking for an existing deal before record creation.
     status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: b2b_benchmark_scope_selector
+    role: demonstrate
+    supports_section: hard-parts
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    source: current public Tcules case media
+    alt_intent: Redesigned Benchmark Gensuite scope selector separating Browse, Recents and Favourites, and Nearby, each with its own search boundary.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: b2b_benchmark_attachments_prototype
+    role: demonstrate
+    supports_section: selected-work
+    card: benchmark-gensuite
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
+    source: current public Tcules case media (case-studies__benchmark-gensuite-enterprise-suite-modernisation.md, benchmark_attachments_prototype)
+    alt_intent: Benchmark Gensuite legacy and redesigned attachments interface, built as a coded prototype for review by Benchmark's engineers.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: b2b_scissors_card
+    role: demonstrate
+    supports_section: selected-work
+    card: scissors
+    asset_uri: null
+    source: no product screen in the Scissors case files yet; text card until the screen library supplies one (design-system.md §4.6)
+    status: SCREEN_REQUIRED
   testimonial_ids:
   - UW-ERP-VALIDATION
+  - DRAFT-DOODLE-RESEARCH
+  - SSOT-TREADCOMMAND
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
   independent_reputation:
     component_type: linked_review_marker
@@ -104,6 +164,7 @@ page_composition:
     - Auxentios
     - Scissors
     - Doodle
+    - Benchmark Gensuite
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -128,97 +189,190 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__b2b-saas-workflow-software.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__b2b-saas-workflow-software.md; Sol integration pass 26 Oct 2026 (Scissors moved up as the page's signature, other cases cut to one line each); standalone landing-page pilot 26 Oct 2026 (41-landing-pages-26-oct/pilot-saas.md; Doodle leads as the imaged signature; Scissors, Auxentios, Dealpath and Benchmark Gensuite carry the hard parts); studio-spine rebuild 26 Oct 2026 evening (42-first-principles-26-oct/pilot2-saas2.md; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · B2B SaaS and workflow software*
 
-# B2B SaaS product design for workflow software
+# SaaS UI/UX design agency for B2B software that many roles share
 
-Our SaaS designers map your records, roles and exceptions before drawing a screen. We work on established products and new ones, from one stubborn workflow to the whole product, with engineers when you need them.
+Customers renew workflow software for what happens at the handovers. A quote reaches pricing with its history intact, an exception lands with someone who can clear it, and a new team's admin sets up access without a support ticket. Tcules is a SaaS UI/UX design studio for B2B workflow products, new or long established.
 
-[Start a conversation](#enquiry)
+[Tell us what you're designing](#enquiry)
 
-*Selected work: Dealpath · Auxentios · Scissors · Doodle*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Where B2B SaaS UX gets hard {#hard-parts}
+## What we design in B2B SaaS and workflow software {#what-we-design}
 
-**"Five roles touch the same record, and each sees a different story."** Sales, pricing and operations all change one item. Nobody can tell what the others did.
+- **Deal and pipeline software** for a single industry, such as real estate · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
-**"We designed the happy path. Customers live in the exceptions."** Missing details, overrides and handoffs end up in support tickets and side spreadsheets.
+- **Quoting, pricing and approvals (CPQ)** shared by several specialists · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design)
 
-**"The product keeps creating duplicates."** One default assumes everything is new, so teams quietly build a second copy of work that already exists.
+- **Staffing and people operations** linking clients, candidates and jobs · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)
 
-**"Every new feature adds another menu."** The structure made sense at ten features. It is now carrying forty.
+- **Scheduling** across teams and companies · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-## How we design workflow software {#approach}
+- **Environment, health, safety and sustainability suites** for large firms · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-**We map what your product keeps track of before drawing screens.** Clients, candidates, jobs, deals, quotes. Once those records and the links between them are clear, screens get simpler without losing anything users rely on.
+- **Back-office software for a single trade,** such as tyre shops · TreadCommand
 
-**Each role gets its own view of the same work.** A sales manager and a pricing expert need different detail on one quote. Both need to trust it is the same quote.
+## Selected B2B SaaS UX design work {#selected-work}
 
-**The awkward cases are designed on purpose.** A rejected approval, a missing field, a record that already exists: each gets a clear state, an owner and a way forward.
+### Doodle: meeting priority joined the scheduling model
 
-**We change what is broken and keep what works.** Long-time users have habits worth protecting, so the effort goes where they actually stumble.
+Doodle was exploring scheduling across companies, and one interview showed that people make time for a meeting that matters to them. In the MVP direction, a bookability score weighs meeting type, priority and tentative plans, and shows the organiser what it rests on. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-## Four products where the workflow was the product {#proof}
+### Scissors: research that reached the users still to come
 
-### Dealpath: find the deal first, create one only if needed
+Some of the people Scissors' staffing software was meant for had yet to use it, so its analytics could show only part of the work. We took the research to the staffing work itself, then redesigned four workflows on one model of clients, candidates, jobs and talent pools. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
-Dealpath serves real estate acquisition teams. Its "Add to pipeline" action always opened a new deal, even when the property was already being tracked. We reversed the order. The redesigned flow asks teams to search for an existing deal and attach the listing to it, and creating a new deal becomes the deliberate fallback.
+### Benchmark Gensuite: new patterns proven in code first
 
-[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+Benchmark Gensuite's long-time users work fast in a suite they know well, so we built its new shared interface patterns as coded prototypes, attachments included. Benchmark's engineers reviewed how they behaved before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Auxentios: a quoting product planned for more than 200 screens
+## Where B2B workflow software gets hard, and how we design for it {#hard-parts}
 
-Auxentios was defining a quoting product for industrial firms, where one quote passes through sales reps, sales managers and product, solution, pricing and maintenance experts. We interviewed people in all six roles, then turned the repeated screen needs into a component system for a product expected to need more than 200 screens, which Auxentios could take into development.
+B2B SaaS products tend to grow in the same order. One role and one workflow come first. Then more roles share the same records, exceptions pile up, and larger customers arrive with their own admins and org charts. Each stage adds its own hard part.
+
+UX design for multi-role SaaS starts by mapping the records and roles underneath, before any screen is drawn.
+
+### Several roles working on one record
+
+Sales, pricing and operations all change one quote, and nobody can tell what the others did. Work moves between roles in whatever order the deal demands, and approvals sit wherever authority changes hands.
+
+We give each role its own view and rights on the same record, so a sales manager and a pricing expert both trust they are reading the same quote. [How to design SaaS onboarding for each role](/insights/guides/saas-onboarding-strategies-to-increase-customer-retention)
+
+Example: Auxentios, a new quoting product where one quotation passes through six specialist roles. Interviews with people in all six shaped one shared workflow with no fixed sequence, and the interface parts Auxentios took into development. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+
+### Records that outlast any one workflow
+
+Many products begin as a run of screens. The work underneath is a set of things that last: a client persists across jobs, a candidate sits on several shortlists, a pool of people gets reused. A linear screen hides all of that, so every new workflow asks again for what the product already knows.
+
+Build on one model of those records, and the next workflow you add becomes a new view of records the product already holds.
+
+Example: Scissors, where onboarding a client organisation could take weeks of manual work. In the redesign each organisation is a lasting record, so brand and contact details entered once shape every later job and candidate message. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+
+### The exceptions your customers live in
+
+Teams design the happy path first. Customers live in the exceptions: missing details, overrides, rejections and duplicates, which drift into support tickets and side spreadsheets. We give each exception a clear status, an owner and a way forward, designed alongside the main path.
+
+Example: in Dealpath's redesign, Add to pipeline looks for an existing deal before it creates a new one, and creating a deal stays available as a deliberate fallback. The listing's other actions were largely kept, so the redesign asks people to relearn one step. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+### Enterprise SaaS UX design for admins and permissions
+
+Enterprise customers buy for one group and roll out to many, each with its own teams, sites and roles. Their admins set up roles and single sign-on, and they expect to see who changed what.
+
+We design those admin and permission screens as part of the product, so access rules read as plainly as the work they protect. A person who picks the wrong part of the organisation sees the wrong data, presented confidently.
+
+Large customers also send long security and accessibility questionnaires before they sign. The product's answers live in visible places: an audit trail, data export, clear role rights, keyboard access. Your security and legal teams own the answers; we design where customers find them.
+
+Example: Benchmark Gensuite's scope selector, where a person tells the suite which part of their organisation they are in. We split it into Browse, Recents and Favourites, and Nearby, each with its own search boundary. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Design for AI agents acting on SaaS records
+
+An agent joins the workflow as one more role touching the record. Without limits, a review step and a visible history, it changes a record and the owner hears about it from a customer. Undoing the change then takes a support ticket.
+
+So we give it the same map of records, rules and states as everyone else, and design where its work ends and a person's sign-off begins.
+
+Agents still need people. In [ICONIQ's 2026 State of AI survey](https://cdn.prod.website-files.com/65d0d38fc4ec8ce8a8921654/6a4e6e010db3862dc33eec65_ICONIQ_State_of_AI_2026_The_Builders_Economy.pdf) of 275 software companies building agents, almost half said their agents need a person to step in on at least 30% of tasks. Only 5% said they rarely do.
+
+Teams also tell us their AI assistant arrived as one more panel that hardly anyone uses. An assistant inherits the confusion of the step it joins, so we fix that step first.
+
+Example: Doodle's MVP names meeting type, priority and tentative availability, the criteria an assistant booking time on someone's behalf can act on. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+## What you get when Tcules designs your workflow product {#what-you-get}
+
+We take on the workflow itself, in a new product or one your customers already rely on.
+
+**What you receive**
+
+- a map of the records, roles, rules and states the workflow runs on
+
+- the screens each role works in, with every exception designed beside the main path
+
+- the admin, permission and audit screens enterprise customers look for
+
+- how an agent's work, or a model's output, appears to the people who check it
+
+- prototypes tested with people who do the job, clickable or in code
+
+- parts your engineers can build from, or Tcules developers working alongside them
+
+**Who does the work.** A senior product designer leads the work and does it. Researchers, design engineers and developers join when the work needs them.
+
+**What we need from you.** Time with people in each role doing real tasks, including the admins and whoever clears the exceptions. We also need your analytics and support tickets, and someone who makes the product calls.
+
+**Where our part stops.** Some calls belong with your team or another specialist: pricing and packaging, building or training AI models, and go-to-market. We design how plans, usage and limits look to your customers, and how a model's output appears in the product.
+
+A suite customers know by heart may also need [Product Modernisation](/services/product-modernisation), and AI features in other kinds of product sit under [AI Product UX](/services/ai-product-ux).
+
+## What clients say {#testimonials}
 
 > “Our aim was to build a consumer-grade UI / UX for our enterprise application. They helped us design what we were looking for. We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
 > **Ashok Mohanty, Founder, Auxentios**
 
-[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+> “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
+> **Stephanie Leue, Doodle**
 
-### Scissors: enter client details once
+> “Tcules designed the UX and UI for the SaaS dashboard in our tyre shop software. They were easy to work with and communicate with throughout.”  
+> **Kalpesh Gohill, Founder & CEO, TreadCommand**
 
-Client onboarding in Scissors' staffing software could take weeks of manual work. We treated each client organisation as a lasting record instead of a setup step, so brand and contact details entered once shape every job and candidate message that follows.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-[Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+## How we work together {#how-we-work-together}
 
-### Doodle: a free slot is only half the answer
+For a workflow product, a good first piece of work is the workflow that costs your roles most time, or a [UX & Product Audit](/audits/ux-product-audit) if the cause is unclear.
 
-One research interview showed that people make time for important meetings even when their calendar says busy. We designed meeting type and priority into Doodle's scheduling MVP, so organisers could judge how dependable each proposed time was.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-[Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-## Why SaaS teams choose Tcules {#why-tcules}
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-**Product design is our core practice.** More than 90 projects for clients in 19 countries since 2017.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-**Research shapes the structure.** Interviews decide what the product tracks, as they did at Auxentios and Doodle.
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-**The design can go all the way into code.** Our [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) teams build it, or your engineers get designs with every state worked out.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-## Questions from SaaS teams {#faq}
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-### Can we hire SaaS designers to work inside our product team?
+## Why teams choose Tcules {#why-tcules}
 
-Yes. A Tcules designer can join your team, work in your tools and meetings, and bring in researchers or engineers when a problem needs them.
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-### Can you fix one workflow without redesigning the whole product?
+- **We work out what the product has to know before we draw it.** We mapped who does what on an Auxentios quotation, from eight interviews, before designing a single component. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
 
-Yes. One workflow is often the right place to start, as Dealpath's pipeline change shows. If you know something is wrong but not where, a [UX & Product Audit](/audits/ux-product-audit) will find it.
+- **We know what to leave alone in a product people rely on.** On Dealpath's deal-management software, we changed one step, Add to pipeline, and largely kept the other three listing actions as users knew them. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
-### How do you simplify a complex product without removing features?
+- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and we design its products as part of its own product team.
 
-We separate the detail the work needs from the friction the interface added. Users keep the information. They lose the hunting, re-typing and guessing.
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about SaaS UI/UX design {#faq}
+
+### Can design help us compete against simpler SaaS tools?
+
+Yes, where your product has depth. A quick build skips the roles, shared records, rules and exceptions, and those are what we design. Designed well, that depth becomes the reason customers stay: the hard parts feel straightforward, and a quick copy shows how much it leaves out.
+
+### How should a SaaS product handle AI agents acting on its records?
+
+Treat the agent as one more role and set its limits: the records it may change, the states it can move work into, the exceptions that go to a person. Show every agent change in the record's history, with a review and an undo. [Which generative AI patterns suit SaaS products](/insights/articles/generative-ai-product-patterns-for-saas) lists the controls.
 
 ### Do you work on new SaaS products as well as established ones?
 
-Yes. We design new products from an idea, research or a working prototype, and can build the first release. See [New Product Design & First Release](/services/new-product-design-first-release).
+Yes. Tcules designs new B2B SaaS products, from an idea, research or a working prototype to the first release, and improves established ones. See [New Product Design & First Release](/services/new-product-design-first-release).
 
-## Tell us where the spreadsheet takes over {#enquiry}
+### What does SaaS UX design cost?
 
-Name the roles, the step where work leaves your product and what they use instead.
+It depends on how many roles, records and exceptions the work touches, and whether we design only or also build. We price each piece of work once the scope is agreed, so you know the cost before work starts.
+
+## Tell us where your workflow breaks {#enquiry}
+
+Name the roles, the records they share and the step where an agent, an AI feature or a side spreadsheet takes over.
 
 **Enquiry form**
 

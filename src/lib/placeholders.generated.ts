@@ -11,6 +11,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     { src: string; width: number; height: number; kind: string; shows: string }
   >
 > = {
+  '/_unregistered#slot': {
+    src: '/placeholders/unregistered--slot.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'studio photo',
+    shows:
+      'FALLBACK, not a slot: what a page shows where its copy (26 Oct 2026) needs an image this register has no row for yet. `placeholderImage` warns in development for each one; give each its own row.',
+  },
   '/#ai-native-practice': {
     src: '/placeholders/home--ai-native-practice.svg',
     width: 1600,

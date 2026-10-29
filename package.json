@@ -14,6 +14,7 @@
     "classes:check": "node scripts/classes-check.mjs",
     "corpus:check": "node --no-warnings scripts/corpus-check.mjs",
     "corpus:assets": "node scripts/corpus-assets.mjs",
+    "corpus:census": "node --no-warnings scripts/corpus-census.mjs",
     "placeholders": "node scripts/placeholders.mjs",
     "aria:check": "node scripts/aria-check.mjs",
     "shots": "node scripts/shots.mjs",

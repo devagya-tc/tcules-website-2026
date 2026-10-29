@@ -12,4 +12,6 @@ export { corpusEnquiryForm, ENQUIRY_DESK, ENQUIRY_DRESS, proofQuote, testimonial
 export type { RatingsById } from './blocks';
 export { coverFor, slugOf } from './images';
 export { AboutPage } from './AboutPage';
+export { PlainPage } from './PlainPage';
+export type { PlainPageProps } from './PlainPage';
 export type { AboutPageProps } from './AboutPage';

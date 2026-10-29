@@ -15,7 +15,9 @@
  *   - the hero has a title; nothing is left in `hero.extra`
  *   - every media binding that claims to be bound has a URL
  *   - no run list contains a raw markdown delimiter that the parser should have consumed
- *   - the first-level pass covers 96 files
+ *   - the first-level pass covers 99 files (the 26 Oct 2026 copy: 96, less insights/videos, plus
+ *     the three legal pages and the authors index)
+ *   - a page that authors no `render.band_order` keeps document order (legal, authors index)
  */
 import { readdirSync, readFileSync } from 'node:fs';
 
@@ -154,8 +156,8 @@ function wordDiff(page, body) {
 const files = readdirSync('_pages').filter(
   (f) => f.endsWith('.md') && f.replace(/\.md$/, '').split('__').length <= 2,
 );
-if (files.length !== 96)
-  problems.push(`expected 96 first/second-level files, found ${files.length}`);
+if (files.length !== 99)
+  problems.push(`expected 99 first/second-level files, found ${files.length}`);
 if (pages.length !== files.length)
   problems.push(`parsed ${pages.length} of ${files.length} files`);
 
@@ -172,7 +174,7 @@ for (const page of pages) {
   if (page.bands.length === 0) note(page, 'no bands');
   const ids = page.bands.map((b) => b.id);
   if (new Set(ids).size !== ids.length) note(page, 'duplicate band ids');
-  if (page.bandOrder.join() !== ids.join())
+  if (page.bandOrder.length > 0 && page.bandOrder.join() !== ids.join())
     warnings.push(
       `${page.file}  band_order differs from document order\n      order: ${page.bandOrder.join(', ')}\n      doc:   ${ids.join(', ')}`,
     );

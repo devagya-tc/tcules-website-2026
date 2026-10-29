@@ -4,12 +4,12 @@ slug: ai-product-engineering
 page_name: AI Product Engineering
 page_type: service
 seo:
-  title: AI Product Development & AI Integration for SaaS | Tcules
+  title: 'AI Product Development & AI Integration for SaaS | Tcules'
   description: 'AI product development for SaaS teams: copilots, AI search and agents built into your product, tested on real tasks and designed for the people using them.'
   canonical: https://www.tcules.com/services/software-development/ai-product-engineering
   robots: index,follow
 social:
-  og_title: AI Product Development & AI Integration for SaaS | Tcules
+  og_title: 'AI Product Development & AI Integration for SaaS | Tcules'
   og_description: 'AI product development for SaaS teams: copilots, AI search and agents built into your product, tested on real tasks and designed for the people using them.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
@@ -18,22 +18,30 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: AI Product Development & AI Integration for SaaS | Tcules
+  twitter_title: 'AI Product Development & AI Integration for SaaS | Tcules'
   twitter_description: 'AI product development for SaaS teams: copilots, AI search and agents built into your product, tested on real tasks and designed for the people using them.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: AI product development for established SaaS products adding AI features
   primary_buyer_question: Can Tcules build an AI feature into our product that works on real data, holds up in live use and that customers actually adopt?
   supporting_questions:
+  - What does the AI product development process involve?
+  - How do we integrate an LLM into our SaaS product?
   - Which AI model do you use?
   - What happens to our customers' data?
   - How do you stop it making things up?
   - What will it cost to run?
-  - Do you build AI agents?
   primary_query: AI product development
   secondary_queries:
-  - AI integration services
+  - AI feature development for SaaS
   - AI agent development
+  - LLM integration services
+  - AI integration services
+  - AI product development process
+  - custom AI product development
+  - generative AI product development
+  - AI product development services
+  - AI that gets past the demo
 navigation:
   breadcrumb:
   - name: Home
@@ -63,11 +71,14 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - scope
-  - how-we-work
   - what-you-get
-  - proof
+  - selected-work
+  - scope
+  - routes
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -75,27 +86,48 @@ page_composition:
   media_bindings:
   - id: ai_eng_connectx
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
-    alt_intent: ConnectX workspace where a question brings up the building's digital twin with the relevant energy data and assets. Public image shows the coded demonstration on interim data.
+    alt_intent: ConnectX workspace where a question brings up the building's digital twin with the relevant energy data and assets. Public image shows the coded demonstration on sample data.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: ai_eng_buildtwin
+  - id: ai_eng_eden_unified_search
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
+    alt_intent: Eden AI workflow builder with one search box for templates and capabilities, and AI-assisted creation as a separate mode.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ai_eng_buildtwin_review_feed
+    role: demonstrate
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
-    alt_intent: BuildTwin review feed where each AI check shows its evidence and engineers can override it with a reason.
+    alt_intent: BuildTwin review feed, where each AI check on a structural drawing shows its source, status and conclusion for the quality engineer.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-CONNECTX-GHOSHAL
-  testimonial_status: DRAFT_AWAITING_CLIENT_SIGN_OFF
+  - DRAFT-EDENAI-SPECS
+  - DRAFT-NOVUS-RESEARCHER
+  - DRAFT-PRIMELIS-CONTAMINE
+  testimonial_status: SIGNED
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
@@ -103,11 +135,9 @@ page_composition:
     - ConnectX
     - Eden AI
     - BuildTwin
-    asset_policy: Approved logo rights required; otherwise render accurate client names as text. ConnectX is AI build work; Eden AI and BuildTwin are described as design work only.
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. ConnectX is AI build work.
   source_notes:
   - ConnectX (owner, 9 October 2026) - product definition, interaction design, eight scenarios and a coded demo, then the demo taken through to a production-ready module, live since late 2025. A digital twin on a dashboard that assembles around a question; no chat interface.
-  - Eden AI models, APIs and workflow engine stayed with Eden's team. Described here as design plus specs Eden's developers built from.
-  - BuildTwin was review model and interface design.
   - The page never mentions Tcules' own AI-native practice (brand architecture, 9 October 2026).
 structured_data:
   types:
@@ -118,14 +148,13 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: VNEXT_REWRITE_2026-10-09
+  content_state: ROLLOUT_SD_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: SPECIFIED_NOT_VISUALLY_VALIDATED
   production: NOT_PRODUCTION_VERIFIED
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - CONNECTX_QUOTE_SIGN_OFF
   - CLIENT_MEDIA_RIGHTS_CONFIRM
   - ROUTE_REGISTRY_UPDATE_FROM_HOLD
 content_governance:
@@ -135,109 +164,154 @@ content_governance:
   source_body: 17-research-9-oct/ai-eng/ai-product-engineering-draft.md, updated with ConnectX build facts (9 October 2026)
 ---
 
-*AI Product Engineering services*
+*Software Development · AI product engineering*
 
-# AI product development that gets past the demo
+# AI product development for SaaS, from first demo to live feature
 
-We build AI features into SaaS products: copilots, AI search, drafting and agents that work on your customers' real data, within their permissions and at a running cost that makes sense. Our designers work alongside the engineers, so the feature fits how people already use your product.
+AI product development is for the customer who hands the feature real work, the support team asked what the AI just did, and the finance lead who reads the model bill. Tcules provides AI product development for SaaS teams: copilots, search and agents built into your product, on your customers' data and inside their permissions.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin)*
 
-*Selected work: ConnectX · Eden AI · BuildTwin*
+[Tell us about the AI feature](#enquiry)
 
-## What should the AI do in your product? {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-### Answer questions from your customers' data
+## What you get from AI product development {#what-you-get}
 
-Answers drawn from the documents and records already in your product, with sources shown. Engineers call this RAG.
+Custom AI product development for one feature: designed and built into your product, starting from an idea or a demo that only works on sample data.
 
-### Help where the work happens
+**What you receive**
 
-A copilot that drafts, summarises or fills in beside the task.
+- **A working AI feature.** Answers from your own documents and records with the sources shown (engineers call this RAG). Or a copilot that drafts, summarises or fills in a form where the work happens, or an agent that updates real records with only the rights of the person it works for.
 
-### Act on a user's behalf
+- **Data inside each user's permissions.** The model sees what that person may see, kept current as the records change.
 
-Agents that update records or run multi-step tasks through your product's own permissions.
+- **Tests you can rerun.** Real tasks with known good answers, run again whenever the model or the prompt changes.
 
-### Turn an AI demo into a feature
+- **A model chosen for each task.** Compared on your own tests for quality, waiting time and cost. The choice sits in one place in the code, so a newer model can be tried, switched in when it wins and switched back if it slips.
 
-It works on sample data. Now it needs paying customers, error handling and a bill you can predict.
+- **Corrections that become tests.** When someone overrules the AI, the design keeps the reason, and the engineers turn it into a new test.
 
-## What we build around the model {#scope}
+- **A view after release.** Usage, cost per use and failures, starting with a few customers and watching what they accept, edit and reject.
 
-Connecting a model is the quick part of AI integration. The model is the part you rent; most of the work is everything around it.
+- **Documented code in your codebase,** with the permissions and action log an agent will need, and designs for slow, unsure and wrong answers.
+
+**Who does the work.** Designers from our [AI Product UX](/services/ai-product-ux) team and our engineers work on the feature together from the first week, and an account lead keeps it running. The designers decide what the AI shows and how people correct it; the engineers connect data, tools and permissions.
+
+**What we need from you.** One task the AI must do well, with examples of a good result, which become the first tests. Access to the data that task needs, within each user's existing permissions.
+
+**Where our part stops.** Your security and legal teams decide which providers and regions the data may go to, and we build to their rules. Once the feature is live, the code is yours to run, or we keep developing it with you.
+
+## Selected AI product development work {#selected-work}
+
+Of these three, ConnectX is the AI we took from a coded demo into live use. For Eden AI and BuildTwin we designed how the AI behaves, the part of the build that users see.
+
+### ConnectX: a question that builds the workspace
+
+In ConnectX's energy product, each plain-language question is matched to a known situation, only permitted tools fetch the data, and the right modules and digital twin appear. Eight scenarios became a coded demo, which we then carried into production, where the module has run since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### Eden AI: searching and asking the AI kept as two modes
+
+An Eden AI workflow can begin with a template, a request to the AI or an empty canvas. We designed one search box for all three, with Tab moving people into AI help so they know which mode they are in, and Eden AI's developers worked from our specs. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+
+### BuildTwin: AI checks an engineer can trace and overrule
+
+BuildTwin's AI checks structural drawings, and a quality engineer still signs each one off. In our design, every check links to its source and says when information is missing, and the engineer can overrule it with a reason that stays on the record. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+## LLM integration services, and what we build around the model {#scope}
+
+Connecting a model is the quick part of AI integration. In generative AI product development, the model is the part you rent; most of the work is everything around it.
 
 | | What we build |
 |---|---|
-| **What it knows** | Your product's data, kept current, limited to what each user may see |
-| **What it may do** | The actions it can take, and where a person must approve |
-| **How we know it works** | Real tasks with known good answers, rerun whenever the prompt, data or model changes. Engineers call these evals |
+| **What it knows** | Your product's data, current, limited to what each user may see |
+| **What it may do** | The actions it takes alone, and the points where a person approves |
+| **How we know it works** | Evals: real tasks with known good answers, rerun after every change |
 | **What it costs** | The right model for each task, with limits on cost and waiting time |
 | **When it fails** | A fallback, a clear message and a way to carry on |
 
-## Designers and engineers on the same feature {#how-we-work}
+An AI feature can pass every test and still go unused when people cannot see what it looked at or put it right. So the behaviour is designed alongside the code. Tests include questions where the right answer is "I don't know".
 
-An AI feature can pass every test and still go unused. People need to see what it looked at and correct it when it is wrong. So our [AI Product UX](/services/ai-product-ux) designers and our engineers work on it together from the first week.
+## AI engineering, AI UX design or a review: which do you need? {#routes}
 
-**1. Pick the job.** One task the AI must do well, with examples of a good result. These become the first tests.
+| Service | What you get | Best for |
+|---|---|---|
+| **AI Product Engineering** | The AI feature designed, built, tested on real tasks and released in your product | Teams that want a working feature and lack engineers who have shipped AI before |
+| **[AI Product UX](/services/ai-product-ux)** | How the AI behaves for users: what it shows, what it may do and how people correct it | Teams with engineers ready to build who need the behaviour worked out first |
+| **[AI UX audit](/audits/ai-product-ux-readiness)** | A fixed-price review of an AI feature you already have | Features that work in testing and go unused, or worry the people who rely on them |
+| **[SaaS & Web Application Development](/services/software-development/saas-web-app-development)** | The product around the AI: accounts, workflows, data and integrations | New products where AI is one part of a larger build |
 
-**2. Design the behaviour.** What it shows, what it may do alone, and how people correct or undo it.
+## What clients say {#testimonials}
 
-**3. Build and test.** Connect data, tools and permissions, and run real tasks until the results hold up.
-
-**4. Release and learn.** Start with a few customers and watch what they accept, edit and reject.
-
-When someone overrules the AI, the design keeps their reason, and the engineers turn those reasons into new tests.
-
-## What you get {#what-you-get}
-
-- A working AI feature in your product
-- Tests your team can rerun when the model changes
-- A view of usage, cost and failures after release
-- Designs for every state, including slow, unsure and wrong
-- Documented code in your repository, or ongoing development with us
-
-## Taking an AI dashboard from demo to live use {#proof}
-
-### ConnectX: ask about a building, and the dashboard answers
-
-ConnectX wanted people to ask about a building's energy and get the answer inside the product, with no separate chat window. We defined the product, designed the interaction and wrote eight scenarios, each tracing a question to the data and view it needed.
-
-We coded a working demo, then took it through to a production-ready module, live since late 2025. Ask a question, and the dashboard opens a digital twin of the building, showing the readings and equipment that answer it.
-
-<!-- awaiting client sign-off -->
 > “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
 
-### Eden AI and BuildTwin: the design half of an AI feature
+> “In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
+> **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-For Eden AI, we redesigned how developers start a workflow, with search and AI help in one entry point, and Eden's developers built it from our specs. For BuildTwin, we designed AI checks on structural drawings that show their sources and keep each engineer's override with its reason.
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
 
-[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign) · [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## Frequently asked questions {#faq}
+## How we work together {#how-we-work-together}
+
+For AI product development, a good first piece of work is one task the AI must do well, with its first tests, tried on your own data.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we researched with families and carers, redesigned the web platform and both apps, and our developers coded the frontend of each from those designs.
+
+- **We design AI that people can check and correct.** In our redesign for [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign), AI suggestions stayed apart from the listing until a person chose them, and every line showed who wrote it.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), the eight scenarios ran first as a coded demo on sample data, and only after the product was judged as a whole did we take it to a production-ready module.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools)
+
+## Questions about AI product development {#faq}
+
+### What does the AI product development process involve?
+
+It means choosing the one job the AI should do well, connecting it to your data and permissions, and testing it on real tasks with known good answers. It also means designing how people see, correct and undo its work, then releasing to a few customers first while watching cost and failures.
 
 ### Which AI model do you use?
 
-Whichever suits the task. We compare models on your own test tasks for quality, speed and cost. The choice sits in one place in the code, so switching later means rerunning the tests.
+Whichever suits each task best on your own test tasks, and the answer can change as models do. Switching later means rerunning those tests against the new model before it reaches customers.
 
 ### What happens to our customers' data?
 
-We agree with you which providers and regions it may go to, send the model only what each task needs, and keep each user's existing permissions. Your security and legal teams set the rules; we build to them.
+We agree with you which providers and regions the data may go to, send the model only what each task needs and keep each user's existing permissions. Your security and legal teams set the rules, and we build to them.
 
 ### How do you stop it making things up?
 
-No one can remove the risk completely, so we design and build for it. Answers cite your own data, the tests include questions where the right answer is "I don't know", and anything consequential waits for a person to approve it.
+By grounding every answer in your own data and designing for the moments a model still gets it wrong. Answers cite your sources, and anything consequential waits for a person to approve it.
 
 ### What will it cost to run?
 
-That depends on use and on which model each task needs. We estimate the cost per use early, while it can still shape the design, and track it after release, so the monthly bill is something you watch rather than discover.
-
-### Do you build AI agents?
-
-Yes, when an agent is the right tool; many tasks need only one well-tested step. An agent gets a short list of tools, the same permissions as the person it acts for, and a record of every action.
+It depends on use and on which model each task needs. We estimate the cost per use early, while it can still shape the design, and track it after release, so you can plan the monthly bill.
 
 ## Tell us about the AI feature you want live {#enquiry}
 

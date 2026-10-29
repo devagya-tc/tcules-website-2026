@@ -151,6 +151,7 @@ function TermPage({ page }: { page: CorpusPage }) {
     rest.length > 0
       ? {
           id: 'definition-2',
+          anchored: false,
           heading: [],
           headingText: '',
           blocks: rest.map((runs) => ({ type: 'paragraph' as const, runs })),

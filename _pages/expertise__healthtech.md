@@ -7,13 +7,13 @@ page_name: HealthTech
 page_type: expertise
 expertise_kind: domain_context
 seo:
-  title: Healthcare UX Design for Patient and Clinician Apps | Tcules
-  description: Healthcare UX design for the apps, portals and staff tools that patients, clinicians and care teams rely on, built around the rules your specialists set.
+  title: 'Healthcare UX Design for Patient & Clinician Apps | Tcules'
+  description: 'Healthcare UX design for patient, clinician and carer apps: clear next steps, plain consent requests and screens your clinical safety lead can review early.'
   canonical: https://www.tcules.com/expertise/healthtech
   robots: index,follow
 social:
-  og_title: Healthcare UX Design for Patient and Clinician Apps | Tcules
-  og_description: Healthcare UX design for the apps, portals and staff tools that patients, clinicians and care teams rely on, built around the rules your specialists set.
+  og_title: 'Healthcare UX Design for Patient & Clinician Apps | Tcules'
+  og_description: 'Healthcare UX design for patient, clinician and carer apps: clear next steps, plain consent requests and screens your clinical safety lead can review early.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -21,18 +21,30 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Healthcare UX Design for Patient and Clinician Apps | Tcules
-  twitter_description: Healthcare UX design for the apps, portals and staff tools that patients, clinicians and care teams rely on, built around the rules your specialists set.
+  twitter_title: 'Healthcare UX Design for Patient & Clinician Apps | Tcules'
+  twitter_description: 'Healthcare UX design for patient, clinician and carer apps: clear next steps, plain consent requests and screens your clinical safety lead can review early.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: HealthTech product design and healthcare UX design
-  primary_buyer_question: How do we design a health product that patients, professionals and staff can each use with confidence, inside rules our clinical and compliance specialists set?
+  primary_buyer_question: How do we design a health product that patients, professionals and staff can each use with confidence, while meeting our clinical and compliance requirements?
   supporting_questions:
   - Will you make our product HIPAA or GDPR compliant?
   - Can you work with our clinical safety officer or regulatory lead?
   - Do you design for accessibility?
   - Can you design AI features for clinicians or patients?
-  primary_query: healthcare UX design / HealthTech product design
+  primary_query: 'healthcare UX design'
+  secondary_queries:
+  - 'healthcare UX design services'
+  - 'digital health UX design'
+  - 'medical software UX design'
+  - 'healthcare UX design case study'
+  - 'healthcare app design'
+  - 'patient app design'
+  - 'patient portal design'
+  - 'clinician app UX'
+  - 'HealthTech product design'
+  - 'HIPAA compliant app design'
+  - 'AI features for clinicians'
 navigation:
   breadcrumb:
   - name: Home
@@ -60,35 +72,77 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  signature_model: person_question_sensitive_information_connected_systems_specialist_rules
-  case_study_slugs: []
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
+  signature_model: many_people_around_one_patient_consent_reviewers_care_away_from_desk
+  selected_work:
+  - benchmark-gensuite-enterprise-suite-modernisation (related work; health clients have no published case page yet, said in the section's first line)
+  - auxentios-cpq-product-mvp-design (related work)
+  - novus-insights-ai-survey-product-design (related work)
+  why_tcules_reasons: [1, 6, 4]
+  case_study_slugs:
+  - benchmark-gensuite-enterprise-suite-modernisation
+  - auxentios-cpq-product-mvp-design
+  - novus-insights-ai-survey-product-design
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - wandering-raven-edtech-moodle-experience
   case_study_slugs_pending:
   - vovisto-healthcare-event-travel-platform
   - curamcare (no draft yet)
-  case_link_policy: Describe CuramCare and Vovisto as projects. Add case links when each case study publishes (owner decision, 9 October 2026).
+  case_link_policy: Describe CuramCare and Vovisto as projects. Add case links when each case study publishes (owner decision, 9 October 2026); when they do, they replace two of the three related Selected work cards.
   media_bindings:
+  - id: healthtech_benchmark_scope_selector
+    role: demonstrate
+    supports_section: selected-work
+    card: benchmark-gensuite
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    source: current public Tcules case media (case-studies__benchmark-gensuite-enterprise-suite-modernisation.md, benchmark_scope_selector)
+    alt_intent: Redesigned Benchmark Gensuite scope selector with Browse, Recents and Favourites, and Nearby, each with its own search boundary, so a person sees the data for the part of the organisation they chose.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: healthtech_auxentios_card
+    role: demonstrate
+    supports_section: selected-work
+    card: auxentios
+    asset_uri: null
+    source: no product screen in the Auxentios case files yet; text card
+    status: SCREEN_REQUIRED
+  - id: healthtech_novus_card
+    role: demonstrate
+    supports_section: selected-work
+    card: novus-insights
+    asset_uri: null
+    source: no product screen in the Novus Insights case files yet; text card
+    status: SCREEN_REQUIRED
   - id: healthtech_asset
     role: demonstrate
-    supports_section: proof
+    supports_section: hard-parts
     status: ASSET_REQUIRED
     communication_job: Show an approved CuramCare or Vovisto screen where different people see their own part of the same booking, trip or care arrangement.
   testimonial_ids:
   - DRAFT-CURAMCARE-ONEILL
-  testimonial_status: DRAFT_AWAITING_CLIENT_SIGN_OFF
+  - DRAFT-VOVISTO-GOMES
+  - DRAFT-KNOVOS-CANDOUR
+  testimonials_general: true
+  testimonial_status: SIGNED
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
   independent_reputation:
     component_type: linked_review_marker
@@ -103,8 +157,11 @@ page_composition:
     clients:
     - CuramCare
     - Vovisto
+    - Benchmark Gensuite
+    - Auxentios
+    - Novus Insights
     asset_policy: Name only CuramCare and Vovisto on this page (owner decision, 9 October 2026). Logo rights need confirmation; use name-only fallback.
-  source_evidence_boundary: Tcules designs with the client's clinical safety, privacy, security and regulatory owners. It does not certify compliance, provide clinical advice or own regulatory submissions. Vovisto development was led and overseen by Tcules, with stage stated as implementation and integration testing plus ongoing maintenance. Accessibility standard is agreed per project; no conformance level is claimed.
+  source_evidence_boundary: Tcules designs with the client's clinical safety, privacy, security and regulatory owners. It does not certify compliance, provide clinical advice or own regulatory submissions. Vovisto development was led and overseen by Tcules, with ongoing care carried by Aldrin Gomes' signed quote ("they still look after the platform"), which follows our line directly (13 Oct). Accessibility standard is agreed per project; no conformance level is claimed.
 structured_data:
   types:
   - WebPage
@@ -121,7 +178,6 @@ release:
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - CURAMCARE_QUOTE_SIGN_OFF
   - CASE_LINKS_ON_PUBLICATION
   - CLIENT_MEDIA_RIGHTS_CONFIRM
   - ROUTE_REGISTRY_UPDATE_FROM_HOLD
@@ -130,22 +186,52 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: 17-research-9-oct/healthtech/expertise__healthtech-draft.md (research rewrite, 9 October 2026)
+  source_body: 17-research-9-oct/healthtech/expertise__healthtech-draft.md (research rewrite, 9 October 2026); studio-spine rebuild 26 Oct 2026 evening (43-rollout-26-oct, tag ind2; industry order; Selected work is labelled related work until the CuramCare and Vovisto cases publish; hard parts are one patient with many people, consent, reviewers, care away from the desk)
 ---
 
 *Expertise · HealthTech product design*
 
-# Healthcare UX design for patients, professionals and the staff behind them
+# Healthcare UX design for apps patients, clinicians and carers can trust
 
-People often reach for health software when they are worried or short of time. We design patient and family apps, portals for healthcare professionals and staff tools, so each person can see what is happening and what to do next. Your clinical and compliance specialists set the rules. We make them easy to follow.
+Around one patient's care, a family decides what to share, a carer saves notes between visits, a clinician looks for one result between patients, and a safety lead reviews it all. Tcules provides healthcare UX design for each of them, from first concept to daily use.
 
-[Start a conversation](#enquiry)
+[Tell us about your health product](#enquiry)
 
-*Selected work: CuramCare · Vovisto*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## The questions a health product has to answer {#hard-parts}
+## What we design in HealthTech and digital health {#what-we-design}
 
-Health software rarely has one user, and every unanswered question becomes a phone call or a note on paper.
+- **[Care platforms](/expertise/marketplaces-multi-sided-platforms)** that connect families with carers at home · CuramCare
+
+- **Apps for carers on home visits**, used on a phone · CuramCare
+
+- **Portals and admin tools** for healthcare professionals' congress travel · Vovisto
+
+- **Clinician tools** that sit beside the patient record · The one thing needed, found between patients
+
+- **Patient portals** for results, appointments and messages · Every result with what happens next
+
+- **Remote check-in apps** for care after a hospital stay · A plain answer on when someone will look
+
+## Selected healthcare UX design work {#selected-work}
+
+Work closest to health products, from three other fields. Our health clients, CuramCare and Vovisto, appear in the sections below.
+
+### Benchmark Gensuite: the wrong scope shows the wrong data
+
+Benchmark Gensuite's safety and sustainability suite rests on the scope selector, where people say which part of the organisation they work in. Choose wrongly, and the wrong records appear, looking right. Our redesign gives it three views with their own search boundaries, one listing sites by where the person stands. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Auxentios: six roles, one record, each with its own part
+
+Each Auxentios quotation passes through six specialist roles in no fixed order. We interviewed people in all six, then designed one shared quotation where each role works on its own part. A care record that family, carers and clinicians share needs the same shape. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+
+### Novus Insights: an expert answers for what the AI drafted
+
+In the MVP we designed for Novus Insights' survey product, AI drafts the questionnaire and the researcher stays responsible for it. Each generated question carries its source prompt, and a rewrite keeps the original visible beneath it, the record a clinician needs beside an AI-drafted note. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+## Digital health UX design for everyone around one patient {#hard-parts}
+
+Health software rarely has one user, and the people around a patient seldom meet. The product has to carry what one of them knows to the next. Otherwise every unanswered question becomes a phone call or a note on paper.
 
 | Who is using it | What they are wondering |
 |---|---|
@@ -156,65 +242,134 @@ Health software rarely has one user, and every unanswered question becomes a pho
 | An operations team | "Which cases need us today, and who is waiting on whom?" |
 | Your clinical safety or compliance lead | "Can we show how this was designed and tested?" |
 
-These people rarely meet, so the product has to carry what one of them knows to the next.
+### Each person's view of the same case
 
-## How we design health products {#approach}
+A family member, a professional and an operations team need different things from one appointment. Each gets a view that fits their task, with access to match, and what one person records reaches the next without retyping.
 
-**Each person gets their own view of the same case.** A family member, a professional and an operations team need different things from one appointment. Each view fits that person's task, with access to match.
+Records, bookings and payments often arrive from other systems, so we also design what people see when that data comes late or wrong.
 
-**We research with the people who will use it.** Interviews, surveys and usability sessions on real tasks. Your own team's feedback helps, but a nurse at the end of a long shift will tell you something different.
+Example: Vovisto sends healthcare professionals to medical congresses. Each trip involves sponsorship budgets, approvals, flights and hotels, and most of it was coordinated by hand.
 
-**People know why you're asking.** Requests for consent, documents or health details say why they are needed at the moment they appear, and people know who will read what they share.
+From the first concept, administrators and travel coordinators got a view for budgets and bookings, and the travelling professionals a portal for their own arrangements. We then led the platform into development, coordinating supplier integrations and testing.
 
-**Other systems are part of the design.** Records, bookings and payments often come from elsewhere. We design what people see when that data arrives late or wrong.
+### Consent, and who reads what
 
-**Your reviewers can follow our reasoning.** Clinical safety, privacy and regulatory leads get the research and the thinking behind each flow in writing, so their review starts from something they can check.
+Requests for consent, documents or health details say why they are needed at the moment they appear, and people know who will read what they share.
 
-## Home care for families, congress travel for healthcare professionals {#proof}
+In the US, HIPAA covers health information held by healthcare providers, health insurers and the companies working for them, and the FTC's Health Breach Notification Rule reaches many consumer health apps. In Europe and the UK, GDPR treats health data as a special category.
 
-### CuramCare: a home care platform, from research to frontend code
+Your privacy and legal advisers decide what each rule requires; we design consent, sharing and access so each person sees only what their role needs.
 
-CuramCare connects people in the UK who need care at home with self-employed carers, through a website and apps for clients and carers. We began with survey research among families and carers and turned the findings into a product plan.
+### Reviewers who need the reasoning in writing
 
-We then redesigned the web platform and both apps, and our developers built the frontend from those designs.
+Health products have reviewers as well as users. In England, the NHS standard DCB0129 sets clinical risk management duties for the makers of health IT, and the DTAC assessment checks clinical safety, data protection, security, interoperability and usability.
 
-<!-- awaiting client sign-off -->
+Software that informs diagnosis or treatment may count as a medical device, and then usability evidence becomes part of the file. So we meet your clinical safety and privacy leads first, and their hazards shape the brief.
+
+Wireframes and walkthroughs reach them while screens are cheap to change, with the research and reasoning behind each step in writing. Where AI drafts a clinical note, the draft sits beside its source with a quick way to correct it, and the record shows who made the call.
+
+### Care away from the ward and the desk
+
+Carers work on phones in people's homes, often with patchy signal. Clinicians work in minutes between patients, so their tools start from the record they already use. Older patients need large type and plain words, as our guide on [how to design for older and disabled people](/insights/guides/inclusive-product-design-for-older-and-disabled-people) explains.
+
+Remote care adds moments of its own. When a patient sends a photo of a healing wound at night, they are told when it will be seen and which symptoms on the care team's list mean calling now.
+
+Nurses work through the photos in the order your clinicians' priority rules set, and missed check-ins reach the care team under the escalation rules they agree.
+
+Example: CuramCare's families and carers each use their own app, joined by a web platform. We researched with both groups, then redesigned the platform and both apps together.
+
+## What you get when Tcules designs your health product {#what-you-get}
+
+We take on health products with several kinds of user and a safety or privacy review to pass, new or live.
+
+**What you receive**
+
+- each role's journey around one patient, with what they may see and what they hand on
+
+- consent, sharing and access steps, worded with your privacy lead
+
+- research with patients, families, clinicians and carers on real tasks, on the devices they carry
+
+- wireframes and walkthroughs for your clinical safety lead, with the reasoning written down
+
+- screens designed for accessibility: readable type, strong contrast, keyboard use and screen readers, to a standard we agree with you at the start
+
+- designs your developers build from, or Tcules developers building the frontend and coordinating integrations and testing with your chosen team
+
+**Who does the work.** The design sits with a senior product designer, who also leads the project, and an account lead keeps it on track. Researchers come in for work with patients and carers, and design engineers or developers when the design moves into code.
+
+**What we need from you.** Your clinical safety and privacy leads from the first week, with the hazards and requirements they already know. We also need access to the people who will use the product and someone with the authority to make product calls.
+
+**Where our part stops.** Hazard logs, risk assessments and medical device classification stay with your clinical safety, privacy and regulatory specialists, and clinical rules come from your clinicians. We design and document so their review has something solid to check.
+
+A health service that exists only as a concept, as Vovisto's once did, can start with [New Product Design & First Release](/services/new-product-design-first-release). A live platform people struggle with suits [Product Redesign](/services/product-modernisation/product-redesign), or a [UX & Product Audit](/audits/ux-product-audit) when nobody can trace the complaints to one cause.
+
+## What clients say {#testimonials}
+
+Jody O'Neill and Aldrin Gomes speak for health clients; the third voice is a client from another field.
+
 > “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
 > **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-<!-- Add the CuramCare case link when the case study publishes. -->
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
 
-### Vovisto: a platform for sending healthcare professionals to medical congresses
+> “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
+> **Akshay Vyas, Creative Head, Knovos**
 
-Each congress trip involves sponsorship budgets, approvals, flights and hotels, and at Vovisto most of it was coordinated by hand. From the first concept, we designed views for administrators and travel coordinators and a portal where healthcare professionals check their arrangements.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-We then led the platform into development, coordinating supplier integrations and testing. It is now in implementation and integration testing, and we maintain it.
+## How we work together {#how-we-work-together}
 
-<!-- Add the Vovisto case link (/case-studies/vovisto-healthcare-event-travel-platform) when the case study publishes. -->
+For a health product, a good first piece of work is the step where people ring for help or go back to paper, redesigned with your clinical safety lead from day one.
 
-## Why HealthTech teams work with us {#why-tcules}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-**Research, design and code in one studio.** The people who run your research also shape the screens, and our developers build from those designs. Our [Software Development](/services/software-development) team takes on wider builds.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-**Requirements settled while they are cheap to change.** Walkthroughs with Vovisto's team surfaced the questions the written brief had left open, before development began.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-## Questions from HealthTech teams {#faq}
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** One Doodle interview showed that people make time for a meeting that matters to them, so meeting priority joined the scheduling model before the interface was designed. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+- **Senior people do the work, and clients keep us for years.** Three years into an ongoing partnership, we still design every product Primelis makes.
+
+- **One studio can take it into working software, with the designers staying in the build.** The team that designed The Wandering Raven's learning world also installed its Moodle plugins and created its custom theme. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about healthcare UX design {#faq}
 
 ### Will you make our product HIPAA or GDPR compliant?
 
-Your privacy, security and legal advisers decide what compliance means for your product. We design to their requirements: what to ask for, when to explain it and who can see what.
+We design every consent, sharing and access step to the requirements your privacy, security and legal advisers set. That covers what people are asked for, when it is explained and who can see what. They decide what compliance means for your product.
 
-### Can you work with our clinical safety officer or regulatory lead?
+### Can designers work with our clinical safety officer?
 
-Yes. Whether you face an NHS DTAC assessment or a regulator's review, the risk assessment is theirs. We show them flows early, while they are easy to change, and design around the hazards they raise.
+Yes. If you face an NHS DTAC assessment or a regulator's review, the risk assessment is theirs, and Tcules works alongside them. We show them the screens early, while they are easy to change, and design around the hazards they raise.
 
-### Do you design for accessibility?
+### How do you design AI features for clinicians and patients?
 
-Yes. Health products serve people of every age and ability, often on a phone and in a hurry. We design for readable type, strong contrast, keyboard use and screen readers, and we agree the accessibility standard with you at the start.
+AI suggestions show what they are based on, so a professional can check, edit or reject them, and the product records who made the call. For AI features across products, see [AI Product UX](/services/ai-product-ux).
 
-### Can you design AI features for clinicians or patients?
+### Do you design patient portals?
 
-Yes. We design AI suggestions that show what they are based on, so a professional can check, edit or reject them, and the product records who made the call. More on this in [AI Product UX](/services/ai-product-ux).
+Yes. Results, appointments, messages and repeat requests are where patients meet a health service online. We design them so each result says what it means for the patient and what happens next, worded with your clinicians.
 
 ## Tell us who your health product is for {#enquiry}
 

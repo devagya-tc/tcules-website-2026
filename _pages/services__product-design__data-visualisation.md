@@ -4,13 +4,13 @@ slug: data-visualisation
 page_name: Data Visualisation
 page_type: service
 seo:
-  title: Dashboard Design & Data Visualisation for SaaS | Tcules
-  description: 'Dashboard design and data visualisation for SaaS: clear measures, useful comparisons and role-based views that answer the question people opened it to ask.'
+  title: 'Dashboard Design Services for SaaS Products | Tcules'
+  description: 'Dashboard design services for SaaS: defined measures, useful comparisons and a view for each role, so people act inside your product instead of exporting.'
   canonical: https://www.tcules.com/services/product-design/data-visualisation
   robots: index,follow
 social:
-  og_title: Dashboard Design & Data Visualisation for SaaS | Tcules
-  og_description: 'Dashboard design and data visualisation for SaaS: clear measures, useful comparisons and role-based views that answer the question people opened it to ask.'
+  og_title: 'Dashboard Design Services for SaaS Products | Tcules'
+  og_description: 'Dashboard design services for SaaS: defined measures, useful comparisons and a view for each role, so people act inside your product instead of exporting.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Dashboard Design & Data Visualisation for SaaS | Tcules
-  twitter_description: 'Dashboard design and data visualisation for SaaS: clear measures, useful comparisons and role-based views that answer the question people opened it to ask.'
+  twitter_title: 'Dashboard Design Services for SaaS Products | Tcules'
+  twitter_description: 'Dashboard design services for SaaS: defined measures, useful comparisons and a view for each role, so people act inside your product instead of exporting.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: dashboard UX and data visualisation design for SaaS products
@@ -29,7 +29,19 @@ search_context:
   - How do you decide what goes on a dashboard?
   - Can different roles share one dashboard?
   - Do you build the data pipelines too?
-  primary_query: dashboard design
+  - Can we start with one dashboard?
+  primary_query: dashboard design services
+  secondary_queries:
+  - SaaS dashboard design
+  - dashboard UX design
+  - dashboard redesign
+  - what goes on a dashboard
+  - dashboard design examples
+  - dashboard design for multiple roles
+  - KPI dashboard design
+  - admin dashboard UX design
+  - dashboard design vs data visualisation
+  - data visualisation services
 navigation:
   breadcrumb:
   - name: Home
@@ -59,11 +71,14 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - approach
-  - scope
-  - proof
+  - what-you-get
+  - selected-work
+  - every-number
+  - routes
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -71,17 +86,34 @@ page_composition:
   media_bindings:
   - id: data_visualisation_connectx_workspace
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
-    alt_intent: ConnectX coded workspace showing an AI-assisted building-energy scenario with data and decisions in one reviewable surface.
+    alt_intent: ConnectX coded workspace showing an AI-assisted building-energy scenario, with the figures, assets and charts for one question in one view, on sample data.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
-  testimonial_ids: []
+  - id: data_visualisation_benchmark_scope_selector
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    alt_intent: Redesigned Benchmark Gensuite scope selector with three views, Browse, Recents and Favourites, and Nearby, each with its own search boundary.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: data_visualisation_ryzeo_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
+  testimonial_ids:
+  - DRAFT-RYZEO-REPORTS
+  - DRAFT-CONNECTX-SCENARIOS
+  - SSOT-TREADCOMMAND
   client_recognition:
     component_type: curated_client_recognition
     clients:
-    - Ryzeo
     - ConnectX
     - Benchmark Gensuite
+    - Ryzeo
+    - TreadCommand
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -91,8 +123,17 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   proof_claim_policy: DEDICATED_DASHBOARD_CASE_PENDING;RYZEO_HISTORICAL
   content_composition:
     primary_intent: dashboard UX design
@@ -112,7 +153,7 @@ page_composition:
     - Action
     label: Editorial explanatory diagram; not a client artefact
     media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: GENERAL_STUDIO_ENDORSEMENT_NOT_ROUTE_SPECIFIC
+  testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
   source_evidence_boundary: ConnectX demonstrates a decision workspace using interim data; Ryzeo illustrates reporting work in broader product modernisation. Neither substantiates numerical decision-efficiency improvements.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
   signature_proposition: Dense information is not inherently useful. The interface must connect its measures and comparisons to a specific user decision.
@@ -133,7 +174,6 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - DEDICATED_DASHBOARD_CASE_PENDING;RYZEO_HISTORICAL
 content_governance:
@@ -143,87 +183,142 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-design__data-visualisation.md
 ---
 
-*Dashboard design for SaaS*
+*Product Design · Data visualisation*
 
-# If everyone exports it, the real dashboard is a spreadsheet
+# Dashboard design services that keep the analysis inside your product
 
-We design dashboards around the questions each role brings, with each number defined, given a comparison and marked with when it was last updated, so the analysis can happen inside your product.
+A dashboard is for the Monday meeting, the operator's next exception and the finance review, where one number has to mean the same thing to everyone reading it. Tcules provides dashboard design services for SaaS and data products: every figure defined, compared and dated, with a view for each role.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-*Selected work: TreadCommand · Ryzeo · ConnectX · Benchmark Gensuite*
+[Tell us who opens your dashboard](#enquiry)
 
-## When the numbers are right and the dashboard still fails {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Everyone exports it to a spreadsheet."** The real analysis happens outside your product.
+## What you get from our dashboard design services {#what-you-get}
 
-**"Active accounts: 12. Is that good?"** Numbers appear with no target, trend or comparison to give them meaning.
+We start from the questions each role brings to the screen, and every number we show answers one of them. Dashboard design sits within our [Product Design](/services/product-design) service.
 
-**"Every role gets the same dashboard."** Operators, managers and finance teams each scroll past what the others need.
+**What you receive**
 
-**"Nobody trusts the numbers."** Users can't tell how fresh the data is, or which figures are estimates.
+- **A view for each role.** Defaults, level of detail and actions for each person who opens the dashboard, all drawing on the same figures.
 
-## How we design a dashboard {#approach}
+- **Every number defined.** What it means, how it is calculated and when it was last updated, agreed with your product and data teams.
+
+- **A comparison for every figure.** Last month, a target, a peer group or a forecast: whatever makes the number mean something.
+
+- **Charts, tables, filters and drill-downs,** each chosen for the question it answers.
+
+- **Screens for imperfect data.** What people see when figures are missing, late, estimated or partial.
+
+- **Thresholds and alerts,** each paired with the action that follows.
+
+- **Views tried with real numbers.** Where a chart only proves itself once data fills it, we build it in code with your data or a realistic sample.
+
+**Who does the work.** Each view comes from a senior product designer who leads the project and does the design, while an account lead keeps it on schedule. Design engineers join to build the views that need real numbers before anyone can judge them.
+
+**What we need from you.** The questions each role brings to the screen, someone on your product or data team who can agree what each metric means, and your data or a realistic sample of it.
+
+**Where our part stops.** Pipelines, data models and one-off analysis stay with your data team or BI tool. We design what people see and do with the data, and your engineers build it unless you add our [Coded Prototyping](/services/design-engineering/coded-prototyping) or development work.
+
+## Selected dashboard design work {#selected-work}
+
+Three dashboard design examples, from an AI energy workspace to an enterprise suite and a marketing product's reports.
+
+### ConnectX: three teams, three questions, one workspace
+
+In ConnectX's building-energy product, an operator wants the exception, a finance leader wants cost and forecast, and a sustainability team wants progress against a target. Our workspace gathers the figures, assets and charts each question needs, proved first as a coded demo on sample data. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### Benchmark Gensuite: the control that decides which data you see
+
+In Benchmark Gensuite's safety and sustainability suite, the scope selector sets which part of the organisation people are looking at. A wrong choice shows the wrong figures, with no error. Our redesign gives it three views, for browsing, for favourite and recent areas and for nearby sites. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Ryzeo: reports aimed at where to act next
+
+Research with Ryzeo's ecommerce marketing customers put reporting first. We reworked how reports were organised and how people tailor a view to their own question, then documented shared rules for filters, states and data. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+## Dashboard UX design: every number defined, compared and dated {#every-number}
+
+A good-looking chart can't rescue a metric nobody has defined. So for each view we work through five things, and the first three come before any chart is drawn.
 
 1. **The question.** What is this person trying to find out, and what will they do about it?
 
 2. **The measure.** What each number means, how it is calculated and when it was last updated.
 
-3. **The comparison.** Last month, a target, a peer group or a forecast: whatever makes the number mean something.
+3. **The comparison.** Whatever makes the number mean something to this role.
 
 4. **The explanation.** What might have caused a change, and how sure the product can be about it.
 
-5. **The next step.** A filter, a drill-down or an action, so people can act inside the product.
+5. **The next step.** A filter, a drill-down or an action, so people act inside the product.
 
-A good-looking chart can't rescue a metric nobody has defined. That is why the first three steps come before any chart is drawn.
+Dashboard design for multiple roles gives each role its own defaults and actions, while everyone sees the same numbers, defined once. We also designed the SaaS dashboard in TreadCommand's tyre shop software.
 
-## What we design {#scope}
+Example: a score shown without its inputs carries more authority than it has earned. For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), the bookability score was tied to meeting type, priority and tentative plans, so organisers could read it as a guide to weigh.
 
-- Dashboard structure and views for each role
-- Charts, tables, filters, comparisons and drill-downs
-- States for missing, late, estimated or partial data
-- Thresholds and alerts, and the action that follows each one
+## Dashboard design, research or a BI tool: which do you need? {#routes}
 
-## Dashboards for tyre shops, marketers and safety teams {#proof}
+A dashboard that fails can have its cause in the screen, in the records behind it or in questions nobody has asked yet.
 
-### TreadCommand: a SaaS dashboard for tyre shops
+| Service | What it covers | Best for |
+|---|---|---|
+| **Dashboard design** | Questions, measures, comparisons, a view per role and every data state | Dashboards people avoid, distrust or export |
+| **[UX Research](/services/product-design/ux-research)** | Interviews and observation that show what each role needs to know | Teams unsure which questions the dashboard should answer |
+| **[Information Architecture & Workflow Design](/services/product-design/information-architecture-workflow-design)** | The records, roles and statuses behind the numbers | Teams who disagree on what a record or a status means |
+| **[Coded Prototyping](/services/design-engineering/coded-prototyping)** | Views built in code with your data or a realistic sample | Charts and tables whose worth shows once real numbers fill them |
+| **Your data team or a BI tool** | Pipelines, data models and one-off analysis | Internal reports read mainly by analysts |
 
-TreadCommand makes software for tyre shops. We designed the UX and UI of the SaaS dashboard shop teams work from.
+## What clients say {#testimonials}
+
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
+
+> “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
 > “Easy to work with and communicate.”  
 > **Kalpesh Gohill, Founder & CEO, TreadCommand**
 
-### Ryzeo: reports that help customers decide where to act
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-Ryzeo's ecommerce marketing customers wanted reports that showed them where to act. Research made reporting the first priority. We reworked how reports were organised and how people could tailor a view to their question. We designed the new reports to help someone decide what to do next, as well as see what happened.
+## How we work together {#how-we-work-together}
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+For dashboards, a good first piece of work is the dashboard of the role whose questions matter most, with every number defined and every data state designed.
 
-### ConnectX: one energy system, three very different questions
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-In ConnectX's building-energy product, a facilities operator wants the exception that needs action. A finance leader wants cost and forecast. A sustainability team wants progress against a target. One dashboard for all three would show far too much.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-We designed a workspace that gathers the figures, assets and charts each request needs. A simplified building view picks out the connected assets that matter right now. The design first ran as a working demo in code before the live data was connected, so ConnectX could try the whole experience.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-Late in 2025, after we hardened it, that demo went live as a production-ready module.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-### Benchmark Gensuite: choosing which data you are looking at
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-In Benchmark's enterprise suite, the scope selector tells the product which part of an organisation you're looking at. Choose the wrong scope and there is no error message, only the wrong data, presented with confidence. For anyone reading a dashboard, that is the worst case: correct figures for the wrong part of the business.
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-We split the selector into three views (Browse, Recents and Favourites, and Nearby), each with a clear search boundary, so people can see which part of the business their figures cover. We tested it as working prototypes in code.
+## Why teams choose Tcules {#why-tcules}
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-## Why Tcules {#why-tcules}
+- **We work out what the product has to know before we draw it.** For [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation), we watched staff use the existing system and followed orders past checkout into production before redesigning the store and the ERP together.
 
-**We define every number before we draw it.** We agree each definition with your product and data teams, so the screen and the figures behind it say the same thing.
+- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we kept every piece of property data on the listing card and changed its reading order, grouping the core values for comparison.
 
-**Prototypes with realistic data.** Our designers can build views in code with your data or a realistic sample, as we did for ConnectX's coded demo on interim data, so you see how they hold up before your engineers commit.
+- **Senior people do the work, and clients keep us for years.** For three years we have designed every product Primelis has, as an ongoing partnership.
 
-## Frequently asked questions {#faq}
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech)
+
+## Questions about dashboard design services {#faq}
+
+### What are the best practices for KPI dashboard design?
+
+Define each KPI once, set it against a target or an earlier period, and show when it was last updated. Put the few KPIs each role acts on first, with a route to the detail behind each one. We work alongside your data team, so every KPI on screen matches the figure behind it.
 
 ### What's the difference between dashboard design and data visualisation?
 
@@ -231,15 +326,19 @@ Data visualisation is how a number or trend is drawn. Dashboard design covers th
 
 ### How do you decide what goes on a dashboard?
 
-We start from each user's job and the questions they need answered. A metric earns its place by helping to answer one of them.
+Tcules starts from each user's job and the questions they need answered. A metric earns its place by helping to answer one of them, and anything else comes off the screen.
 
-### Can different roles share one dashboard?
+### How do we stop users exporting the dashboard to Excel?
 
-They can share the data. Each role usually needs its own defaults, level of detail and actions, which we design as views of one system.
+Give each number a definition, a comparison and a next step people can take in the product. An export usually means the screen is missing one of those, such as the filter, drill-down or action people need. We find which one by watching what people do with the spreadsheet.
 
-### Do you build the data pipelines too?
+### Do you design admin dashboards as well as customer-facing ones?
 
-That work usually stays with your data team. We design on top of the data you have and work closely with the people who run it.
+Yes. Admin dashboard UX design follows the same five steps, with more weight on exceptions, permissions and the action an administrator takes next. Both kinds of view draw on the same definitions, so everyone reads a figure the same way.
+
+### Do dashboard designers build the data pipelines too?
+
+Your data team owns the pipelines, and Tcules works hand in hand with them on what people see and do with the data. Each definition is agreed together, so the design matches the data that exists.
 
 ## Tell us what your dashboard should help people do {#enquiry}
 

@@ -4,13 +4,13 @@ slug: services
 page_name: Services
 page_type: service
 seo:
-  title: Product Design & Development Services for SaaS | Tcules
-  description: 'Product design and development services for SaaS teams: launch a new product, make a growing one easier to use, modernise old software or add AI features.'
+  title: 'UI/UX Design Services & Software Development | Tcules'
+  description: 'UI/UX design services and software development for SaaS: new products taken from idea to launch-ready software, and established ones made better.'
   canonical: https://www.tcules.com/services
   robots: index,follow
 social:
-  og_title: Product Design & Development Services for SaaS | Tcules
-  og_description: 'Product design and development services for SaaS teams: launch a new product, make a growing one easier to use, modernise old software or add AI features.'
+  og_title: 'UI/UX Design Services & Software Development | Tcules'
+  og_description: 'UI/UX design services and software development for SaaS: new products taken from idea to launch-ready software, and established ones made better.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,18 +18,26 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Product Design & Development Services for SaaS | Tcules
-  twitter_description: 'Product design and development services for SaaS teams: launch a new product, make a growing one easier to use, modernise old software or add AI features.'
+  twitter_title: 'UI/UX Design Services & Software Development | Tcules'
+  twitter_description: 'UI/UX design services and software development for SaaS: new products taken from idea to launch-ready software, and established ones made better.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: Explore Product Design and related software product services
   primary_buyer_question: What work can Tcules own for my product, and where should we start?
   supporting_questions:
   - Do we need to know which service we want?
-  - Can you design and develop a new SaaS product?
+  - Can you take a new SaaS product from idea to launch?
   - Can we start with an audit or one workflow?
-  - Can you work with our own designers and developers?
-  primary_query: product design and development services
+  primary_query: 'UI/UX design and development services'
+  secondary_queries:
+  - 'UI/UX design services'
+  - 'design and development for enterprise software'
+  - 'end-to-end product development services'
+  - 'should we hire one studio for design and development or two suppliers'
+  - 'which design service do we need'
+  - 'can you take a SaaS product from idea to launch'
+  - 'can we start with an audit or one workflow'
+  - 'UI UX design and development cost'
 navigation:
   breadcrumb:
   - name: Home
@@ -56,16 +64,23 @@ conversion:
 render:
   band_order:
   - client-recognition
-  - product-design
-  - new-products
-  - established-products
-  - product-build
-  - how-we-work
+  - service-guide
   - selected-work
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  visual_plan: product_design_core_then_new_products_established_products_build_and_ways_of_working
+  page_family: hub
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, hub order)
+  visual_plan: hub_chooser_table_then_three_case_selected_work_then_studio_spine
+  selected_work:
+  - ai-native-building-energy-product-connectx
+  - eden-ai-workflow-builder-search-redesign
+  - gold-image-printing-web-to-print-erp-modernisation
+  why_tcules_reasons: [1, 4, 6]
   client_recognition:
     component_type: client_logo_strip
     placement: after_hero
@@ -74,32 +89,40 @@ page_composition:
     - Dealpath
     - Benchmark Gensuite
     - Eden AI
+    - ConnectX
     - JoVE
     - Ringier Media Switzerland
     asset_policy: Client relationship only; use approved assets, text fallback; do not imply a common role or outcome.
   media_bindings:
-  - id: services_doodle
-    role: proof
+  - id: services_connectx
+    role: demonstrate
     supports_section: selected-work
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
+    card: connectx
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
     status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: services_dealpath
-    role: proof
-    supports_section: selected-work
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
-    status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: services_benchmark
-    role: proof
-    supports_section: selected-work
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
-    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (connectx_workspace)
+    alt_intent: Coded ConnectX workspace demonstrating an AI-assisted building-energy scenario
   - id: services_eden
-    role: proof
+    role: demonstrate
     supports_section: selected-work
+    card: eden-ai
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
     status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (eden_unified_search)
+    alt_intent: Eden AI workflow builder showing unified search and AI-assisted creation
+  - id: services_gold_image
+    role: demonstrate
+    supports_section: selected-work
+    card: gold-image-printing
+    asset_uri: null
+    status: IMAGE_ASSET_REQUIRED
+    source: Gold Image Printing case has no bound screen; pull one from the live case media
+    alt_intent: Gold Image Printing store and production screens built on one component set
   testimonial_ids:
-  - UW-JOVE-INTEGRATION
+  - DRAFT-VOVISTO-GOMES
+  - DRAFT-EDENAI-SPECS
+  - DRAFT-CURAMCARE-APPS
+  - FP-GOLDIMAGE-NAVIGATION
 structured_data:
   types:
   - CollectionPage
@@ -108,7 +131,7 @@ structured_data:
   - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH2_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_HUB_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_PENDING
   production: NOT_PRODUCTION_VERIFIED
@@ -123,96 +146,157 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services.md; studio-spine hub rebuild 26 Oct 2026 evening (43-rollout-26-oct/log-hubs.md; hub order, chooser first, three selected pieces, spine sections word for word)
 ---
 
 *Services*
 
-# Create a new product, or evolve the one you have
+# UI/UX design services and software development for new and established products
 
-Every project starts with Product Design. Design engineers and developers join when the work needs them.
+Design and engineering are for the places your product is judged: the people who use it all day, the sales demo, the sprint where engineers build it and the renewal.
 
-[Start a conversation](#enquiry)
+Tcules offers UI/UX design services and software development for complex software, with a particular focus on SaaS, from a founder's first idea to products customers have used for years.
 
-**Founded 2017 · More than 90 projects · Clients in 19 countries · 4.8 on Clutch from 13 reviews**
+Product Design leads every project. We join at the idea stage, inside your product team, or the day a working prototype has to become software customers rely on.
+
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)*
+
+[Describe your product, and we'll suggest the mix](#enquiry)
+
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
 ## Some of the teams we've worked with {#client-recognition}
 
-Doodle · Dealpath · Benchmark Gensuite · Eden AI · JoVE · Ringier Media Switzerland
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · Ringier Media Switzerland
 
-## Product design that makes your software easier to use {#product-design}
+## Which design or development service do you need? {#service-guide}
 
-The work starts with two questions: what should the product do, and how should it work for the people using it? Our [Product Design services](/services/product-design) answer them through [user research](/services/product-design/ux-research), [workflows and structure](/services/product-design/information-architecture-workflow-design), [interface design](/services/product-design/interaction-ui-design), [prototypes and usability tests](/services/product-design/prototyping-usability-testing) and [data visualisation](/services/product-design/data-visualisation).
+Seven services and our audits, each with its own page. Most projects draw on two or three of them.
 
-Some answers only show up once a design runs in the browser. Our [design engineers](/services/design-engineering) build working prototypes and ready-to-use screen parts, then check that the finished product matches what was designed.
+| Service | Best for | What you come away with |
+|---|---|---|
+| [Product Design](/services/product-design) | Working out what a product should do and how it should work, at any stage | Research, workflows, interface design and tested prototypes |
+| [New Product Design & First Release](/services/new-product-design-first-release) | Turning an idea, a concept or an AI-built prototype into an MVP | A first release customers want to use, taken through to launch if you choose |
+| [Product Modernisation](/services/product-modernisation) | Software customers rely on daily, whose screens and code show their age | A product changed part by part while customers keep working, with their habits kept |
+| [Design Systems](/services/design-systems) | Teams whose buttons, spacing, Figma files and code have drifted apart | One set of components and rules in Figma and in code, so design and code match |
+| [AI Product UX](/services/ai-product-ux) | Adding AI that answers, drafts, checks or acts for your users | What the AI does, and how people follow, steer, check and correct it |
+| [Design Engineering](/services/design-engineering) | Trying risky interactions in code before committing to them | Working prototypes, and interface code that keeps to the design from first prototype to production |
+| [Software Development](/services/software-development) | Products that need building as well as designing | Frontend, backend, integrations, testing and release, with designers alongside until release |
+| [Audits & Assessments](/audits) | Teams that agree something is wrong and disagree on what | The cause found and the fixes ranked, before you fund the work |
 
-Our designers can also work inside your own team, alongside your product managers and designers.
+Product Design can also be hired in parts: [user research](/services/product-design/ux-research), [workflows and structure](/services/product-design/information-architecture-workflow-design), [interface design](/services/product-design/interaction-ui-design), [prototypes and usability tests](/services/product-design/prototyping-usability-testing) and [data visualisation](/services/product-design/data-visualisation).
 
-> “The Tcules team integrated well with our internal PMs and designers, contributing meaningfully to high-fidelity design deliverables that most often met our product standards.”  
-> **Dhanur Aashray Majety, Director, Product Management, JoVE**
+Software Development covers web apps, major features and care of a live product, plus [AI Product Engineering](/services/software-development/ai-product-engineering) and [Mobile App Development](/services/software-development/mobile-app-development).
 
-## Launch a new product {#new-products}
+A new AI product often brings Product Design, AI Product UX and Software Development together.
 
-Bring an idea, a concept or the prototype you built with AI. We shape it into a product your customers want to use, agree with you what the first release must do well, and see it through to launch. [New Product Design & First Release](/services/new-product-design-first-release)
+## Selected design and development work {#selected-work}
 
-Already have a working prototype? A [Prototype Readiness Review](/audits/prototype-readiness-review) shows what it still needs before customers rely on it.
+Three products, each drawing on a different mix of our services.
 
-## Improve a product customers already rely on {#established-products}
+### ConnectX: an AI energy product taken from definition to a live module
 
-Established software comes with habits worth keeping. Start from the problem you recognise.
+We defined this building-energy product around eight scenarios drawn from the questions its users ask, then proved it in a coded demo on sample data. We then carried the demo into a production-ready module that went live in late 2025.
 
-| Sounds familiar? | Where we'd start |
-|---|---|
-| Customers use the product every day, but the screens and the code underneath are showing their age | [Product Modernisation](/services/product-modernisation): a plan for what to keep and change, redesigned workflows and careful moves to new platforms |
-| The same button looks different on every screen, and Figma no longer matches the code | [Design Systems](/services/design-systems): a shared library of screen parts, Figma and code that match, and simple rules teams follow |
-| AI is about to suggest or do things for your users | [AI Product UX](/services/ai-product-ux): review steps, clear limits on what the AI may do, and ways to correct and undo |
-| Everyone agrees something is wrong, and nobody agrees on what | [Audits & Assessments](/audits): a focused review that finds the cause and ranks what to fix |
+[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
-## Need it built as well? {#product-build}
+### Eden AI: one search box, with AI help kept separate
 
-Our engineers build it with the designers beside them, so the product people use matches the one you approved. [Software Development](/services/software-development) covers web apps, major features and looking after a live product, with dedicated help for [AI Product Engineering](/services/software-development/ai-product-engineering) and [Mobile App Development](/services/software-development/mobile-app-development).
+Developers on Eden AI's platform can begin a workflow three ways: from a template, from scratch or with the AI's help. Our redesign brought all three into one search box, made AI help a mode you enter on purpose, and gave Eden's own developers specs to build from.
 
-Services combine. A new AI-powered SaaS product, for example, may need Product Design, AI Product UX and Software Development in one team.
+[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-## How we work with your team {#how-we-work}
+### Gold Image Printing: a print store and its production system redesigned together
 
-You talk directly to the designers and engineers on your project. We work in your tools, fit around your release schedule and agree working hours that overlap with yours. [How we work](/how-we-work)
+We watched production staff use the existing system, then redesigned the web-to-print store and the internal ERP on a single component set and style guide. The design gives each order one shape from checkout through artwork, scheduling and fulfilment, and we worked with the client's technical team on implementation.
 
-Our designers also use AI tools to study live products, sort research and try ideas in working prototypes, and a person checks every result. [AI-native Product Design](/how-we-work/ai-native-product-design)
+[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-## Work across our services {#selected-work}
+## What clients say {#testimonials}
 
-**Doodle: research before screens.** Research showed a free calendar slot was not enough, so the scheduling MVP was designed around meeting type, priority and "maybe" availability. [Read the case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
 
-**Dealpath: one workflow, redesigned.** We redesigned the "Add to pipeline" flow so teams search for an existing deal before creating a new one. [Read the case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
 
-**Eden AI: AI help in the right place.** Templates, AI assistance and a blank start brought into one starting point for a workflow builder. [Read the case](/case-studies/eden-ai-workflow-builder-search-redesign)
+> “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**GT Tools: designed and built.** A Shopify store where buyers check compatibility, stock and warranty before they buy. [Read the case](/case-studies/gt-tools-shopify-product-discovery)
+> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-Want to compare us with other studios? [How to choose a product design studio](/why-tcules)
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## Frequently asked questions {#faq}
+## How we work together {#how-we-work-together}
+
+When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** Before we shaped [Auxentios'](/case-studies/auxentios-cpq-product-mvp-design) quoting MVP, eight interviews mapped what each of six specialist roles adds to a quotation, and the product structure followed that map.
+
+- **One studio can take it into working software, with the designers staying in the build.** For [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience), we designed a creative-writing world for young learners, then set up its Moodle plugins and custom theme ourselves, so the design holds together where learners use it.
+
+- **Senior people do the work, and clients keep us for years.** Primelis brought us in three years ago and has kept us on as an ongoing partnership; we have designed every one of its products since.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about choosing UI/UX design and development services {#faq}
 
 ### Do we need to know which service we want?
 
-No. Tell us about the product, where it's heading and what is hard. We'll suggest where to start.
+No. Tcules recommends the service, or mix of services, once you describe the product, where it is heading and what is hard. A few lines will do, and you don't need our service names.
 
-### Can you design and develop a new SaaS product?
+### Can you take a new SaaS product from idea to launch?
 
-Yes. We can take a product from first definition through design, build and first release. [New Product Design & First Release](/services/new-product-design-first-release) explains how.
+Yes. Our end-to-end product development services take new SaaS products from first definition to a launch-ready first release, as [New Product Design & First Release](/services/new-product-design-first-release) explains. Already have a working prototype? A [Prototype Readiness Review](/audits/prototype-readiness-review) shows what it needs before customers arrive.
 
 ### Can we start with an audit or one workflow?
 
-Yes. A focused review or one well-defined problem is often the best first step. [See our audits](/audits)
+Yes. Tcules treats one workflow, a feature or a focused audit as a strong first step. It runs as a pilot project, so you see how we think about your product before planning anything bigger. [How pilots work](/how-we-work#engagement-shapes)
 
-### Can you work with our own designers and developers?
+### What is the difference between Product Design and Design Engineering?
 
-Yes. We work directly with product, design and engineering teams, and agree who signs off what at the start. [How we work](/how-we-work)
+Product Design works out what the product does and how it works, through research, workflows and interface design. Design Engineering takes that work into code, so a risky interaction can be tried in a running product and the production interface keeps to the design. The two often run side by side on one project.
+
+### Design Systems or Product Modernisation: which do we need?
+
+Choose Design Systems when the trouble is inconsistency: the same button built five ways, or Figma and code drifting apart. Choose Product Modernisation when workflows and technology have aged and need changing in stages. A modernisation can start from a shared component layer, as Benchmark Gensuite's did.
+
+### Should we hire one studio for design and development, or two suppliers?
+
+Separate suppliers suit a finished design that only needs building, but gaps can open before release. Our design with your engineers suits a strong in-house team, as long as someone answers the product questions that land on engineers mid-build; at [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), its own team owned implementation.
+
+One studio suits new products and designs still moving once code starts, with the code we touch agreed early.
+
+### How much do UI/UX design and development services cost?
+
+The cost depends on what is designed and built, and how much of it. Each engagement gets its price before any work begins, based on the scope you agree with us. [How pricing works](/how-we-work#engagement-shapes)
 
 ## Tell us the problem, we'll suggest the mix {#enquiry}
 
-Skip the service menu. Describe what you're creating or changing, and we'll work out with you where to start.
+Not sure which service you need? Skip the menu. Describe what you're creating or changing, and we'll work out with you where to start.
 
 **Enquiry form**
 

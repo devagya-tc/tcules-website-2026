@@ -100,7 +100,8 @@ function sigOf(block: CorpusBlock): Sig | null {
   }
 }
 
-function signature(band: CorpusBand): string {
+/** A band's shape: one letter per block (comments skipped). Read by `npm run corpus:census` too. */
+export function signature(band: CorpusBand): string {
   return band.blocks
     .map(sigOf)
     .filter((sig): sig is Sig => sig !== null)

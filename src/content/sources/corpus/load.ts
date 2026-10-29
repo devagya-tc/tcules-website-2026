@@ -46,6 +46,7 @@ function mediaBinding(raw: unknown): CorpusMediaBinding {
     id: str(b.id) ?? '',
     role: str(b.role) ?? '',
     supportsSection: str(b.supports_section) ?? '',
+    card: str(b.card),
     assetUri,
     altIntent: str(b.alt_intent),
     status,
@@ -64,10 +65,33 @@ function composition(raw: unknown): CorpusComposition {
     ? strs(recognition.clients)
     : strs(c.logo_client_ids);
   const caseMeta = dict(c.case_meta);
+  const hasRecognition = Object.keys(recognition).length > 0;
+  /* `selected_work` is a list of slugs or of `{slug|case|card}` records, depending on the page. */
+  const selected = (Array.isArray(c.selected_work) ? c.selected_work : []).map((x) =>
+    typeof x === 'string' ? x : (str(dict(x).slug) ?? str(dict(x).case) ?? str(dict(x).card)),
+  );
+  const caseSlugs = [
+    ...new Set(
+      [...selected, ...strs(c.case_study_slugs), ...strs(c.featured_case_slugs)]
+        /* Some entries carry a note after the slug: `benchmark-… (related work; …)`. */
+        .map((x) => (x ? (/^[a-z0-9-]+/.exec(x.trim())?.[0] ?? null) : null))
+        .filter((x): x is string => !!x),
+    ),
+  ];
   return {
     visualPlan: str(c.visual_plan),
     mediaBindings: Array.isArray(c.media_bindings) ? c.media_bindings.map(mediaBinding) : [],
     logoClients,
+    clientRecognition: hasRecognition
+      ? {
+          componentType: str(recognition.component_type),
+          placement: str(recognition.placement),
+          clients: strs(recognition.clients),
+          label: str(recognition.label),
+          assetPolicy: str(recognition.asset_policy),
+        }
+      : null,
+    caseSlugs,
     testimonialIds: strs(c.testimonial_ids).length
       ? strs(c.testimonial_ids)
       : strs(dict(c.commercial_system).testimonial_ids),
@@ -140,6 +164,8 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const nav = dict(data.navigation);
     const render = dict(data.render);
     const release = dict(data.release);
+    const search = dict(data.search_context);
+    const structured = dict(data.structured_data);
     const { hero, bands } = parseBody(body);
     const comp = composition(data.page_composition);
     assignTestimonialIds(bands, comp.testimonialIds);
@@ -163,6 +189,19 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
       ),
       conversion: conversion(data.conversion),
       bandOrder: strs(render.band_order),
+      searchContext: {
+        primaryIntent: str(search.primary_intent),
+        primaryBuyerQuestion: str(search.primary_buyer_question),
+        supportingQuestions: strs(search.supporting_questions),
+        primaryQuery: str(search.primary_query),
+        secondaryQueries: strs(search.secondary_queries),
+        keyEntities: strs(search.key_entities),
+      },
+      structuredData: {
+        types: strs(structured.types),
+        organizationRef: str(structured.organization_ref),
+        raw: structured,
+      },
       composition: comp,
       release: {
         contentState: str(release.content_state),

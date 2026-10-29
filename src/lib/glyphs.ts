@@ -61,7 +61,7 @@ const SECTORS: Readonly<Record<string, RouterGlyph>> = {
   '/expertise/data-analytics-decision-products': 'graph-up',
   '/expertise/commerce-transactional-products': 'cart',
   '/expertise/marketplaces-multi-sided-platforms': 'users-group-rounded',
-  '/expertise/fintech-insurtech': 'wallet',
+  '/expertise/fintech': 'wallet',
   '/expertise/healthtech': 'heart-pulse',
   '/expertise/martech-salestech': 'chat-round-dots',
 };

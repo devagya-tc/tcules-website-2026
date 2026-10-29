@@ -4,13 +4,13 @@ slug: scissors-staffing-software-object-oriented-ux
 page_name: Reframing staffing software around its core objects
 page_type: case_study
 seo:
-  title: 'Scissors: connecting clients, candidates and jobs | Tcules'
-  description: Tcules connected onboarding, shortlisting, talent pools and job creation around the client, candidate and job records in Scissors staffing software.
+  title: 'Scissors staffing software UX case study | Tcules'
+  description: 'Scissors staffing software UX case study: onboarding, shortlisting, talent pools and job creation redesigned around one client, candidate and job model.'
   canonical: https://www.tcules.com/case-studies/scissors-staffing-software-object-oriented-ux
   robots: index,follow
 social:
-  og_title: 'Scissors: connecting clients, candidates and jobs | Tcules'
-  og_description: Tcules connected onboarding, shortlisting, talent pools and job creation around the client, candidate and job records in Scissors staffing software.
+  og_title: 'Scissors staffing software UX case study | Tcules'
+  og_description: 'Scissors staffing software UX case study: onboarding, shortlisting, talent pools and job creation redesigned around one client, candidate and job model.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,19 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Scissors: connecting clients, candidates and jobs | Tcules'
-  twitter_description: Tcules connected onboarding, shortlisting, talent pools and job creation around the client, candidate and job records in Scissors staffing software.
+  twitter_title: 'Scissors staffing software UX case study | Tcules'
+  twitter_description: 'Scissors staffing software UX case study: onboarding, shortlisting, talent pools and job creation redesigned around one client, candidate and job model.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'Scissors staffing software UX'
+  secondary_queries:
+  - 'Scissors staffing software UX case study'
+  - 'object-oriented UX case study'
+  - 'recruitment software redesign'
+  - 'staffing platform UX'
+  - 'candidate shortlisting design'
+  - 'talent pool UX'
+  - 'client candidate job model'
   primary_intent: staffing software workflow redesign case study
   primary_buyer_question: How did Tcules connect Scissors’ staffing workflows through a shared product model?
   key_entities:
@@ -30,7 +39,7 @@ search_context:
   - object-oriented UX
   - talent pools
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +63,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +74,7 @@ render:
   - the-redesign-applied-the-model-to-four-responsib
   - what-this-case-establishes
   - when-this-approach-is-useful
-  - delivery-impact
+  - faq
   - related
   - enquiry
 page_composition:
@@ -84,7 +93,7 @@ page_composition:
       the-redesign-applied-the-model-to-four-responsib: comparison_decision
       what-this-case-establishes: argument_thesis
       when-this-approach-is-useful: argument_thesis
-      delivery-impact: argument_thesis
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
@@ -104,10 +113,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#scissors
 release:
@@ -155,11 +165,13 @@ content_governance:
 
 *Case study · Scissors*
 
-# Keep the client, candidate and job connected
+# Scissors staffing software UX: clients, candidates and jobs in one model
 
-Scissors was developing temporary-staffing software across client onboarding, candidate management, shortlisting, talent pools and job creation, while some intended users were not yet active in the product. Tcules extended the research beyond current usage, modelled the connected product objects, and redesigned four workflows around one operating model instead of separate screen sequences.
+Scissors was developing temporary-staffing software across client onboarding, candidate management, shortlisting, talent pools and job creation. Some intended users had yet to start using the product.
 
-With those users missing, the product's analytics could not show how the work should flow. Tcules combined a heuristic review, stakeholder work, user research and object-oriented UX to investigate the operating model before redesigning the main workflows.
+Tcules extended the research beyond current usage, modelled the connected product objects and redesigned four workflows around one operating model.
+
+With those users yet to arrive, analytics could show only part of the picture, so Tcules went to the staffing work itself. A heuristic review, stakeholder work, user research and object-oriented UX, which designs around the things a product keeps track of, mapped the operating model before the main workflows were redesigned.
 
 ## At a glance {#case-context}
 
@@ -171,68 +183,86 @@ With those users missing, the product's analytics could not show how the work sh
 
 Related Tcules services: [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design) and [UX Research](/services/product-design/ux-research).
 
-## How could Tcules research a workflow before all intended users were active? {#research-had-to-reach-beyond-current-usage}
-Onboarding a client organisation could take weeks of manual work. Tcules treated the organisation as a persistent record rather than a setup step, so brand and contact detail entered once continued to shape every job and candidate message afterwards.
+## Staffing platform UX research that looked beyond current users {#research-had-to-reach-beyond-current-usage}
 
-Inflexible shortlisting and difficult-to-use talent pools added friction after onboarding. Interviews and stakeholder work were used to understand the organisations, candidates and jobs behind the visible screens.
+Onboarding a client organisation could take weeks of manual work. Tcules treated the organisation as a persistent record, so brand and contact detail entered once continued to shape every job and candidate message afterwards.
+
+Inflexible shortlisting and difficult-to-use talent pools added friction after onboarding. Interviews and stakeholder work helped Tcules understand the organisations, candidates and jobs behind the visible screens.
 
 The key question became: what does the staffing team continue to recognise and act on across onboarding, placement and repeat work?
 
-## The workflow became a set of connected objects {#the-workflow-became-a-set-of-connected-objects}
+## The client, candidate and job model behind every workflow {#the-workflow-became-a-set-of-connected-objects}
 
-A linear interface can make onboarding appear to be one long procedure. Staffing work behaves differently. A client organisation persists across jobs. A candidate can appear in more than one shortlist. A talent pool can be reused, filtered and updated. A job carries requirements and status. A shortlist connects a specific job to selected candidates without changing who those candidates are elsewhere.
+A linear interface can make onboarding look like one long procedure. Staffing work behaves differently:
+
+- A client organisation persists across jobs.
+- A candidate can appear in more than one shortlist.
+- A talent pool can be reused, filtered and updated.
+- A job carries requirements and status.
+- A shortlist connects a specific job to selected candidates, while each candidate's record elsewhere stays the same.
 
 Object-oriented UX helped separate these persistent things from the actions performed on them.
 
-## The redesign applied the model to four responsibilities {#the-redesign-applied-the-model-to-four-responsib}
+## Recruitment software redesign: onboarding, shortlisting, talent pools and job creation {#the-redesign-applied-the-model-to-four-responsib}
 
-The work covered onboarding, shortlisting, talent-pool filtering and job creation.
+The work covered onboarding, shortlisting, talent-pool filtering and job creation:
 
-For onboarding, the product needed to capture organisation and brand information without treating setup as a disposable prelude. Those details would continue to shape jobs and candidate communication.
+- Onboarding. The product needed to capture organisation and brand information once and keep it in use. Those details would continue to shape jobs and candidate communication.
+- Shortlisting. The design had to permit judgement and revision. A staffing team may need to compare, remove, add or revisit candidates as availability and requirements change.
+- Talent pools. The pool itself was a reusable operational asset, so the interface needed to help teams filter it, maintain it and use it across new demand.
+- Job creation. The product had to connect requirements to the existing organisation and candidate model, so the user could build on what the product already knew.
 
-For shortlisting, the design had to permit judgement and revision. A staffing team may need to compare, remove, add or revisit candidates as availability and requirements change.
+## What Scissors gained: four workflows that reuse the same records {#what-this-case-establishes}
 
-For talent pools, filtering was not only search. The pool represented a reusable operational asset, so the interface needed to help teams maintain it and use it across new demand.
-
-For job creation, the product had to connect requirements to the existing organisation and candidate model rather than ask the user to recreate context.
-
-## Four workflows built around the same operating model {#what-this-case-establishes}
-
-Scissors gained a connected design for onboarding, shortlisting, talent pools and job creation. Client and candidate information could continue to do useful work across those workflows, reducing the need to reconstruct context at each step.
+Scissors gained a connected design for onboarding, shortlisting, talent pools and job creation. In the redesign, client and candidate details entered once are designed to carry through all four workflows instead of being re-entered at each step. With one model underneath, the next workflow Scissors adds becomes a new view of records the product already knows.
 
 Tcules reached beyond current product usage to understand the staffing operation, then used that understanding to shape the records and relationships the interface depended on.
 
-## When this approach is useful {#when-this-approach-is-useful}
+## When modelling the records first pays off {#when-this-approach-is-useful}
 
-Object-oriented UX is useful when the same things recur across many workflows, roles and states. It is not a substitute for research, domain rules or implementation detail. A product team still has to decide:
+Object modelling pays off when the same things recur across many workflows, roles and states. It works alongside research, domain rules and implementation detail, and it sets up the questions the product team answers next:
 
-- which object is the source of truth;
-- which role can create, change or remove it;
-- what history must remain visible;
-- how exceptions propagate; and
-- how a shared model appears differently to each role.
+- Which record is the source of truth?
+- Which role may create, change or remove it?
+- What history must stay visible?
+- How do exceptions travel through the model?
+- How does the shared model appear to each role?
 
-For a staffing, marketplace or operations product, those decisions can remove more ambiguity than redesigning each workflow independently.
+For a staffing, marketplace or operations product, those answers can remove more ambiguity than redesigning each workflow on its own.
 
-Object modelling of this kind, done before workflow redesign rather than after it, sits within Tcules' [information architecture and workflow design](/services/product-design/information-architecture-workflow-design) service.
+Tcules' [information architecture and workflow design](/services/product-design/information-architecture-workflow-design) service does this object modelling before any workflow is redesigned.
 
-## What changed when the workflow became connected objects {#delivery-impact}
+## Questions about the Scissors staffing software redesign {#faq}
 
-| Impact dimension | What changed |
-|---|---|
-| Operating-model clarity | Clients, candidates, jobs, talent pools and organisations were modelled as connected objects before the main workflows were redesigned. |
-| Workflow consistency | Four responsibilities were redesigned around the same operating model instead of becoming four unrelated screen sequences. |
-| Context continuity | Client and candidate information could remain useful across onboarding, shortlisting, talent-pool and job-creation work. |
+### What did Tcules design for Scissors?
 
-## Related workflow work {#related}
+Tcules redesigned four workflows in Scissors' temporary-staffing software: client onboarding, candidate shortlisting, talent-pool filtering and job creation. All four rest on one connected model of clients, candidates, jobs and talent pools, shaped by research and object-oriented product modelling.
 
-Two other cases where naming the objects settled the interface argument.
+### How do you redesign staffing software around its core records?
+
+Start by naming what the staffing team keeps recognising and acting on: client organisations, candidates, jobs, talent pools and shortlists. Object-oriented UX separates those persistent records from the actions performed on them, and each workflow is then designed on that shared model.
+
+### What changed in candidate shortlisting and talent pools?
+
+The shortlisting design allows judgement and revision, so a team can compare, remove, add or revisit candidates as availability and requirements change. Talent pools were treated as a reusable asset, designed for teams to filter, maintain and draw on for new demand.
+
+### How did the research reach users who were yet to use the product?
+
+Through interviews, stakeholder work and user research into the staffing operation itself, since analytics showed only how current users worked. Tcules combined these with a heuristic review to understand the organisations, candidates and jobs behind the visible screens.
+
+## More case studies that started from the product's records {#related}
+
+In these two as well, naming the objects first ended the argument about the interface.
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
 [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
 
 [See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
+
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us what the product is really keeping track of {#enquiry}
 

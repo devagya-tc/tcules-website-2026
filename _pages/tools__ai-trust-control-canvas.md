@@ -4,13 +4,13 @@ slug: ai-trust-control-canvas
 page_name: AI Trust and Control Canvas
 page_type: tool
 seo:
-  title: AI trust and control canvas for product teams | Tcules
-  description: Set out the checks, approvals and recovery around one AI output, then download a control brief your design and engineering teams can work from.
+  title: 'AI Trust and Control Canvas: Free Template | Tcules'
+  description: 'A free AI trust and control canvas: plan what people can check, approve and undo around one AI output, then download a control brief for your team.'
   canonical: https://www.tcules.com/tools/ai-trust-control-canvas
   robots: index,follow
 social:
-  og_title: AI trust and control canvas for product teams | Tcules
-  og_description: Set out the checks, approvals and recovery around one AI output, then download a control brief your design and engineering teams can work from.
+  og_title: 'AI Trust and Control Canvas: Free Template | Tcules'
+  og_description: 'A free AI trust and control canvas: plan what people can check, approve and undo around one AI output, then download a control brief for your team.'
   og_image: https://www.tcules.com/assets/og/tools.png
   og_image_alt: Tcules social card headed Tools, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: AI trust and control canvas for product teams | Tcules
-  twitter_description: Set out the checks, approvals and recovery around one AI output, then download a control brief your design and engineering teams can work from.
+  twitter_title: 'AI Trust and Control Canvas: Free Template | Tcules'
+  twitter_description: 'A free AI trust and control canvas: plan what people can check, approve and undo around one AI output, then download a control brief for your team.'
   twitter_image: https://www.tcules.com/assets/og/tools.png
 search_context:
   primary_intent: design trust and control for an AI output
@@ -43,6 +43,17 @@ search_context:
     - How should I interpret an unknown or a gap?
     - What can I take into the next team review?
     questions_withheld: []
+  primary_query: AI trust and control canvas
+  secondary_queries:
+  - AI trust canvas
+  - what users must check before AI acts
+  - AI output control template
+  - AI trust framework for product teams
+  - AI governance canvas for features
+  - design brief for AI controls
+  - AI approval and undo checklist
+  - AI control brief template
+  - free AI trust template
 navigation:
   breadcrumb:
   - name: Home
@@ -53,15 +64,19 @@ navigation:
     url: /tools/ai-trust-control-canvas
 render:
   band_order:
-  - fill-the-canvas-in-order-because-each-block-cons
+  - example
+  - who-its-for
+  - start
   - workspace
   - reading-your-canvas
-  - what-this-does-not-tell-you
+  - test
   - next
+  - faq
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 release:
@@ -97,11 +112,14 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      fill-the-canvas-in-order-because-each-block-cons: argument_thesis
+      example: argument_thesis
+      who-its-for: buyer_situation
+      start: method_process
       workspace: argument_thesis
       reading-your-canvas: argument_thesis
-      what-this-does-not-tell-you: argument_thesis
+      test: argument_thesis
       next: argument_thesis
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -110,7 +128,7 @@ page_composition:
   visual_requirements:
   - id: v11_tool_interface
     status: ASSET_REQUIRED
-    supports_section: fill-the-canvas-in-order-because-each-block-cons
+    supports_section: workspace
     communication_job: Show the actual tool or a representative interactive state.
     asset_uri: null
     alt_caption_intent: Describe what the artefact demonstrates, not merely what it looks like.
@@ -123,58 +141,101 @@ content_governance:
   language: en-GB
 ---
 
-*Free tools · AI interaction design*
+*Free tool · AI controls*
 
-# Decide what a person must be able to check before AI changes something
+# AI trust and control canvas: plan what people check, approve and undo
 
-The AI Trust and Control Canvas maps what a person must be able to inspect, approve, change or recover before an AI output becomes an action. A suggested paragraph, a changed account record and a sent customer message need different controls. The useful starting point is what can happen after the output is accepted.
+The AI Trust and Control Canvas is a free template that maps what a person must be able to inspect, approve, change or recover before an AI output turns into an action. A suggested paragraph, a changed account record and a sent customer message each need different controls.
 
-The result is a control brief your designer and engineer can work through together.
+The canvas starts from what can happen once someone accepts the output. The result is a control brief your designer and engineer can work through together.
+
 [Build a control canvas](#workspace)
 
-## A missing control is a design question, not a blank cell {#fill-the-canvas-in-order-because-each-block-cons}
-In the AI Trust and Control Canvas, an unknown means a control decision is not yet safe to assume. Record what is missing: evidence, authority, reversibility, escalation or implementation behaviour. The gap becomes useful when the team can name who resolves it and what must be true before the AI output is allowed to progress.
+## A sent customer notice: what users must check before AI acts {#example}
 
-Name the output exactly as the user encounters it. Then follow the action it can trigger: who or what changes, who is affected, and which consequences can still be corrected.
+*Illustration, not client work.* An assistant drafts a notice about a change to a customer's account. Before it goes, the reviewer sees the recipient, the proposed change and the account record behind it, and can edit or reject the draft.
 
-“Human approval” is incomplete if the reviewer has no evidence, no time or no authority to reject the proposal. Record what that person can actually inspect and do.
+After it goes, recovery means correcting the account where needed and sending the recipient a correction. Deleting the message from the sender's screen leaves its effect in place. The canvas names that limit, and the person responsible for the correction.
 
-## Build the control plan for one output {#workspace}
+## An AI trust framework for product teams, one feature at a time {#who-its-for}
 
-| Part of the interaction | Specify |
+The canvas suits a product manager, a designer and an engineer working on a feature where AI output becomes an action: a message sent, a record changed, a request approved. Bring the person who would answer for a wrong result, too.
+
+Teams that report to a risk or governance group can use the finished canvas as an AI governance canvas for features, showing where a person can still step in.
+
+Agents raise the stakes. One run can chain several actions across tools, each with its own point of no return. The canvas takes them one at a time: give each point where a draft becomes an action its own canvas, and together they become the control plan for the whole run.
+
+The canvas works best once the use case is clear. If you are still working out whether the feature is ready at all, start with the [AI Product UX Readiness Check](/tools/ai-product-ux-readiness-check).
+
+## How to use the AI trust canvas on one output {#start}
+
+Name the output exactly as the user meets it. Then follow the action it can trigger: what changes, who is affected and which consequences can still be put right.
+
+"Human approval" works only when the reviewer has the information, the time and the authority to say no. Record what that person can see and do.
+
+Where a control is still unclear, write down what is missing: the information to check, the authority to act, a way to reverse it, a route for escalation or how it will be built. Then name who will decide it, and what must be true before the output goes any further.
+
+From there, the canvas runs in three steps:
+
+1. **Fill in the seven parts.** Work down the canvas below, from the consequence to the review record, and write "unclear" wherever a control is still open.
+
+2. **Read the pattern.** The table under the canvas shows which control to work out first.
+
+3. **Try it with a wrong answer.** Run the plan with a plausible wrong output, then download the brief and give each open control an owner.
+
+## AI output control template: seven parts to fill in {#workspace}
+
+| Part of the interaction | What to set out |
 |---|---|
-| Output and consequence | The proposal, resulting action, affected people or records and reversibility |
-| Evidence | Sources the user can inspect, their freshness and relevant missing information |
-| Uncertainty | Known limitations or conflicting evidence the interface can reliably reveal |
-| Authority | Who may accept, edit, reject, act manually or escalate |
-| Commitment | The precise point where a draft becomes an action; what must be confirmed there |
-| Recovery | Detection, correction, notification and handling of dependent actions |
-| Review record | What must be available later to reconstruct the action, with an agreed access and retention policy |
+| Output and consequence | The proposal, the action it leads to, who or what it affects, and whether it can be reversed |
+| Evidence | Sources the user can inspect, how fresh they are, and anything relevant that is missing |
+| Uncertainty | Known limits or conflicting information the interface shows the user |
+| Authority | Who may accept, edit, reject, do the job by hand or escalate |
+| Commitment | The exact point where a draft becomes an action, and what must be confirmed there |
+| Recovery | How a mistake is spotted, corrected and reported, and what happens to actions that depend on it |
+| Review record | What to keep so the action can be pieced together later, and who may see it |
 
-A generated explanation is not proof that an output is correct. Prefer inspectable evidence and explicit limitations. Only show confidence measures when their meaning and usefulness have been established for this task.
+Show sources people can open, and state the limits plainly. An AI-written explanation can sound convincing about a wrong answer. Show a confidence measure only once you know what it means for this task and that it helps people judge.
 
-## An undo button cannot retrieve a message someone has read {#reading-your-canvas}
+## Read the finished canvas to see which control comes first {#reading-your-canvas}
 
-Worked example, not a client result. An assistant drafts a notice about an account change. Before sending, the reviewer sees the recipient, the proposed change and the supporting account record. They can edit or reject it.
-
-After sending, recovery means correcting the account where appropriate and sending a correction to the recipient. Removing the message from the sender's screen does not reverse its effect. The canvas should name that limitation and the person responsible for the correction.
-
-| If the record shows | Resolve next |
+| If the canvas shows | Decide this next |
 |---|---|
-| A consequential action with no effective review or recovery | Set authority and containment before enabling the action |
-| An approval step with no usable evidence | Test whether the reviewer can identify a representative wrong proposal |
-| A harmless, editable draft with heavy confirmation | Test whether lighter controls preserve what matters |
-| A correction that leaves dependent records wrong | Define propagation and notification, including what cannot be reversed |
+| An action with real consequences and no working review or way back | Who has authority, and how a mistake is contained, before the action is switched on |
+| An approval step with nothing useful to review | Whether the reviewer can spot a typical wrong proposal |
+| A harmless, editable draft behind heavy confirmation | Whether lighter controls keep what matters |
+| A correction that leaves linked records wrong | How the correction reaches linked records and who is told, including anything that can't be reversed |
 
-## A control plan still needs to be tested {#what-this-does-not-tell-you}
+## Test the AI controls with a plausible wrong answer {#test}
 
-Try the interaction with a plausible wrong output, missing evidence and a reviewer who disagrees. Observe whether the person can find and use the controls in time.
+Run the interaction with a plausible wrong output, missing information and a reviewer who disagrees. Watch whether the person can find and use the controls in time.
 
-The canvas is informed by [Microsoft's human-AI interaction guidelines](https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/). It does not establish model accuracy, legal sufficiency or a universal level of acceptable risk.
+The canvas draws on [Microsoft's human-AI interaction guidelines](https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/). It gives the specialists who judge model accuracy, legal requirements and acceptable risk a precise picture of where people can step in.
 
-## Keep the control brief with the implementation {#next}
+## Turn the canvas into a design brief for AI controls {#next}
 
-Download the canvas and turn each unresolved control into an acceptance check. The [BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin) shows design work around expert review of AI-generated analysis.
+Download the canvas and turn each open control into a check the finished feature must pass. The [BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin) shows our design work around expert review of AI-generated analysis.
 
-For help designing the interaction, see [Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery).
+To have a live or beta AI feature tested on real tasks, see the [AI Product UX Readiness Review](/audits/ai-product-ux-readiness). For help designing the controls themselves, see [Trust, Control & Recovery](/services/ai-product-ux/trust-control-recovery).
 
+## AI trust and control canvas FAQs {#faq}
+
+### Is there a template for deciding what users can check and undo around AI output?
+
+This canvas is one. It follows a single AI output to the action it can trigger, then records what people can inspect, approve, change or recover along the way. It is free, and you download the result as a control brief.
+
+### How do we plan controls around one AI output?
+
+Start from what happens once someone accepts the output. Then work through the seven parts: consequence, evidence, uncertainty, authority, commitment, recovery and the review record. Finish by running the plan with a plausible wrong answer and a reviewer who disagrees.
+
+### What should a brief for AI controls include?
+
+For each control, the brief names what the reviewer can see, who may accept or reject, where a draft becomes an action and how a mistake gets corrected. Each open control gets an owner and a check the finished feature must pass, so the brief stays useful through the build.
+
+### Is there a free AI trust framework for product teams?
+
+The canvas works as one, applied a feature at a time. It draws on Microsoft's human-AI interaction guidelines and turns them into questions about one output in your product, ready to sit beside your organisation's AI policy.
+
+### When is a confidence score worth showing to users?
+
+Show one only when you know what it means for this task and that it helps people judge. Sources people can open give a reviewer something to check; an explanation written by AI can sound sure of a wrong answer. [Why AI earns trust when the review step hands control back to people](/insights/confidence-scores-dont-fix-trust-when-review-step-never) goes further.

@@ -21,6 +21,7 @@ Started 10 Oct 2026. Briefs and generation happen later.
 
 | Page | Band | Kind | What it shows | Ratio |
 | ---- | ---- | ---- | ------------- | ----- |
+| `/_unregistered` | slot | studio photo | FALLBACK, not a slot: what a page shows where its copy (26 Oct 2026) needs an image this register has no row for yet. `placeholderImage` warns in development for each one; give each its own row. | 3:2 |
 | `/` | hero | illustration | The product-decision survival model (`visual_plan`): how one consequential product decision survives from research, through design and coded prototype, into shipped software, with one Tcules practice carrying it across every step. | 5:4 |
 | `/` | client-recognition | icon | **Client logo SVG needed** for Dealpath, Benchmark Gensuite, JoVE and Ringier Media Switzerland. Home round 3 (11 Oct 2026): the logo wall shows real files only, no typeset wordmarks — Doodle's SVG and Eden AI's trimmed PNG (`public/clients/eden-ai.png`, copied from the previous site; an SVG is still wanted) lead, then the in-house set (Omny, LatitudePay, Quoter, Knovos, SafeXpay, Pledge, GT Tools, Incluude). Each missing client joins the wall when its file arrives. Supply the client's own published SVG, never a redraw, with its viewBox and measured density (`node scripts/client-mark-density.mjs`). | intrinsic (logo cell) |
 | `/` | ai-native-practice | studio photo | Tcules designers and engineers using AI in their own work (exploring options, prototyping in code, checking a build against the design), with a person making the call. | 3:2 |

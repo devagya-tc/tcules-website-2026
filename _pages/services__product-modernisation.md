@@ -4,13 +4,13 @@ slug: product-modernisation
 page_name: Product Modernisation
 page_type: service
 seo:
-  title: Product Modernisation Services for SaaS | Tcules
-  description: 'Product modernisation services for established software: redesign, simplify, replatform or rebuild part by part, so customers keep working while it changes.'
+  title: 'Software Product Modernisation Services for SaaS | Tcules'
+  description: 'Software product modernisation services for established SaaS: keep what customers value and make room for what comes next, one part at a time.'
   canonical: https://www.tcules.com/services/product-modernisation
   robots: index,follow
 social:
-  og_title: Product Modernisation Services for SaaS | Tcules
-  og_description: 'Product modernisation services for established software: redesign, simplify, replatform or rebuild part by part, so customers keep working while it changes.'
+  og_title: 'Software Product Modernisation Services for SaaS | Tcules'
+  og_description: 'Software product modernisation services for established SaaS: keep what customers value and make room for what comes next, one part at a time.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Product Modernisation for established SaaS and enterprise software.
   og_type: website
@@ -18,18 +18,34 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Product Modernisation Services for SaaS | Tcules
-  twitter_description: 'Product modernisation services for established software: redesign, simplify, replatform or rebuild part by part, so customers keep working while it changes.'
+  twitter_title: 'Software Product Modernisation Services for SaaS | Tcules'
+  twitter_description: 'Software product modernisation services for established SaaS: keep what customers value and make room for what comes next, one part at a time.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: product modernisation for established SaaS and enterprise software
   primary_buyer_question: What should this product preserve, simplify, redesign, replatform, rebuild or retire so it can support what comes next?
   supporting_questions:
-  - Should we redesign or rebuild?
+  - Should we redesign or rebuild our product?
   - Can we modernise one workflow instead of the whole product?
   - Will modernisation disrupt our current customers?
-  - Can you work with our engineers?
-  primary_query: product modernisation services
+  - How long does software modernisation take?
+  - What does a software modernisation project cost?
+  - Do you modernise enterprise software as well as SaaS?
+  - Is modernisation the same as a redesign?
+  primary_query: software product modernisation services
+  secondary_queries:
+  - software modernisation services
+  - SaaS product modernisation
+  - product modernisation services
+  - UI UX modernisation services
+  - modernise software without disrupting users
+  - redesign or rebuild our product
+  - modernise one workflow at a time
+  - product modernisation partner
+  - enterprise software modernisation
+  - modernisation without losing customers
+  - how long does software modernisation take
+  - software modernisation cost
 navigation:
   breadcrumb:
   - name: Home
@@ -57,34 +73,57 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - disposition
-  - transition
-  - proof
+  - selected-work
+  - what-you-get
+  - hard-parts
+  - how-it-runs
+  - services-on-their-own
+  - testimonials
+  - how-we-work-together
   - why-tcules
-  - specialist-routes
+  - industries
   - faq
   - enquiry
 page_composition:
-  visual_plan: preserve_simplify_redesign_replatform_rebuild
+  visual_plan: studio_spine_core_service_three_case_selected_work_then_what_you_get_then_what_to_keep_and_change
   media_bindings:
   - id: modernisation_benchmark_scope
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: benchmark-gensuite
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
     status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: modernisation_benchmark_code
-    role: demonstrate
-    supports_section: proof
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Redesigned Benchmark Gensuite scope selector with three views, Browse, Recents and Favourites, and Nearby, each with its own search boundary
   - id: modernisation_dealpath
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: dealpath
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
     status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Dealpath listing redesign in which Add to pipeline asks people to find and attach an existing deal before creating a new one
+  - id: modernisation_gold_image
+    role: demonstrate
+    supports_section: selected-work
+    card: gold-image-printing
+    asset_uri: null
+    status: IMAGE_ASSET_REQUIRED
+    source: Gold Image Printing case has no bound screen; pull the component sheet or a store and production screen from the live case media
+    alt_intent: Gold Image Printing store and production screens built from one set of components
+  - id: modernisation_benchmark_code
+    role: demonstrate
+    supports_section: how-it-runs
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Benchmark Gensuite legacy and redesigned attachments interface, side by side, from the coded prototype review
   testimonial_ids:
   - FP-GOLDIMAGE-NAVIGATION
+  - DRAFT-RYZEO-REPORTS
+  - DRAFT-VOVISTO-GOMES
+  - CLUTCH-RINGIER-SAILER
+  trust_module_policy: required_commercial_relation_module
 structured_data:
   types:
   - WebPage
@@ -94,131 +133,193 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH2_DRAFT_2026-10-08
+  content_state: ROLLOUT_DRAFT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
-  composition: SPECIFIED_NOT_VISUALLY_VALIDATED
-  production: NOT_PRODUCTION_VERIFIED
+  composition: NOT_COMPOSITION_VALIDATED
+  production: NOT_PRODUCTION_VALIDATED
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - EXACT_OCT1_PHASE6_SOURCE_DIFF
+  - IMAGE_ASSET_REQUIRED
   - CLIENT_MEDIA_RIGHTS_CONFIRM
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-modernisation.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-modernisation.md; Sol integration pass 26 Oct 2026; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct/log-core.md)
 ---
 
 *Product Modernisation services*
 
-# Modernise the product, keep the muscle memory
+# Software product modernisation services: keep what customers value, build what's next
 
-Product modernisation for SaaS and enterprise software that people use every day. Easier workflows, clearer structure and updated patterns, introduced part by part so customers keep their bearings while it changes.
+Product modernisation is for the customer who knows your product by heart and the prospect who sees it beside newer software in a demo. It is also for a roadmap that needs a new market, a new way to charge or AI features.
 
-[Start a conversation](#enquiry)
+Tcules provides software product modernisation services for established SaaS and enterprise software, changing them part by part while customers keep working.
 
-*Selected modernisation work: Benchmark Gensuite · Dealpath · Gold Image Printing · Ryzeo*
+*Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)*
 
-## What has become hard to change? {#recognition}
+[Start a modernisation enquiry](#enquiry)
 
-**"The interface feels years behind the product."** A redesign is overdue, but customers can't afford to relearn everything.
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"The workarounds have become the workflow."** Manual steps, special cases and extra roles now shape how people use the product.
+## Selected product modernisation work {#selected-work}
 
-**"Our design system no longer matches the live product."** Local fixes keep multiplying.
+### Benchmark Gensuite: current to prospects, familiar to customers
 
-**"The technology is changing and the experience has to survive it."** A new platform, a migration or new modules put existing workflows at risk.
-
-**"We want AI in a product people already rely on."** It has to fit the data, roles and judgement that are already there.
-
-## Five ways to modernise {#disposition}
-
-Most products need a mix. We decide part by part.
-
-| Choice | When it makes sense |
-|---|---|
-| **Keep** | A feature or habit still works well for customers |
-| **Simplify** | Several steps or states can safely become fewer |
-| **Redesign** | The product works underneath, but the screens or structure make it hard to use |
-| **Move to a new platform** | The technology must change and the product behaviour must survive the move |
-| **Rebuild or retire** | A part of the product gets in the way, or no longer does a useful job |
-
-## Change that works while it's happening {#transition}
-
-A great new design is no help if customers get lost on the way to it.
-
-**Before.** We study the live product, how customers use it, your analytics and support history, and the roles, rules and systems behind it.
-
-**During.** We decide what changes, what stays, which old and new parts run side by side, and how customers keep their bearings.
-
-**After.** We work with the people maintaining the product on the design system, the code and the rollout.
-
-## What we changed, and what we left alone {#proof}
-
-### Benchmark Gensuite: a new interface for a suite people use every day
-
-For a large environment, health and safety suite, we designed new shared screens and controls, including a clearer way to pick which part of the organisation you are looking at. We tested them as working prototypes in code against the habits long-time users rely on.
+Benchmark Gensuite's environment, health, safety and sustainability suite had to look like software built now without breaking the fast habits its users had formed. We began with the components every application shares, then proved them in one high-use control, the scope selector, as coded prototypes that Benchmark's engineers reviewed before wider implementation.
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Dealpath: change what's broken, keep what works
+### Dealpath: one action changed, three kept
 
-Of the four actions on a Dealpath listing, only "Add to pipeline" had a real problem: it always started a new deal. We redesigned that action so teams search for an existing deal first, tidied up the listing card, and left the other three actions as users knew them.
+An audit of Dealpath's deal-management software traced the trouble to one action: Add to pipeline opened a new deal even when the team already tracked one. The redesign searches existing deals first and largely keeps the view, comparable and pass actions, so it asks people to relearn a single step.
 
 [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
-### Gold Image Printing: online orders and production, redesigned together
+### Gold Image Printing: the store and the production system, redesigned as one
 
-We redesigned the customer ordering site and the internal production system as one product, with a shared set of interface components across both.
-
-<!-- awaiting client sign-off -->
-> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
-> **David Aghaei, Senior Partner, Gold Image Printing**
+Each online order at Gold Image Printing continues into artwork, scheduling, inventory and fulfilment in the production system its staff use. We watched that work, then designed one component set and style guide for both. Stakeholders reviewed the new flows as interactive prototypes, and we worked with Gold Image Printing's technical team on implementation.
 
 [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-### Ryzeo: deciding what to redesign first
+## What you get from our product modernisation services {#what-you-get}
 
-For Ryzeo's marketing automation platform, user interviews, analytics and a review of the product put reporting first. We followed with a new structure, prototypes and a shared set of interface parts.
+Our software modernisation services move an established product forward in stages, each one scoped and priced before it starts.
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+**What you receive**
 
-## Why teams trust us with established products {#why-tcules}
+- **A call on every part of the product:** keep, simplify, redesign, move to a new platform, rebuild or retire, agreed with your product and engineering leads.
 
-**We can tell what's useful from what's just old.** Habits that help people work are kept; the ones that slow them down go.
+- **A written record of what customers rely on:** the habits, shortcuts, saved work and reports that must survive the change.
 
-**We dig into how the business really runs.** Workflows, records, roles and connected systems are part of the redesign.
+- **One high-use workflow changed first,** designed in every state and tried with the people who use it before the next stage is planned.
 
-**Design can carry on into the build.** Our Design Systems, Design Engineering and Software Development teams can take the work into code.
+- **A plan for old and new running side by side,** so customers move across in stages.
 
-## Find the right kind of modernisation {#specialist-routes}
+- **Designs ready to build, or the build itself,** with our designers beside the people who maintain the product through each rollout.
 
-**[Product Redesign](/services/product-modernisation/product-redesign)** when the product works underneath but needs better workflows and screens.
+**Who does the work.** One senior product designer leads your modernisation and designs it hands-on, with an account lead looking after the project. Design engineers join to try a risky change in code, and developers when we build.
 
-**[Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation)** when old business rules and dependencies are built into the software.
+**What we need from you.** The live product, your analytics and support history, time with people who use it every day, and product and engineering leads who can agree what changes.
 
-**[Replatforming Product Design](/services/product-modernisation/replatforming-product-design)** when the product has to survive a move to new technology.
+**Where our part stops.** You decide what ships and when. Your platform team keeps your infrastructure, data and hosting, including any large cloud move. Our part ends with each stage designed and checked as it ships, unless you add the build.
 
-**[Product Modernisation Assessment](/audits/product-modernisation-assessment)** when you need to decide what to do before you do it.
+## What to keep and what to change in an established SaaS product {#hard-parts}
 
-## Frequently asked questions {#faq}
+**What customers do without looking.** Long-time customers work from memory: the shortcut, the saved filter, the report they open every Monday. We record those habits before any screen changes and treat them as part of the brief, because a fresher look that breaks them costs more than it gives.
 
-### Should we redesign or rebuild?
+Example: developers using [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) could begin a workflow with a template, an AI prompt or a blank canvas. Our redesign kept all three ways in and brought them into one search box.
 
-Redesign when the product works underneath and the screens or structure are the problem. Rebuild when the technology or the structure itself has stopped working. We look first, then recommend.
+**Work that happens outside the product.** Retyping, spreadsheets and weeks of manual set-up often carry the real workflow in an ageing product. We redesign the records behind the screens, so a detail entered once is there wherever it is needed next.
+
+Example: client onboarding at [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux) could take weeks of manual work, so we designed each client organisation as one record that every job and candidate message draws on.
+
+**What the business needs next.** A new market, a new way to charge or an AI feature usually needs a change underneath first, often to records that are retyped at every stage today. We choose the first move by what customers use most and what depends on it.
+
+Example: [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) wanted its product to do more for customers' growth and retention. Interviews, analytics, stakeholder conversations, a competitor study and an expert review together made reporting the first move.
+
+## How we modernise software without disrupting users {#how-it-runs}
+
+1. **Study the live product.** Its usage, your analytics and support history, and the people who use it every day.
+
+2. **Agree what changes and what stays,** part by part, with your product and engineering leads.
+
+3. **Change one high-use workflow first.** It shows how the change lands before the next stage is planned.
+
+4. **Design how old and new meet.** When both have to run for a while, we design how they coexist.
+
+5. **Stay through the rollout,** keeping the design system and the code in step with the people maintaining the product.
+
+## Product modernisation services you can hire on their own {#services-on-their-own}
+
+| Service | What changes | Best for |
+|---|---|---|
+| **[Product Redesign](/services/product-modernisation/product-redesign)** | Screens, structure and workflows, on the technology you have | Products that work underneath while their screens have aged |
+| **[Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation)** | The old system, replaced in stages after its hidden rules are mapped | Businesses whose rules are buried in old software |
+| **[Replatforming Product Design](/services/product-modernisation/replatforming-product-design)** | The customer side of a move to new technology | Teams whose customers must move with them to a new platform |
+| **[Product Modernisation Assessment](/audits/product-modernisation-assessment)** | A route for each part of the product, before any build | Teams that want the right route confirmed first |
+| **[Design Systems](/services/design-systems)** | One set of shared parts behind every screen | Products whose screens have drifted apart as they grew |
+
+## What clients say {#testimonials}
+
+> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
+
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
+
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
+
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For modernisation, a good first piece of work is one high-use workflow changed while customers carry on with the rest, or a [Product Modernisation Assessment](/audits/product-modernisation-assessment) when the route is unclear.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We know what to leave alone in a product people rely on.** Inside [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) existing component set, we kept standard interactions as they were and added new components only where the calendar and bookability work needed them.
+
+- **We prove the hard parts in code while they can still change.** [ConnectX](/case-studies/ai-native-building-energy-product-connectx) tried its new workspace in our coded demo on sample data, before any live integration, and we later took that demo through to a production-ready module.
+
+- **Senior people do the work, and clients keep us for years.** For three years, Primelis has come back to us for every one of its products, as an ongoing partnership.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+
+## Questions about software product modernisation services {#faq}
+
+### Should we redesign or rebuild our product?
+
+Usually some of each, decided part by part. Where a part works underneath and its screens get in the way, Tcules redesigns it; where a part blocks customers, we design its replacement or retire it. A [Product Modernisation Assessment](/audits/product-modernisation-assessment) can set the route for each area first.
 
 ### Can we modernise one workflow instead of the whole product?
 
-Yes. A focused change is often the better choice when the rest of the product works and customers rely on it.
+Yes. Tcules changes one workflow while customers carry on using the rest, as a pilot project at a fixed price agreed up front. Later stages are planned from what that first change shows. [How pilots work](/how-we-work#engagement-shapes)
 
 ### Will modernisation disrupt our current customers?
 
-We plan the change so customers can keep working throughout: how familiar workflows change, how old and new parts run side by side, and how the rollout happens in stages.
+Tcules plans modernisation without losing customers along the way, so they can keep working throughout. We agree how familiar workflows change and how old and new parts run side by side, then roll out one stage at a time.
 
-### Can you work with our engineers?
+### How long does software modernisation take?
 
-Yes. We can design and prototype inside your product team, or take on more of the build with our own engineers.
+The first stage is usually one workflow, with its length agreed before work starts. It finishes long before the whole product does, so customers see the change early and later stages are planned from what it shows.
+
+### What does a software modernisation project cost?
+
+It depends on how many parts change and which route each one takes. A redesign of one workflow costs far less than replacing a system, and Tcules prices each stage once its scope is agreed. [How pricing works](/how-we-work#engagement-shapes)
+
+### Do you modernise enterprise software as well as SaaS?
+
+Yes. We work on SaaS products and on the business software companies run internally, such as production and operations systems. What matters is how established the product is and how many people depend on it.
+
+### Is modernisation the same as a redesign?
+
+A redesign is one route within modernisation. Modernisation can also mean moving to a new platform, rebuilding a part or retiring one, and our glossary explains [what product modernisation means](/glossary/product-modernisation).
 
 ## Tell us what to keep and what to change {#enquiry}
 

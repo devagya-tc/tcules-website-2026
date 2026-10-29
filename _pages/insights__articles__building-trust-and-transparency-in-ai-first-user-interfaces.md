@@ -1,37 +1,45 @@
 ---
 route: /insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces
 slug: building-trust-and-transparency-in-ai-first-user-interfaces
-page_name: AI interfaces need calibrated trust, not maximum transparency
+page_name: 'Trust and transparency in AI interfaces: what to show, and how much'
 page_type: article
 seo:
-  title: Trust and transparency in AI product interfaces | Tcules
-  description: 'Calibrate trust in AI interfaces: show the AI''s role, sources, authority, uncertainty and recovery in proportion to what is at stake for the user.'
+  title: 'Trust and transparency in AI interfaces: a guide | Tcules'
+  description: 'Trust and transparency in AI interfaces: the five things to show, how much review each AI action needs, and how to test whether people rely on it well.'
   canonical: https://www.tcules.com/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces
   robots: index,follow
 social:
-  og_title: Trust and transparency in AI product interfaces | Tcules
-  og_description: 'Calibrate trust in AI interfaces: show the AI''s role, sources, authority, uncertainty and recovery in proportion to what is at stake for the user.'
+  og_title: 'Trust and transparency in AI interfaces: a guide | Tcules'
+  og_description: 'Trust and transparency in AI interfaces: the five things to show, how much review each AI action needs, and how to test whether people rely on it well.'
   og_image: https://www.tcules.com/assets/og/insights.png
   og_image_alt: Tcules social card headed Insights, on a white background with the Tcules wordmark.
   og_type: article
   article_published_time: '2025-05-09'
-  article_modified_time: '2026-09-08'
+  article_modified_time: '2026-10-26'
   og_url: https://www.tcules.com/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Trust and transparency in AI product interfaces | Tcules
-  twitter_description: 'Calibrate trust in AI interfaces: show the AI''s role, sources, authority, uncertainty and recovery in proportion to what is at stake for the user.'
+  twitter_title: 'Trust and transparency in AI interfaces: a guide | Tcules'
+  twitter_description: 'Trust and transparency in AI interfaces: the five things to show, how much review each AI action needs, and how to test whether people rely on it well.'
   twitter_image: https://www.tcules.com/assets/og/insights.png
 search_context:
-  primary_intent: AI interfaces need calibrated trust, not maximum transparency
+  primary_query: 'trust and transparency in AI interfaces'
+  secondary_queries:
+  - 'explainable AI UX'
+  - 'AI transparency UX'
+  - 'how to show AI sources'
+  - 'AI uncertainty in the interface'
+  - 'calibrated trust in AI'
+  - 'AI disclosure in UI'
+  primary_intent: 'trust and transparency in AI interfaces'
   primary_buyer_question: When should an AI interface identify itself and require review?
   key_entities:
   - AI interface trust
   - human review
   - calibrated reliance
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -40,7 +48,7 @@ navigation:
     url: /insights
   - name: Articles
     url: /insights/articles
-  - name: AI interfaces need calibrated trust, not maximum transparency
+  - name: 'Trust and transparency in AI interfaces: what to show, and how much'
     url: /insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces
 subscription:
   form: insights_newsletter
@@ -61,33 +69,47 @@ render:
   band_order:
   - trust-should-match-capability
   - five-contracts-have-to-be-visible-to-the-person
+  - five-things-in-omny-ai-and-buildtwin
   - consequence-determines-friction
   - an-assistant-proposes-pausing-a-campaign
   - match-authority-and-recovery-to-consequence
   - evaluate-the-relationship-not-only-task-speed
   - when-should-an-ai-interface-identify-itself-and-
+  - faq
+  - related-reading
 structured_data:
   types:
   - WebPage
   - Article
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   article_publisher_ref: https://www.tcules.com/#organization
   article_author_source: editorial.author
   article_date_published_source: editorial.published_at
   article_date_modified_source: editorial.modified_at
   article_date_published: '2025-05-09'
-  article_date_modified: '2026-09-08'
+  article_date_modified: '2026-10-26'
   article_authors:
   - type: Person
     name: Shoghi Bagul
-    profile_url: null
-    profile_status: PROFILE_ROUTE_REQUIRED
+    profile_url: https://www.tcules.com/insights/authors/shoghi-bagul
+    job_title: Product Designer
+    works_for_ref: https://www.tcules.com/#organization
 editorial:
   author: Shoghi Bagul
+  author_role: Product Designer, Tcules
   reviewer: null
   published_at: '2025-05-09'
-  modified_at: '2026-09-08'
+  modified_at: '2026-10-26'
+  date_as_displayed: Updated 26 October 2026
+  reading_time_as_displayed: 7 min read
+  key_takeaways:
+  - "People should trust an AI feature as far as it can do the job, and the interface decides how far they do."
+  - "Five things need to be visible: what the AI is doing, the evidence behind it, what it may change alone, how sure it is and how to recover."
+  - "Raise review and control as the consequence, the uncertainty and the difficulty of reversal rise. Low-consequence help can stay fast."
+  - "Before an AI moves from suggesting to acting, ask for approval, then show the status and a way back afterwards."
+  - "Measure whether people rely on the AI in the right measure, alongside task speed."
 release:
   content_state: CONTENT_READY
   site_release_state: SITE_RELEASE_HOLD
@@ -124,6 +146,9 @@ page_composition:
       match-authority-and-recovery-to-consequence: argument_thesis
       evaluate-the-relationship-not-only-task-speed: argument_thesis
       when-should-an-ai-interface-identify-itself-and-: argument_thesis
+      five-things-in-omny-ai-and-buildtwin: case_or_artefact_proof
+      faq: faq
+      related-reading: related_link
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -141,45 +166,67 @@ page_composition:
 
 *Insights · Article*
 
-# AI interfaces need calibrated trust, not maximum transparency
+# Trust and transparency in AI interfaces: what to show, and how much
 
-An AI interface earns calibrated trust by showing what a person needs to understand the system's role, inspect a consequential output, intervene and recover. This article explains how role, evidence, authority, uncertainty and recovery should change with consequence, using product situations rather than a universal checklist for AI trust.
+By [Shoghi Bagul](/insights/authors/shoghi-bagul) · Published 9 May 2025 · Updated 26 October 2026 · 7 min read
 
-By Shoghi Bagul · Published 9 May 2025 · Updated 8 September 2026
+People should trust an AI feature as far as it can do the job, and the interface shapes how far they do.
 
-## AI trust should match what the system can actually do {#trust-should-match-capability}
+This article on trust and transparency in AI interfaces names the five things a person needs to see. It shows how much review and control to add as the cost of a mistake rises. It ends with a way to test whether people rely on the AI in the right measure.
 
-An interface can create over-trust by sounding certain, hiding source limits or acting before the person understands the scope. It can create under-trust by asking for review without explaining what deserves attention.
+**Key takeaways**
 
-The design target is appropriate reliance.
+- People should trust an AI feature as far as it can do the job, and the interface decides how far they do.
+- Five things need to be visible: what the AI is doing, the evidence behind it, what it may change alone, how sure it is and how to recover.
+- Raise review and control as the consequence, the uncertainty and the difficulty of reversal rise. Low-consequence help can stay fast.
+- Before an AI moves from suggesting to acting, ask for approval, then show the status and a way back afterwards.
+- Measure whether people rely on the AI in the right measure, alongside task speed.
+
+## Calibrated trust in AI: how far people should rely on a feature {#trust-should-match-capability}
+
+An interface creates over-trust when it sounds certain, hides the limits of its sources or acts before the person understands the scope. It creates under-trust when it asks for review without saying what deserves attention.
+
+The design target is appropriate reliance: people trusting the AI as far as it has earned, and no further.
 
 The [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) treats trustworthiness as contextual and tied to risk management. Microsoft's [Guidelines for Human-AI Interaction](https://www.microsoft.com/en-us/research/publication/guidelines-for-human-ai-interaction/) similarly distinguish what a system should communicate initially, during interaction, when wrong and over time.
 
-## Five contracts have to be visible to the person {#five-contracts-have-to-be-visible-to-the-person}
+## AI transparency UX: five things the interface should make visible {#five-contracts-have-to-be-visible-to-the-person}
 
-Tcules applies these principles in [AI Product UX](/services/ai-product-ux).
+Each of the five answers a question the person is silently asking. Tcules designs these moments in [AI Product UX](/services/ai-product-ux), so people can follow, check and correct what the AI does.
 
-### Role defines what the AI system is doing {#role-defines-what-the-ai-system-is-doing}
+### Role: what is the AI doing? {#role-defines-what-the-ai-system-is-doing}
 
-What is the AI doing: retrieving, generating, ranking, recommending or acting? A chat interface can hide these differences.
+Is it fetching existing material, writing something new, ranking options, recommending one or taking an action? A chat window can hide the difference.
 
-### Evidence lets a person inspect the basis of an AI output {#evidence-lets-a-person-inspect-the-basis-of-an-ai-output}
+### Evidence: how should an AI show its sources? {#evidence-lets-a-person-inspect-the-basis-of-an-ai-output}
 
-Which sources, records or signals shaped the output? Show provenance where it changes the decision. Do not produce decorative citations that do not support the statement.
+Which sources, records or signals shaped it? Show the origin wherever it changes the decision, and cite only sources that support the statement.
 
-### Authority defines what the AI system may change {#authority-defines-what-the-ai-system-may-change}
+### Authority: what may the AI change on its own? {#authority-defines-what-the-ai-system-may-change}
 
-What may happen without approval? Separate suggestion from commitment. Make limits visible before a consequential action.
+Separate suggestion from commitment. Make the limits visible before any consequential action.
 
-### Uncertainty changes how confidently the interface should present an answer {#uncertainty-changes-how-confidently-the-interface-should-present-an-answer}
+### Uncertainty: how sure is the answer, and where does that show? {#uncertainty-changes-how-confidently-the-interface-should-present-an-answer}
 
-Communicate known limits in a form the user can act on. A generic disclaimer after the output is not useful uncertainty.
+Show known limits in a form the user can act on, beside the part of the answer they affect.
 
-### Recovery gives people a way back after a wrong AI action {#recovery-gives-people-a-way-back-after-a-wrong-ai-action}
+### Recovery: how does a person get back after a wrong action? {#recovery-gives-people-a-way-back-after-a-wrong-ai-action}
 
-Can the person edit, retry, compare, undo, escalate or restore a prior state? Recovery is part of the interaction, not an error-page concern.
+Can they edit, retry, compare, undo, escalate or restore an earlier state? Build recovery into the interaction itself, with the same care as the main flow.
 
-## Higher consequence justifies more review and control {#consequence-determines-friction}
+## How Omny AI and BuildTwin made the five things visible {#five-things-in-omny-ai-and-buildtwin}
+
+Two products we designed show the five at work in very different settings.
+
+[Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) writes product benefits and use cases for Amazon sellers. The old design filled the content area with suggestions before the person did anything, so acceptance had become automatic. We made the final content area start empty, kept suggestions in their own panel and made adding one a deliberate click, which put authority back with the person.
+
+Role became visible through colour: purple for anything the AI generated, blue for anything a person typed, chose or overrode.
+
+[BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) uses AI to check structural-engineering drawings, and a quality engineer still signs each one off. Every check links to its drawing reference and source document, which covers evidence.
+
+When a check cannot run, the interface names the missing information, so uncertainty arrives in a form the engineer can act on. Recovery is an override: a new status plus a reason, with the original result kept on the record.
+
+## How much review does each kind of AI action need? {#consequence-determines-friction}
 
 | AI role | Example | Appropriate control |
 |---|---|---|
@@ -188,25 +235,29 @@ Can the person edit, retry, compare, undo, escalate or restore a prior state? Re
 | Decide | Approve eligibility | Human authority, contestability and policy trace |
 | Act | Update many records | Preview scope, permission, stop and recovery |
 
-Low-consequence assistance can remain fast. Requiring confirmation for every grammar suggestion would make the product unusable. The control should rise with consequence, uncertainty and reversibility.
+Low-consequence help can stay fast. Asking for confirmation on every grammar suggestion would make the product unusable. Raise the control as consequence, uncertainty and difficulty of reversal rise.
 
-## An assistant proposes pausing a campaign {#an-assistant-proposes-pausing-a-campaign}
+## A worked example: an AI recommendation to pause a campaign {#an-assistant-proposes-pausing-a-campaign}
 
 An assistant proposes pausing a campaign because performance has declined.
 
-A trustworthy interface shows the period and signals used, distinguishes observed data from interpretation, identifies the records or spend affected, offers alternatives and asks for approval before action. If the user approves, the system records who acted, which recommendation version was used and how to reverse the change.
+A trustworthy interface shows the period and signals it used. It separates observed data from interpretation. It names the records or spend affected and offers alternatives. Then it asks for approval before acting. If the user approves, the system records who acted, which recommendation version it used and how to reverse the change.
 
-The same surface should not imply that the model “knows” the cause of decline unless the evidence establishes it.
+The same screen presents any cause of the decline as the model's interpretation until the evidence establishes it.
 
-## Match authority and recovery to consequence {#match-authority-and-recovery-to-consequence}
+## Before the AI acts: approval, status and a way back {#match-authority-and-recovery-to-consequence}
 
-An AI output may inform a decision, but an action must cross an authority gate. The gate is where the five contracts are cashed in: if any of them is missing at that moment, the person is approving something they cannot see. After execution, the product needs a visible state and a recovery path, with stale or missing evidence shown where it changes the decision.
+An AI output can inform a decision. An action has to pass an approval step first. That step is where the five elements matter most. If any is missing, the person approves something they cannot see.
+
+After execution, the product needs a visible status and a recovery path. It should also show stale or missing evidence wherever that changes the decision.
+
+This step is about to carry more weight. Agents are starting to chain actions across tools: update the record, draft the message, schedule the send. Approval then moves from one output to a plan of several steps. The products people trust with that kind of delegation will show the whole plan before it runs, let a person approve it step by step or all at once, and keep a record that can be rewound. Much of the next round of AI interface work will be designing that plan view well.
 
 The [AI Trust and Control Canvas](/tools/ai-trust-control-canvas) turns the decisions in this article into a one-page worksheet for a single output.
 
-## Evaluate the relationship, not only task speed {#evaluate-the-relationship-not-only-task-speed}
+## How to test whether people rely on the AI the right amount {#evaluate-the-relationship-not-only-task-speed}
 
-Test whether people can:
+Measure reliance as well as task speed. Test whether people can:
 
 - describe what the AI did and did not do;
 - locate the evidence required for a decision;
@@ -216,10 +267,39 @@ Test whether people can:
 - recover a consequential action;
 - adjust reliance after the system succeeds or fails.
 
-Tcules applies these questions through [Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery). We are not naming the client work behind this until we can republish the evidence with their agreement.
+Tcules applies these questions through [Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery), and the Omny AI and BuildTwin work above shows the answers in real products.
 
-## When should an AI interface identify itself and require review? {#when-should-an-ai-interface-identify-itself-and-}
+## AI disclosure in the UI: when to label output and require review {#when-should-an-ai-interface-identify-itself-and-}
 
-Identify generated material when provenance changes how it should be judged, then keep the relevant controls close to the output: edit, retry, compare, reject, undo or escalate. A generic “AI-powered” badge does not explain authority, evidence or recovery.
+Identify generated material when its origin changes how it should be judged. Then keep the controls close to the output: edit, retry, compare, reject, undo or escalate. A generic “AI-powered” badge leaves authority, evidence and recovery unexplained.
 
-Before an AI action crosses from suggestion into execution, name the consequence and reversibility. Low-consequence, easily reversed changes may need lightweight review. Actions that affect access, money, publication, eligibility or another person's work need an explicit confirmation or an accountable human checkpoint. This is a product-control decision, not a promise that a model is error-free.
+Before an AI action crosses from suggestion into execution, name its consequence and whether it can be reversed. Low-consequence changes that are easy to reverse need only light review. Actions that affect access, money, publication, eligibility or another person's work need an explicit confirmation or an accountable human checkpoint. Design that checkpoint on the assumption that the model will sometimes be wrong.
+
+## Questions about trust and transparency in AI interfaces {#faq}
+
+### How much should an AI feature explain to users?
+
+Enough for the person to judge the output at the moment they act on it. Low-stakes help, such as a grammar suggestion, needs very little. Anything that changes money, access, publication or another person's work should show its role, sources, authority, uncertainty and how to undo it.
+
+### How do you show uncertainty in an AI interface?
+
+Put it beside the part of the answer it affects, in a form the person can act on. Say what is missing or weak, and what would resolve it, the way BuildTwin names the information a blocked check needs. A single confidence number on its own gives people little to do.
+
+### When should an AI product show its sources?
+
+Whenever the source changes how the output should be judged, as with a summary of contracts or an answer drawn from account data. Cite only sources that support the statement. Let people follow each one back to the record it came from.
+
+### How do you build calibrated trust in AI features?
+
+Show the AI's role, evidence, authority, uncertainty and recovery in proportion to what is at stake, then test reliance alongside speed. People should be able to say what the AI did, find the basis for a decision and recover a bad action. Calibrated trust means relying on it as far as it has earned.
+
+### What is explainable AI UX?
+
+It is the interface side of explainability: showing people why an AI produced an output, in terms they can check. That usually means the sources, signals or rules behind it. Explaining how a model works internally is a separate, technical field; in the product, the test is whether the person knows what to do next.
+
+## Related reading on AI trust and control {#related-reading}
+
+- [AI Trust and Control Canvas](/tools/ai-trust-control-canvas): a one-page worksheet for a single AI output.
+- [Why confidence scores leave AI usage flat, and what the review step should do](/insights/confidence-scores-dont-fix-trust-when-review-step-never)
+- [Which generative AI pattern fits your feature?](/insights/articles/generative-ai-product-patterns-for-saas)
+- [Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery): how Tcules designs these moments into AI products.

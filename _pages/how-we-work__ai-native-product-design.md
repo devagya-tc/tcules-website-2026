@@ -4,13 +4,13 @@ slug: ai-native-product-design
 page_name: AI-native Product Design
 page_type: practice
 seo:
-  title: 'AI-native Product Design: How Our Designers Use AI | Tcules'
-  description: 'How Tcules designers use AI in their work: inspecting live products, sorting research and checking design against code, with people deciding what it means.'
+  title: 'AI in Product Design: How Our Designers Use It | Tcules'
+  description: 'AI in product design at Tcules: what our designers now cover with AI, from reviewing a live product to checking design against code, and what people decide.'
   canonical: https://www.tcules.com/how-we-work/ai-native-product-design
   robots: index,follow
 social:
-  og_title: 'AI-native Product Design: How Our Designers Use AI | Tcules'
-  og_description: 'How Tcules designers use AI in their work: inspecting live products, sorting research and checking design against code, with people deciding what it means.'
+  og_title: 'AI in Product Design: How Our Designers Use It | Tcules'
+  og_description: 'AI in product design at Tcules: what our designers now cover with AI, from reviewing a live product to checking design against code, and what people decide.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules AI-native Product Design.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI-native Product Design: How Our Designers Use AI | Tcules'
-  twitter_description: 'How Tcules designers use AI in their work: inspecting live products, sorting research and checking design against code, with people deciding what it means.'
+  twitter_title: 'AI in Product Design: How Our Designers Use It | Tcules'
+  twitter_description: 'AI in product design at Tcules: what our designers now cover with AI, from reviewing a live product to checking design against code, and what people decide.'
   twitter_image: IMAGE_ASSET_REQUIRED
 navigation:
   breadcrumb:
@@ -31,15 +31,16 @@ navigation:
     url: /how-we-work/ai-native-product-design
 render:
   band_order:
-  - definition
-  - current-practice
-  - delegation
-  - project-knowledge
-  - checks
+  - design-run
+  - what-you-get
+  - people-decide
+  - what-stays
+  - whats-next
+  - your-rules
   - faq
   - enquiry
 release:
-  content_state: BATCH5_DRAFT_2026-10-08
+  content_state: EXCELLENCE_DRAFT_2026-10-14_W4; SOL_INTEGRATION_2026-10-26 (typical AI-assisted design run leads, written as present capability)
   site_release_state: SITE_RELEASE_HOLD
   composition: NOT_COMPOSITION_VALIDATED
   production: NOT_PRODUCTION_VALIDATED
@@ -51,7 +52,7 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/how-we-work__ai-native-product-design.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/how-we-work__ai-native-product-design.md; repositioned in 28-excellence-14-oct/drafts (14 Oct 2026)
 conversion:
   form: project_enquiry
   anchor: enquiry
@@ -70,13 +71,21 @@ conversion:
     post_submit_scheduling: optional_only_if_runtime_supports
   processor: cms_record_and_notify
 search_context:
-  primary_intent: understand Tcules AI-native Product Design
-  primary_buyer_question: What does Tcules mean by AI-native Product Design, and where do humans remain responsible?
-  primary_query: AI-native Product Design
+  primary_intent: find out what AI changes about working with Tcules, and what stays with people
+  primary_buyer_question: Does Tcules use AI, and what does that change for our product?
+  primary_query: 'AI in product design'
+  secondary_queries:
+  - 'how designers use AI'
+  - 'AI-native design studio'
+  - 'senior designers with AI tools'
+  - 'AI for design reviews'
+  - 'AI design to code checks'
+  - 'will AI replace product designers'
+  - 'how do I check an agency is using AI responsibly'
   supporting_questions:
-  - Does AI design the product?
-  - Will AI be part of every stage of our project?
-  - Does this change how we work with you day to day?
+  - What can a small design team cover with AI?
+  - Who decides what the AI output means?
+  - Does AI change who leads our work or how we review it?
   - What if our company has rules about AI on supplier projects?
 page_composition:
   testimonial_ids: []
@@ -90,77 +99,90 @@ structured_data:
 
 *How we work · AI-native Product Design*
 
-# AI-native Product Design: how our designers work with AI
+# AI in product design, with people making every call
 
-Our designers direct AI tools and small purpose-built agents through set parts of a project: inspecting a live product, sorting research, comparing design with code and testing ideas in working prototypes. People decide what the results mean.
+Our designers now hand the legwork of a product review to AI. It walks through your live product, sorts what it finds and drafts corrections, and a designer judges each result before the next step starts.
+
+A small team sees more of your product before anyone changes it, so you choose between more options with more of the picture in view. People decide what the results mean.
+
+We call this AI-native Product Design. The [glossary defines the term](/glossary/ai-native-product-design).
 
 [Start a conversation](#enquiry)
 
-## What AI-native means at Tcules {#definition}
+## A typical AI-assisted design run, step by step {#design-run}
 
-Plenty of teams use AI for single tasks: summarise an interview, draft a variation, write a function. That is AI-assisted design.
+Here is a run our designers use when the screens of a live product have drifted away from its design system. At each step, AI does the legwork and a person checks the result.
 
-AI-native goes further. We reshape the workflow around tasks that repeat. Project material is organised so software can use it, a repeated check becomes a small agent or script, and review is built into the workflow itself.
-
-The term describes how we work, whatever kind of product we are designing.
-
-## Where AI shows up in a project {#current-practice}
-
-| Part of the work | What software handles | What the designer decides | What you get |
+| Step | What AI does | What a person checks | What the designer can do next |
 |---|---|---|---|
-| **Inspecting your live product** | Moving through screens, collecting states, grouping similar patterns | Which differences matter and what to investigate | A wider view of the existing product before anyone proposes a change |
-| **Research and project material** | Transcribing, sorting and retrieving interviews, notes and documents | What the material means and which sources deserve weight | Findings you can trace back to what users and stakeholders said |
-| **Design system and design-to-code checks** | Comparing the design files with the live product, screen by screen and state by state | Whether a difference is a mistake, a deliberate exception or a product choice | Mismatches between design and code listed screen by screen, so they can be fixed before release |
-| **Exploring and prototyping** | Generating alternatives and assembling small working prototypes | Which direction is worth pursuing and what the prototype must test | More options you can click through before committing to one |
-| **Supporting the build** | Well-defined code changes and repetitive production work | Acceptance, interaction details, accessibility and fit with the product | Design that stays close to the working software |
+| **1. Capture the live product** | Walks through the product in a browser and saves each screen in every state it reaches: empty, loading, error and full | That the walk covered the roles and journeys that matter, adding any it missed | Work from the product your customers see today |
+| **2. Sort into patterns** | Groups the captures by pattern: every table, form, filter and confirmation | Which groups are one pattern and which only look alike | See every version of a pattern side by side |
+| **3. Compare with the design system** | Checks each pattern against the design system's components and rules | Which differences are deliberate and which are drift | Separate the variations to keep from the ones to fix |
+| **4. List the exceptions** | Drafts a list of exceptions, each with the screens where it appears | Which exceptions harm users most, and whether to fix each one, keep it or add it to the system | Bring you a short, ranked list with the screens attached |
+| **5. Propose and test a coded correction** | Drafts the correction in code and runs the design-system and accessibility checks agreed for the project | A design engineer reads the code and tries it in the browser | Judge the fix working in the product's own states |
+| **6. Designer sign-off** | Reruns the checks on the final version | The senior designer approves, revises or rejects the change | Hand your engineers a change ready for their own review |
 
-The mix changes from project to project, depending on the task and your requirements.
+Code handed over for release still goes through the reviews and tests your project has agreed. The same split, AI on the repetitive work and a person on each judgement, runs through the rest of our work.
 
-## How we choose what to hand to software {#delegation}
+## How designers use AI in research, options and production {#what-you-get}
 
-We delegate tasks. Product design itself stays with designers.
+| What you get | How AI helps the designer get there |
+|---|---|
+| **Findings you can trace** to what users and your team said | Interviews, notes and documents are transcribed, sorted and kept searchable |
+| **More options to click through** before you commit to one | Alternatives and small working prototypes are put together from the designer's brief |
+| **Design that stays close to the working software** | Well-defined, repetitive production tasks go to tools, and people check the results |
 
-- **A script** when a transformation repeats exactly.
-- **An agent** for a bounded job across several tools, with clear inputs, limits and a way to check the result.
-- **A person** for unclear goals, disagreeing stakeholders, domain knowledge, taste, and any call with real consequences for your users.
+The mix changes with the project and with your rules.
 
-We also try out new ways of working in our [Future Interfaces Lab](/future-interfaces-lab), away from client projects. One Lab experiment, the AI Design Audit Agent, asks how far AI can assist with a first-pass design critique without mixing up what it observed with what that means.
+## Which design calls stay with people, and how AI work is checked {#people-decide}
 
-## Agents get the same project material a designer would {#project-knowledge}
+**What stays with a person.** Designers frame the problem, choose the direction and decide what goes into the design. Taste, domain knowledge, disagreements in your team and anything with real consequences for your users stay with a person.
 
-An agent working on a real product needs what a designer needs: the research, current screens, component rules, product documents, code, agreed choices and the limits of its authority.
+**What goes to software.** We hand a task to software when the goal is clear and the result can be checked. The tool gets the same project material a designer would use, organised so the right part reaches each task.
 
-So we organise that material and bring the right part of it to each task. Clear tokens and documented component states help here too, because people and tools then follow the same rules.
+**How results are checked.** We check results in the way their task needs. Some checks run against your design system, accessibility standards or business rules. A designer reviews wherever no automatic check can answer.
 
-## People check the work before it reaches you {#checks}
+**When a result counts.** A generated screen is accepted when it passes those checks. A comparison becomes a finding when a designer understands it. Code handed over for release goes through the reviews and tests the project has agreed.
 
-Producing options is the easy part. Knowing which one is right is the job.
+## Senior designers with AI tools: who leads and when you review {#what-stays}
 
-Checks fit the task: design system rules, accessibility expectations, agreed states, product requirements and business rules. Where no automatic test can settle the question, a designer reviews the work.
+A senior designer leads the project, supported by an account lead. You review at the points agreed at the start. AI changes how much ground the team covers, and the senior designer still decides what goes forward.
 
-A generated screen is accepted only once it passes those checks. A comparison result becomes a finding only once someone understands it. Code meant for release goes through whatever review, testing and sign-off the project has agreed.
+AI runs through how our studio works. On your project, you decide how far it reaches: some clients want it used widely, others limit it to tasks that never touch their data.
 
-Craft still counts too: framing the problem, writing, interaction design, visual judgement, and knowing when to ignore the machine entirely.
+We try out new ways of working in our [Future Interfaces Lab](/future-interfaces-lab), away from client projects. One Lab experiment asks how far AI can help with a first-pass design review.
 
-## Frequently asked questions {#faq}
+## Where AI-native product design goes next {#whats-next}
 
-### Does AI design the product?
+Today, AI takes the legwork of a product review, a research sort or a first prototype. We can see the next step coming. We expect agents to keep a live product and its design system in step between releases, prototypes to be generated from a design system and a brief, and research to stay searchable for as long as a client's rules allow.
 
-No. Designers frame the problem, choose the direction and decide what goes into the design. AI tools carry defined tasks inside that work, and their output is reviewed before it reaches you.
+As that happens, our designers spend less time producing and more time deciding: what the product should be, which options deserve building and whether the result is good enough for your customers. That is the work this practice is built around.
 
-### Will AI be part of every stage of our project?
+## Tell us your AI rules before the project starts {#your-rules}
 
-No. We use it where a task suits it. Some engagements use it widely, others hardly at all, and AI is not a prerequisite for working with us.
+If your company limits which AI tools suppliers may use, or what material they may share with them, tell us first. We agree the tools and set-up with you and record any specific commitments in the agreement.
 
-### Does this change how we work with you day to day?
+For data handling and procurement questions, see [what happens to your material when we use AI tools](/how-we-work/ai-transparency).
 
-Very little. You still deal directly with the designers and engineers on your project, and review work at the same points. What changes is how much of your product the team can cover.
+## Questions about AI in product design {#faq}
 
-### What if our company has rules about AI on supplier projects?
+### How does Tcules use AI in product design?
 
-Tell us when we scope the project. We will talk through which tools and set-ups suit your rules, and write any specific commitments into the agreement.
+Our designers use AI to walk through live products, compare screens with the design system and draft coded corrections. They also use it to sort research and build small prototypes. A person checks each result, and people decide what the results mean.
 
-## Tell us about your product {#enquiry}
+### Does using AI make design work faster or cheaper?
+
+It changes how much ground a small team covers: more of your live product reviewed, more research sorted and more options to click through before you commit. People still make the calls. Each engagement is priced on its agreed scope before work starts.
+
+### Will AI replace product designers?
+
+No. On our projects, AI takes well-defined tasks whose results can be checked, and designers keep the framing, the direction and the judgement about what is good. The role is moving towards directing that work, which puts more of a designer's attention on the parts of a product that need taste and care.
+
+### How do I check that a design studio uses AI responsibly?
+
+Ask which tasks go to AI, how the results are checked, who signs off and what happens to your material. Our answer to the last one is on the page about [what happens to your material when we use AI tools](/how-we-work/ai-transparency).
+
+## Tell us about the product you want designed {#enquiry}
 
 Tell us what you are designing, fixing or rebuilding. If your company has rules about AI on supplier projects, mention them here.
 

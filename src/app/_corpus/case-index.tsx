@@ -95,7 +95,10 @@ function itemOf(
     ctaLabel?: string;
     band: string;
   },
-): CaseItem {
+): CaseItem | null {
+  /* Only a line that links a case is a case (the 26 Oct 2026 copy adds testimonial and FAQ bands
+     whose labelled lines, "**4.8 on Clutch.** …", are not); a filing drops a link-less item anyway. */
+  if (!fields.href?.startsWith('/case-studies/')) return null;
   return {
     id: fields.href ?? fields.title,
     href: fields.href ?? '',
@@ -122,7 +125,7 @@ function featuredItem(
   refs: Readonly<Record<string, CorpusCaseRef>>,
   block: Extract<CorpusBlock, { type: 'item' }>,
   band: string,
-): CaseItem {
+): CaseItem | null {
   const bodyHtml: string[] = [];
   let href: string | undefined;
   let ctaLabel: string | undefined;
@@ -173,7 +176,7 @@ function labelledItem(
   refs: Readonly<Record<string, CorpusCaseRef>>,
   block: Extract<CorpusBlock, { type: 'labelled' }>,
   band: string,
-): CaseItem {
+): CaseItem | null {
   const link = firstLink(block.label);
   return itemOf(page, refs, {
     title: runIn(text(block.label)),
@@ -210,9 +213,13 @@ function sectionOf(
   const items: CaseItem[] = [];
   let quote: TestimonialItem | undefined;
   for (const block of band.blocks) {
-    if (block.type === 'item') items.push(featuredItem(page, refs, block, band.id));
-    else if (block.type === 'labelled') items.push(labelledItem(page, refs, block, band.id));
-    else if (block.type === 'paragraph') {
+    if (block.type === 'item') {
+      const item = featuredItem(page, refs, block, band.id);
+      if (item) items.push(item);
+    } else if (block.type === 'labelled') {
+      const item = labelledItem(page, refs, block, band.id);
+      if (item) items.push(item);
+    } else if (block.type === 'paragraph') {
       const item = boldLedItem(page, refs, block, band.id);
       if (item) items.push(item);
     } else if (block.type === 'quote') quote = testimonialItem(block, ratings, avatars);

@@ -1,16 +1,16 @@
 ---
 route: /glossary/design-system-adoption
 slug: design-system-adoption
-page_name: Design-System Adoption
+page_name: Design System Adoption
 page_type: defined_term
 seo:
-  title: What is design system adoption? Meaning and example | Tcules
-  description: Design system adoption is repeated use of shared assets and decisions in real product work because they create a dependable route to delivery.
+  title: 'What is design system adoption? Meaning and metrics | Tcules'
+  description: 'What is design system adoption? How far teams use the shared system in released product, the metrics that show it, and why adoption stalls.'
   canonical: https://www.tcules.com/glossary/design-system-adoption
   robots: index,follow
 social:
-  og_title: What is design system adoption? Meaning and example | Tcules
-  og_description: Design system adoption is repeated use of shared assets and decisions in real product work because they create a dependable route to delivery.
+  og_title: 'What is design system adoption? Meaning and metrics | Tcules'
+  og_description: 'What is design system adoption? How far teams use the shared system in released product, the metrics that show it, and why adoption stalls.'
   og_image: https://www.tcules.com/assets/og/glossary.png
   og_image_alt: Tcules social card headed Glossary, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,34 +18,45 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is design system adoption? Meaning and example | Tcules
-  twitter_description: Design system adoption is repeated use of shared assets and decisions in real product work because they create a dependable route to delivery.
+  twitter_title: 'What is design system adoption? Meaning and metrics | Tcules'
+  twitter_description: 'What is design system adoption? How far teams use the shared system in released product, the metrics that show it, and why adoption stalls.'
   twitter_image: https://www.tcules.com/assets/og/glossary.png
 search_context:
   primary_intent: what is design-system adoption
   primary_buyer_question: How do you measure design-system adoption?
+  primary_query: 'what is design system adoption'
+  secondary_queries:
+  - 'design system adoption meaning'
+  - 'how to measure design system adoption'
+  - 'design system adoption metrics'
+  - 'design system adoption rate'
+  - 'why design system adoption fails'
   key_entities:
-  - Design-System Adoption
+  - Design System Adoption
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
     url: /
   - name: Glossary
     url: /glossary
-  - name: Design-System Adoption
+  - name: Design System Adoption
     url: /glossary/design-system-adoption
 render:
   band_order:
+  - measure
   - practice
   - comparison
+  - related-terms
+  - faq
   - next
 structured_data:
   types:
   - WebPage
   - DefinedTerm
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
   defined_term_set_ref: https://www.tcules.com/glossary#glossary
@@ -77,8 +88,11 @@ content_governance:
 page_composition:
   editorial_review:
     section_components:
+      measure: method_process
       practice: argument_thesis
-      comparison: argument_thesis
+      comparison: comparison_decision
+      related-terms: related_link
+      faq: faq
       next: argument_thesis
   media_bindings: []
   commercial_system:
@@ -89,37 +103,73 @@ page_composition:
     version: semantic-v11
 ---
 
-*Glossary · Design-System Adoption*
+*Glossary · Design System Adoption*
 
-# Design system adoption
+# What is design system adoption? Meaning, metrics and common gaps
 
-Design system adoption is the repeated use of shared system assets and decisions in real product work because they offer a dependable route to a result. When it matters: Adoption is the question to ask before investing further in a library.
+Design system adoption is how far teams use the shared design system when they build product. It is the question to ask before investing further in a library. A system nobody uses is a cost with no return.
 
-A system nobody routes through is a cost, not leverage. It is measured in product behaviour, not asset counts.
+In practice, adoption shows in behaviour. A team uses the supported status component, adds a missing state to the system and finishes a migration, instead of making its own altered copy.
 
-Downloads, library enablement and component coverage are weak proxies on their own. Consider a team that uses the supported status component, contributes a missing state and completes migration instead of detaching an instance. That behaviour is stronger evidence than package volume.
+See [Governance and Adoption](/services/design-systems/governance-adoption) or diagnose how your system is run with a [Design System Audit](/audits/design-system-audit).
 
-Useful measures include production reuse, overrides, contribution, migration completion, defects and whether teams know when to reuse or extend. [Design-system governance](/glossary/design-system-governance) defines how those changes are decided.
+## How to measure design system adoption: metrics that show real use {#measure}
 
-See [Governance and Adoption](/services/design-systems/governance-adoption) or diagnose the operating system with a [Design System Audit](/audits/design-system-audit).
+Downloads, switched-on libraries and component counts are weak signs on their own. Behaviour is stronger proof. Better measures look at released product:
 
-## How is design-system adoption used in practice? {#practice}
+- **Reuse in released products.** How much of what ships uses the shared component, compared with local versions of the same thing.
+- **Local overrides.** Where teams change a shared component in place, and the reason they give.
+- **Contributions.** Missing states and patterns that teams send back to the system.
+- **Finished migrations.** Products moved off old versions within the agreed release window.
+- **Defects.** Bugs traced to shared components, and whether fixes reach every product that uses them.
 
-Design-system adoption asks whether teams use the shared system when making and shipping product decisions. Import counts alone cannot answer that. A component may be technically present while teams override it locally because a state is missing, contribution takes too long or the documented pattern does not fit the product.
+[Design system governance](/glossary/design-system-governance) defines how those changes are agreed.
 
-A useful adoption review follows a shared decision into consuming products, checks where teams diverge and asks whether the cause should be repaired centrally or remain local. The [Design System Audit](/audits/design-system-audit) uses that kind of trace.
+A design system adoption rate is usually the share of eligible screens or components in released products that use the shared version. Read it as a trend: a rising rate with falling overrides says more than any single figure.
 
-## How does adoption differ from component usage? {#comparison}
+## Why design system adoption fails, and what a review looks for {#practice}
 
-The table separates technical presence from practical reliance on the system.
+Adoption asks whether teams reach for the shared system when they make and ship product choices. Counts of how often the library is installed cannot answer that. A component can be present while teams override it locally, for reasons such as a missing state, slow contribution or a pattern that does not fit.
 
-| Signal | What it can establish | What it cannot establish alone |
+A useful review follows one shared choice into the products that use it and notes where teams diverge. Then it asks whether the cause should be fixed in the system or left local. The [Design System Audit](/audits/design-system-audit) uses that kind of trace.
+
+## Design system adoption vs component usage {#comparison}
+
+| Signal | What it can show | What it cannot show alone |
 |---|---|---|
-| Component or package usage | A shared asset is present in a product | That teams trust the asset, use the intended behaviour or can contribute changes |
-| Design-system adoption | Teams use the system as the normal route for shared product decisions | That every local variation is wrong or should be centralised |
+| Component or package usage | A shared piece is present in a product | Whether teams trust it, use it as intended or can contribute changes |
+| Design system adoption | Teams use the system as the normal route for shared product choices | That every local variation is wrong or should be centralised |
 
-## Why design system adoption matters in product work {#next}
+## Terms related to design system adoption {#related-terms}
 
-Adoption is measured in released products, not in published components.
+[Design system governance](/glossary/design-system-governance): who can propose, approve, release and retire shared components, and what happens when a product needs something the system lacks.
+
+[Design system drift](/glossary/design-system-drift): what happens when Figma, code, documentation and live products slowly stop agreeing on how a shared component behaves.
+
+[Design system](/glossary/design-system): the shared building blocks, code and guidance that several products or teams build with, plus the rules for how they change.
+
+## Design system adoption FAQs {#faq}
+
+### How do you measure design system adoption?
+
+Measure it in released products. Track reuse of shared components against local versions, overrides and their reasons, contributions back to the system, finished migrations and defects traced to shared parts. Library installs and download counts only show that the system is available.
+
+### Why do teams skip the design system?
+
+Usually because the local route is easier. A component lacks a state they need, contributing a change is slow or unclear, or a pattern does not fit their product. Each reason points to a fix in the system or in how it is run.
+
+### What is a good design system adoption rate?
+
+A good rate is one that keeps rising while local overrides fall. Mature products often carry legacy screens, so a lower figure on an older product can still be healthy if new work uses the system.
+
+### Who is responsible for design system adoption?
+
+The team that runs the system makes the shared route easy to use and to change. Product teams decide whether they take it. Adoption improves when both sides share the measures and agree what to do about each gap.
+
+## Where to look for real adoption {#next}
+
+Look in released products, where the shared system either shapes what users see or gets worked around. Published components show what is available; released screens show what is used.
+
+Adoption has a new kind of user. AI coding assistants build screens too, and a system they can read and apply correctly shows up in the screens they generate.
 
 [See the Design System Audit](/audits/design-system-audit)

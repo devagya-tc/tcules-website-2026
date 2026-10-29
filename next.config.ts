@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 
-import { CASE_SLUG_REDIRECTS, caseStudyPath } from './src/lib/routes';
+import { CASE_SLUG_REDIRECTS, EXPERTISE_SLUG_REDIRECTS, caseStudyPath } from './src/lib/routes';
 
 const nextConfig: NextConfig = {
   /**
@@ -26,11 +26,19 @@ const nextConfig: NextConfig = {
   /** The corpus's planned case slugs → the live Strapi slugs (routes.ts § CASE_SLUG_REDIRECTS).
       Temporary, so nothing caches the planned slug as moved for good. */
   async redirects() {
-    return Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => ({
-      source: caseStudyPath(from),
-      destination: caseStudyPath(to),
-      permanent: false,
-    }));
+    return [
+      ...Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => ({
+        source: caseStudyPath(from),
+        destination: caseStudyPath(to),
+        permanent: false,
+      })),
+      /* The copy's renamed expertise slugs → the live Strapi slugs (routes.ts § EXPERTISE_SLUG_REDIRECTS). */
+      ...Object.entries(EXPERTISE_SLUG_REDIRECTS).map(([from, to]) => ({
+        source: `/expertise/${from}`,
+        destination: `/expertise/${to}`,
+        permanent: false,
+      })),
+    ];
   },
 };
 

@@ -4,13 +4,13 @@ slug: ai-copilots-agents
 page_name: AI Copilots & Agents
 page_type: service
 seo:
-  title: 'AI Agent UX Design: Copilots Users Can Direct | Tcules'
-  description: 'AI agent and copilot UX design: clear limits on what the AI may do, visible plans, approvals and undo, so users can direct and interrupt it at any point.'
+  title: 'AI Agent UX Design for Copilots and Agents | Tcules'
+  description: 'AI agent UX design for copilots and agents in SaaS products: clear limits, visible plans, approvals and undo, so users can direct and interrupt the AI.'
   canonical: https://www.tcules.com/services/ai-product-ux/ai-copilots-agents
   robots: index,follow
 social:
-  og_title: 'AI Agent UX Design: Copilots Users Can Direct | Tcules'
-  og_description: 'AI agent and copilot UX design: clear limits on what the AI may do, visible plans, approvals and undo, so users can direct and interrupt it at any point.'
+  og_title: 'AI Agent UX Design for Copilots and Agents | Tcules'
+  og_description: 'AI agent UX design for copilots and agents in SaaS products: clear limits, visible plans, approvals and undo, so users can direct and interrupt the AI.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI Agent UX Design: Copilots Users Can Direct | Tcules'
-  twitter_description: 'AI agent and copilot UX design: clear limits on what the AI may do, visible plans, approvals and undo, so users can direct and interrupt it at any point.'
+  twitter_title: 'AI Agent UX Design for Copilots and Agents | Tcules'
+  twitter_description: 'AI agent UX design for copilots and agents in SaaS products: clear limits, visible plans, approvals and undo, so users can direct and interrupt the AI.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: AI copilot and agent UX design for delegated product workflows
@@ -29,6 +29,17 @@ search_context:
   - Does every agent action need approval?
   - Can an agent undo what it changed?
   primary_query: AI agent UX design
+  secondary_queries:
+  - AI agent UX
+  - agentic UX patterns
+  - agent approval flows
+  - undo agent actions
+  - copilot vs agent
+  - AI copilot UX
+  - AI copilot design
+  - AI assistant UX design
+  - chatbot UX design
+  - does every agent action need approval
 navigation:
   breadcrumb:
   - name: Home
@@ -58,11 +69,13 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - authority
-  - experience
-  - proof
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -70,27 +83,48 @@ page_composition:
   media_bindings:
   - id: copilots_connectx_workspace
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
-    alt_intent: ConnectX coded workspace turning conversational intent into a reviewable building-energy decision surface.
+    alt_intent: ConnectX coded workspace in an AI-assisted energy scenario, where a plain-language request has assembled the data, assets and charts for one of eight agreed scenarios.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: copilots_eden_ai_mode
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
+    alt_intent: Eden AI's workflow builder start, where one search box finds templates and capabilities and AI-assisted creation is a separate mode the developer enters on purpose.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - DRAFT-NOVUS-RESEARCHER
+  - DRAFT-CONNECTX-GHOSHAL
+  - DRAFT-EDEN-ONEKEY-26OCT
+  - CL-RINGIER-COLLAB
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: hero
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: testimonials
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
     - ConnectX
     - Novus Insights
+    - Eden AI
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
+  proof_claim_policy: NO_AGENT_CASE_ON_RECORD;AGENT_DESIGN_IS_PRESENT_CAPABILITY;SELECTED_WORK_LABELLED_CLOSEST_RELATED
 structured_data:
   types:
   - WebPage
@@ -100,15 +134,15 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: ROLLOUT_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_UNVERIFIED
   production: NOT_PRODUCTION_VERIFIED
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - EXACT_OCT1_PHASE6_SOURCE_DIFF
   - QUOTE_PUBLICATION_REVIEW
+  - EDEN_ONEKEY_QUOTE_AWAITS_CLIENT_SIGNATURE
   - CLIENT_MEDIA_RIGHTS_CONFIRM
 content_governance:
   language: en-GB
@@ -119,25 +153,61 @@ content_governance:
 
 *AI Product UX · Copilots and agents*
 
-# AI copilot and agent UX your users can steer
+# AI agent UX design that lets users pause, redirect or take over
 
-Copilots that help people inside your SaaS product, and agents that act on their behalf. We set how much the AI may do alone, what users see while it works and how they step in.
+An agent earns its place in your customers' day when they can hand it a job, check progress between meetings and step in before anything costly goes out. Your support team needs to see what it did. Tcules provides AI agent UX design for SaaS teams adding copilots and agents to their product.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)*
 
-*Selected work: ConnectX · Novus Insights*
+[Describe the task you want to hand to AI](#enquiry)
 
-## Where copilots and agents lose their users {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**The copilot sits beside the work.** Users copy its answers into the product by hand, so the AI never touches the real work.
+## What you get from our AI agent UX design {#what-you-get}
 
-**The agent works out of sight.** People wait with no sign of progress, then get a finished result they have no way to check.
+Everything a person sees and controls while a copilot or agent works for them, from the brief to the undo.
 
-**Every step asks for approval.** Users click "Approve" so often that they stop reading what they approve.
+**What you receive**
 
-**Half the job succeeded.** Three records updated, the fourth failed, and nobody can tell which is which.
+- **A level for each step.** Whether the AI suggests, prepares, acts after approval, acts within limits or hands back, agreed with you step by step through the task.
 
-## Decide how much the AI may do on its own {#authority}
+- **Screens for the start and the middle of a job.** Before it starts, the goal it understood, the data it can read and the tools it may use. While it works, the plan and progress, with controls to pause, redirect, narrow the task or take over one step by hand.
+
+- **Screens for the pause and the finish.** When it needs a person, the proposed action, what it rests on and what will change. When it finishes or stops partway, what happened, what failed, what is still open and how the person picks the task up.
+
+- **Agent approval flows.** One clear request for each risky step, and low-risk steps grouped so people approve a plan once.
+
+- **Access and memory controls.** Whether the agent reads one record or the whole workspace, and what it remembers, shown where users can see and change it.
+
+- **Undo and repair.** Undo for anything your product can reverse, and for the rest, a record of what changed and a way to put it right, shown before the agent acts.
+
+- **The riskiest step in code.** A coded version on sample data, so your team watches the agent at work before engineering commits.
+
+**Who does the work.** A senior product designer, hands-on throughout, starts by sitting with the people who do the task today. A design engineer builds the coded step, and an account lead handles planning and contact.
+
+**What we need from you.** Time with the people who do the task, the records, tools and permissions the AI may use, and someone who can say which actions must wait for a person.
+
+**Where our part stops.** We design the agent's limits, screens and controls. Your engineers build them, or [AI Product Engineering](/services/software-development/ai-product-engineering) builds them with you, and model choice and accuracy stay with your engineers. When an expert must sign off what the agent produced, that review step is [Human-in-the-Loop Workflows](/services/ai-product-ux/human-in-the-loop-workflows).
+
+## Selected AI copilot and assistant work {#selected-work}
+
+The closest work to this service: three AI products where we set how far the AI goes and where a person takes over.
+
+### ConnectX: the AI adapts only inside eight agreed scenarios
+
+In ConnectX's energy product, a plain-language request assembles a working view of the building. Eight agreed scenarios each name the request, data, screen and next action, and the AI adapts within them through permitted tools. We took the coded demo on to a production-ready module, in live use since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### Novus Insights: an assistant that drafts inside the researcher's own list
+
+We designed Novus Insights' survey MVP so the AI drafts a starting questionnaire and suggests questions the researcher may have missed. The draft lands in the same list the researcher edits, so the assistant works in the task, with every question open to rewriting. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+### Eden AI: AI help as a mode people enter on purpose
+
+Eden AI's developers have three ways into a new workflow: a template, AI help or a blank canvas. In the redesign, one box serves all three and Tab moves a developer into AI assistance, so asking the AI is a deliberate step people can see. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+
+## Agentic UX patterns: how much the AI does on its own {#authority}
+
+Before anyone writes a prompt, we agree three things with you: the job the AI does, which outputs need someone's sign-off, and how people reject or roll back its mistakes. Then each step of the workflow gets one of five levels.
 
 | Level | What the user sees |
 |---|---|
@@ -147,63 +217,84 @@ Copilots that help people inside your SaaS product, and agents that act on their
 | **Act within limits** | Work that runs alone inside agreed tools, data and boundaries |
 | **Hand back** | A clear return of control when the task leaves those limits |
 
-One workflow often uses several levels. Tidying a table can run on its own; emailing a customer waits for a person.
+A copilot lives mostly in the first two levels and an agent reaches the last three, so most products need both, chosen task by task. Tidying a table can run alone; emailing a customer waits for a person.
 
-## What we design around an agent's work {#experience}
+Approval goes where an action costs money, reaches customers or is hard to reverse. People asked to approve every step soon stop reading what they approve.
 
-**Before it starts.** The goal the AI understood, the data it can read and the tools it may use.
+Agents are starting to run for an afternoon, across several systems, and to pass parts of a job to other agents. We design for that now.
 
-**While it works.** The plan, progress and any change of plan, with controls to pause, redirect, narrow the task or take over one step by hand.
+The agent reads the brief back before it starts, and its questions arrive together instead of one at a time. Its report keeps what was done apart from what still needs a person, and each step stays traceable to the agent that took it, so someone can undo only its part.
 
-**When it needs a person.** The proposed action, what it is based on and what will change if someone approves it.
+## What clients say {#testimonials}
 
-**When it finishes.** What happened, what failed, what is still open and what can be undone.
+> “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-Access and memory get the same care. Can the agent read one record or the whole workspace? Can it remember a preference for this project only? Users should be able to see and change both.
+> “Developers on our platform can start a workflow from a template, by asking the AI or from scratch. Tcules brought all three into one search box and designed AI help as a mode you enter with one key, so people can always see whether they are searching or asking the AI.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
 
-## AI help that works inside the user's own work {#proof}
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-### ConnectX: AI that adapts within agreed rules
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-ConnectX was defining an AI building-energy product in which a user's request assembles a workspace of data, assets and charts. An interface that can assemble anything is hard to trust, so we worked with ConnectX to define eight scenarios first.
+## How we work together {#how-we-work-together}
 
-Each scenario named the request, the data needed, the parts of the screen and the next action. The AI could adapt within those rules and fetch data only through tools agreed in advance.
+For AI agents and copilots, a good first piece of work is one task designed end to end, from the brief the agent reads back to the undo after it finishes.
 
-Then we built a coded demo so ConnectX could try the scenarios for itself, and later carried it through to the production-ready module ConnectX has run since late 2025.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-### Novus Insights: AI drafts inside the researcher's own list
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-For Novus Insights' survey product, we designed an MVP in which AI drafts a starting questionnaire and suggests questions the researcher may have missed. The draft and the researcher's edits sit in one list, and each generated question shows its source prompt. A rewritten question keeps the AI's original visible beneath it.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-<!-- awaiting client sign-off -->
-> “In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
-> **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-[Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-## Why Tcules for copilots and agents {#why-tcules}
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-**We design the job first.** What the agent is for, what it may touch and when it stops are settled before anyone writes a prompt.
+## Why teams choose Tcules {#why-tcules}
 
-**We design the stopping points as carefully as the smooth run.** Pause, hand-back and part-failed screens get the same attention as the moment everything works.
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-## Frequently asked questions {#faq}
+- **We design AI that people can check and correct.** In [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin)'s review design, an engineer who disagrees with an AI check changes its status and gives a reason, and the original result stays visible beside the correction.
+
+- **We work out what the product has to know before we draw it.** For [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), eight interviews mapped who does what on a quotation across six roles before we designed a single component.
+
+- **We prove the hard parts in code while they can still change.** Reviewing our coded prototypes for [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer asked how drag and drop would work in Bootstrap 5, and the team could act on it while the choice was still open.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech)
+
+## Questions about AI agent UX design {#faq}
 
 ### What is the difference between an AI copilot and an AI agent?
 
-A copilot helps a person do the work, and the person stays in the driving seat. An agent carries more of a multi-step task itself and may act through tools or other systems. Many products need both.
+A copilot works beside a person while they do the task, and the person stays in the driving seat. An agent carries more of a multi-step task itself and acts through tools or other systems. Many products need both, chosen per task.
+
+### How does chatbot UX design differ from agent UX design?
+
+A chatbot answers inside a conversation, so its design centres on the exchange. An agent acts in your product, so it also needs permissions, visible progress, approval points and undo. Tcules designs both, and often puts a chat entry point in front of an agent.
 
 ### Does every agent action need approval?
 
-No. Approval belongs where an action costs money, reaches customers or is hard to reverse. Safe, reversible steps can run within agreed limits, which keeps approval meaningful when it does appear.
+No. Tcules puts approval where an action costs money, reaches customers or is hard to reverse. The request comes once, with the action, what it is based on and exactly what will change. Safe, reversible steps run within agreed limits.
 
-### Can an agent undo what it changed?
+### Can users undo what an AI agent changed?
 
-It can undo whatever your product and its integrations can reverse. For everything else, we design a clear record of what changed and a way to put it right.
+Yes, for anything your product and its integrations can reverse. For the rest, Tcules designs a clear record of what changed and a route to put it right, and shows that route before the agent acts.
 
-## What should your agent do, and when should it ask first? {#enquiry}
+### Who designs UX for AI agents in SaaS products?
+
+Product designers who have worked on AI inside live products, with engineers close at hand. At Tcules, designers set the agent's limits, approvals and undo, and our engineers or yours build them. ConnectX, Novus Insights and Eden AI show the closest work.
+
+## Tell us what your agent should do, and when it asks first {#enquiry}
 
 Describe the workflow, the action you want to hand to AI and the moments a person must approve.
 

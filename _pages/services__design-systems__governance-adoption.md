@@ -4,13 +4,13 @@ slug: governance-adoption
 page_name: Design System Governance & Adoption
 page_type: service
 seo:
-  title: 'Design System Governance: Get Teams Using It | Tcules'
-  description: 'Design system governance and adoption for teams whose system gets bypassed: clear ownership, contribution, exceptions and releases that make it the easy path.'
+  title: 'Design System Governance and Adoption Services | Tcules'
+  description: 'Design system governance for teams whose system gets bypassed: clear owners, a contribution route, exceptions and releases that make the shared path easy.'
   canonical: https://www.tcules.com/services/design-systems/governance-adoption
   robots: index,follow
 social:
-  og_title: 'Design System Governance: Get Teams Using It | Tcules'
-  og_description: 'Design system governance and adoption for teams whose system gets bypassed: clear ownership, contribution, exceptions and releases that make it the easy path.'
+  og_title: 'Design System Governance and Adoption Services | Tcules'
+  og_description: 'Design system governance for teams whose system gets bypassed: clear owners, a contribution route, exceptions and releases that make the shared path easy.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Design System Governance: Get Teams Using It | Tcules'
-  twitter_description: 'Design system governance and adoption for teams whose system gets bypassed: clear ownership, contribution, exceptions and releases that make it the easy path.'
+  twitter_title: 'Design System Governance and Adoption Services | Tcules'
+  twitter_description: 'Design system governance for teams whose system gets bypassed: clear owners, a contribution route, exceptions and releases that make the shared path easy.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: Design System governance and adoption for product organisations
@@ -30,6 +30,19 @@ search_context:
   - Can governance be fixed without rebuilding the system?
   - Should AI-generated code follow the same rules?
   primary_query: design system governance
+  secondary_queries:
+  - design system governance models
+  - design system governance process
+  - design system governance framework
+  - design system adoption
+  - increase design system adoption
+  - design system contribution model
+  - design system ownership
+  - design system governance services
+  - stop teams making local component copies
+  - who should own the design system
+  - AI-generated code and the design system
+  - fix governance without rebuilding
 navigation:
   breadcrumb:
   - name: Home
@@ -59,42 +72,54 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - change-path
-  - exceptions
-  - releases
-  - proof
+  - models
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: change_path_need_local_decision_contribution_review_release_product_feedback
   media_bindings:
-  - id: design_system_governance_change_path
+  - id: governance_benchmark_scope_selector
     role: demonstrate
-    supports_section: proof
-    status: ASSET_REQUIRED
-    communication_job: Show one real or safely redacted contribution or exception moving from product need through review and shared release back into a consuming product.
-  - id: design_system_governance_matter
-    role: inspect
-    supports_section: proof
-    asset_uri: /matter-design-system
-    alt_intent: Matter, Tcules' public Design System reference.
-    status: INTERNAL_WORKING_ARTIFACT
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    alt_intent: 'Benchmark Gensuite''s redesigned scope selector, a shared control proved in coded prototypes and checked with the suite''s engineers, with Browse, Recents and Favourites, and Nearby views.'
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - FP-DOODLE-EFFICIENCY
+  - DRAFT-DOODLE-COMPONENTS
+  - DRAFT-RYZEO-REPORTS
+  - DRAFT-PRIMELIS-TEAM
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
     - Doodle
+    - Ryzeo
+    - Benchmark Gensuite
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -105,7 +130,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_UNVERIFIED
   production: NOT_PRODUCTION_VERIFIED
@@ -123,94 +148,176 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__design-systems__governance-adoption.md
 ---
 
-*Design system governance & adoption*
+*Design Systems · Governance and adoption*
 
-# Design system governance that keeps teams using the system
+# Design system governance that makes the shared component the easy choice
 
-For teams whose shared system gets worked around. We set up owners, a quick route for changes and a home for exceptions.
+Design system governance is for the designer who needs a missing table option by Friday and wants to know who decides. It also serves the system owner tracking every local copy and why it exists. Tcules provides design system governance for SaaS teams: named owners, a quick change path and a home for exceptions.
 
-[Start a conversation](#enquiry)
+*Selected work: [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-*Selected work: Doodle*
+[Tell us where your one-off components live](#enquiry)
 
-## Why teams work around the system {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-When teams work around a design system, the workaround usually points to one of these problems.
+## What you get from design system governance {#what-you-get}
 
-**A state is missing.** The shared component can't handle what the product needs.
+A system teams choose because going through it is quicker than going around it, run by people you name.
 
-**Contributing takes longer than building.** With a deadline looming, a local copy wins every time.
+**What you receive**
 
-**Nobody knows who approves a change.** So nobody asks.
+- **A map of where teams leave the system.** Live screens and code compared with the library, with every local copy and override listed. Our [Design System Drift Checker](/tools/design-system-drift-checker) gives a first look on your own.
 
-**Figma and code have drifted apart.** Teams stop trusting either version.
+- **Gaps told apart.** A missing case needs a better component; a slow approval needs a better path. Each workaround is labelled as one or the other.
 
-**The need really is product-specific.** And there is no approved way to say so.
+- **Named owners.** People in design and engineering for the foundations, the shared components and each product's exceptions.
 
-## Make the shared path easier than the workaround {#change-path}
+- **A path for every change.** Request, sort, build, release and confirm, fitted to how your teams already plan work.
 
-Every change needs a route. This is the one we set up, adapted to how your teams work.
+- **A governance model.** Central team, contribution model or shared core with local layers, chosen with you and set up with the people you have.
+
+- **An exceptions register.** Each exception with a type, an owner and a date to review it.
+
+- **A way to retire components.** Versioning, release notes, migration guidance and an end date for the old version.
+
+- **Adoption measures.** How many screens use shared components and how many local copies remain, so adoption shows up as a number.
+
+**Who does the work.** A senior designer leads the governance work with a design engineer who reads your code, and an account lead runs the schedule. We take the first few changes through the new path beside your owners, then step back.
+
+**What we need from you.** Access to live screens, code and the library, time with each system owner, and an honest account of how changes reach the system today.
+
+**Where our part stops.** Your owners run the system once the first changes are through. If nobody has agreed what belongs in the system, start with [Design System Strategy](/services/design-systems/design-system-strategy); if the system itself needs examining first, start with a [Design System Audit](/audits/design-system-audit).
+
+## Selected design system governance work {#selected-work}
+
+None of our case studies is a governance set-up on its own. The nearest three show shared parts adopted, extended and rolled out.
+
+### Ryzeo: shared rules so the next report follows the first
+
+We redesigned reporting in Ryzeo's marketing-automation product and documented reusable components with shared rules for filters, states, data treatments and navigation. The next report, and any screen after it, can follow the same logic. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+### Doodle: the contributing team inside someone else's system
+
+On Doodle's scheduling MVP we were the team adding to an existing design system. We used what was there and made new components only for the calendar and bookability work. A contributor needs a clear list of what exists and a quick answer on whether a new part belongs. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+### Benchmark Gensuite: one shared control at a time
+
+We proved the scope selector, a shared control every application in the suite depends on, in coded prototypes, then checked it with Benchmark's engineers and against the habits customers rely on. The same approach can carry the rest of the suite, one control at a time. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+## The design system governance process, and where exceptions live {#change-path}
+
+Teams go around a system when going through it is slower. So every change gets a path, adapted to how your teams work.
 
 | Step | What happens |
 |---|---|
-| Request | A product team brings a need, with the screen and the states involved |
-| Sort | System owners decide: keep it in the product, change an existing component, or add a new one |
+| Request | A product team brings a need, with the screen and the cases involved |
+| Sort | System owners choose: keep it in the product, change an existing component, or add a new one |
 | Build | Named people design, code, review and document the change |
 | Release | Figma, code and documentation update together, with notes on what changed and how to move across |
 | Confirm | The team that asked checks it works in their product |
 
-## Give exceptions a proper home {#exceptions}
+Code from AI coding tools takes the same path as code a person writes. Our article follows [how a product need becomes a shared design system release](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency).
 
-Exceptions are normal. Hidden exceptions are the problem. We give each one a type, an owner and a date to review it.
+Exceptions are normal. Hidden ones are the problem, so each one goes on a register where every team can see it.
 
-**Product-specific.** It belongs to one workflow and should stay there.
+*Illustration, not client work*
 
-**Temporary.** The system should cover it eventually, but this release can't wait.
+Three entries from the exceptions register of a SaaS company with four product teams.
 
-**A candidate for the system.** Several teams need the same thing, so it may belong in the shared library.
+| Exception | Type | Owner | Review |
+|---|---|---|---|
+| A pricing table with a frozen first column, used only in Billing | Product-specific: it belongs to one workflow | Billing's design lead | At the next quarterly system review |
+| A date-range picker built locally for Reports | Temporary: the shared picker will cover it | Reports' frontend lead | When the shared picker gains range selection |
+| An inline status badge two teams built separately | A candidate for the system | The system owners | At the next release planning |
 
-Once it is visible, an exception can be revisited on its review date.
+Once it is visible, an exception can be revisited on its date, moved into the system or retired.
 
-## Retire old components and keep products working {#releases}
+## Design system governance models, and the teams each one suits {#models}
 
-Changing or removing a shared component affects every product that uses it. We set up versioning, release notes, migration guidance and a clear end date for the old version.
+| Model | How it works | Best for |
+|---|---|---|
+| **Central team** | One core group designs, builds and releases every shared component | One product, or a few teams with similar needs |
+| **Contribution model** | Product teams propose and build components; a core group reviews and releases them | Several teams with their own designers and developers |
+| **Shared core, local layers** | A core group owns foundations and common components; each product owns its own layer through an agreed path | Several products or brands on one system |
 
-Retiring a component is finished when every product has moved off it. Marking it as old in the documentation is only the first step.
+A shared core with local layers suits most organisations with several product teams.
 
-Want to see where teams leave the system today? Try our [Design System Drift Checker](/tools/design-system-drift-checker).
+## What clients say {#testimonials}
 
-## What contributing looks like from the product side {#proof}
-
-On Doodle's scheduling MVP, we were a product team working inside someone else's system. Every standard interaction used a component Doodle already had. The calendar and bookability work had no existing match, so we added new components organised to sit consistently within Doodle's product system.
-
-Reuse first, add only what the product needs: the habit we help your product teams build.
-
-> “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
+> “Tcules reused our existing components wherever they could, and designed new ones only for the calendar and scheduling work our system didn't cover yet. Everything they added was organised to fit the system we already had.”  
 > **Stephanie Leue, Doodle**
 
-[Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
 
-## Frequently asked questions {#faq}
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For design system governance, a good first piece of work is finding where teams leave the system today, and why each one does.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We know what to leave alone in a product people rely on.** For [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation), we worked with the company's technical group, so the new design fitted the systems the business already runs.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), eight agreed scenarios set what the adaptive workspace could show, and a coded demo on sample data proved them before we took it to a production-ready module.
+
+- **We work out what the product has to know before we draw it.** Before drawing a single component for [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), we mapped what each of six roles needs from a quote, so the shared parts follow how the work moves.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[Data and analytics](/expertise/data-analytics-decision-products) · [MarTech](/expertise/martech-salestech)
+
+## Design system governance FAQs {#faq}
 
 ### How do we stop teams making local copies?
 
-Make the shared component the easier option. Fill the missing states, make contributing quick, and give real exceptions an approved route. Policing teams rarely works for long.
+Make the shared component the easier option. Tcules fills the missing cases, makes contributing quick, and gives real exceptions an approved path, because teams follow whichever path costs them least.
+
+### How do we get teams to actually use our design system?
+
+Fix the reason they leave it first, which is usually a missing case, a slow contribution path or drift between Figma and code. Then track how many screens use shared components and how many local copies remain.
+
+### What is a design system contribution model?
+
+It is the agreed way a product team proposes, builds and releases a change to the shared system. A good one says who reviews, how long an answer takes and what the team does while it waits.
 
 ### Who should own the design system?
 
-A small core group owns the foundations and shared components, with named people in design and engineering. Product teams own their exceptions. How central that group should be depends on how many teams and products use the system.
+Design system ownership usually sits with a small core group, with named people in design and engineering, who look after the foundations and shared components. Product teams own their exceptions, and how central the core group should be depends on how many teams use the system.
 
 ### Can governance be fixed without rebuilding the system?
 
-Often, yes. First we separate problems with the components themselves from problems with how changes get made. Many systems need a better contribution route and nothing more.
+In most cases, yes. Tcules first separates problems with the components themselves from problems with how changes get made. Many systems need a better contribution path and nothing more.
 
 ### Should AI-generated code follow the same rules?
 
-Yes. Code from AI tools goes through the same request, review and release route as code a person writes. Give the tools your tokens, components and usage rules, then review what they produce.
+Yes. Code from AI tools goes through the same request, review and release path as code a person writes. Give the tools your colours, components and usage rules, then review what they produce.
 
-## Every team has a ‘just this once’ component {#enquiry}
+## Tell us where your ‘just this once’ components live {#enquiry}
 
-Tell us where yours live, what teams do when the system lacks a piece and how changes reach it today.
+Tell us what teams do when the system lacks a piece, and how changes reach it today.
 
 **Enquiry form**
 

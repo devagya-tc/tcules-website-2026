@@ -4,13 +4,13 @@ slug: clients
 page_name: Clients
 page_type: proof_hub
 seo:
-  title: 'Clients: Doodle, Dealpath, Eden AI, JoVE & More | Tcules'
-  description: 'Doodle, Benchmark Gensuite, Dealpath, Eden AI, Ringier, JoVE and more: what they asked us to do and what they said. Rated 4.8 on Clutch from 13 reviews.'
+  title: 'Tcules Clients: Doodle, Dealpath, Eden AI and More | Tcules'
+  description: 'Tcules clients include Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX and JoVE: what each asked us to do, and what they said. Rated 4.8 on Clutch.'
   canonical: https://www.tcules.com/clients
   robots: index,follow
 social:
-  og_title: 'Clients: Doodle, Dealpath, Eden AI, JoVE & More | Tcules'
-  og_description: 'Doodle, Benchmark Gensuite, Dealpath, Eden AI, Ringier, JoVE and more: what they asked us to do and what they said. Rated 4.8 on Clutch from 13 reviews.'
+  og_title: 'Tcules Clients: Doodle, Dealpath, Eden AI and More | Tcules'
+  og_description: 'Tcules clients include Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX and JoVE: what each asked us to do, and what they said. Rated 4.8 on Clutch.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Selected Tcules client logos and product work.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Clients: Doodle, Dealpath, Eden AI, JoVE & More | Tcules'
-  twitter_description: 'Doodle, Benchmark Gensuite, Dealpath, Eden AI, Ringier, JoVE and more: what they asked us to do and what they said. Rated 4.8 on Clutch from 13 reviews.'
+  twitter_title: 'Tcules Clients: Doodle, Dealpath, Eden AI and More | Tcules'
+  twitter_description: 'Tcules clients include Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX and JoVE: what each asked us to do, and what they said. Rated 4.8 on Clutch.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: evaluate Tcules clients and experience
@@ -30,7 +30,15 @@ search_context:
   - Can Tcules work with internal product and engineering teams?
   - Does Tcules carry design into implementation?
   - Which client work is most relevant to my situation?
-  primary_query: Tcules clients
+  primary_query: 'Tcules clients'
+  secondary_queries:
+  - 'who has Tcules worked with'
+  - 'Tcules client list'
+  - 'Tcules testimonials'
+  - 'can Tcules work with internal product teams'
+  - 'does Tcules carry design into implementation'
+  - 'Tcules Clutch reviews'
+  - 'has Tcules worked on AI products'
 navigation:
   breadcrumb:
   - name: Home
@@ -58,15 +66,36 @@ render:
   band_order:
   - client-recognition
   - product-responsibility
+  - client-list
+  - testimonials
+  - returning-clients
   - case-studies
+  - faq
   - enquiry
 page_composition:
   logo_client_ids:
-  - Founders and product teams have trusted us with new products, established platforms and the work of carrying design into code. Here's who, and what for.
+  - Doodle
+  - Benchmark Gensuite
+  - Dealpath
+  - Eden AI
+  - Ringier Media Switzerland
+  - JoVE
+  - Primelis
+  - Auxentios
+  - ConnectX
+  - BuildTwin
+  - Novus Insights
+  - GT Tools
+  - Knovos
+  - Scissors
+  - Gold Image Printing
   testimonial_ids:
+  - FP-DOODLE-EFFICIENCY
   - FP-GOLDIMAGE-NAVIGATION
-  - UW-JOVE-INTEGRATION
-  - UW-AUDIT-INSIGHTS
+  - DRAFT-CONNECTX-SCENARIOS
+  - DRAFT-CURAMCARE-APPS
+  - DRAFT-PRIMELIS-TEAM
+  - CL-KNOVOS-CANDOUR
   visual_plan: PROOF_LED_RESPONSIVE_GRID_WITH_SINGLE_RECORD_PER_CASE_AND_CLAIM_BOUNDED_TRUST
   media_bindings: []
   trust_source: TCULES-CANONICAL-PROOF-GRAPH + TESTIMONIAL-REGISTER-CANONICAL
@@ -74,6 +103,7 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
   content_state: BATCH3_DRAFT_2026-10-08
@@ -97,15 +127,15 @@ content_governance:
 
 *Clients*
 
-# Some names you'll know, and problems you'll recognise
+# Tcules clients: who we've worked with and what each asked for
 
-Founders and product teams in 19 countries have brought us new products, established software, AI features and designs that needed building. Here's who, and what each asked for.
+Founders and product teams in 19 countries have trusted us with new products, software their customers rely on, AI features and designs that had to become working software. You'll know some of the names, and recognise the problems.
 
 [Start a conversation](#enquiry)
 
-**Founded 2017 · More than 90 projects · Clients in 19 countries**
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Selected clients {#client-recognition}
+## Who Tcules has worked with {#client-recognition}
 
 Doodle · Benchmark Gensuite · Dealpath · Eden AI · Ringier Media Switzerland · JoVE · Primelis · Auxentios · ConnectX · BuildTwin · Novus Insights · GT Tools · Knovos · Scissors · Gold Image Printing
 
@@ -113,41 +143,96 @@ Doodle · Benchmark Gensuite · Dealpath · Eden AI · Ringier Media Switzerland
 
 ### Shape a new product
 
-Research changed the scheduling model behind [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) enterprise MVP. For [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), we designed one quoting product for six specialist roles.
+For [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), we designed one quoting product for six specialist roles. At [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), our research changed the scheduling model behind an enterprise MVP.
 
 ### Improve software customers already rely on
 
-For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), we built the new interface as working prototypes in code so experienced users could try it before rollout. For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we redesigned the listing card and one pipeline action.
+For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), we built new interface patterns as working prototypes in code. Benchmark's engineers could check them against how experienced users already work, before wider rollout. For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we audited the product and redesigned how a listing joins the deal pipeline. [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) asked us to redesign online ordering and production together.
 
-<!-- awaiting client sign-off -->
-> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
-> **David Aghaei, Senior Partner, Gold Image Printing**
+### Design AI into the product
 
-### Make AI usable
+For [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign), we brought AI help, search and templates into one starting point. For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we designed an AI building-energy product around a dependable path from each person's question to the data and action they need.
 
-[Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) brought AI help, search and templates into one starting point. For [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), we designed a way for engineers to check and challenge what the AI found.
+### Carry the design into working software
 
-### Design it and build it
+We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store. For [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience), we designed the learning experience and its custom Moodle theme. For CuramCare, research with families and carers came first, then a redesign of its care platform and the frontend build.
 
-We designed and built [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store and [The Wandering Raven's](/case-studies/wandering-raven-edtech-moodle-experience) learning experience inside Moodle.
+### Work as part of an internal product team
 
-### Work as part of the team
-
-> “The Tcules team integrated well with our internal PMs and designers, contributing meaningfully to high-fidelity design deliverables that most often met our product standards.”  
-> **Dhanur Aashray Majety, Director, Product Management, JoVE**
+JoVE brought us into its product team for six months, across several growth projects.
 
 ### Find out what's wrong before fixing it
 
-> “Communication was prompt, the deliverable was clearly defined ahead of engagement and the outcome met our expectations and contained useful insights which we will now be working to improve.”  
-> **Alex Tawfik, Marketing Head, TiiPii Bed**
+Knovos asked us to find what was really holding its product back, then deal with it head-on.
 
-[See our audits](/audits)
+## Tcules client list: the product and the work we did {#client-list}
 
-## See the work behind the names {#case-studies}
+| Client | Product | Our work |
+|---|---|---|
+| [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) | Enterprise meeting scheduling | Research, product modelling, interface design and new components for Doodle's design system |
+| [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) | Real estate deal management | A product audit, then a focused redesign of the listing-to-deal workflow |
+| [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) | Environment, health, safety and sustainability suite | Shared interface direction, a scope selector redesign and coded prototypes |
+| [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) | AI platform for developers | A redesign of how people start a workflow, with search and AI help |
+| [ConnectX](/case-studies/ai-native-building-energy-product-connectx) | AI building-energy product | Eight scenarios and a coded demo, taken through to a production-ready module |
+| [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) | AI drawing checks for structural engineering | The AI review model and the review interface |
+| [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) | AI-assisted survey product | Research, personas, product definition and MVP design |
+| [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) | Industrial quoting software | Eight interviews, MVP product design and a reusable component system |
+| [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) | Marketing automation | Research and a redesign of its reporting |
+| [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux) | Staffing software | A connected product model and a redesign of four core workflows |
+| [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) | Online ordering and print production | Ordering site and production system redesigned as one product |
+| [GT Tools](/case-studies/gt-tools-shopify-product-discovery) | Specialist Shopify store | Product-discovery redesign and development of the store |
+| JoVE | Science education | Six months inside its product team, across growth projects |
+| Primelis | Marketing products | Designing its products for three years |
+| [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) | AI listing content for Amazon sellers, acquired by Primelis | A redesign of how AI suggestions reach a listing |
+
+## Tcules testimonials: what clients say about the work {#testimonials}
+
+> “Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
+> **Stephanie Leue, Doodle**
+
+> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
+
+> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
+
+> “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
+
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Clients who keep working with us {#returning-clients}
+
+Primelis has kept us designing its products for three years, and we redesigned [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign), which Primelis acquired. Our work with [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) has continued since the first project.
+
+## Case studies behind the client names {#case-studies}
 
 Each case study shows what made the product hard, what we did and what changed. [Browse the case studies](/case-studies)
 
-**4.8 out of 5 on Clutch** across 13 independent client reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+## Questions about Tcules clients and reviews {#faq}
+
+### Which companies has Tcules worked with?
+
+Tcules has worked with Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier Media Switzerland and Primelis, among others. Its clients are founders and product teams in 19 countries, with new products and established software alike. The table above lists what we did for each.
+
+### Is Tcules well reviewed on Clutch?
+
+Tcules is rated 4.8 on Clutch from 13 reviews. Each review shows the client's own rating and comments, and you can read them all on the [Tcules Clutch profile](https://clutch.co/profile/tcules-saas-product-design-studio).
+
+### Has Tcules worked on AI products?
+
+Yes. Eden AI, ConnectX, BuildTwin, Novus Insights and Omny AI are all AI products we have designed for. ConnectX's work went on to a production-ready module. [AI product case studies](/case-studies#ai-products)
+
+### Can Tcules work with an internal product team?
+
+Yes. JoVE brought us into its product team for six months, and Primelis has worked with us on its products for three years. We work in the client's own tools and alongside its product managers, designers and engineers.
+
+### Does Tcules carry design into working software?
+
+Yes, when the client wants it. We developed the GT Tools store on Shopify, set up The Wandering Raven's custom Moodle theme and built CuramCare's frontend. Dealpath's own team owned the build from our designs instead. [Software Development](/services/software-development)
 
 ## Add your product to the list {#enquiry}
 

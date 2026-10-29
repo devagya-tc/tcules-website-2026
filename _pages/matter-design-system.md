@@ -4,13 +4,13 @@ slug: matter-design-system
 page_name: Matter Design System
 page_type: lab_artefact
 seo:
-  title: 'Matter: A Free Figma Design System | Tcules'
-  description: Matter is a free Figma design system made by Tcules, with purpose-named tokens and components built from smaller parts. Open it on Figma Community.
+  title: 'Matter Figma design system: free on Figma Community | Tcules'
+  description: 'The Matter Figma design system is free on Figma Community, made by Tcules with purpose-named tokens and components built from smaller parts.'
   canonical: https://www.tcules.com/matter-design-system
   robots: index,follow
 social:
-  og_title: 'Matter: A Free Figma Design System | Tcules'
-  og_description: Matter is a free Figma design system made by Tcules, with purpose-named tokens and components built from smaller parts. Open it on Figma Community.
+  og_title: 'Matter Figma design system: free on Figma Community | Tcules'
+  og_description: 'The Matter Figma design system is free on Figma Community, made by Tcules with purpose-named tokens and components built from smaller parts.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Matter Design System.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Matter: A Free Figma Design System | Tcules'
-  twitter_description: Matter is a free Figma design system made by Tcules, with purpose-named tokens and components built from smaller parts. Open it on Figma Community.
+  twitter_title: 'Matter Figma design system: free on Figma Community | Tcules'
+  twitter_description: 'The Matter Figma design system is free on Figma Community, made by Tcules with purpose-named tokens and components built from smaller parts.'
   twitter_image: IMAGE_ASSET_REQUIRED
 navigation:
   breadcrumb:
@@ -52,10 +52,16 @@ content_governance:
 search_context:
   primary_intent: inspect Tcules Matter Design System
   primary_buyer_question: What does Matter demonstrate about Tcules' Design System practice?
-  primary_query: Matter Design System Tcules
+  primary_query: Matter Figma design system
+  secondary_queries:
+  - free Figma design system
+  - Matter design system
+  - Matter design system Figma Community
+  - Figma design system with tokens
+  - free design system for startups
   supporting_questions:
   - Is Matter free to use?
-  - Does Matter include coded components?
+  - Does Matter include working code?
   - Can we build our product on Matter?
 page_composition:
   visual_plan: real_matter_figma_artefacts
@@ -80,33 +86,35 @@ structured_data:
 
 *Future Interfaces Lab · Matter Design System*
 
-# Matter: a free Figma design system made by Tcules
+# Matter Figma design system: free to duplicate, study and adapt
 
-Matter is a design system we made and published free on Figma Community. Duplicate it to see how we name tokens, assemble components from smaller parts and organise a library so designers can find the right piece.
+Matter is our own design system, published free on Figma Community. Duplicate it to see how we name colour, spacing and type values, assemble components from smaller parts and organise a library so designers can find the right piece.
 
 [Open Matter on Figma](https://www.figma.com/community/file/1314109325852179933/matter-design-system-free)
 
 [Start a conversation](#enquiry)
 
-## What's inside Matter {#contents}
+## What's inside: a Figma design system with purpose-named tokens {#contents}
 
-**Tokens named for their purpose.** Colour, spacing and type tokens are named for how designers choose between them, so the right value is easy to recognise.
+**Tokens named for their purpose.** Tokens are a design system's named colours, spacing and type sizes. Matter names them for how designers choose between them, so the right one is easy to recognise.
 
-**Components built from smaller parts.** Larger components are assembled from smaller parts, and each carries properties and variants for its different states.
+**Components built from smaller parts.** Larger components are assembled from smaller parts, and each has options for its different states.
 
-**Naming you can follow.** Tokens and components share one naming scheme, and the library is organised so related pieces sit together.
+**Naming you can follow.** Colours, spacing, type and components share one naming scheme, and the library is organised so related pieces sit together.
 
-## How teams use Matter {#use}
+## Duplicate Matter from Figma Community and take it apart {#use}
 
-Matter works as a reference and a starting point. Duplicate the file, take a component apart and follow how a foundation token flows into a finished component.
+Duplicate the file, open a component and follow how a foundation value flows into the finished piece. Use it to learn how a design system fits together, or as a starting point for your own.
 
-It is published as it stands, without a schedule of updates, so treat it as a study copy to learn from and adapt.
+Treat it as a study copy: published as it stands, and yours to learn from and adapt.
 
-## What your team needs beyond a Figma file {#beyond-the-file}
+## What a working design system adds to a Figma file {#beyond-the-file}
 
-A free Figma file can't stop a team shipping a one-off button. A working design system can, because someone owns the answer and every product team has agreed to follow it.
+A Figma file alone does not stop a team shipping a one-off button. A working design system can, because someone owns the answer and every product team has agreed to follow it.
 
-That takes owners, shared names, coded components, documentation, a way to contribute, releases and migration. Matter shows how we think about foundations and components. The rest is built around your product and your teams.
+That takes owners, shared names, coded components, documentation, a way to contribute, releases and migration. Matter shows how we name and organise the basics of a system. The rest is built around your product and your teams.
+
+Design systems are also gaining a new reader. AI tools that generate screens and code build from whatever names, rules and states a system gives them. A system described clearly enough for a machine to follow keeps generated work looking like your product, and purpose-named tokens like Matter's are where that starts.
 
 ## Get help with your own design system {#services}
 
@@ -115,19 +123,20 @@ That takes owners, shared names, coded components, documentation, a way to contr
 - [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment): when Figma and the coded library have drifted.
 - [Governance & Adoption](/services/design-systems/governance-adoption): when teams build around the system.
 
-## Frequently asked questions {#faq}
+## Questions about the free Matter design system {#faq}
 
 ### Is Matter free to use?
 
-Yes. Matter is free on Figma Community under a CC BY 4.0 licence, as shown on its Community page. You can use and adapt it, provided you credit Tcules as the licence requires.
+Yes. Tcules offers Matter free on Figma Community under a CC BY 4.0 licence, as shown on its Community page. You can use and adapt it, provided you credit Tcules as the licence requires.
 
-### Does Matter include coded components?
+### Does Matter include working code?
 
-Matter lives in Figma. When a team needs coded components and Storybook stories that match its Figma library, we build those as part of [Design System Implementation](/services/design-systems/design-system-implementation).
+No. Tcules made Matter in Figma. When a team needs working components in code, with a Storybook catalogue that matches its Figma library, we build them as part of [Design System Implementation](/services/design-systems/design-system-implementation).
 
 ### Can we build our product on Matter?
 
-You can start from it. A product's system still needs its own tokens, components and code shaped around the product, plus people who keep it current. We can help you adapt Matter or build a system of your own.
+Yes, you can start from it. Your product's system still needs its own colours, components and code shaped around the product, plus people who keep it current. Tcules can help you adapt Matter or build your own.
+
 
 ## Tell us about your design system {#enquiry}
 
