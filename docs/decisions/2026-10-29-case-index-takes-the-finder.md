@@ -1,7 +1,7 @@
 ---
 title: "/case-studies is the insights finder: Stage, Industry and Service in the rail, a curated lead, then the stage shelves"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, cards, components, content, proof]
 source: "Owner (Devagya), listing pages of the 26 Oct copy rebuild, 29 Oct 2026 (feat/r3-listings)"
 supersedes: ["2026-10-29-case-index-is-the-listing-grid", "2026-10-22-case-index-opens-by-stage"]

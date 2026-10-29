@@ -92,8 +92,11 @@ export type SliderProps = {
    * two or more in view an advance moves things the reader is part-way through, so with any other
    * `perView` it is ignored with a development warning. Default `false`.
    *
-   * With it the rail becomes a STEPPER — one plain bar per slide, the current one filling over the
-   * interval (owner, 9 Oct 2026: bars only, no numerals). Under `align="start"` a rotation control
+   * With it the rail becomes a STEPPER — one plain bar per slide (owner, 9 Oct 2026: bars only, no
+   * numerals). The current bar starts FULL and empties from its start to its end over the interval, a
+   * countdown to the next slide; once the rotation has stopped the current bar stays full, the
+   * selected state, and the others are empty (owner, 29 Oct 2026;
+   * decisions/2026-10-29-slider-bar-counts-down). Under `align="start"` a rotation control
    * (pause / play) leads the control row (WCAG 2.2.2; APG carousel). Under `align="center"` the bars
    * ARE the control row — no previous / next, no rotation button — so the chrome is one quiet strip
    * under a centred quote rather than three controls stacked on one axis. The rotation:
@@ -104,10 +107,20 @@ export type SliderProps = {
    *     and only their press starts it;
    *   - never starts before hydration, so a server render and a no-script page are the manual row;
    *   - is silent: the status line speaks after a reader's own press, never after an advance;
-   *   - rests when a reader presses a bar, and resumes RESUME (6s) later from the slide they chose
-   *     (owner, 9 Oct 2026). A bar under KEYBOARD focus holds it for as long as focus stays.
+   *   - STOPS when a reader presses a bar or a previous / next control (owner, 29 Oct 2026): what
+   *     they chose stays, its bar full. Under `start` the rotation control then offers Play. A bar
+   *     under KEYBOARD focus holds it for as long as focus stays;
+   *   - under reduced motion the current bar is simply full: it never drains, even with Play.
    */
   autoplay?: boolean;
+  /**
+   * Where a slide sits in the row's height, which is always the TALLEST slide's, so the controls
+   * under the row never move as it turns. `stretch` (the default) fills it: a row of cards ends
+   * level. `center` centres each slide in it: a one-up row of quotes of different lengths, where a
+   * short quote under-filled at the top read as a gap above the controls (owner, 29 Oct 2026;
+   * decisions/2026-10-29-quote-slider-centres-each-quote).
+   */
+  slideAlign?: 'stretch' | 'center';
   /** What one slide is, for each bar's name: "Show {slideName} 2 of 4". Default `'slide'`. */
   slideName?: string;
   /** Milliseconds a slide holds before the next, with `autoplay`. Default 8000 — a 35-word quote read twice. */
@@ -119,9 +132,6 @@ const INTERVAL = 8000;
 
 /** Longest frame the autoplay clock will count: a backgrounded tab resumes, it does not skip. */
 const MAX_FRAME = 100;
-
-/** How long a press on a bar holds the rotation before it resumes (owner, 9 Oct 2026). */
-const RESUME = 6000;
 
 /* Reduced motion as an external store: read during render, so the default rotation state needs no
    effect. The server snapshot says "reduce", so nothing rotates before hydration. */
@@ -210,6 +220,7 @@ export function Slider({
   peek = false,
   autoplay = false,
   interval = INTERVAL,
+  slideAlign = 'stretch',
 }: SliderProps) {
   const slides = Children.toArray(children);
   const count = slides.length;
@@ -232,15 +243,12 @@ export function Slider({
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const playing = rotates && (choice ? choice === 'play' : !reduced);
-  /* A press on a bar rests the rotation for RESUME, then it carries on from the chosen slide. Each
-     press restarts the rest. */
-  const [rest, setRest] = useState(0);
-  useEffect(() => {
-    if (!rest) return;
-    const timer = window.setTimeout(() => setRest(0), RESUME);
-    return () => window.clearTimeout(timer);
-  }, [rest]);
-  const held = hovered || focused || rest > 0;
+  /* A press on a bar or a previous / next control STOPS the rotation (owner, 29 Oct 2026): the
+     reader chose a slide, so it stays, and its bar stays full. */
+  const stop = useCallback(() => {
+    if (rotates) setChoice('pause');
+  }, [rotates]);
+  const held = hovered || focused;
   /* Time the current slide has been shown while running, in ms; reset whenever the slide changes. */
   const elapsed = useRef(0);
   const [tabStop, setTabStop] = useState(false);
@@ -497,7 +505,10 @@ export function Slider({
            the click and keeps the ring. */
         disabled={!ready}
         aria-disabled={ready && blocked ? true : undefined}
-        onClick={() => go(direction)}
+        onClick={() => {
+          stop();
+          go(direction);
+        }}
         className={styles.control}
       />
     );
@@ -526,12 +537,12 @@ export function Slider({
     />
   );
 
-  /* The stepper: one plain bar per slide, the current one filling over its hold. Each bar's name is
+  /* The stepper: one plain bar per slide, the current one counting down its hold. Each bar's name is
      the slide's place in the set; a list, so a screen reader hears how many there are.
 
      WCAG 2.2.2 (Pause, Stop, Hide) without a rotation button, for the centred row: pressing any bar
-     RESTS the rotation for RESUME and then it carries on from that slide (owner, 9 Oct 2026); a bar
-     under keyboard focus, like the slides under a mouse or focus, HOLDS it for as long as it stays.
+     STOPS the rotation on that slide (owner, 29 Oct 2026); a bar under keyboard focus, like the
+     slides under a mouse or focus, HOLDS it for as long as it stays.
      A mouse press also focuses the bar in some browsers, so only :focus-visible counts as a hold
      here — otherwise a clicked bar would hold the rotation until the reader clicked elsewhere. So
      every reader who can reach the content has a way to stop it, at the control they would use
@@ -553,7 +564,7 @@ export function Slider({
             }}
             onBlur={() => setFocused(false)}
             onClick={() => {
-              if (rotates) setRest((n) => n + 1);
+              stop();
               goTo(index);
             }}
           >
@@ -605,6 +616,7 @@ export function Slider({
           columns={LADDER[perView]}
           peek={perView === 1 ? false : peek ? 'always' : true}
           colGap="gutter"
+          align={slideAlign}
           tabIndex={tabStop ? 0 : undefined}
           className={styles.row}
         >

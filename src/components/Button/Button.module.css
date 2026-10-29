@@ -201,6 +201,22 @@
   margin-inline: 0;
 }
 
+/* Inline, not the box's inline-block: an atomic label is one unbreakable piece, so a long one wrapped
+   as a block as wide as the line and the glyph fell to the next line after it. */
+.link .labelInk {
+  display: inline;
+}
+
+/* A link whose label ends on the trailing glyph's line: nowrap on the link, normal again on
+   `.labelHead`, so only the last word and the glyph never part (Button.tsx GluedLabel). */
+.glued {
+  white-space: nowrap;
+}
+
+.labelHead {
+  white-space: normal;
+}
+
 .labelInk {
   display: inline-block;
   margin-inline-end: calc(-1 * var(--btn-text-tracking));

@@ -351,6 +351,7 @@ export function QuoteGroupBand({
       block.type === 'paragraph' && ratingOf(block) !== undefined,
   );
   const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const wall = quotes.length >= WALL_FROM;
   const footer = rating ? (
     <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
       <ScoreBadge rating={rating} />
@@ -359,13 +360,17 @@ export function QuoteGroupBand({
   return (
     <ContentSection
       {...head(band)}
+      /* Under the wall the head stays the band's h2; one quote at a time, it is the h2 in the
+         eyebrow's voice, so the quote is the band's emphasis (owner, 29 Oct 2026;
+         decisions/2026-10-29-quote-slider-head-is-an-eyebrow). */
+      headingSize={wall ? undefined : 'eyebrow'}
       data-band="G"
       surface={surface}
       align="center"
       lead={lead ? plain(lead.runs) : undefined}
       footer={footer}
     >
-      {quotes.length >= WALL_FROM ? (
+      {wall ? (
         <TestimonialWall
           items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
         />
@@ -422,7 +427,14 @@ function QuoteSlider({
   const [only] = slides;
   if (slides.length === 1 && only) return <Proof quote={only} align="center" />;
   return (
-    <Slider label={label} slideName="testimonial" perView={1} align="center" autoplay>
+    <Slider
+      label={label}
+      slideName="testimonial"
+      perView={1}
+      align="center"
+      slideAlign="center"
+      autoplay
+    >
       {slides.map((quote, index) => (
         <li key={`${index}-${quote.name}`}>
           <Proof quote={quote} align="center" />
