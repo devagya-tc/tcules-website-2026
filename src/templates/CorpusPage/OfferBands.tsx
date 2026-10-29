@@ -329,7 +329,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'note':
       return <NoteBand band={band} />;
     case 'close':
-      return <CloseBand page={page} band={band} surface={unit.surface} />;
+      return <CloseBand page={page} band={band} />;
 
     /* Symptoms in the customer's own words, each answered by where we start (VoiceLedger;
        product-design round 6, page-mapping § 23). The reader knows what is going wrong before they

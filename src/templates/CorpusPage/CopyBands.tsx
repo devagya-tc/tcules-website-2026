@@ -1030,17 +1030,10 @@ export function NoteBand({ band }: { band: CorpusBand }) {
 
 /**
  * A page's last ask: the open close, its paragraphs the body (two at most), its link the action.
- * Without a link it is a short prose band.
+ * Without a link it is a short prose band. The open close is an ink island on CtaSection's own paper
+ * band (decisions/2026-10-29-cta-band-is-an-ink-island), so it takes no surface from the plan.
  */
-export function CloseBand({
-  page,
-  band,
-  surface,
-}: {
-  page: CorpusPage;
-  band: CorpusBand;
-  surface: 'paper' | 'tint';
-}) {
+export function CloseBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => {
     if (block.type === 'links') return block.links;
@@ -1068,7 +1061,6 @@ export function CloseBand({
         id={band.id}
         data-band="L"
         arrangement="open"
-        surface={surface}
         heading={band.headingText}
         body={body.length > 0 ? (body.slice(0, 2) as [string] | [string, string]) : undefined}
         actions={

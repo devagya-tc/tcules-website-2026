@@ -224,7 +224,6 @@ export default async function ServicesPage() {
         page.closingCta.actions.length > 0 ? (
           <CtaSection
             arrangement="open"
-            surface="tint"
             heading={page.closingCta.heading}
             body={page.closingCta.body}
             points={page.closingCta.points}

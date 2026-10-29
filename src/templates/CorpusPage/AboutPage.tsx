@@ -844,7 +844,6 @@ function WorkWithUs({ page }: { page: CorpusPage }) {
       id={b.id}
       data-band="L"
       arrangement="open"
-      surface="tint"
       heading={b.headingText}
       body={lead ? [plain(lead)] : undefined}
       actions={[{ label: link.labelText, href: link.href }]}

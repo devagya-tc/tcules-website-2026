@@ -214,7 +214,6 @@ function CloseBand({ band }: { band: CorpusBand }) {
         id={band.id}
         data-band="L"
         arrangement="open"
-        surface="tint"
         heading={band.headingText}
         body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
         actions={[{ label: link.labelText, href: link.href }]}

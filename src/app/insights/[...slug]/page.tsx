@@ -372,7 +372,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
       {blog.cta ? (
         <CtaSection
           arrangement="open"
-          surface="tint"
           heading={blog.cta.heading}
           body={blog.cta.body}
           actions={blog.cta.actions}

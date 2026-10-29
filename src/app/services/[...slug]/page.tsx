@@ -513,7 +513,6 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         ) : (
           <CtaSection
             arrangement="open"
-            surface="tint"
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}

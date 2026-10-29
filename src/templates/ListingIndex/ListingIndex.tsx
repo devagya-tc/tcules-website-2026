@@ -95,7 +95,7 @@ export type ListingOffer = {
 };
 
 /**
- * The page's close: the copy and the ask on tint before the ink footer. The form is composed by the
+ * The page's close: the copy and the ask on an island before the ink footer. The form is composed by the
  * caller and handed over (a template's slot, as every corpus close takes it); a close with only an
  * action takes the open arrangement; a close with neither is not rendered.
  */
@@ -300,7 +300,7 @@ export function ListingIndex({
       {bands?.afterListing}
 
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
-          action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
+          action under it, the open close an ink island on paper (decisions/2026-10-29-cta-band-is-an-ink-island).
           A conversation glyph is the eye's entry into it, as every corpus close has. */}
       {closing?.form ? (
         <CtaSection
@@ -318,7 +318,6 @@ export function ListingIndex({
         <CtaSection
           id={closing.id}
           arrangement="open"
-          surface={offer?.image ? 'paper' : 'tint'}
           eyebrow={closing.eyebrow || undefined}
           mark={<Icon name="chat-round-dots" size="xl" />}
           heading={closing.heading}
