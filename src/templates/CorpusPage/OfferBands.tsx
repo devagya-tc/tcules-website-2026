@@ -69,6 +69,7 @@ import {
   TextBand,
   sheetParts,
 } from './CopyBands';
+import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
 import { kindOf, type OfferUnit } from './plan';
 import {
   bandLinks,
@@ -304,9 +305,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'recognition':
       return <RecognitionBand band={band} />;
     case 'destinations':
-      return <DestinationsBand band={band} />;
+      /* `###` groups of linked tables (/expertise `product-types`): HubBands, 29 Oct 2026. */
+      return hasDestinationGroups(band) ? (
+        <DestinationGroupsBand page={page} band={band} />
+      ) : (
+        <DestinationsBand band={band} />
+      );
     case 'directory':
-      return <DirectoryBand band={band} />;
+      return <DirectoryBand page={page} band={band} />;
     case 'text':
       return <TextBand page={page} band={band} side={unit.side} />;
     case 'note':

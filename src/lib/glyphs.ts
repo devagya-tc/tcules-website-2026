@@ -68,8 +68,24 @@ const SECTORS: Readonly<Record<string, RouterGlyph>> = {
   '/expertise/martech-salestech': 'chat-round-dots',
 };
 
+/**
+ * The six free tools (/tools hub, 29 Oct 2026), each marked by the job it serves: the AI checks by
+ * AI Product UX's `stars` and by what the canvas plans (what people can see and check, `eye`), the
+ * component worksheets by Design Systems' `layers` and a component's states (`widget`), the route
+ * worksheet by Product Modernisation's `shield-check`, the prototype checklist by `clipboard-check`.
+ */
+const TOOLS: Readonly<Record<string, RouterGlyph>> = {
+  '/tools/ai-product-ux-readiness-check': 'stars',
+  '/tools/ai-trust-control-canvas': 'eye',
+  '/tools/design-system-drift-checker': 'layers',
+  '/tools/figma-storybook-fidelity-checklist': 'widget',
+  '/tools/audit-redesign-modernise-rebuild': 'shield-check',
+  '/tools/prototype-readiness-checklist': 'clipboard-check',
+};
+
 const BY_ROUTE: Readonly<Record<string, RouterGlyph>> = {
   ...SERVICES,
+  ...TOOLS,
   ...PRODUCT_DESIGN_SPECIALISTS,
   ...SECTORS,
 };
