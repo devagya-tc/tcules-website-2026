@@ -206,7 +206,11 @@ function cardOf(item: InsightItem, meta: MetaOptions = {}) {
     title: item.title,
     href: item.href,
     body: item.description?.trim() || undefined,
-    eyebrow: meta.withKind ? LABEL[item.kind].one : item.subject?.trim() || undefined,
+    /* The topic is a tag under the title, the same shape in the curated view and the finder's
+       results (owner, 29 Oct 2026: "why not just hide the eyebrow in the curated view and show the
+       tag?"). The curated card carries no eyebrow: its section already names the format. */
+    eyebrow: meta.withKind ? LABEL[item.kind].one : undefined,
+    tag: meta.withKind ? undefined : item.subject?.trim() || undefined,
     media: picture
       ? picture.type === 'image'
         ? { type: 'image' as const, image: picture.image }

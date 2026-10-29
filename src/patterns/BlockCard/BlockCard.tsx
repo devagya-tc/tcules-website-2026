@@ -723,12 +723,15 @@ export function BlockCard({
       {titleNode}
     </>
   );
+  /* The topic tag follows the copy, a block under it and over any cta, in every arrangement
+     (owner, 28 Oct 2026: "go with the tag under the title"). */
   const content = (
     <Layout rowGap="block" className={styles.content}>
       <Layout rowGap="text">
         {head}
         {bodyNode}
       </Layout>
+      {tagNode}
       {cta}
     </Layout>
   );
@@ -843,19 +846,6 @@ export function BlockCard({
         >
           <span className={styles.compactCover}>{imageNode}</span>
           {content}
-        </Layout>
-      );
-    } else if (tagNode) {
-      /* The topic tag follows the copy (owner, 28 Oct 2026: "go with the tag under the title"):
-         pinned to the foot of a box-less card it floated away from the words it labels. */
-      frameContent = (
-        <Layout rowGap="block">
-          {imageNode}
-          {ruleNode}
-          <Layout rowGap="block">
-            {content}
-            {tagNode}
-          </Layout>
         </Layout>
       );
     } else {
