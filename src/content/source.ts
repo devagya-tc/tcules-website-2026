@@ -32,6 +32,7 @@ import { servicesMasterSource } from './sources/strapi/services-master';
 import { howWeWorkSource, strapiSource } from './sources/strapi';
 import { termsOfUseSource } from './sources/strapi/terms-of-use';
 import { toolSource } from './sources/strapi/tool';
+import { sitePageSource } from './sources/strapi/site-pages';
 import type {
   CaseStory,
   IdealAboutPage,
@@ -58,6 +59,7 @@ import type {
   ServicesMasterContentSource,
   TermsOfUseContentSource,
   ToolContentSource,
+  SitePagesContentSource,
 } from './types';
 import type {
   CaseIndustry,
@@ -98,6 +100,7 @@ const servicesSource: ServiceContentSource = serviceSource;
 const servicesMastersSource: ServicesMasterContentSource = servicesMasterSource;
 const termsOfUsePagesSource: TermsOfUseContentSource = termsOfUseSource;
 const toolsSource: ToolContentSource = toolSource;
+const sitePagesSource: SitePagesContentSource = sitePageSource;
 /** The `_pages/` corpus: first-pass pages read from markdown on disk, parsed once per process. */
 const corpusPagesSource: CorpusContentSource = corpusSource;
 
@@ -165,6 +168,7 @@ export const getServicesMasterPage =
 export const getTermsOfUsePage =
   termsOfUsePagesSource.getTermsOfUsePage.bind(termsOfUsePagesSource);
 export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
+export const listSitePages = sitePagesSource.listSitePages.bind(sitePagesSource);
 export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
 export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
 export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPagesSource);
