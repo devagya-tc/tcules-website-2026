@@ -1,4 +1,4 @@
-import { Icon, Layout, Media, type MediaImage, Sketch } from '@/components';
+import { Cluster, Icon, type IconName, Layout, Media, type MediaImage, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
 import { CARD_TWO_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
@@ -121,7 +121,33 @@ export type TeaserProps = {
    * one link. It moves toward its destination on hover. Not with a picture.
    */
   arrow?: boolean;
+  /**
+   * The piece's FORMAT glyph (owner, 29 Oct 2026: a resource row "can have format icons"), from the
+   * content icon set (`TEASER_FORMAT_ICON` holds the one glyph per format). It heads the meta: the
+   * first row of a ledger's meta column (`metaAside`), else before the meta line. Decorative: the
+   * format is said in words beside it (`label`), so the glyph is aria-hidden. Ignored with no meta
+   * line, because a glyph with no format word beside it would be the only statement of the format.
+   */
+  icon?: IconName;
 };
+
+/**
+ * Each insight format's glyph, Solar Bold from the content set — the ones the format menu set
+ * (owner, 23 Oct 2026). One map, read by every placement that marks a piece's format: a resource
+ * row's meta (Teaser `icon`) and a listing's no-picture panel (BlockCard `icon`).
+ */
+export const TEASER_FORMAT_ICON = {
+  article: 'document-text',
+  guide: 'notebook',
+  research: 'graph-up',
+  interview: 'chat-round-dots',
+  podcast: 'microphone',
+  video: 'videocamera-record',
+  event: 'calendar',
+} as const satisfies Record<string, IconName>;
+
+/** A format the glyph map knows. */
+export type TeaserFormat = keyof typeof TEASER_FORMAT_ICON;
 
 const SIZE_CLASS: Record<TeaserSize, string | undefined> = {
   xl: styles.sizeXl,
@@ -176,6 +202,7 @@ export function Teaser({
   metaAside = false,
   ruled = false,
   arrow = false,
+  icon,
 }: TeaserProps) {
   const hasImage = media?.type === 'image' && media.image.src.trim().length > 0;
   const picture =
@@ -229,24 +256,44 @@ export function Teaser({
     ? (dateBlock ?? (index ? <span className={styles.index}>{index}</span> : null))
     : null;
 
+  const hasMeta = Boolean(label) || metaParts.length > 0;
+  const glyph =
+    icon && hasMeta ? (
+      <span className={styles.glyph} aria-hidden="true">
+        <Icon name={icon} size="md" />
+      </span>
+    ) : null;
+  const metaLine = hasMeta ? (
+    <p className={cx(styles.meta, asideMeta && !glyph && styles.metaInline)}>
+      {label ? <span className={styles.label}>{label}</span> : null}
+      {metaParts.map((part, i) =>
+        /* The first fact always shows; the rest drop on a phone's narrow row. */
+        i === 0 && !label ? (
+          <span key={i}>{part}</span>
+        ) : (
+          <span key={i} className={styles.metaMore}>
+            {` · ${part}`}
+          </span>
+        ),
+      )}
+    </p>
+  ) : null;
+
   const copy = (
     <Layout rowGap="tight">
       {!row ? dateBlock : null}
-      {label || metaParts.length > 0 ? (
-        <p className={cx(styles.meta, asideMeta && styles.metaInline)}>
-          {label ? <span className={styles.label}>{label}</span> : null}
-          {metaParts.map((part, i) =>
-            /* The first fact always shows; the rest drop on a phone's narrow row. */
-            i === 0 && !label ? (
-              <span key={i}>{part}</span>
-            ) : (
-              <span key={i} className={styles.metaMore}>
-                {` · ${part}`}
-              </span>
-            ),
-          )}
-        </p>
-      ) : null}
+      {metaLine && glyph ? (
+        <Cluster
+          colGap="tight"
+          rowGap="inline"
+          className={asideMeta ? styles.metaInline : undefined}
+        >
+          {glyph}
+          {metaLine}
+        </Cluster>
+      ) : (
+        metaLine
+      )}
       <Title className={styles.title}>{title}</Title>
       {bodyText ? <p className={styles.body}>{bodyText}</p> : null}
     </Layout>
@@ -279,12 +326,15 @@ export function Teaser({
         colGap="gutter"
         align="start"
       >
-        <Layout rowGap="inline" className={styles.markerAside}>
-          {facts.map((fact, i) => (
-            <span key={i} className={cx(styles.meta, i === 0 && label && styles.label)}>
-              {fact}
-            </span>
-          ))}
+        <Layout rowGap="tight" className={styles.markerAside}>
+          {glyph}
+          <Layout rowGap="inline">
+            {facts.map((fact, i) => (
+              <span key={i} className={cx(styles.meta, i === 0 && label && styles.label)}>
+                {fact}
+              </span>
+            ))}
+          </Layout>
         </Layout>
         {copy}
         {thumb ? (
@@ -392,6 +442,10 @@ export function Teaser({
         compact && arrangement === 'stack' && styles.compact,
         graphic && styles.graphic,
       )}
+      /* A picture BESIDE the copy (a row's thumbnail, the `beside` halves) is a horizontal media
+         item: it takes a whole row of any grid it is set in (owner, 29 Oct 2026), never a track
+         beside another. Layout's contract: the item says what it is, the container places it. */
+      data-media-row={picture && (row || arrangement === 'beside') ? true : undefined}
     >
       <a className={styles.link} href={href}>
         {inner}

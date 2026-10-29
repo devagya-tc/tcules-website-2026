@@ -419,8 +419,10 @@ export {
    stack, beside, or as a row with an end thumbnail (insights hub and format pages, 16 Oct 2026). */
 export {
   Teaser,
+  TEASER_FORMAT_ICON,
   type TeaserArrangement,
   type TeaserDate,
+  type TeaserFormat,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,

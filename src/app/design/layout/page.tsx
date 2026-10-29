@@ -422,6 +422,20 @@ export default function LayoutSpecimenPage() {
         </Specimen>
 
         <Specimen
+          title="A horizontal media item takes a whole row — data-media-row"
+          note="Owner, 29 Oct 2026 (decisions/2026-10-29-media-rows-take-a-whole-row): an item whose picture sits BESIDE its words (BlockCard horizontal, a ListCard row with a thumbnail, a Teaser row or beside with a picture) declares data-media-row, and in any track count it spans every track, so two never sit side by side. The vertical items around it keep their tracks. Not in a scroll row. Here a three-track Layout: vertical, vertical, the media row on its own row, then vertical again."
+        >
+          <Layout columns={{ md: 3 }} colGap="gutter" rowGap="column">
+            <Box>vertical card</Box>
+            <Box>vertical card</Box>
+            <div data-media-row>
+              <Box>media row — picture beside words, the whole row</Box>
+            </div>
+            <Box>vertical card</Box>
+          </Layout>
+        </Specimen>
+
+        <Specimen
           title="No gap stated → 0, on purpose"
           note="Neither axis has a default. A silent 24 looks plausible and hides an omission; a collapsed seam is wrong on sight. These two boxes share an edge."
         >

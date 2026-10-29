@@ -4,7 +4,7 @@ import { Layout, Section, type SectionSurface } from '@/components';
 import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
-import { Teaser, type TeaserMedia } from '@/patterns';
+import { Teaser, TEASER_FORMAT_ICON, type TeaserMedia } from '@/patterns';
 
 import { Specimen } from '../_specimen/Specimen';
 
@@ -241,8 +241,8 @@ export default function TeaserSpecimen() {
           </Specimen>
 
           <Specimen
-            title="row · lg · metaAside + ruled + arrow — a resource listing"
-            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column holds the format and the length as the piece's own page displays them; the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the meta line sits over the title and the arrow keeps the row's end."
+            title="row · lg · metaAside + ruled + arrow + icon — a resource listing"
+            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column is headed by the format's glyph (`icon`, from TEASER_FORMAT_ICON: Solar Bold content icons, in the accent), then the format and the length as the piece's own page displays them; the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the glyph leads the meta line over the title and the arrow keeps the row's end."
           >
             <Layout as="ul" rowGap="none">
               <Teaser
@@ -250,6 +250,7 @@ export default function TeaserSpecimen() {
                 size="lg"
                 label="Article"
                 meta={['10 min read']}
+                icon={TEASER_FORMAT_ICON.article}
                 title="AI confidence scores in UX: design the review step people control"
                 body="Why a number on an AI answer earns little trust, and the review step that does, drawn from three AI products we designed."
                 href={HREF}
@@ -262,6 +263,7 @@ export default function TeaserSpecimen() {
                 size="lg"
                 label="Guide"
                 meta={['13 min read']}
+                icon={TEASER_FORMAT_ICON.guide}
                 title={LONG}
                 body="A long title at the row measure, with two lines of standfirst under it, so the arrow is seen holding the row's end beside a wrapped title."
                 href={HREF}
@@ -274,6 +276,7 @@ export default function TeaserSpecimen() {
                 size="lg"
                 label="Podcast"
                 meta={['6 min read']}
+                icon={TEASER_FORMAT_ICON.podcast}
                 title="Eden AI's Samy Melaine on building AI products for users: podcast"
                 href={HREF}
                 metaAside

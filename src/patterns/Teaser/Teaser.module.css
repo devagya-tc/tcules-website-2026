@@ -237,6 +237,14 @@
   text-transform: var(--text-mono-case);
 }
 
+/* The format's glyph (`icon`, owner 29 Oct 2026): the content icon in the accent, heading the meta.
+   Its own box, so the glyph sits on the meta line's centre in the inline form and heads the column
+   in the ledger's. */
+.glyph {
+  display: inline-flex;
+  color: var(--tsr-glyph-ink);
+}
+
 /* The format, where a set mixes them: the meta line's lead fact, in the title's ink. */
 .label {
   color: var(--tsr-label-ink);

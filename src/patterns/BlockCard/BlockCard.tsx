@@ -869,6 +869,10 @@ export function BlockCard({
         panel && styles.panel,
         compact && !horizontal && imageNode && !cta && styles.compact,
       )}
+      /* A cover BESIDE its words takes a whole row of any grid it is set in (owner, 29 Oct 2026:
+         never two horizontal media items side by side). Layout's published contract: the card says
+         what it is, the container places it. */
+      data-media-row={horizontal && imageNode ? true : undefined}
     >
       {destination && !ctaScoped ? (
         /* The attribute is Button's published contract, not a hook of this component's own: it
