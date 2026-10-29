@@ -177,7 +177,7 @@ export default function TableOfContentsSpecimen() {
         <Layout rowGap="stack">
           <Specimen
             title="5 · Longest strings, and a pasted URL"
-            note="What a page hands the outline before its markers are written: whole headings. Each is cut to one line with an ellipsis — the full string stays in the DOM, so a screen reader reads it — and all four trip the development warning at 26 characters. The answer is a short navigationLabel, not a wider rail."
+            note="What a page hands the outline before its markers are written: whole headings. Each WRAPS to as many lines as it needs at 14 (owner, 29 Oct 2026: no truncation), the marker growing with the row it marks — and all four trip the development warning at 26 characters. The answer is still a short navigationLabel, not a wider rail."
           >
             <Shell prefix="long-labels" labels={LONG} />
           </Specimen>

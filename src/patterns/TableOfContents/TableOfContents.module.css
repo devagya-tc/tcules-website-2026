@@ -67,14 +67,13 @@
   border-radius: var(--toc-ring-radius);
 }
 
-/* The section in view, in the entries' sans; truncated at the chevron rather than wrapping the bar. */
+/* The section in view, in the entries' sans. Never truncated (owner, 29 Oct 2026): a long name
+   wraps and the bar grows a line rather than cutting the words. */
 .summaryCurrent {
   min-inline-size: 0;
-  overflow: hidden;
   font: var(--toc-item-text);
   letter-spacing: var(--toc-item-tracking);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
 }
 
 /* Above the first section there is no "here" to name, so the bar says what it is: the rail's title,
@@ -115,13 +114,13 @@
   position: relative;
 }
 
-/* An entry: the name alone, on one line. The labels are short markers authored for the outline, so
-   one line is the contract and the ellipsis is the fallback for content not yet rewritten — the dev
-   warning names any label past the cap. Scoped `.list .link` so `a:hover` in globals.css never ties
-   it on specificity. */
+/* An entry: the name alone. Never truncated (owner, 29 Oct 2026; decisions/2026-10-29-toc-items-14-
+   and-wrap, superseding the 26 Oct ellipsis): a name longer than the rail wraps to a new line, and the
+   marker, which measures the row's box, grows with it. The labels are still short markers authored for
+   the outline — the dev warning names any label past the cap. Scoped `.list .link` so `a:hover` in
+   globals.css never ties it on specificity. */
 .list .link {
   display: block;
-  overflow: hidden;
   padding-block: var(--toc-item-padding-block);
   padding-inline-start: var(--toc-item-inset);
   border-radius: var(--toc-ring-radius);
@@ -129,8 +128,7 @@
   font: var(--toc-item-text);
   letter-spacing: var(--toc-item-tracking);
   text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
   transition: color var(--toc-duration) var(--toc-easing);
 }
 
