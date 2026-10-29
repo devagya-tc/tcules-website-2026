@@ -38,6 +38,7 @@ export {
   getServicesMasterPage,
   getTermsOfUsePage,
   getToolPage,
+  listSitePages,
   getCorpusPage,
   listCorpusPages,
   getTestimonialRatings,
@@ -206,6 +207,9 @@ export type {
   ToolLabelledItem,
   ToolContentColumn,
   ToolContentSource,
+  SitePage,
+  SitePageFamily,
+  SitePagesContentSource,
 } from './types';
 export type {
   CorpusPage,
