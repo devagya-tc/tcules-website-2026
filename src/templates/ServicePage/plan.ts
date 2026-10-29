@@ -51,7 +51,7 @@ import type {
  *          a text-only head is never split left/right.
  *   § 1.7  two tint bands are never adjacent (owner, 9 Oct 2026), the close L included: where two
  *          would meet, the proof band G keeps tint and its neighbour drops to paper; between two Gs
- *          the later one drops. `closeSurface` gives L its ground from the plan.
+ *          the later one drops. The close L is an island on paper (29 Oct 2026), so it never meets one.
  *   § 1.7  never two text-heavy bands back to back (owner, 7 Oct 2026): a dev warning, not a
  *          rearrangement, because the fix is the story's order and the plan never reorders it.
  *          `textHeavy` below is the definition.
@@ -360,11 +360,6 @@ export function planBands(story: ServiceStory): Band[] {
 
   if (process.env.NODE_ENV !== 'production') warnTextHeavyPairs(story.slug, bands);
   return bands;
-}
-
-/** The close L's ground: tint, the closer's step (CtaSection), unless the last band is tint (§ 1.7). */
-export function closeSurface(bands: readonly Band[]): BandSurface {
-  return bands.at(-1)?.surface === 'tint' ? 'paper' : 'tint';
 }
 
 /** Bands whose job is drawn rather than written: a diagram, client marks, a set of covers, an icon

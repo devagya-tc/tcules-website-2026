@@ -36,6 +36,12 @@
    default, and an inline replaced element sits on a line box and leaves a descender gap. */
 .flow {
   display: block;
+  color: var(--tex-flow-ink);
+}
+
+/* A field whose WebGL context was lost steps aside (TextureFlow): the ground stands plain. */
+.flow[data-lost] {
+  visibility: hidden;
 }
 
 .frame {

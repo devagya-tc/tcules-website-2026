@@ -77,10 +77,6 @@
      has no step between lead (56ch, ~620 here) and title (32ch, ~350), so it is named here for the
      one component that needs it rather than added to the ramp on one use. */
   --cta-lede-measure: 44ch;
-  /* The split close's form panel (home round 3): the photograph radius every image box and the
-     testimonial card take. */
-  --cta-panel-radius: var(--radius-8);
-
   /* The island close (owner, 16 Oct 2026): the split close on a blue or ink island, the form on a
      paper panel INSIDE it. The panel takes 16, a step under the island's 24, and a `block` inset
      (was `gutter`; owner, 16 Oct 2026: the close fits one laptop screen, 828 tall at 1440). */
@@ -150,7 +146,7 @@
   --cta-mark-ink: var(--color-brandeis-500); /* the lede's mark */ /* 5.51:1 */
   --cta-number-ink: var(--color-neutral-700); /* 7.27:1 */
   --cta-rule-ink: var(--color-neutral-400); /* decoration; 300 vanishes on the deeper ground */
-  --cta-panel-ground: var(--color-paper-deep); /* the form panel as a tint surface */
+  --cta-panel-ground: var(--color-paper); /* declared for self-containment; no panel is tint (29 Oct 2026) */
 }
 
 [data-surface='ink'] {

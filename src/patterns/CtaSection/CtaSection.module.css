@@ -16,13 +16,14 @@
    ground is `--sec-ground` and nothing else. That is the hard constraint "must not own its ground"
    read as a rule about what this stylesheet may contain rather than about which props exist, and
    the spec's §14 names the grep that proves it.
-   ONE exception since home round 3 (11 Oct 2026): the split close's form panel (`.formPanel`, at the
-   foot) paints --cta-panel-ground — the ground of the small surface the panel itself declares, so
-   the form reads as the band's primary object. The band's own ground is still Section's.
+   ONE exception since home round 3 (11 Oct 2026): the island close's form panel (`.islandPanel`)
+   paints --cta-panel-ground — the ground of the small surface the panel itself declares, so the
+   form reads as the band's primary object. The band's own ground is still Section's, the island's
+   is Island's. (The plain split's `.formPanel` was retired 29 Oct 2026: a form sits only on an
+   island.)
 
    No `display: grid` and no `display: flex`. All three arrangements are `Layout` and `Cluster` in
-   the TSX — the two-column split, the 3-up points row in `open`, the 2- and 3-up points grid in
-   `offer`, and each point's marker-and-label row, a nowrap baseline `Cluster` (30 Sep 2026; it was a
+   the TSX — the two-column split, the 3-up points row in `open`, and each point's marker-and-label row, a nowrap baseline `Cluster` (30 Sep 2026; it was a
    two-track `Layout`). There is nothing left for a local grid to do.
 
    No margin, no padding, no reach into `--space-*`. The ~20px `--text-index` numeral in `marker`
@@ -285,13 +286,6 @@
    panel's own padding, not outer spacing; no edge and no shadow (nothing on the site casts one).
    `block`, not `gutter`: in the 326 phone column a 32 inset left the fields 236 of text, and the
    "Product or company URL (optional)" cue was cut; at 24 it is 252 and reads whole. */
-.formPanel {
-  min-inline-size: 0;
-  padding: var(--gap-block);
-  background: var(--cta-panel-ground);
-  border-radius: var(--cta-panel-radius);
-}
-
 
 /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────
    The form's panel inside the island: paper, the 16 radius under the island's 24, a `block` inset.
