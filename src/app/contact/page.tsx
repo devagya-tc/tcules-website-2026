@@ -1,13 +1,22 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { ComposedRoute, composedMetadata, isComposedRoute } from '@/app/_corpus/composed';
+import { composedMetadata, isComposedRoute } from '@/app/_corpus/composed';
 
 import { Button, Cluster, Icon, Layout, Section } from '@/components';
-import { getContactPage, type ContactAction } from '@/content';
+import {
+  getCaseRefs,
+  getContactPage,
+  getCorpusPage,
+  getTestimonialAvatars,
+  getTestimonialRatings,
+  type ContactAction,
+} from '@/content';
+import { caseRoutesIn } from '@/lib/corpus-cases';
 import { ENDPOINTS, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import { Breadcrumbs, EnquiryForm, ListCard, PageHero } from '@/patterns';
+import { ContactPage as ContactTemplate } from '@/templates';
 
 const CONTACT_SLUG = ROUTES.contact.slice(1);
 
@@ -56,8 +65,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/** The 26 Oct copy through the Contact template (component-map § E /contact). Composition only. */
+async function ContactFromCopy() {
+  const page = await getCorpusPage(ROUTES.contact);
+  if (!page) notFound();
+  const [caseRefs, ratings, avatars] = await Promise.all([
+    getCaseRefs(caseRoutesIn(page)),
+    getTestimonialRatings(page.composition.testimonialIds),
+    getTestimonialAvatars(page.composition.testimonialIds),
+  ]);
+  return (
+    <ContactTemplate
+      page={page}
+      caseRefs={caseRefs}
+      shared={{}}
+      ratings={ratings}
+      avatars={avatars}
+    />
+  );
+}
+
 export default async function ContactPage() {
-  if (isComposedRoute(ROUTES.contact)) return <ComposedRoute route={ROUTES.contact} />;
+  if (isComposedRoute(ROUTES.contact)) return <ContactFromCopy />;
 
   const page = await getContactPage(CONTACT_SLUG);
 

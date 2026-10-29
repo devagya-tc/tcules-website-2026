@@ -343,7 +343,9 @@ export const TEMPLATE_BANDS = {
     'ai-native-practice',
     'expertise',
   ],
-  '/about': ['leadership', 'company-record'],
+  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record'],
+  /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
+  '/contact': ['brief', 'next-steps', 'confidentiality'],
 } as const satisfies Readonly<Record<string, readonly string[]>>;
 
 /** The kind the id table gives a band, or undefined when its id is not in the table. */
