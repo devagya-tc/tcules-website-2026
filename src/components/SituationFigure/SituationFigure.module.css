@@ -10,6 +10,13 @@
   overflow: visible;
 }
 
+/* Across its box instead: the full width, the height its ratio gives (product-paths). Sizing, not
+   arrangement. */
+.figure[data-fit='width'] {
+  block-size: auto;
+  inline-size: 100%;
+}
+
 /* A part that moves: from where it is drawn (rest) by its own displacement (end). */
 .figure :global(.mv) {
   transform-box: fill-box;
@@ -26,19 +33,16 @@
 }
 
 /* End state: when the link the drawing sits in is hovered or focused — the one place a drawing is
-   interactive — or when a specimen asks for it. A host that is not one link (GatewayPaths: a path
-   with two or three links) marks itself `data-sfig-host`, and pointing at it or focusing one of its
-   links plays the drawing the same way. */
+   interactive — or when a specimen asks for it. (GatewayPaths' per-path host, `data-sfig-host`, went
+   with its per-path drawings on 29 Oct 2026: its one drawing is static.) */
 :global(a:hover) .figure :global(.mv),
 :global(a:focus-visible) .figure :global(.mv),
-:global([data-sfig-host]:is(:hover, :focus-within)) .figure :global(.mv),
 .figure[data-state='end'] :global(.mv) {
   transform: translate(var(--sfig-tx), var(--sfig-ty)) rotate(var(--sfig-rot));
 }
 
 :global(a:hover) .figure :global(.trace),
 :global(a:focus-visible) .figure :global(.trace),
-:global([data-sfig-host]:is(:hover, :focus-within)) .figure :global(.trace),
 .figure[data-state='end'] :global(.trace) {
   stroke-dashoffset: 0;
 }

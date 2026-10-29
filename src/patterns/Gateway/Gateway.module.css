@@ -285,11 +285,12 @@
 }
 
 /* ── paths (GatewayPaths, home, 29 Oct 2026) ───────────────────────────────────
-   Two paths on paper, each read down: drawing, title, sentences, links. No ground and no box. The
-   drawing's box is one height for both, so the titles share a line. Sizing, not arrangement. */
-.pathVisual {
+   Two equal paths on paper, each read down: title, sentences, links. No ground, no box, no rule. One
+   drawing over both, across the content column (the figure fills its width and keeps its ratio, so
+   it scales whole at every width). Sizing, not arrangement. */
+.pathsVisual {
   display: block;
-  block-size: var(--gwy-path-visual-height);
+  min-inline-size: 0;
 }
 
 .pathTitle {
