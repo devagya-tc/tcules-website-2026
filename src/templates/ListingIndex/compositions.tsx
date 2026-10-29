@@ -353,6 +353,9 @@ export function Feature({
         <ul>
           <BlockCard
             {...cardOf(lead, meta)}
+            /* The lead carries no topic tag (owner, 29 Oct 2026: on the horizontal card "the tag
+               feels like an impediment"): its title and action are the whole of its copy column. */
+            tag={undefined}
             orientation="horizontal"
             size="lg"
             titleAs={titleAs}
