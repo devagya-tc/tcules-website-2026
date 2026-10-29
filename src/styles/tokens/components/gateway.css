@@ -60,11 +60,8 @@
      first glyph. An optical offset, not a layout distance (gap rule 1). */
   --gwy-card-ring-offset: var(--space-12);
   /* `GatewayPaths` (home, 29 Oct 2026, component-map C10): two paths, not six situations. With two
-     the title takes a step up (h3, the serif) and stays under the band's h2; the drawing's box is
-     taller than the board's 140 because two drawings share the row, yet stays well under the
-     words' block so the title, not the picture, is the item's hero
-     (decisions/2026-10-10-gateway-title-is-the-hero). A component size. */
-  --gwy-path-visual-height: 180px;
+     the title takes a step up (h3, the serif) and stays under the band's h2. Their one drawing is
+     set across the column by the figure's own ratio, so it needs no size here. */
   --gwy-path-title-text: var(--text-h3);
   --gwy-path-title-tracking: var(--text-h3-tracking);
   --gwy-path-body-text: var(--text-body);

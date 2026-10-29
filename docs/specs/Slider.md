@@ -118,13 +118,13 @@ Deliberately not props: autoplay, loop, a per-slide picker, a step size (always 
 |---|---|---|
 | before hydration | native `disabled`, neutral | thumb at the start, its CSS length |
 | rest | blue glyph, blue hairline rule, no fill | thumb = view ÷ count of the rail |
-| hover / focus-visible | filled with the surface's primary, glyph to the fill's label colour; focus adds the ring | — |
-| pressed | the fill one step deeper | — |
+| hover / focus-visible | the rule firms one step and the glyph takes the link's step, no fill (29 Oct 2026); focus adds the ring | — |
+| pressed | a pale ground, the rule one step firmer again | — |
 | at an end | `aria-disabled="true"`, neutral rule and glyph, no fill on hover or press; keeps focus and its ring | thumb at that end |
 | nothing to scroll | both controls at an end | thumb fills the rail |
 | row focused (no focusable slides) | — | the row draws the ring round itself |
 
-Hover ≠ pressed on every surface (`--btn-outline-primary-bg-hover` ≠ `-pressed`). The controls are Button's `outline` emphasis; their colour tokens live in `button.css`.
+Hover ≠ pressed on every surface (`--btn-outline-primary-rule-hover` ≠ `-rule-pressed`, or the pressed ground). The controls are Button's `outline` emphasis; their colour tokens live in `button.css`.
 
 ## 6 · Per-surface colour
 
