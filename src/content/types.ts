@@ -510,6 +510,33 @@ export type ToolContentSource = {
 };
 
 /**
+ * One page the CMS publishes, by the route family that serves it. The sitemap reads the list; the
+ * page builds each path with `@/lib/routes`, so a family's URL is still decided in one place. `slug`
+ * is the route's own slug (an event's `events/` CMS prefix is already gone), and nested slugs keep
+ * their `/` (`product-design/ux-research`).
+ */
+export type SitePageFamily =
+  | 'service'
+  | 'audit'
+  | 'expertise'
+  | 'glossary'
+  | 'tool'
+  | 'insight'
+  | 'podcast'
+  | 'event'
+  | 'caseStudy';
+
+export type SitePage = {
+  family: SitePageFamily;
+  slug: string;
+  updatedAt?: string;
+};
+
+export type SitePagesContentSource = {
+  listSitePages(): Promise<SitePage[]>;
+};
+
+/**
  * How We Work uses the same ordered content-block vocabulary as an audit page in Strapi. Keeping
  * the page-facing model aligned lets both route families compose the same established patterns
  * while their CMS queries and cache identities remain independent.
@@ -1254,7 +1281,13 @@ export type IdealAboutPage = {
   };
   testimonials: {
     heading: string;
-    items: Array<{ id: string; quoteHtml: string; name: string; role: string; company: string }>;
+    items: Array<{
+      id: string;
+      quoteHtml: string;
+      name: string;
+      role: string;
+      company: string;
+    }>;
   };
   record: { heading: string; rows: Array<[string, string]> };
   faq: { heading: string; items: Array<{ question: string; answerHtml: string }> };
@@ -1320,13 +1353,7 @@ export type InsightTaxonomy = {
  * designed for them before the CMS has them (docs/strapi-changes.md § 20).
  */
 export type InsightResourceKind =
-  | 'article'
-  | 'guide'
-  | 'research'
-  | 'event'
-  | 'interview'
-  | 'podcast'
-  | 'video';
+  'article' | 'guide' | 'research' | 'event' | 'interview' | 'podcast' | 'video';
 
 export type InsightResource = {
   documentId: string;
