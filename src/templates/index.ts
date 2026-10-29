@@ -46,6 +46,7 @@ export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {
   AboutPage,
+  ContactPage,
   HomePage,
   PlainPage,
   LongformPage,
@@ -67,6 +68,7 @@ export {
 } from './CorpusPage';
 export type {
   AboutPageProps,
+  ContactPageProps,
   HomePageProps,
   PlainPageProps,
   LongformFamily,
