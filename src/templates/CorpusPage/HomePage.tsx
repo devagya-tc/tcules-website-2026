@@ -12,6 +12,7 @@ import {
   CtaRow,
   Gateway,
   GatewayPaths,
+  Teaser,
   type BentoItem,
   type BlockCardSetItem,
   type GatewayItem,
@@ -19,12 +20,13 @@ import {
   type HeroStat,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
-import { caseRouteOf } from '@/lib/corpus-cases';
+import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
   CorpusBlock,
   CorpusCaseRef,
+  CorpusInsightRef,
   CorpusMediaBinding,
   CorpusPage,
   PlaceholderReasons,
@@ -44,7 +46,7 @@ import {
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { LinkActions } from './CopyBands';
+import { LinkActions, RelatedBand, content, entriesOf } from './CopyBands';
 import { bindingNamed, coverFor, slugOf } from './images';
 import { UnitView, type OfferContext } from './OfferBands';
 import { planOffer, TEMPLATE_BANDS } from './plan';
@@ -53,6 +55,11 @@ import { bandLinks, labelTitle, leadOf, plain, trimEnd } from './text';
 export type HomePageProps = {
   page: CorpusPage;
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
+  /**
+   * The insights the page links, as each piece's own corpus page describes it (format and length),
+   * by live route (`getInsightRefs`). A piece with none shows no meta column facts.
+   */
+  insightRefs?: Readonly<Record<string, CorpusInsightRef>>;
   shared?: Readonly<Record<string, CorpusMediaBinding>>;
   /**
    * Star ratings for the page's testimonials, by testimonial id, as the route read them from the
@@ -77,7 +84,6 @@ export type HomePageProps = {
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
-type QuoteBlock = Extract<CorpusBlock, { type: 'quote' }>;
 type ParagraphBlock = Extract<CorpusBlock, { type: 'paragraph' }>;
 
 const items = (b: CorpusBand): ItemBlock[] =>
@@ -85,9 +91,6 @@ const items = (b: CorpusBand): ItemBlock[] =>
 
 const paragraphRuns = (blocks: readonly CorpusBlock[]) =>
   blocks.flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
-
-const quoteIn = (blocks: readonly CorpusBlock[]): QuoteBlock | undefined =>
-  blocks.find((block): block is QuoteBlock => block.type === 'quote');
 
 /** Every lone-link line of an item, as links, in order. */
 const linkLines = (item: ItemBlock | undefined) =>
@@ -101,19 +104,20 @@ const linkLines = (item: ItemBlock | undefined) =>
  * never paraphrased (owner, 10 Oct 2026: "we are allowed to design the content"): the hero's record
  * line becomes three figures inside the hero, the client names become the logo wall the Clutch score
  * leads, the situations become a scannable set of decisions, the two quoted cases are featured with
- * their clients' words as each case's twin panel, the reasons are a set each drawn beside its
- * claim, and the client voices are a wall of rated cards. The one reorder is shared by
+ * their clients' words as each case's twin panel, the reasons are a set each headed by the
+ * drawing of its claim, and the client voices are a wall of rated cards. The one reorder is shared by
  * every corpus page: the form sits directly above the questions (order.ts).
  *
  * Shapes down the page, so no two neighbours are one rectangle: a split hero with its figures · a
  * boxed logo wall · the six situations as a one-column typographic router · two case-and-quote
- * diptychs, then a lighter pair · six icon boxes · four reasons 2×2, each beside its drawing · a wall
+ * diptychs, then a lighter pair · six icon boxes · four reasons 2×2, each under its drawing · a wall
  * of rated cards on tint · a photo banner · eight sector cards · the form panel on tint · the
  * questions. The hero's solid is the page's one blue ask; the form's submit repeats it.
  */
 export function HomePage({
   page,
   caseRefs = {},
+  insightRefs = {},
   shared = {},
   ratings,
   avatars,
@@ -121,8 +125,7 @@ export function HomePage({
   eyebrows,
   reasonFigure,
 }: HomePageProps) {
-  /* The plan decides every band's kind, surface and arrangement (the Reasons bands' open/beside
-     included, owner 29 Oct 2026, Q1), and the form sits right before the questions. */
+  /* The plan decides every band's kind and surface, and the form sits right before the questions. */
   const units = planOffer(page);
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, reasonFigure };
   return (
@@ -150,6 +153,7 @@ export function HomePage({
             reasons={reasons}
             eyebrows={eyebrows}
             caseRefs={caseRefs}
+            insightRefs={insightRefs}
           />
         );
       })}
@@ -165,6 +169,7 @@ type BandProps = {
   reasons?: PlaceholderReasons | null;
   eyebrows?: ProposedEyebrows;
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
+  insightRefs?: Readonly<Record<string, CorpusInsightRef>>;
 };
 
 /* ── 0 · the studio's record, as three figures in the hero ───────────────────────── */
@@ -401,7 +406,8 @@ function OneStudio({ b }: BandProps) {
 /**
  * The studio's people: the team photograph under the head (Banner `below`, component-map Q17
  * default). The band's two paragraphs are its lead, both at the lead's role and measure, and the
- * two links stack under them.
+ * two links are one row under them: "Meet the studio" an outlined button, "Careers at Tcules" the
+ * quieter link (owner, 29 Oct 2026).
  */
 function People({ page, b }: BandProps) {
   const paras = paragraphRuns(b.blocks);
@@ -415,7 +421,7 @@ function People({ page, b }: BandProps) {
       headingId={headingIdOf(b)}
       heading={b.headingText}
       lead={paras.map((runs) => plain(runs))}
-      actions={<LinkActions links={bandLinks(b)} />}
+      actions={<LinkActions links={bandLinks(b)} pair />}
       image={
         binding
           ? { ...corpusImage(binding), kind: 'photograph' }
@@ -425,7 +431,7 @@ function People({ page, b }: BandProps) {
   );
 }
 
-/* ── 3 · selected work: two cases with their clients' words, then two more ───────── */
+/* ── 3 · selected work: every case as a horizontal case card ───────────────────────── */
 
 /**
  * Where a case cover is cropped (Media `focus`) in the one 16:9 card box (home round 3). Every
@@ -446,21 +452,14 @@ const COVER_FOCUS: Readonly<Record<string, { x: number; y: number }>> = {
 };
 
 /**
- * Featured, then listed (owner, home round 2: "2 rows for the case studies with quotes, and then the
- * other case studies listed in a 2-col layout").
+ * Every case as one horizontal CaseCard (owner, 29 Oct 2026; supersedes home round 2's "featured,
+ * then listed"): the cover beside the claim on the card's paper-deep ground, a `gutter` apart, every
+ * second card mirrored. The client's name before the title's colon is the card's eyebrow, the rest
+ * its claim (splitClaim). No quote is shown on a card (owner, 22 Oct 2026); the client's words stay in
+ * the page's own testimonial band.
  *
- *   1. The two cases whose clients spoke (Doodle, Eden AI) are each ONE featured card (CaseCard,
- *      the shape approved in round 7 on 16 Oct 2026): the cover beside the claim on one ground. The
- *      quote the corpus authors with the case marks it as featured, but is not shown on the card
- *      (owner, 22 Oct 2026: "case study cards never hold testimonials in them"); the client's words
- *      stay in the page's own testimonial band. The client's name before the title's colon becomes
- *      the card's eyebrow, the rest its claim. The two cards are a set, a `gutter` apart, and the
- *      second mirrors the first.
- *   2. The cases without a quote (Dealpath, Benchmark Gensuite) follow as a lighter pair, two across,
- *      one type step down, at the same 16:9 (there is no other card crop since round 3).
- *
- * A HOME shape (page-mapping § 19): a service or expertise page features one case with its quote as
- * the [7, 5] card (TestimonialBeside `card`), because there the case serves the offer.
+ * A HOME shape: home emphasises its case studies. Every other page's selected work stays the
+ * three-across BlockCard grid (OfferBands), where the cases are paths to more content.
  */
 function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
   const cases = items(b);
@@ -507,63 +506,38 @@ function SelectedWork({ page, b, caseRefs = {} }: BandProps) {
     );
   };
 
-  const indexed = cases.map((item, index) => ({ item, index, quote: quoteIn(item.blocks) }));
-  const featured = indexed.filter((entry) => entry.quote);
-  const listed = indexed.filter((entry) => !entry.quote);
-
-  /* The 26 Oct copy quotes no case (component-map § E home 5, Q2 default): three peers, one covered
-     set three across at md, never a phone scroll (home never hides a card). */
-  const peers: BlockCardSetItem[] = cases.map((item, index) => {
-    const { link, story, image } = parts(item, index);
-    return {
-      id: item.headingText,
-      title: item.headingText,
-      ...story,
-      ...(link ? { href: link.href, ctaLabel: link.labelText } : {}),
-      /* Every card its case's cover (a peer set is all-covered or none): the page's binding that
-         names the case, else the case's own cover, else its placeholder (coverFor). */
-      media: {
-        type: 'image' as const,
-        image:
+  /* Every case is one horizontal CaseCard on its paper-deep ground, the second mirroring the first
+     (owner, 29 Oct 2026; decisions/2026-10-29-home-selected-work-is-case-cards): home emphasises its
+     case studies, so each gets the row. Every other page sets its selected work as the three-across
+     BlockCard grid (OfferBands), because there the cases are paths to more content. The cover is the
+     page's binding that names the case, else the case's own cover, else its placeholder (coverFor). */
+  const body = (
+    <Layout rowGap="gutter">
+      {cases.map((item, index) => {
+        const { link, story, image } = parts(item, index);
+        /* A case without its link falls back to the plain card. */
+        if (!link) return <ul key={item.headingText}>{card(item, index)}</ul>;
+        const cover =
           image ??
           coverFor(
             page,
             item.headingText.split(':')[0] ?? item.headingText,
-            link ? caseRefs[caseRouteOf(link.href)] : undefined,
-          ),
-      },
-    };
-  });
-  const body =
-    featured.length === 0 ? (
-      <BlockCardSet items={peers} lead="none" across={3} size="md" cue="cta" scroll="never" />
-    ) : (
-      <Layout rowGap="section">
-        <Layout rowGap="gutter">
-          {featured.map(({ item, index }, row) => {
-            const { link, story, image } = parts(item, index);
-            /* A featured case without its link or cover falls back to the plain card. */
-            if (!link || !image) return <ul key={item.headingText}>{card(item, index)}</ul>;
-            return (
-              <CaseCard
-                key={item.headingText}
-                {...splitClaim(item.headingText)}
-                {...story}
-                href={link.href}
-                ctaLabel={link.labelText}
-                image={image}
-                reverse={row % 2 === 1}
-              />
-            );
-          })}
-        </Layout>
-        {listed.length > 0 ? (
-          <Layout as="ul" columns={{ md: 2 }} colGap="gutter" rowGap="stack">
-            {listed.map(({ item, index }) => card(item, index))}
-          </Layout>
-        ) : null}
-      </Layout>
-    );
+            caseRefs[caseRouteOf(link.href)],
+          );
+        return (
+          <CaseCard
+            key={item.headingText}
+            {...splitClaim(item.headingText)}
+            {...story}
+            href={link.href}
+            ctaLabel={link.labelText}
+            image={cover}
+            reverse={index % 2 === 1}
+          />
+        );
+      })}
+    </Layout>
+  );
   return closing ? (
     <ContentSection
       {...head(b)}
@@ -703,6 +677,58 @@ function Expertise({ page, b }: BandProps) {
   );
 }
 
+/* ── 7 · selected thinking: a resource listing, one piece per row ────────────────────── */
+
+/** A piece's format as its own page names it (`page_type`), in words: `article` → "Article". */
+const formatLabel = (pageType: string) =>
+  pageType.charAt(0).toUpperCase() + pageType.slice(1).replace(/_/g, ' ');
+
+/**
+ * "Selected thinking from the studio" as a resource listing (owner, 29 Oct 2026): ONE piece per row
+ * at the column's full width, the rows ruled, each row one link (Teaser `row`, `metaAside`, `ruled`,
+ * `arrow`). The meta column holds the piece's format and its length as the piece's OWN corpus page
+ * displays them (insightRefs; never a word nobody authored); the title is the row's anchor with the
+ * summary under it, and an arrow ends the row. A band with anything other than linked entries keeps
+ * the shared related-reading list (RelatedBand), so no block is dropped.
+ */
+function Insights({ b, insightRefs = {} }: BandProps) {
+  const blocks = content(b);
+  const [first] = blocks;
+  const leadText =
+    first?.type === 'paragraph' && !first.runs.some((run) => run.type === 'link')
+      ? plain(first.runs)
+      : undefined;
+  const { entries, rest } = entriesOf(leadText ? blocks.slice(1) : blocks);
+  if (rest.length > 0 || entries.length === 0 || entries.some((entry) => !entry.href)) {
+    return <RelatedBand band={b} />;
+  }
+  return (
+    <ContentSection {...head(b)} data-band="K" lead={leadText}>
+      <Layout as="ul" rowGap="none">
+        {entries.map((entry) => {
+          const href = entry.href ?? '';
+          const ref = insightRefs[insightRouteOf(href)];
+          return (
+            <Teaser
+              key={href}
+              arrangement="row"
+              metaAside
+              ruled
+              arrow
+              size="lg"
+              title={entry.title}
+              href={href}
+              body={entry.body}
+              label={ref ? formatLabel(ref.format) : undefined}
+              meta={ref?.length ? [ref.length] : undefined}
+            />
+          );
+        })}
+      </Layout>
+    </ContentSection>
+  );
+}
+
 /* ── The band table: the content team's ids, each to its renderer ─────────────────── */
 
 /** Home's own bands (plan.ts `TEMPLATE_BANDS['/']`); every other band renders as the plan names it. */
@@ -717,6 +743,7 @@ const HOME_BANDS: Readonly<
   people: People,
   'ai-native-practice': AiPractice,
   expertise: Expertise,
+  insights: Insights,
 };
 
 const BANDS: Readonly<Record<string, ComponentType<BandProps>>> = {
