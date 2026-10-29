@@ -433,42 +433,45 @@ function SpecialistPrototype() {
   );
 }
 
-/** New Product Design & First Release: the founder's rough prototype, never built, carried into a
- *  first release that is whole, its one action lit, and the launch flagged at its corner. */
+/** New Product Design & First Release: the prototype that holds everything, made the release that
+ *  holds one job for one person; what it leaves out is hatched, not built. */
 function SpecialistNewProduct() {
+  const widths = [52, 64, 40, 70, 46, 58, 36];
   return (
     <>
-      <Hatched x={30} y={58} w={80} h={64} />
-      <Hop x1={110} x2={160} y={90} />
-      <Rect x={160} y={36} w={110} h={108} rx={8} className={styles.frame} />
-      <Copy x={176} y={58} w={48} quiet />
-      <Copy x={176} y={74} w={72} />
-      <Rect x={176} y={88} w={78} h={14} className={styles.tile} />
-      <Rect x={176} y={114} w={44} h={16} rx={8} className={styles.solid} />
-      <Focus x={270} y={140} glyph="flag" size={12} />
+      <Rect x={30} y={40} w={100} h={100} rx={8} className={styles.trailFrame} />
+      {[56, 68, 80, 92, 104, 116, 128].map((y, i) => (
+        <Copy key={y} x={44} y={y} w={widths[i] ?? 40} quiet />
+      ))}
+      <Hop x1={130} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={188} cy={50} size={14} className={styles.glyph} />
+      <Copy x={202} y={50} w={40} quiet />
+      <Rect x={180} y={66} w={100} h={36} rx={12} className={styles.halo} />
+      <Rect x={186} y={72} w={88} h={24} className={styles.region} />
+      <path className={styles.regionCopy} d="M196,84 L250,84" />
+      <Hatched x={186} y={112} w={88} h={14} />
+      <Hatched x={186} y={132} w={56} h={10} />
     </>
   );
 }
 
-/** UX & Product Audit: something is wrong somewhere on the screen; the lens finds the row, and it
- *  goes on the list of findings as the one that matters. */
+/** UX & Product Audit: the team knows something is wrong somewhere on the screen; the lens finds what. */
 function SpecialistAudit() {
   return (
     <>
-      <Rect x={30} y={30} w={160} h={120} rx={8} className={styles.frame} />
-      <Copy x={46} y={50} w={56} quiet />
-      <Rect x={46} y={64} w={128} h={16} className={styles.tile} />
-      <Rect x={46} y={88} w={128} h={16} className={styles.region} />
-      <path className={styles.regionCopy} d="M56,96 L116,96" />
-      <Rect x={46} y={112} w={128} h={16} className={styles.tile} />
-      <Lens x={150} y={96} r={16} />
-      <Hop x1={190} x2={222} y={96} />
-      <Rect x={222} y={58} w={64} h={22} className={styles.tile} />
-      <Copy x={232} y={69} w={36} quiet />
-      <Rect x={222} y={85} w={64} h={22} className={styles.region} />
-      <path className={styles.regionCopy} d="M232,96 L272,96" />
-      <Rect x={222} y={112} w={64} h={22} className={styles.tile} />
-      <Copy x={232} y={123} w={28} quiet />
+      <Rect x={30} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      <Copy x={46} y={50} w={60} quiet />
+      <Copy x={46} y={62} w={100} />
+      {[46, 110, 174].map((x) => (
+        <g key={x}>
+          <Rect x={x} y={84} w={52} h={44} className={styles.tile} />
+          <Copy x={x + 8} y={96} w={28} quiet />
+          <Copy x={x + 8} y={108} w={20} quiet />
+        </g>
+      ))}
+      <Lens x={136} y={106} r={24} />
+      <Focus x={136} y={106} glyph="danger-triangle" size={12} />
     </>
   );
 }
@@ -605,6 +608,6 @@ export const OFFER_DRAWN: Partial<
   'specialist-ui': [36, 26, 208, 128],
   'specialist-dataviz': [36, 26, 248, 128],
   'specialist-prototype': [26, 30, 280, 116],
-  'specialist-new-product': [26, 30, 266, 130],
-  'specialist-audit': [26, 26, 264, 128],
+  'specialist-new-product': [26, 26, 268, 128],
+  'specialist-audit': [26, 26, 228, 128],
 };

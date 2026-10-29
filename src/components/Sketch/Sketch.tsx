@@ -21,6 +21,7 @@ import type { SketchName } from '@/lib/sketches';
  *   ai-product-ux          a suggestion, and the person's cursor accepting it
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
+ *   audits                 a problem on the screen traced to the findings, ranked, the first lit
  * And the ARTICLE scenes, each drawn for one insight from its own argument, its cover until a real
  * one exists (owner, 13 Oct 2026; @/lib/sketches `ArticleSceneName`): code-review,
  * security-checklist, prototype-to-production. And the KIT scenes (./kit): EngagementOptions' scopes

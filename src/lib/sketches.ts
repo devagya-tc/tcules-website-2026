@@ -10,7 +10,8 @@ export type ServiceSceneName =
   | 'design-systems'
   | 'ai-product-ux'
   | 'design-engineering'
-  | 'software-development';
+  | 'software-development'
+  | 'audits';
 
 /**
  * ARTICLE scenes (owner, 13 Oct 2026): each drawn for ONE insight, from that article's own argument,
@@ -49,7 +50,9 @@ export type TraceSceneName =
  * OFFER scenes (owner, 26 Oct 2026, product-design page): drawn for one item of a service page's
  * band from that item's own words, and assigned item by item at the content seam
  * (src/content/sources/offer-scenes.ts). `outcome-*` for "What you get", `symptom-*` for "Where we
- * start", `specialist-*` for the specialist services bento, `case-*` for a worked example's story.
+ * start", `specialist-*` for the specialist services bento (seven since the 26 Oct copy: New Product
+ * Design and the UX & Product Audit joined the five, owner 29 Oct 2026, Q7), `case-*` for a worked
+ * example's story.
  */
 export type OfferSceneName =
   | 'outcome-explain'
@@ -82,6 +85,7 @@ const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
   '/services/ai-product-ux': 'ai-product-ux',
   '/services/design-engineering': 'design-engineering',
   '/services/software-development': 'software-development',
+  '/audits': 'audits',
 };
 
 /** The scene for a service page's route, or undefined for a route that has none. */

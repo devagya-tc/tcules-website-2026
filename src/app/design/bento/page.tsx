@@ -167,7 +167,7 @@ export default function BentoSpecimen() {
               [
                 'ia',
                 'Information Architecture & Workflow Design',
-                'Products where work passes between people',
+                'Products where work passes between people, or the menu keeps growing',
                 'specialist-ia',
               ],
               [
