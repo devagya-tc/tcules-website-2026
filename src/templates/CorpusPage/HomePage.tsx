@@ -71,6 +71,8 @@ export type HomePageProps = {
   reasons?: PlaceholderReasons | null;
   /** Eyebrows proposed for bands the corpus authors without one, by band id (PROPOSED, P49). */
   eyebrows?: ProposedEyebrows;
+  /** A Why Tcules reason's drawing by its authored title, as OfferPage takes it (component-map C1). */
+  reasonFigure?: OfferContext['reasonFigure'];
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
@@ -116,11 +118,12 @@ export function HomePage({
   avatars,
   reasons,
   eyebrows,
+  reasonFigure,
 }: HomePageProps) {
   /* The plan decides every band's kind, surface and arrangement (the Reasons bands' open/beside
      included, owner 29 Oct 2026, Q1), and the form sits right before the questions. */
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars };
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, reasonFigure };
   return (
     <>
       <CorpusHero

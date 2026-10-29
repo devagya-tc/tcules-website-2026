@@ -14,6 +14,8 @@ import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { OfferPage } from '@/templates';
 
+import { landedReasonFigure } from './reason-figure';
+
 /**
  * The composed corpus routes that are not an offer family's (component-map C12, 29 Oct 2026): a hub
  * or a one-off page whose copy is a run of bands, handed to OfferPage's unit loop, so every band
@@ -63,6 +65,7 @@ export async function ComposedRoute({ route }: { route: string }) {
       ratings={ratings}
       avatars={avatars}
       scenes={scenes}
+      reasonFigure={landedReasonFigure}
     />
   );
 }
