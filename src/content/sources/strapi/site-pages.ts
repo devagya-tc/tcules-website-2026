@@ -4,7 +4,11 @@ import { SITE_PAGES_QUERY } from './site-pages-query';
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const SITE_PAGES_REVALIDATE_SECONDS = 300;
 
-type StrapiSlugEntry = { slug?: string | null; updatedAt?: string | null };
+type StrapiSlugEntry = {
+  slug?: string | null;
+  title?: string | null;
+  updatedAt?: string | null;
+};
 
 type StrapiSitePagesResponse = {
   data?: Partial<Record<keyof typeof FAMILIES, StrapiSlugEntry[] | null>>;
@@ -38,6 +42,15 @@ const INDEX_RECORD_SLUG = 'main';
 
 function value(candidate: string | null | undefined): string {
   return typeof candidate === 'string' ? candidate.trim() : '';
+}
+
+/** Strapi titles mark a display line break with `|` ("Designing trust | OmnyAI"); a list reads one line. */
+function displayTitle(candidate: string | null | undefined): string {
+  return value(candidate)
+    .split('|')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join(' ');
 }
 
 function routeSlug(family: SitePageFamily, candidate: string | null | undefined): string {
@@ -77,7 +90,7 @@ async function fetchSitePages(): Promise<StrapiSitePagesResponse['data']> {
   return payload.data;
 }
 
-/** Every page Strapi publishes, as route family + route slug, deduplicated and in a stable order. */
+/** Every page Strapi publishes, as route family + route slug + title, deduplicated. */
 export const sitePageSource: SitePagesContentSource = {
   async listSitePages() {
     const data = await fetchSitePages();
@@ -91,7 +104,12 @@ export const sitePageSource: SitePagesContentSource = {
         const slug = routeSlug(family, entry.slug);
         if (!slug || slug === INDEX_RECORD_SLUG) continue;
         const updatedAt = value(entry.updatedAt);
-        pages.set(`${family}:${slug}`, { family, slug, ...(updatedAt ? { updatedAt } : {}) });
+        pages.set(`${family}:${slug}`, {
+          family,
+          slug,
+          title: displayTitle(entry.title) || slug,
+          ...(updatedAt ? { updatedAt } : {}),
+        });
       }
     }
 

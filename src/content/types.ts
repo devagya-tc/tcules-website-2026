@@ -529,6 +529,8 @@ export type SitePageFamily =
 export type SitePage = {
   family: SitePageFamily;
   slug: string;
+  /** The entry's title, or its slug when the CMS has none. */
+  title: string;
   updatedAt?: string;
 };
 
