@@ -21,6 +21,43 @@
   }
 }
 
+/* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
+   texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
+   where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
+   below, where the grid is two tracks or one, it takes a whole row. Placement of this unit's own
+   cell inside the Layout it renders, as `.wide`. */
+.note {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+}
+
+@media (min-width: 768px) {
+  .note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .note[data-span='1'] {
+    grid-column: auto;
+  }
+
+  .note[data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .note[data-span='3'] {
+    grid-column: span 3;
+  }
+}
+
+.noteText {
+  max-inline-size: var(--bnt-body-measure);
+  color: var(--bnt-body-ink);
+  font: var(--bnt-body-text);
+  text-wrap: var(--text-running-wrap);
+}
+
 /* The tile is the link and the frame: its hairline at rest, its inset inside that hairline (a
    `block` in a single tile, a `gutter` in a wide one), its corners. Positioned and isolated so its
    two texture layers sit between its ground and its content. `display: block` sizes the anchor to

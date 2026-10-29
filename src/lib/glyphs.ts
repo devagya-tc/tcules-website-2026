@@ -43,6 +43,8 @@ const SERVICES: Readonly<Record<string, RouterGlyph>> = {
   '/services/design-engineering': 'monitor',
   '/services/software-development': 'database',
   '/services/new-product-design-first-release': 'flag',
+  /* The audits hub, where a list of the services closes on it (/expertise, /about; 29 Oct 2026). */
+  '/audits': 'checklist',
 };
 
 /** The five specialist Product Design services. */

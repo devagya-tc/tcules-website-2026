@@ -34,6 +34,16 @@ const KIT: readonly SketchName[] = [
   'trace-product',
   'trace-signoff',
 ];
+/** The offer scenes the specialist services bento draws (product-design; owner, 29 Oct 2026, Q7). */
+const SPECIALIST: readonly SketchName[] = [
+  'specialist-research',
+  'specialist-ia',
+  'specialist-ui',
+  'specialist-dataviz',
+  'specialist-prototype',
+  'specialist-new-product',
+  'specialist-audit',
+];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 /** The scenes with a STORY drawing: the six the home bento shows. */
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
@@ -85,6 +95,20 @@ export default function SketchSpecimen() {
               {KIT.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.5 · the specialist services · ${surface}`}
+            note="The product-design bento's seven services you can hire on their own. New Product Design & First Release (a rough prototype carried into a whole first release, the launch flagged) and UX & Product Audit (the lens finds the row that is wrong, and it goes on the findings list) were drawn 29 Oct 2026 for the 4 + 3 bento (Q7). Plate above, bare (as the bento sets them) below."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {SPECIALIST.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
+                  <Sketch name={name} frame="bare" />
                   <code>{name}</code>
                 </Layout>
               ))}

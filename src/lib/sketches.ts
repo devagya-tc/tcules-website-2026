@@ -66,6 +66,8 @@ export type OfferSceneName =
   | 'specialist-ui'
   | 'specialist-dataviz'
   | 'specialist-prototype'
+  | 'specialist-new-product'
+  | 'specialist-audit'
   | 'case-dealpath-problem'
   | 'case-dealpath-did';
 

@@ -27,6 +27,12 @@ export type OfferSheetItem = {
    * sheet is two rows of two, each drawing beside its words.
    */
   scene?: SketchName;
+  /**
+   * The page the promise names, when the title is authored as a link (an expertise page's "What we
+   * design": "**[Care coordination platforms](/…)** that connect families with carers", component-map
+   * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
+   */
+  href?: string;
 };
 
 export type OfferSheetProps = {
@@ -35,6 +41,18 @@ export type OfferSheetProps = {
   /** "What you get": the h2, the band's accessible name. */
   heading: string;
   headingId: string;
+  /**
+   * The sentence that frames the offer, under the heading at the lead role ("Our digital product
+   * design services cover the thinking behind your product…", component-map C4). Optional: most
+   * sheets open straight on their promises.
+   */
+  lead?: string;
+  /**
+   * A label over the promises when the copy names the list ("What you receive", component-map C4):
+   * set in the label voice above the first rule, so the authored words stay and the h2 stays the
+   * band's one heading.
+   */
+  listLabel?: string;
   /** Two to six promises. Four is the shape: two rows of two beside the aside. */
   items: readonly OfferSheetItem[];
   /**
@@ -81,6 +99,8 @@ export function OfferSheet({
   id,
   heading,
   headingId,
+  lead,
+  listLabel,
   items,
   aside,
   asideImage,
@@ -102,7 +122,15 @@ export function OfferSheet({
   }
   const words = (item: OfferSheetItem) => (
     <Layout rowGap="text">
-      <h3 className={styles.title}>{item.title}</h3>
+      <h3 className={styles.title}>
+        {item.href ? (
+          <a href={item.href} className={styles.titleLink}>
+            {item.title}
+          </a>
+        ) : (
+          item.title
+        )}
+      </h3>
       {item.bodyHtml ? (
         <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
       ) : item.body ? (
@@ -141,13 +169,21 @@ export function OfferSheet({
     </Layout>
   );
 
-  const sheet = note ? (
-    <Layout rowGap="stack">
+  const labelled = listLabel ? (
+    <Layout rowGap="block">
+      <p className={styles.listLabel}>{listLabel}</p>
       {promises}
-      {note}
     </Layout>
   ) : (
     promises
+  );
+  const sheet = note ? (
+    <Layout rowGap="stack">
+      {labelled}
+      {note}
+    </Layout>
+  ) : (
+    labelled
   );
   const side = drawn
     ? undefined
@@ -161,9 +197,18 @@ export function OfferSheet({
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
       <Layout rowGap="stack">
-        <h2 id={headingId} className={styles.heading}>
-          {heading}
-        </h2>
+        {lead ? (
+          <Layout rowGap="block">
+            <h2 id={headingId} className={styles.heading}>
+              {heading}
+            </h2>
+            <p className={styles.lead}>{lead}</p>
+          </Layout>
+        ) : (
+          <h2 id={headingId} className={styles.heading}>
+            {heading}
+          </h2>
+        )}
         {side ? (
           <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
             {sheet}

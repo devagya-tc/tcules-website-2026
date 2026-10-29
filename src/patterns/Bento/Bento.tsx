@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { Layout, Sketch } from '@/components';
 import { cx } from '@/lib/cx';
 import type { SketchName } from '@/lib/sketches';
@@ -9,8 +11,13 @@ export type BentoItem = {
   id: string;
   /** The destination's name ("Product Design"). The tile's heading. */
   title: string;
-  /** One or two lines on what it is. Plain text, about 60–90 characters: a tile is not a page. */
-  body: string;
+  /**
+   * One or two lines on what it is. Plain text, about 60–90 characters: a tile is not a page.
+   * Optional (component-map C11/C17): a set whose copy names each destination and says nothing more
+   * (home's "One studio" row of four services) is title and drawing alone. Give every tile a body or
+   * none, so the set reads as one.
+   */
+  body?: string;
   /** The whole tile is the link. */
   href: string;
   /** The destination's own Sketch scene, drawn bare on the tile's texture. */
@@ -34,6 +41,15 @@ export type BentoProps = {
    * are ignored.
    */
   tracks?: 3 | 4;
+  /**
+   * A TEXT CELL after the tiles: the band's closing words in the grid's own last row, where the tiles
+   * leave a hole (owner, 29 Oct 2026, /services/product-design: seven services on four tracks, 4 + 3,
+   * "the band's closing paragraph sits in the empty eighth cell"). Unframed, no texture, not a link:
+   * it reads as the row's last word, never as an eighth destination. It takes every track the last
+   * row leaves, or a whole row when the tiles fill theirs. Inline content the caller renders (its
+   * links included).
+   */
+  note?: ReactNode;
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -81,9 +97,20 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3', tracks = 4 }: BentoProps) {
+export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    items.some((item) => item.body) &&
+    items.some((item) => !item.body)
+  ) {
+    console.warn('Bento: some tiles carry a body and some do not; give every tile one or none.');
+  }
+  /* The tracks the last row leaves open, which the text cell fills (a full row when none are). */
+  const last = placed.at(-1);
+  const used = last ? last.col + last.span : 0;
+  const noteSpan = used === tracks ? tracks : tracks - used;
 
   return (
     <Layout
@@ -99,7 +126,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4 }: BentoProps) 
         const words = (
           <Layout rowGap="tight">
             <Title className={styles.title}>{item.title}</Title>
-            <p className={styles.body}>{item.body}</p>
+            {item.body ? <p className={styles.body}>{item.body}</p> : null}
           </Layout>
         );
         const art = (
@@ -135,6 +162,11 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4 }: BentoProps) 
           </li>
         );
       })}
+      {note ? (
+        <li className={styles.note} data-span={noteSpan}>
+          <p className={styles.noteText}>{note}</p>
+        </li>
+      ) : null}
     </Layout>
   );
 }

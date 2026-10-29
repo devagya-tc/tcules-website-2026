@@ -291,6 +291,44 @@ export default function ReasonsSpecimen() {
         arrangement="boxed"
         surface="tint"
       />
+
+      <Variation
+        id="lead-open"
+        title="11 · A lead, open (the first Reasons band on a page)"
+        note="`lead`: the sentence that frames the set, under the heading at the lead role (component-map C1). Three items fill one row from 1440. The first Reasons band on a page is `open` (owner, 29 Oct 2026, Q1)."
+      />
+      <Reasons
+        heading="How we work together"
+        headingId="rsn-lead-open"
+        lead="Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product."
+        items={items().slice(0, 3)}
+        action={ACTION}
+      />
+
+      <Variation
+        id="lead-beside"
+        title="12 · A lead, beside (the second Reasons band on a page)"
+        note="In `beside` the lead reads in the head third between the heading and the action, the three items in the trailing two thirds. The plan sets the second Reasons band on a page `beside` (Q1), so two drawn sets never read as one idea twice. A lead of two paragraphs is passed as nodes."
+      />
+      <Reasons
+        heading="How we work together"
+        headingId="rsn-lead-beside"
+        lead={
+          <Layout rowGap="text">
+            <p>
+              Bring what you have: an idea, a hunch that something is wrong, a prototype or a
+              product with ten years behind it.
+            </p>
+            <p>
+              Shaping the brief is part of the work, and our first conversation is about your
+              product.
+            </p>
+          </Layout>
+        }
+        items={items().slice(0, 3)}
+        action={ACTION}
+        arrangement="beside"
+      />
     </>
   );
 }

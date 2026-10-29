@@ -811,6 +811,47 @@ export default function DataTableSpecimenPage() {
           </Layout>
         </Layout>
       </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            <h2>12 · Linked row headers (headerHtml)</h2>
+            <p>
+              A &ldquo;which do you need&rdquo; table names each option as a link to its page
+              (component-map C6). `headerHtml` sets the key cell from trusted inline HTML in the
+              key&rsquo;s own voice; `header` still carries the plain words. A key the page
+              names itself stays plain.
+            </p>
+          </Layout>
+          <DataTable
+            caption="Which audit do you need?"
+            keyColumn={{ heading: 'Audit' }}
+            columns={[{ heading: 'Best for' }, { heading: 'You get' }]}
+            rows={[
+              {
+                header: 'UX & Product Audit',
+                headerHtml: '<a href="/audits/ux-product-audit">UX &amp; Product Audit</a>',
+                cellsHtml: [
+                  p('Teams who know something is wrong but not yet what'),
+                  p('A ranked list of findings'),
+                ],
+              },
+              {
+                header: 'Design System Audit',
+                headerHtml: '<a href="/audits/design-system-audit">Design System Audit</a>',
+                cellsHtml: [
+                  p('Systems that drift between design and code'),
+                  p('A map of the drift'),
+                ],
+              },
+              {
+                header: 'This review',
+                cellsHtml: [p('A prototype heading for customers'), p('A fix list by risk')],
+              },
+            ]}
+          />
+        </Layout>
+      </Section>
     </>
   );
 }

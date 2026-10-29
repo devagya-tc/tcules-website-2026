@@ -47,6 +47,9 @@
   /* The `boxed` frame's corners: the photograph radius, LogoGrid's (owner, 16 Oct 2026: "use the
      logo-grid approach"), duplicated on purpose — a component never reads another's tokens. */
   --rsn-frame-radius: var(--radius-8);
+  /* The set's framing sentence (component-map C1): the lead role, its own measure. */
+  --rsn-lead-text: var(--text-lead);
+  --rsn-lead-measure: var(--measure-lead);
 }
 
 @media (max-width: 767px) {
@@ -66,6 +69,7 @@
   --rsn-eyebrow-ink: var(--color-neutral-600); /* 4.92:1 */
   --rsn-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --rsn-body-ink: var(--color-neutral-700); /* 8.14:1 */
+  --rsn-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --rsn-rule-ink: var(--color-neutral-200); /* decoration */
 }
 
@@ -76,6 +80,7 @@
   --rsn-eyebrow-ink: var(--color-neutral-700); /* 7.27:1 */
   --rsn-title-ink: var(--color-neutral-900); /* 13.05:1 */
   --rsn-body-ink: var(--color-neutral-800); /* 10.54:1 */
+  --rsn-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on the deeper ground */
 }
 
@@ -86,6 +91,7 @@
   --rsn-eyebrow-ink: var(--color-neutral-400); /* 8.05:1 */
   --rsn-title-ink: var(--color-white); /* 17.26:1 */
   --rsn-body-ink: var(--color-neutral-300); /* 11.07:1 */
+  --rsn-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --rsn-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
@@ -96,5 +102,6 @@
   --rsn-eyebrow-ink: var(--color-brandeis-100); /* 4.91:1 */
   --rsn-title-ink: var(--color-white); /* 6.23:1 */
   --rsn-body-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --rsn-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --rsn-rule-ink: var(--color-brandeis-400); /* decoration */
 }

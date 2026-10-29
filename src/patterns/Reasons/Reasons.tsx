@@ -55,6 +55,14 @@ export type ReasonsProps = {
   headingTail?: string;
   headingId: string;
   /**
+   * The sentence that frames the set, under the heading at the lead role (component-map C1: Why
+   * Tcules and How we work together both open on one: "Bring what you have: an idea, a prototype…").
+   * A string, or inline content the caller renders (a link inside it). In `beside` it reads in the
+   * head third, between the heading and the action; in `open` and `boxed`, under the heading across
+   * the top.
+   */
+  lead?: ReactNode;
+  /**
    * Built for four, set 2×2 (owner, 22 Oct 2026). Three and six are still accepted: they fill whole
    * rows at three across. Any other count leaves a hole and warns in development.
    */
@@ -98,6 +106,7 @@ export function Reasons({
   heading,
   headingTail,
   headingId,
+  lead,
   items,
   action,
   note,
@@ -127,6 +136,11 @@ export function Reasons({
           </>
         ) : null}
       </h2>
+      {typeof lead === 'string' ? (
+        <p className={styles.lead}>{lead}</p>
+      ) : lead ? (
+        <div className={styles.lead}>{lead}</div>
+      ) : null}
     </Layout>
   );
 

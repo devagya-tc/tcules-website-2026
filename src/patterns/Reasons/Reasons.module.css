@@ -18,6 +18,14 @@
   color: var(--rsn-heading-ink);
 }
 
+/* The set's framing sentence (`lead`), at the system's lead role and measure. */
+.lead {
+  font: var(--rsn-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--rsn-lead-ink);
+  max-inline-size: var(--rsn-lead-measure);
+}
+
 /* The second clause of the same sentence, stepped back. Its measure is the heading's. */
 .headingTail {
   color: var(--rsn-heading-tail-ink);

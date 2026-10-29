@@ -159,6 +159,61 @@ export default function OfferSheetSpecimen() {
         surface="tint"
         aside={<TestimonialCard item={VOICE} fill />}
       />
+
+      <Variation
+        id="lead-list"
+        title="5 · A lead, a list label and the terms (the 26 Oct copy's What you get)"
+        note="`lead` under the heading at the lead role, `listLabel` over the promises in the label voice (the copy's &ldquo;What you receive&rdquo;), five promises three across (3 + 2), the terms as the note (component-map C4)."
+      />
+      <OfferSheet
+        heading="What you get from our product design services"
+        headingId="ofs-lead"
+        lead="Our digital product design services cover the thinking behind your product and every screen in it. We size each part to what your team already knows."
+        listLabel="What you receive"
+        items={[
+          {
+            title: 'A tested brief',
+            body: 'What goes in, what waits and what stays out, checked against the people who use the product.',
+          },
+          {
+            title: 'A model of roles, records, permissions and workflows',
+            body: 'Drawn before the screens, so every screen agrees with the next.',
+          },
+          { title: 'Interaction and visual design for every screen and state' },
+          { title: 'Clickable or coded prototypes, tested with people who match your users.' },
+          { title: 'Designs ready to build, and our review of what your engineers ship.' },
+        ]}
+        across={3}
+        note={
+          <p className={t.body}>
+            Who does the work. A senior product designer leads your project and does the design.
+          </p>
+        }
+      />
+
+      <Variation
+        id="linked"
+        title="6 · Promises named as links (a catalogue)"
+        note="`href` on an item: its title is the link, underlined on the mark's ink (component-map C7, an expertise page's &ldquo;What we design&rdquo;). The item is still not a card."
+      />
+      <OfferSheet
+        heading="What we design"
+        headingId="ofs-linked"
+        items={[
+          {
+            title: 'Care coordination platforms',
+            href: '#care',
+            body: 'that connect families with carers at home · CuramCare',
+          },
+          {
+            title: 'Clinical research tools',
+            href: '#research',
+            body: 'that turn survey data into findings · Novus Insights',
+          },
+          { title: 'Patient portals', body: 'that people return to between appointments' },
+        ]}
+        across={3}
+      />
     </>
   );
 }

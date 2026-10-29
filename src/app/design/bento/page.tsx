@@ -142,6 +142,82 @@ export default function BentoSpecimen() {
       </Section>
 
       <Variation
+        id="seven-note"
+        title="2c · Seven peers on four tracks, the closing words in the eighth cell"
+        note="`tracks={4}` with seven tiles is 4 + 3; `note` puts the band's closing paragraph in the cell the last row leaves, unframed and untextured, so it reads as the row's last word, never an eighth destination (owner, 29 Oct 2026, Q7, /services/product-design). Below 1024 the note takes a row of its own."
+      />
+      <Section>
+        <Bento
+          tracks={4}
+          note={
+            <>
+              Want the riskiest screens tried in code, or the whole product built?{' '}
+              <a href="#de">Design Engineering</a> and <a href="#sd">Software Development</a>{' '}
+              carry the design on.
+            </>
+          }
+          items={(
+            [
+              [
+                'ux-research',
+                'UX Research',
+                'Teams about to spend on an assumption nobody has tested',
+                'specialist-research',
+              ],
+              [
+                'ia',
+                'Information Architecture & Workflow Design',
+                'Products where work passes between people',
+                'specialist-ia',
+              ],
+              [
+                'ui',
+                'Interaction & UI Design',
+                'Products whose structure works but whose screens confuse people',
+                'specialist-ui',
+              ],
+              [
+                'dataviz',
+                'Data Visualisation',
+                'Dashboards that people export to a spreadsheet',
+                'specialist-dataviz',
+              ],
+              [
+                'prototyping',
+                'Prototyping & Usability Testing',
+                'Choosing between directions before engineers start',
+                'specialist-prototype',
+              ],
+              [
+                'new-product',
+                'New Product Design & First Release',
+                'Founders turning an idea or prototype into an MVP',
+                'specialist-new-product',
+              ],
+              [
+                'audit',
+                'UX & Product Audit',
+                'Teams who know something is wrong but not yet what',
+                'specialist-audit',
+              ],
+            ] as const
+          ).map(([id, title, body, scene]) => ({ id, title, body, scene, href: `#${id}` }))}
+        />
+      </Section>
+
+      <Variation
+        id="title-only"
+        title="2d · Title and drawing, no body"
+        note="`body` is optional (component-map C11/C17): a set whose copy names each destination and says nothing more, as home's &ldquo;One studio&rdquo; row of four. Every tile or none."
+      />
+      <Section>
+        <Bento
+          items={single.slice(2, 6).map((item) => ({ ...item, body: undefined }))}
+          tracks={4}
+        />
+      </Section>
+
+      <Variation
         id="pair"
         title="3 · Two wide tiles"
         note="2 + 2: each tile's drawing beside its words, at the wide scale."

@@ -433,6 +433,46 @@ function SpecialistPrototype() {
   );
 }
 
+/** New Product Design & First Release: the founder's rough prototype, never built, carried into a
+ *  first release that is whole, its one action lit, and the launch flagged at its corner. */
+function SpecialistNewProduct() {
+  return (
+    <>
+      <Hatched x={30} y={58} w={80} h={64} />
+      <Hop x1={110} x2={160} y={90} />
+      <Rect x={160} y={36} w={110} h={108} rx={8} className={styles.frame} />
+      <Copy x={176} y={58} w={48} quiet />
+      <Copy x={176} y={74} w={72} />
+      <Rect x={176} y={88} w={78} h={14} className={styles.tile} />
+      <Rect x={176} y={114} w={44} h={16} rx={8} className={styles.solid} />
+      <Focus x={270} y={140} glyph="flag" size={12} />
+    </>
+  );
+}
+
+/** UX & Product Audit: something is wrong somewhere on the screen; the lens finds the row, and it
+ *  goes on the list of findings as the one that matters. */
+function SpecialistAudit() {
+  return (
+    <>
+      <Rect x={30} y={30} w={160} h={120} rx={8} className={styles.frame} />
+      <Copy x={46} y={50} w={56} quiet />
+      <Rect x={46} y={64} w={128} h={16} className={styles.tile} />
+      <Rect x={46} y={88} w={128} h={16} className={styles.region} />
+      <path className={styles.regionCopy} d="M56,96 L116,96" />
+      <Rect x={46} y={112} w={128} h={16} className={styles.tile} />
+      <Lens x={150} y={96} r={16} />
+      <Hop x1={190} x2={222} y={96} />
+      <Rect x={222} y={58} w={64} h={22} className={styles.tile} />
+      <Copy x={232} y={69} w={36} quiet />
+      <Rect x={222} y={85} w={64} h={22} className={styles.region} />
+      <path className={styles.regionCopy} d="M232,96 L272,96" />
+      <Rect x={222} y={112} w={64} h={22} className={styles.tile} />
+      <Copy x={232} y={123} w={28} quiet />
+    </>
+  );
+}
+
 /* ── A worked example: Dealpath ──────────────────────────────────────────────────
    Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.82, so the listing card, its
    "Add to pipeline" action and the pipeline column read at the plate's size. The two drawings share
@@ -550,6 +590,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-ui': SpecialistUi,
   'specialist-dataviz': SpecialistDataviz,
   'specialist-prototype': SpecialistPrototype,
+  'specialist-new-product': SpecialistNewProduct,
+  'specialist-audit': SpecialistAudit,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -563,4 +605,6 @@ export const OFFER_DRAWN: Partial<
   'specialist-ui': [36, 26, 208, 128],
   'specialist-dataviz': [36, 26, 248, 128],
   'specialist-prototype': [26, 30, 280, 116],
+  'specialist-new-product': [26, 30, 266, 130],
+  'specialist-audit': [26, 26, 264, 128],
 };
