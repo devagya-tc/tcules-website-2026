@@ -10,6 +10,7 @@ import type {
 } from '../../types';
 import { mapUploadImage } from './image';
 import { COVER_SCENES } from '../cover-scenes';
+import { teamPortrait } from '../people';
 import { blogKind } from './insights';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
@@ -518,7 +519,12 @@ function mapBlog(
     authors: (rawBlog.blogProfileSection ?? []).flatMap((author, index) => {
       const name = value(author.name);
       if (!name) return [];
-      const image = firstImage(author.profilePicture, name, 'profile picture', graphqlUrl);
+      const image =
+        firstImage(author.profilePicture, name, 'profile picture', graphqlUrl) ??
+        (() => {
+          const portrait = teamPortrait(name);
+          return portrait ? { ...portrait, mime: 'image/jpeg' } : undefined;
+        })();
       return [
         {
           id: value(author.id) || `blog-author-${index}`,
