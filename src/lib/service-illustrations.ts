@@ -2,35 +2,45 @@ import { ILLUSTRATION_LEGENDS } from './illustration-legends';
 import { ROUTES, servicePath } from './routes';
 
 /**
- * The hero illustrations, by route: the approved isometric heroes (owner, 30 Oct 2026), each 820 wide
- * in `public/illustrations/heroes/`, its viewBox trimmed to the drawing (16 above and below) so no hero
- * carries a band of empty floor. A route here takes its drawing whole (an illustration is never
+ * The hero illustrations, by route. A route here takes its drawing whole (an illustration is never
  * cropped); every other page's hero is a bound asset or a labelled placeholder.
+ *
+ * Six are Bhumika's finals, frozen by Jatin on 30 Oct 2026, then polished: every slab one outline
+ * weight with its corner edges, every line stopping at the edge of what it reaches (source, before/after
+ * and the pass: docs/illustrations/polish-2026-10-30/). The owner approved them for the pages the same
+ * day: "use the updated drawings on the pages". The other four are the approved isometric heroes
+ * (owner, 30 Oct 2026), 820 wide, their viewBox trimmed to the drawing (16 above and below) so no hero
+ * carries a band of empty floor. None carries a label, so one file serves every width.
  */
-/** Each trimmed drawing's height in its 820-wide viewBox. */
-const HERO_HEIGHTS: Readonly<Record<string, number>> = {
-  audits: 627,
-  expertise: 464,
-  'services-ai-product-ux': 466,
-  'services-design-engineering': 597,
-  'services-design-systems': 535,
-  'services-new-product-design-first-release': 519,
-  'services-product-design': 563,
-  'services-product-modernisation': 518,
-  'services-software-development': 693,
-};
-
-const HERO_ILLUSTRATIONS: Readonly<Record<string, string>> = {
-  [servicePath('product-design')]: 'services-product-design',
-  [servicePath('product-modernisation')]: 'services-product-modernisation',
-  [servicePath('design-systems')]: 'services-design-systems',
-  [servicePath('ai-product-ux')]: 'services-ai-product-ux',
-  [servicePath('design-engineering')]: 'services-design-engineering',
-  [servicePath('software-development')]: 'services-software-development',
-  [servicePath('new-product-design-first-release')]:
-    'services-new-product-design-first-release',
-  [ROUTES.expertise]: 'expertise',
-  [ROUTES.audits]: 'audits',
+const HERO_ILLUSTRATIONS: Readonly<
+  Record<string, { file: string; width: number; height: number }>
+> = {
+  [servicePath('product-design')]: { file: 'product-design', width: 786, height: 543 },
+  [servicePath('product-modernisation')]: {
+    file: 'product-modernisation',
+    width: 700,
+    height: 499,
+  },
+  [servicePath('design-engineering')]: { file: 'design-engineering', width: 772, height: 577 },
+  [servicePath('design-systems')]: { file: 'design-systems', width: 802, height: 515 },
+  [servicePath('ai-product-ux')]: { file: 'ai-product-ux', width: 792, height: 446 },
+  [servicePath('ai-product-ux/ai-copilots-agents')]: {
+    file: 'ai-copilots-agents',
+    width: 788,
+    height: 609,
+  },
+  [servicePath('software-development')]: {
+    file: 'services-software-development',
+    width: 820,
+    height: 693,
+  },
+  [servicePath('new-product-design-first-release')]: {
+    file: 'services-new-product-design-first-release',
+    width: 820,
+    height: 519,
+  },
+  [ROUTES.expertise]: { file: 'expertise', width: 820, height: 464 },
+  [ROUTES.audits]: { file: 'audits', width: 820, height: 627 },
 };
 
 export type ServiceIllustration = {
@@ -44,13 +54,13 @@ export type ServiceIllustration = {
 
 /** The hero illustration for a route. Undefined for a route with none. */
 export function serviceIllustration(route: string): ServiceIllustration | undefined {
-  const file = HERO_ILLUSTRATIONS[route];
-  if (!file) return undefined;
-  const src = `/illustrations/heroes/${file}.svg`;
+  const drawing = HERO_ILLUSTRATIONS[route];
+  if (!drawing) return undefined;
+  const src = `/illustrations/heroes/${drawing.file}.svg`;
   return {
     src,
-    width: 820,
-    height: HERO_HEIGHTS[file] ?? 820,
+    width: drawing.width,
+    height: drawing.height,
     alt: '',
     kind: 'illustration',
     cut: ILLUSTRATION_LEGENDS[src],

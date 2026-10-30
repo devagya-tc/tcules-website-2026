@@ -1,16 +1,14 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Prose } from '@/components';
-import { BlockCard, ServiceTile, TEASER_FORMAT_ICON } from '@/patterns';
-import type { SketchName } from '@/lib/sketches';
+import { Button, Chip, Cluster, Icon, Input, Layout, Tag } from '@/components';
+import { Accordion } from '@/patterns';
 
 import styles from './ListingIndex.module.css';
 import type { ListingFinder, ListingSection, ListingView } from './ListingIndex';
-import { listingFinder, type FinderArgs } from './listingFinder';
+import { FinderMore } from './Finder';
 import {
   byEventDate,
   CardGrid,
-  hasPicture,
   Dates,
   Feature,
   followCount,
@@ -85,183 +83,6 @@ export function insightViews({
   return [{ id: 'type', label: 'By type', sections: typeSections }];
 }
 
-/* ── BY PROBLEM · the copy's shelves ─────────────────────────────────────────────
-   The 26 Oct 2026 copy curates the hub by the problem a reader is working on ("sorted by the problem
-   you are working on"): five shelves of two or three pieces, each closing on the related service.
-   The view the hub opens on while nothing is picked; the finder still holds every piece. */
-
-/** One shelf: the problem as its head, the pieces the copy names, and its closing line. */
-export type InsightShelf = {
-  /** The section's anchor (the copy's band id). */
-  id: string;
-  heading: string;
-  /** The pieces, in the copy's order, each as the copy titles and describes it. */
-  items: readonly InsightItem[];
-  /** The shelf's closing line ("Our related service: …") as trusted inline HTML, its link kept. */
-  noteHtml?: string;
-  /**
-   * The related service or expertise the closing line names: a card in the shelf's grid (owner,
-   * 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles,
-   * decisions/2026-10-29-related-destination-is-a-card). `eyebrow` is the line's own words before
-   * the link ("Our related service"), set as the tile's eyebrow. A service draws its own `scene`; an
-   * expertise shows its sector `picture` (or its labelled placeholder), composed by the route.
-   */
-  related?: ShelfRelated;
-};
-
-/** What a shelf's closing line names, as its tile. */
-export type ShelfRelated = {
-  kind: 'service' | 'expertise';
-  eyebrow: string;
-  title: string;
-  href: string;
-  scene?: SketchName;
-  picture?: ReactNode;
-};
-
-/**
- * The shelves as listing sections. Three pieces led by a pictured one open on the horizontal lead
- * with the other two under it (the hub's group, 2026-10-29-listing-cards-topic-tag-three-tracks);
- * two pieces, or three without a pictured first, are cards in two or three of the three tracks. A
- * piece with no picture is still a card: the panel led by its format's glyph. The closing line
- * follows the cards, a `block` under them: it answers the shelf, it does not head it.
- */
-export function shelfSections(shelves: readonly InsightShelf[]): ListingSection[] {
-  return shelves
-    .filter((shelf) => shelf.items.length > 0)
-    .map((shelf) => ({
-      id: shelf.id,
-      heading: shelf.heading,
-      count: shelf.items.length,
-      content: <Shelf items={shelf.items} noteHtml={shelf.noteHtml} related={shelf.related} />,
-    }));
-}
-
-/** The related tile's action: one wording for every tile of its kind (owner, 29 Oct 2026). */
-const RELATED_ACTION: Record<ShelfRelated['kind'], string> = {
-  service: 'Explore the service',
-  expertise: 'Explore the expertise',
-};
-
-function Shelf({
-  items,
-  noteHtml,
-  related,
-}: {
-  items: readonly InsightItem[];
-  noteHtml?: string;
-  related?: ShelfRelated;
-}) {
-  const [first, ...rest] = items;
-  const led = first && items.length >= 3 && hasPicture(first);
-  /* The related service or expertise is a card in the grid, after the pieces: eyebrow, title, its
-     visual in the middle, the action at its foot (2026-10-29-related-destination-is-a-card). Where
-     the pieces fill whole rows, it would sit alone on a row, so it takes the whole row instead, its
-     words beside its visual (2026-10-29-media-rows-take-a-whole-row). */
-  const inGrid = led ? rest.length : items.length;
-  const wide = inGrid > 0 && inGrid % 3 === 0;
-  const after = related ? (
-    <li data-media-row={wide ? '' : undefined}>
-      <ServiceTile
-        title={related.title}
-        href={related.href}
-        eyebrow={related.eyebrow}
-        scene={related.scene}
-        picture={related.picture}
-        action={RELATED_ACTION[related.kind]}
-        wide={wide}
-      />
-    </li>
-  ) : undefined;
-  /* A shelf with no pictured piece is a row of panels, the results' card for a piece without a
-     picture (2026-10-29-pictureless-piece-is-a-panel-card): the ruled text tiles it took before were
-     a third card look on one page, the rows that ruling dropped (review 29 Oct). */
-  return (
-    <Layout rowGap="block">
-      {led ? (
-        <Feature lead={first} cards={rest} shelf after={after} />
-      ) : (
-        <CardGrid cards={items} shelf after={after} />
-      )}
-      {noteHtml ? <Prose html={`<p>${noteHtml}</p>`} /> : null}
-    </Layout>
-  );
-}
-
-/* ── The formats, as tiles ──────────────────────────────────────────────────────
-   The copy's "Browse Tcules insights by format" table (Format | What you will find | Best for) as the
-   format tiles the hub's approved front page had (owner, 16 Oct 2026: keep main's format tiles;
-   29 Oct 2026: "render it as cards"; decisions/2026-10-29-format-table-is-tiles): each format's glyph
-   heads its tile, its name (the link) is the title, what you will find is the body and "Best for"
-   a labelled line under it. Every authored word stays. */
-
-/** One row of the format table: a format (with its glyph) or another way in (the authors index). */
-export type FormatTileRow = {
-  /** The format, for its glyph. Absent: not a format (Authors), set as a quiet line under the tiles. */
-  kind?: InsightKind;
-  name: string;
-  /** Where the name goes: the finder with the format picked. Absent: no page yet, the name unlinked. */
-  href?: string;
-  /** "What you will find", as trusted inline HTML. */
-  findHtml: string;
-  /** "Best for", as trusted inline HTML, and its label as the table heads its column. */
-  bestFor?: { label: string; html: string };
-};
-
-/**
- * The format tiles: one tile per format, four in a row where the column holds them (1440) and two by
- * two below, so four tiles never leave one alone on a row; a row that is not a format (Authors: no
- * glyph of its own, an index of people rather than a kind of piece, and no page yet) is a quieter
- * line under the set, rather than a fifth tile that would sit alone.
- */
-export function FormatTiles({ rows }: { rows: readonly FormatTileRow[] }) {
-  const tiles = rows.filter((row) => row.kind);
-  const others = rows.filter((row) => !row.kind);
-  const escape = (text: string) =>
-    text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  const bestForHtml = (row: FormatTileRow) =>
-    row.bestFor ? `<strong>${row.bestFor.label}:</strong> ${row.bestFor.html}` : undefined;
-  return (
-    <Layout rowGap="stack">
-      <Layout as="ul" columns={{ base: 1, md: 2, xl: 4 }} colGap="gutter" rowGap="column">
-        {tiles.map((row) => (
-          <BlockCard
-            key={row.name}
-            title={row.name}
-            href={row.href}
-            icon={TEASER_FORMAT_ICON[row.kind as InsightKind]}
-            bodyHtml={[row.findHtml, ...(row.bestFor ? [bestForHtml(row) as string] : [])]}
-            size="md"
-            tracks={3}
-            cue="title"
-          />
-        ))}
-      </Layout>
-      {others.length > 0 ? (
-        /* Each a quiet pair of lines: the name and what you will find, then "Best for". */
-        <Layout rowGap="text">
-          {others.map((row) => (
-            <Layout key={row.name} rowGap="tight">
-              <p
-                className={styles.aside}
-                dangerouslySetInnerHTML={{
-                  __html: `<strong>${row.href ? `<a href="${escape(row.href)}">${escape(row.name)}</a>` : escape(row.name)}:</strong> ${row.findHtml}`,
-                }}
-              />
-              {row.bestFor ? (
-                <p
-                  className={styles.aside}
-                  dangerouslySetInnerHTML={{ __html: bestForHtml(row) as string }}
-                />
-              ) : null}
-            </Layout>
-          ))}
-        </Layout>
-      ) : null}
-    </Layout>
-  );
-}
-
 /* ── A group: its lead, then its cards ──────────────────────────────────────────── */
 
 /** A hub section's pieces: the lead and the cards under it. */
@@ -290,6 +111,7 @@ function groupOf(items: readonly InsightItem[]): Group {
 /** How many events the hub's dated rows hold. */
 const EVENT_TAKE = 3;
 
+
 function TypeShape({
   kind,
   items,
@@ -306,29 +128,157 @@ function TypeShape({
 }
 
 /* ── The finder: every insight, found from the rail ─────────────────────────────────
-   The listing's one finder (finder.tsx) with the insights' results: one grid of cards, each saying
-   its format and date, a piece without a picture its panel. */
+   Jatin, 26 Oct 2026, after myntra.com's list pages: "there is a permanent location for some main
+   filters … whatever you are selecting, it keeps on adding here … and you can easily remove it".
+   Owner, 28 Oct 2026: the rail's switch and "Jump to" give way to the groups — Type, Topic, Stage,
+   Industry — each a disclosure (the FAQ's, at the rail's scale), Type open; the hub stays curated
+   until something is picked; a pick adds a chip over the results, which are one grid of cards. */
 
-/** The insights finder for ListingIndex: the groups the route read, and the pieces they let through. */
+/** One option in a group: the value it puts in the URL, its label, and whether it is picked. */
+export type FinderOption = { value: string; label: string; picked: boolean };
+
+/** One group of options: its URL parameter ("topic"), its label, its options. */
+export type FinderGroup = { name: string; label: string; options: readonly FinderOption[] };
+
+/** One pick, as its chip: the label and the page without it. */
+export type FinderPick = { label: string; removeHref: string };
+
+/**
+ * The finder's three parts for ListingIndex, from the groups the route read out of the URL and the
+ * pieces the picks let through.
+ */
 export function insightFinder({
+  action,
+  query,
+  search,
+  groups,
+  picks,
+  clearHref,
   items,
   shown,
-  ...rest
-}: Omit<FinderArgs, 'total' | 'results'> & {
+  moreHref,
+}: {
+  /** The page's own path. */
+  action: string;
+  /** The query in effect, as a string. */
+  query: string;
+  /** The search in effect and its label ("Search insights"). */
+  search: { value?: string; label: string };
+  groups: readonly FinderGroup[];
+  /** Every pick in effect, the search's included, in rail order. Empty: the curated view. */
+  picks: readonly FinderPick[];
+  /** The page with nothing picked. */
+  clearHref: string;
   /** Every piece the picks let through, newest first. */
   items: readonly InsightItem[];
+  /** How many of them the reader has opened. */
+  shown: number;
+  /** The next page's URL, while more exist. */
+  moreHref?: string;
 }): ListingFinder {
-  return listingFinder({
-    ...rest,
-    shown,
-    total: items.length,
-    results: (
-      <CardGrid
-        cards={items.slice(0, shown)}
-        meta={{ withKind: true }}
-        titleAs="h2"
-        facts
+  const controls = (
+    <Layout rowGap="block">
+      <Input
+        type="search"
+        name="q"
+        defaultValue={search.value}
+        placeholder={search.label}
+        aria-label={search.label}
+        enterKeyHint="search"
       />
+      <Accordion
+        size="sm"
+        items={groups.map((group, index) => ({
+          question: group.label,
+          /* Type open; another group opens only when it holds a pick. */
+          open: index === 0 || group.options.some((option) => option.picked),
+          content: (
+            <fieldset className={styles.options}>
+              <legend className={styles.hidden}>{group.label}</legend>
+              <Layout rowGap="text">
+                {group.options.map((option) => (
+                  <Chip
+                    key={option.value}
+                    look="index"
+                    type="checkbox"
+                    name={group.name}
+                    value={option.value}
+                    defaultChecked={option.picked}
+                    tick={<Icon name="chrome-check" />}
+                  >
+                    {option.label}
+                  </Chip>
+                ))}
+              </Layout>
+            </fieldset>
+          ),
+        }))}
+      />
+    </Layout>
+  );
+
+  const count = picks.length;
+  const label = count > 0 ? `Filters · ${count}` : 'Filters';
+  if (count === 0) return { action, query, controls, label };
+
+  const total = items.length;
+  return {
+    action,
+    query,
+    controls,
+    label,
+    picks: (
+      /* "Showing results for", then each pick as a held filter chip with its close, then the way
+         back to the curated page. */
+      <Layout columns={{ base: 1, md: ['auto', 1] }} colGap="text" rowGap="tight" align="center">
+        <p className={styles.count} role="status">
+          {total === 0
+            ? 'Nothing matches'
+            : `${total} ${total === 1 ? 'result' : 'results'} for`}
+        </p>
+        {/* The chips at the tight step, and the way back to the curated page a text step clear of
+            them (owner, 28 Oct 2026: "8px is too tight"): grouping, not a gap knob. */}
+        <Cluster colGap="text" rowGap="tight" align="center">
+          <Cluster as="ul" colGap="tight" rowGap="tight" align="center">
+            {picks.map((pick) => (
+              <li key={pick.removeHref}>
+                <Tag
+                  variant="filter"
+                  href={pick.removeHref}
+                  selected
+                  icon={<Icon name="chrome-close" label="Remove" />}
+                >
+                  {pick.label}
+                </Tag>
+              </li>
+            ))}
+          </Cluster>
+          <span className={styles.clear}>
+            <Button as="a" href={clearHref} emphasis="link" tone="primary">
+              Clear all
+            </Button>
+          </span>
+        </Cluster>
+      </Layout>
     ),
-  });
+    results:
+      total === 0 ? null : (
+        <Layout rowGap="column">
+          <CardGrid
+            cards={items.slice(0, shown)}
+            meta={{ withKind: true }}
+            titleAs="h2"
+            facts
+          />
+          {moreHref ? (
+            <Cluster colGap="block" rowGap="text" align="center">
+              <p className={styles.count}>{`${Math.min(shown, total)} of ${total}`}</p>
+              <FinderMore href={moreHref} icon={<Icon name="alt-arrow-down" />}>
+                Show more
+              </FinderMore>
+            </Cluster>
+          ) : null}
+        </Layout>
+      ),
+  };
 }

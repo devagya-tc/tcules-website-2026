@@ -78,6 +78,16 @@ export type StrapiPodcastResource = {
   slug?: string | null;
   createdAt?: string | null;
   publishedAt?: string | null;
+  /** The SEO meta description: an article's standfirst, as its own page uses it. */
+  seo?: { metaDescription?: string | null } | null;
+  /** Only the body's iframe blocks: one of them carries the authored date line. */
+  mainSection?: Array<{
+    __typename?: string | null;
+    title?: string | null;
+    description?: string | null;
+    url?: string | null;
+    embedCode?: string | null;
+  }> | null;
   thumbnail?: StrapiPodcastFile | null;
 };
 

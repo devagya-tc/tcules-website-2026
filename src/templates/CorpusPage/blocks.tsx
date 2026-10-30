@@ -192,15 +192,17 @@ function editorialByline(page: CorpusPage) {
   const modified = str('modified_at');
   const minutes = /(\d+)\s*min/i.exec(str('reading_time_as_displayed') ?? '')?.[1];
   const credits: HeroCredit[] = [
-    { role: 'author', people: [author], ...(role ? { detail: role } : {}) },
-    ...(reviewer ? [{ role: 'reviewer' as const, people: [reviewer] as const }] : []),
+    { role: 'author', people: [{ name: author }] },
+    ...(reviewer ? [{ role: 'reviewer' as const, people: [{ name: reviewer }] as const }] : []),
   ];
   const dates: HeroDates | undefined = published
     ? { published, ...(modified ? { modified } : {}) }
     : modified
       ? { modified }
       : undefined;
-  return { author, credits, dates, readingTime: minutes ? `${minutes} min` : undefined };
+  /* `role` is who the author is. It no longer sits in the byline (board G): it is for the end of the
+     article, in Contributors, wired once the 26 Oct copy's templates land (feat/new-copy). */
+  return { author, role, credits, dates, readingTime: minutes ? `${minutes} min` : undefined };
 }
 
 /* ── Quotes ───────────────────────────────────────────────────────────────────── */

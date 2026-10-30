@@ -9,10 +9,11 @@ export type {
   ListingSection,
   ListingView,
 } from './ListingIndex';
-export { FormatTiles, insightFinder, insightViews, shelfSections } from './insights';
-export type { FormatTileRow, InsightFormat, InsightShelf, ShelfRelated } from './insights';
+export { insightFinder, insightViews } from './insights';
+export type { InsightFormat } from './insights';
 export { listingFinder } from './listingFinder';
 export type { FinderArgs, FinderGroup, FinderOption, FinderPick } from './listingFinder';
 export type { InsightItem, InsightKind } from './compositions';
 export { caseFinder, caseViews } from './cases';
+export { InsightResources } from './resources';
 export type { CaseGroup, CaseItem, CaseView } from './cases';

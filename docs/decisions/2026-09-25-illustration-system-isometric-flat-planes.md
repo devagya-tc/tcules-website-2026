@@ -1,7 +1,7 @@
 ---
 title: Illustrations are isometric flat planes, one solid blue plane, one peridot carried item
 date: 2026-09-25
-status: active
+status: superseded
 area: [illustration]
 source: Owner rewrite of ch05 §4a–§4d, 25 Sep 2026, written into ch05 v1.0
 supersedes: []

@@ -45,11 +45,3 @@
 .clear {
   flex: none;
 }
-
-/* A row of a set that is not one of its tiles (the format table's Authors): a quieter line under the
-   set, at the card body's step. */
-.aside {
-  max-inline-size: var(--lix-aside-measure);
-  color: var(--lix-aside-ink);
-  font: var(--lix-aside-text);
-}

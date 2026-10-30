@@ -37,8 +37,9 @@ import type { Navigation } from '../../types';
  * linked from here. Everything else is `planned`: the route is decided, the page is not built. The
  * links render exactly as live ones do, deliberately (§2.1) — a greyed row tells a visitor the
  * company is unfinished, where a thin page tells them the work is in progress. What the flag is
- * FOR is the sitemap: a holding page must not be submitted to a search engine, and there is no
- * sitemap generator in this repo yet to read it.
+ * FOR was the sitemap, so a holding page is never submitted to a search engine. The sitemap that
+ * shipped (src/app/_sitemap/pages.ts) does not read it: it lists the pages that answer — the fixed
+ * routes, the corpus and Strapi's entries — and borrows only the labels from these records.
  *
  * No promises, no row descriptions. The revised IA dropped them — rows are labels, and the group
  * label above them carries the meaning.

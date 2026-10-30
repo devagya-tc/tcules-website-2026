@@ -5,8 +5,8 @@
    is IndexRail's.
 
    Naming: --lix-{part}-{role}
-     parts  section-title · count · aside
-     roles  text · tracking · ink · measure
+     parts  section-title · count
+     roles  text · tracking · ink
 
    Every surface block declares every surface-dependent token. Every band these templates paint is
    paper; the other three are declared for self-containment (tokens rule 2).
@@ -24,9 +24,6 @@
   /* The count beside "Show more": the label voice. */
   --lix-count-text: var(--text-eyebrow);
   --lix-count-tracking: var(--text-eyebrow-tracking);
-  /* A quiet line under a set (the format tiles' Authors): the card body's step and measure. */
-  --lix-aside-text: var(--text-body-sm);
-  --lix-aside-measure: var(--measure-lead);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -34,26 +31,22 @@
 [data-surface='paper'] {
   --lix-section-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --lix-count-ink: var(--color-neutral-600); /* 4.92:1 */
-  --lix-aside-ink: var(--color-neutral-700); /* 8.14:1 */
 }
 
 /* ── Surface: tint ── the quiet ink steps to 700: 600 is 4.39:1 on paper-deep ── */
 [data-surface='tint'] {
   --lix-section-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --lix-count-ink: var(--color-neutral-700); /* 7.27:1 */
-  --lix-aside-ink: var(--color-neutral-700); /* 7.27:1 */
 }
 
 /* ── Surface: ink ── words lift ──────────────────────────────────────────────── */
 [data-surface='ink'] {
   --lix-section-title-ink: var(--color-white);
   --lix-count-ink: var(--color-neutral-400); /* 8.05:1 */
-  --lix-aside-ink: var(--color-neutral-300); /* 11.07:1 */
 }
 
 /* ── Surface: blue ── declared for self-containment ─────────────────────────── */
 [data-surface='blue'] {
   --lix-section-title-ink: var(--color-white); /* 6.23:1 */
   --lix-count-ink: var(--color-brandeis-100); /* 4.91:1 */
-  --lix-aside-ink: var(--color-brandeis-50); /* 5.57:1 */
 }

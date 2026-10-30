@@ -25,12 +25,24 @@
    the image. The aspect-ratio goes on the <iframe>.
 
    ── What is NOT here, and why each absence is a decision ────────────────────────
-   No display:flex and no display:grid. Every arrangement in this component is a Layout or a
-   Cluster; there is nothing left for a local grid to do. The one inline-flex inside the band is
-   Button's, centring a label in its own control box, which is not arrangement. The two
-   display:block declaration below de-inlines a replaced element; it arranges nothing.
+   No display:flex and no display:grid for arrangement, with ONE argued exception. Every
+   arrangement in this component is a Layout or a Cluster. The byline's portraits (board G, 30 Oct
+   2026) add four declarations, and only the first arranges anything:
+     .avatars  inline-flex: the overlapping discs. A Cluster cannot express it — the discs need a
+               NEGATIVE gap (each tucks --hero-avatar-overlap under the one before), and no gap step
+               is negative. The overlap is drawn by `.avatar + .avatar`'s margin, the one margin here,
+               and it is a drawing inside one group, not a distance between two things.
+     .initials flex: centres two glyphs in their own disc; arranges no siblings.
+     .withPortraits .value  grid: centres a value's one line in a box the portrait's height.
+     .avatar   display:block de-inlines the disc, as the declarations below de-inline replaced
+               elements.
+   The one inline-flex elsewhere in the band is Button's, centring a label in its own control box.
 
-   No position and no z-index: the end-fade Texture is a direct child of the Section and fills the
+   Positioning, likewise, only where the byline needs it: `.avatar` is relative so Media's fill
+   resolves inside the disc, and `.silentKey` is the visually-hidden idiom (absolute, clipped), out
+   of flow so its pair's gap closes. Neither stacks anything and neither takes a z-index.
+
+   Otherwise no position and no z-index: the end-fade Texture is a direct child of the Section and fills the
    band (its z-index is Texture's own, and resolves inside the Section's isolation). Nothing here is
    positioned, INCLUDING the video. The 16/9 box is an aspect-ratio
    on the iframe itself, so the padding-top-percentage-plus-absolute-fill idiom that every embed
@@ -233,16 +245,76 @@
   padding-block-start: var(--gap-block);
 }
 
-/* A credited name leads the strip; who they are sits under it, a size down. */
+/* With portraits in the strip, every value is the portrait's height and centres its line in it:
+   the keys keep one top line, and a date reads level with the names beside the faces rather than
+   at the top of a taller row. */
+.withPortraits .value {
+  display: grid;
+  align-content: center;
+  min-block-size: var(--hero-avatar-size);
+}
+
+/* A key that is announced and not shown: an article's "Written by", which the faces and names
+   already say (board G). Out of flow, so the pair's 4px gap closes with it. */
+.silentKey {
+  position: absolute;
+  width: var(--hero-hidden-size);
+  height: var(--hero-hidden-size);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A credited name leads the strip. Linked to the person's page, it keeps the name's ink and
+   weight and takes the underline only under the pointer, so a row of names is not a row of links
+   shouting at the title above it. */
 .name {
   color: var(--hero-name-ink);
   font-weight: var(--hero-name-weight);
+  text-decoration-line: none;
 }
 
-.detail {
+a.name:hover {
+  text-decoration-line: underline;
+}
+
+/* ── Portraits · one group, overlapping ─────────────────────────────────────────
+   Each portrait after the first tucks under the one before it by --hero-avatar-overlap. The
+   negative inline margin is the one margin in this module and it is not spacing: it is how far
+   two discs overlap, a drawing decision inside one group, and the group's distance to the names
+   is still the Cluster's gap. The ring is the ground, so each edge stays legible on any surface. */
+.avatars {
+  display: inline-flex;
+  flex: none;
+}
+
+.avatar {
+  position: relative;
   display: block;
-  color: var(--hero-detail-ink);
-  font: var(--hero-detail-text);
+  flex: none;
+  width: var(--hero-avatar-size);
+  height: var(--hero-avatar-size);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 var(--hero-avatar-ring-width) var(--hero-avatar-ring);
+}
+
+.avatar + .avatar {
+  margin-inline-start: calc(-1 * var(--hero-avatar-overlap));
+}
+
+/* A person with no portrait in a group that has them: initials in an outlined disc on the ground,
+   so it reads as a stand-in by design rather than a missing photograph. */
+.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hero-avatar-ring);
+  border: var(--hero-byline-rule-width) solid var(--hero-avatar-edge);
+  color: var(--hero-avatar-initials-ink);
+  font: var(--hero-avatar-text);
+  letter-spacing: var(--hero-avatar-tracking);
+  text-transform: var(--text-mono-case);
 }
 
 /* ── The media · one slot, two renderings ──────────────────────────────────────

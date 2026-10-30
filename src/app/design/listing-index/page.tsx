@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getCorpusPage, getInsightsFixturePage, type InsightsPage } from '@/content';
+import { getInsightsFixturePage, type InsightsPage } from '@/content';
 import { ROUTES } from '@/lib/routes';
 import { ListingIndex, type CaseView } from '@/templates';
 
@@ -79,20 +79,15 @@ function sparseCases(views: CaseView[]): CaseView[] {
  * drift.
  *
  *   (default)             the insights hub over the stress fixture (src/content/sources/fixtures/
- *                         insights.ts) with the 26 Oct copy's shelves, format table, FAQ and close:
- *                         the copy's pieces match no fixture record, so every shelf shows its
- *                         pictureless forms (the panel beside a cover, the typographic shelf)
- *   ?copy=none            the hub without the copy: the CMS's words and the BY TYPE view, all seven
- *                         formats, the longest titles, missing covers, an event without a date
+ *                         insights.ts): all seven formats, more items than any section shows, the
+ *                         longest titles and an unbroken one, missing covers and descriptions, an
+ *                         event without a date
  *   ?type=articles&topic=… the finder: its picks over the results (any of the live page's
  *                         parameters); ticks, chips and "Show more" stay here, the state kept
  *   ?state=sparse         the live CMS's shape
  *   ?state=empty          nothing published
- *   ?data=cases           the case-study index from the copy and the Strapi list: client wall, the
- *                         finder (Stage, Industry, Service) over the curated view — one featured lead,
- *                         its cards, the four stage shelves — the proof wall, the island close, the
- *                         FAQ after it; add `&stage=…`, `&industry=…`, `&service=…` for the results
- *   ?data=cases&state=sparse   covers missing, a group of one
+ *   ?data=cases           the case-study index from the corpus (BY STAGE, ?view=industry)
+ *   ?data=cases&state=sparse   one view, covers missing, a group of one
  *   ?data=cases&state=empty    no cases
  *
  * A template's specimen is the page itself rather than Specimen blocks: what is judged is the
@@ -103,12 +98,8 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
   const state = one(query.state);
 
   if (one(query.data) === 'cases') {
-    /* The finder's links and form come back to the specimen, the dataset and state kept. */
-    const casePath = `${PATH}?${new URLSearchParams({ data: 'cases', ...(state ? { state } : {}) }).toString()}`;
-    const props = await caseIndexProps(
-      query,
-      (views) => (state === 'empty' ? [] : state === 'sparse' ? sparseCases(views) : views),
-      casePath,
+    const props = await caseIndexProps(query, (views) =>
+      state === 'empty' ? [] : state === 'sparse' ? sparseCases(views) : views,
     );
     if (!props) notFound();
     return <ListingIndex {...props} />;
@@ -119,6 +110,5 @@ export default async function ListingIndexSpecimen({ searchParams }: Props) {
     state === 'sparse' ? sparse(fixture) : state === 'empty' ? empty(fixture) : fixture;
   /* The finder's links and form come back to the specimen, the state kept. */
   const path = state ? `${PATH}?${new URLSearchParams({ state }).toString()}` : PATH;
-  const copy = one(query.copy) === 'none' ? null : await getCorpusPage(ROUTES.insights);
-  return <ListingIndex {...insightsIndexProps(page, query, path, copy)} />;
+  return <ListingIndex {...insightsIndexProps(page, query, path)} />;
 }
