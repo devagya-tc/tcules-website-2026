@@ -8,7 +8,6 @@ import {
   type IconName,
   Layout,
   Media,
-  type MediaImage,
   Prose,
   Sketch,
 } from '@/components';
@@ -562,24 +561,22 @@ export function SheetBand({
   );
 }
 
-/** The three terms the four-part band knows, by key, and the visual each takes. */
+/** The three terms the four-part band knows, by key; each takes a drawing. */
 const TERM_KEYS = ['who does the work', 'what we need from you', 'where our part stops'] as const;
 
 /**
- * "What you get" in four parts (owner, 30 Oct 2026, round 6;
- * decisions/2026-10-30-what-you-get-titled-terms-four-parts): the drawn deliverables, then the band's
- * three terms as peers, each led by its visual (the studio photograph, then one needs and one stops
- * drawing). Renders OfferParts only when every piece exists; otherwise the sheet stands unchanged,
+ * "What you get" in four parts (owner, 30 Oct 2026, round 7;
+ * decisions/2026-10-30-what-you-get-label-rows): the drawn deliverables, then the band's three terms
+ * as peers, each a flat drawing beside its words (one team, one needs and one stops drawing, never a
+ * photograph). Renders OfferParts only when every piece exists; otherwise the sheet stands unchanged,
  * and in development the warning names each unmet piece, so a stale scene key cannot fall back silently.
  */
 export function WhatYouGetBand({
   band,
   scenes,
-  studio,
 }: {
   band: CorpusBand;
   scenes: (key: string) => SketchName | undefined;
-  studio?: MediaImage;
 }) {
   const parts = sheetParts(band);
   const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
@@ -596,14 +593,10 @@ export function WhatYouGetBand({
   const peers = terms.flatMap((term): OfferPart[] => {
     const key = offerSceneKey(term.title);
     const title = term.title.replace(/[.:]\s*$/, '');
-    if (key === 'who does the work') {
-      if (!studio) unmet.push('no studio photograph');
-      return studio ? [{ ...term, title, visual: { kind: 'photo' as const, image: studio } }] : [];
-    }
-    if (key === 'what we need from you' || key === 'where our part stops') {
+    if (TERM_KEYS.some((k) => k === key)) {
       const scene = scenes(term.title);
       if (!scene) unmet.push(`term "${term.title}" has no drawing`);
-      return scene ? [{ ...term, title, visual: { kind: 'drawing' as const, scene } }] : [];
+      return scene ? [{ ...term, title, scene }] : [];
     }
     unmet.push(`unknown term "${term.title}"`);
     return [];

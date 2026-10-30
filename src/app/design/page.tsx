@@ -255,7 +255,7 @@ const SPECIMENS = [
       {
         href: '/design/offer-parts',
         name: 'OfferParts',
-        note: 'what you get in four parts — the deliverables across, then who does the work, what we need and where our part stops as three peers each led by its visual; five, four and six deliverables, two parts, one part, an undrawn part, tint',
+        note: 'what you get as four rows in a label column — the deliverables as a drawn strip, then who does the work, what we need and where our part stops each a 16:9 drawing beside its words; five, four and six deliverables, two parts, one part, an undrawn part, tint',
       },
       {
         href: '/design/bento',

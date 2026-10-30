@@ -322,15 +322,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        26 Oct 2026). The client's words that close the band in the corpus follow it as a band of their
        own (`voice`, plan.ts), so the offer stands alone: the quote as a third column, or a line under
        the set, "reads as noise". "What you get" itself is FOUR PARTS (OfferParts; owner, 30 Oct 2026,
-       round 6; decisions/2026-10-30-what-you-get-titled-terms-four-parts): the deliverables, then who
-       does the work, what we need and where our part stops, each part's title at one role, the last
-       three each led by its visual. The sheet stands wherever a drawing is missing. */
+       round 7; decisions/2026-10-30-what-you-get-label-rows): the deliverables, then who does the
+       work, what we need and where our part stops, each part's title in a label column, the last
+       three each led by its drawing. The sheet stands wherever a drawing is missing. */
     case 'outcomes':
     case 'catalog': {
       const scenes = (title: string) => sceneFor(ctx, band, title);
       if (band.id === 'what-you-get') {
-        const studio = ctx.shared['about_studio_review'];
-        return <WhatYouGetBand band={band} scenes={scenes} studio={studio ? corpusImage(studio) : undefined} />;
+        return <WhatYouGetBand band={band} scenes={scenes} />;
       }
       return <SheetBand band={band} scenes={scenes} />;
     }

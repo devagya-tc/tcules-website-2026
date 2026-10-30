@@ -122,7 +122,9 @@ export type L1OutcomeScene =
   | 'outcome-old-new'
   | 'outcome-small-releases'
   | 'outcome-release-checks'
-  | 'outcome-release-support';
+  | 'outcome-release-support'
+  | 'outcome-designed-first'
+  | 'outcome-launch-support';
 
 export type L1SpecialistScene =
   | 'specialist-ai-copilots'
@@ -154,8 +156,20 @@ export type L1SpecialistScene =
  * frame, the decisive one lit. `stops-*` is the boundary, read "us to you": our last piece left of a
  * dashed line with the lit check, what stays theirs on their panel. Each is drawn from its page's
  * own words, never borrowed from How we work together's scopes.
+ *
+ * Round 7 (30 Oct 2026, decisions/2026-10-30-what-you-get-label-rows): `team-*` is "Who does the work",
+ * our team frame with the senior designer lit and the roles beside it, always-in solid and routed in,
+ * specialists who join when needed dashed. `stops-*` now reads "our last piece → our check on its own
+ * card; what stays theirs on their panel, no route into it".
  */
 export type L1TermScene =
+  | 'team-product-design'
+  | 'team-ai-product-ux'
+  | 'team-design-engineering'
+  | 'team-design-systems'
+  | 'team-new-product'
+  | 'team-product-modernisation'
+  | 'team-software-development'
   | 'needs-product-design'
   | 'needs-ai-product-ux'
   | 'needs-design-engineering'

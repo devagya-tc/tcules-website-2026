@@ -389,7 +389,6 @@ export {
   type OfferPart,
   type OfferPartsDeliverable,
   type OfferPartsProps,
-  type OfferPartsVisual,
 } from './OfferParts';
 
 /* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */

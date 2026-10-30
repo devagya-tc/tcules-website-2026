@@ -1,22 +1,15 @@
 import { Layout, Section } from '@/components';
 import { OfferParts, type OfferPart, type OfferPartsDeliverable } from '@/patterns';
-import { getKitPhoto } from '@/lib/photos';
 
 import { Variation } from '../_specimen/Variation';
 import t from '../_specimen/typeroles.module.css';
 
 /**
- * /design/offer-parts — "What you get" in four parts (round 6, 30 Oct 2026;
- * decisions/2026-10-30-what-you-get-titled-terms-four-parts). The real words of /services/product-design
+ * /design/offer-parts — "What you get" as four rows in a label column (round 7, 30 Oct 2026;
+ * decisions/2026-10-30-what-you-get-label-rows). The real words of /services/product-design
  * (five deliverables, three parts), then four, six, two parts, one part, an undrawn part and tint.
- * The photograph is a kit studio photograph for this specimen only.
+ * Every visual is a flat drawing; there is no photograph kind.
  */
-
-const PHOTO = {
-  ...getKitPhoto('team-laptops-table', {
-    alt: 'Tcules team in an in-studio presentation and review session',
-  }),
-};
 
 const FIVE: OfferPartsDeliverable[] = [
   {
@@ -50,17 +43,17 @@ const PARTS: OfferPart[] = [
   {
     title: 'Who does the work',
     body: 'Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.',
-    visual: { kind: 'photo', image: PHOTO },
+    scene: 'team-product-design',
   },
   {
     title: 'What we need from you',
     body: 'The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product calls.',
-    visual: { kind: 'drawing', scene: 'needs-product-design' },
+    scene: 'needs-product-design',
   },
   {
     title: 'Where our part stops',
     body: 'You make the product calls: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build.',
-    visual: { kind: 'drawing', scene: 'stops-product-design' },
+    scene: 'stops-product-design',
   },
 ];
 
@@ -75,9 +68,10 @@ export default function OfferPartsSpecimen() {
           <p className={t.eyebrow}>Pattern · tier 2</p>
           <h1>OfferParts</h1>
           <p className={t.lead}>
-            What you get in four parts: the deliverables across, one row of drawn items under one
-            title, then three peer parts each led by its visual. Every part opens on an h3 at one
-            role, so none outranks another. No numbers, hairlines or containers.
+            What you get as four rows in a label column: the deliverables as a strip of drawn items,
+            then who does the work, what we need and where our part stops, each a 16:9 drawing
+            beside its words. Every row opens on an h3 at one role, so none outranks another. Every
+            visual is a flat drawing. No numbers, hairlines or containers.
           </p>
         </Layout>
       </Section>
@@ -85,7 +79,7 @@ export default function OfferPartsSpecimen() {
       <Variation
         id="five"
         title="1 · Five deliverables and three parts — the shape"
-        note="From 1024 the deliverables are one row of five; the three parts sit under them on the column seam, their heads on one line and their visuals sharing top and bottom. Below 1024 one column, each visual beside its words from 768 and full width below."
+        note="Four rows, the part's name in the label column from 1024; from 1440 five deliverables across the content column, 1024–1439 three then two; rows 2–4 a 16:9 drawing beside the words. Below 1024 the label sits over its content."
       />
       <OfferParts
         heading="What you get from our product design services"
@@ -99,7 +93,7 @@ export default function OfferPartsSpecimen() {
       <Variation
         id="four"
         title="2 · Four deliverables"
-        note="Four tracks from 1024."
+        note="Four deliverables: 2 + 2 below 1440 and four across at 1440."
       />
       <OfferParts
         heading="What you get"
@@ -112,7 +106,7 @@ export default function OfferPartsSpecimen() {
       <Variation
         id="six"
         title="3 · Six deliverables"
-        note="Six read three over three; the rows share their parts."
+        note="Six read three over three."
       />
       <OfferParts
         heading="What you get"
@@ -129,7 +123,7 @@ export default function OfferPartsSpecimen() {
         parts={PARTS}
       />
 
-      <Variation id="two" title="4 · Two parts" note="Two peers on two tracks from 1024." />
+      <Variation id="two" title="4 · Two parts" note="Two parts: the rows are unchanged." />
       <OfferParts
         heading="What you get"
         headingId="ofp-two"
@@ -141,7 +135,7 @@ export default function OfferPartsSpecimen() {
       <Variation
         id="one"
         title="5 · One part"
-        note="A single part keeps its visual beside its words from 768, so it never sits as a lone tile."
+        note="One part: the row is unchanged."
       />
       <OfferParts
         heading="What you get"
@@ -153,18 +147,18 @@ export default function OfferPartsSpecimen() {
 
       <Variation
         id="undrawn"
-        title="6 · A drawing part with no scene"
-        note="The empty plate stands, and development warns."
+        title="6 · A part with no scene"
+        note="Undrawn: the empty plate stands, and development warns."
       />
       <OfferParts
         heading="What you get"
         headingId="ofp-undrawn"
         deliverablesTitle="What you receive"
         deliverables={FIVE}
-        parts={[PARTS[0]!, PARTS[1]!, { ...PARTS[2]!, visual: { kind: 'drawing' } }]}
+        parts={[PARTS[0]!, PARTS[1]!, { ...PARTS[2]!, scene: undefined }]}
       />
 
-      <Variation id="tint" title="7 · Tint" note="The same band on the tint ground." />
+      <Variation id="tint" title="7 · Tint" note="Tint." />
       <OfferParts
         heading="What you get"
         headingId="ofp-tint"

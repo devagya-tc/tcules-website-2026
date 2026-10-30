@@ -1,14 +1,6 @@
 import type { ReactNode } from 'react';
 
-import {
-  Layout,
-  Media,
-  Section,
-  Sketch,
-  type MediaImage,
-  type SketchName,
-} from '@/components';
-import { PART_TRACK } from '@/lib/image-sizes';
+import { Layout, Section, Sketch, type SketchName } from '@/components';
 
 import styles from './OfferParts.module.css';
 
@@ -23,17 +15,16 @@ export type OfferPartsDeliverable = {
   scene: SketchName;
 };
 
-/** The visual that heads a peer part: a photograph, or a flat drawing on its plate. */
-export type OfferPartsVisual =
-  | { kind: 'photo'; image: MediaImage }
-  | { kind: 'drawing'; scene?: SketchName };
-
-/** One of the peer parts under the deliverables (who does the work, what we need, where we stop). */
+/**
+ * One of the three terms under the deliverables (who does the work, what we need, where we stop). Its
+ * visual is always a flat drawing: there is no photograph kind, so one-register-per-section is
+ * enforced by the type. A missing scene draws the empty plate and warns in development.
+ */
 export type OfferPart = {
   title: string;
   body?: string;
   bodyHtml?: string;
-  visual: OfferPartsVisual;
+  scene?: SketchName;
 };
 
 export type OfferPartsProps = {
@@ -54,13 +45,16 @@ export type OfferPartsProps = {
   surface?: 'paper' | 'tint';
 };
 
-/** Deliverable tracks from 1024: one per deliverable, and six read three over three. */
-const TRACKS: Record<number, 2 | 3 | 4 | 5> = { 2: 2, 3: 3, 4: 4, 5: 5, 6: 3 };
-
-const PEER_COLUMNS: Record<number, { base: 1; lg?: 2 | 3 }> = {
-  1: { base: 1 },
-  2: { base: 1, lg: 2 },
-  3: { base: 1, lg: 3 },
+/**
+ * Deliverable tracks. From 1024 the deliverables sit in a 3/4 column, so five across only fit at the
+ * 1240 cap (xl); below it they read three then two.
+ */
+const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 | 5 }> = {
+  2: { lg: 2, xl: 2 },
+  3: { lg: 3, xl: 3 },
+  4: { lg: 2, xl: 4 },
+  5: { lg: 3, xl: 5 },
+  6: { lg: 3, xl: 3 },
 };
 
 const words = (item: { body?: string; bodyHtml?: string }) =>
@@ -70,16 +64,26 @@ const words = (item: { body?: string; bodyHtml?: string }) =>
     <p className={styles.body}>{item.body}</p>
   ) : null;
 
+/** A part's row: its title in the label column from 1024, over its content below. */
+function Row({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <Layout columns={{ base: 1, lg: [1, 3] }} colGap="section" rowGap="block" align="start">
+      <h3 className={styles.partTitle}>{title}</h3>
+      {children}
+    </Layout>
+  );
+}
+
 /**
- * OfferParts — "What you get" in four parts (owner, 30 Oct 2026, round 6;
- * decisions/2026-10-30-what-you-get-titled-terms-four-parts).
+ * OfferParts — "What you get" as four rows in a label column (owner, 30 Oct 2026, round 7;
+ * decisions/2026-10-30-what-you-get-label-rows).
  *
- * The deliverables are one part across the full width, one row of drawn items under one title; the
- * other three parts are one row of peers beneath, each its title, then its visual over its words.
- * Equal standing comes from structure, not from equal rectangles: every part opens on an h3 at one
- * role, with the same head-to-content seam and the same part seam. The row of three runs on
- * different tracks (3, not 5) and a wider seam (column, not gutter), so it never reads as one more
- * row of the set. No numbers, no hairlines, no containers: sequence is the reading order.
+ * Each row is its part's name in a label column, then its content: row 1 the deliverables as a strip
+ * of drawn items, rows 2–4 (who does the work, what we need, where our part stops) a compact 16:9
+ * drawing beside the words. Every visual is a flat Sketch, never a photograph (one register per
+ * section). Equal standing comes from structure: every row opens on an h3 at one role with the same
+ * label-to-content seam. No numbers, no hairlines, no containers: rows are separated by Layout seams
+ * alone, and sequence is the reading order.
  */
 export function OfferParts({
   id,
@@ -100,19 +104,12 @@ export function OfferParts({
       console.warn(`OfferParts: ${parts.length} parts; built for three.`);
     }
     for (const part of parts) {
-      if (part.visual.kind === 'drawing' && !part.visual.scene) {
+      if (!part.scene) {
         console.warn(`OfferParts: "${part.title}" has no drawing; the empty plate stands.`);
       }
     }
   }
-  const tracks = TRACKS[deliverables.length] ?? 3;
-
-  const visualOf = (visual: OfferPartsVisual) =>
-    visual.kind === 'photo' ? (
-      <Media image={visual.image} ratio="16/9" sizes={PART_TRACK} />
-    ) : (
-      <Sketch name={visual.scene} />
-    );
+  const t = TRACKS[deliverables.length] ?? { lg: 3, xl: 3 };
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-parts">
@@ -130,11 +127,10 @@ export function OfferParts({
           </h2>
         )}
         <Layout rowGap="column">
-          <Layout rowGap="block">
-            <h3 className={styles.partTitle}>{deliverablesTitle}</h3>
+          <Row title={deliverablesTitle}>
             <Layout
               as="ul"
-              columns={{ base: 1, lg: tracks }}
+              columns={{ base: 1, lg: t.lg, xl: t.xl }}
               colGap="gutter"
               rowGap="stack"
               shareRows={2}
@@ -143,7 +139,7 @@ export function OfferParts({
                 <Layout
                   as="li"
                   key={item.title}
-                  columns={{ base: [5, 6], lg: 1 }}
+                  columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
                   colGap="gutter"
                   rowGap="block"
                   align="start"
@@ -156,27 +152,16 @@ export function OfferParts({
                 </Layout>
               ))}
             </Layout>
-          </Layout>
+          </Row>
           {parts.length > 0 ? (
-            <Layout
-              columns={PEER_COLUMNS[Math.min(parts.length, 3)] ?? { base: 1 }}
-              colGap="column"
-              rowGap="column"
-              shareRows={2}
-            >
+            <Layout rowGap="stack">
               {parts.map((part) => (
-                <Layout key={part.title} rowGap="block">
-                  <h3 className={styles.partTitle}>{part.title}</h3>
-                  <Layout
-                    columns={{ base: 1, md: [5, 6], lg: 1 }}
-                    colGap="gutter"
-                    rowGap="block"
-                    align="start"
-                  >
-                    {visualOf(part.visual)}
+                <Row key={part.title} title={part.title}>
+                  <Layout columns={{ base: [2, 3], md: [1, 3] }} colGap="gutter" align="start">
+                    <Sketch name={part.scene} />
                     {words(part)}
                   </Layout>
-                </Layout>
+                </Row>
               ))}
             </Layout>
           ) : null}

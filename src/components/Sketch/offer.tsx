@@ -251,18 +251,20 @@ function OutcomeFinished() {
 function OutcomeBrief() {
   return (
     <>
-      <Glyph name="user" cx={40} cy={90} size={20} className={styles.glyph} />
-      <Hop x1={60} x2={100} y={90} />
-      <Rect x={100} y={30} w={72} h={120} rx={8} className={styles.frame} />
-      <Copy x={114} y={46} w={28} quiet />
-      <Rect x={114} y={58} w={44} h={14} className={styles.tile} />
-      <Rect x={114} y={80} w={44} h={14} className={styles.tile} />
-      <Focus x={136} y={124} glyph="check-circle" size={12} />
-      <Rect x={188} y={40} w={52} h={100} rx={8} className={styles.frameQuiet} />
-      <Glyph name="clock-circle" cx={214} cy={60} size={14} className={styles.glyphQuiet} />
-      <Rect x={198} y={80} w={32} h={12} className={styles.tile} />
-      <Rect x={198} y={100} w={32} h={12} className={styles.tile} />
-      <Hatched x={256} y={50} w={40} h={80} />
+      <Rect x={50} y={50} w={60} h={80} rx={8} className={styles.frameQuiet} />
+      <Glyph name="user" cx={80} cy={78} size={20} className={styles.glyph} />
+      <Copy x={64} y={108} w={32} quiet />
+      <Hop x1={110} x2={150} y={90} />
+      <Rect x={150} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={166} y={48} w={40} quiet />
+      {[64, 84].map((y) => (
+        <g key={y}>
+          <Rect x={166} y={y - 5} w={10} h={10} rx={3} className={styles.solid} />
+          <Copy x={184} y={y} w={48} />
+        </g>
+      ))}
+      <Hatched x={166} y={98} w={66} h={12} />
+      <Focus x={248} y={128} glyph="check-circle" size={12} />
     </>
   );
 }
@@ -323,8 +325,9 @@ function SymptomTest() {
       <Rect x={46} y={114} w={48} h={20} rx={10} className={styles.tile} />
       <Cursor x={84} y={120} />
       <Hop x1={170} x2={210} y={90} />
-      <Glyph name="user" cx={230} cy={90} size={22} className={styles.glyph} />
-      <Focus x={270} y={90} glyph="check-circle" size={12} />
+      <Rect x={210} y={40} w={80} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={250} cy={68} size={22} className={styles.glyph} />
+      <Focus x={250} y={112} glyph="check-circle" size={12} />
     </>
   );
 }
@@ -353,12 +356,11 @@ function SymptomMatch() {
       <Rect x={42} y={30} w={90} h={100} rx={8} className={styles.frameQuiet} />
       <Copy x={54} y={50} w={40} quiet />
       <Rect x={54} y={66} w={56} h={20} className={styles.tile} />
-      <Hop x1={140} x2={180} y={90} />
-      <Rect x={186} y={34} w={104} h={112} rx={12} className={styles.halo} />
+      <Hop x1={132} x2={192} y={90} />
       <Rect x={192} y={40} w={90} h={100} rx={8} className={styles.frame} />
       <Copy x={204} y={60} w={40} quiet />
       <Rect x={204} y={76} w={56} h={20} className={styles.region} />
-      <Focus x={268} y={128} glyph="check-circle" size={12} />
+      <Focus x={260} y={118} glyph="check-circle" size={12} />
     </>
   );
 }

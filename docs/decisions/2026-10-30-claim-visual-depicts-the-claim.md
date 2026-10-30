@@ -4,7 +4,7 @@ date: 2026-10-30
 status: active
 area: [illustration, proof]
 source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the L1 service pages"
-supersedes: [2026-10-30-hard-parts-case-row]
+supersedes: []
 dbf: []
 dbf_status: none
 enforced_by: review
