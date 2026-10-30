@@ -72,7 +72,7 @@
 }
 
 /* The CTA card (`cta`): a cell of its own kind. A dotted outline, no fill, the tile's radius, no
-   texture, no lift; a `block` inset on a phone, a `gutter` from 768. Placement as `.wide`/`.note`. */
+   texture, no lift; a `block` inset (the single tile's, so its first line starts where a neighbouring title does), a `gutter` only where it spans a whole row with no neighbour (768-1023). Placement as `.wide`/`.note`. */
 .cta {
   min-inline-size: 0;
   padding: var(--gap-block);
@@ -82,12 +82,18 @@
 
 @media (min-width: 768px) {
   .cta {
-    padding: var(--gap-gutter);
     grid-column: 1 / -1;
   }
 
   .cta[data-fill-md='true'] {
     grid-column: auto;
+  }
+}
+
+/* Spanning a whole row with no neighbour tile to line up with (768-1023), it takes the gutter. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cta:not([data-fill-md='true']) {
+    padding: var(--gap-gutter);
   }
 }
 

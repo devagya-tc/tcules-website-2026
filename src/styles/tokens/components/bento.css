@@ -44,7 +44,7 @@
   --bnt-duration: var(--duration-slow);
   --bnt-easing: var(--easing-ease);
   --bnt-ring-width: var(--border-width-2);
-  /* the CTA card's dotted outline: at 2 the dots render round and read as dotted; at 1 they merge into a grey line */
+  /* the CTA card's dotted outline: at 2 the dots read as dotted (Chromium draws them square-ish on straight runs, rounder at corners); at 1 they merge into a grey line */
   --bnt-cta-rule-width: var(--border-width-2);
   /* The ring's offset off the tile's edge: an optical gap, as Button's ring offset is. */
   --bnt-ring-offset: var(--space-2);

@@ -107,8 +107,8 @@ function CtaCard({ cta }: { cta: BentoCta }) {
   if (process.env.NODE_ENV !== 'production' && !routes.some((r) => r.actions.length > 0)) {
     console.warn('Bento: the CTA card has no action.');
   }
-  const half = (route: BentoCtaRoute, key: string | number) => (
-    <Layout key={key} className={styles.fill} rowGap="block" pinLast>
+  const half = (route: BentoCtaRoute, key: string | number, paired: boolean) => (
+    <Layout key={key} className={styles.fill} rowGap="block" pinLast={paired}>
       <Layout rowGap="tight">
         {route.question ? (
           <>
@@ -120,30 +120,50 @@ function CtaCard({ cta }: { cta: BentoCta }) {
         ) : null}
       </Layout>
       {route.actions.length > 0 ? (
-        <Cluster colGap="block" rowGap="text" align="center">
-          {route.actions.map((action) => (
-            <Button
-              key={action.href}
-              as="a"
-              href={action.href}
-              emphasis="link"
-              tone="primary"
-              size="md"
-              icon={<Icon name="arrow-right" />}
-            >
-              {action.label}
-            </Button>
-          ))}
-        </Cluster>
+        paired ? (
+          <Layout rowGap="tight">
+            {route.actions.map((action) => (
+              <Button
+                key={action.href}
+                as="a"
+                href={action.href}
+                emphasis="link"
+                tone="primary"
+                size="md"
+                icon={<Icon name="arrow-right" />}
+              >
+                {action.label}
+              </Button>
+            ))}
+          </Layout>
+        ) : (
+          <Cluster colGap="block" rowGap="text" align="center">
+            {route.actions.map((action) => (
+              <Button
+                key={action.href}
+                as="a"
+                href={action.href}
+                emphasis="link"
+                tone="primary"
+                size="md"
+                icon={<Icon name="arrow-right" />}
+              >
+                {action.label}
+              </Button>
+            ))}
+          </Cluster>
+        )
       ) : null}
     </Layout>
   );
   const [only] = routes;
-  /* One question: the same structure across the whole card, at every span, no drawing. */
-  if (routes.length === 1 && only) return half(only, 'only');
+  /* One question: the same structure across the whole card, no drawing. Not pinned: the links follow
+     the sentence a `block` below, so the spare room sits in one block at the foot, not mid-card.
+     Two halves pin their links to one foot line and stack them (a half is too narrow for a row). */
+  if (routes.length === 1 && only) return half(only, 'only', false);
   return (
     <Layout className={styles.fill} columns={{ base: 1, md: [1, 1] }} colGap="column" rowGap="stack">
-      {routes.map((route, i) => half(route, route.question ?? route.answer ?? i))}
+      {routes.map((route, i) => half(route, route.question ?? route.answer ?? i, true))}
     </Layout>
   );
 }
