@@ -1056,7 +1056,15 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
       : undefined;
     return wrap(
       <Bento
-        tracks={cta ? ctaTracks(n + cta.routes.length) : n === 7 || n === 8 || n === 4 ? 4 : 3}
+        tracks={
+          cta
+            ? /* A lone card is two cells wide (decisions/2026-10-30-set-ends-in-a-cta-card): counted
+                 as one, seven tiles chose four tracks and squeezed it into the eighth cell. */
+              ctaTracks(n + cta.routes.length + (cta.routes.length === 1 ? 1 : 0))
+            : n === 7 || n === 8 || n === 4
+              ? 4
+              : 3
+        }
         cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,

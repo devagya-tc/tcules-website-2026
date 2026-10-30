@@ -46,7 +46,8 @@ a visible placeholder, not as the old design. The same applies to the audit page
 | Hero | **hero**: Bhumika's illustration for the 6 product types; **photo**: the sector photo for the 6 industries | page | Launch roadmap split. HealthTech's copy binds an illustration slot ("each seeing their own view of one shared case"); owner to choose. |
 | What we design | **flat**, one per product kind | item | Replaces the blue-tick cells. The client named after "·" stays as the item's proof line. |
 | Selected work | the cases' own covers | case | Already right. |
-| Hard parts | **iso** per claim; a worked scenario ("Illustration, not client work") takes one **flat** scenario drawing instead; a table of people or questions becomes a voice ledger or drawn items | claim | See § 3 for the band update. |
+| Hard parts | **iso** per claim; a table of people or questions becomes a voice ledger or drawn items | claim | See § 3 for the band update. |
+| Worked example ("Illustration, not client work") | **flat story**: one animated flat graphic, or 3–5 frames, of the moments the words name | example | Its own section kind (treatment rules § 2), not a hard part. 4 expertise pages (§ 2.16); 24 pages site-wide carry one (services, audits, tools), so it is one component built once. |
 | What you get: deliverables | **flat**, one per deliverable, each under a title pulled from its own words | item | Content change logged in `docs/content-changes.md`. |
 | What you get: the three terms | **flat**: reuse `team-product-design`, `needs-product-design`, `stops-product-design` on every expertise page | page | Zero new drawings. Same message on every page. |
 | Testimonials | none | — | Already right. |
@@ -454,6 +455,21 @@ a visible placeholder, not as the old design. The same applies to the audit page
 | Sector photo: EdTech | hero + Other industries | missing (Yash) |
 | Sector photo: PropTech | hero + Other industries | missing (Yash) |
 | Sector photo: Content & knowledge | Other industries | missing (Yash) |
+
+### 2.16 Worked examples: the frames each one shows
+
+Each is a story told in frames (or one animation running through them). They are listed separately from
+hard parts because they're a different kind of section; the "flat scenario" rows in § 2 point here.
+
+| Page | Example | Frames |
+|---|---|---|
+| ClimateTech | Overnight charging for a delivery fleet | 1 · vans plugged in at dusk, each with a ready-by-six marker · 2 · the price forecast overnight, cheap hours lit · 3 · two vans flagged where readiness and price pull apart, the fleet manager picking · 4 · morning: every van ready, a summary of what the system did |
+| Commerce | A made-to-measure blind | 1 · the product page asks which blind and recess or wall · 2 · measuring steps for that choice · 3 · before payment, the figures read back, an unusual one questioned · 4 · the blind fits |
+| Content | The veteran's part number and the newcomer's description | 1 · one search box, a part number typed, straight to its page · 2 · the same box, "pump making a grinding noise" · 3 · "which machine?" asked first · 4 · the right manual page, matched on the words senior engineers hear |
+| EdTech | An apprentice's circuit signed off | 1 · at work: two photos and a sentence recorded · 2 · the mentor confirms on a phone between jobs, in under a minute · 3 · the assessor sees the record beside the standard and signs |
+
+The rows in § 2.3, 2.4, 2.5 and 2.7 marked "flat scenario" are these; one drawing set per example, not one per frame
+plus one for the claim.
 
 ### 2.15 IRL photographs from the Tcules gallery
 
