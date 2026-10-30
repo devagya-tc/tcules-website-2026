@@ -86,6 +86,7 @@ import {
   linkLead,
   plain,
   trimEnd,
+  trimStart,
 } from './text';
 
 /**
@@ -816,6 +817,49 @@ function trailingAfterTable(band: CorpusBand): InlineRun[][] {
     .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
 }
 
+type Sentence = { runs: InlineRun[]; text: string };
+function sentencesOf(runs: readonly InlineRun[]): Sentence[] {
+  const out: Sentence[] = [];
+  let cur: InlineRun[] = [];
+  const flush = () => {
+    const text = plain(cur).trim();
+    if (text) out.push({ runs: trimEnd(trimStart(cur)), text });
+    cur = [];
+  };
+  for (const run of runs) {
+    if (run.type !== 'text') {
+      cur.push(run);
+      continue;
+    }
+    const parts = run.text.split(/(?<=[.?!])\s+/);
+    parts.forEach((part, i) => {
+      if (part) cur.push({ type: 'text', text: part });
+      if (i < parts.length - 1) flush();
+    });
+  }
+  flush();
+  return out;
+}
+
+/** A closing paragraph authored as questions each answered by where to go (the onward cell): undefined when it is not. */
+function routesOf(
+  paragraphs: readonly InlineRun[][],
+): { question: string; answer: InlineRun[] }[] | undefined {
+  const routes: { question: string; answer: InlineRun[] }[] = [];
+  for (const s of paragraphs.flatMap(sentencesOf)) {
+    if (s.text.endsWith('?')) routes.push({ question: s.text, answer: [] });
+    else {
+      const r = routes.at(-1);
+      if (!r) return undefined;
+      if (r.answer.length) r.answer.push({ type: 'text', text: ' ' });
+      r.answer.push(...s.runs);
+    }
+  }
+  return routes.length > 0 && routes.every((r) => r.answer.length > 0 && hasLink(r.answer))
+    ? routes
+    : undefined;
+}
+
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
@@ -888,10 +932,14 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
         </>
       ) : undefined;
     const inCell = four && rows.length % 4 !== 0;
+    /* The closing router is the onward cell (owner, 30 Oct 2026); a closing paragraph that is not
+       questions answered by links keeps the plain text cell. */
+    const routes = inCell ? routesOf(closing) : undefined;
     return wrap(
       <Bento
         tracks={four ? 4 : 3}
-        note={inCell ? note : undefined}
+        note={inCell && !routes ? note : undefined}
+        onward={routes?.map((r) => ({ question: r.question, answer: renderInline(r.answer) }))}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,

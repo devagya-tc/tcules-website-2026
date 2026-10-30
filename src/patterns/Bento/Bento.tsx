@@ -30,6 +30,9 @@ export type BentoItem = {
   span?: 1 | 2;
 };
 
+/** One route out of the set: a question and the services that answer it. */
+export type BentoRoute = { question: string; answer: ReactNode };
+
 export type BentoProps = {
   /** The tiles, in reading order. Built for six on two rows: two wide, four single. */
   items: readonly BentoItem[];
@@ -50,6 +53,13 @@ export type BentoProps = {
    * links included).
    */
   note?: ReactNode;
+  /**
+   * The ONWARD cell (owner, 30 Oct 2026): the band's closing router out of the set, its questions each
+   * answered by the services that take over, in the grid's last cell. Dashed edge (the Sketch grammar's
+   * 'beyond this set'), no texture, not one link; each question over its answer, the answer's links in
+   * place. Exclusive with `note`, which wins nothing: onward is rendered when given.
+   */
+  onward?: readonly BentoRoute[];
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -254,7 +264,7 @@ export function ServiceTile({
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoProps) {
+export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, onward }: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
   if (
@@ -290,7 +300,22 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
           <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
       ))}
-      {note ? (
+      {onward?.length ? (
+        <li
+          className={styles.onward}
+          data-span={noteSpan}
+          data-fill-md={items.length % 2 === 1 ? 'true' : undefined}
+        >
+          <Layout rowGap="block">
+            {onward.map((route) => (
+              <Layout key={route.question} rowGap="tight">
+                <p className={styles.question}>{route.question}</p>
+                <p className={styles.answer}>{route.answer}</p>
+              </Layout>
+            ))}
+          </Layout>
+        </li>
+      ) : note ? (
         <li className={styles.note} data-span={noteSpan}>
           <p className={styles.noteText}>{note}</p>
         </li>

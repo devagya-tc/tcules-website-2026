@@ -23,7 +23,7 @@ import {
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
-import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor } from '@/lib/sketches';
@@ -266,15 +266,39 @@ const rowBody = (runs: readonly InlineRun[]) =>
 
 /* ── Sheets: what you get, a catalogue, argued items (C4, C7) ─────────────────── */
 
+/** The runs with the first letter of the first text run upper-cased. */
+function capitalFirst(runs: InlineRun[]): InlineRun[] {
+  const [first, ...rest] = runs;
+  return first?.type === 'text'
+    ? [{ type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) }, ...rest]
+    : runs;
+}
+
 /**
  * One list item or claim as a promise. A bold lead is the title (a lead authored as a link keeps it,
  * C7); otherwise a colon inside the first seventy characters splits title from body; otherwise the
  * whole sentence is the title (component-map § A `what-you-get`).
  */
-function sheetItem(runs: readonly InlineRun[]): OfferSheetItem {
+function sheetItem(runs: readonly InlineRun[], opts?: { wholeSentence?: boolean }): OfferSheetItem {
   const lead = boldLead(runs);
   if (lead) {
     const link = linkIn(lead.label);
+    const labelText = inlineToText(lead.label).trim();
+    /* Titles on What you get, the sentence kept whole (owner, 30 Oct 2026): "**A tested brief:** what
+       goes in…" is a title over its remainder; a run-on lead ("**The build,** alongside…") titles
+       with its own opening and keeps the whole authored sentence as the body. */
+    if (labelText.endsWith(':')) {
+      return {
+        title: labelTitle(lead.label),
+        ...bodyFields(capitalFirst(trimStart(lead.body))),
+      };
+    }
+    if (opts?.wholeSentence && !link && !labelText.endsWith('.')) {
+      return {
+        title: labelText.replace(/,$/, '').trim(),
+        ...bodyFields([...lead.label, { type: 'text', text: ' ' }, ...trimStart(lead.body)]),
+      };
+    }
     const body = trimStart(lead.body);
     return {
       title: labelTitle(lead.label),
@@ -329,7 +353,8 @@ export function sheetParts(band: CorpusBand): SheetParts {
   let end = start;
   const at = blocks[start];
   if (at?.type === 'list') {
-    items = at.items.map(sheetItem);
+    const opts = { wholeSentence: band.id === 'what-you-get' };
+    items = at.items.map((runs) => sheetItem(runs, opts));
     /* A set is titled throughout or not at all (review 29 Oct): where any promise is authored with
        no lead of its own, every promise is a statement, its words whole in the body role. */
     if (items.some((item) => !item.title)) {
@@ -413,9 +438,22 @@ export function SheetBand({
     const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);
     return scene ? { ...item, scene } : item;
   });
+  const rest = [...parts.intro, ...parts.after];
+  const combined =
+    rest.length > 0 ? <BandBody blocks={rest} labelledBy={head(band).headingId} /> : undefined;
+  /* The band's terms ("**Who does the work.** …") are its foot; every other block is the note. */
+  const isTerm = (block: CorpusBlock) => {
+    const lead = leadOf(block);
+    return lead !== null && !isBareLabel(block) && linkIn(lead.label) === undefined;
+  };
+  const terms = rest.flatMap((block) => {
+    const lead = isTerm(block) ? leadOf(block) : null;
+    return lead ? [{ title: labelTitle(lead.label), ...bodyFields(trimStart(lead.body)) }] : [];
+  });
+  const noteBlocks = rest.filter((block) => !isTerm(block));
   const note =
-    parts.intro.length > 0 || parts.after.length > 0 ? (
-      <BandBody blocks={[...parts.intro, ...parts.after]} labelledBy={head(band).headingId} />
+    noteBlocks.length > 0 ? (
+      <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
     ) : undefined;
   if (items.length > 6) {
     const rows: ReadDownRow[] = items.map((item) => ({
@@ -423,9 +461,8 @@ export function SheetBand({
       ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : item.body ? { body: item.body } : {}),
     }));
     return (
-      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={note}>
+      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
         <Layout rowGap="block">
-          {parts.listLabel ? <p>{parts.listLabel}</p> : null}
           <ReadDown rows={rows} columns={2} />
         </Layout>
       </ContentSection>
@@ -435,10 +472,10 @@ export function SheetBand({
     <OfferSheet
       {...head(band)}
       lead={parts.lead}
-      listLabel={parts.listLabel}
       items={items}
       across={acrossFor(items.length)}
       note={note}
+      terms={terms.length > 0 ? terms : undefined}
     />
   );
 }

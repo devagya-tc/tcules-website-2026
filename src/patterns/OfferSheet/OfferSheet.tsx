@@ -43,6 +43,9 @@ export type OfferSheetItem = {
   href?: string;
 };
 
+/** One of the band's terms: a title and what it says. */
+export type OfferSheetTerm = { title: string; body?: string; bodyHtml?: string };
+
 export type OfferSheetProps = {
   /** The band's anchor. */
   id?: string;
@@ -61,6 +64,12 @@ export type OfferSheetProps = {
    * band's one heading.
    */
   listLabel?: string;
+  /**
+   * The band's terms (who does the work, what we need, where our part stops): they belong to the
+   * whole band, so they sit in its FOOT after one full-width hairline, unruled, side by side, a role
+   * under the promises (owner, 30 Oct 2026).
+   */
+  terms?: readonly OfferSheetTerm[];
   /** Two to six promises. Four is the shape: two rows of two beside the aside. */
   items: readonly OfferSheetItem[];
   /**
@@ -113,6 +122,7 @@ export function OfferSheet({
   aside,
   asideImage,
   note,
+  terms,
   across = 2,
   surface = 'paper',
 }: OfferSheetProps) {
@@ -216,6 +226,30 @@ export function OfferSheet({
         </div>
       ) : undefined));
 
+  const foot = terms?.length ? (
+    <div className={styles.foot}>
+      <Layout
+        as="ul"
+        columns={{ base: 1, lg: terms.length % 3 === 0 ? 3 : 2 }}
+        colGap="gutter"
+        rowGap="stack"
+      >
+        {terms.map((t) => (
+          <li key={t.title}>
+            <Layout rowGap="text">
+              <h3 className={styles.termTitle}>{t.title}</h3>
+              {t.bodyHtml ? (
+                <p className={styles.body} dangerouslySetInnerHTML={{ __html: t.bodyHtml }} />
+              ) : t.body ? (
+                <p className={styles.body}>{t.body}</p>
+              ) : null}
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+    </div>
+  ) : null;
+
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
       <Layout rowGap="stack">
@@ -239,6 +273,7 @@ export function OfferSheet({
         ) : (
           sheet
         )}
+        {foot}
       </Layout>
     </Section>
   );

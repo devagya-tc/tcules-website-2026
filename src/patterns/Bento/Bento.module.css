@@ -51,6 +51,61 @@
   }
 }
 
+/* The onward cell (`onward`): a cell of its own kind. The tile's radius and inset, its edge dashed
+   (the Sketch grammar's "beyond this set"), no texture, no lift, not one link. */
+.onward {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+  border: var(--bnt-rule-width) dashed var(--bnt-onward-rule-ink);
+  border-radius: var(--bnt-radius);
+}
+
+@media (min-width: 768px) {
+  .onward {
+    grid-column: 1 / -1;
+  }
+
+  .onward[data-fill-md='true'] {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .onward[data-span='1'] {
+    grid-column: auto;
+  }
+
+  .onward[data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .onward[data-span='3'] {
+    grid-column: span 3;
+  }
+
+  .onward[data-span='4'] {
+    grid-column: 1 / -1;
+  }
+}
+
+.question {
+  color: var(--bnt-title-ink);
+  font: var(--bnt-question-text);
+  letter-spacing: var(--bnt-question-tracking);
+  text-wrap: var(--text-running-wrap);
+}
+
+.answer {
+  max-inline-size: var(--bnt-body-measure);
+  color: var(--bnt-body-ink);
+  font: var(--bnt-body-text);
+  text-wrap: var(--text-running-wrap);
+}
+
+.answer a {
+  font-weight: var(--font-weight-medium);
+}
+
 .noteText {
   max-inline-size: var(--bnt-body-measure);
   color: var(--bnt-body-ink);

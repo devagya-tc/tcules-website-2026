@@ -376,7 +376,12 @@ export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gatewa
 
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
-export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
+export {
+  OfferSheet,
+  type OfferSheetItem,
+  type OfferSheetProps,
+  type OfferSheetTerm,
+} from './OfferSheet';
 
 /* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
 export {
@@ -446,5 +451,6 @@ export {
   ServiceTile,
   type BentoItem,
   type BentoProps,
+  type BentoRoute,
   type ServiceTileProps,
 } from './Bento';
