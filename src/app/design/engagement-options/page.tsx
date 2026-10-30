@@ -76,7 +76,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a stem rising from a port on one rail to each option's own text, the rail running only between the outer stems and turning into them at a rounded corner, the terms under it (one column to 1024, two from there), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot, end-aligned) beside its words from 768. Below 768 the three stems cluster into one short bracket. The ask is the next band, an ink island (owner, 30 Oct 2026)."
+        note="Three options on three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are one plain text row at body size a column under the set: from 1024 on the options' grid (tracks 1 and 2, track 3 empty), stacked below; no plates, drawings, rail or nodes (owner, 30 Oct 2026, engagement-terms-plain-row). The ask is the next band, an ink island."
       />
       <EngagementOptions
         heading="How we work together"
@@ -89,11 +89,9 @@ export default function EngagementOptionsSpecimen() {
         terms={[
           {
             body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
-            scope: 'build',
           },
           {
             body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
-            scope: 'overlap',
           },
         ]}
         action={
@@ -107,7 +105,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together-tint"
         title="0b · Shared terms on tint"
-        note="The same options and terms on the tint surface, proving the rail and port inks per surface. The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a stem rising from a port on one rail to each option's own text, the rail running only between the outer stems and turning into them at a rounded corner, the terms under it (one column to 1024, two from there), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot, end-aligned) beside its words from 768. Below 768 the three stems cluster into one short bracket. The ask is the next band, an ink island (owner, 30 Oct 2026)."
+        note="The same on tint, proving the term ink per surface."
       />
       <EngagementOptions
         surface="tint"
@@ -121,11 +119,9 @@ export default function EngagementOptionsSpecimen() {
         terms={[
           {
             body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
-            scope: 'build',
           },
           {
             body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
-            scope: 'overlap',
           },
         ]}
         action={
@@ -146,6 +142,10 @@ export default function EngagementOptionsSpecimen() {
         headingId="eop-four"
         options={FOUR}
         note={NOTE}
+        terms={[
+          { body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you.' },
+          { body: 'Our studio is in Ahmedabad, India. We agree the hours we share before each project starts.' },
+        ]}
       />
 
       <Variation

@@ -5,7 +5,7 @@
    through a feathered wave drawn across the whole row and clipped by each tile.
 
    Naming: --bnt-{part}-{role}
-     parts  tile · rule · title · body · art · tex · ring · lift · cta
+     parts  tile · rule · title · body · art · tex · ring · lift · cta (roles: rule-ink · rule-width)
      roles  ink · width · radius · text · tracking · measure · scale · strength · duration · easing
 
    One state, hover (and keyboard focus, which gets what the pointer gets): the tile lifts, its
@@ -44,6 +44,8 @@
   --bnt-duration: var(--duration-slow);
   --bnt-easing: var(--easing-ease);
   --bnt-ring-width: var(--border-width-2);
+  /* the CTA card's dotted outline: at 2 the dots render round and read as dotted; at 1 they merge into a grey line */
+  --bnt-cta-rule-width: var(--border-width-2);
   /* The ring's offset off the tile's edge: an optical gap, as Button's ring offset is. */
   --bnt-ring-offset: var(--space-2);
 }
@@ -52,7 +54,7 @@
 :root,
 [data-surface='paper'] {
   --bnt-rule-ink: var(--color-neutral-200); /* decoration */
-  --bnt-cta-ground: var(--color-paper-deep); /* the CTA card's own ground: title neutral-900 and body neutral-700 on paper-deep, both over 7:1 */
+  --bnt-cta-rule-ink: var(--color-neutral-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-100); /* decoration */
   --bnt-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
@@ -66,7 +68,7 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --bnt-rule-ink: var(--color-neutral-300);
-  --bnt-cta-ground: var(--color-paper); /* the CTA card's own ground: title neutral-900 and body neutral-700 on paper, both over 7:1 */
+  --bnt-cta-rule-ink: var(--color-neutral-400); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
@@ -80,7 +82,7 @@
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --bnt-rule-ink: var(--color-neutral-800);
-  --bnt-cta-ground: var(--color-neutral-900); /* the CTA card's own ground: title white and body neutral-300 on neutral-900, both over 10:1 */
+  --bnt-cta-rule-ink: var(--color-neutral-600); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-700);
   --bnt-title-ink: var(--color-white); /* 17.26:1 */
   --bnt-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
@@ -94,7 +96,7 @@
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
 [data-surface='blue'] {
   --bnt-rule-ink: var(--color-brandeis-400);
-  --bnt-cta-ground: var(--color-brandeis-600); /* the CTA card's own ground: title white and body brandeis-50 on brandeis-600, both over 7:1 */
+  --bnt-cta-rule-ink: var(--color-brandeis-300); /* the CTA card's dotted outline (decoration): one step stronger than this surface's tile hairline, as dots carry about half the ink of a solid line */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-white); /* 6.23:1 */
   --bnt-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */

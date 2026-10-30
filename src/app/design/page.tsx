@@ -280,7 +280,7 @@ const SPECIMENS = [
       {
         href: '/design/engagement-options',
         name: 'EngagementOptions',
-        note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, paper and tint',
+        note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, shared terms as one plain row under the set, paper and tint',
       },
       {
         href: '/design/trace-plates',

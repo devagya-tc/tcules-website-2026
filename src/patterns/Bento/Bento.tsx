@@ -67,9 +67,9 @@ export type BentoProps = {
   /**
    * The band's closing routes as a mini call-to-action card in the grid's last row
    * (decisions/2026-10-30-set-ends-in-a-cta-card): two tracks, or every track the last row leaves; a
-   * whole row when the tiles fill theirs. It holds every question, sentence and link. Distinct from a
-   * tile: a ground, no hairline, no texture, no lift, not itself a link. Actions are numbered across
-   * the card in reading order: the first is an outline button, every later one a link.
+   * whole row when the tiles fill theirs. A dotted outline and no fill, no texture, no lift, not itself
+   * a link. Each route is its question, its sentence, then its destinations as arrow links, and two
+   * routes are two halves of identical structure (decisions/2026-10-30-cta-card-is-dotted-halves).
    */
   cta?: BentoCta;
 };
@@ -101,87 +101,49 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
   });
 }
 
-/** The CTA card's content: each route a question over its answer, its actions at the foot. */
-function CtaCard({ cta, span }: { cta: BentoCta; span: number }) {
+/** The CTA card's content: each route a question, its sentence, then its destinations as arrow links. */
+function CtaCard({ cta }: { cta: BentoCta }) {
   const { routes } = cta;
-  let n = 0;
   if (process.env.NODE_ENV !== 'production' && !routes.some((r) => r.actions.length > 0)) {
     console.warn('Bento: the CTA card has no action.');
   }
-  const actions = (route: BentoCtaRoute) => (
-    <Cluster colGap="block" rowGap="text" align="center">
-      {route.actions.map((action) =>
-        n++ === 0 ? (
-          <Button key={action.href} as="a" href={action.href} emphasis="outline" size="md">
-            {action.label}
-          </Button>
-        ) : (
-          <Button
-            key={action.href}
-            as="a"
-            href={action.href}
-            emphasis="link"
-            tone="primary"
-            size="md"
-            icon={<Icon name="arrow-right" />}
-          >
-            {action.label}
-          </Button>
-        ),
-      )}
-    </Cluster>
-  );
-  const words = (route: BentoCtaRoute) => (
-    <Layout rowGap="tight">
-      {route.question ? (
-        <>
-          <p className={styles.ctaTitle}>{route.question}</p>
-          {route.answer ? <p className={styles.ctaBody}>{route.answer}</p> : null}
-        </>
-      ) : route.answer ? (
-        <p className={styles.ctaTitle}>{route.answer}</p>
+  const half = (route: BentoCtaRoute, key: string | number) => (
+    <Layout key={key} className={styles.fill} rowGap="block" pinLast>
+      <Layout rowGap="tight">
+        {route.question ? (
+          <>
+            <p className={styles.ctaTitle}>{route.question}</p>
+            {route.answer ? <p className={styles.ctaBody}>{route.answer}</p> : null}
+          </>
+        ) : route.answer ? (
+          <p className={styles.ctaTitle}>{route.answer}</p>
+        ) : null}
+      </Layout>
+      {route.actions.length > 0 ? (
+        <Cluster colGap="block" rowGap="text" align="center">
+          {route.actions.map((action) => (
+            <Button
+              key={action.href}
+              as="a"
+              href={action.href}
+              emphasis="link"
+              tone="primary"
+              size="md"
+              icon={<Icon name="arrow-right" />}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </Cluster>
       ) : null}
     </Layout>
   );
   const [only] = routes;
-  if (routes.length === 1 && only) {
-    /* One route, stacked as a two-route card is: its words in a `tight` group, the actions a `block`
-       below at the foot. A card of three tracks or more has room for a small route drawing beside
-       them, so it is designed rather than padded (from 1024; the drawing is hidden below). */
-    const stacked = (
-      <Layout className={styles.fill} rowGap="block" pinLast>
-        {words(only)}
-        {actions(only)}
-      </Layout>
-    );
-    if (span < 3) return stacked;
-    return (
-      <Layout
-        className={styles.fill}
-        columns={{ base: 1, lg: [1, 1] }}
-        colGap="section"
-        rowGap="block"
-      >
-        {stacked}
-        <div className={styles.ctaArt}>
-          <Sketch name="offer-route" frame="bare" />
-        </div>
-      </Layout>
-    );
-  }
+  /* One question: the same structure across the whole card, at every span, no drawing. */
+  if (routes.length === 1 && only) return half(only, 'only');
   return (
-    <Layout
-      className={styles.fill}
-      columns={{ base: 1, md: [1, 1] }}
-      colGap="gutter"
-      rowGap="stack"
-    >
-      {routes.map((route, index) => (
-        <Layout key={route.question ?? route.answer ?? index} className={styles.fill} rowGap="block" pinLast>
-          {words(route)}
-          {actions(route)}
-        </Layout>
-      ))}
+    <Layout className={styles.fill} columns={{ base: 1, md: [1, 1] }} colGap="column" rowGap="stack">
+      {routes.map((route, i) => half(route, route.question ?? route.answer ?? i))}
     </Layout>
   );
 }
@@ -422,7 +384,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
           data-span={noteSpan}
           data-fill-md={oddMd && ctaRoutes < 2 ? 'true' : undefined}
         >
-          <CtaCard cta={cta} span={noteSpan} />
+          <CtaCard cta={cta} />
         </li>
       ) : note ? (
         <li className={styles.note} data-span={noteSpan}>
