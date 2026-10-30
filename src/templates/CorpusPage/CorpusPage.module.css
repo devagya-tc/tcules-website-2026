@@ -112,58 +112,6 @@
   inline-size: var(--cpg-claim-figure-width);
 }
 
-/* The words share one right edge at the lead measure; the band's right side stays air. */
-.claimWords {
-  max-inline-size: var(--measure-lead);
-}
-
-/* The example, as a footnote: small type in the muted ink. Its own link (Matter) takes the citation
-   ink and the base link underline. */
-.claimNote {
-  font: var(--text-body-sm);
-  color: var(--cpg-ink-muted);
-  text-wrap: var(--text-running-wrap);
-}
-
-.claimNote a {
-  color: var(--cpg-citation-ink);
-}
-
-/* A claim's citation: the case's own title as the one link, an arrow that moves under the pointer. */
-.citation {
-  display: block;
-  inline-size: fit-content;
-  font: var(--cpg-citation-text);
-  color: var(--cpg-citation-ink);
-  text-decoration: none;
-}
-
-.citation:hover,
-.citation:focus-visible {
-  text-decoration: underline;
-}
-
-/* The title's last word and its arrow, kept on one line. */
-.citationTail {
-  white-space: nowrap;
-}
-
-/* Inline in running text, so inline-block: a transform does not apply to an inline box. Its inset
-   before the glyph is the word-to-arrow join (the gap-scale's tight step), the one distance a
-   Cluster gave it before; a Cluster cannot keep the arrow on the title's last line. */
-.citationArrow {
-  display: inline-block;
-  vertical-align: middle;
-  padding-inline-start: var(--gap-tight);
-  color: var(--cpg-mark);
-  transition: transform var(--duration-slow) var(--easing-ease);
-}
-
-.citation:hover .citationArrow,
-.citation:focus-visible .citationArrow {
-  transform: translateX(var(--space-4)); /* a motion offset, optical */
-}
-
 /* A ledger row (DrawnTableBand `ledger`): the row is the link's target when its title links, so the
    whole row, not one underlined word, is the way in. The title keeps the heading's ink at rest and
    takes the accent under the pointer or focus, as a title-cued card's does. */

@@ -65,11 +65,11 @@ export type BentoProps = {
    */
   note?: ReactNode;
   /**
-   * The band's closing routes as a mini call-to-action card in the grid's last row
-   * (decisions/2026-10-30-set-ends-in-a-cta-card): two tracks, or every track the last row leaves; a
-   * whole row when the tiles fill theirs. A dotted outline and no fill, no texture, no lift, not itself
-   * a link. Each route is its question, its sentence, then its destinations as arrow links, and two
-   * routes are two halves of identical structure (decisions/2026-10-30-cta-card-is-dotted-halves).
+   * The band's closing routes as CTA cards after the tiles, ONE card per route, each a normal grid
+   * cell: a dotted outline and no fill, no texture, no lift, not itself a link. Every card is its
+   * question, its sentence, then its destinations as arrow links. The caller picks `tracks` so tiles
+   * plus cards fill whole rows where 3 or 4 can; where neither does, the last card takes every track
+   * its row leaves (owner, 30 Oct 2026).
    */
   cta?: BentoCta;
 };
@@ -101,14 +101,17 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
   });
 }
 
-/** The CTA card's content: each route a question, its sentence, then its destinations as arrow links. */
-function CtaCard({ cta }: { cta: BentoCta }) {
-  const { routes } = cta;
-  if (process.env.NODE_ENV !== 'production' && !routes.some((r) => r.actions.length > 0)) {
-    console.warn('Bento: the CTA card has no action.');
+/**
+ * One CTA card: one route, its question as the title, its sentence, then its destinations as arrow
+ * links pinned to the card's foot, so the links of cards sharing a row sit on one line. Every card has
+ * this one structure (owner, 30 Oct 2026: one dotted card per question).
+ */
+function CtaCard({ route }: { route: BentoCtaRoute }) {
+  if (process.env.NODE_ENV !== 'production' && route.actions.length === 0) {
+    console.warn('Bento: a CTA card has no action.');
   }
-  const half = (route: BentoCtaRoute, key: string | number, paired: boolean) => (
-    <Layout key={key} className={styles.fill} rowGap="block" pinLast={paired}>
+  return (
+    <Layout className={styles.fill} rowGap="block" pinLast={route.actions.length > 0}>
       <Layout rowGap="tight">
         {route.question ? (
           <>
@@ -120,50 +123,22 @@ function CtaCard({ cta }: { cta: BentoCta }) {
         ) : null}
       </Layout>
       {route.actions.length > 0 ? (
-        paired ? (
-          <Layout rowGap="tight">
-            {route.actions.map((action) => (
-              <Button
-                key={action.href}
-                as="a"
-                href={action.href}
-                emphasis="link"
-                tone="primary"
-                size="md"
-                icon={<Icon name="arrow-right" />}
-              >
-                {action.label}
-              </Button>
-            ))}
-          </Layout>
-        ) : (
-          <Cluster colGap="block" rowGap="text" align="center">
-            {route.actions.map((action) => (
-              <Button
-                key={action.href}
-                as="a"
-                href={action.href}
-                emphasis="link"
-                tone="primary"
-                size="md"
-                icon={<Icon name="arrow-right" />}
-              >
-                {action.label}
-              </Button>
-            ))}
-          </Cluster>
-        )
+        <Layout rowGap="tight">
+          {route.actions.map((action) => (
+            <Button
+              key={action.href}
+              as="a"
+              href={action.href}
+              emphasis="link"
+              tone="primary"
+              size="md"
+              icon={<Icon name="arrow-right" />}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </Layout>
       ) : null}
-    </Layout>
-  );
-  const [only] = routes;
-  /* One question: the same structure across the whole card, no drawing. Not pinned: the links follow
-     the sentence a `block` below, so the spare room sits in one block at the foot, not mid-card.
-     Two halves pin their links to one foot line and stack them (a half is too narrow for a row). */
-  if (routes.length === 1 && only) return half(only, 'only', false);
-  return (
-    <Layout className={styles.fill} columns={{ base: 1, md: [1, 1] }} colGap="column" rowGap="stack">
-      {routes.map((route, i) => half(route, route.question ?? route.answer ?? i, true))}
     </Layout>
   );
 }
@@ -172,13 +147,10 @@ function CtaCard({ cta }: { cta: BentoCta }) {
 function TileLink({
   item,
   wide,
-  wideMd = false,
   Title,
 }: {
   item: BentoItem;
   wide: boolean;
-  /** Wide from 768 to 1023 only (the odd last tile before a two-route card that takes the row). */
-  wideMd?: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
   const words = (
@@ -205,13 +177,7 @@ function TileLink({
           {art}
         </Layout>
       ) : (
-        <Layout
-          className={styles.fill}
-          columns={wideMd ? { base: 1, md: [1, 1], lg: 1 } : undefined}
-          colGap={wideMd ? 'gutter' : undefined}
-          rowGap="block"
-          pinLast={wideMd ? 'lg' : true}
-        >
+        <Layout className={styles.fill} rowGap="block" pinLast>
           {words}
           {art}
         </Layout>
@@ -367,11 +333,13 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   const last = placed.at(-1);
   const used = last ? last.col + last.span : 0;
   const noteSpan = used === tracks ? tracks : tracks - used;
-  /* From 768 to 1023 (two tracks) a card of two or more routes takes the row, its routes side by side;
-     an odd last tile then takes the row above it, words beside drawing, so no hole is left. */
-  const ctaRoutes = cta?.routes.length ?? 0;
-  const oddMd = items.length % 2 === 1;
-  const lastMdWide = ctaRoutes >= 2 && oddMd;
+  /* The CTA cards follow the tiles one cell each; the LAST card takes every track its row leaves, so
+     the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
+  const routes = cta?.routes ?? [];
+  const ctaAt = used % tracks;
+  const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
+  const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
+  const mdSpan = mdCells % 2 === 1 ? 2 : 1;
 
   return (
     <Layout
@@ -388,24 +356,24 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
           className={cx(styles.cell, span === 2 && styles.wide)}
           data-row={row % 2 === 0 ? 'a' : 'b'}
           data-col={col}
-          data-md-wide={lastMdWide && index === placed.length - 1 ? 'true' : undefined}
         >
-          <TileLink
-            item={item}
-            wide={span === 2}
-            wideMd={lastMdWide && index === placed.length - 1 && span !== 2}
-            Title={Title}
-          />
+          <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
       ))}
-      {cta?.routes.length ? (
-        <li
-          className={styles.cta}
-          data-span={noteSpan}
-          data-fill-md={oddMd && ctaRoutes < 2 ? 'true' : undefined}
-        >
-          <CtaCard cta={cta} />
-        </li>
+      {routes.length > 0 ? (
+        routes.map((route, i) => {
+          const isLast = i === routes.length - 1;
+          return (
+            <li
+              key={route.question ?? route.answer ?? i}
+              className={styles.cta}
+              data-span={isLast ? lgSpan : 1}
+              data-span-md={isLast ? mdSpan : 1}
+            >
+              <CtaCard route={route} />
+            </li>
+          );
+        })
       ) : note ? (
         <li className={styles.note} data-span={noteSpan}>
           <p className={styles.noteText}>{note}</p>

@@ -21,26 +21,6 @@
   }
 }
 
-/* The odd last tile before a two-route card (`data-md-wide`): from 768 to 1023, where the card takes
-   the row, it takes the row above it too, its words beside its drawing, so no hole and no stretched
-   tile is left. From 1024 it is a single tile again. */
-@media (min-width: 768px) and (max-width: 1023.98px) {
-  .cell[data-md-wide] {
-    grid-column: 1 / -1;
-  }
-
-  .cell[data-md-wide] .tile {
-    padding: var(--gap-gutter);
-  }
-
-  .cell[data-md-wide] .art {
-    --skt-scale: var(--bnt-art-scale-wide);
-
-    align-self: center;
-    justify-self: center;
-  }
-}
-
 /* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
    texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
    where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
@@ -71,8 +51,10 @@
   }
 }
 
-/* The CTA card (`cta`): a cell of its own kind. A dotted outline, no fill, the tile's radius, no
-   texture, no lift; a `block` inset (the single tile's, so its first line starts where a neighbouring title does), a `gutter` only where it spans a whole row with no neighbour (768-1023). Placement as `.wide`/`.note`. */
+/* A CTA card (`cta`): a cell of its own kind, one per route. A dotted outline, no fill, the tile's
+   radius, no texture, no lift; a `block` inset (the single tile's, so its first line starts where a
+   neighbouring title does). One cell like a tile; the last card takes the tracks its row leaves
+   (`data-span-md` from 768, `data-span` from 1024). Placement as `.wide`/`.note`. */
 .cta {
   min-inline-size: 0;
   padding: var(--gap-block);
@@ -80,28 +62,13 @@
   border: var(--bnt-cta-rule-width) dotted var(--bnt-cta-rule-ink);
 }
 
-@media (min-width: 768px) {
-  .cta {
-    grid-column: 1 / -1;
-  }
-
-  .cta[data-fill-md='true'] {
-    grid-column: auto;
-  }
-}
-
-/* Spanning a whole row with no neighbour tile to line up with (768-1023), it takes the gutter. */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .cta:not([data-fill-md='true']) {
-    padding: var(--gap-gutter);
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .cta[data-span-md='2'] {
+    grid-column: span 2;
   }
 }
 
 @media (min-width: 1024px) {
-  .cta[data-span='1'] {
-    grid-column: auto;
-  }
-
   .cta[data-span='2'] {
     grid-column: span 2;
   }
@@ -111,7 +78,7 @@
   }
 
   .cta[data-span='4'] {
-    grid-column: 1 / -1;
+    grid-column: span 4;
   }
 }
 

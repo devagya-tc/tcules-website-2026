@@ -458,8 +458,8 @@ export default function BentoSpecimen() {
       </Section>
       <Variation
         id="cta"
-        title="2c · Seven peers on three tracks, a two-route CTA card in the last two cells"
-        note="`cta` (decisions/2026-10-30-cta-card-is-dotted-halves): dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button. Seven peers take three tracks (3 + 3 + 1), so the card has exactly two cells, beside the seventh tile from 768."
+        title="2c · Seven peers and two cards on three tracks (9 cells)"
+        note="`cta`: one dotted card per question, each a normal cell: its question, its sentence, then its destinations as arrow links pinned to the foot; no fill, no drawing, no outline button. Tracks are chosen so tiles plus cards fill whole rows; where 3 and 4 both leave a hole, the last card takes what its row leaves. Seven tiles and two cards are nine cells: three full rows."
       />
       <Section>
         <Bento
@@ -488,8 +488,8 @@ export default function BentoSpecimen() {
       </Section>
       <Variation
         id="cta-one"
-        title="2d · Six on four tracks, a one-route card"
-        note="Six peers on four tracks leave two cells (4 + 2). One route: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
+        title="2d · Six and one card on four tracks, the card spanning two"
+        note="Seven cells fill neither three nor four tracks; four leaves the fuller last row (4 + 3), so the one card takes the last two cells."
       />
       <Section>
         <Bento
@@ -513,12 +513,12 @@ export default function BentoSpecimen() {
       </Section>
       <Variation
         id="cta-statement"
-        title="2e · Five on four tracks, a statement card spanning three"
-        note="Five peers on four tracks leave three cells beside the fifth tile. A closing statement with no question: its sentence takes the title role, then its arrow links. dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
+        title="2e · Five and a statement card on three tracks (6 cells)"
+        note="A closing statement with no question: its sentence takes the title role, then its arrow links. Six cells fill three tracks."
       />
       <Section>
         <Bento
-          tracks={4}
+          tracks={3}
           items={DS_FIVE}
           cta={{
             routes: [
@@ -539,12 +539,12 @@ export default function BentoSpecimen() {
       </Section>
       <Variation
         id="cta-three-actions"
-        title="2f · Seven on three tracks, one route with three actions"
-        note="One question, both sentences, three arrow links wrapping in one Cluster: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
+        title="2f · Seven and one card on four tracks (8 cells), three actions"
+        note="One question, both sentences, three arrow links stacked. Eight cells fill four tracks."
       />
       <Section>
         <Bento
-          tracks={3}
+          tracks={4}
           items={SD_SEVEN}
           cta={{
             routes: [
@@ -567,8 +567,8 @@ export default function BentoSpecimen() {
       </Section>
       <Variation
         id="cta-row"
-        title="2g · Three on three tracks, the card a whole row"
-        note="When the tiles fill their row, the card takes a whole row below them: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
+        title="2g · Three and two cards on three tracks, the last card spanning two"
+        note="Five cells fill neither; three tracks leave the fuller last row (3 + 2), so the second card takes the last two cells."
       />
       <Section>
         <Bento
@@ -580,6 +580,13 @@ export default function BentoSpecimen() {
                 question: 'Want it built, not only designed?',
                 answer: 'Software Development carries the design on.',
                 actions: [{ label: 'Software Development', href: '/services/software-development' }],
+              },
+              {
+                question: 'Already have finished screens?',
+                answer: 'Design to Code takes them from there.',
+                actions: [
+                  { label: 'Design to Code', href: '/services/design-engineering/design-to-code' },
+                ],
               },
             ],
           }}

@@ -39,9 +39,7 @@ export function OfferPage({
   reasonFigure,
   claimFigure,
 }: OfferPageProps) {
-  const drawing = page.route.startsWith('/services/')
-    ? serviceIllustration(page.slug)
-    : undefined;
+  const drawing = serviceIllustration(page.route);
   const units = planOffer(
     page,
     new Set(Object.keys(scenes?.items ?? {})),

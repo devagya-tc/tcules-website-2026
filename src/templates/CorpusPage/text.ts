@@ -1,5 +1,4 @@
 import type { CorpusBand, CorpusBlock, CorpusLink } from '@/lib/corpus-types';
-import { caseRouteOf } from '@/lib/corpus-cases';
 import { inlineToHtml, inlineToText, paragraphHtml, type InlineRun } from '@/lib/inline';
 
 /**
@@ -184,55 +183,7 @@ export function exampleLink(
   return { href: run.href, name: plain(run.children).replace(/['’]s$/, '') };
 }
 
-const CASE_HREF = /^\/case-studies\//;
-
-/** The text of a run list, links unwrapped, for matching only. */
-const flat = (runs: readonly InlineRun[]): string => plain(runs);
-
-/**
- * A hard part's "Example:" paragraph as a footnote (decisions/2026-10-30-hard-parts-claims-lead-proof-
- * footnotes): the sentence without its lead-in, and the case it cites (the first link to a case page).
- * The link to the cited case is unwrapped (the citation carries it) or, when the sentence ends with
- * it ("Read the X case"), dropped; any other link stays. Undefined unless the paragraph opens
- * "Example:".
- */
-export function exampleParts(
-  runs: readonly InlineRun[],
-): { sentence: InlineRun[]; cite?: { href: string; name: string } } | undefined {
-  if (!/^example:/i.test(flat(runs).trimStart())) return undefined;
-  // 2.1 strip the lead-in from the leading text
-  let rest: InlineRun[] = [...runs];
-  const first = rest[0];
-  if (first?.type === 'text') {
-    const text = first.text.replace(/^\s*example:\s*/i, '');
-    rest = text ? [{ type: 'text', text }, ...rest.slice(1)] : rest.slice(1);
-  }
-  // 2.2 capitalise a lower-case start
-  const head = rest[0];
-  if (head?.type === 'text' && /^[a-z]/.test(head.text)) {
-    rest[0] = { type: 'text', text: head.text[0]!.toUpperCase() + head.text.slice(1) };
-  }
-  // 2.3 the citation
-  const link = rest.find(
-    (r): r is Extract<InlineRun, { type: 'link' }> => r.type === 'link' && CASE_HREF.test(r.href),
-  );
-  if (!link) return { sentence: rest };
-  const linkText = flat(link.children);
-  const read = /^Read the (.+) case$/i.exec(linkText.trim());
-  const cite = { href: link.href, name: read ? read[1]! : linkText.replace(/['’]s$/, '') };
-  // 2.4 drop a trailing link to the cited case, unwrap the others
-  const lastIdx = lastIndexWhere(
-    rest,
-    (r) => !(r.type === 'text' && r.text.trim() === ''),
-  );
-  const last = rest[lastIdx];
-  const trailing =
-    last?.type === 'link' && caseRouteOf(last.href) === caseRouteOf(link.href) ? lastIdx : -1;
-  const out: InlineRun[] = [];
-  rest.forEach((r, i) => {
-    if (trailing >= 0 && i >= trailing) return;
-    if (r.type === 'link' && caseRouteOf(r.href) === caseRouteOf(link.href)) out.push(...r.children);
-    else out.push(r);
-  });
-  return { sentence: trailing >= 0 ? trimEnd(out) : out, cite };
+/** A hard part's example: a paragraph that opens "Example:". It is rendered exactly as authored. */
+export function isExample(runs: readonly InlineRun[]): boolean {
+  return /^example:/i.test(plain(runs).trimStart());
 }

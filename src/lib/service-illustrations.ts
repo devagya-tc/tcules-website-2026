@@ -1,23 +1,22 @@
 import { ILLUSTRATION_LEGENDS } from './illustration-legends';
+import { ROUTES, servicePath } from './routes';
 
 /**
- * The service lines whose page keeps a live hero illustration in the corpus pass.
- *
- * `/services/product-design` keeps its existing drawing and its numbered cut (page-mapping § 0 rule
- * 5, the one deliberate exception to "a hero takes a bound asset or a placeholder"): it is the
- * page's own live hero asset and was owner-approved in the kit, so keep-what-was-approved applies.
- * The content team's `visual_plan` for the page asks for a different drawing, which the image
- * register carries as its replacement. A line is added here only when its page is mapped and its
- * drawing is kept on purpose; every other page's hero is a bound asset or a labelled placeholder.
+ * The hero illustrations, by route: the approved isometric heroes (owner, 30 Oct 2026), each 820 × 820
+ * in `public/illustrations/heroes/`. A route here takes its drawing whole (an illustration is never
+ * cropped); every other page's hero is a bound asset or a labelled placeholder.
  */
-const SERVICE_ILLUSTRATIONS: Readonly<
-  Record<string, { src: string; width: number; height: number }>
-> = {
-  'product-design': {
-    src: '/illustrations/services/product-design.paper.svg',
-    width: 962,
-    height: 714,
-  },
+const HERO_ILLUSTRATIONS: Readonly<Record<string, string>> = {
+  [servicePath('product-design')]: 'services-product-design',
+  [servicePath('product-modernisation')]: 'services-product-modernisation',
+  [servicePath('design-systems')]: 'services-design-systems',
+  [servicePath('ai-product-ux')]: 'services-ai-product-ux',
+  [servicePath('design-engineering')]: 'services-design-engineering',
+  [servicePath('software-development')]: 'services-software-development',
+  [servicePath('new-product-design-first-release')]:
+    'services-new-product-design-first-release',
+  [ROUTES.expertise]: 'expertise',
+  [ROUTES.audits]: 'audits',
 };
 
 export type ServiceIllustration = {
@@ -29,10 +28,19 @@ export type ServiceIllustration = {
   cut: (typeof ILLUSTRATION_LEGENDS)[string] | undefined;
 };
 
-export function serviceIllustration(slug: string): ServiceIllustration | undefined {
-  const drawing = SERVICE_ILLUSTRATIONS[slug];
-  if (!drawing) return undefined;
-  return { ...drawing, alt: '', kind: 'illustration', cut: ILLUSTRATION_LEGENDS[drawing.src] };
+/** The hero illustration for a route. Undefined for a route with none. */
+export function serviceIllustration(route: string): ServiceIllustration | undefined {
+  const file = HERO_ILLUSTRATIONS[route];
+  if (!file) return undefined;
+  const src = `/illustrations/heroes/${file}.svg`;
+  return {
+    src,
+    width: 820,
+    height: 820,
+    alt: '',
+    kind: 'illustration',
+    cut: ILLUSTRATION_LEGENDS[src],
+  };
 }
 
 /**

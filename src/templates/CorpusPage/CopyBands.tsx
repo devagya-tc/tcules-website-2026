@@ -2,7 +2,6 @@ import { Fragment, type ReactNode } from 'react';
 
 import {
   Button,
-  ClientMark,
   Cluster,
   Icon,
   type IconName,
@@ -11,8 +10,6 @@ import {
   Prose,
   Sketch,
 } from '@/components';
-import { clientMark } from '@/lib/client-marks';
-import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
   BlockCardSet,
@@ -34,13 +31,7 @@ import {
   type ReadDownRow,
   type Step,
 } from '@/patterns';
-import type {
-  CorpusBand,
-  CorpusBlock,
-  CorpusCaseRef,
-  CorpusLink,
-  CorpusPage,
-} from '@/lib/corpus-types';
+import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
@@ -54,7 +45,7 @@ import { caseCover, hasSlot, slotImage, slugOf, type SlotImage } from './images'
 import { signature } from './plan';
 import {
   boldLead,
-  exampleParts,
+  isExample,
   hasLink,
   labelTitle,
   leadOf,
@@ -232,7 +223,8 @@ export function scenarioParts(blocks: readonly CorpusBlock[]): {
 } {
   const at = blocks.findIndex(
     (block) =>
-      block.type === 'paragraph' && /^illustration, not client work$/i.test(plain(block.runs).trim()),
+      block.type === 'paragraph' &&
+      /^illustration, not client work$/i.test(plain(block.runs).trim()),
   );
   if (at < 0) return { before: [...blocks], scenario: [] };
   const found = blocks[at];
@@ -341,7 +333,10 @@ const rowBody = (runs: readonly InlineRun[]) =>
 function capitalFirst(runs: InlineRun[]): InlineRun[] {
   const [first, ...rest] = runs;
   return first?.type === 'text'
-    ? [{ type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) }, ...rest]
+    ? [
+        { type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) },
+        ...rest,
+      ]
     : runs;
 }
 
@@ -350,7 +345,10 @@ function capitalFirst(runs: InlineRun[]): InlineRun[] {
  * C7); otherwise a colon inside the first seventy characters splits title from body; otherwise the
  * whole sentence is the title (component-map § A `what-you-get`).
  */
-function sheetItem(runs: readonly InlineRun[], opts?: { wholeSentence?: boolean }): OfferSheetItem {
+function sheetItem(
+  runs: readonly InlineRun[],
+  opts?: { wholeSentence?: boolean },
+): OfferSheetItem {
   const lead = boldLead(runs);
   if (lead) {
     const link = linkIn(lead.label);
@@ -562,7 +560,11 @@ export function SheetBand({
 }
 
 /** The three terms the four-part band knows, by key; each takes a drawing. */
-const TERM_KEYS = ['who does the work', 'what we need from you', 'where our part stops'] as const;
+const TERM_KEYS = [
+  'who does the work',
+  'what we need from you',
+  'where our part stops',
+] as const;
 
 /**
  * "What you get" in four parts (owner, 30 Oct 2026, round 7;
@@ -601,12 +603,17 @@ export function WhatYouGetBand({
     unmet.push(`unknown term "${term.title}"`);
     return [];
   });
-  if (peers.length !== terms.length || !TERM_KEYS.every((k) => terms.some((t) => offerSceneKey(t.title) === k))) {
+  if (
+    peers.length !== terms.length ||
+    !TERM_KEYS.every((k) => terms.some((t) => offerSceneKey(t.title) === k))
+  ) {
     unmet.push('the three terms are not all present and resolved');
   }
   if (unmet.length > 0 || deliverables.length !== parts.items.length) {
     if (process.env.NODE_ENV !== 'production') {
-      console.warn(`WhatYouGetBand "${band.id}": the sheet stands; ${[...new Set(unmet)].join('; ')}.`);
+      console.warn(
+        `WhatYouGetBand "${band.id}": the sheet stands; ${[...new Set(unmet)].join('; ')}.`,
+      );
     }
     return <SheetBand band={band} scenes={scenes} />;
   }
@@ -632,20 +639,18 @@ export function WhatYouGetBand({
 const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
 /**
- * The hard parts: claim leads; a 168 drawing at the start (above the words below 768); the example as a
- * footnote (citation link + sentence). A band whose rows do not all carry an "Example:" reads down as
- * before. decisions/2026-10-30-hard-parts-claims-lead-proof-footnotes.
+ * The hard parts: each row a 168 drawing, the claim (title and body), and its "Example:" paragraph as
+ * authored, in three columns across the content width (owner, 30 Oct 2026). A band whose rows do not
+ * all carry an "Example:" reads down as before.
  */
 export function ChallengesBand({
   page,
   band,
-  caseRefs = {},
   claimFigure,
   ground = 'paper',
 }: {
   page: CorpusPage;
   band: CorpusBand;
-  caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
   /** A claim's drawing by its title, exported on the band's ground; undefined takes the slot. */
   claimFigure?: (
     title: string,
@@ -677,7 +682,9 @@ export function ChallengesBand({
           inner.type === 'paragraph' ? [inlineToHtml(inner.runs)] : [],
         ),
       });
-      rowRuns.push(block.blocks.flatMap((inner) => (inner.type === 'paragraph' ? [inner.runs] : [])));
+      rowRuns.push(
+        block.blocks.flatMap((inner) => (inner.type === 'paragraph' ? [inner.runs] : [])),
+      );
     } else if (lead && !isBareLabel(block)) {
       flush();
       open = {
@@ -696,72 +703,51 @@ export function ChallengesBand({
     }
   });
   flush();
-  const parts = rowRuns.map((paras) => {
-    const at = paras.findIndex((runs) => exampleParts(runs) !== undefined);
-    return at < 0 ? undefined : { at, ...exampleParts(paras[at]!)! };
-  });
-  if (rows.length >= 2 && parts.every(Boolean)) {
+  /* The paragraph that opens "Example:" in each row, rendered exactly as authored. */
+  const exampleAt = rowRuns.map((paras) => paras.findIndex(isExample));
+  if (rows.length >= 2 && exampleAt.every((at) => at >= 0)) {
+    /* Each row across the content column: the 168 drawing; the claim's title and body; its example.
+       Drawing beside words is a split (copy beside an image: `section`); claim beside example is two
+       peer text columns of one row (`column`). Below 1024 the example drops under the body; below 768
+       all four stack: drawing, title, body, example. */
     const proofSet = (
       <Layout as="ul" rowGap="column">
         {rows.map((row, i) => {
-          const example = parts[i]!;
+          const at = exampleAt[i]!;
           const drawn = claimFigure?.(row.title, ground);
           const image = drawn
             ? { ...drawn, alt: '', kind: 'illustration' as const }
             : { ...placeholderIllustration(row.title), alt: '' };
-          const body = (row.bodyHtml ?? []).filter((_, j) => j !== example.at);
-          const cite = example.cite;
-          const mark = cite ? clientMark(cite.name) : undefined;
-          const title = cite ? (caseRefs[caseRouteOf(cite.href)]?.title ?? cite.name) : '';
-          const cut = title.lastIndexOf(' ');
-          const titleHead = cut > 0 ? title.slice(0, cut) : '';
-          const titleLast = cut > 0 ? title.slice(cut + 1) : title;
+          const paras = row.bodyHtml ?? [];
+          const body = paras.filter((_, j) => j !== at);
           return (
             <li key={row.title}>
-              <Layout columns={{ md: ['auto', 1] }} colGap="stack" rowGap="block" align="start">
+              <Layout
+                columns={{ md: ['auto', 1] }}
+                colGap="section"
+                rowGap="block"
+                align="start"
+              >
                 <div className={styles.claimFigure}>
                   <Media image={image} sizes="168px" />
                 </div>
-                <Layout rowGap="block" className={styles.claimWords}>
-                  <h3 className={styles.itemTitle}>{row.title}</h3>
-                  <Layout rowGap="text">
-                    {body.map((html, j) => (
-                      <p
-                        key={j}
-                        className={styles.hardBody}
-                        dangerouslySetInnerHTML={{ __html: html }}
-                      />
-                    ))}
+                <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="text" align="start">
+                  <Layout rowGap="block">
+                    <h3 className={styles.itemTitle}>{row.title}</h3>
+                    <Layout rowGap="text">
+                      {body.map((html, j) => (
+                        <p
+                          key={j}
+                          className={styles.hardBody}
+                          dangerouslySetInnerHTML={{ __html: html }}
+                        />
+                      ))}
+                    </Layout>
                   </Layout>
-                  <Layout rowGap="tight">
-                    {cite ? (
-                      /* One link holds the mark, the title and the arrow. The mark is hidden from
-                         assistive tech: the title already starts with the client's name. The title's
-                         last word is glued to the arrow so it never wraps onto a line of its own. */
-                      <a href={cite.href} className={styles.citation}>
-                        <Layout as="span" rowGap="tight">
-                          {mark ? (
-                            <span aria-hidden="true">
-                              <ClientMark {...mark} size="sm" />
-                            </span>
-                          ) : null}
-                          <span>
-                            {titleHead ? `${titleHead} ` : null}
-                            <span className={styles.citationTail}>
-                              {titleLast}
-                              <span className={styles.citationArrow} aria-hidden="true">
-                                <Icon name="arrow-right" />
-                              </span>
-                            </span>
-                          </span>
-                        </Layout>
-                      </a>
-                    ) : null}
-                    <p
-                      className={styles.claimNote}
-                      dangerouslySetInnerHTML={{ __html: inlineToHtml(example.sentence) }}
-                    />
-                  </Layout>
+                  <p
+                    className={styles.hardBody}
+                    dangerouslySetInnerHTML={{ __html: paras[at] ?? '' }}
+                  />
                 </Layout>
               </Layout>
             </li>
@@ -999,18 +985,20 @@ export function TableBand({
         </Layout>
         <Sketch name={agreement!} />
       </Layout>
-      {parts.before.slice(tableAt + 1).map((block, index) =>
-        block.type === 'paragraph' ? (
-          <Callout
-            key={index}
-            tone="example"
-            html={inlineToHtml(block.runs)}
-            icon={<Icon name="code-square" size="xl" />}
-          />
-        ) : (
-          <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
-        ),
-      )}
+      {parts.before
+        .slice(tableAt + 1)
+        .map((block, index) =>
+          block.type === 'paragraph' ? (
+            <Callout
+              key={index}
+              tone="example"
+              html={inlineToHtml(block.runs)}
+              icon={<Icon name="code-square" size="xl" />}
+            />
+          ) : (
+            <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
+          ),
+        )}
       {parts.label ? (
         <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
       ) : null}
@@ -1086,7 +1074,12 @@ export function DrawnTableBand({
     <Layout as="ul" rowGap="stack">
       {items.map((item) => (
         <li key={item.title} className={styles.ledgerRow}>
-          <Layout columns={{ base: 1, lg: [2, 3, 3] }} colGap="gutter" rowGap="block" align="center">
+          <Layout
+            columns={{ base: 1, lg: [2, 3, 3] }}
+            colGap="gutter"
+            rowGap="block"
+            align="center"
+          >
             <Sketch name={item.scene} />
             <Layout rowGap="text">
               <h3 className={styles.itemTitle}>
@@ -1114,37 +1107,42 @@ export function DrawnTableBand({
       ))}
     </Layout>
   );
-  const set = arrangement === 'ledger' ? ledger : (
-    <Layout rowGap="block">
-      {table.header.length === 2 && heading ? <p className={styles.legend}>{heading}</p> : null}
-      <Layout
-        as="ul"
-        columns={{ base: 1, md: 2, lg: n === 4 ? 4 : 3 }}
-        colGap="gutter"
-        rowGap="column"
-      >
-        {items.map((item) => (
-          <li key={item.title}>
-            <Layout rowGap="block">
-              <Sketch name={item.scene} />
-              <Layout rowGap="text">
-                <h3 className={styles.itemTitle}>
-                  {item.href ? <a href={item.href}>{item.title}</a> : item.title}
-                </h3>
-                <p dangerouslySetInnerHTML={{ __html: item.body }} />
-                {item.meta ? (
-                  <p className={styles.proofLine}>
-                    <span className={styles.legend}>{item.meta.label}</span>{' '}
-                    <span dangerouslySetInnerHTML={{ __html: item.meta.html }} />
-                  </p>
-                ) : null}
+  const set =
+    arrangement === 'ledger' ? (
+      ledger
+    ) : (
+      <Layout rowGap="block">
+        {table.header.length === 2 && heading ? (
+          <p className={styles.legend}>{heading}</p>
+        ) : null}
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: 2, lg: n === 4 ? 4 : 3 }}
+          colGap="gutter"
+          rowGap="column"
+        >
+          {items.map((item) => (
+            <li key={item.title}>
+              <Layout rowGap="block">
+                <Sketch name={item.scene} />
+                <Layout rowGap="text">
+                  <h3 className={styles.itemTitle}>
+                    {item.href ? <a href={item.href}>{item.title}</a> : item.title}
+                  </h3>
+                  <p dangerouslySetInnerHTML={{ __html: item.body }} />
+                  {item.meta ? (
+                    <p className={styles.proofLine}>
+                      <span className={styles.legend}>{item.meta.label}</span>{' '}
+                      <span dangerouslySetInnerHTML={{ __html: item.meta.html }} />
+                    </p>
+                  ) : null}
+                </Layout>
               </Layout>
-            </Layout>
-          </li>
-        ))}
+            </li>
+          ))}
+        </Layout>
       </Layout>
-    </Layout>
-  );
+    );
   const bound = page.composition.mediaBindings.some(
     (b) => b.bound && b.supportsSection === band.id,
   );

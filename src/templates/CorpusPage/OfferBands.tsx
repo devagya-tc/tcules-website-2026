@@ -351,7 +351,6 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         <ChallengesBand
           page={page}
           band={band}
-          caseRefs={ctx.caseRefs}
           claimFigure={ctx.claimFigure}
           ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
         />
@@ -958,16 +957,14 @@ function routerBody(
 }
 
 /**
- * 3 or 4 tracks so the last row leaves exactly two cells for the CTA card; else the count that fills its
- * rows (the card a whole row); else four, the card taking what the last row leaves
- * (decisions/2026-10-30-set-ends-in-a-cta-card). The card is a dotted outline whose every action is an
- * arrow link (decisions/2026-10-30-cta-card-is-dotted-halves).
+ * 3 or 4 tracks for `cells` (the tiles plus one CTA card per question) so they fill whole rows; where
+ * neither does, the count whose last row is fuller, the last card taking what that row leaves
+ * (owner, 30 Oct 2026: one dotted card per question).
  */
-function ctaTracks(n: number): 3 | 4 {
-  for (const t of [3, 4] as const) if (n % t !== 0 && t - (n % t) === 2) return t;
-  if (n % 3 === 0) return 3;
-  if (n % 4 === 0) return 4;
-  return 4;
+function ctaTracks(cells: number): 3 | 4 {
+  if (cells % 3 === 0) return 3;
+  if (cells % 4 === 0) return 4;
+  return cells % 3 > cells % 4 ? 3 : 4;
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
@@ -1032,8 +1029,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
-       every link becomes an arrow link in a dotted card, one half per question
-       (decisions/2026-10-30-cta-card-is-dotted-halves). A closing with no link stays below the set. */
+       every link becomes an arrow link in a dotted card, one card per question (owner, 30 Oct 2026). A closing with no link stays below the set. */
     const routes =
       routesOf(closing) ??
       (closing.length > 0 && closing.every(hasLink)
@@ -1060,7 +1056,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
       : undefined;
     return wrap(
       <Bento
-        tracks={cta ? ctaTracks(n) : n === 7 || n === 8 || n === 4 ? 4 : 3}
+        tracks={cta ? ctaTracks(n + cta.routes.length) : n === 7 || n === 8 || n === 4 ? 4 : 3}
         cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,
