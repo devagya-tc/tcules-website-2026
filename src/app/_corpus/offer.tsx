@@ -30,6 +30,12 @@ export const PASS_1_OFFER_ROUTES: ReadonlySet<string> = new Set([
   '/services/product-design',
   '/audits/design-to-code-audit',
   '/expertise/healthtech',
+  '/services/ai-product-ux',
+  '/services/design-engineering',
+  '/services/design-systems',
+  '/services/new-product-design-first-release',
+  '/services/product-modernisation',
+  '/services/software-development',
 ]);
 
 /** Studio photographs an offer page may reuse, by binding id (page-mapping § 0 rule 5.3). */

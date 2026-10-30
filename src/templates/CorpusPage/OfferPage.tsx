@@ -38,7 +38,7 @@ export function OfferPage({
   scenes,
   reasonFigure,
 }: OfferPageProps) {
-  const units = planOffer(page);
+  const units = planOffer(page, new Set(Object.keys(scenes?.items ?? {})));
   const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure };
 
   const drawing = page.route.startsWith('/services/')

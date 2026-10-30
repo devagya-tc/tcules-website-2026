@@ -37,7 +37,6 @@ import { glyphForRoute } from '@/lib/glyphs';
 import {
   offerSceneKey,
   serviceSceneFor,
-  type OfferSceneName,
   type OfferScenes,
   type SketchName,
 } from '@/lib/sketches';
@@ -64,6 +63,7 @@ import {
   CloseBand,
   DestinationsBand,
   DirectoryBand,
+  DrawnTableBand,
   IndustriesBand,
   LinkActions,
   MethodBand,
@@ -127,7 +127,7 @@ function sceneFor(
   ctx: OfferContext,
   band: CorpusBand,
   key: string,
-): OfferSceneName | undefined {
+): SketchName | undefined {
   return ctx.scenes?.items[band.id]?.[offerSceneKey(key)] ?? ctx.scenes?.items[band.id]?.[key];
 }
 
@@ -309,8 +309,24 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       return <IndustriesBand page={page} band={band} />;
     case 'challenges':
       return <ChallengesBand page={page} band={band} />;
-    case 'method':
-      return <MethodBand band={band} />;
+    case 'method': {
+      const figureScene = sceneFor(ctx, band, 'figure');
+      const bound = page.composition.mediaBindings.some(
+        (b) => b.bound && b.supportsSection === band.id,
+      );
+      const figure = figureScene
+        ? { sketch: figureScene }
+        : bound
+          ? { image: slotImage(page, band.id) }
+          : undefined;
+      return (
+        <MethodBand
+          band={band}
+          scenario={sceneFor(ctx, band, 'scenario')}
+          {...(figure ? { figure } : {})}
+        />
+      );
+    }
     case 'related':
       return <RelatedBand band={band} />;
     case 'recognition':
@@ -325,7 +341,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
     case 'text':
-      return <TextBand page={page} band={band} side={unit.side} />;
+      return (
+        <TextBand
+          page={page}
+          band={band}
+          side={unit.side}
+          scenario={sceneFor(ctx, band, 'scenario')}
+        />
+      );
     case 'note':
       return <NoteBand band={band} />;
     case 'close':
@@ -506,7 +529,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M15 — a comparison: a key column against rows, boxed. */
     case 'table':
-      return <TableBand band={band} />;
+      return ctx.scenes?.items[band.id] && blocksOf(band, 'table').length > 0 ? (
+        <DrawnTableBand
+          page={page}
+          band={band}
+          sceneOf={(key) => sceneFor(ctx, band, key)}
+        />
+      ) : (
+        <TableBand band={band} scenario={sceneFor(ctx, band, 'scenario')} />
+      );
 
     /* What you receive: a list of deliverables, with the product shot beside it. */
     /* What you receive — the deliverables as ONE offer (OfferSheet, as "What you get" on the service
@@ -816,6 +847,14 @@ function trailingAfterTable(band: CorpusBand): InlineRun[][] {
     .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
 }
 
+/** A router row's words: the second column, and a third ("Best for") as a sentence after it. */
+function routerBody(table: Extract<CorpusBlock, { type: 'table' }>, row: InlineRun[][]): string {
+  const second = plain(row[1] ?? []).replace(/\.$/, '');
+  return table.header.length >= 3
+    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
+    : second;
+}
+
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
@@ -830,7 +869,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [{ href: link.href, title: plain(link.children), body: plain(row[1] ?? []) }]
+          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
           : [];
       })
     : band.blocks.flatMap((block) => {
