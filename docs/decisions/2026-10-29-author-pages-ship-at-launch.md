@@ -1,7 +1,7 @@
 ---
 title: "Author pages ship at launch"
 date: 2026-10-29
-status: active
+status: superseded
 area: [content, process]
 source: "Owner, 29 Oct 2026, answering docs/research/insight-structured-data.md § 5 (PR #166)"
 supersedes: []
