@@ -76,11 +76,43 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead, the band's own link at the heading's end. The three options take three tracks from 768, each its flat scope drawing on its plate above its name and words. The two closing terms hold for every option: side by side a column apart, each led by a small bare drawing (scope-build, scope-overlap), no hairline. Nothing closes the band: on the offer pages its ask is the next band, an ink island (CtaSection open) (owner, 30 Oct 2026)."
+        note="The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a port under each option's column, a stem onto one rail spanning the set, the terms under it on two tracks (one below 768), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot), beside its words from 1440. The ask is the next band, an ink island (owner, 30 Oct 2026)."
       />
       <EngagementOptions
         heading="How we work together"
         headingId="eop-together"
+        lead={[
+          'When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.',
+          'Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.',
+        ]}
+        options={TOGETHER}
+        terms={[
+          {
+            body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
+            scope: 'build',
+          },
+          {
+            body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+            scope: 'overlap',
+          },
+        ]}
+        action={
+          <CtaRow
+            rule={false}
+            actions={[{ label: 'How we work together', href: '#together' }]}
+          />
+        }
+      />
+
+      <Variation
+        id="together-tint"
+        title="0b · Shared terms on tint"
+        note="The same options and terms on the tint surface, proving the rail and port inks per surface. The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a port under each option's column, a stem onto one rail spanning the set, the terms under it on two tracks (one below 768), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot), beside its words from 1440. The ask is the next band, an ink island (owner, 30 Oct 2026)."
+      />
+      <EngagementOptions
+        surface="tint"
+        heading="How we work together"
+        headingId="eop-together-tint"
         lead={[
           'When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.',
           'Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.',

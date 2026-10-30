@@ -495,8 +495,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
 
     /* How we work together / Ways to work with us — the head (heading, its own link as end action,
-       lead), the three options (primary, plated flat drawings), the two terms (secondary, small bare
-       marks, no hairline). Its ask ("Tell us what you're working on") is its own band after it, an ink
+       lead), the three options (primary, plated flat drawings), the two terms (one shared tier on a rail under the set, small marks). Its ask ("Tell us what you're working on") is its own band after it, an ink
        island with the texture and one solid to the contact route (owner, 30 Oct 2026, round 5: "the 2
        buttons split up and down is horrible design… an island section with that title and a button to
        the contact page"). */

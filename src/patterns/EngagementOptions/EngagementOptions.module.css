@@ -47,10 +47,32 @@
   font: var(--eop-body-text-rows);
 }
 
-/* A closing term's mark. */
-.termArt {
+/* A closing term's mark, in a fixed slot so both terms' words start on one line. */
+.termMark {
+  inline-size: var(--eop-term-mark-inline);
+  block-size: var(--eop-term-mark-block);
   /* The one Sketch value a parent sets: the bare drawing's scale. */
   --skt-scale: var(--eop-term-art-scale);
+}
+
+/* The shared rail is a drawn connector in the flat grammar (port, line on the axes), never a divider;
+   it renders only with its stems. */
+.port {
+  inline-size: var(--eop-port-size);
+  block-size: var(--eop-port-size);
+  border-radius: var(--eop-port-radius);
+  background: var(--eop-port-ink);
+}
+
+.stem {
+  inline-size: var(--eop-rail-width);
+  block-size: var(--eop-stem-size);
+  background: var(--eop-rail-ink);
+}
+
+.rail {
+  block-size: var(--eop-rail-width);
+  background: var(--eop-rail-ink);
 }
 
 .termText {

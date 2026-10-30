@@ -75,10 +75,12 @@ export type EngagementOptionsProps = {
   /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
   note?: ReactNode;
   /**
-   * Secondary terms that hold for every option (where our part stops; where the studio is), set side
-   * by side under the options as two peers a `column` apart, each led by its own small BARE drawing
-   * (no plate), no hairline (owner, 30 Oct 2026: "the 3 cards are directly engagement related, the
-   * other 2 are around the engagement"; ruled text-only cards are retired). One column below 768.
+   * Terms that hold for every option, one tier under the whole set (owner, 30 Oct 2026;
+   * decisions/2026-10-30-options-and-shared-terms-are-two-tiers, -shared-terms-sit-on-one-rail). A port
+   * under each option's column drops a stem onto one rail spanning the set; the terms sit under it on
+   * two tracks a column apart (one below 768), each led by its mark in a fixed 160 × 80 slot at 0.6,
+   * beside its words from 1440 and above them below. The rail aligns with the options where they sit
+   * on one row (three options from 768).
    */
   terms?: readonly EngagementTerm[];
   /**
@@ -169,74 +171,85 @@ export function EngagementOptions({
             </Layout>
           ) : null}
         </Layout>
-        {arrangement === 'grid' ? (
-          /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
-             column below: a borderless tile each (the drawing's plate is the image, the
-             name and its words under it), 32 across and a `column` down the set — the row seam of
-             every borderless card set. */
-          <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
-            {shown.map((option) => (
-              <li key={option.title}>
-                <Layout rowGap="block">
-                  {option.scope ? <Drawing scope={option.scope} /> : null}
-                  <Layout rowGap="text">
-                    <h3 className={cx(styles.title, dense && styles.titleDense)}>
-                      {option.title}
-                    </h3>
-                    <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
-                  </Layout>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        ) : (
-          <Layout as="ul" rowGap="column">
-            {shown.map((option, index) => (
-              <li key={option.title}>
-                {/* One row per option, the drawing and the words side by side, swapping sides row
-                    by row from 768. Below 768 the drawing heads its words, full width at 2:1:
-                    beside them, the column gap left both too narrow. */}
-                <Layout
-                  columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-                  reverse={{ md: index % 2 === 1 }}
-                  colGap="column"
-                  rowGap="block"
-                  align="center"
-                >
-                  {option.scope ? <Drawing scope={option.scope} /> : null}
+        <Layout rowGap="block">
+          {arrangement === 'grid' ? (
+            /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
+               column below: a borderless tile each (the drawing's plate is the image, the
+               name and its words under it), 32 across and a `column` down the set — the row seam of
+               every borderless card set. */
+            <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
+              {shown.map((option) => (
+                <li key={option.title}>
                   <Layout rowGap="block">
-                    <h3 className={styles.title}>{option.title}</h3>
-                    <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                    {option.scope ? <Drawing scope={option.scope} /> : null}
+                    <Layout rowGap="text">
+                      <h3 className={cx(styles.title, dense && styles.titleDense)}>
+                        {option.title}
+                      </h3>
+                      <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
+                    </Layout>
                   </Layout>
+                </li>
+              ))}
+            </Layout>
+          ) : (
+            <Layout as="ul" rowGap="column">
+              {shown.map((option, index) => (
+                <li key={option.title}>
+                  {/* One row per option, the drawing and the words side by side, swapping sides row
+                      by row from 768. Below 768 the drawing heads its words, full width at 2:1:
+                      beside them, the column gap left both too narrow. */}
+                  <Layout
+                    columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+                    reverse={{ md: index % 2 === 1 }}
+                    colGap="column"
+                    rowGap="block"
+                    align="center"
+                  >
+                    {option.scope ? <Drawing scope={option.scope} /> : null}
+                    <Layout rowGap="block">
+                      <h3 className={styles.title}>{option.title}</h3>
+                      <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                    </Layout>
+                  </Layout>
+                </li>
+              ))}
+            </Layout>
+          )}
+          {terms.length > 0 ? (
+            /* The shared base: the options drop onto one rail and the terms sit under it. The rail is
+               a drawn connector (port, stem, line), decorative, so hidden from assistive tech. */
+            <Layout rowGap="block">
+              <div aria-hidden="true">
+                <Layout>
+                  <Layout columns={{ base: shown.length }} colGap="gutter">
+                    {shown.map((option) => (
+                      <Layout key={option.title} justifyItems="center">
+                        <span className={styles.port} />
+                        <span className={styles.stem} />
+                      </Layout>
+                    ))}
+                  </Layout>
+                  <span className={styles.rail} />
                 </Layout>
-              </li>
-            ))}
-          </Layout>
-        )}
-        {terms.length > 0 ? (
-          /* The terms sit on the options' own tracks and gutter, so each starts under an option
-             (two terms take the first two columns of three) and reads as a lighter tier of the same
-             grid, never a row of its own proportions (round 5, 30 Oct 2026). */
-          <Layout
-            as="ul"
-            columns={arrangement === 'grid' ? optionTracks : { base: 1, md: 3 }}
-            colGap="gutter"
-            rowGap="column"
-          >
-            {terms.map((term, index) => (
-              <li key={index}>
-                <Layout rowGap="block" justifyItems="start">
-                  {term.scope ? (
-                    <div className={styles.termArt}>
-                      <Sketch name={`scope-${term.scope}`} frame="bare" />
-                    </div>
-                  ) : null}
-                  <p className={styles.termText}>{term.body}</p>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        ) : null}
+              </div>
+              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="column" rowGap="gutter">
+                {terms.map((term, index) => (
+                  <li key={index}>
+                    <Layout columns={{ xl: ['auto', 1] }} colGap="block" rowGap="block" align="start">
+                      {term.scope ? (
+                        <div className={styles.termMark}>
+                          <Sketch name={`scope-${term.scope}`} frame="bare" />
+                        </div>
+                      ) : null}
+                      <p className={styles.termText}>{term.body}</p>
+                    </Layout>
+                  </li>
+                ))}
+              </Layout>
+            </Layout>
+          ) : null}
+        </Layout>
         {note}
       </Layout>
     </Section>
