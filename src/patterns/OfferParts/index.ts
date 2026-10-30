@@ -3,5 +3,4 @@ export type {
   OfferPart,
   OfferPartsDeliverable,
   OfferPartsProps,
-  OfferPartsVisual,
 } from './OfferParts';

@@ -19,10 +19,15 @@ import styles from './Sketch.module.css';
  *             ends on the arrowhead at our frame's left port (190, 90). Our frame holds a heading
  *             line, a quiet line and the work, hatched, waiting on these. The lit input is the one the
  *             copy treats as decisive.
- *   stops-*   the BOUNDARY, read "us to you". A dashed line at x = 190, full height; the open
- *             client side to its right holds what stays theirs, one row each (flag always means product calls; server,
- *             database and layers platform, data and infrastructure); our last piece stands left of
- *             it, its route running to the lit check at (150, 90): our part ends here.
+ *   stops-*   the BOUNDARY, read "us to you": our last piece, routed to our check on its own card
+ *             (the lit focal point); what stays theirs sits on their panel (the same ground as the
+ *             needs-* client panel, one row each: flag always means product calls; server, database
+ *             and layers platform, data and infrastructure), no route entering it. The gap between
+ *             the two is the boundary; nothing is drawn across it.
+ *   team-*    WHO DOES THE WORK (round 7): our team frame with the senior designer lit and the account
+ *             lead, and role cards to its right: the roles that are always in the team solid and routed
+ *             in (arrowhead into the frame), the specialists who join when needed dashed, their route
+ *             ending in an open node, no arrowhead.
  *
  * Never borrowed from How we work together's scope-* scenes, which draw a different argument.
  */
@@ -98,23 +103,25 @@ function Needs({
   );
 }
 
-/** What stays theirs, one row: its chips, then a heading line and a quiet one. */
+/** What stays theirs, one row on their panel: its chips, then a heading line and a quiet one. */
 function Theirs({ cy, glyphs }: { cy: number; glyphs: readonly IconName[] }) {
-  const end = 204 + glyphs.length * 20;
+  const n = glyphs.length;
+  const x = 236 + 20 * (n - 1);
+  const w = 280 - x;
   return (
     <>
       {glyphs.map((glyph, i) => (
-        <C key={glyph} cx={212 + i * 20} cy={cy} glyph={glyph} />
+        <C key={glyph} cx={216 + i * 20} cy={cy} glyph={glyph} />
       ))}
-      <Copy x={end + 4} y={cy - 4} w={52} />
-      <Copy x={end + 4} y={cy + 4} w={36} quiet />
+      <Copy x={x} y={cy - 4} w={w} />
+      <Copy x={x} y={cy + 4} w={Math.round(w * 0.7)} quiet />
     </>
   );
 }
 
 /**
- * The boundary: a full-height dashed line, our last piece (`ours`) left of it with the lit check, and
- * the client's side open on the right, no panel (a wall, where NEEDS is a funnel).
+ * The boundary: our last piece (`ours`) routed to our check on its own card, then their panel with
+ * what stays theirs. No route enters their panel: the gap is the boundary.
  */
 function Stops({
   ours,
@@ -125,12 +132,60 @@ function Stops({
 }) {
   return (
     <>
-      <path className={styles.trail} d="M190,20 L190,160" />
       {ours}
-      <path className={styles.line} d="M110,90 L150,90" />
-      <circle className={styles.node} cx="110" cy="90" r="2.5" />
-      <Focus x={150} y={90} glyph="check-circle" size={13} />
+      <Hop x1={110} x2={140} y={90} />
+      <Rect x={140} y={64} w={44} h={52} rx={8} className={styles.frame} />
+      <Focus x={162} y={90} glyph="check-circle" size={13} />
+      <Rect x={200} y={30} w={90} h={120} rx={8} className={styles.tile} />
       {theirs}
+    </>
+  );
+}
+
+/**
+ * Who does the work: our team frame (the senior designer lit, the account lead) with role cards at
+ * its right. A core role is solid and routed in; a joiner is dashed and its route ends open.
+ */
+type Role = { glyph: IconName; core?: boolean; sheets?: 0 | 1 };
+function Team({ roles }: { roles: readonly Role[] }) {
+  const ys = roles.length === 1 ? [90] : roles.length === 2 ? [70, 110] : [50, 90, 130];
+  return (
+    <>
+      <Rect x={30} y={30} w={150} h={120} rx={8} className={styles.frame} />
+      <Focus x={60} y={66} glyph="user" size={12} />
+      <Copy x={90} y={62} w={60} />
+      <Copy x={90} y={72} w={40} quiet />
+      <Glyph name="user" cx={60} cy={114} size={18} className={styles.glyph} />
+      <Copy x={90} y={110} w={60} />
+      <Copy x={90} y={120} w={40} quiet />
+      {roles.map((role, i) => {
+        const cy = ys[i] ?? 90;
+        return (
+          <g key={`${role.glyph}-${i}`}>
+            {role.sheets ? (
+              <Rect x={220} y={cy - 18} w={70} h={28} rx={8} className={styles.frameQuiet} />
+            ) : null}
+            <Rect
+              x={216}
+              y={cy - 14}
+              w={70}
+              h={28}
+              rx={8}
+              className={role.core ? styles.frame : styles.trailFrame}
+            />
+            <C cx={234} cy={cy} glyph={role.glyph} />
+            <Copy x={250} y={cy} w={26} quiet />
+            {role.core ? (
+              <Hop x1={216} x2={180} y={cy} />
+            ) : (
+              <>
+                <path className={styles.trail} d={`M216,${cy} L183,${cy}`} />
+                <circle className={styles.nodeOpen} cx={180} cy={cy} r={3} />
+              </>
+            )}
+          </g>
+        );
+      })}
     </>
   );
 }
@@ -174,6 +229,47 @@ function Screen({
         </>
       )}
     </>
+  );
+}
+
+/* ── Who does the work ──────────────────────────────────────────────────────────── */
+
+/** The senior designer and the account lead; researchers, design engineers and developers join when needed. */
+function TeamProductDesign() {
+  return <Team roles={[{ glyph: 'chat-round-dots' }, { glyph: 'code' }, { glyph: 'server' }]} />;
+}
+
+/** The senior designer and the account lead, with design engineers always in the team. */
+function TeamAiProductUx() {
+  return <Team roles={[{ glyph: 'code', core: true, sheets: 1 }]} />;
+}
+
+function TeamDesignEngineering() {
+  return <Team roles={[{ glyph: 'code', core: true, sheets: 1 }]} />;
+}
+
+function TeamDesignSystems() {
+  return <Team roles={[{ glyph: 'code', core: true, sheets: 1 }]} />;
+}
+
+/** Specialists join the senior designer and the account lead when the product needs them. */
+function TeamNewProduct() {
+  return <Team roles={[{ glyph: 'user' }, { glyph: 'user' }, { glyph: 'user' }]} />;
+}
+
+function TeamProductModernisation() {
+  return <Team roles={[{ glyph: 'code' }, { glyph: 'server' }]} />;
+}
+
+/** Developers always in the team, and the senior engineer who reviews every change. */
+function TeamSoftwareDevelopment() {
+  return (
+    <Team
+      roles={[
+        { glyph: 'code', core: true, sheets: 1 },
+        { glyph: 'clipboard-check', core: true },
+      ]}
+    />
   );
 }
 
@@ -328,10 +424,10 @@ function StopsAiProductUx() {
       }
       theirs={[
         <g key="a">
-          <Switch x={204} y={44} on={false} />
-          <C cx={242} cy={50} glyph="user" />
-          <Copy x={256} y={46} w={40} />
-          <Copy x={256} y={54} w={24} quiet />
+          <Switch x={208} y={44} on={false} />
+          <C cx={244} cy={50} glyph="user" />
+          <Copy x={256} y={46} w={24} />
+          <Copy x={256} y={54} w={16} quiet />
         </g>,
         <Theirs key="b" cy={90} glyphs={['cpu']} />,
         <Theirs key="c" cy={130} glyphs={['shield-check']} />,
@@ -443,6 +539,13 @@ function StopsSoftwareDevelopment() {
 }
 
 export const L1_TERMS: Record<L1TermScene, () => ReactNode> = {
+  'team-product-design': TeamProductDesign,
+  'team-ai-product-ux': TeamAiProductUx,
+  'team-design-engineering': TeamDesignEngineering,
+  'team-design-systems': TeamDesignSystems,
+  'team-new-product': TeamNewProduct,
+  'team-product-modernisation': TeamProductModernisation,
+  'team-software-development': TeamSoftwareDevelopment,
   'needs-product-design': NeedsProductDesign,
   'needs-ai-product-ux': NeedsAiProductUx,
   'needs-design-engineering': NeedsDesignEngineering,

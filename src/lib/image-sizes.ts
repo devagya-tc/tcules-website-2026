@@ -262,12 +262,3 @@ export const CASE_SPREAD_MEDIA =
   `(min-width: ${CAP}px) ${Math.round(((CONTAINER - COLUMN_GAP) * 7) / 12)}px, ` +
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + COLUMN_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;
 
-/**
- * OfferParts' three peer parts (what you get, 30 Oct 2026): three equal tracks from 1024 with the
- * 64 column seam between them, (1240 − 128) / 3 ≈ 371 at the cap; from 768 a part's visual is the
- * 5 of [5, 6] beside its words at gutter 32 in a column of 704+ (≈ 5/11 of it); one column below.
- */
-export const PART_TRACK =
-  `(min-width: ${CAP}px) ${Math.round((CONTAINER - 2 * COLUMN_GAP) / 3)}px, ` +
-  `(min-width: 1024px) calc((100vw - ${2 * GUTTER + 2 * COLUMN_GAP}px) / 3), ` +
-  `(min-width: 768px) calc((100vw - ${2 * GUTTER + GUTTER}px) * 5 / 11), ${FLUID_COLUMN}`;

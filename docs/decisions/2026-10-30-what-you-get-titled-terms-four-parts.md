@@ -1,7 +1,7 @@
 ---
 title: "What you get: the deliverables across, three peer parts under them, each led by its visual"
 date: 2026-10-30
-status: proposed
+status: superseded
 area: [layout, illustration]
 source: "Owner, 30 Oct 2026, round 6 ('go ahead with all the changes. log the rules.'); arrangement designed against 2026-10-30-what-you-get-is-four-parts"
 supersedes: [2026-10-30-what-you-get-titled-terms-foot]

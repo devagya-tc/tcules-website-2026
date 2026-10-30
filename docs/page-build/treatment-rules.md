@@ -42,7 +42,7 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **What you get is four parts** (OfferParts; 2026-10-30-what-you-get-titled-terms-four-parts, proposed): the drawn deliverables in one row under "What you receive", then who does the work, what we need and where our part stops as three peers on the column seam (64), each an h3 at one role over a 16:9 visual (the studio photograph; a needs drawing; a stops drawing) and its words. One body role (14). No numbers, hairlines or containers. Never the terms as a text foot or as more items on the deliverables' tracks. Until a page's drawings exist the old sheet stands.
+- **What you get is four rows in a label column** (OfferParts; 2026-10-30-what-you-get-label-rows, proposed): the part's name in a label column from 1024 (over its content below), row 1 the drawn deliverables as a strip, rows 2–4 (who does the work, what we need, where our part stops) a compact 16:9 flat drawing beside the words. Every visual is flat (one-register-per-section). One body role (14). No numbers, hairlines or containers: rows are separated by Layout seams only. Never the terms as a text foot, a photograph among drawings, or more items on the deliverables' tracks. Until a page's drawings exist the old sheet stands.
 - **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set. Except on What you get, where it titles the first of the four parts.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
@@ -75,7 +75,7 @@ rulings generalised into the tables above, so every service page maps the same w
 1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE; REDONE in round 6 (an isometric illustration of each claim, the example a citation).
 2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
 3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE; REDONE in round 6 (one isometric illustration per reason, band scale, case links stay in the text; an undrawn reason takes the labelled slot).
-4. **What you get**: four parts (OfferParts), round 6.
+4. **What you get**: four label-column rows (OfferParts), round 7.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
 
@@ -99,7 +99,7 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 |---|---|---|---|
 | **Claims backed by examples** (hard parts) | an illustration per claim; the example as a citation (client mark + case name + link) | the cited case's cover as the claim's picture | claim-visual-depicts-the-claim |
 | **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
-| **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed), what-you-get-titled-terms-four-parts (proposed) |
+| **What you get** (deliverables · who works · what we need · where it stops) | four rows in a label column: deliverables as a drawn strip; who does the work, what we need, where our part stops each a compact 16:9 flat drawing beside the words. All flat (one-register-per-section) | a photograph among drawings; terms as a foot | what-you-get-label-rows (proposed) |
 | **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set, sat on one rail the options drop onto | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers; shared-terms-sit-on-one-rail (proposed) |
 | **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
 | **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
