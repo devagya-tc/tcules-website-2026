@@ -76,7 +76,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead. The three options take three tracks from 768, each the flat scope drawing above its name and words. The closing paragraphs are equal terms side by side on their hairlines, a stack under the options. The band's own link (How we work together) is the head's end action, centred on the heading from 1024 with the lead under that row (owner, 29 Oct 2026); the other link closes the band, a stack under the terms."
+        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead, the band's own link at the heading's end. The three options take three tracks from 768, each its flat scope drawing on its plate above its name and words. The two closing terms hold for every option: side by side a column apart, each led by a small bare drawing (scope-build, scope-overlap), no hairline. Nothing closes the band: on the offer pages its ask is the next band, an ink island (CtaSection open) (owner, 30 Oct 2026)."
       />
       <EngagementOptions
         heading="How we work together"
@@ -87,19 +87,19 @@ export default function EngagementOptionsSpecimen() {
         ]}
         options={TOGETHER}
         terms={[
-          'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
-          'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+          {
+            body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
+            scope: 'build',
+          },
+          {
+            body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+            scope: 'overlap',
+          },
         ]}
         action={
           <CtaRow
             rule={false}
             actions={[{ label: 'How we work together', href: '#together' }]}
-          />
-        }
-        actions={
-          <CtaRow
-            rule={false}
-            actions={[{ label: "Tell us what you're working on", href: '#enquiry' }]}
           />
         }
       />

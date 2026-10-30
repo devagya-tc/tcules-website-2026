@@ -29,6 +29,13 @@ export type EngagementScope =
   | 'overlap'
   | 'commercial';
 
+export type EngagementTerm = {
+  /** The term's paragraph, inline content the caller renders. */
+  body: ReactNode;
+  /** Its mark: a scope scene drawn bare and small above the words. Absent, the words alone. */
+  scope?: EngagementScope;
+};
+
 export type EngagementOption = {
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
   title: string;
@@ -68,12 +75,12 @@ export type EngagementOptionsProps = {
   /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
   note?: ReactNode;
   /**
-   * The band's closing terms, each one paragraph's inline content (what we stop at; where the studio
-   * is), set side by side as equal terms under the options, each on its hairline: the terms-tile
-   * grammar of a What you get band (owner, 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head).
-   * Two or three; one column below 768.
+   * Secondary terms that hold for every option (where our part stops; where the studio is), set side
+   * by side under the options as two peers a `column` apart, each led by its own small BARE drawing
+   * (no plate), no hairline (owner, 30 Oct 2026: "the 3 cards are directly engagement related, the
+   * other 2 are around the engagement"; ruled text-only cards are retired). One column below 768.
    */
-  terms?: readonly ReactNode[];
+  terms?: readonly EngagementTerm[];
   /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
@@ -83,11 +90,6 @@ export type EngagementOptionsProps = {
    * floated away from the words (decisions/2026-10-29-how-we-work-together-band).
    */
   action?: ReactNode;
-  /**
-   * Any further action, closing the band a `stack` under the terms: in practice a single-link
-   * `CtaRow` (on the offer pages "Tell us what you're working on").
-   */
-  actions?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
   /** Default `grid`. See `EngagementArrangement`. */
@@ -123,7 +125,6 @@ export function EngagementOptions({
   note,
   terms = [],
   action,
-  actions,
   surface = 'paper',
   arrangement = 'grid',
 }: EngagementOptionsProps) {
@@ -219,22 +220,27 @@ export function EngagementOptions({
           </Layout>
         )}
         {terms.length > 0 ? (
-          /* Equal terms side by side, each on its hairline (the What you get terms' grammar). */
           <Layout
             as="ul"
             columns={{ base: 1, md: Math.min(terms.length, 3) }}
-            colGap="gutter"
-            rowGap="block"
+            colGap="column"
+            rowGap="column"
           >
             {terms.map((term, index) => (
-              <li key={index} className={styles.term}>
-                <p className={styles.termText}>{term}</p>
+              <li key={index}>
+                <Layout rowGap="block" justifyItems="start">
+                  {term.scope ? (
+                    <div className={styles.termArt}>
+                      <Sketch name={`scope-${term.scope}`} frame="bare" />
+                    </div>
+                  ) : null}
+                  <p className={styles.termText}>{term.body}</p>
+                </Layout>
               </li>
             ))}
           </Layout>
         ) : null}
         {note}
-        {actions}
       </Layout>
     </Section>
   );

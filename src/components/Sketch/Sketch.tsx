@@ -67,6 +67,10 @@ const H = 180;
  */
 const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number]>> = {
   'new-product': [26, 26, 268, 128],
+  /* The two engagement terms' marks (EngagementOptions `terms`, owner 30 Oct 2026): set bare, so
+     cropped to the drawn edge. */
+  'scope-build': [30, 30, 260, 120],
+  'scope-overlap': [50, 30, 220, 120],
 };
 
 /**

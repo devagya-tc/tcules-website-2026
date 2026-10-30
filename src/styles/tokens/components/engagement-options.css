@@ -6,7 +6,7 @@
    tokens are Sketch's; this layer holds only the words.
 
    Naming: --eop-{part}-{role}
-     parts  heading · lead · title · body · term (a closing term on its hairline, 29 Oct 2026)
+     parts  heading · lead · title · body · term (a closing term led by its small bare drawing, 30 Oct 2026)
      roles  text · tracking · measure · ink
 
    No state tokens: nothing responds to a pointer. Every surface block
@@ -31,7 +31,9 @@
   --eop-body-measure: var(--measure-lead);
   /* A closing term reads at a card body's size (14), on the hairline a list tile carries. */
   --eop-term-text: var(--text-body-sm);
-  --eop-term-rule-width: var(--border-width-hairline);
+  /* A component SIZE: a closing term's drawing, set bare at this scale of its drawing units (90 tall), so it
+     reads as a mark under the plated options, not as a fifth card image. Bento's one-track tile holds 0.7. */
+  --eop-term-art-scale: 0.75;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -42,7 +44,6 @@
   --eop-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --eop-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --eop-term-ink: var(--color-neutral-700); /* 8.14:1 */
-  --eop-term-rule-ink: var(--color-neutral-300); /* decoration */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -52,7 +53,6 @@
   --eop-title-ink: var(--color-neutral-900); /* 13.05:1 */
   --eop-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --eop-term-ink: var(--color-neutral-800); /* 10.54:1 */
-  --eop-term-rule-ink: var(--color-neutral-400); /* decoration */
 }
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
@@ -62,7 +62,6 @@
   --eop-title-ink: var(--color-white); /* 17.26:1 */
   --eop-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --eop-term-ink: var(--color-neutral-300); /* 11.07:1 */
-  --eop-term-rule-ink: var(--color-neutral-700); /* decoration */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
@@ -72,5 +71,4 @@
   --eop-title-ink: var(--color-white); /* 6.23:1 */
   --eop-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --eop-term-ink: var(--color-brandeis-50); /* 5.57:1 */
-  --eop-term-rule-ink: var(--color-brandeis-300); /* decoration */
 }

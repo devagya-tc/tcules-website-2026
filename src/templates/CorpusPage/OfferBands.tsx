@@ -9,6 +9,7 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
+  CtaSection,
   EngagementOptions,
   ListCard,
   OfferSheet,
@@ -34,6 +35,7 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { ROUTES } from '@/lib/routes';
 import {
   offerSceneKey,
   serviceSceneFor,
@@ -212,6 +214,14 @@ function scopeOf(title: string): EngagementScope | undefined {
   if (/\b(team|designer|embedded)\b/.test(name)) return 'embedded';
   if (/\b(area|whole|new product)\b/.test(name)) return 'area';
   if (/\b(workflow|feature)\b/.test(name)) return 'feature';
+  return undefined;
+}
+
+/** Which mark a closing engagement term draws, read from its own words; none fits → no drawing. */
+function termScopeOf(text: string): EngagementScope | undefined {
+  const words = text.toLowerCase();
+  if (/\bstop at designs\b|\binto code\b|\bbuild the product\b/.test(words)) return 'build';
+  if (/\bhours we share\b|\btime zones?\b|\bour studio is in\b/.test(words)) return 'overlap';
   return undefined;
 }
 
@@ -413,34 +423,42 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* How we work together / Ways to work with us — peers a reader chooses between (EngagementOptions,
-       owner 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head). The head is the heading and
-       the band's opening paragraphs as its lead (the page's own line, then the shared "Bring what you
-       have…"); each option is drawn in the FLAT grammar (Sketch `scope-*`), the drawing above its
-       name and words, so the band never reads as Why Tcules' isometric reasons beside it; the closing
-       paragraphs (what we stop at; where the studio is) are equal terms side by side under the
-       options; the band's own link is the head's end action and any other closes the band. */
+    /* How we work together / Ways to work with us — the head (heading, its own link as end action,
+       lead), the three options (primary, plated flat drawings), the two terms (secondary, small bare
+       marks, no hairline). Its ask ("Tell us what you're working on") is its own band after it, an ink
+       island with the texture and one solid to the contact route (owner, 30 Oct 2026, round 5: "the 2
+       buttons split up and down is horrible design… an island section with that title and a button to
+       the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
       const terms = trailingParagraphs(band);
       const links = bandLinks(band);
       return (
-        <EngagementOptions
-          {...head(band)}
-          surface={unit.surface}
-          lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-          options={leads(band).map((row) => ({
-            title: row.title,
-            body: renderInline(row.body),
-            scope: scopeOf(row.title),
-          }))}
-          terms={terms.map((runs) => renderInline(runs))}
-          /* The band's own link ("How we work together") is the head's end action; any other link
-             ("Tell us what you're working on") closes the band (owner, 29 Oct 2026;
-             decisions/2026-10-29-how-we-work-together-link-in-head). */
-          action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
-          actions={links.length > 1 ? <LinkActions links={links.slice(1)} /> : undefined}
-        />
+        <Fragment>
+          <EngagementOptions
+            {...head(band)}
+            surface={unit.surface}
+            lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
+            options={leads(band).map((row) => ({
+              title: row.title,
+              body: renderInline(row.body),
+              scope: scopeOf(row.title),
+            }))}
+            terms={terms.map((runs) => ({
+              body: renderInline(runs),
+              scope: termScopeOf(plain(runs)),
+            }))}
+            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+          />
+          {links[1] ? (
+            <CtaSection
+              data-band="L"
+              arrangement="open"
+              heading={links[1].labelText}
+              actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+            />
+          ) : null}
+        </Fragment>
       );
     }
 
