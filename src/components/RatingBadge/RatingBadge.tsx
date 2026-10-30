@@ -47,6 +47,12 @@ export type RatingBadgeProps = {
    */
   frame?: 'pill' | 'plain';
   /**
+   * `md` (default): 14px text, 16px marks, wherever the badge is a claim a band makes (owner, 29 Oct
+   * 2026). `sm`: 12px text, 14px marks, where it is chrome, the site footer (owner, 30 Oct 2026;
+   * decisions/2026-10-30-footer-takes-the-small-rating-badge).
+   */
+  size?: 'md' | 'sm';
+  /**
    * What the claim says beyond the pill, for assistive technology and machines only — in practice
    * the copy's own words after the score: "from 13 reviews. Read the reviews" (owner, 29 Oct 2026:
    * a rating is always the badge, never text and a link; "from 13 reviews" is not shown wherever a
@@ -80,11 +86,16 @@ export function RatingBadge({
   showScore = true,
   scale,
   frame = 'pill',
+  size = 'md',
   detail,
 }: RatingBadgeProps) {
   return (
     <a
-      className={cx(styles.badge, frame === 'plain' && styles.plain)}
+      className={cx(
+        styles.badge,
+        frame === 'plain' && styles.plain,
+        size === 'sm' && styles.sm,
+      )}
       href={href}
       target="_blank"
       rel="noreferrer noopener"
