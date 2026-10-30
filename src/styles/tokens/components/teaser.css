@@ -6,7 +6,7 @@
 
    Naming: --tsr-{part}-{role}-{state}, with a size suffix where the type steps with the placement
    (--tsr-title-text-xl | -lg | -md | -sm)
-     parts: title | body | meta | label | date | index | marker | media | play | ring
+     parts: title | body | meta | label | date | index | marker | media | play | ring | rule | arrow
      states: hover, on the title's ink only (the cover zoom is geometry).
 
    Every surface block declares every surface-dependent token.
@@ -124,6 +124,13 @@
   --tsr-ring-width: var(--focus-ring-width);
   --tsr-ring-offset: var(--focus-ring-offset);
   --tsr-ring-radius: var(--radius-4);
+
+  /* A resource listing's ruled row (`ruled`, owner 29 Oct 2026) and its end arrow (`arrow`). The
+     arrow is the size of a lg button's glyph; on hover it moves 4 toward its destination — an
+     optical nudge from the space ramp, not a layout distance. */
+  --tsr-rule-width: var(--border-width-hairline);
+  --tsr-arrow-size: var(--icon-size-24);
+  --tsr-arrow-shift: var(--space-4);
 }
 
 :root,
@@ -140,6 +147,9 @@
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
+  --tsr-rule-ink: var(--color-neutral-200); /* decoration: the row's edge */
+  --tsr-arrow-ink: var(--color-brandeis-500); /* 6.17:1, the link cue */
+  --tsr-glyph-ink: var(--color-brandeis-500); /* 6.17:1 — the format glyph, the card icon's accent */
 }
 
 /* Tint: the quiet ink steps to 700 — 600 is 4.39:1 on paper-deep. */
@@ -156,6 +166,9 @@
   --tsr-play-ground: var(--color-paper);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-500);
+  --tsr-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on paper-deep */
+  --tsr-arrow-ink: var(--color-brandeis-600);
+  --tsr-glyph-ink: var(--color-brandeis-600);
 }
 
 [data-surface='ink'] {
@@ -171,6 +184,9 @@
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-neutral-900);
   --tsr-ring-color: var(--color-brandeis-300);
+  --tsr-rule-ink: var(--color-neutral-700); /* decoration */
+  --tsr-arrow-ink: var(--color-brandeis-300);
+  --tsr-glyph-ink: var(--color-brandeis-300);
 }
 
 /* Blue: declared for self-containment; every ink lifts to white or the lightest Brandeis steps. */
@@ -187,4 +203,7 @@
   --tsr-play-ground: var(--color-white);
   --tsr-play-ink: var(--color-brandeis-700);
   --tsr-ring-color: var(--color-white);
+  --tsr-rule-ink: var(--color-brandeis-300); /* decoration */
+  --tsr-arrow-ink: var(--color-white);
+  --tsr-glyph-ink: var(--color-white);
 }

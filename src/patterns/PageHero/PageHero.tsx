@@ -226,7 +226,7 @@ export type { HeroTrail };
  *
  *   masthead a LISTING's opening (beauty round 4, 16 Oct 2026, the insights hub and its format pages,
  *            after claude.com/resources): the title alone in 2 of 3 from 1024 (its measure, so a
- *            long title keeps the lines it has stacked), the lede and the `record` in the third, set on the title's LAST BASELINE — so the band's end half,
+ *            long title keeps the lines it has stacked), the lede and its figures (`stats`) in the third, set on the title's LAST BASELINE — so the band's end half,
  *            where the texture runs, carries the words that frame it instead of empty paper, and the
  *            band is a title's height rather than a title plus a lede: the list under it starts
  *            inside the first screen. No media and no ask (a listing's ask is its list). Below 1024
@@ -306,6 +306,14 @@ type PageHeroBaseProps = {
    * gutter. Never for a sentence: a mark title is meant to stand on one line.
    */
   titleSize?: 'display' | 'mark';
+  /**
+   * `beside` only: the eyebrow and title read ACROSS the column above the split, at their own
+   * measure, and the lead, actions and figures sit in the copy track beside the media. For a title
+   * too long for half the column at display (review 29 Oct: /services set seven display lines in
+   * the 572 track and its hero ran 1262 tall). The title keeps display (owner, 29 Sep 2026). Ignored
+   * by every other arrangement.
+   */
+  titleAcross?: boolean;
   /**
    * The paragraphs, in order. Optional (cmp-feature, 6 Oct 2026): an index page whose h1 is the
    * whole opening — the case-study index — has none, and passed `['']` to satisfy the type, a
@@ -427,19 +435,14 @@ type PageHeroBaseProps = {
    */
   tags?: readonly string[];
   /**
-   * A listing's record as ONE mono line directly under the lede (beauty round 4, 16 Oct 2026): its
-   * facts joined by a middle dot, no pixels — "42 published · Latest 15 Oct 2026". For a page whose
-   * hero introduces a list; the facts are read with the lede, not as a footnote after the actions.
-   * Authored case; mono uppercases it. Blank entries are dropped; absent renders nothing.
-   */
-  record?: readonly string[];
-  /**
    * The studio's record as figures, INSIDE the hero (owner, home round 3, 11 Oct 2026: "could the
    * facts/figures section be integrated into the hero so it doesn't take one entire section?").
    * One `Stat` each at the md step (40, blue numeral, its hairline and mark), in one row a `text`
    * under the actions: as many tracks as figures, at every width, so three figures never orphan.
    * Two to four; more belong in a facts band. Records rather than nodes, so the hero owns the size,
-   * the row and the seam. Absent renders no row and no seam.
+   * the row and the seam. Absent renders no row and no seam. A `masthead` sets them in its lede's
+   * column, a `stack` under the lede: a listing's record is figures too, never a mono line of facts
+   * (owner, 29 Oct 2026; decisions/2026-10-29-studio-record-is-figures, which retired `record`).
    */
   stats?: readonly HeroStat[];
   /**
@@ -662,6 +665,7 @@ type BylinePair = { id: string; label: string; value: ReactNode; silent?: boolea
 export function PageHero({
   title,
   titleSize = 'display',
+  titleAcross = false,
   body,
   eyebrow,
   rating,
@@ -676,7 +680,6 @@ export function PageHero({
   arrangement = 'stacked',
   surface = 'paper',
   tags = [],
-  record = [],
   stats = [],
   texture = false,
   announcement,
@@ -745,6 +748,7 @@ export function PageHero({
   const centredHead = arrangement === 'centred';
   const display = arrangement === 'display';
   const masthead = arrangement === 'masthead';
+  const across = titleAcross && split && !wide;
 
   /* Against media, the copy's alignment follows what the media IS (visual-direction § 3.2). An
      illustration has no box, so the copy is centred on it and the two read as one pair; a
@@ -865,21 +869,15 @@ export function PageHero({
   /* copy · 16 between paragraphs. Absent entirely when every entry was blank — never an empty
      <div> holding 16px of nothing. The index is the key: static frontmatter copy in array order,
      never reordered, and two paragraphs may be identical strings. */
-  const recordParts = record.map((part) => part.trim()).filter(Boolean);
-  const recordNode =
-    recordParts.length === 0 ? null : <p className={styles.tag}>{recordParts.join(' · ')}</p>;
   const copyNode =
-    lead === undefined && recordNode === null ? null : (
+    lead === undefined ? null : (
       <Layout rowGap="text">
-        {lead !== undefined ? (
-          <p className={styles.lead}>{lead}</p>
-        ) : null}
+        {lead !== undefined ? <p className={styles.lead}>{lead}</p> : null}
         {rest.map((paragraph, index) => (
           <p key={index} className={styles.body}>
             {paragraph}
           </p>
         ))}
-        {recordNode}
       </Layout>
     );
 
@@ -1137,12 +1135,21 @@ export function PageHero({
       justifyItems={justify}
       className={centredHead ? styles.centred : undefined}
     >
-      <Layout rowGap="block" justifyItems={justify}>
-        {eyebrowNode}
-        {titleNode}
-        {copyNode}
-        {labelsNode}
-      </Layout>
+      {across ? (
+        copyNode || labelsNode ? (
+          <Layout rowGap="block" justifyItems={justify}>
+            {copyNode}
+            {labelsNode}
+          </Layout>
+        ) : null
+      ) : (
+        <Layout rowGap="block" justifyItems={justify}>
+          {eyebrowNode}
+          {titleNode}
+          {copyNode}
+          {labelsNode}
+        </Layout>
+      )}
       {bylineNode}
       {extrasNode}
       {actionsNode}
@@ -1171,7 +1178,7 @@ export function PageHero({
   if (masthead) {
     /* ── masthead · the title, and the lede on its last baseline ─────────────────────────
        A [2, 1] split: the title alone in the 2 (wide enough for its own measure, so it sets the lines
-       it would stacked), the lede and the record in the 1, both halves sharing the title's last baseline (`align="baseline"`).
+       it would stacked), the lede and its figures in the 1, both halves sharing the title's last baseline (`align="baseline"`).
        Media and actions are not a masthead's (see `HeroArrangement`); a byline or tags would follow
        the lede in its column. */
     top = withTrail(
@@ -1180,11 +1187,14 @@ export function PageHero({
           {eyebrowNode}
           {titleNode}
         </Layout>
-        <Layout rowGap="block">
-          {copyNode}
-          {labelsNode}
-          {bylineNode}
-          {tagsNode}
+        <Layout rowGap="stack">
+          <Layout rowGap="block">
+            {copyNode}
+            {labelsNode}
+            {bylineNode}
+            {tagsNode}
+          </Layout>
+          {statsNode}
         </Layout>
       </Layout>,
     );
@@ -1272,7 +1282,20 @@ export function PageHero({
         {mediaTrack}
       </Layout>
     );
-    top = centred ? content : withTrail(content);
+    /* `titleAcross`: the head across the column, then the split under it, a `stack` apart, as the
+       split's own copy blocks are. */
+    const headed = across ? (
+      <Layout rowGap="stack">
+        <Layout rowGap="block">
+          {eyebrowNode}
+          {titleNode}
+        </Layout>
+        {content}
+      </Layout>
+    ) : (
+      content
+    );
+    top = centred ? headed : withTrail(headed);
   }
 
   return (

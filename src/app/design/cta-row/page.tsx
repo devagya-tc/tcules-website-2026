@@ -71,13 +71,13 @@ export default function CtaRowSpecimen() {
             A band&rsquo;s action: a hairline, 24, then an optional one-line note and ONE blue
             link with the arrow cue. A CtaRow is always in-band, and an in-band action is a link
             (r7-buttons, owner 7 Oct 2026 as corrected 8 Oct) — the blue solid and its ghost
-            partner are the page&rsquo;s one main action, and live in the hero (PageHero) and the
-            close (CtaSection), never at a band&rsquo;s foot. &ldquo;Start with a UX Product
+            partner are the page&rsquo;s one main action, and live in the hero (PageHero) and
+            the close (CtaSection), never at a band&rsquo;s foot. &ldquo;Start with a UX Product
             Audit&rdquo; inside a band is a link, not a button. One link, because two links side
-            by side are two actions of the same emphasis; the types allow no other shape. The row
-            decides the arrow; the caller passes a label and an href. Placed by a band —
-            ContentSection&rsquo;s <code>footer</code>, or with <code>rule=&#123;false&#125;</code>{' '}
-            its <code>actions</code>.
+            by side are two actions of the same emphasis; the types allow no other shape. The
+            row decides the arrow; the caller passes a label and an href. Placed by a band —
+            ContentSection&rsquo;s <code>footer</code>, or with{' '}
+            <code>rule=&#123;false&#125;</code> its <code>actions</code>.
           </p>
         </Layout>
       </Section>
@@ -94,8 +94,8 @@ export default function CtaRowSpecimen() {
             </p>
           </Layout>
           <Specimen
-            title="link · one action (the only shape)"
-            note="The band's Signal (§ 4.2), label and arrow blue at rest. A second destination is a second band's."
+            title="link · one action"
+            note="The band's Signal (§ 4.2), label and arrow blue at rest. Never two links side by side."
           >
             <CtaRow actions={[SEE_WORK]} />
           </Specimen>
@@ -118,6 +118,12 @@ export default function CtaRowSpecimen() {
             <CtaRow actions={[START]} rule={false} />
           </Specimen>
           <Specimen
+            title="a pair — an outlined button, then the link"
+            note="Two actions in ONE row with a hierarchy (owner, 29 Oct 2026): the first a labelled outline Button, the second the quieter link, a block apart. A Banner's two actions. Never a solid: the blue solid is the page's one main action."
+          >
+            <CtaRow actions={[START, SEE_WORK]} rule={false} />
+          </Specimen>
+          <Specimen
             title='align="center"'
             note="Note and link centred, the whole box — rule included — capped at the body measure. Here the specimen does not centre the box; a centred band does (section 4)."
           >
@@ -133,8 +139,8 @@ export default function CtaRowSpecimen() {
             <h2>2 · Stress, and narrow tracks</h2>
             <p className={s.specNote}>
               At the four-word label ceiling the label never wraps (Button labels never wrap); a
-              long note wraps at 56ch and pushes the link below it at 24 once the row cannot hold
-              both. A whitespace-only note renders nothing and the row is the no-note row.
+              long note wraps at 56ch and pushes the link below it at 24 once the row cannot
+              hold both. A whitespace-only note renders nothing and the row is the no-note row.
             </p>
           </Layout>
           <Specimen title="a four-word label (the ceiling) and a long note, full column">
@@ -154,6 +160,11 @@ export default function CtaRowSpecimen() {
           <Specimen title="the 326 phone column, with a note">
             <div className={s.trackMobile}>
               <CtaRow actions={[ALL_SERVICES]} note={NOTE} />
+            </div>
+          </Specimen>
+          <Specimen title="the 326 phone column, a pair">
+            <div className={s.trackMobile}>
+              <CtaRow actions={[LABEL_LONG, ALL_SERVICES]} rule={false} />
             </div>
           </Specimen>
           <Specimen title="the 326 phone column, centred">
@@ -181,6 +192,9 @@ export default function CtaRowSpecimen() {
             </Specimen>
             <Specimen title={`${surface} · link, rule off`}>
               <CtaRow actions={[START]} rule={false} />
+            </Specimen>
+            <Specimen title={`${surface} · a pair`}>
+              <CtaRow actions={[START, SEE_WORK]} rule={false} />
             </Specimen>
           </Layout>
         </Section>

@@ -1,6 +1,9 @@
-import { Layout, Prose } from '@/components';
+import { Fragment, type ReactNode } from 'react';
+
+import { Layout, Media, Prose } from '@/components';
 import {
   Banner,
+  Bento,
   BlockCardSet,
   ContentSection,
   ContentSectionText,
@@ -11,15 +14,21 @@ import {
   OfferSheet,
   ProfileCard,
   ProfileFollow,
+  ReadDown,
   VoiceLedger,
+  type BentoItem,
   type BlockCardSetItem,
   type EngagementScope,
   type HeroStat,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusCaseRef, CorpusPage } from '@/lib/corpus-types';
+import type { IconName } from '@/components';
 import { glyphForRoute } from '@/lib/glyphs';
+import { FULL_COLUMN } from '@/lib/image-sizes';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { placeholderImage } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
+import { sketchForRoute, type SketchName } from '@/lib/sketches';
 
 import {
   CorpusHero,
@@ -30,8 +39,12 @@ import {
   headingIdOf,
   type RatingsById,
 } from './blocks';
-import { coverFor, slotImage, slugOf } from './images';
+import { coverFor, slotImage } from './images';
 import styles from './CorpusPage.module.css';
+import { LinkActions } from './CopyBands';
+import { recordStats as homeRecordStats } from './HomePage';
+import { UnitView, type OfferContext } from './OfferBands';
+import { planOffer, TEMPLATE_BANDS } from './plan';
 import { bandLinks, blocksOf, boldLead, html, labelTitle, plain, trimStart } from './text';
 
 export type AboutPageProps = {
@@ -43,6 +56,299 @@ export type AboutPageProps = {
 };
 
 type ItemBlock = Extract<CorpusBlock, { type: 'item' }>;
+
+/** Every band id the About composition reads by name. */
+const LEGACY_ABOUT_BANDS = [
+  'ahmedabad-is-part-of-how-we-work',
+  'the-practice-keeps-moving',
+  'what-we-do',
+  'who-we-work-with',
+  'difference',
+  'how-we-work',
+  'leadership',
+  'work-you-can-inspect',
+  'testimonials',
+  'company-record',
+  'frequently-asked-questions',
+  'what-remains-constant',
+  'work-with-tcules',
+  'careers',
+] as const;
+
+/**
+ * Whether the corpus page still carries every band this composition names. The 26 Oct 2026 copy
+ * reshaped About, so the template checks this and falls back to `PlainPage` rather than crash.
+ */
+const aboutPageFits = (page: CorpusPage): boolean =>
+  LEGACY_ABOUT_BANDS.every((id) => page.bands.some((b) => b.id === id));
+
+type AboutBandProps = {
+  page: CorpusPage;
+  band: CorpusBand;
+  caseRefs: NonNullable<AboutPageProps['caseRefs']>;
+};
+
+/**
+ * The 26 Oct copy's About (component-map § E /about, 29 Oct 2026): the ids About composes itself.
+ * Every other band renders through the plan's id table (plan.ts `BAND_KINDS`) and OfferBands, so no
+ * band of the copy is skipped: what-we-do as destinations, difference / who-uses-tcules / how-we-work
+ * as sheets, testimonials as the wall, the questions, the close.
+ */
+const ABOUT_BANDS: Readonly<
+  Record<(typeof TEMPLATE_BANDS)['/about'][number], (props: AboutBandProps) => ReactNode>
+> = {
+  'what-we-do': WhatWeDoBento,
+  'who-uses-tcules': WhoUsesBand,
+  leadership: LeadershipBand,
+  'company-record': ({ page }) => <CompanyRecord page={page} />,
+};
+
+/**
+ * The hero's paragraphs as authored: the bold standfirst ("Tcules is a digital product design studio
+ * in Ahmedabad…") first, then the lede. The parser files a bold-only paragraph after the title as a
+ * label with no body (`hero.extra`), which no hero reads, so About gathers it here rather than lose it.
+ */
+function aboutLedes(page: CorpusPage): InlineRun[][] {
+  const standfirst = page.hero.extra.flatMap((block) =>
+    block.type === 'labelled' && block.body.length === 0 ? [block.label] : [],
+  );
+  return [...standfirst, ...page.hero.lede];
+}
+
+/** The 26 Oct copy's About: the hero with the record as figures, then every band in order. */
+function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
+  const units = planOffer(page);
+  const ctx: OfferContext = { page, caseRefs: caseRefs ?? {}, shared: {}, ratings };
+  return (
+    <>
+      <CorpusHero
+        page={page}
+        ledes={aboutLedes(page)}
+        proofLine={false}
+        stats={homeRecordStats(page)}
+      />
+      {units.map((unit) => {
+        const Band =
+          unit.part === 'b'
+            ? undefined
+            : (ABOUT_BANDS as Readonly<Record<string, (props: AboutBandProps) => ReactNode>>)[
+                unit.band.id
+              ];
+        return Band ? (
+          <Fragment key={unit.id}>
+            <Band page={page} band={unit.band} caseRefs={caseRefs ?? {}} />
+          </Fragment>
+        ) : (
+          <UnitView key={unit.id} unit={unit} ctx={ctx} />
+        );
+      })}
+    </>
+  );
+}
+
+/** A list item's words as a row title: the first letter set in capitals, the words as authored. */
+const sentenceCase = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
+
+/** A service's scene, by its route; the audits hub takes the audit specialist's (component-map C17). */
+const sceneForService = (href: string): SketchName | undefined =>
+  sketchForRoute(href) ?? (href === ROUTES.audits ? 'specialist-audit' : undefined);
+
+/**
+ * What Tcules does (component-map § E /about 2): the eight services as home's approved What-we-do
+ * Bento, four equal tiles on four tracks, two rows, every service in view. Each tile is its service's
+ * name, its authored paragraph and its scene, and the whole tile is the link its "Explore …" line
+ * names. Clickable tiles under the band's full-width head, nothing beside them.
+ */
+function WhatWeDoBento({ band: b }: AboutBandProps) {
+  const tiles: BentoItem[] = items(b).flatMap((item) => {
+    const link = item.blocks.flatMap((block) => (block.type === 'links' ? block.links : []))[0];
+    const scene = link ? sceneForService(link.href) : undefined;
+    if (!link || !scene) return [];
+    return [
+      {
+        id: link.href,
+        title: item.headingText,
+        body: paragraphRuns(item.blocks).map(plain).join(' '),
+        href: link.href,
+        scene,
+      },
+    ];
+  });
+  return (
+    <ContentSection {...head(b)} data-band="C-bento">
+      <Bento items={tiles} tracks={4} />
+    </ContentSection>
+  );
+}
+
+/**
+ * Who uses Tcules (component-map § E /about 4), ONE band so it reads as the visual one after the text
+ * of `difference`: the head and its lead; the five audiences as a two-column read-down, each with the
+ * glyph of the service line it comes for (first release, growth, modernisation, AI, design systems);
+ * the SaaS line; then the authored h3 "Work you can inspect" over the four cases as covered cards
+ * (each its own cover, its authored sentence the body), and the Lab line with "Explore all case
+ * studies" under them. The cards sit under their own full-width head with nothing beside them.
+ */
+const AUDIENCE_GLYPHS = [
+  'flag',
+  'graph-up',
+  'shield-check',
+  'stars',
+  'layers',
+] as const satisfies readonly IconName[];
+
+function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
+  const blocks = b.blocks.filter((block) => block.type !== 'comment');
+  const [leadBlock] = blocks;
+  const lead = leadBlock?.type === 'paragraph' ? plain(leadBlock.runs) : undefined;
+  const list = blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'list' }> => block.type === 'list',
+  );
+  const lines = blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+      block.type === 'paragraph' && block !== leadBlock,
+  );
+  const work = items(b)[0];
+  const workBlocks = work?.blocks ?? [];
+  const cases = workBlocks.flatMap((block) => {
+    if (block.type !== 'paragraph') return [];
+    const [first, ...tail] = block.runs;
+    return first?.type === 'link' && first.href.startsWith('/case-studies/')
+      ? [{ link: first, body: trimStart(tail) }]
+      : [];
+  });
+  const cards: BlockCardSetItem[] = cases.map(({ link, body }) => {
+    const name = plain(link.children);
+    return {
+      id: link.href,
+      title: name,
+      /* "Doodle shows research…": the name is the card's title, so its sentence opens the body. */
+      body: sentenceCase(plain(body)),
+      media: { type: 'image', image: coverFor(page, name, caseRefs[link.href], b.id) },
+      href: link.href,
+    };
+  });
+  const after = workBlocks.filter(
+    (block) =>
+      !(
+        block.type === 'paragraph' &&
+        block.runs[0]?.type === 'link' &&
+        block.runs[0].href.startsWith('/case-studies/')
+      ),
+  );
+  const afterLinks = after.flatMap((block) => (block.type === 'links' ? block.links : []));
+  const afterText = paragraphRuns(after);
+  return (
+    <ContentSection {...head(b)} data-band="M" lead={lead}>
+      <Layout rowGap="section">
+        <Layout rowGap="stack">
+          {list ? (
+            <ReadDown
+              columns={2}
+              rows={list.items.map((runs, index) => ({
+                title: sentenceCase(plain(runs)),
+                ...(AUDIENCE_GLYPHS[index] ? { icon: AUDIENCE_GLYPHS[index] } : {}),
+              }))}
+            />
+          ) : null}
+          {lines.length > 0 ? <Text paragraphs={lines.map((block) => block.runs)} /> : null}
+        </Layout>
+        {work ? (
+          <Layout rowGap="block">
+            <h3 id={`${b.id}-work-heading`}>{work.headingText}</h3>
+            <Layout rowGap="stack">
+              <BlockCardSet
+                items={cards}
+                lead="none"
+                across={4}
+                size="sm"
+                cue="title"
+                scroll="never"
+                titleAs="h4"
+              />
+              {afterText.length > 0 || afterLinks.length > 0 ? (
+                <Layout rowGap="block">
+                  {afterText.length > 0 ? <Text paragraphs={afterText} /> : null}
+                  {afterLinks.length > 0 ? <LinkActions links={afterLinks} /> : null}
+                </Layout>
+              ) : null}
+            </Layout>
+          </Layout>
+        ) : null}
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/**
+ * Who founded Tcules (G17): the founders as profile cards under the head and its lead (ruling
+ * 2026-10-12-people-get-profile-cards); then the studio's two `###` (The Ahmedabad studio, The
+ * practice keeps moving) as a part of their own beside the team photograph, with the closing links.
+ */
+function LeadershipBand({ page, band: b }: AboutBandProps) {
+  const blocks = b.blocks.filter((block) => block.type !== 'comment');
+  const lead = blocks[0]?.type === 'paragraph' ? plain(blocks[0].runs) : undefined;
+  const people = items(b).filter((item) =>
+    item.blocks.some(
+      (block) =>
+        block.type === 'links' && block.links.some((l) => /linkedin\.com\/in\//.test(l.href)),
+    ),
+  );
+  const studio = items(b).filter((item) => !people.includes(item));
+  return (
+    <>
+      <ContentSection {...head(b)} data-band="P" lead={lead}>
+        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
+          {people.map((item) => {
+            const [name = item.headingText, ...role] = item.headingText.split(', ');
+            const link = item.blocks.flatMap((block) =>
+              block.type === 'links' ? block.links : [],
+            )[0];
+            const bio = paragraphRuns(item.blocks).map(plain).join(' ');
+            return (
+              <ProfileCard
+                key={item.headingText}
+                name={name}
+                role={role.join(', ') || undefined}
+                bio={bio || undefined}
+                linkedin={link ? { label: link.labelText, href: link.href } : undefined}
+              />
+            );
+          })}
+        </Layout>
+      </ContentSection>
+      {studio.length > 0 ? (
+        /* The studio and the practice, the team photograph across the column over the two as peer
+           halves (component-map § E /about 5 part b). Beside the photograph, the two items ran ~600
+           past its foot and left a hole under it; across, the photograph is the band's large thing and
+           the two stories read side by side, each closing on its own links. */
+        <ContentSection id={`${b.id}-2`} data-band="B-wide">
+          <Layout rowGap="stack">
+            <Media
+              image={slotImage(page, b.id)}
+              ratio={{ base: '4/3', lg: '2/1' }}
+              sizes={FULL_COLUMN}
+            />
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column" rowGap="stack">
+              {studio.map((item) => {
+                const links = item.blocks.flatMap((block) =>
+                  block.type === 'links' ? block.links : [],
+                );
+                return (
+                  <Layout key={item.headingText} rowGap="block">
+                    <h3>{item.headingText}</h3>
+                    <Prose html={paragraphRuns(item.blocks).map(html).join('')} />
+                    {links.length > 0 ? <LinkActions links={links} /> : null}
+                  </Layout>
+                );
+              })}
+            </Layout>
+          </Layout>
+        </ContentSection>
+      ) : null}
+    </>
+  );
+}
 
 const band = (page: CorpusPage, id: string): CorpusBand => {
   const found = page.bands.find((b) => b.id === id);
@@ -84,6 +390,10 @@ function Text({
  * `studio`, so the first viewport is not a wall of text.
  */
 export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
+  /* The 26 Oct 2026 copy reshaped About's bands: it composes from the plan (AboutCopy). The earlier
+     composition below stays for a page that still carries the earlier bands. */
+  if (!aboutPageFits(page))
+    return <AboutCopy page={page} caseRefs={caseRefs} ratings={ratings} />;
   const [lede1, ...opening] = page.hero.lede;
   return (
     <>
@@ -115,7 +425,10 @@ export function AboutPage({ page, caseRefs = {}, ratings }: AboutPageProps) {
  */
 const RECORD_FIGURES: Readonly<Record<string, (value: string) => HeroStat>> = {
   Founded: (value) => ({ value, label: 'Founded' }),
-  Projects: (value) => ({ value: value.replace(/^More than (\d+)$/u, '$1+'), label: 'Projects' }),
+  Projects: (value) => ({
+    value: value.replace(/^More than (\d+)$/u, '$1+'),
+    label: 'Projects',
+  }),
   'Client reach': (value) => ({
     value: /\d+/u.exec(value)?.[0] ?? value,
     label: 'Countries with clients',
@@ -278,7 +591,13 @@ function Difference({ page }: { page: CorpusPage }) {
 /* ── 6 · how Tcules works: five principles, closed ───────────────────────────── */
 
 /* Each principle's drawing, in the authored order (EngagementOptions' scopes). */
-const HOW_SCOPES: readonly EngagementScope[] = ['start', 'direct', 'inside', 'overlap', 'commercial'];
+const HOW_SCOPES: readonly EngagementScope[] = [
+  'start',
+  'direct',
+  'inside',
+  'overlap',
+  'commercial',
+];
 
 /**
  * Five working principles as the "Ways to work with us" cards (owner, 11 Oct 2026): a drawing each on
@@ -337,9 +656,10 @@ function Leadership({ page }: { page: CorpusPage }) {
               name={leader.name}
               role={leader.role || undefined}
               bio={leader.bio.length > 0 ? leader.bio.map(plain).join(' ') : undefined}
-              portrait={placeholderImage(page.route, b.id, slugOf(leader.name))}
               linkedin={
-                leader.link ? { label: leader.link.labelText, href: leader.link.href } : undefined
+                leader.link
+                  ? { label: leader.link.labelText, href: leader.link.href }
+                  : undefined
               }
             />
           ))}
@@ -427,7 +747,9 @@ function Lab({
   band: CorpusBand;
   runs: readonly InlineRun[];
 }) {
-  const link = runs.find((run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link');
+  const link = runs.find(
+    (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
+  );
   const name = link ? plain(link.children) : 'Future Interfaces Lab';
   return (
     <Banner
@@ -522,7 +844,6 @@ function WorkWithUs({ page }: { page: CorpusPage }) {
       id={b.id}
       data-band="L"
       arrangement="open"
-      surface="tint"
       heading={b.headingText}
       body={lead ? [plain(lead)] : undefined}
       actions={[{ label: link.labelText, href: link.href }]}

@@ -1,9 +1,12 @@
+import type { ReactNode } from 'react';
+
 import { Layout, type IconName } from '@/components';
 import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import type { ArticleSceneName } from '@/lib/sketches';
 import {
   BlockCard,
   Teaser,
+  TEASER_FORMAT_ICON,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,
@@ -55,16 +58,9 @@ export const LABEL: Record<InsightKind, { one: string; many: string }> = {
   interview: { one: 'Interview', many: 'Interviews' },
 };
 
-/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026). */
-const GLYPH: Record<InsightKind, IconName> = {
-  article: 'document-text',
-  guide: 'notebook',
-  research: 'graph-up',
-  interview: 'chat-round-dots',
-  podcast: 'microphone',
-  video: 'videocamera-record',
-  event: 'calendar',
-};
+/** Each format's glyph, as the format menu set them (owner, 23 Oct 2026): the one map, Teaser's,
+    which the resource rows read too (owner, 29 Oct 2026). */
+const GLYPH: Record<InsightKind, IconName> = TEASER_FORMAT_ICON;
 
 const DAY = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -238,6 +234,8 @@ export function CardGrid({
   titleAs = 'h3',
   id,
   facts = false,
+  shelf = false,
+  after,
 }: {
   cards: readonly InsightItem[];
   meta?: MetaOptions;
@@ -249,12 +247,25 @@ export function CardGrid({
    * as a panel led by its format's glyph, so a row of mixed pieces ends level.
    */
   facts?: boolean;
+  /**
+   * A curated SHELF (the hub's problem sections, 26 Oct 2026 copy): every piece the copy names is a
+   * card, so a piece with no picture stands as the results' panel led by its format's glyph rather
+   * than dropping out; no topic tag, because the section's head already names the problem.
+   */
+  shelf?: boolean;
+  /** One more card after the pieces, its own `li` (a shelf's related service tile). */
+  after?: ReactNode;
 }) {
-  if (cards.length === 0) return null;
+  if (cards.length === 0 && !after) return null;
   return (
-    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
+    <ListingGrid id={id}>
       {cards.map((item) => {
         const pictured = Boolean(pictureOf(item));
+        /* A panel says its format: the glyph with the format's name beside it, on every panel, as
+           the resource rows set it (owner, 29 Oct 2026; decisions/2026-10-29-panel-names-its-format). */
+        const panel = pictured
+          ? {}
+          : { frame: 'panel' as const, icon: GLYPH[item.kind], eyebrow: LABEL[item.kind].one };
         return (
           <BlockCard
             key={item.id}
@@ -268,12 +279,30 @@ export function CardGrid({
               ? {
                   aside: dateOf(item.publishedAt),
                   tag: item.subject,
-                  ...(pictured ? {} : { frame: 'panel' as const, icon: GLYPH[item.kind] }),
+                  ...panel,
                 }
-              : {})}
+              : shelf
+                ? { tag: undefined, ...panel }
+                : {})}
           />
         );
       })}
+      {after}
+    </ListingGrid>
+  );
+}
+
+/**
+ * Every listing's card grid (owner, 29 Oct 2026: "/case-studies … what happened to using the same
+ * 3 card grid?"): three tracks from md, a `gutter` across and a `column` down (a borderless set's row
+ * seam), one column on a phone. The insights hub's shelves and the case-study index's groups both set
+ * their cards in THIS, so the two listings cannot drift into two grids again
+ * (decisions/2026-10-22-listings-share-one-structure). Its children are BlockCards at `tracks={3}`.
+ */
+export function ListingGrid({ id, children }: { id?: string; children: ReactNode }) {
+  return (
+    <Layout as="ul" id={id} columns={{ md: 3 }} colGap="gutter" rowGap="column">
+      {children}
     </Layout>
   );
 }
@@ -284,11 +313,17 @@ export function Feature({
   cards,
   meta,
   titleAs = 'h3',
+  shelf = false,
+  after,
 }: {
   lead?: InsightItem;
   cards: readonly InsightItem[];
   meta?: MetaOptions;
   titleAs?: 'h2' | 'h3' | 'h4';
+  /** The cards under the lead as a curated shelf's (CardGrid `shelf`). */
+  shelf?: boolean;
+  /** One more card after the cards (CardGrid `after`). */
+  after?: ReactNode;
 }) {
   return (
     <Layout rowGap="column">
@@ -309,7 +344,7 @@ export function Feature({
           />
         </ul>
       ) : null}
-      <CardGrid cards={cards} meta={meta} titleAs={titleAs} />
+      <CardGrid cards={cards} meta={meta} titleAs={titleAs} shelf={shelf} after={after} />
     </Layout>
   );
 }

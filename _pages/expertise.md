@@ -4,13 +4,13 @@ slug: expertise
 page_name: Expertise
 page_type: expertise_hub
 seo:
-  title: Product Design by Industry & Software Type | Tcules
-  description: 'Product design for your industry and type of software: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
+  title: 'Product Design Expertise by Industry and Software | Tcules'
+  description: 'Product design expertise by industry and software type: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
   canonical: https://www.tcules.com/expertise
   robots: index,follow
 social:
-  og_title: Product Design by Industry & Software Type | Tcules
-  og_description: 'Product design for your industry and type of software: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
+  og_title: 'Product Design Expertise by Industry and Software | Tcules'
+  og_description: 'Product design expertise by industry and software type: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules product and domain expertise.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Product Design by Industry & Software Type | Tcules
-  twitter_description: 'Product design for your industry and type of software: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
+  twitter_title: 'Product Design Expertise by Industry and Software | Tcules'
+  twitter_description: 'Product design expertise by industry and software type: B2B SaaS, AI, data, commerce, marketplaces, FinTech, HealthTech, EdTech, PropTech and energy.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: evaluate Tcules product and domain expertise
@@ -28,7 +28,16 @@ search_context:
   - Do you need experience in our exact industry?
   - Our product fits several pages. Where do we start?
   - How is this different from your services?
-  primary_query: product design expertise by industry
+  primary_query: 'product design expertise by industry'
+  secondary_queries:
+  - 'SaaS design by product type'
+  - 'UX design by industry'
+  - 'our product fits several industries'
+  - 'domain expertise in product design'
+  - 'do you need industry experience to design our product'
+  - 'which industries does Tcules work in'
+  - 'product design for regulated industries'
+  - 'expertise vs services'
 navigation:
   breadcrumb:
   - name: Home
@@ -54,17 +63,66 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - client-recognition
   - product-types
-  - industries
-  - overlap
-  - proof
+  - selected-work
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - services
   - faq
   - enquiry
 page_composition:
-  visual_plan: matrix_product_shape_x_domain_context
-  media_bindings: []
+  page_family: hub
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, hub order)
+  visual_plan: hub_chooser_by_product_type_and_industry_then_three_case_selected_work_then_studio_spine
+  selected_work:
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - ai-quality-control-expert-review-buildtwin
+  - wandering-raven-edtech-moodle-experience
+  why_tcules_reasons: [1, 6, 4]
+  hub_equivalent_of_industries_row: services (the chooser already lists every industry; the row lists the services we bring to them)
+  client_recognition:
+    component_type: client_logo_strip
+    placement: after_hero
+    clients:
+    - Doodle
+    - Dealpath
+    - Benchmark Gensuite
+    - Eden AI
+    - ConnectX
+    - JoVE
+    - Ringier Media Switzerland
+    asset_policy: Client relationship only; use approved assets, text fallback; do not imply a common role or outcome.
+  media_bindings:
+  - id: expertise_doodle_object_model
+    role: demonstrate
+    supports_section: selected-work
+    card: doodle
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (doodle_object_model)
+    alt_intent: Doodle object model connecting meeting priority, availability and scheduling behaviour
+  - id: expertise_buildtwin_review_feed
+    role: demonstrate
+    supports_section: selected-work
+    card: buildtwin
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (buildtwin_review_feed)
+    alt_intent: BuildTwin continuous expert-review feed for AI quality-control findings
+  - id: expertise_wandering_raven
+    role: demonstrate
+    supports_section: selected-work
+    card: the-wandering-raven
+    asset_uri: null
+    status: IMAGE_ASSET_REQUIRED
+    source: The Wandering Raven case has no bound screen; pull one from the live case media
+    alt_intent: The Wandering Raven learning world for young writers, themed inside Moodle
   testimonial_ids:
+  - FP-WANDERING-PICTURE
+  - CL-AUX-COMPLEXITY
+  - DRAFT-CURAMCARE-ONEILL
   - DRAFT-NOVUS-RESEARCHER
 structured_data:
   types:
@@ -73,7 +131,7 @@ structured_data:
   - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH5_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_HUB_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: NOT_COMPOSITION_VALIDATED
   production: NOT_PRODUCTION_VALIDATED
@@ -83,86 +141,158 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise.md; studio-spine hub rebuild 26 Oct 2026 evening (43-rollout-26-oct/log-hubs.md; hub order, one chooser for product types and industries, three selected pieces, spine sections word for word)
 ---
 
 *Expertise*
 
-# Product design expertise for your industry and type of software
+# Product design expertise by industry, matched to the product you run
 
-Work passing between roles, money changing hands, AI making suggestions, figures people must trust. Find the page closest to your product to see how we design for its hard part, with real project examples.
+Knowing a field shows in small places: screens in your users' own words, a status that means what your compliance lead expects, and a sales demo in the buyer's language. Tcules brings product design expertise by industry and product type to SaaS and other software, new or long established.
 
-[Start a conversation](#enquiry)
+Find the page closest to the product you're launching or improving. Each shows how we design for its hardest part, with real projects.
 
-*Selected work: Novus Insights · Dealpath · ConnectX*
+*Selected work: [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience)*
 
-## Start with the kind of product you run {#product-types}
+[Not sure which page fits? Tell us about your product](#enquiry)
 
-**[B2B SaaS & Workflow Software](/expertise/b2b-saas-workflow-software).** For products where deals, quotes, hires or approvals pass between several roles. We design shared records, a view for each role and a route for the cases that fall off the happy path.
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**[AI Products & Developer Tools](/expertise/ai-products-developer-tools).** For AI platforms, APIs and developer tools that people try once and then judge. First-time users find a way in, and experienced ones keep their speed.
+## Some of the teams we've worked with {#client-recognition}
 
-**[Data, Analytics & Decision Products](/expertise/data-analytics-decision-products).** For dashboards and reports customers open once a month, then forget. Figures people trust, each with a next step beside it.
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · JoVE · Ringier Media Switzerland
 
-**[Content, Knowledge & Discovery Platforms](/expertise/content-knowledge-discovery-platforms).** For knowledge bases, document libraries and large catalogues where search returns too much, or the wrong version. People find the right item and can tell which version counts.
+## UX design by industry and product type: find the closest page {#product-types}
 
-**[Commerce & Transactional Products](/expertise/commerce-transactional-products).** For stores and ordering systems where buyers must check fit, variants or delivery before they pay. Buyers get those answers on the product page, and orders stay clear after checkout.
+Six pages cover SaaS design by product type, and six cover industries. Many products fit one of each, so start with whichever holds the hardest part of yours.
 
-**[Marketplaces & Multi-Sided Platforms](/expertise/marketplaces-multi-sided-platforms).** For platforms that serve buyers, providers and the operations team in between. Buyers can trust who they book, providers see work worth taking, and your team can see when to step in.
+### By product type: what your product does
 
-## Or start with your industry {#industries}
+| Product type | Best for | How we design for it |
+|---|---|---|
+| [B2B SaaS & Workflow Software](/expertise/b2b-saas-workflow-software) | Products where deals, quotes, hires or approvals pass between several roles | We design shared records, a view for each role and a route for the cases that fall off the happy path. |
+| [AI Products & Developer Tools](/expertise/ai-products-developer-tools) | AI platforms, APIs and developer tools that people try once and then judge | We design so first-time users find a way in and experienced ones keep their speed. |
+| [Data, Analytics & Decision Products](/expertise/data-analytics-decision-products) | Dashboards and reports customers open once a month, then forget | We design figures people can trust, each with a next step beside it. |
+| [Content, Knowledge & Discovery Platforms](/expertise/content-knowledge-discovery-platforms) | Knowledge bases, document libraries and large catalogues where search returns too much, or the wrong version | We design search so people find the right item and can tell which version counts. |
+| [Commerce & Transactional Products](/expertise/commerce-transactional-products) | Stores and ordering systems where buyers must check fit, variants or delivery before they pay | We put those answers on the product page and keep orders clear after checkout. |
+| [Marketplaces & Multi-Sided Platforms](/expertise/marketplaces-multi-sided-platforms) | Platforms that serve buyers, providers and the operations team in between | We design so buyers can trust who they book, providers see work worth taking and your team sees when to step in. |
 
-**[FinTech & InsurTech](/expertise/fintech-insurtech).** Lending, payments and claims products. Every status and identity check gets explained, so customers stop calling to ask what is happening to their money.
+### By industry: the rules, money or health your product touches
 
-**[HealthTech](/expertise/healthtech).** Apps for patients and families, portals for healthcare professionals, and tools for staff. People who are worried or pressed for time can see where things stand and what happens next.
+| Industry | Best for | How we design for it |
+|---|---|---|
+| [FinTech](/expertise/fintech) | Lending, payments and business finance products | We explain each status and identity check, so customers can see what is happening to their money. |
+| [HealthTech](/expertise/healthtech) | Apps for patients and families, portals for healthcare professionals, and tools for staff | We design so people who are worried or pressed for time can see where things stand and what happens next. |
+| [EdTech & Learning](/expertise/edtech-learning) | Courses and learning platforms, often running inside an LMS such as Moodle | We design so learners know what to do next and teachers can spot who is stuck. |
+| [MarTech & SalesTech](/expertise/martech-salestech) | Marketing automation, CRM and quoting tools | We design reports that lead to action, and keep AI drafts apart from approved content. |
+| [PropTech, ConTech & Field Operations](/expertise/proptech-contech-field-operations) | Property, construction and field software used in offices and on sites | We keep one asset recognisable across screens, and let reviewers sign off with the source in view. |
+| [ClimateTech & Energy](/expertise/climatetech-energy) | Energy and sustainability software for operators, finance teams and sustainability leads | We keep live readings distinct from forecasts, and compare scenarios against a clear baseline. |
 
-**[EdTech & Learning](/expertise/edtech-learning).** Courses and learning platforms, often running inside an LMS such as Moodle. Learners always know what to do next, and teachers can spot who is stuck.
+## Selected work from different industries {#selected-work}
 
-**[MarTech & SalesTech](/expertise/martech-salestech).** Marketing automation, CRM and quoting tools. Reports lead to action, and AI drafts stay apart from approved content.
+Three products from three fields, each with its own hard part.
 
-**[PropTech, ConTech & Field Operations](/expertise/proptech-contech-field-operations).** Property, construction and field software used in offices and on sites. One asset looks the same on every screen, and reviewers sign off with the source in view.
+### Doodle: meeting times ranked by how likely they are to hold
 
-**[ClimateTech & Energy](/expertise/climatetech-energy).** Energy and sustainability software for operators, finance teams and sustainability leads. Live readings stay distinct from forecasts, and scenarios compare against a clear baseline.
+In enterprise scheduling across companies, an empty slot only helps if the meeting will happen. Our research showed that priority decides who makes time, so the bookability interface we designed compares possible times by how likely each one is to hold.
 
-## Products that fit more than one page {#overlap}
+[Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-Most do. [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) is workflow software and property software at once. [ConnectX](/case-studies/ai-native-building-energy-product-connectx) is an AI product, an energy product and a data product. Read the page closest to the hardest part of yours, then tell us about the rest.
+### BuildTwin: every AI check traceable, and open to challenge
 
-## Learning a field from the people in it {#proof}
+In structural engineering, a quality engineer signs off each drawing and has to defend the call. Our redesign of BuildTwin's AI review lets that engineer follow each check back to its source and overrule it, with the reason kept on the record.
 
-**Novus Insights.** Novus was exploring an AI-assisted product for writing survey questionnaires, aimed at brand managers and researchers. Before designing screens, we studied the market and competitors, interviewed stakeholders and built personas for brand-management roles.
+[Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-That groundwork set where the product starts: with the research question, before any survey questions appear. In the MVP we designed, the researcher stays responsible for wording and order, and any question they rewrite still shows what the AI first suggested. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+### The Wandering Raven: a writing world that holds together on Moodle
 
-<!-- awaiting client sign-off -->
+Learners aged eight to eighteen meet this creative-writing world on Moodle. After researching how educators and learners work, we revised the structure, designed a character-led visual world and carried it into Moodle with selected plugins and a custom theme.
+
+[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+## What clients say {#testimonials}
+
+> “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
+
+> “We were impressed with their lead designer and team because they understood our complex concepts.”  
+> **Ashok Mohanty, Founder, Auxentios**
+
 > “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
 > **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-## Why teams bring us their specialist products {#why-tcules}
+> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**We learn your field from your users and experts.** Interviews and research come before screens, so the design reflects how the work really happens.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-**Product design sits at the centre of our work.** Since 2017 we have completed more than 90 projects, for clients in 19 countries and across the industries above.
+## How we work together {#how-we-work-together}
 
-**We can build it as well.** When you want the product built, designers and engineers work together through the build. If your own engineers build it, they get designs with every state worked out.
+Whatever your industry, a good first piece of work is the part of the product that is hardest for your users.
 
-## Frequently asked questions {#faq}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-### Do you need experience in our exact industry?
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-It helps, and the pages above show where we have it. What matters more is understanding how work moves through your product: who acts, what can go wrong and what people need to trust. The specifics we learn from your team and your users.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** For [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), stakeholder interviews and personas for brand managers and researchers came before the MVP design, and they set where the product starts: with the research question.
+
+- **Senior people do the work, and clients keep us for years.** Three years into an ongoing partnership, Primelis still has us design every one of its products.
+
+- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, so the thinking behind how specialist buyers find and compare equipment reached the store they use.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Services we bring to every industry {#services}
+
+[Product Design](/services/product-design) · [New Product Design & First Release](/services/new-product-design-first-release) · [Product Modernisation](/services/product-modernisation) · [Design Systems](/services/design-systems) · [AI Product UX](/services/ai-product-ux) · [Design Engineering](/services/design-engineering) · [Software Development](/services/software-development) · [Audits & Assessments](/audits)
+
+## Questions about industry experience in product design {#faq}
+
+### Does a product design studio need experience in my industry?
+
+It helps, and the pages above show where we have it. The bigger advantage is a team that reads how work moves through a product: who acts, what can go wrong and what people need to trust. We learn the specifics from your team and your users.
+
+### How do you build domain expertise for a new field?
+
+Domain expertise in product design comes from the people who use the product and from your specialists. Interviews show each role's words, rules and worries, and your subject experts explain what the product must respect. Prototypes then go back to the same people, so their corrections reach the design early.
 
 ### Our product fits several pages. Where do we start?
 
-With the part that is hardest for your users. Tell us about the whole product and we'll draw on every kind of experience that applies.
+With the part that is hardest for your users. Many do: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) is workflow software and property software at once, and [ConnectX](/case-studies/ai-native-building-energy-product-connectx) is an AI product and an energy product. Tell us about the whole product, and we'll bring the relevant experience to that first piece, as a [pilot project](/how-we-work#engagement-shapes) or within a larger one.
 
 ### How is this different from your services?
 
-[Services](/services) describe the work we take on, such as Product Design or Software Development. These pages show how that work changes for a particular kind of product.
+[Services](/services) describe the work we do, such as Product Design or Software Development. These pages show how that work changes for a particular kind of product.
+
+### Which industries does Tcules design for?
+
+FinTech, HealthTech, EdTech, MarTech and SalesTech, PropTech and field operations, and ClimateTech and energy, plus six product types from workflow software to marketplaces. SaaS is our particular focus. They cover business and consumer software alike.
+
+### Do you design for regulated industries such as finance and healthcare?
+
+Yes. The [FinTech](/expertise/fintech) and [HealthTech](/expertise/healthtech) pages show how we design status updates, identity checks and next steps for people whose money or health is involved. Your compliance team keeps sign-off, and the design turns its rules into screens people understand.
+
+### Should we choose by industry or by product type?
+
+Start with product type when the hardest part is how the software works, such as work passing between roles or AI making suggestions. Start with industry when rules, money or health shape what people need to see. Plenty of products need both, so the pages link to each other.
 
 ## Tell us about your product {#enquiry}
 
-Say what it does, who uses it and what you'd like designed or changed. A link helps.
+Not sure which page fits? Say what your product does, who uses it and what you'd like designed or changed. A link helps.
 
 **Enquiry form**
 

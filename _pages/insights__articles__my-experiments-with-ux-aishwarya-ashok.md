@@ -1,37 +1,44 @@
 ---
 route: /insights/articles/my-experiments-with-ux-aishwarya-ashok
 slug: my-experiments-with-ux-aishwarya-ashok
-page_name: Aishwarya Ashok on building an AI-first product experience
+page_name: 'Aishwarya Ashok on the AI-first product experience: an interview'
 page_type: article
 seo:
-  title: Aishwarya Ashok on building AI-first products | Tcules
-  description: A July 2025 conversation with Aishwarya Ashok on researching users through their complaints and setting product principles before choosing features.
+  title: 'Aishwarya Ashok AI-first product interview | Tcules'
+  description: 'Aishwarya Ashok in an AI-first product interview with Tcules: researching users through their complaints, and writing product principles before features.'
   canonical: https://www.tcules.com/insights/articles/my-experiments-with-ux-aishwarya-ashok
   robots: index,follow
 social:
-  og_title: Aishwarya Ashok on building AI-first products | Tcules
-  og_description: A July 2025 conversation with Aishwarya Ashok on researching users through their complaints and setting product principles before choosing features.
+  og_title: 'Aishwarya Ashok AI-first product interview | Tcules'
+  og_description: 'Aishwarya Ashok in an AI-first product interview with Tcules: researching users through their complaints, and writing product principles before features.'
   og_image: https://www.tcules.com/assets/og/insights.png
   og_image_alt: Tcules social card headed Insights, on a white background with the Tcules wordmark.
   og_type: article
   article_published_time: '2025-07-07'
-  article_modified_time: '2026-09-08'
+  article_modified_time: '2026-10-26'
   og_url: https://www.tcules.com/insights/articles/my-experiments-with-ux-aishwarya-ashok
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Aishwarya Ashok on building AI-first products | Tcules
-  twitter_description: A July 2025 conversation with Aishwarya Ashok on researching users through their complaints and setting product principles before choosing features.
+  twitter_title: 'Aishwarya Ashok AI-first product interview | Tcules'
+  twitter_description: 'Aishwarya Ashok in an AI-first product interview with Tcules: researching users through their complaints, and writing product principles before features.'
   twitter_image: https://www.tcules.com/assets/og/insights.png
 search_context:
-  primary_intent: product interview on research practice and product principles
+  primary_query: 'Aishwarya Ashok AI-first product interview'
+  secondary_queries:
+  - 'Aishwarya Ashok interview'
+  - 'Aishwarya Ashok product principles'
+  - 'researching users through complaints'
+  - 'AI-first product experience'
+  - 'product principles before features'
+  primary_intent: 'Aishwarya Ashok AI-first product interview'
   primary_buyer_question: Where does a product manager find out what users actually think?
   key_entities:
   - Aishwarya Ashok
   - Stitchflow
   - My Experiments with UX
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -40,7 +47,7 @@ navigation:
     url: /insights
   - name: Articles
     url: /insights/articles
-  - name: Aishwarya Ashok on building an AI-first product experience
+  - name: 'Aishwarya Ashok on the AI-first product experience: an interview'
     url: /insights/articles/my-experiments-with-ux-aishwarya-ashok
 subscription:
   form: insights_newsletter
@@ -63,29 +70,38 @@ render:
   - write-the-principles-before-the-features
   - deciding-not-to-look-like-the-parent-company
   - what-to-take-from-it
+  - faq
+  - related-reading
 structured_data:
   types:
   - WebPage
   - Article
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   article_publisher_ref: https://www.tcules.com/#organization
   article_author_source: editorial.author
   article_date_published_source: editorial.published_at
   article_date_modified_source: editorial.modified_at
   article_date_published: '2025-07-07'
-  article_date_modified: '2026-09-08'
+  article_date_modified: '2026-10-26'
   article_authors:
   - type: Person
     name: Jatin Leuva
-    profile_url: null
-    profile_status: PROFILE_ROUTE_REQUIRED
+    profile_url: https://www.tcules.com/insights/authors/jatin-leuva
 editorial:
   author: Jatin Leuva
   reviewer: null
   published_at: '2025-07-07'
-  modified_at: '2026-09-08'
+  modified_at: '2026-10-26'
+  date_as_displayed: Updated 26 October 2026
   series: My Experiments with UX
+  reading_time_as_displayed: 4 min read
+  key_takeaways:
+  - "Aishwarya Ashok spends up to two hours a day reading where IT professionals discuss their work with peers, then takes those questions into research."
+  - "Her first act as product manager on VaniHQ was writing product principles, which guided the team for at least two years."
+  - "The principles split the team's energy between content and collaboration, which made collaboration a defining part of the product."
+  - "She decided early that VaniHQ should look different from Zoho, and gave it a character of its own in the interaction."
 release:
   content_state: CONTENT_READY
   site_release_state: SITE_RELEASE_HOLD
@@ -121,6 +137,8 @@ page_composition:
       write-the-principles-before-the-features: argument_thesis
       deciding-not-to-look-like-the-parent-company: argument_thesis
       what-to-take-from-it: argument_thesis
+      faq: faq
+      related-reading: related_link
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -144,34 +162,66 @@ page_composition:
 
 *Insights · Article*
 
-# Aishwarya Ashok on building an AI-first product experience
+# Aishwarya Ashok on the AI-first product experience: an interview
+
+By [Jatin Leuva](/insights/authors/jatin-leuva) · Published 7 July 2025 · Updated 26 October 2026 · 4 min read
 
 In Tcules’ July 2025 interview, Aishwarya Ashok describes her work in product and growth at Stitchflow. Before that, at Zoho, she took the visual collaboration product VaniHQ from an idea to beta. This is the second conversation in My Experiments with UX.
 
-By Jatin Leuva · Published 7 July 2025 · Updated 8 September 2026
+**Key takeaways**
 
-## Research where people complain, not where they are polite {#research-where-people-complain-not-where-they-ar}
+- Aishwarya Ashok spends up to two hours a day reading where IT professionals discuss their work with peers, then takes those questions into research.
+- Her first act as product manager on VaniHQ was writing product principles, which guided the team for at least two years.
+- The principles split the team's energy between content and collaboration, which made collaboration a defining part of the product.
+- She decided early that VaniHQ should look different from Zoho, and gave it a character of its own in the interaction.
+
+## Researching users through the complaints they share with peers {#research-where-people-complain-not-where-they-ar}
 
 Aishwarya spends between an hour and a half and two hours a day on Reddit, reading what IT professionals say to each other when no vendor is listening. "Understanding their rants is actually my go-to thing to do," she says. "That's where I get to deeply understand our audience."
 
-The useful difference is who the conversation is for. On Reddit, people describe problems to peers who may have met them too. Reading those discussions can reveal vocabulary, frustrations and workarounds to investigate in direct research. Aishwarya makes that listening part of her daily work.
+What makes Reddit useful is who the conversation is for. People describe problems to peers who may have met them too. Reading those threads can reveal vocabulary, frustrations and workarounds worth investigating in direct research. Aishwarya makes that listening part of her daily work.
 
-## Write the principles before the features {#write-the-principles-before-the-features}
+## Product principles before features: her first act on VaniHQ {#write-the-principles-before-the-features}
 
-Her first act as product manager on VaniHQ was not a roadmap. "The first ever thing that I did as a PM was actually drafting a whole principles pillar for what this product would look like, and then that became our guiding light for the next at least two years."
+Her first act as product manager on VaniHQ came before any roadmap. "The first ever thing that I did as a PM was actually drafting a whole principles pillar for what this product would look like, and then that became our guiding light for the next at least two years."
 
-The principles remained useful for at least two years. That is what makes this more than a document-writing exercise: the team had an agreed direction to return to while the product took shape.
+Because the principles stayed in use for at least two years, the team had an agreed direction to return to while the product took shape.
 
-The split it produced was explicit: "Our 50-60% energy went into the content bucket, […] but the remaining 40-50% went into the collaboration bucket". That split made room for collaboration as a defining part of the product, alongside the content people came to create.
+The principles produced an explicit split: "Our 50-60% energy went into the content bucket, […] but the remaining 40-50% went into the collaboration bucket". That split made room for collaboration as a defining part of the product, alongside the content people came to create.
 
-## Deciding not to look like the parent company {#deciding-not-to-look-like-the-parent-company}
+## Giving VaniHQ a character of its own, apart from Zoho {#deciding-not-to-look-like-the-parent-company}
 
-The other early decision was about identity. "The first ever decision I made was that this shouldn't look like Zoho." VaniHQ went out with its own character, down to floating tiles in its Catchup video calls and cursors with personality, in a market she puts at around 17.5 billion dollars.
+The other early decision was about identity. "The first ever decision I made was that this shouldn't look like Zoho." VaniHQ went out with its own character: floating tiles in its Catchup video calls and cursors with personality, in a market she puts at around 17.5 billion dollars.
 
-Aishwarya wanted VaniHQ to have its own identity. The floating tiles and expressive cursors gave that decision a place in the interaction itself. A shared design system needs room for this question: which parts of the experience benefit from family resemblance, and where does the product need its own character?
+The floating tiles and expressive cursors gave that decision a place in the interaction itself. A shared design system has to leave room for the same question: which parts of the experience benefit from family resemblance, and where does the product need its own character?
 
-## What to take from it {#what-to-take-from-it}
+## What product teams can take from the interview {#what-to-take-from-it}
 
-Two habits are worth trying. Follow a place where your users discuss their work with peers, then take the questions it raises into research. Write down the product principles early enough to use them in feature decisions, and revisit them when the evidence changes.
+Two habits are worth trying. Follow a place where your users discuss their work with peers, then take the questions it raises into research. Write down the product principles early enough to use them in feature decisions, and revisit them when what you learn changes.
 
-The first is [UX research](/services/product-design/ux-research). The second is closer to [design system strategy](/services/design-systems/design-system-strategy), where the question of what should be shared and what should stay local is the whole subject.
+The first is what [UX research](/services/product-design/ux-research) is for. The second is closer to [design system strategy](/services/design-systems/design-system-strategy), where deciding what to share and what to keep local is the whole subject.
+
+## Questions about the Aishwarya Ashok interview {#faq}
+
+These answers come from the interview as published on this page.
+
+### Who is Aishwarya Ashok?
+
+In July 2025 she worked in product and growth at Stitchflow. Before that, at Zoho, she took the visual collaboration product VaniHQ from an idea to beta. Hers is the second conversation in Tcules' My Experiments with UX series.
+
+### How can complaints be used as user research?
+
+In the interview, Aishwarya describes spending up to two hours a day reading what IT professionals say to each other when no vendor is listening. Those threads can reveal vocabulary, frustrations and workarounds. Our reading: treat them as leads to investigate in direct research with the people concerned.
+
+### Why set product principles before choosing features?
+
+On VaniHQ, Aishwarya drafted product principles before any roadmap, and she says they guided the team for at least two years. They also set an explicit split of the team's energy between content and collaboration, which made collaboration a defining part of the product.
+
+### What can product teams take from the Aishwarya Ashok interview?
+
+Our reading: two habits are worth trying. Follow a place where users discuss their work with peers and take the questions into research, and write product principles early enough to use in feature decisions. She also gave VaniHQ a look of its own, apart from Zoho.
+
+## Related reading from My Experiments with UX {#related-reading}
+
+- [Karthik Pasupathy interview: why should the core task come first?](/insights/articles/my-experiments-with-ux-karthik-pasupathy)
+- [UX Research](/services/product-design/ux-research): research that starts from the choice a team needs to make.

@@ -4,13 +4,13 @@ slug: ai-transparency
 page_name: AI Transparency
 page_type: policy
 seo:
-  title: How We Use AI on Client Projects | Tcules
-  description: How Tcules uses AI to research, design, prototype, test and build software, and how we agree an approach when your organisation has AI requirements.
+  title: 'AI Use Policy for Client Projects: How We Use AI | Tcules'
+  description: 'How Tcules uses AI on client projects: where it fits, how your material is handled, who reviews the work and how your own AI rules are agreed.'
   canonical: https://www.tcules.com/how-we-work/ai-transparency
   robots: index,follow
 social:
-  og_title: How We Use AI on Client Projects | Tcules
-  og_description: How Tcules uses AI to research, design, prototype, test and build software, and how we agree an approach when your organisation has AI requirements.
+  og_title: 'AI Use Policy for Client Projects: How We Use AI | Tcules'
+  og_description: 'How Tcules uses AI on client projects: where it fits, how your material is handled, who reviews the work and how your own AI rules are agreed.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules AI Transparency.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: How We Use AI on Client Projects | Tcules
-  twitter_description: How Tcules uses AI to research, design, prototype, test and build software, and how we agree an approach when your organisation has AI requirements.
+  twitter_title: 'AI Use Policy for Client Projects: How We Use AI | Tcules'
+  twitter_description: 'How Tcules uses AI on client projects: where it fits, how your material is handled, who reviews the work and how your own AI rules are agreed.'
   twitter_image: IMAGE_ASSET_REQUIRED
 navigation:
   breadcrumb:
@@ -35,6 +35,7 @@ render:
   - client-information
   - review
   - agreeing-an-approach
+  - faq
 release:
   content_state: BATCH5_DRAFT_2026-10-08
   site_release_state: SITE_RELEASE_HOLD
@@ -52,7 +53,16 @@ content_governance:
 search_context:
   primary_intent: understand Tcules AI use in client work
   primary_buyer_question: What can Tcules responsibly say about its use of AI in client work?
-  primary_query: Tcules AI transparency
+  primary_query: 'AI use policy for client projects'
+  secondary_queries:
+  - 'Tcules AI transparency'
+  - 'AI disclosure in client work'
+  - 'AI and client confidentiality'
+  - 'AI procurement requirements for suppliers'
+  - 'which AI tools does Tcules use'
+  - 'can we ask an agency to work without AI'
+  - 'do AI providers train on client material'
+  - 'agency AI use policy'
   supporting_questions:
   - Will you tell us which AI tools you use?
   - Can we ask you to work without AI?
@@ -72,35 +82,66 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
 ---
 
 *How we work · AI transparency*
 
-# How we use AI on client projects
+# How we use AI on client projects, with room for your own AI policy
 
-We use AI where it helps us research, design, prototype, test or build software. The tools may change from project to project. Our responsibility for the work we agree to deliver does not.
+AI is part of how we research, design, prototype, test and build software, and this page sets out where it sits. The tools change from project to project. Our responsibility for the work we agree to deliver stays the same.
 
-## Where AI fits into our work {#where-ai-fits}
+This page sets out how we work. The commitments for your project are written into its agreement, where you can hold us to them.
 
-Our teams may use AI-enabled tools to organise research material, explore alternatives, inspect product interfaces, develop prototypes, write or review code and support quality checks. People make the product decisions and assess work before it is delivered.
+## Where AI fits into client work, and when it is optional {#where-ai-fits}
 
-How much AI is useful depends on the task, the project and your requirements. It is not a prerequisite for working with us.
+Depending on the project, our teams use AI tools to organise research material, explore alternatives and inspect product interfaces. They also use them to develop prototypes, write or review code and support quality checks. People make the product choices and assess the work before it reaches you.
 
-## Client information and AI tools {#client-information}
+You decide how far AI reaches on your project, from wide use to none at all. Within that, how much we use depends on the task and the project.
 
-We use third-party services, including AI features within design, development and collaboration tools. Their data-handling arrangements can differ by provider, product and account.
+AI tools are taking on longer and more independent tasks, and our use of them will grow with that. Two things hold as it does: a person assesses what AI produces, and your rules are agreed before work starts.
 
-We handle project information under the confidentiality, access and data-use requirements applicable to the engagement. Where a project has specific restrictions on AI tools or information that may be shared with them, we address those requirements as part of the working arrangements.
+## AI and client confidentiality: how project information is handled {#client-information}
 
-## Review and responsibility {#review}
+We work with third-party services, including AI features within design, development and collaboration tools. Providers handle data in different ways, depending on the product and the account, so we choose the tools for your project with your rules in hand.
 
-AI-generated material is assessed in the context of the work it supports. Product decisions, research conclusions and deliverables remain subject to the judgement and review of the people responsible for them. Code intended for release follows the review, testing and acceptance arrangements agreed for the project.
+We treat project information according to the confidentiality, access and data-use terms that apply to your project. If a project restricts which AI tools we use, or what we share with them, we agree those limits with you. We record them in the project agreement.
 
-Our responsibilities, your team's responsibilities and any release approvals are defined by the engagement, rather than by whether a tool used AI.
+## Who reviews AI-assisted work, and who is responsible for it {#review}
 
-## Agreeing a suitable approach {#agreeing-an-approach}
+A person assesses AI-generated material against the work it supports. Product choices, research conclusions and finished work stay with the people responsible for them, and those people review them. Code intended for release goes through the review, testing and acceptance steps agreed for the project.
 
-If your organisation has AI, security, privacy or procurement requirements, tell us during scoping. We can discuss suitable tools, environments and restrictions, and record any specific commitments in the project agreement. Some requirements may affect the approach, scope or cost, which we will address before proceeding.
+The project agreement sets out our responsibilities, your team's responsibilities and any release approvals. Using an AI tool moves none of them.
+
+## Tell us your AI and procurement requirements before we start {#agreeing-an-approach}
+
+If your organisation has AI, security, privacy or procurement requirements, these steps come before any work starts:
+
+1. **You tell us your requirements** when we plan the project.
+
+2. **We discuss suitable tools with you**, with the environments and restrictions that go with them. For a particular tool or provider, we can go through its published terms with you.
+
+3. **We record specific commitments** in the project agreement.
+
+4. **We tell you before work begins** if a requirement changes the approach, scope or cost.
 
 Our [Privacy Policy](/privacy-policy) covers personal information more generally. To discuss a project, [contact us](/contact).
+
+## Questions about how we use AI on client projects {#faq}
+
+### Which AI tools does Tcules use?
+
+The tools change from project to project, and include AI features inside design, development and collaboration software. When we plan your project, we can agree which tools are used and record that in the project agreement.
+
+### Can we ask Tcules to work without AI?
+
+Yes. AI is optional, and you can work with us either way. If the restriction changes the approach, scope or cost, we tell you before work begins.
+
+### Do AI providers keep or train on our material?
+
+It depends on the provider, the product and the account, because their data-handling arrangements differ. If your project limits what may be shared with AI tools, we agree those limits with you and record them. For a particular provider, we can go through its published terms with you.
+
+### What should a design studio's AI use policy cover?
+
+It should say which tasks use AI, how client information is handled, who reviews what AI produces and how a client's own rules are agreed and recorded. This page covers each of those in turn.

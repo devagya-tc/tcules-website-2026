@@ -13,7 +13,8 @@ import { CURSOR, Focus, Glyph, Hatched } from './scenes';
  * what is not built, one focal point. Still, like every plate.
  *
  *   outcome-*     "What you get": the change each promise makes (a manual set aside, the rules behind
- *                 one switch, the awkward cases designed and handed to code, a card in every state)
+ *                 one switch, the awkward cases designed and handed to code, a card in every state, a
+ *                 brief sorted into in, waiting and out against the person who uses the product)
  *   symptom-*     "Where we start": each complaint drawn as the problem turning into its fix
  *   specialist-*  the specialist services, drawn bare on the bento's tiles
  *   case-*        a worked example's problem and what we did, drawn on the same screen so the change
@@ -231,6 +232,30 @@ function OutcomeFinished() {
   );
 }
 
+/**
+ * A tested brief: what goes in, what waits and what stays out, checked against the person who uses the
+ * product. The person's route arrives at the brief's settled scope, which carries the one check; what
+ * waits sits in a quiet panel with its clock, and what stays out is hatched, never built.
+ */
+function OutcomeBrief() {
+  return (
+    <>
+      <Glyph name="user" cx={40} cy={90} size={20} className={styles.glyph} />
+      <Hop x1={60} x2={100} y={90} />
+      <Rect x={100} y={30} w={72} h={120} rx={8} className={styles.frame} />
+      <Copy x={114} y={46} w={28} quiet />
+      <Rect x={114} y={58} w={44} h={14} className={styles.tile} />
+      <Rect x={114} y={80} w={44} h={14} className={styles.tile} />
+      <Focus x={136} y={124} glyph="check-circle" size={12} />
+      <Rect x={188} y={40} w={52} h={100} rx={8} className={styles.frameQuiet} />
+      <Glyph name="clock-circle" cx={214} cy={60} size={14} className={styles.glyphQuiet} />
+      <Rect x={198} y={80} w={32} h={12} className={styles.tile} />
+      <Rect x={198} y={100} w={32} h={12} className={styles.tile} />
+      <Hatched x={256} y={50} w={40} h={80} />
+    </>
+  );
+}
+
 /* ── Where we start ───────────────────────────────────────────────────────────── */
 
 /** "Customers keep getting stuck": the old path loops back at step two; the new one runs through. */
@@ -433,6 +458,49 @@ function SpecialistPrototype() {
   );
 }
 
+/** New Product Design & First Release: the prototype that holds everything, made the release that
+ *  holds one job for one person; what it leaves out is hatched, not built. */
+function SpecialistNewProduct() {
+  const widths = [52, 64, 40, 70, 46, 58, 36];
+  return (
+    <>
+      <Rect x={30} y={40} w={100} h={100} rx={8} className={styles.trailFrame} />
+      {[56, 68, 80, 92, 104, 116, 128].map((y, i) => (
+        <Copy key={y} x={44} y={y} w={widths[i] ?? 40} quiet />
+      ))}
+      <Hop x1={130} x2={170} y={90} />
+      <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={188} cy={50} size={14} className={styles.glyph} />
+      <Copy x={202} y={50} w={40} quiet />
+      <Rect x={180} y={66} w={100} h={36} rx={12} className={styles.halo} />
+      <Rect x={186} y={72} w={88} h={24} className={styles.region} />
+      <path className={styles.regionCopy} d="M196,84 L250,84" />
+      <Hatched x={186} y={112} w={88} h={14} />
+      <Hatched x={186} y={132} w={56} h={10} />
+    </>
+  );
+}
+
+/** UX & Product Audit: the team knows something is wrong somewhere on the screen; the lens finds what. */
+function SpecialistAudit() {
+  return (
+    <>
+      <Rect x={30} y={30} w={220} h={120} rx={8} className={styles.frame} />
+      <Copy x={46} y={50} w={60} quiet />
+      <Copy x={46} y={62} w={100} />
+      {[46, 110, 174].map((x) => (
+        <g key={x}>
+          <Rect x={x} y={84} w={52} h={44} className={styles.tile} />
+          <Copy x={x + 8} y={96} w={28} quiet />
+          <Copy x={x + 8} y={108} w={20} quiet />
+        </g>
+      ))}
+      <Lens x={136} y={106} r={24} />
+      <Focus x={136} y={106} glyph="danger-triangle" size={12} />
+    </>
+  );
+}
+
 /* ── A worked example: Dealpath ──────────────────────────────────────────────────
    Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.82, so the listing card, its
    "Add to pipeline" action and the pipeline column read at the plate's size. The two drawings share
@@ -540,6 +608,7 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-rules': OutcomeRules,
   'outcome-build': OutcomeBuild,
   'outcome-finished': OutcomeFinished,
+  'outcome-brief': OutcomeBrief,
   'symptom-stuck': SymptomStuck,
   'symptom-messy': SymptomMessy,
   'symptom-test': SymptomTest,
@@ -550,6 +619,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-ui': SpecialistUi,
   'specialist-dataviz': SpecialistDataviz,
   'specialist-prototype': SpecialistPrototype,
+  'specialist-new-product': SpecialistNewProduct,
+  'specialist-audit': SpecialistAudit,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -563,4 +634,6 @@ export const OFFER_DRAWN: Partial<
   'specialist-ui': [36, 26, 208, 128],
   'specialist-dataviz': [36, 26, 248, 128],
   'specialist-prototype': [26, 30, 280, 116],
+  'specialist-new-product': [26, 26, 268, 128],
+  'specialist-audit': [26, 26, 228, 128],
 };

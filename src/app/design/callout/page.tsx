@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Cluster, Layout, Prose, Section, type SectionSurface } from '@/components';
+import { Cluster, Icon, Layout, Prose, Section, type SectionSurface } from '@/components';
 import { ROUTES } from '@/lib/routes';
 import { Callout, Proof } from '@/patterns';
 
@@ -115,6 +115,19 @@ export default function CalloutSpecimenPage() {
           </Specimen>
           <Specimen title="Two sentences" note="The common complete shape.">
             <Callout html={TWO_SENTENCES} />
+          </Specimen>
+          <Specimen
+            title="icon · a glyph heads the note"
+            note="For a note that stands as its own band (/contact confidentiality): glyph, then key, then sentence, each on its own row. The caller composes the Icon and its size."
+          >
+            <Layout rowGap="stack">
+              <Callout html={TWO_SENTENCES} icon={<Icon name="shield-check" size="xl" />} />
+              <Callout
+                label="Scope"
+                html={ONE_SENTENCE}
+                icon={<Icon name="shield-check" size="xl" />}
+              />
+            </Layout>
           </Specimen>
           <Specimen
             title="tone=example · the worked example a set walks through"
@@ -419,11 +432,11 @@ export default function CalloutSpecimenPage() {
           <Layout rowGap="block">
             <h2>12 · The optional key</h2>
             <p>
-              Added 29 Sep 2026 (tracker 2.17, owner&rsquo;s decision): a scope note was visually
-              identical to a caption. An optional <code>label</code> leads the sentence as a mono
-              key — authored in sentence case, uppercased in CSS only — in a baseline-aligned
-              Cluster at <code>tight</code>. Beside the sentence while the line has room; above
-              it when it does not. Without a label, nothing changes.
+              Added 29 Sep 2026 (tracker 2.17, owner&rsquo;s decision): a scope note was
+              visually identical to a caption. An optional <code>label</code> leads the sentence
+              as a mono key — authored in sentence case, uppercased in CSS only — in a
+              baseline-aligned Cluster at <code>tight</code>. Beside the sentence while the line
+              has room; above it when it does not. Without a label, nothing changes.
             </p>
           </Layout>
           <Layout columns={2} colGap="gutter" rowGap="stack">
@@ -432,7 +445,9 @@ export default function CalloutSpecimenPage() {
             </Specimen>
             <Specimen
               title="With label"
-              note={'label="Scope" — the string stays "Scope" in the DOM and the accessibility tree.'}
+              note={
+                'label="Scope" — the string stays "Scope" in the DOM and the accessibility tree.'
+              }
             >
               <Callout label="Scope" html={TWO_SENTENCES} />
             </Specimen>
@@ -473,7 +488,10 @@ export default function CalloutSpecimenPage() {
               <Callout label="Scope of the qualitative evidence" html={TWO_SENTENCES} />
             </Layout>
           </Specimen>
-          <Specimen title="192px track" note="The key leads; the sentence wraps beneath at the floor.">
+          <Specimen
+            title="192px track"
+            note="The key leads; the sentence wraps beneath at the floor."
+          >
             <Layout className={s.trackXs}>
               <Callout label="Scope" html={TWO_SENTENCES} />
             </Layout>
@@ -487,8 +505,8 @@ export default function CalloutSpecimenPage() {
             <Layout rowGap="block">
               <h2>13 · The key on {surface}</h2>
               <p>
-                <code>--call-label-ink</code> resolves to <code>{label}</code>, one rung stronger
-                than the sentence&rsquo;s <code>{content}</code>.
+                <code>--call-label-ink</code> resolves to <code>{label}</code>, one rung
+                stronger than the sentence&rsquo;s <code>{content}</code>.
               </p>
             </Layout>
             <Layout columns={2} colGap="gutter" rowGap="stack">

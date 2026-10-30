@@ -1,1 +1,7 @@
-export { Bento, type BentoItem, type BentoProps } from './Bento';
+export {
+  Bento,
+  ServiceTile,
+  type BentoItem,
+  type BentoProps,
+  type ServiceTileProps,
+} from './Bento';

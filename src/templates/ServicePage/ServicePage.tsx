@@ -5,13 +5,15 @@ import {
   PageHero,
   type BreadcrumbItem,
 } from '@/patterns';
+import { Media } from '@/components';
+import { ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 import type { ServiceStory } from '@/lib/service-story';
 import { ANCHORS, ROUTES, servicePath } from '@/lib/routes';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { heroTrail } from '@/lib/trail';
 
 import { BandView } from './Bands';
-import { closeSurface, planBands, type Band } from './plan';
+import { planBands, type Band } from './plan';
 import { withStandIns } from './standIns';
 
 /** A band's React key: the id of the story entry it renders. */
@@ -107,10 +109,15 @@ export function ServicePage({
         <BandView key={bandKey(band)} band={band} labels={resolved.labels} slots={slots} />
       ))}
 
+      {/* The close is the enquiry island (owner, 29 Oct 2026; decisions/2026-10-29-forms-only-on-the-island):
+          brandeis, in halves, the sketch-to-shipped drawing over the words, the moving field. */}
       <CtaSection
         id={ANCHORS.enquiry}
         data-band="L"
-        surface={closeSurface(bands)}
+        island="blue"
+        islandArrangement="halves"
+        islandTexture="flow"
+        art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
         eyebrow={close.eyebrow}
         heading={close.heading}
         body={[close.body, close.note]}

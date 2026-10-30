@@ -4,13 +4,13 @@ slug: legacy-software-modernisation
 page_name: Legacy Software Modernisation
 page_type: service
 seo:
-  title: Legacy Software Modernisation, Done in Safe Stages | Tcules
-  description: 'Legacy software modernisation led by product design: find the rules and workarounds your business relies on, then replace the old system in safe stages.'
+  title: 'Legacy Software Modernisation Services, Design-Led | Tcules'
+  description: 'Legacy software modernisation services led by product design: map the rules your business relies on, then replace the old system in stages people work through.'
   canonical: https://www.tcules.com/services/product-modernisation/legacy-software-modernisation
   robots: index,follow
 social:
-  og_title: Legacy Software Modernisation, Done in Safe Stages | Tcules
-  og_description: 'Legacy software modernisation led by product design: find the rules and workarounds your business relies on, then replace the old system in safe stages.'
+  og_title: 'Legacy Software Modernisation Services, Design-Led | Tcules'
+  og_description: 'Legacy software modernisation services led by product design: map the rules your business relies on, then replace the old system in stages people work through.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Benchmark Gensuite legacy and redesigned attachments interface used in coded prototype review.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Legacy Software Modernisation, Done in Safe Stages | Tcules
-  twitter_description: 'Legacy software modernisation led by product design: find the rules and workarounds your business relies on, then replace the old system in safe stages.'
+  twitter_title: 'Legacy Software Modernisation Services, Design-Led | Tcules'
+  twitter_description: 'Legacy software modernisation services led by product design: map the rules your business relies on, then replace the old system in stages people work through.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: legacy application and software modernisation with Product Design
@@ -27,8 +27,22 @@ search_context:
   supporting_questions:
   - What makes software "legacy"?
   - Should we rebuild from scratch?
+  - Can we start with one part of the system?
   - Do you handle infrastructure and cloud migration?
-  primary_query: legacy software modernisation
+  primary_query: legacy software modernisation services
+  secondary_queries:
+  - legacy application modernisation services
+  - legacy application modernisation
+  - legacy application modernisation strategies
+  - legacy system modernisation
+  - incremental legacy modernisation
+  - legacy UI modernisation
+  - legacy modernisation for SaaS
+  - legacy software modernisation cost
+  - what makes software legacy
+  - should we rebuild from scratch
+  - modernise one part of the system first
+  - legacy modernisation and cloud migration
 navigation:
   breadcrumb:
   - name: Home
@@ -58,29 +72,46 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - discovery
-  - stages
-  - proof
+  - strategies
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: load_bearing_knowledge_map_behaviour_rules_data_integrations_operations_technical_constraints
   media_bindings:
-  - id: legacy_modernisation_benchmark
+  - id: legacy_modernisation_benchmark_scope_selector
     role: demonstrate
-    supports_section: proof
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    alt_intent: Benchmark Gensuite legacy and redesigned attachments interface used in coded prototype review.
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    alt_intent: Benchmark Gensuite's redesigned scope selector, the control every application in the suite depends on, with Browse, Recents and Favourites, and Nearby views.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: legacy_modernisation_gold_image_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
+  - id: legacy_modernisation_ryzeo_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
   testimonial_ids:
   - DRAFT-GOLDIMAGE-COMPONENTS
+  - SSOT-RUSSELL-MILER-COO-RYZEO
+  - DRAFT-KNOVOS-CANDOUR
   client_recognition:
     component_type: curated_client_recognition
     clients:
     - Benchmark Gensuite
     - Gold Image Printing
+    - Ryzeo
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -90,8 +121,17 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   proof_claim_policy: BENCHMARK_CODED_MODERNIZATION;NO_QUANTIFIED_ADOPTION_UPLIFT
   content_composition:
     primary_intent: legacy software modernisation services
@@ -132,7 +172,6 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - BENCHMARK_CODED_MODERNIZATION;NO_QUANTIFIED_ADOPTION_UPLIFT
 content_governance:
@@ -142,27 +181,59 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-modernisation__legacy-software-modernisation.md
 ---
 
-*For established SaaS and enterprise systems*
+*Product Modernisation · Legacy software*
 
-# Legacy software modernisation, one part at a time
+# Legacy software modernisation services that keep staff and customers working
 
-We map what your system really does, including the rules and workarounds nobody wrote down, then plan the order of change so staff and customers keep working.
+Legacy modernisation is for the staff who keep a spreadsheet open beside the old system, the customers whose orders still run through it, and the sales demo that opens with an apology. Tcules provides legacy software modernisation services for established products: a map of what the system really does, then change in stages.
 
-[Start a conversation](#enquiry)
+*Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-*Selected work: Benchmark Gensuite · Gold Image Printing*
+[Tell us about the system everyone's afraid to touch](#enquiry)
 
-## When old software starts holding the business back {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Nobody knows why it works this way, so nobody dares change it."** The rules live in the code and in a few people's heads.
+## What you get from legacy software modernisation {#what-you-get}
 
-**"Staff keep a spreadsheet open next to the system."** The workarounds have become the real process.
+Before anything is switched off, you know what the old system does and what each stage of the change will ask of the people using it. It is the part of our [Product Modernisation](/services/product-modernisation) work for systems whose rules are buried in old code.
 
-**"The storefront and the back office tell different stories."** Customer-facing and internal systems have drifted apart.
+**What you receive**
 
-## Find out what the old system is really doing {#discovery}
+- **A map of what the system really does.** Its behaviour, rules, data, connected systems and the workarounds people rely on, written down.
 
-Before recommending anything, we look at five places where an old system hides how it really works:
+- **A keep-or-change call on each rule.** Judged by what the rule does for your users and the business, with a reason for every rule that stays and a plan for every one that goes.
+
+- **A staged plan.** The order of change, and how the old and new systems share the work in between.
+
+- **Designs for each stage.** Screens, states and the move of people's saved work, ready for your engineers or ours.
+
+- **Help through each rollout.** Designers on hand while staff and customers move across.
+
+**Who does the work.** A senior designer leads and does the work, and owns what users notice: which rules carry over, how the new screens behave and how people move across. An account lead keeps the stages on track. Our [Software Development](/services/software-development) team builds agreed parts of a rebuild beside your platform team.
+
+**What we need from you.** The running system, staff we can watch at work, and whatever documentation exists for the system and the software connected to it.
+
+**Where our part stops.** Cloud migration and other infrastructure moves stay with your platform team or a specialist firm. We plan alongside them so product and platform move in step, and the product calls stay yours.
+
+## Selected legacy modernisation work {#selected-work}
+
+Work closest to this service: two legacy modernisations, and a redesign that started with reporting.
+
+### Benchmark Gensuite: shared building blocks first, then the scope selector
+
+Long-time users of Benchmark's safety and sustainability suite had fast habits on the old interface, and its archive controls behaved differently from one area to the next. We started with the shared building blocks, then redesigned the scope selector every application depends on, checked against those habits in coded prototypes. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Gold Image Printing: an order followed past checkout into the ERP
+
+Gold Image's online orders continue into artwork, production, scheduling, inventory and fulfilment inside an internal ERP. Watching staff use it showed that a change simplifying the order could still confuse production, so the store and the ERP workflows were redesigned together. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+
+### Ryzeo: reporting first, then rules for the rest
+
+Ryzeo's marketing-automation product had more known problems than one redesign could fix. Five research sources put reporting first, and the components and shared rules documented with it give later work across the product the same logic to follow. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+## First, map what the old system really does {#discovery}
+
+A product that has grown for a decade carries rules added for customers who left long ago, and a few that still hold the business together. Before recommending anything, we look in five places where an old system hides how it really works:
 
 - **Behaviour:** what the software allows, blocks, defaults to and recovers from.
 
@@ -174,15 +245,13 @@ Before recommending anything, we look at five places where an old system hides h
 
 - **People:** support routines, manual fixes and the workarounds that keep things running.
 
-Some of this should go. All of it should be understood before anything is switched off.
+We watch people use the current system, because the most important rules are often the ones nobody mentions.
 
-We watch people use the current system, because the most important rules are often the ones nobody mentions. On large products we also use AI tools to compare screens, states and documentation across the whole application, so fewer corners go unchecked. Our practitioners decide what each difference means.
+On large products we also use AI tools to compare screens, behaviour and documentation across the application, and our designers decide what each difference means.
 
-## Change in stages {#stages}
+The change itself runs as incremental legacy modernisation, in four stages that keep people working:
 
-For a while you run two products: the one customers use and the one replacing it. We plan the order so nobody loses work.
-
-1. **Start with the shared parts.** The buttons, forms and layouts every screen is built from.
+1. **Start with the shared parts.** The reusable pieces every screen is built from, such as buttons and layouts.
 
 2. **Try them in one real workflow.** A high-use feature where the change can be judged against real work.
 
@@ -190,49 +259,92 @@ For a while you run two products: the one customers use and the one replacing it
 
 4. **Extend where it pays.** Put the next round of effort where the product and its users gain most.
 
-## Following the work the old system still does {#proof}
+## Legacy application modernisation strategies: which fits each part? {#strategies}
 
-### Benchmark Gensuite: new patterns, familiar habits
+Engineers name seven strategies, and each part of an old system can take a different one. What matters to the business is what each strategy changes for the people who use it.
 
-Long-time users of Benchmark's environment, health and safety suite had built efficient habits on the old interface. A modernisation that broke those habits would cost them more than it gave.
+| Strategy | What changes | What users notice | Best for |
+|---|---|---|---|
+| **Retain** | Nothing, for now | Nothing | Parts that still work well and rarely change |
+| **Retire** | The part is switched off | A task moves elsewhere, or goes away | Features few people use, once their rules are checked |
+| **Rehost** | The system moves to new infrastructure as it is | Little or nothing | Reducing hosting risk before deeper change |
+| **Replatform** | The system moves to a newer platform with small changes | Renamed features and lost settings, unless the move is designed | Framework or cloud moves the product has to survive |
+| **Refactor** | The code is restructured and behaviour stays | Edge cases that behave differently | Code that blocks change while the product still works |
+| **Rebuild** | Parts are rebuilt on a new structure | New screens and new steps | Parts whose structure stops the product doing what the business needs |
+| **Replace** | An off-the-shelf product takes over | Someone else's workflow | Jobs that work the same way across your industry |
 
-We started with the shared building blocks, then redesigned the control every application in the suite uses to choose which part of the organisation you are looking at. Working prototypes in code let the team check the new selector against those habits before wider implementation.
+Moving to a new platform has its own page: [Replatforming Product Design](/services/product-modernisation/replatforming-product-design).
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+## What clients say {#testimonials}
 
-### Gold Image Printing: following an order past checkout
-
-Gold Image's online orders continue into artwork, production, scheduling, inventory and fulfilment inside an internal ERP. We watched staff use the existing system and traced orders beyond checkout.
-
-That showed how a change that simplified ordering could still confuse production staff. So we redesigned the storefront and ERP workflows together, created shared components first, and worked alongside Gold Image's technical team as the changes were implemented.
-
-<!-- awaiting client sign-off -->
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+> “We had a very old web application that looked out of date, so we wanted to update it. We’re impressed by how good they were at documenting their research and creating the user interaction flow. They were highly methodical and process-driven as well. We also appreciated that their team was willing to interview a lot of users for us.”  
+> **Russell Miler, COO, Ryzeo**
 
-## Why Tcules {#why-tcules}
+> “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
+> **Akshay Vyas, Creative Head, Knovos**
 
-**Product designers first.** We judge each old rule by what it does for users and the business, then decide whether it stays.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-**We can rebuild the parts that need it.** When part of the system needs rebuilding, our [Software Development](/services/software-development) team can take it on alongside the design work.
+## How we work together {#how-we-work-together}
 
-## Frequently asked questions {#faq}
+For legacy software, a good first piece of work is a map of what one area of the system really does, followed by one high-use workflow changed in full.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we redesigned the one listing action built on a wrong assumption and left the other three largely as users knew them.
+
+- **We prove the hard parts in code while they can still change.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer reviewing our coded prototypes asked whether drag and drop would need an external library, while that choice was still open.
+
+- **Senior people do the work, and clients keep us for years.** Primelis has kept us for three years, and we keep improving each of its products as they grow.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [Commerce](/expertise/commerce-transactional-products)
+
+## Legacy software modernisation FAQs {#faq}
 
 ### What makes software "legacy"?
 
-Software becomes legacy when its structure makes important change slow, risky or expensive. Age has little to do with it. Plenty of older systems still serve their users well.
+Software becomes legacy when its structure makes important change slow, risky or expensive. Age has little to do with it. Plenty of older systems still serve their users well, and Tcules keeps what they do well.
 
 ### Should we rebuild from scratch?
 
-Usually only in parts. We separate the knowledge worth keeping from the foundations that block you, and rebuild where the old structure genuinely stops the product. When that covers most of the system, a full rebuild is the right call.
+Usually not from scratch. Many legacy systems need parts rebuilt and the rest kept, so Tcules separates the knowledge worth keeping from the foundations that block you. When the old structure stops most of the product, a full rebuild is the right call.
 
-### Do you handle infrastructure and cloud migration?
+### Can we start with one part of the system?
 
-No. Infrastructure and cloud moves stay with your platform team or a specialist partner, and we work closely with them. We cover the product: workflows, interface and frontend, plus agreed software work through our development team.
+Yes. One high-use workflow makes a complete first stage, run as a pilot at a price agreed before work starts. If you first need to know which parts to keep, a [Product Modernisation Assessment](/audits/product-modernisation-assessment) of one workflow answers that.
 
-## Introduce us to the system everyone's afraid to touch {#enquiry}
+### Can you modernise just the legacy UI?
+
+Yes, when the rules underneath still do their job. A new interface on the existing system is the smaller change, and customers see the difference in the first stage. We map the rules first, so the new screens keep what the old ones enforced.
+
+### What does legacy application modernisation cost?
+
+It depends on how much of the system changes and which strategy each part takes. Mapping the system and modernising one workflow come first, priced before work starts, and later stages are priced once that first stage shows the size of the rest. [How pricing works](/how-we-work#engagement-shapes)
+
+## Tell us about the legacy system everyone's afraid to touch {#enquiry}
 
 Tell us what it still does well, what the business needs next and which workarounds keep it going.
 

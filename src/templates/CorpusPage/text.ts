@@ -58,6 +58,29 @@ export function boldLead(runs: readonly InlineRun[]): Lead | null {
   return { label: first.children, body: trimStart(rest) };
 }
 
+/**
+ * A step's lead as a whole sentence. "**1. We read your message** and a senior designer writes back."
+ * bolds the start of ONE sentence: promoted to a title as written, the step read "We read your
+ * message" over a body that began "and a senior designer…" (review 29 Oct, /contact). Where the bold
+ * label has no terminal punctuation and the body runs on in lower case, the label takes the rest of
+ * that first sentence, so the title is the sentence and the body what follows it. Words unchanged; a
+ * label with a link, or one that ends its own sentence, is returned as it is.
+ */
+export function sentenceLead(lead: Lead): Lead {
+  const label = inlineToText(lead.label).trim();
+  if (/[.:;?!…]$/.test(label) || lead.label.some((run) => run.type === 'link')) return lead;
+  const [first, ...rest] = lead.body;
+  if (first?.type !== 'text') return lead;
+  const match = /^(\s*[a-z][^.?!]*[.?!])\s*([\s\S]*)$/.exec(first.text);
+  if (!match) return lead;
+  const tail = match[2] ?? '';
+  return {
+    /* `boldLead` trims the body's leading space, so the join restores the one between the words. */
+    label: [...lead.label, { type: 'text', text: ` ${(match[1] ?? '').trimStart()}` }],
+    body: tail ? [{ type: 'text', text: tail }, ...rest] : rest,
+  };
+}
+
 /** A block as a label and a body, whichever of the spellings it was written in. */
 export function leadOf(block: CorpusBlock): Lead | null {
   if (block.type === 'labelled') return { label: block.label, body: block.body };
@@ -134,7 +157,9 @@ export function lastIndexWhere<T>(items: readonly T[], test: (item: T) => boolea
  * with (`[Tell us where quotes slow down](/contact).`): the link. A line like that is an ask, so it
  * becomes a button, and the button draws no full stop (page-mapping § 0 rule 1).
  */
-export function loneLink(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }> | null {
+export function loneLink(
+  runs: readonly InlineRun[],
+): Extract<InlineRun, { type: 'link' }> | null {
   const [first, second, ...rest] = runs;
   if (first?.type !== 'link' || rest.length > 0) return null;
   if (second === undefined) return first;

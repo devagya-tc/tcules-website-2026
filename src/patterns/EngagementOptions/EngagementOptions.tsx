@@ -54,7 +54,12 @@ export type EngagementOptionsProps = {
   /** The h2, the band's accessible name. */
   heading: string;
   headingId: string;
-  lead?: string;
+  /**
+   * The band's lead: one paragraph, or several stacked a `text` apart in the lead's column (the
+   * page's own opening line, then the shared "Bring what you have…", owner 29 Oct 2026). Each entry
+   * is one paragraph's inline content, the caller's links kept.
+   */
+  lead?: string | readonly ReactNode[];
   /**
    * Two to five options, peers: none is featured (a featured option reads as a recommendation). Five
    * set five across from 1440 (three from 1024) at the denser card steps, h5 over body-sm.
@@ -62,6 +67,27 @@ export type EngagementOptionsProps = {
   options: readonly EngagementOption[];
   /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
   note?: ReactNode;
+  /**
+   * The band's closing terms, each one paragraph's inline content (what we stop at; where the studio
+   * is), set side by side as equal terms under the options, each on its hairline: the terms-tile
+   * grammar of a What you get band (owner, 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head).
+   * Two or three; one column below 768.
+   */
+  terms?: readonly ReactNode[];
+  /**
+   * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
+   * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
+   * decisions/2026-10-29-how-we-work-together-link-in-head): at the inline end of the heading's
+   * row from 1024, vertically centred on the heading, a `column` (64) from it, the lead under that
+   * row; below 1024 a `block` under the heading. One action only: two links at the heading's end
+   * floated away from the words (decisions/2026-10-29-how-we-work-together-band).
+   */
+  action?: ReactNode;
+  /**
+   * Any further action, closing the band a `stack` under the terms: in practice a single-link
+   * `CtaRow` (on the offer pages "Tell us what you're working on").
+   */
+  actions?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
   /** Default `grid`. See `EngagementArrangement`. */
@@ -95,20 +121,47 @@ export function EngagementOptions({
   lead,
   options,
   note,
+  terms = [],
+  action,
+  actions,
   surface = 'paper',
   arrangement = 'grid',
 }: EngagementOptionsProps) {
   const shown = options.filter((option) => option.title.trim().length > 0);
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
+  /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
+  const three = shown.length === 3;
+  const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
   return (
-    <Section id={id} surface={surface} aria-labelledby={headingId} data-band="engagement-options">
+    <Section
+      id={id}
+      surface={surface}
+      aria-labelledby={headingId}
+      data-band="engagement-options"
+    >
       <Layout rowGap="stack">
-        <Layout rowGap="block">
+        {/* The head: the heading, the action at its end from 1024 centred on it (ContentSection
+            `actionsAt="end"`, the one rule for every head's end action), the lead under that row. */}
+        <Layout
+          columns={action ? { lg: [1, 'auto'] } : undefined}
+          colGap={action ? 'column' : undefined}
+          rowGap="block"
+          align={action ? 'center' : undefined}
+        >
           <h2 id={headingId} className={styles.heading}>
             {heading}
           </h2>
-          {lead ? <p className={styles.lead}>{lead}</p> : null}
+          {action ? <div>{action}</div> : null}
+          {leads.length > 0 ? (
+            <Layout rowGap="text">
+              {leads.map((paragraph, index) => (
+                <p key={index} className={styles.lead}>
+                  {paragraph}
+                </p>
+              ))}
+            </Layout>
+          ) : null}
         </Layout>
         {arrangement === 'grid' ? (
           /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
@@ -117,7 +170,13 @@ export function EngagementOptions({
              every borderless card set. */
           <Layout
             as="ul"
-            columns={dense ? { base: 1, md: 2, lg: 3, xl: 5 } : { base: 1, md: 2, lg: 4 }}
+            columns={
+              dense
+                ? { base: 1, md: 2, lg: 3, xl: 5 }
+                : three
+                  ? { base: 1, md: 3 }
+                  : { base: 1, md: 2, lg: 4 }
+            }
             colGap="gutter"
             rowGap="column"
           >
@@ -126,7 +185,9 @@ export function EngagementOptions({
                 <Layout rowGap="block">
                   {option.scope ? <Drawing scope={option.scope} /> : null}
                   <Layout rowGap="text">
-                    <h3 className={cx(styles.title, dense && styles.titleDense)}>{option.title}</h3>
+                    <h3 className={cx(styles.title, dense && styles.titleDense)}>
+                      {option.title}
+                    </h3>
                     <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
                   </Layout>
                 </Layout>
@@ -157,7 +218,23 @@ export function EngagementOptions({
             ))}
           </Layout>
         )}
+        {terms.length > 0 ? (
+          /* Equal terms side by side, each on its hairline (the What you get terms' grammar). */
+          <Layout
+            as="ul"
+            columns={{ base: 1, md: Math.min(terms.length, 3) }}
+            colGap="gutter"
+            rowGap="block"
+          >
+            {terms.map((term, index) => (
+              <li key={index} className={styles.term}>
+                <p className={styles.termText}>{term}</p>
+              </li>
+            ))}
+          </Layout>
+        ) : null}
         {note}
+        {actions}
       </Layout>
     </Section>
   );

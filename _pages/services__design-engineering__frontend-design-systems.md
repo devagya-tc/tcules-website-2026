@@ -4,13 +4,13 @@ slug: frontend-design-systems
 page_name: Frontend Design Systems
 page_type: service
 seo:
-  title: Frontend Design Systems & Component Libraries | Tcules
-  description: 'Frontend design systems for product teams: coded components with every state, keyboard support, tests and usage examples, built to fit your codebase.'
+  title: 'Frontend Design Systems for Complex Components | Tcules'
+  description: 'Frontend design systems for your hardest screens: data tables, editors and drag and drop, built in code with every state, keyboard behaviour and test.'
   canonical: https://www.tcules.com/services/design-engineering/frontend-design-systems
   robots: index,follow
 social:
-  og_title: Frontend Design Systems & Component Libraries | Tcules
-  og_description: 'Frontend design systems for product teams: coded components with every state, keyboard support, tests and usage examples, built to fit your codebase.'
+  og_title: 'Frontend Design Systems for Complex Components | Tcules'
+  og_description: 'Frontend design systems for your hardest screens: data tables, editors and drag and drop, built in code with every state, keyboard behaviour and test.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,18 +18,28 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Frontend Design Systems & Component Libraries | Tcules
-  twitter_description: 'Frontend design systems for product teams: coded components with every state, keyboard support, tests and usage examples, built to fit your codebase.'
+  twitter_title: 'Frontend Design Systems for Complex Components | Tcules'
+  twitter_description: 'Frontend design systems for your hardest screens: data tables, editors and drag and drop, built in code with every state, keyboard behaviour and test.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
-  primary_intent: coded frontend design-system implementation
-  primary_buyer_question: Which shared Product Design decisions should become dependable reusable behaviour in frontend code?
+  primary_intent: complex frontend components built in code
+  primary_buyer_question: Can Tcules build the components our hardest screens depend on, with every state, keyboard behaviour and test they need?
   supporting_questions:
   - Which frameworks do you work in?
-  - Can you improve a library our developers already built?
-  - Do we need a finished Figma library before you start?
-  - Can AI coding tools work with our component library?
+  - Can you fix a component our developers already built?
+  - Do we need a finished design first?
   primary_query: frontend design system
+  secondary_queries:
+  - component refactoring
+  - component states and variants in code
+  - Storybook component library
+  - shared UI components
+  - design system engineering
+  - coded design system
+  - accessible component library
+  - which frameworks for a design system
+  - fix components developers already built
+  - frontend design system without a finished design
 navigation:
   breadcrumb:
   - name: Home
@@ -59,29 +69,37 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - component-contract
-  - testing
-  - consuming-products
-  - proof
+  - which-do-you-need
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: component_meaning_api_states_tokens_behaviour_accessibility_tests_docs
   media_bindings:
-  - id: frontend_ds_benchmark
+  - id: frontend_ds_benchmark_attachments
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    alt_intent: Benchmark Gensuite coded prototype showing shared frontend behaviour tested against an established enterprise product.
+    alt_intent: 'Benchmark Gensuite''s attachments area, legacy beside redesigned, built in code first with nested folders, previews, reordering and the states shown while files move.'
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
+  - DRAFT-RYZEO-REPORTS
   - DRAFT-GOLDIMAGE-COMPONENTS
+  - DRAFT-DOODLE-COMPONENTS
+  - DRAFT-CURAMCARE-APPS
   client_recognition:
     component_type: curated_client_recognition
     clients:
     - Benchmark Gensuite
-    - Gold Image Printing
+    - GT Tools
+    - Ryzeo
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -91,12 +109,21 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   proof_claim_policy: CLIENT_SYSTEM_RELEASE_ARTIFACT_NEEDED;DO_NOT_CLAIM_MEASURED_ADOPTION
   content_composition:
-    primary_intent: frontend design system
-    recognition_count: 3
+    primary_intent: frontend design system for complex components
+    recognition_count: 1
     signature_model_type: component-correspondence
     proof_component: source_bound_named_case_or_explicit_proof_gap
     testimonial_component: verbatim_quote_with_source_scope_in_cms
@@ -109,13 +136,13 @@ page_composition:
     - Component state
     - Coded implementation
     - Test or story
-    - Adoption
+    - Use in the screen
     label: Editorial explanatory diagram; not a client artefact
     media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: GENERAL_STUDIO_ENDORSEMENT_NOT_ROUTE_SPECIFIC
+  testimonial_context: NO_QUOTE_ON_PAGE
   source_evidence_boundary: Existing cases demonstrate coded patterns and implemented frontend work, but not a verified organisation-wide Design System release outcome.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: A frontend system is only reusable when states, rules and intended behaviour carry through into implementation.
+  signature_proposition: A hard component is only finished when every state, keyboard rule and test is built into the screen that depends on it.
 structured_data:
   types:
   - WebPage
@@ -125,7 +152,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
@@ -134,7 +161,6 @@ release:
   - CLAIM_EVIDENCE_VERIFICATION
   - CLIENT_FRONTEND_SYSTEM_RELEASE_ARTEFACT_PREFERRED
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - CLIENT_SYSTEM_RELEASE_ARTIFACT_NEEDED;DO_NOT_CLAIM_MEASURED_ADOPTION
 content_governance:
@@ -146,84 +172,158 @@ content_governance:
 
 *Design Engineering · Frontend design systems*
 
-# A frontend design system your teams reuse instead of rebuild
+# Frontend design system engineering for the components developers avoid touching
 
-The coded layer of your design system: components with the options developers need, every state your products use, keyboard behaviour, tests and usage examples.
+A frontend design system is for the screens people spend their day in: the data table, the editor, the list they drag and reorder. It is also for the developer who has to change one of them next sprint. Tcules builds those components in code for SaaS teams, with every state, keyboard behaviour and test.
 
-[Start a conversation](#enquiry)
+*Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)*
 
-*Selected work: Benchmark Gensuite · Gold Image Printing · Matter*
+[Tell us which screen keeps breaking](#enquiry)
 
-## Where coded libraries let teams down {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Screen readers skip half our controls."** Accessibility was left to each product team.
+## What you get from frontend design system work {#what-you-get}
 
-**"Every app has its own table, and they all sort differently."** The shared version never handled real use.
+One hard component, the kind your busiest screens rest on, rebuilt in your codebase so your team can extend it and see what a change affects.
 
-**"Developers override styles to get anything done."** The component options don't match how screens are actually built.
+**What you receive**
 
-**"We can't tell whether a change will break something."** There are no stories, no tests and no release notes.
+- **The component, rebuilt in code.** A data table, rich text editor, complex form or drag-and-drop list, built in place on the screen that depends on it, with your real data.
 
-## What each shared component should define {#component-contract}
+- **Its contract.** Purpose, options, states, behaviour, accessibility and the real data it must handle, written down (an example follows below).
 
-A component is only worth sharing if using it correctly gets the product right. For each important component, we define:
+- **Every state on show.** Each one in Storybook, or the tool your team already uses, so designers, developers and testers look at the same thing.
 
-| Part | What it covers |
+- **Automatic checks.** Tests for appearance, behaviour and accessibility, run on every later change.
+
+- **Notes to extend it.** In your naming conventions, written so people and AI coding assistants pick up the component as it is instead of copying and changing it.
+
+**Who does the work.** Design engineers review the current code, keep what works and build the rest. When the component needs an option or a state the design never covered, they work it out with your designers and developers there and then.
+
+**What we need from you.** The current code, the screen that depends on the component, real data or a realistic sample, and the developer who will look after the component once it is handed back.
+
+**Where our part stops.** We work in one product. When several products need to share one set of components, that is [Design System Implementation](/services/design-systems/design-system-implementation).
+
+## Selected frontend design system work {#selected-work}
+
+The nearest work: one component built in code first, and two products where shared parts carry the screens.
+
+### Benchmark Gensuite: an attachments area built in code first
+
+For Benchmark's environment, health, safety and sustainability suite, we built the attachments area as a working prototype in HTML, CSS and JavaScript. It covered nested folders, previews, reordering and every state the screen shows while files move, and Benchmark's engineers checked it before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### GT Tools: a header that stays with the buyer
+
+We developed GT Tools' Shopify store from our own design. Its product pages carry long technical detail, so a persistent header keeps the price and add-to-cart in reach the whole way down. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+### Ryzeo: shared rules for filters, states and data
+
+Ryzeo's reporting redesign came with documented, reusable components. Filters, states and data treatments each got shared rules, so later reports can build on the same parts. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+## Component states and variants in code: what a hard component needs {#component-contract}
+
+A screen is only as dependable as the component it leans on. A button or a badge needs little of what follows. A data table, a rich text editor or a drag-and-drop list needs all of it, which is why we start there.
+
+*Illustration, not client work*
+
+The contract for a data table in a SaaS product's account list.
+
+| Part | What we define |
 |---|---|
-| Purpose | The job it does in your product, and when to use something else |
-| Options | The settings developers can pass in, and what each one may change |
-| States | Loading, empty, error, disabled, selected and role-based states |
-| Behaviour | Keyboard, focus, validation and transitions |
-| Accessibility | Screen-reader names, roles and keyboard rules |
-| Exceptions | When a product should keep its own version |
+| Purpose | Comparing and acting on many accounts at once; a simple list is used where nobody needs to compare |
+| Options | Which columns show, sorting, row selection, compact or comfortable density |
+| States | Loading, empty, filtered to nothing, failed to load, rows selected, read-only for viewers |
+| Behaviour | Arrow keys move between cells, Space selects a row, bulk actions appear once rows are selected |
+| Accessibility | Column headers and sort order read out by screen readers; focus never lost after a bulk action |
+| Real data | Long account names, missing values, very large lists loaded in pages, a save interrupted halfway |
+| Tests | Every state in Storybook, with checks for appearance, behaviour and accessibility on each change |
 
-A small button needs little of this. A data table needs all of it.
+Later changes run against those tests, so your team can see what a fix affects before it ships.
 
-## Every state visible and tested {#testing}
+## Frontend design system, shared library or frontend build: which do you need? {#which-do-you-need}
 
-We show each component's states outside the full application, usually in Storybook, so designers, developers and testers see them in one place. Those same examples feed automatic checks for appearance, behaviour and accessibility. If your team uses another tool, we work in that.
+| Option | What it covers | Best for |
+|---|---|---|
+| **Frontend design systems** | The few hardest components, built in code with states, keyboard behaviour and tests | One product whose key screens rest on fragile components |
+| **[Design System Implementation](/services/design-systems/design-system-implementation)** | A shared library in Figma and code | Several products that need one set of components |
+| **[Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment)** | The design library and coded components matched, family by family | Teams whose Figma and code disagree |
+| **[Frontend Development](/services/software-development/frontend-development)** | The whole interface built to the design | A full build with an agreed design |
 
-When a change will break existing screens, product teams get notice, a guide to moving across and time to do it.
+## What clients say {#testimonials}
 
-## Built for the products that use it {#consuming-products}
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
 
-A library proves itself inside products, so we follow it there. When a team hits a missing state or an awkward option, we decide together: change the shared component, add a new one, or let the product keep its own version. Your team keeps that way of deciding after we leave.
-
-If you need the Figma library, documentation and rollout as well, that is [Design System Implementation](/services/design-systems/design-system-implementation).
-
-## One set of components, more than one product {#proof}
-
-**Benchmark Gensuite.** We set the component direction for Benchmark's move to Bootstrap 5 and built the shared patterns into working HTML, CSS and JavaScript prototypes. Benchmark's engineers could inspect real component behaviour inside a heavily used feature, the scope selector, before wider migration. [Read the case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
-
-**Gold Image Printing.** We designed one shared set of interface components and a style guide, then applied them across two products: the customer storefront and the internal production ERP. We worked with Gold Image's technical team so the design fitted the systems already running. [Read the case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
-
-<!-- awaiting client sign-off -->
 > “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-**Matter.** The public Figma design system we created, showing how we name and structure components. [Explore Matter](/matter-design-system)
+> “Tcules reused our existing components wherever they could, and designed new ones only for the calendar and scheduling work our system didn't cover yet. Everything they added was organised to fit the system we already had.”  
+> **Stephanie Leue, Doodle**
 
-## Frequently asked questions {#faq}
+> “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-### Which frameworks do you work in?
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-The one your product already uses. We build components to fit your codebase, naming conventions and release process, so your developers can maintain them without us.
+## How we work together {#how-we-work-together}
 
-### Can you improve a library our developers already built?
+For a frontend design system, a good first piece of work is the component your team avoids touching, rebuilt with its states and its tests.
 
-Yes. We review what is there, keep what works, and add the missing states, tests and documentation without forcing a rewrite.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-### Do we need a finished Figma library before you start?
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-No. Many teams arrive with coded components and a Figma library that disagree, or with no Figma library at all. We start from the components your products use today. If the design side then needs bringing into line, that is [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment).
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-### Can AI coding tools work with our component library?
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-Yes. They reuse a library more reliably when each component's options and usage rules are written down next to examples. Your developers still review what the tools produce.
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-## Tell us which products should share components {#enquiry}
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-Share your component code, the products that use it and where the coded versions differ.
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We prove the hard parts in code while they can still change.** [ConnectX's](/case-studies/ai-native-building-energy-product-connectx) modules and digital twin first ran as a coded demo on sample data, where their behaviour could still change, before we took them to a production-ready module.
+
+- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we ran the UX audit, designed the store mobile first and built it on Magento, with a style guide to keep it consistent.
+
+- **We know what to leave alone in a product people rely on.** For [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) scheduling MVP, we kept Doodle's existing components for standard interactions and designed new ones only where the calendar and bookability work had nothing to use.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy)
+
+## Questions about frontend design systems {#faq}
+
+### Do you build an accessible component library?
+
+Yes. Keyboard use, focus order, labels and screen-reader behaviour go into each component as we build it, and we test them again on the screens that use it. Contrast and text size are checked, component by component, against the rules your design system sets.
+
+### Which frameworks do design system engineers work in?
+
+Most often React, or another mainstream framework your product already uses. Tcules builds components to fit your codebase, naming conventions and release process, so your developers can maintain them without us.
+
+### Can you fix a component our developers already built?
+
+Yes. Component refactoring starts with a review of what your developers built: Tcules keeps what works and adds the missing states, keyboard behaviour and tests. Your team's existing work carries on.
+
+### Do we need a finished design before building a frontend design system?
+
+No. Tcules often starts from a rough design or the version already in your product, and finishes the remaining states in code with your designers. When your Figma library and coded components disagree, [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment) is the wider job.
+
+### Can we start with one component?
+
+Yes, and most teams should. Start with the component that breaks most often or sits under the most screens, because its tests then protect every screen that uses it.
+
+## Tell us which screen keeps breaking {#enquiry}
+
+Share the screen, the component it depends on and what goes wrong when people use it.
 
 **Enquiry form**
 

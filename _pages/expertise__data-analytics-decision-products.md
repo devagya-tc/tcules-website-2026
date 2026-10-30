@@ -5,13 +5,13 @@ page_name: Data, Analytics & Decision Products
 page_type: expertise
 expertise_kind: product_shape
 seo:
-  title: Data Product Design for Analytics Software | Tcules
-  description: 'Data product design for analytics and reporting software: clear scope, numbers people trust and an obvious next step. Work for Benchmark Gensuite and Doodle.'
+  title: 'Data Product Design for Analytics Software | Tcules'
+  description: 'Data product design for analytics software: reports, scores and views that show what changed, why, and what to do next, with figures every role reads alike.'
   canonical: https://www.tcules.com/expertise/data-analytics-decision-products
   robots: index,follow
 social:
-  og_title: Data Product Design for Analytics Software | Tcules
-  og_description: 'Data product design for analytics and reporting software: clear scope, numbers people trust and an obvious next step. Work for Benchmark Gensuite and Doodle.'
+  og_title: 'Data Product Design for Analytics Software | Tcules'
+  og_description: 'Data product design for analytics software: reports, scores and views that show what changed, why, and what to do next, with figures every role reads alike.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,8 +19,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Data Product Design for Analytics Software | Tcules
-  twitter_description: 'Data product design for analytics and reporting software: clear scope, numbers people trust and an obvious next step. Work for Benchmark Gensuite and Doodle.'
+  twitter_title: 'Data Product Design for Analytics Software | Tcules'
+  twitter_description: 'Data product design for analytics software: reports, scores and views that show what changed, why, and what to do next, with figures every role reads alike.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: data analytics and decision product design
@@ -30,7 +30,19 @@ search_context:
   - How should we show uncertain or incomplete data?
   - How do you handle customers who each want their own reports?
   - Who decides how our metrics are calculated?
-  primary_query: data product design
+  - Can we start with one report?
+  primary_query: 'data product design'
+  secondary_queries:
+  - 'analytics product design'
+  - 'analytics software UX design'
+  - 'data product design principles'
+  - 'reporting UX design'
+  - 'decision support software design'
+  - 'embedded analytics UX'
+  - 'BI product UX'
+  - 'show uncertain or incomplete data'
+  - 'customers who want their own reports'
+  - 'get customers to act on analytics'
 navigation:
   breadcrumb:
   - name: Home
@@ -58,66 +70,87 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: definition_comparison_context_uncertainty_action
+  selected_work:
+  - benchmark-gensuite-enterprise-suite-modernisation
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - ryzeo-marketing-automation-ux-revamp
+  why_tcules_reasons: [1, 6, 4]
   case_study_slugs:
-  - ai-native-building-energy-product-connectx
-  - enterprise-workflow-redesign-dealpath-real-estate
-  - novus-insights-ai-survey-product-design
+  - benchmark-gensuite-enterprise-suite-modernisation
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - ryzeo-marketing-automation-ux-revamp
   media_bindings:
-  - id: data_decision_asset
+  - id: data_benchmark_scope_selector
     role: demonstrate
-    supports_section: proof
-    status: ASSET_REQUIRED
-    communication_job: Show an approved data/decision surface where comparison, baseline, uncertainty and action are visible.
+    supports_section: selected-work
+    card: benchmark-gensuite
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    source: current public Tcules case media (case-studies__benchmark-gensuite-enterprise-suite-modernisation.md, benchmark_scope_selector)
+    alt_intent: Redesigned Benchmark Gensuite scope selector in three views, each stating its own search boundary.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: data_doodle_object_model
+    role: demonstrate
+    supports_section: selected-work
+    card: doodle
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
+    source: current public Tcules case media (case-studies__doodle-case-study-automating-enterprise-meeting-scheduling.md, doodle_object_model)
+    alt_intent: Doodle object model linking meeting priority and tentative availability to the bookability score.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: data_ryzeo_card
+    role: demonstrate
+    supports_section: selected-work
+    card: ryzeo
+    asset_uri: null
+    source: no product screen in the Ryzeo case files yet; text card until the screen library supplies one
+    status: SCREEN_REQUIRED
   testimonial_ids:
-  - DRAFT-RYZEO-REPORTS
-  client_recognition:
-    component_type: curated_client_recognition
-    clients:
-    - Benchmark Gensuite
-    - Doodle
-    - Ryzeo
-    placement: compact_hero_followup
-    label: Selected Tcules client relationships across the practice
-    source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
+  - DRAFT-RYZEO-REPORTING
+  - DRAFT-DOODLE-RESEARCH
+  - DRAFT-TREADCOMMAND-DASHBOARD
+  testimonial_context: 'CURATED_VERBATIM_CLIENT_VOICE (all three voices registered for data and analytics)'
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
-  proof_claim_policy: CONNECTX_INTERIM_DATA;DEDICATED_ANALYTICS_ARTIFACT_NEEDED
-  content_composition:
-    primary_intent: data product design
-    recognition_count: 3
-    signature_model_type: decision-surface
-    proof_component: source_bound_named_case_or_explicit_proof_gap
-    testimonial_component: verbatim_quote_with_source_scope_in_cms
-    form_anchor: enquiry
-    mobile_table_policy: stack_as_labelled_rows
-  signature_explanatory_object:
-    type: decision-surface
-    sequence:
-    - Decision
-    - Meaning of metrics
-    - Useful comparison
-    - Exception or signal
-    - Action
-    label: Editorial explanatory diagram; not a client artefact
-    media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: GENERAL_STUDIO_ENDORSEMENT_NOT_ROUTE_SPECIFIC
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    verified_client_reviews_separately: 12
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - Benchmark Gensuite
+    - Doodle
+    - Ryzeo
+    - TreadCommand
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
+  proof_claim_policy: CONNECTX_CODED_DEMO_ON_INTERIM_DATA_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025;DEDICATED_ANALYTICS_ARTIFACT_NEEDED
   source_evidence_boundary: Current cases demonstrate decision-support patterns; a standalone quantified dashboard-improvement case is not yet approved.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: The strongest starting point is the decision someone owns, not the chart type the product already supports.
 structured_data:
   types:
   - WebPage
@@ -135,100 +168,185 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
-  - CONNECTX_INTERIM_DATA;DEDICATED_ANALYTICS_ARTIFACT_NEEDED
+  - CONNECTX_CODED_DEMO_ON_INTERIM_DATA_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025;DEDICATED_ANALYTICS_ARTIFACT_NEEDED
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__data-analytics-decision-products.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__data-analytics-decision-products.md; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct, tag ind1; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · data and analytics products*
 
-# Dashboards that show users what to do next
+# Data product design for analytics that shows users what to do next
 
-We design analytics products, reports and dashboards around the questions users bring: what changed, why, and what should I do about it? Fewer charts to decode.
+A customer opens your analytics on Monday to see what changed. By Thursday two of their teams are quoting its figures in one meeting, and your support team hears when those figures disagree. Tcules provides data product design for analytics, embedded reports and scores in SaaS products and data platforms.
 
-[Start a conversation](#enquiry)
+[Tell us what your users ask the data](#enquiry)
 
-*Selected work: Benchmark Gensuite · Doodle · Ryzeo*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Why customers stop opening your analytics {#hard-parts}
+## What we design in data and analytics products {#what-we-design}
 
-**"They log in for the monthly report, then disappear."** Between reports, nothing in the product gives them a reason to come back.
+- **Customer-facing reports and dashboards** inside a SaaS product · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
-**"Two teams, two numbers, one metric."** People stop trusting a figure when they cannot see how it was defined or what it covers.
+- **Scores** that show what they are based on · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-**"The dashboard says what happened, then stops."** There is no route from a worrying trend to the action that fixes it.
+- **Multi-site data** filtered to the right part of the organisation · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-**"Every new customer asks for a custom view."** Each request becomes a one-off, and the product slowly fills with special cases.
+- **Operational dashboards** for tyre shop software · TreadCommand
 
-## The four questions every data screen must answer {#approach}
+- **Ask-the-data analytics**, where users type a question · Answers held to the same standard as any chart
+
+## Selected data product design work {#selected-work}
+
+### Benchmark Gensuite: a scope selector in three views
+
+Every application in Benchmark Gensuite's suite depends on the selector that sets which part of the organisation people work in. We redesigned it as three views, Browse, Recents and Favourites, and Nearby, each with a stated search boundary. Benchmark's engineers reviewed it as a coded prototype before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Doodle: one interview found the missing variable
+
+Doodle was exploring enterprise scheduling across companies, and the brief looked like automation. One interview showed that whether someone is free depends on how much the meeting matters. Priority joined the product's model, beside meeting type and tentative weekly schedules. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+### Ryzeo: reports customers can tailor on shared rules
+
+Ryzeo's ecommerce customers wanted more useful insights from their reports. We researched how they used reporting, reorganised how reports are structured and designed how customers tailor a view, backed by documented rules for filters, states and how data is shown. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+## Where analytics products get hard: the four questions behind every screen {#hard-parts}
 
 | What the user asks | What the product has to show |
 |---|---|
 | What am I looking at? | The scope, filters and time period, stated plainly |
 | Compared with what? | A baseline, target, previous period or scenario |
-| Can I trust this number? | How it is worked out, how fresh it is and what is missing |
+| Can I trust this number? | How it is calculated, how fresh it is, what is missing |
 | What should I do now? | The available action, with the supporting figures close by |
 
-We start with these questions and the people asking them. Chart types come last. A score with no explanation invites either blind faith or none at all.
+We start with these questions and the people asking them, including the questions that send them to a spreadsheet. Chart types come last.
 
-## Numbers that say what they're based on {#proof}
+### What am I looking at, and compared with what?
 
-### Benchmark Gensuite: making clear what a result covers
+Two teams, two numbers, one metric: people stop trusting a figure when they cannot see how it was defined or what it covers. The screen states the scope, filters, period and baseline, so every role reads a number the same way.
 
-Every application in Benchmark Gensuite's environment, health, safety and sustainability suite depends on one control: the selector that sets which part of the organisation you are working in. Pick the wrong one and the wrong figures appear, with nothing to warn you.
+Your data team owns the calculation; we make its definition visible and raise disagreements while they are cheap to resolve.
 
-We split the selector into three views, each saying plainly what it searches: the full organisation, your recent and favourite places, and sites near you. Benchmark's engineers tried it as a working prototype in code.
+Data access shapes the screens as much as the charts do. Row-level permissions decide who sees which customer, region or site, and GDPR's data minimisation principle favours showing each person only what their role needs. A restricted view should read as a permission, never as a fault.
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+Example: in Benchmark Gensuite's suite, a person who picks the wrong scope sees the wrong data, presented confidently. That is why each view of the redesigned selector says what it searches. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-### Doodle: a score that says what it is based on
+### Can I trust this number?
 
-Doodle's scheduling MVP needed to suggest meeting times across organisations. We designed a bookability score that combines meeting type, priority and tentative availability, so organisers read it as a guide to how dependable a time is, not a promise.
+A score with no explanation invites blind faith or none at all. Each figure shows how it is worked out, how fresh it is and what is missing.
 
-[Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+Empty, partial and late data are designed up front, so a gap reads as a gap and nobody mistakes it for zero. When users ask the data a question in plain words, the AI's answer meets the same standard as any chart.
 
-### Ryzeo: reports people can tailor without losing the thread
+Example: in our design for Doodle's scheduling MVP, the bookability score was tied visibly to meeting type, priority and tentative availability, so an organiser could weigh it as a guide. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
-Ryzeo's ecommerce customers wanted reports that answered their own questions. Custom reports help, but they also bring set-up work and figures that disagree. We reorganised the report information, designed how customers tailor a view to what they need, and documented shared components so later reports follow the same rules.
+### What should I do now?
 
-<!-- awaiting client sign-off -->
+Customers log in for the monthly report, then disappear, because nothing between reports gives them a reason to return.
+
+For every number that matters, we work out what a user would do if it moved, and give that step a place on the same screen. A summary that lands in the inbox, or an AI explaining a dip, has to answer the same four questions.
+
+Example: we framed Ryzeo's reporting redesign around four questions a good report answers: what happened, what may have contributed, what needs attention and what to do next. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+## What you get when Tcules designs your analytics product {#what-you-get}
+
+We design analytics around the questions people bring, on definitions your data team agrees.
+
+**What you receive**
+
+- a plain definition, scope and freshness rule for each figure that matters, agreed before any chart is drawn
+
+- views for analysts, managers and customers at different depths, on the same definitions
+
+- reports, scores and charts that show their baseline and what they rest on
+
+- the next step placed beside the figure that prompts it
+
+- screens for missing, late, partial and restricted data
+
+- saved views and filters in place of one-off custom reports
+
+- prototypes with real or realistic figures, because tidy sample numbers hide the hard cases
+
+**Who does the work.** The work is led by a senior product designer who does it hands-on, and an account lead keeps it on course. Design engineers build the views that need real numbers to judge.
+
+**What we need from you.** The questions each role opens the product to answer, your data team's time on definitions, real data or a realistic sample, your usage analytics, and a product owner who can agree changes.
+
+**Where our part stops.** Pipelines, warehouses, metric calculations and models stay with your data team or BI vendor.
+
+One dashboard or chart set people misread may need only [dashboard design](/services/product-design/data-visualisation). Usage falling with no clear cause suits a [UX & Product Audit](/audits/ux-product-audit), and report screens that have drifted apart, [Design System Strategy](/services/design-systems/design-system-strategy).
+
+## What clients say {#testimonials}
+
 > “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
 > **Russell Miler, COO, Ryzeo**
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+> “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
+> **Stephanie Leue, Doodle**
 
-## Why data teams bring us in {#why-tcules}
+> “Tcules designed the UX and UI for the SaaS dashboard in our tyre shop software. They were easy to work with and communicate with throughout.”  
+> **Kalpesh Gohill, Founder & CEO, TreadCommand**
 
-**Definitions are part of the design.** How a figure is worked out, what it covers and how fresh it is all sit in the interface, so every role reads a number the same way.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-**Your engineers can try it before they build it.** For Benchmark Gensuite, the design ran in code, so its engineers could click through the real behaviour while it was still cheap to change.
+## How we work together {#how-we-work-together}
 
-For dashboards and chart design as a standalone project, see [Data Visualisation](/services/product-design/data-visualisation).
+For an analytics product, a good first piece of work is the report customers open once a month and then forget, redesigned around the questions they bring to it.
 
-## Questions about analytics products {#faq}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** Before redesigning four of Scissors' staffing workflows, we modelled how its clients, candidates, jobs and talent pools connect. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+
+- **Senior people do the work, and clients keep us for years.** Our designers have worked on all of Primelis' products for the past three years, as an ongoing partnership.
+
+- **One studio can take it into working software, with the designers staying in the build.** We took ConnectX's coded demo through to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about data product design {#faq}
 
 ### How do we get customers to act on what our analytics show?
 
-Put the action beside the figure that prompts it. For each important number, we work out what a user would do if it moved, then give that step a place on the same screen, with the supporting figures in view.
+Put the action beside the figure that prompts it. For each important number, Tcules works out what a user would do if it moved, and that step gets a place on the same screen.
 
 ### How should we show uncertain or incomplete data?
 
-Show it where it would change what someone does: a range, a missing-data marker or a note on how recent the figures are. Uncertainty that changes nothing can stay out of the way.
+Where it would change what someone does: a range, a missing-data marker or a note on how recent the figures are. Uncertainty that changes nothing stays out of the way.
 
-### How do you handle customers who each want their own reports?
+### How do we handle customers who each want custom reports?
 
-We look for the questions behind the requests. Most come down to a handful that recur, which become saved views and filters on shared definitions, so a new customer rarely needs new screens.
+Look for the questions behind the requests. Most come down to a handful that recur, and those become saved views and filters on shared definitions, so most new requests become a saved view in place of a new screen.
+
+### Do you design embedded analytics inside SaaS products?
+
+Yes. Ryzeo's customer-facing reporting is one example: we researched how its ecommerce customers used reports, then reorganised the structure and designed how customers tailor a view. Embedded analytics has to match the rest of the product and answer questions about the customer's own account.
 
 ### Who decides how our metrics are calculated?
 
-Your data team owns the calculations. We make the definitions visible in the product and raise disagreements early, while they are still cheap to settle.
+Your data team owns the calculations. Tcules makes the definitions visible in the product and raises disagreements early, so every role reads a figure the same way.
 
-## Send us the dashboard customers stopped opening {#enquiry}
+## Show us the dashboard customers stopped opening {#enquiry}
 
 Add who it is for and the question it should answer.
 

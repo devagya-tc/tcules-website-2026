@@ -54,7 +54,7 @@ export const ROUTES = {
   marketplaces: '/expertise/marketplaces-multi-sided-platforms',
   contentDiscovery: '/expertise/content-knowledge-discovery-platforms',
   commerce: '/expertise/commerce-transactional-products',
-  fintech: '/expertise/fintech-insurtech',
+  fintech: '/expertise/fintech',
   healthtech: '/expertise/healthtech',
   edtech: '/expertise/edtech-learning',
   martech: '/expertise/martech-salestech',
@@ -279,6 +279,27 @@ export const CASE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
     'saas-ux-ui-case-study-research-and-object-oriented-ux-for-staffing-agencies-software',
   'wandering-raven-edtech-moodle-experience':
     'transforming-an-edtech-platform-into-an-engaging-learning-experience',
+};
+
+/**
+ * A path the copy links → the path the piece lives at on Strapi today, for an insight the copy files
+ * under another format or slug. The home page's Eden AI episode is linked as a podcast; the live page
+ * is a video (review 29 Oct 2026). The corpus seam rewrites every link to the live path, and
+ * next.config.ts serves the copy's path as a temporary redirect, the way it does a case's slug.
+ */
+export const INSIGHT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
+  '/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo':
+    '/insights/videos/do-ai-not-for-ai-sake-but-for-your-user-insights-from-eden-ai-ctpo',
+};
+
+/**
+ * The copy's expertise slug → the slug the page lives at on Strapi today. The 26 Oct 2026 copy renamed
+ * `/expertise/fintech-insurtech` to `/expertise/fintech` (its `redirect_from`); until that page renders
+ * from the corpus, next.config.ts serves the new path as a temporary redirect to the live one, so every
+ * link to ROUTES.fintech opens a real page. The entry goes when the page switches to the corpus.
+ */
+export const EXPERTISE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
+  fintech: 'fintech-insurtech',
 };
 
 /** A placeholder case link: the case index, marked so every one can be found and replaced. */

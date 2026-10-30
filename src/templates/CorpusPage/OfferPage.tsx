@@ -36,9 +36,10 @@ export function OfferPage({
   ratings,
   avatars,
   scenes,
+  reasonFigure,
 }: OfferPageProps) {
   const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes };
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure };
 
   const drawing = page.route.startsWith('/services/')
     ? serviceIllustration(page.slug)
@@ -65,7 +66,8 @@ export function OfferPage({
 
   return (
     <>
-      {/* The hero's "Selected … work:" line names the cases the page lists further down; where it
+      {/* The studio's record line is the hero's figures: CorpusHero reads it from the hero itself
+          (decisions/2026-10-29-studio-record-is-figures). The hero's "Selected … work:" line names the cases the page lists further down; where it
           does list them (a case band), the line only repeats that list and read as unfinished
           (owner, 11 Oct 2026), so it is not rendered. Logged as proposal P46. */}
       <CorpusHero

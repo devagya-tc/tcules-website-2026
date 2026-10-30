@@ -4,7 +4,7 @@ import { Layout, Section, type SectionSurface } from '@/components';
 import { CARD_THREE_TRACKS } from '@/lib/image-sizes';
 import { getKitPhoto } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
-import { Teaser, type TeaserMedia } from '@/patterns';
+import { Teaser, TEASER_FORMAT_ICON, type TeaserMedia } from '@/patterns';
 
 import { Specimen } from '../_specimen/Specimen';
 
@@ -241,6 +241,52 @@ export default function TeaserSpecimen() {
           </Specimen>
 
           <Specimen
+            title="row · lg · metaAside + ruled + arrow + icon — a resource listing"
+            note="Home's Selected thinking (owner, 29 Oct 2026): one piece per row at the column's full width, a hairline above each row and under the last, the copy a block inside its rules (the list sets no gap). The meta column sets the format's glyph (`icon`, from TEASER_FORMAT_ICON: Solar Bold content icons, in the accent) inline before the format, tight, on one line, and the length a text (16) under it, as the piece's own page displays them (owner, 29 Oct 2026); the title is the row's anchor with the summary under it; an arrow ends the row and moves toward its destination on hover. The whole row is one link. Below md the glyph leads the meta line, a text (16) over the title, and the arrow keeps the row's end."
+          >
+            <Layout as="ul" rowGap="none">
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Article"
+                meta={['10 min read']}
+                icon={TEASER_FORMAT_ICON.article}
+                title="AI confidence scores in UX: design the review step people control"
+                body="Why a number on an AI answer earns little trust, and the review step that does, drawn from three AI products we designed."
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Guide"
+                meta={['13 min read']}
+                icon={TEASER_FORMAT_ICON.guide}
+                title={LONG}
+                body="A long title at the row measure, with two lines of standfirst under it, so the arrow is seen holding the row's end beside a wrapped title."
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+              <Teaser
+                arrangement="row"
+                size="lg"
+                label="Podcast"
+                meta={['6 min read']}
+                icon={TEASER_FORMAT_ICON.podcast}
+                title="Eden AI's Samy Melaine on building AI products for users: podcast"
+                href={HREF}
+                metaAside
+                ruled
+                arrow
+              />
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="row · lg · date + graphic — an event card on white"
             note="`graphic`: the picture's white takes the box's pale ground (multiply), so a card drawn on white keeps an edge on paper. The day is zero-padded and tabular, so titles start on one edge."
           >
@@ -282,7 +328,13 @@ export default function TeaserSpecimen() {
                 media={PHOTO}
                 href={HREF}
               />
-              <Teaser size="sm" meta="Design System" title="Short title" media={SCENE} href={HREF} />
+              <Teaser
+                size="sm"
+                meta="Design System"
+                title="Short title"
+                media={SCENE}
+                href={HREF}
+              />
               <Teaser
                 size="sm"
                 meta="Information Design"

@@ -420,7 +420,6 @@ export default async function ExpertisePage({ params }: PageProps<'/expertise/[s
         ) : (
           <CtaSection
             arrangement="open"
-            surface="tint"
             heading={expertise.capabilitiesCta.heading}
             body={expertise.capabilitiesCta.body}
             points={expertise.capabilitiesCta.points}

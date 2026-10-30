@@ -4,13 +4,13 @@ slug: product-design
 page_name: Product Design
 page_type: service
 seo:
-  title: 'Product Design Services for SaaS: UX, UI, Research | Tcules'
-  description: 'Product design services for SaaS and complex software: make a powerful product easier to use with research, workflows, UI design, prototypes and testing.'
+  title: 'Product Design Services for New and Growing SaaS | Tcules'
+  description: 'Product design services for new and established SaaS products: research, product thinking, interaction and visual design, tested and carried into code.'
   canonical: https://www.tcules.com/services/product-design
   robots: index,follow
 social:
-  og_title: 'Product Design Services for SaaS: UX, UI, Research | Tcules'
-  og_description: 'Product design services for SaaS and complex software: make a powerful product easier to use with research, workflows, UI design, prototypes and testing.'
+  og_title: 'Product Design Services for New and Growing SaaS | Tcules'
+  og_description: 'Product design services for new and established SaaS products: research, product thinking, interaction and visual design, tested and carried into code.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Product Design for SaaS and complex software.
   og_type: website
@@ -18,21 +18,33 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Product Design Services for SaaS: UX, UI, Research | Tcules'
-  twitter_description: 'Product design services for SaaS and complex software: make a powerful product easier to use with research, workflows, UI design, prototypes and testing.'
+  twitter_title: 'Product Design Services for New and Growing SaaS | Tcules'
+  twitter_description: 'Product design services for new and established SaaS products: research, product thinking, interaction and visual design, tested and carried into code.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: Product Design agency for SaaS and complex software
   primary_buyer_question: Can Tcules resolve the product decisions beneath the interface and make them specific enough to test and build?
   supporting_questions:
   - Is Product Design the same as UI/UX design?
-  - Can we start with one feature or workflow?
   - What do we receive at the end?
+  - What is your product design process?
   - How much research do we need?
-  - What will you need from us?
   - Can you hand over to our developers, or do you build it?
   - When should we start with an audit instead?
+  - What kinds of software do you design?
   primary_query: product design services
+  secondary_queries:
+  - digital product design services
+  - software product design services
+  - SaaS product design
+  - B2B SaaS product design
+  - product design for startups
+  - product design for enterprise software
+  - product design process
+  - product design deliverables
+  - product design vs UI/UX design
+  - product design handover to developers
+  - how much does product design cost
 navigation:
   breadcrumb:
   - name: Home
@@ -60,35 +72,55 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - outcomes
-  - starting-points
-  - worked-example
-  - complex-products
-  - engagement
-  - specialist-capabilities
+  - selected-work
+  - what-you-get
+  - hard-parts
+  - services-on-their-own
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  visual_plan: uncertainty_to_design_medium_map_with_case_pins
+  visual_plan: studio_spine_core_service_three_case_selected_work_then_what_you_get_then_hard_parts_with_doodle_model
   media_bindings:
-  - id: product_design_doodle
-    role: demonstrate
-    supports_section: proof
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
-    status: BOUND_EXISTING_PUBLIC_ASSET
   - id: product_design_dealpath
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: dealpath
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
     status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Dealpath listing redesign in which Add to pipeline asks people to find and attach an existing deal before creating a new one
   - id: product_design_eden
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: eden-ai
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
     status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Eden AI workflow builder redesign showing the single search box and AI-assisted creation
+  - id: product_design_auxentios
+    role: demonstrate
+    supports_section: selected-work
+    card: auxentios
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766140498/660bd75ce27b3355165af8d8_1_7_59f1667d2c.webp
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (the live Auxentios case's first section image, the Repair Builder coverage screen; pulled 29 Oct 2026)
+    alt_intent: Auxentios shared quotation screen used by six specialist roles
+  - id: product_design_doodle
+    role: demonstrate
+    supports_section: hard-parts
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media
+    alt_intent: Doodle object model connecting meeting priority, availability and scheduling behaviour
   testimonial_ids:
-  - CL-VIDEOPLASTY-DECISIONS
-  - CL-AUX-COMPLEXITY
+  - DRAFT-EDENAI-SPECS
+  - SSOT-ASHOK-MOHANTY-FOUNDER-AUXENTIOS
+  - DRAFT-DOODLE-RESEARCH
+  - CLUTCH-RINGIER-SAILER
   trust_module_policy: required_commercial_relation_module
 structured_data:
   types:
@@ -99,7 +131,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: PILOT_DRAFT_V2_2026-10-08
+  content_state: PILOT_DRAFT_V3_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: NOT_COMPOSITION_VALIDATED
   production: NOT_PRODUCTION_VALIDATED
@@ -111,124 +143,182 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked_2026-10-08
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: source-pages-1-oct (1 Oct 2026) with Phase 3 candidate (8 Oct 2026) for Home
+  source_body: source-pages-1-oct (1 Oct 2026) with Phase 3 candidate (8 Oct 2026); owner-review draft 12 Oct 2026 (C18a, new headline and opening argument); Sol integration pass 26 Oct 2026 (Dealpath as signature case, process and specialisms compressed); standalone landing-page pilot 26 Oct 2026 (41-landing-pages-26-oct/pilot-pd.md); studio-spine rebuild 26 Oct 2026 evening (42-first-principles-26-oct/pilot2-pd2.md)
 ---
 
 *Product Design services*
 
-# Product design for software that's easy to use, however complex it gets
+# Product design services that get the product right before the screens
 
-We design SaaS and complex software that customers understand quickly and engineers can build with fewer open questions. Research, workflows, interface design, prototyping and testing, carried into code when you need it.
+Good product design shows up all week. It is in people who use the software all day without carrying half the task in their heads, and in a roadmap meeting that starts from what customers do. It is in engineers who begin each sprint with their questions answered.
+
+Tcules provides product design services for SaaS and complex software, from a founder's first release to a product customers have relied on for years.
+
+*Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)*
 
 [Start a Product Design enquiry](#enquiry)
 
-*Selected Product Design work: Doodle · Dealpath · Eden AI · Auxentios · Scissors*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What you get {#outcomes}
+## Selected product design work {#selected-work}
 
-**A product that needs less explaining.** Workflows that match how your users actually work, so they find their way without a manual.
+### Dealpath: one assumption reversed, the rest kept familiar
 
-**Complex rules, simple screens.** Roles, permissions and exceptions are worked out before they reach the interface, long before customers trip over them.
-
-**Fewer surprises in development.** Designs that cover the awkward cases too, so your engineers spend their time building instead of guessing.
-
-**An interface that feels finished.** Loading, empty and error states are designed too, so nothing looks half-built when real data arrives.
-
-> “The thought process behind every single decision they make. The team was skilled and knowledgeable in the workflow.”  
-> **Eduard Stinga, Founder, VideoPlasty**
-
-## Where we start depends on what's going wrong {#starting-points}
-
-**"Customers keep getting stuck."** We watch how people really use the product, then redesign the workflows that trip them up.
-
-**"The product has grown messy."** We reorganise its structure and navigation, so people stop hunting for features they know are in there somewhere.
-
-**"We want to test an idea before building it."** We prototype it and put it in front of real users.
-
-**"Every screen looks slightly different."** We define shared patterns your team can reuse.
-
-**"What ships doesn't match the design."** We work in code with your developers until it does.
-
-## Example: Dealpath {#worked-example}
-
-**The problem.** Dealpath helps real estate investment teams manage their deal pipeline. Its "Add to pipeline" button always started a new deal, even when that property was already in the pipeline.
-
-**What we did.** We started with a wider review of the product, then redesigned this workflow so teams search for an existing deal before creating a new one. We changed the listing card and the pipeline action, and kept the rest of the workspace as users knew it.
-
-**The result.** A redesigned flow that catches a duplicate deal before it is created, kept tight enough for Dealpath's own engineers to build without reworking the rest of the workspace.
+Dealpath's deal-management software opened a new deal whenever someone added a listing to the pipeline, even one the team already tracked. After an audit, our redesign changed that one step to find the existing deal first, and left the other three listing actions largely as users knew them.
 
 [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
-## More complex products we have made easier to use {#complex-products}
+### Auxentios: six specialist roles, one quotation
 
-**Doodle.** One interview showed that people make time for an important meeting even when their calendar says they are busy. We built meeting types and their priority into the design of the scheduling MVP.
+Auxentios was defining a new industrial quoting product, where sales, product, solution, pricing and maintenance specialists all add to each quote. Eight interviews showed who contributes what, so we shaped the MVP around one shared quotation and designed interface parts for a product planned to run to more than 200 screens.
 
-**Scissors.** Staffing software where onboarding, shortlisting, talent pools and job creation each ran as a separate sequence. We redesigned all four around one connected model of clients, candidates and jobs, so details entered once carry through the rest of the work.
+[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
 
-**Eden AI.** Three ways to start a workflow (template, AI help or blank page) brought together in one starting point.
+### Eden AI: three ways to start, one search box
 
-**Auxentios.** In Auxentios' industrial quoting product, six specialist roles contribute to each quote. After eight user interviews, we designed one shared quoting workflow for all of them.
+Developers on Eden AI could begin a workflow three ways: pick a template, ask the AI or start blank. Each route led somewhere slightly different. In our redesign, one search box recognises how you want to start, Tab moves you into AI help, and settings and test results stay beside the step you are changing.
 
-> “We were impressed with their lead designer and team because they understood our complex concepts.”  
-> **Ashok Mohanty, Founder, Auxentios Technology**
+[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-## Ways to work with us {#engagement}
+## What you get from our product design services {#what-you-get}
 
-**A single workflow or feature.** One problem, solved properly.
+Our digital product design services cover the thinking behind your product and every screen in it. We size each part to what your team already knows, so the budget goes on what it has not learned yet, and we agree the deliverables before work starts.
 
-**A product area or a whole new product.** From research to designs ready to build.
+**What you receive**
 
-**A designer in your team.** An experienced Tcules designer working in your tools and meetings, with specialists joining when needed.
+- A tested brief: what goes in, what waits and what stays out, checked against the people who use the product.
 
-**Design and build.** We design it, then our [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) teams build it.
+- A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.
 
-We are at our best when there is real thinking to do. If every screen is already specified and you mainly need extra hands to produce them, a production-focused team will suit you better.
+- Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos.
 
-## Specialist Product Design services {#specialist-capabilities}
+- Clickable or coded prototypes, tested with people who match your users.
 
-[UX Research](/services/product-design/ux-research): find out how people really use your product.
+- Designs ready to build, and our review of what your engineers ship.
 
-[Information Architecture & Workflow Design](/services/product-design/information-architecture-workflow-design): make complex products easy to navigate.
+**Who does the work.** Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.
 
-[Interaction & UI Design](/services/product-design/interaction-ui-design): screens and interactions that make the next step obvious.
+**What we need from you.** The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product calls.
 
-[Data Visualisation](/services/product-design/data-visualisation): dashboards and charts people can act on.
+**Where our part stops.** You make the product calls: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build.
 
-[Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing): test ideas before you build them.
+## The hard parts of SaaS product design {#hard-parts}
 
-## Frequently asked questions {#faq}
+**Rules nobody has written down.** People who use a product follow rules the brief never mentions, such as which meetings matter enough to move another. We find those rules in research and give them a place in the product before anyone draws a screen.
 
-### Is Product Design the same as UI/UX design?
+Example: for [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that people's availability depends on how important a meeting is, so priority became part of the new scheduling MVP.
 
-UI and UX design are part of it. Product Design also covers the research, structure and workflows behind the screens, and it can carry on into code.
+**Several people working on one record.** In staffing, quoting or deal software, different roles change the same record, with different permissions and in no fixed order. We design the records, roles and hand-offs first, so each person finds their part of the job.
 
-### Can we start with one feature or workflow?
+Example: for [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we redesigned four staffing workflows around one model of clients, candidates and jobs.
 
-Yes. One workflow or feature is a complete project in its own right, and often the best place to start.
+**Customers and staff on the same records.** An order a customer places becomes work for your staff, and both sides have to read it the same way. We design the two sides as one product.
 
-### What do we receive at the end?
+Example: we redesigned [Gold Image Printing's](/case-studies/gold-image-printing-web-to-print-erp-modernisation) web store and staff production system on one set of components and a style guide, so an order reads the same from purchase into production.
 
-Whatever the work needs: research findings, user flows and site structure, interface designs, clickable or coded prototypes, usability test results, reusable design patterns and guidance for your developers. We agree the outputs before we start.
+**Screens people work in for hours.** Someone who spends the day in your product meets every empty table, slow load, error and missing permission. Those screens get the same interaction and visual care as the ones in the demo, with shared rules that keep later work consistent.
 
-### How much research do we need?
+Example: for [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), we redesigned reporting and documented shared rules for filters, states and data, so later work across the product has the same logic to follow.
 
-Only as much as the problem needs. That might be a handful of user interviews, your analytics and support tickets, or research you already have.
+## Product design services you can hire on their own {#services-on-their-own}
 
-### What will you need from us?
+Most projects draw on several of these. When one problem stands out, each can be hired alone.
 
-Access to the product or prototype, any existing designs, and time with the people who know your users and workflows best.
+| Service | Best for |
+|---|---|
+| **[UX Research](/services/product-design/ux-research)** | Teams about to spend on an assumption nobody has tested |
+| **[Information Architecture & Workflow Design](/services/product-design/information-architecture-workflow-design)** | Products where work passes between people, or the menu keeps growing |
+| **[Interaction & UI Design](/services/product-design/interaction-ui-design)** | Products whose structure works but whose screens confuse people |
+| **[Data Visualisation](/services/product-design/data-visualisation)** | Dashboards that people export to a spreadsheet |
+| **[Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing)** | Choosing between directions before engineers start |
+| **[New Product Design & First Release](/services/new-product-design-first-release)** | Founders turning an idea or prototype into an MVP |
+| **[UX & Product Audit](/audits/ux-product-audit)** | Teams who know something is wrong but not yet what |
+
+Want the riskiest screens tried in code, or the whole product built? [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) carry the design on. Already have finished screens? [Design to Code](/services/design-engineering/design-to-code) takes them from there.
+
+## What clients say {#testimonials}
+
+> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
+
+> “Our aim was to build a consumer-grade UI / UX for our enterprise application. They helped us design what we were looking for. We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
+> **Ashok Mohanty, Founder, Auxentios**
+
+> “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
+> **Stephanie Leue, Doodle**
+
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For product design, a good first piece of work is one workflow redesigned in full, or an audit first when the cause is unclear, as at Dealpath.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** For [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), we mapped the detailer, the quality engineer and the approver, and the four questions a reviewer asks of an AI check, before redesigning the review screen.
+
+- **We prove the hard parts in code while they can still change.** One of [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers, reviewing our coded prototypes of the suite's new shared patterns, asked how drag and drop would work in Bootstrap 5 while the choice was still open.
+
+- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years as an ongoing partnership, and we have designed every one of its products in that time.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about product design services {#faq}
+
+### Is product design the same as UI/UX design?
+
+Product design includes UI and UX design, and goes further. Tcules also works out what the product should do, for whom, and how its workflows fit together. It then designs each screen, empty and error screens included. The work can carry on into code with our design engineers and developers.
+
+### What is your product design process?
+
+It is the studio's own process, sized to your product. We start from what you already hold, research where knowledge is thin, and model roles, records and workflows before drawing screens. Then we design and test every screen and state, and hand over to your engineers or carry the design into code with ours.
+
+### How much research does a product design project need?
+
+Tcules sizes research to the problem: a handful of user interviews, your analytics and support tickets, or research you already have. We size it so your team can make the product calls with confidence, and agree the scope before work starts.
 
 ### Can you hand over to our developers, or do you build it?
 
-Either. We can hand your developers designs that are ready to build and stay on to review what they ship, or our own engineers can build it.
+Tcules does both, whichever suits your team. Your developers can build from our designs while we review what they ship, or our engineers build it through [Software Development](/services/software-development). For ConnectX, we proved an AI workspace in a coded demo on sample data, then took it to a production-ready module, live since late 2025.
 
 ### When should we start with an audit instead?
 
-When you know something is wrong but not what. A [UX & Product Audit](/audits/ux-product-audit) finds the cause before you spend money redesigning the wrong thing.
+Start with a [UX & Product Audit](/audits/ux-product-audit) when you know something is wrong but not what. It finds the cause first, so the redesign budget goes where it helps, and it can cover one workflow.
 
-## Tell us what needs fixing or building {#enquiry}
+### How much do product design services cost?
 
-A live product, a prototype or one stubborn workflow your users keep tripping over. Any of them is enough to start.
+Product design is priced up front, once the scope is agreed, so the figure depends on the problem and how much of the product it touches. Redesigning one workflow is a smaller piece of work than defining a whole product. [How pricing works](/how-we-work#engagement-shapes)
+
+### What kinds of software do you design?
+
+Mostly B2B SaaS, such as scheduling, quoting, staffing and deal-management products, and enterprise suites like the one Benchmark Gensuite's specialist teams use every day. We also design other business applications, data-rich interfaces, consumer products and AI-powered products. Founders bring us new products to define, and product teams bring established ones to take further.
+
+## Tell us what you're building or improving {#enquiry}
+
+A new idea, a live product or one stubborn workflow your users keep tripping over. Any of them is enough to start.
 
 **Enquiry form**
 

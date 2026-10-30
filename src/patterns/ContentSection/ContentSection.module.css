@@ -4,7 +4,7 @@
    no distance, no ground and no size of its own: every value comes from --csec-*, declared in
    tokens/components/content-section.css.
 
-   Classes: .eyebrow .mark .heading .headingMd .headingXl .asideFill .lead .leadBeside .centred
+   Classes: .eyebrow .mark .heading .headingMd .headingEyebrow .headingXl .asideFill .lead .leadBeside .centred
    .centredLg .itemsCentredLg .bodyCentred .bodyCentredLg .text .textCentred .textureLg .photoTrack .photo
    .photoLeads .photoToCopy
 
@@ -39,6 +39,19 @@
 .headingMd {
   font: var(--csec-heading-text-md);
   letter-spacing: var(--csec-heading-tracking-md);
+}
+
+/* `headingSize="eyebrow"`: the h2 in the eyebrow's voice, so the band's one large thing (a turning
+   quote) carries the emphasis. The eyebrow's own role, case and ink; a role swap, never a distance. */
+.headingEyebrow {
+  font: var(--csec-eyebrow-text);
+  letter-spacing: var(--csec-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--csec-eyebrow-ink);
+
+  /* The title measure is set in the title's own em, so at the eyebrow's size it would break a short
+     label in two: an eyebrow is one line, as the eyebrow above a title is. */
+  max-inline-size: none;
 }
 
 .lead {

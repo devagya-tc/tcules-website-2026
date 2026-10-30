@@ -1,8 +1,10 @@
 import { Layout } from '@/components';
 import { splitClaim } from '@/lib/claim';
-import { BlockCardSet, CaseCard, ListCard, type BlockCardImage } from '@/patterns';
+import { BlockCard, type BlockCardImage } from '@/patterns';
 
-import type { ListingView } from './ListingIndex';
+import { ListingGrid } from './compositions';
+import type { ListingFinder, ListingView } from './ListingIndex';
+import { listingFinder, type FinderArgs } from './listingFinder';
 
 /* ── The case-study index, as ListingIndex data ────────────────────────────────────
    What the case-study index puts in the listing's sections: its groups of cases, each shaped by its
@@ -16,7 +18,9 @@ import type { ListingView } from './ListingIndex';
  */
 export type CaseItem = {
   id: string;
-  href: string;
+  /** The case's page. Absent for a case the copy lists before its page exists ("Case study coming
+      soon"): its card is shown, unlinked, and it never leads a group. */
+  href?: string;
   title: string;
   /** The one line under the title: 8–15 words (strapi-changes.md §13). */
   description: string;
@@ -29,9 +33,11 @@ export type CaseItem = {
   /** The cta wording on a featured card ("Read the Doodle case"). Absent, the card's default. */
   ctaLabel?: string;
   /**
-   * A case the page features: it leads its group as ONE card (CaseCard, home's selected-work shape),
-   * in whichever group and view it falls. The card carries no testimonial (owner, 22 Oct 2026:
-   * "case study cards never hold testimonials in them").
+   * A case the page features: the group's FIRST featured case leads it as the listing's horizontal
+   * card (the insights hub's lead: cover across two thirds, copy in the third, no ground); without
+   * one, the group's first case leads; the others open the grid under it (owner, 29 Oct 2026). Never CaseCard on its paper-deep ground, which is home's
+   * alone (owner, 29 Oct 2026). The card carries no testimonial (owner, 22 Oct 2026: "case study
+   * cards never hold testimonials in them").
    */
   featured?: boolean;
 };
@@ -52,18 +58,13 @@ export type CaseView = {
 };
 
 /**
- * The case-study index's views as listing views. A group's ARRANGEMENT is decided here from its
- * position and its count, never from its id, so a new group arrives already shaped. Its featured
- * cases lead (CaseCard, a `gutter` apart, the second mirrored as on home); the rest take:
- *
- *   first, four or more   the featured set: the first case leads at full width, the rest under it
- *                         (BlockCardSet `auto`, ruling C3), each with a cta
- *   five or more          thumbnail rows in two columns, a denser catalogue shape than the covers
- *   one to four           covers, linked whole cards: four as two pairs, the rail's column being
- *                         too narrow for four across
- *
- * Neighbouring groups differ because their counts differ, which is the variation the page needs
- * without a ground change.
+ * The case-study index's views as listing views. Every group is one shape (owner, 29 Oct 2026:
+ * "the /case-studies page is horrible. what happened to using the same 3 card grid?";
+ * decisions/2026-10-29-case-listing-groups-lead-horizontal): one case as the card-less horizontal lead, then
+ * every other case as a card in the listing's one three-track grid (`ListingGrid`, the same the
+ * insights hub's shelves use). No arrangement is chosen by a
+ * group's id, position or count any more: the varied shapes (a featured set, two columns of
+ * thumbnail rows, 2-up large covers) were the problem, not a feature.
  */
 export function caseViews(views: readonly CaseView[]): ListingView[] {
   return views.map((view) => ({
@@ -71,21 +72,21 @@ export function caseViews(views: readonly CaseView[]): ListingView[] {
     label: view.label,
     sections: view.groups
       .filter((group) => group.items.length > 0)
-      .map((group, index) => ({
+      .map((group) => ({
         id: group.id,
         heading: group.heading,
         count: group.items.length,
-        content: <CaseGroupShape items={group.items} first={index === 0} />,
+        content: <CaseRun items={group.items} />,
       })),
   }));
 }
 
 /** The record's body: its HTML paragraphs where it has them, else its one line. */
 const bodyOf = (item: CaseItem) =>
-  item.bodyHtml ? { bodyHtml: item.bodyHtml } : { body: item.description };
+  item.bodyHtml ? { bodyHtml: item.bodyHtml } : { body: item.description || undefined };
 
 const coverOf = (item: CaseItem) =>
-  item.cover ? { media: { type: 'image' as const, image: item.cover } } : {};
+  item.cover ? { media: { type: 'image' as const, image: sized(item.cover) } } : {};
 
 /** A cover with its intrinsic size, 16:9 where the record states none. */
 const sized = (cover: BlockCardImage) => ({
@@ -94,96 +95,100 @@ const sized = (cover: BlockCardImage) => ({
   height: cover.height ?? 900,
 });
 
-/** One group's cases: its featured cases, then the rest in the shape their position and count call for. */
-function CaseGroupShape({ items, first }: { items: readonly CaseItem[]; first: boolean }) {
-  /* A featured case needs its cover to be the one card: without one it joins the set. */
-  const featured = items.filter((item) => item.featured && item.cover);
-  const rest = items.filter((item) => !featured.includes(item));
+/**
+ * One run of cases, the listing's ONE shape for every group and for the finder's results (owner,
+ * 29 Oct 2026; decisions/2026-10-29-case-listing-groups-lead-horizontal): the first case is the card-less
+ * horizontal card across the full row, its cover across two of the grid's three tracks, and every
+ * other case is a card in the listing's three-track grid under it. The lead is the group's first
+ * featured case, else its first; it needs its cover and its page to lead, so a case without them
+ * joins the grid and the next one that has them leads instead. No other card shape.
+ */
+function CaseRun({
+  items,
+  titleAs = 'h3',
+}: {
+  items: readonly CaseItem[];
+  titleAs?: 'h2' | 'h3';
+}) {
+  const canLead = (item: CaseItem) => Boolean(item.cover && item.href);
+  const lead = items.find((item) => item.featured && canLead(item)) ?? items.find(canLead);
+  const rest = items.filter((item) => item !== lead);
 
   return (
-    <Layout rowGap="stack">
-      {featured.length > 0 ? (
-        <Layout rowGap="gutter">
-          {featured.map((item, row) => (
-            <CaseCard
-              key={item.id}
-              {...splitClaim(item.title)}
-              {...bodyOf(item)}
-              href={item.href}
-              ctaLabel={item.ctaLabel ?? 'Read the case'}
-              image={sized(item.cover!)}
-              reverse={row % 2 === 1}
-            />
-          ))}
-        </Layout>
+    <Layout rowGap="column">
+      {lead ? (
+        /* The hub's lead exactly: the cover leading, so a phone stacks it cover-first. Not compact
+           on a phone: a case card's words are the copy's, and the compact row drops its body. */
+        <ul>
+          <BlockCard
+            {...splitClaim(lead.title)}
+            {...bodyOf(lead)}
+            {...coverOf(lead)}
+            href={lead.href}
+            orientation="horizontal"
+            size="lg"
+            tracks={2}
+            titleAs={titleAs}
+            cue="cta"
+            ctaLabel={lead.ctaLabel ?? 'Read the case'}
+            split="grid"
+          />
+        </ul>
       ) : null}
-      {rest.length > 0 ? <CaseSet items={rest} first={first} /> : null}
+      {rest.length > 0 ? <CaseCards items={rest} titleAs={titleAs} /> : null}
     </Layout>
   );
 }
 
-/** A group's other cases, in the shape their position and count call for. */
-function CaseSet({ items, first }: { items: readonly CaseItem[]; first: boolean }) {
-  /* The first group, four or more: the featured set. */
-  if (first && items.length >= 4) {
-    return (
-      <BlockCardSet
-        lead="auto"
-        cue="cta"
-        scroll="never"
-        items={items.map((item) => ({
-          id: item.id,
-          title: item.title,
-          ...bodyOf(item),
-          ...coverOf(item),
-          href: item.href,
-          ctaLabel: item.ctaLabel,
-        }))}
-      />
-    );
-  }
-
-  /* Five or more: thumbnail rows, two columns, filled down the first and then the second. */
-  if (items.length >= 5) {
-    const half = Math.ceil(items.length / 2);
-    const columns = [items.slice(0, half), items.slice(half)];
-    return (
-      <Layout columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="none">
-        {columns.map((column, index) => (
-          <Layout as="ul" rowGap="none" key={index}>
-            {column.map((item) => (
-              <ListCard
-                key={item.id}
-                titleAs="h3"
-                title={item.title}
-                href={item.href}
-                marker={
-                  item.cover ? { type: 'thumbnail', image: sized(item.cover) } : undefined
-                }
-                {...bodyOf(item)}
-              />
-            ))}
-          </Layout>
-        ))}
-      </Layout>
-    );
-  }
-
-  /* One to four: covers, each a whole-card link, stacked on a phone (no case sliders, home round
-     1). Four go as two pairs: four across the rail's column would be about 220 a card. */
+/**
+ * Cases as the hub's cards: the small step, the whole card the link, in the listing's one grid. A
+ * case listed before its page exists ("Case study coming soon") keeps its place, unlinked, at the
+ * same size as its neighbours — never the largest placeholder on the page.
+ */
+function CaseCards({
+  items,
+  titleAs = 'h3',
+}: {
+  items: readonly CaseItem[];
+  titleAs?: 'h2' | 'h3';
+}) {
   return (
-    <BlockCardSet
-      lead="none"
-      cue="title"
-      scroll="never"
-      across={items.length === 4 ? 2 : undefined}
-      items={items.map((item) => ({
-        id: item.id,
-        title: item.title,
-        ...bodyOf(item),
-        ...coverOf(item),
-        href: item.href,
-      }))}
-    />
+    <ListingGrid>
+      {items.map((item) => (
+        <BlockCard
+          key={item.id}
+          title={item.title}
+          {...bodyOf(item)}
+          {...coverOf(item)}
+          href={item.href}
+          size="sm"
+          tracks={3}
+          titleAs={titleAs}
+          cue="title"
+        />
+      ))}
+    </ListingGrid>
   );
+}
+
+/**
+ * The case-study index's finder (owner, 29 Oct 2026: "/case-studies becomes the same FINDER as
+ * /insights"): the listing's one finder, its results the cases the picks let through as one grid of
+ * the same cards, twelve at a time.
+ */
+export function caseFinder({
+  items,
+  shown,
+  ...rest
+}: Omit<FinderArgs, 'total' | 'results'> & {
+  /** Every case the picks let through, in the page's order. */
+  items: readonly CaseItem[];
+}): ListingFinder {
+  return listingFinder({
+    ...rest,
+    shown,
+    total: items.length,
+    /* The results take the groups' shape: the first horizontal, the rest in the grid. */
+    results: <CaseRun items={items.slice(0, shown)} titleAs="h2" />,
+  });
 }

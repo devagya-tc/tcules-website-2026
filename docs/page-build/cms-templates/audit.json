@@ -1,0 +1,345 @@
+{
+  "template": "audit",
+  "route": "/audits/ux-product-audit",
+  "slug": "ux-product-audit",
+  "name": "UX & Product Audit",
+  "pageType": "audit",
+  "seo": {
+    "title": "UX Audit Services for SaaS: Find Why Users Stall | Tcules",
+    "description": "UX audit services for SaaS and complex software: find why customers get stuck, trace each problem to its cause and get a ranked list of what to fix first.",
+    "canonical": "https://www.tcules.com/audits/ux-product-audit",
+    "robots": "index,follow",
+    "ogImageAlt": "IMAGE_ASSET_REQUIRED"
+  },
+  "social": {
+    "og_title": "UX Audit Services for SaaS: Find Why Users Stall | Tcules",
+    "og_description": "UX audit services for SaaS and complex software: find why customers get stuck, trace each problem to its cause and get a ranked list of what to fix first.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "IMAGE_ASSET_REQUIRED",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Audits & Assessments",
+      "url": "/audits"
+    },
+    {
+      "name": "UX & Product Audit",
+      "url": "/audits/ux-product-audit"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "UX and product audit for established complex software",
+    "primaryBuyerQuestion": "Where is the product actually failing people, and what should we fix or investigate first?",
+    "supportingQuestions": [
+      "Should we do a UX audit before redesigning our product?",
+      "Is a UX audit the same as a heuristic evaluation?",
+      "What deliverables does a UX audit include?",
+      "Can you audit just one workflow, or only onboarding?",
+      "Do you interview users during a UX audit?",
+      "How long does a UX audit take?",
+      "How much does a UX audit cost?"
+    ],
+    "primaryQuery": "UX audit services",
+    "secondaryQueries": [
+      "UX audit service",
+      "SaaS UX audit",
+      "product UX audit",
+      "UX audit deliverables",
+      "UX audit vs usability testing",
+      "UX audit vs heuristic evaluation",
+      "UX audit for B2B SaaS",
+      "UX audit for complex software",
+      "how long does a UX audit take",
+      "UX audit cost",
+      "can you audit one workflow or onboarding",
+      "do you interview users in a UX audit",
+      "UX audit for a redesign decision"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "BATCH4_DRAFT_2026-10-08",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": {
+    "form": "project_enquiry",
+    "anchor": "enquiry",
+    "visibleFields": [
+      "Email",
+      "What are you working on?",
+      "Product or company URL"
+    ],
+    "optionalFields": [
+      "Product or company URL"
+    ],
+    "submitLabel": "Send enquiry",
+    "hiddenContext": [
+      "origin_route",
+      "placement",
+      "family",
+      "service_or_audit",
+      "referrer",
+      "campaign"
+    ],
+    "onSuccess": {
+      "heading": "Your enquiry has reached us.",
+      "body": "We'll reply within one business day.",
+      "retainEnteredData": true
+    },
+    "processor": "cms_record_and_notify",
+    "schedulingLabel": null
+  },
+  "hero": {
+    "eyebrow": "UX & Product Audit",
+    "title": "UX audit services that find why SaaS customers get stuck",
+    "lede": [
+      "A UX audit is for the week support, sales and engineering each blame something different for the same stalled customer, and the roadmap has room for one fix. Tcules provides UX audit services for established SaaS and complex software, tracing each problem in a workflow to its cause."
+    ],
+    "actions": [
+      {
+        "label": "Tell us where customers stall",
+        "href": "#enquiry"
+      }
+    ],
+    "proofLines": [
+      "Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)"
+    ],
+    "studioFacts": true,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "What you get",
+      "id": "deliverables",
+      "heading": "What you get: findings ranked by the harm they do",
+      "intro": "The audit starts with one workflow, such as sign-up or creating a record, reviewed from start to finish. That takes about two days, and the price is fixed before we begin.",
+      "itemsLabel": "What you receive",
+      "items": [
+        {
+          "title": "A ranked list of findings.",
+          "body": "Each sets out what happens and where, who it affects, why it matters, how sure we are and what to do next: fix, redesign, test first or leave alone."
+        },
+        {
+          "title": "An order of work ranked by harm.",
+          "body": "A quiet flaw in how records connect can outrank an ugly screen, because it spreads further."
+        },
+        {
+          "title": "A realistic view of each fix.",
+          "body": "Our designers work with engineers on fixes, so each finding says what fixing it is likely to take."
+        },
+        {
+          "title": "A walkthrough with your team",
+          "body": ", so everyone leaves knowing what comes first."
+        }
+      ],
+      "whoDoesTheWork": "A senior designer runs the audit and is your main contact. A researcher joins when the question needs user interviews.",
+      "whatWeNeedFromYou": "Access to the product, your analytics and support history, and time with the people who know the workflow best.",
+      "whereOurPartStops": "The audit names the causes and the order of work. Whether to fund a redesign, and who carries it out, stays with you.",
+      "after": "Here is one real finding, from our audit of Dealpath's deal-management software, set out the way every finding is.\n\n| Field | The finding |\n|---|---|\n| **What happens** | \"Add to pipeline\" opens a new deal first, even when that property already has one |\n| **Who it affects** | Real-estate acquisitions teams |\n| **Why it matters** | One opportunity can become two deals |\n| **How sure we are** | Confirmed. The button offers no other route |\n| **What to do next** | Redesign this path to find an existing deal first. Leave the other listing actions alone |\n\n\"How sure we are\" always says which of three it is: seen in use, backed by your data, or a hunch to test before anyone builds on it. Our guide covers [how to turn UX audit findings into decisions your team can own](/insights/guides/how-to-use-a-ux-product-audit)."
+    },
+    {
+      "block": "Rich section",
+      "id": "method",
+      "heading": "How our UX audit service runs",
+      "body": "We start from the argument your team keeps having, then read the product the way the people in that argument meet it.\n\n1. **Agree the question.** We choose the workflow the argument centres on, such as onboarding or creating a record.\n1. **Read what you already know.** Analytics, support tickets and past research show where people stall before we open the product.\n1. **Walk the real tasks, role by role.** A senior designer works through each task, including the awkward cases, the error messages and the permissions.\n1. **Ask users where the data runs out.** A researcher interviews users when the numbers show where people stall and leave the reason open.\n1. **Rank the findings and walk your team through them.**\n\n| Where we look | What we want to find out |\n|---|---|\n| Tasks and workflows | Where people stall, loop back or give up |\n| How the product is organised | Whether people can find things and see how records relate |\n| Roles and permissions | Whether each role sees what it needs, and only that |\n| Screens and controls | Whether labels, states, errors and next steps make sense |\n| What you already know | What analytics, support tickets and past research confirm or contradict |\n\nA usability checklist can say a button is hard to see. Watching people use the product shows why they press the wrong one."
+    },
+    {
+      "block": "Comparison",
+      "id": "compare",
+      "heading": "UX audit vs usability testing, research or a redesign",
+      "intro": "Each option answers a different question. Pick the one that matches the argument your team keeps having.",
+      "table": {
+        "columns": [
+          "Option",
+          "What it answers",
+          "Best for"
+        ],
+        "rows": [
+          [
+            "**UX & Product Audit**",
+            "Where customers get stuck in the live product, why, and what to fix first",
+            "Established products where teams disagree about the cause"
+          ],
+          [
+            "**[Usability testing](/services/product-design/prototyping-usability-testing)**",
+            "Whether people can complete set tasks on a design or prototype",
+            "Checking a new design before it is built"
+          ],
+          [
+            "**[UX research](/services/product-design/ux-research)**",
+            "Who the users are, how they work and what they need",
+            "New products, new markets or roles you know little about"
+          ],
+          [
+            "**[Design-to-Code Audit](/audits/design-to-code-audit)**",
+            "Why the live product differs from the approved design",
+            "Designs that look right in Figma and ship differently"
+          ],
+          [
+            "**[Product Modernisation Assessment](/audits/product-modernisation-assessment)**",
+            "Which parts to redesign, move to a new platform or rebuild",
+            "Products where the way forward is itself the open question"
+          ],
+          [
+            "**[Product redesign](/services/product-modernisation/product-redesign)**",
+            "How the workflow should work instead",
+            "Teams that already agree what is wrong"
+          ]
+        ]
+      }
+    },
+    {
+      "block": "Selected work",
+      "id": "selected-work",
+      "heading": "Selected UX audit work",
+      "intro": "Three products where a review of this kind came first and set what changed: established deal software, a new online store and a marketing-automation platform.",
+      "cases": [
+        {
+          "case": "enterprise-workflow-redesign-dealpath-real-estate",
+          "copySlug": null,
+          "heading": "Dealpath: one faulty action out of four",
+          "body": "The audit narrowed to the listing workflow, where only Add to pipeline had a structural fault. Our redesign changed that path and left the comparable and pass actions largely as users knew them. Dealpath's team owned implementation.",
+          "linkLabel": "Read the Dealpath case",
+          "media": null
+        },
+        {
+          "case": "ux-ui-design-and-development-for-magento-of-a-silver-chain-store",
+          "copySlug": null,
+          "heading": "The Chain Hut: an audit before the first sketch",
+          "body": "A new UK jewellery brand's store began with personas, interviews, competitor benchmarks and a heuristic check against usability rules. The report's recommendations shaped a mobile-first design, which we then built on Magento.",
+          "linkLabel": "Read The Chain Hut case",
+          "media": null
+        },
+        {
+          "case": "ux-revamp-for-a-saas-product-in-marketing-automation-vertical",
+          "copySlug": "ryzeo-marketing-automation-ux-revamp",
+          "heading": "Ryzeo: five sources that put reporting first",
+          "body": "Ryzeo's customers wanted more from their reports, and navigation and patterns needed work too. We read an expert review, stakeholder conversations, competitor analysis, user interviews and product analytics side by side, and together they put reporting first.",
+          "linkLabel": "Read the Ryzeo case",
+          "media": null
+        }
+      ],
+      "media": [
+        {
+          "id": "ux_audit_dealpath",
+          "role": "demonstrate",
+          "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp",
+          "altIntent": "Dealpath's redesigned Add to pipeline flow, which asks people to attach a listing to an existing deal before creating a new one.",
+          "status": "BOUND_EXISTING_PUBLIC_ASSET",
+          "source": "current public Tcules case media (case binding dealpath_workflow)"
+        }
+      ]
+    },
+    {
+      "block": "Testimonials",
+      "id": "testimonials",
+      "heading": "What clients say",
+      "testimonials": [
+        "CL-KNOVOS-CANDOUR",
+        "SSOT-RUSSELL-MILER-COO-RYZEO",
+        "FP-CHAINHUT-HOLISTIC"
+      ],
+      "showPlatformRating": true
+    },
+    {
+      "block": "How we work together",
+      "id": "how-we-work-together",
+      "heading": "How we work together",
+      "intro": "After a UX audit, your team can run with the findings alone, or we can take the flagged workflows into a redesign through [Product Design](/services/product-design), tested with users and ready to build.",
+      "shared": "how-we-work-together:default"
+    },
+    {
+      "block": "Why Tcules",
+      "id": "why-tcules",
+      "heading": "Why teams choose Tcules",
+      "shared": "why-tcules:default",
+      "reasons": [
+        {
+          "reason": 7,
+          "evidence": "At Omny AI, users were holding the product accountable for AI suggestions they had not properly reviewed. The cause was a default that filled the content area before anyone chose, and our redesign made adding a suggestion a deliberate click. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)"
+        },
+        {
+          "reason": 1,
+          "evidence": "For Scissors, we modelled how clients, candidates, jobs and talent pools connect before redesigning four of its staffing workflows. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)"
+        },
+        {
+          "reason": 4,
+          "evidence": "We redesigned GT Tools' Shopify store and developed it ourselves, so what we learned about specialist buyers reached the live store. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)"
+        }
+      ]
+    },
+    {
+      "block": "Industries",
+      "id": "industries",
+      "heading": "Industries we know well",
+      "expertise": [
+        "b2b-saas-workflow-software",
+        "data-analytics-decision-products",
+        "proptech-contech-field-operations",
+        "ai-products-developer-tools",
+        "martech-salestech",
+        "commerce-transactional-products"
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Questions about our UX audit services",
+      "items": [
+        {
+          "question": "Should we do a UX audit before redesigning our product?",
+          "answer": "Yes, if your team disagrees about what is wrong. An audit names the cause first, so the redesign fixes what customers actually trip over. If everyone already agrees on the problem, go straight to a [product redesign](/services/product-modernisation/product-redesign)."
+        },
+        {
+          "question": "Is a UX audit the same as a heuristic evaluation?",
+          "answer": "A heuristic evaluation is one part of a Tcules UX audit. We also look at how the product is organised, how roles differ and what users actually do, so each finding explains a cause as well as a symptom."
+        },
+        {
+          "question": "What deliverables does a UX audit include?",
+          "answer": "A ranked list of findings, each with what happens, who it affects, why it matters, how sure we are and the next move. You also get the order of work and a walkthrough with your team. The Dealpath finding above shows the format."
+        },
+        {
+          "question": "Can you audit just one workflow, or only onboarding?",
+          "answer": "Yes. One important workflow, such as onboarding or an approval step, is often a better start than a light pass over everything. A finished product tour doesn't mean people reached first value; our guide covers [how SaaS onboarding gets each role there](/insights/guides/saas-onboarding-strategies-to-increase-customer-retention)."
+        },
+        {
+          "question": "Do you interview users during a UX audit?",
+          "answer": "Yes, Tcules interviews users when the question needs it. Your analytics, support tickets and past research often answer part of the question first, so interviews go to the gaps that remain."
+        },
+        {
+          "question": "How long does a UX audit take?",
+          "answer": "One workflow takes about two days. A wider audit takes longer, and its dates are agreed with the scope before we begin. Access sets the pace: the sooner we have the product and the right people, the sooner the findings arrive."
+        },
+        {
+          "question": "How much does a UX audit cost?",
+          "answer": "Every Tcules UX audit has a fixed price, agreed up front once the scope is set. One workflow is the smallest scope, and a wider audit is priced on what it covers. [How We Work](/how-we-work) explains pricing across audits, projects and ongoing work."
+        }
+      ]
+    },
+    {
+      "block": "Enquiry",
+      "id": "enquiry",
+      "heading": "Tell us the step where customers stall",
+      "intro": "Add who they are and what you've already changed. A product link is enough to start.",
+      "form": "conversion"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/audits__ux-product-audit.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

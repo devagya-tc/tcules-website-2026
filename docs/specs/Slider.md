@@ -24,14 +24,19 @@ The owner asked for the typographic testimonial "inside the auto-advancing Slide
 
 - the rail is replaced by a **stepper**: one step per slide, a mono numeral (`--text-index`, from md) over
   a line at `--sld-step-length`, in a `--sld-step-target`-tall button named "Slide n of N" with
-  `aria-current` on the current one. The current line fills over the hold (`--slider-step-progress`,
-  written each frame by the clock, as the thumb's `--slider-progress` is). Below md the numerals drop and
+  `aria-current` on the current one. The current line starts FULL and empties left to right over the
+  hold, a countdown (`transform: scaleX(1 − --slider-step-progress)`, origin right; the progress written
+  each frame by the clock, as the thumb's `--slider-progress` is). Stopped, it stays full; under reduced
+  motion it never drains (29 Oct 2026; decisions/2026-10-29-slider-bar-counts-down). Below md the numerals drop and
   the lines alone are the stepper. Step ink is `--sld-step-fg` / `--sld-step-fg-current`, per surface;
   the line and fill reuse `--sld-progress-rail` / `--sld-progress-thumb`;
 - a **rotation control** (Button outline lg, `chrome-pause` / `chrome-play`, named "Pause slides" /
   "Play slides") leads the stepper (WCAG 2.2.2);
 - the turn **holds** while a mouse rests on the slides or focus is inside them, and resumes from where it
   froze; the control row does not hold it, so Play under the pointer plays;
+- a press on a bar or a previous / next control **stops** it on the chosen slide (29 Oct 2026);
+- `slideAlign="center"` centres each slide in the row's height (the tallest slide's), for quotes of
+  different lengths (decisions/2026-10-29-quote-slider-centres-each-quote);
 - it **never starts** before hydration or for a reader who prefers reduced motion — Play starts it;
 - it wraps from the last slide to the first, and it is silent: the status line still speaks only after
   a reader's press.
@@ -118,13 +123,13 @@ Deliberately not props: autoplay, loop, a per-slide picker, a step size (always 
 |---|---|---|
 | before hydration | native `disabled`, neutral | thumb at the start, its CSS length |
 | rest | blue glyph, blue hairline rule, no fill | thumb = view ÷ count of the rail |
-| hover / focus-visible | filled with the surface's primary, glyph to the fill's label colour; focus adds the ring | — |
-| pressed | the fill one step deeper | — |
+| hover / focus-visible | the rule firms one step and the glyph takes the link's step, no fill (29 Oct 2026); focus adds the ring | — |
+| pressed | a pale ground, the rule one step firmer again | — |
 | at an end | `aria-disabled="true"`, neutral rule and glyph, no fill on hover or press; keeps focus and its ring | thumb at that end |
 | nothing to scroll | both controls at an end | thumb fills the rail |
 | row focused (no focusable slides) | — | the row draws the ring round itself |
 
-Hover ≠ pressed on every surface (`--btn-outline-primary-bg-hover` ≠ `-pressed`). The controls are Button's `outline` emphasis; their colour tokens live in `button.css`.
+Hover ≠ pressed on every surface (`--btn-outline-primary-rule-hover` ≠ `-rule-pressed`, or the pressed ground). The controls are Button's `outline` emphasis; their colour tokens live in `button.css`.
 
 ## 6 · Per-surface colour
 

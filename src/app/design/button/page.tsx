@@ -55,7 +55,7 @@ const VARIATIONS = [
   { id: 'ghost', index: '06', name: 'Blue ghost' },
   { id: 'link', index: '07', name: 'Link button' },
   { id: 'icons', index: '08', name: 'Label, arrow, glyph, icon alone' },
-  { id: 'stepper', index: '09', name: 'Outline stepper' },
+  { id: 'stepper', index: '09', name: 'Outline · stepper and pair' },
   { id: 'chrome', index: '10', name: 'Site chrome · neutral' },
   { id: 'surfaces', index: '11', name: 'Four surfaces, and nesting' },
   { id: 'touch', index: '12', name: 'The 44px touch floor' },
@@ -625,39 +625,73 @@ export default function ButtonSpecimenPage() {
       {/* ── 09 · Outline stepper ────────────────────────────────────────────────────────────── */}
       <Band
         id="stepper"
-        note="The fourth emphasis, and the only one with an edge: a round hairline control that steps through a set, a slider’s previous and next. Icon alone and blue by type, so it never competes with the page’s ask. Hover fills the disc; at the end of its row it keeps its circle, off."
+        note="The fourth emphasis, and the only one with an edge. Icon alone, a round hairline control that steps through a set, a slider’s previous and next. It is the secondary control (owner, 29 Oct 2026): hover never fills it — the line firms one step and the label takes the link’s step, colour only — and only a press takes a pale ground, so it never competes with the solid. At the end of its row it keeps its circle, off. Labelled (owner, 29 Oct 2026), at the button’s own radius, it leads an in-band pair whose second is the link — a Banner’s two actions — and never stands beside a solid."
       >
         {/* Varied on purpose: the sizes as a ladder in the head track, and the stepper where it
             lives, a Slider of case cards, in the body track — the one image row in the anatomy. */}
         <Layout columns={{ base: 1, lg: [1, 2] }} colGap="column" rowGap="stack" align="start">
-          <Cell
-            label="Size · rest, then unavailable"
-            note="At the start of its row previous keeps its circle, off."
-          >
-            <Layout rowGap="block">
-              {SIZES.map((size) => (
-                <Rung key={size} size={size}>
-                  <Cluster colGap="text" rowGap="text" align="center">
-                    <Button
-                      emphasis="outline"
-                      iconOnly
-                      size={size}
-                      disabled
-                      icon={<Icon name="arrow-left" />}
-                      aria-label={`Previous, ${size}`}
-                    />
-                    <Button
-                      emphasis="outline"
-                      iconOnly
-                      size={size}
-                      icon={<Icon name="arrow-right" />}
-                      aria-label={`Next, ${size}`}
-                    />
-                  </Cluster>
-                </Rung>
-              ))}
-            </Layout>
-          </Cell>
+          <Layout rowGap="stack">
+            <Cell
+              label="Labelled · the first of a pair"
+              note="Outlined button, then the quieter link, one row a block apart (CtaRow’s pair)."
+            >
+              <Cluster colGap="block" rowGap="text" align="center">
+                <Button as="a" href={ROUTES.about} emphasis="outline">
+                  Meet the studio
+                </Button>
+                <Button
+                  as="a"
+                  href={ROUTES.careers}
+                  emphasis="link"
+                  extendHitArea
+                  icon={<Icon name="arrow-right" />}
+                >
+                  Careers at Tcules
+                </Button>
+              </Cluster>
+            </Cell>
+            <Cell
+              label="State · rest, then pressed"
+              note="Point at the first: the rule firms, no fill. The second is held: the pale ground is the press, the one ground it ever takes."
+            >
+              <Cluster colGap="block" rowGap="text" align="center">
+                <Button as="a" href={ROUTES.about} emphasis="outline">
+                  Meet the studio
+                </Button>
+                <Button as="a" href={ROUTES.about} emphasis="outline" active>
+                  Meet the studio
+                </Button>
+              </Cluster>
+            </Cell>
+            <Cell
+              label="Size · rest, then unavailable"
+              note="At the start of its row previous keeps its circle, off."
+            >
+              <Layout rowGap="block">
+                {SIZES.map((size) => (
+                  <Rung key={size} size={size}>
+                    <Cluster colGap="text" rowGap="text" align="center">
+                      <Button
+                        emphasis="outline"
+                        iconOnly
+                        size={size}
+                        disabled
+                        icon={<Icon name="arrow-left" />}
+                        aria-label={`Previous, ${size}`}
+                      />
+                      <Button
+                        emphasis="outline"
+                        iconOnly
+                        size={size}
+                        icon={<Icon name="arrow-right" />}
+                        aria-label={`Next, ${size}`}
+                      />
+                    </Cluster>
+                  </Rung>
+                ))}
+              </Layout>
+            </Cell>
+          </Layout>
           <Cell label="Where it lives · a Slider" note="Step through the row, or swipe it.">
             <Slider label="Case studies" perView={3}>
               {WORK.map((card) => (

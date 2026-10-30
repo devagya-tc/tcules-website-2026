@@ -1,5 +1,22 @@
-import { BlockCard, TestimonialBeside, TestimonialCard, TestimonialWall } from '@/patterns';
-import { Layout, Section, type SectionSurface } from '@/components';
+import {
+  BlockCard,
+  ContentSection,
+  Proof,
+  Slider,
+  TestimonialBeside,
+  TestimonialCard,
+  TestimonialWall,
+} from '@/patterns';
+import {
+  BrandMark,
+  Cluster,
+  Icon,
+  Layout,
+  RatingBadge,
+  Section,
+  type SectionSurface,
+} from '@/components';
+import { EXTERNAL } from '@/lib/routes';
 import type { TestimonialAvatar, TestimonialItem } from '@/patterns';
 import { getKitPhoto, type PhotoId } from '@/lib/photos';
 
@@ -158,6 +175,60 @@ export default function TestimonialSpecimen() {
           </Specimen>
         </Layout>
       </Section>
+
+      <Section>
+        <Layout rowGap="stack">
+          <h2>2b · Fewer than six · one quote at a time</h2>
+          <p>
+            A testimonial band with fewer than six quotes turns them one at a time (owner, 29
+            Oct 2026; the explicit exception to no hidden cards, for testimonials only): the
+            centred italic quote with its stars and speaker, in the one-up Slider with its plain
+            bars. The score is the RatingBadge alone, in a fixed place under the quotes, so it
+            never moves with a slide. Six or more keep the wall (§ 2). The template&rsquo;s
+            band, composed here from the same parts.
+          </p>
+        </Layout>
+      </Section>
+      <ContentSection
+        surface="tint"
+        align="center"
+        heading="What clients say"
+        footer={
+          <Cluster justify="center">
+            <RatingBadge
+              score="4.8"
+              platform="Clutch"
+              href={EXTERNAL.clutch}
+              icon={<Icon name="star" size="sm" />}
+              mark={<BrandMark name="clutch" />}
+              detail="from 13 reviews. Read the reviews"
+            />
+          </Cluster>
+        }
+      >
+        <Slider
+          label="What clients say"
+          slideName="testimonial"
+          perView={1}
+          align="center"
+          autoplay
+        >
+          {[A, B, D, E].map((item) => (
+            <li key={item.id}>
+              <Proof
+                align="center"
+                quote={{
+                  quoteHtml: item.quoteHtml,
+                  name: item.name,
+                  role: item.role,
+                  company: item.company,
+                  ...(item.rating !== undefined ? { stars: item.rating } : {}),
+                }}
+              />
+            </li>
+          ))}
+        </Slider>
+      </ContentSection>
 
       <Section>
         <Layout rowGap="stack">

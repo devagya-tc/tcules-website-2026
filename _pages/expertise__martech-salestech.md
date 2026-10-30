@@ -5,13 +5,13 @@ page_name: MarTech & SalesTech
 page_type: expertise
 expertise_kind: domain_context
 seo:
-  title: 'MarTech Product Design: Reports Teams Act On | Tcules'
-  description: 'MarTech and SalesTech product design: reports teams act on, AI drafts a person approves and quoting tools sales teams use. Work for Ryzeo and Omny AI.'
+  title: 'MarTech Product Design for Marketing & Sales Tools | Tcules'
+  description: 'MarTech product design for marketing and sales software: reports that point to a next step, AI drafts people approve and quotes on one shared record.'
   canonical: https://www.tcules.com/expertise/martech-salestech
   robots: index,follow
 social:
-  og_title: 'MarTech Product Design: Reports Teams Act On | Tcules'
-  og_description: 'MarTech and SalesTech product design: reports teams act on, AI drafts a person approves and quoting tools sales teams use. Work for Ryzeo and Omny AI.'
+  og_title: 'MarTech Product Design for Marketing & Sales Tools | Tcules'
+  og_description: 'MarTech product design for marketing and sales software: reports that point to a next step, AI drafts people approve and quotes on one shared record.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,8 +19,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'MarTech Product Design: Reports Teams Act On | Tcules'
-  twitter_description: 'MarTech and SalesTech product design: reports teams act on, AI drafts a person approves and quoting tools sales teams use. Work for Ryzeo and Omny AI.'
+  twitter_title: 'MarTech Product Design for Marketing & Sales Tools | Tcules'
+  twitter_description: 'MarTech product design for marketing and sales software: reports that point to a next step, AI drafts people approve and quotes on one shared record.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: MarTech and SalesTech product design
@@ -29,7 +29,19 @@ search_context:
   - Do you design CRM, CPQ and sales tools?
   - How should AI-generated marketing content be reviewed?
   - Can you redesign our reporting without rebuilding the whole product?
-  primary_query: MarTech product design
+  primary_query: 'MarTech product design'
+  secondary_queries:
+  - 'MarTech UX design'
+  - 'SalesTech product design'
+  - 'AI-generated marketing content review'
+  - 'marketing analytics UX'
+  - 'marketing reporting redesign'
+  - 'sales tool UX design'
+  - 'redesign reporting without rebuilding'
+  - 'CRM UX design'
+  - 'lead management software UX'
+  - 'sales enablement software design'
+  - 'SalesTech UX design'
 navigation:
   breadcrumb:
   - name: Home
@@ -57,30 +69,70 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  signature_model: signal_segmentation_decision_action_attribution
-  case_study_slugs:
-  - ryzeo-marketing-automation-ux-revamp
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
+  signature_model: reports_to_action_ai_drafts_shared_record_commission_consent
+  selected_work:
   - omny-ai-suggestion-trust-redesign
+  - ryzeo-marketing-automation-ux-revamp
+  - enterprise-workflow-redesign-dealpath-real-estate (related work, a deal pipeline; labelled in the section's first line; the only card with a bound screen, since no MarTech case has one yet)
+  why_tcules_reasons: [1, 2, 4]
+  case_study_slugs:
+  - omny-ai-suggestion-trust-redesign
+  - ryzeo-marketing-automation-ux-revamp
+  - enterprise-workflow-redesign-dealpath-real-estate
+  - auxentios-cpq-product-mvp-design
+  - novus-insights-ai-survey-product-design
+  - doodle-case-study-automating-enterprise-meeting-scheduling
+  - gt-tools-shopify-product-discovery
+  - benchmark-gensuite-enterprise-suite-modernisation
   media_bindings:
-  - id: martech_asset
+  - id: martech_dealpath_workflow
     role: demonstrate
-    supports_section: proof
-    status: ASSET_REQUIRED
-    communication_job: Show an approved campaign, segmentation, recommendation or attribution workflow from Ryzeo or Omny AI context.
-  testimonial_ids: []
+    supports_section: selected-work
+    card: dealpath
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    source: current public Tcules case media (case-studies__enterprise-workflow-redesign-dealpath-real-estate.md, dealpath_workflow)
+    alt_intent: Dealpath redesign of Add to pipeline, where a person searches for and attaches an existing deal before creating a new one.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: martech_omny_card
+    role: demonstrate
+    supports_section: selected-work
+    card: omny-ai
+    asset_uri: null
+    source: Omny's suggestion screen is requested in DIAGNOSIS (one asset serves three routes); text card until supplied
+    status: SCREEN_REQUIRED
+  - id: martech_ryzeo_card
+    role: demonstrate
+    supports_section: selected-work
+    card: ryzeo
+    asset_uri: null
+    source: no product screen in the Ryzeo case files yet; text card
+    status: SCREEN_REQUIRED
+  testimonial_ids:
+  - UW-RAZEO-METHOD
+  - DRAFT-PRIMELIS-CONTAMINE
+  - DRAFT-NOVUS-RESEARCHER
+  - DRAFT-AUXENTIOS-SIX-ROLES (drafted 26 Oct for client signature)
   client_recognition:
     component_type: curated_client_recognition
     clients:
     - Ryzeo
     - Omny AI
     - Auxentios
+    - Novus Insights
+    - Primelis
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -90,7 +142,8 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
   proof_claim_policy: RYZEO_HISTORICAL_INACTIVE;OMNY_UNVERIFIED_CONVERSION_CLAIM
   content_composition:
@@ -132,91 +185,192 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - RYZEO_HISTORICAL_INACTIVE;OMNY_UNVERIFIED_CONVERSION_CLAIM
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__martech-salestech.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__martech-salestech.md; studio-spine rebuild 26 Oct 2026 evening (43-rollout-26-oct, tag ind2; industry order; Omny AI and Ryzeo with Dealpath as labelled related pipeline work; hard parts are reports to action, AI drafts, one record, commission and consent)
 ---
 
 *Expertise · MarTech and SalesTech*
 
-# Great report. Now what?
+# MarTech product design for CRM, reporting and AI-drafted marketing content
 
-Marketing and sales tools are full of reports, scores and AI drafts. We design MarTech and SalesTech products so each report points to a next step and each quote stays on one record.
+Marketing and sales software is used under someone else's eye. A marketer takes its report to a budget meeting, a rep sends its quote to a customer, and a brand signs off AI-drafted copy. Tcules is a MarTech product design studio, from reporting and AI content tools to CRM and quoting.
 
-[Start a conversation](#enquiry)
+[Tell us about your marketing or sales product](#enquiry)
 
-*Selected work: Ryzeo · Omny AI · Auxentios*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Where marketing and sales tools lose their users {#hard-parts}
+## What we design in MarTech and SalesTech {#what-we-design}
 
-- Customers open a report and still don't know what to do next.
-- Users blame you for AI copy they never checked.
-- Every customer wants a different report, and setting one up has become a job in itself.
-- One quote passes through half a dozen specialists and several tools.
+- **Marketing automation and reporting** for ecommerce brands · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp)
 
-## How we design marketing and sales software {#approach}
+- **Budget and listing-content tools** for Amazon sellers · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)
 
-**Reports that point somewhere.** Each report answers what happened, what may have caused it and what to look at next, with filters that match the questions people actually ask.
+- **Quoting (CPQ) tools** shared by sales reps and pricing experts · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design)
 
-**AI drafts wait for a person.** Suggestions stay visibly separate from approved content until someone adds them, so authorship is never in doubt.
+- **AI-assisted survey and market research products** · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design)
 
-**One record for the whole sales team.** Everyone who touches a deal or quote works on the same record and sees what changed since they last looked.
+- **CRM, pipeline and commission tools** · Commission shown on the deal, with the rule behind it
 
-**Shared parts for repeated patterns.** Filters, states and data displays are designed once and reused, so the tenth report looks like it belongs with the first.
+- **Lead management and sales enablement software** · The next action on a lead in one glance
 
-## Showing customers what the product did for them {#proof}
+## Selected MarTech product design work {#selected-work}
 
-### Ryzeo: reports that show customers what the product does for them
+Two pieces of marketing software, and the closest work we have to a CRM pipeline: deal software for real estate acquisitions teams.
 
-Ryzeo sells marketing automation to ecommerce brands and wanted the product to do more for customer growth and retention. Its customers were asking for reporting that helped them see how they were doing and where to act.
+### Omny AI: AI drafts that wait for a person
 
-After user interviews and a review of product analytics, we restructured the reports and the way customers shape a view around their own questions. We also designed a documented component system, so later screens follow the same rules for filters, states and data.
+Omny AI, since acquired by Primelis, writes listing content for brands and agencies selling on Amazon; its suggestions used to fill the content area before anyone chose them. Our redesign starts the area empty, gives adding a suggestion its own click and colours AI content purple. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-> “We’re impressed by how good they were at documenting their research and creating the user interaction flow.”  
+### Ryzeo: reporting first, with rules for what follows
+
+Ryzeo's ecommerce customers wanted reports that helped them choose where to act. Five research inputs made reporting the first move. We restructured the reports, designed how customers shape a view around their own questions, and documented the rules later screens share. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+### Dealpath: search the pipeline before adding a deal
+
+Dealpath's Add to pipeline opened Create deal straight away, even for a deal the team already tracked. In our redesign the step looks for an existing deal first, with creating one kept as a deliberate fallback, designed to keep each opportunity's history in one record. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+## MarTech UX design for reports, AI drafts and pipelines {#hard-parts}
+
+Marketing and sales software is full of figures, scores and drafts, and each one asks someone to act. The hard part is the step between seeing and doing, for people who are often between calls.
+
+### Reports that point to a next step
+
+Each report answers what happened, what may have caused it and what to look at next, with filters that match the questions people ask. For each figure that matters, we agree what a user should do when it moves, and put that action on the same screen.
+
+Every customer wants a different report, and setting one up can become a job in itself. So filters, states and data displays are designed once and reused, and the tenth report looks like it belongs with the first. Our guide shows [how to design marketing automation around the operator's choices](/insights/guides/marketing-automation-software-design-best-practices).
+
+Analytics and attribution views say what each figure covers and which model produced it. Your data team owns the model; we make its assumptions visible, so marketers can see what a number rests on before they act on it.
+
+### AI drafts your customers answer for
+
+Your customers answer for what goes out under their name. Suggestions stay visibly apart from approved content until someone adds them, accepting one is a deliberate act, and the product marks which part the AI wrote.
+
+Omny AI reported that after this change users grew more conscious of relying on the AI, and more forgiving when a suggestion missed.
+
+Example: in Novus Insights' survey MVP, as we designed it, each AI-generated question carries the prompt behind it, and a researcher's rewrite keeps the original visible beneath it. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+### One quote, deal or campaign on one record
+
+A quote moves between CRM records, internal messages, pricing rules and service contracts, and maintenance work can change the offer late. Everyone who touches it works on the same record and sees what changed since they last looked.
+
+Example: each Auxentios quotation passes through six specialist roles, from sales representative to pricing and maintenance experts. Eight interviews across those roles shaped a single quotation that every role works on, each in its own part and in no fixed order.
+
+### Commission and pipeline people can check
+
+Where commission is worked out in a spreadsheet at month-end, a rep cannot see what a deal earned or why. We show commission on each closed deal with the plan rule that produced it, split into what the deal has earned and when it will be paid.
+
+A rep who disagrees raises it on the deal, and sales operations answers there.
+
+Two things to agree with your finance lead first: what turns earned commission into payable, and who may change a split between two reps.
+
+Reps work in the gaps between calls, often on a phone, and need the next action on a lead or deal in one glance. Revenue operations needs the opposite: every rule, stage and handover visible in one place.
+
+### Consent before the send
+
+In Europe and the UK, GDPR and the ePrivacy rules set when someone may be emailed at all. In the US, CAN-SPAM sets how commercial email identifies itself and how people opt out.
+
+Your legal team decides what those rules require; we design consent records and unsubscribe states, so a marketer can see who may be contacted before a send.
+
+## What you get when Tcules designs your MarTech product {#what-you-get}
+
+We take on the screens where your customers read, decide and send, in a new product or an established one.
+
+**What you receive**
+
+- interviews with marketers, reps, pricing experts and their managers, so the first change comes from what users say they need most
+
+- reports and dashboards where each figure that matters has its next action on the same screen
+
+- AI draft review: suggestions kept apart, acceptance made deliberate, and AI and human work marked
+
+- the shared record for a campaign, deal or quote, with every role and tool it passes through
+
+- consent and unsubscribe states marketers can read before a send
+
+- shared filters, states and data displays, written up so later screens follow them
+
+- designs your engineers build from, or Tcules developers building with your team
+
+**Who does the work.** Each project has a senior product designer at its head, doing the design work, and an account lead keeping it on schedule. Researchers join for interview-heavy work, and design engineers or developers when it moves into code.
+
+**What we need from you.** Sessions with the marketers, reps and managers who use the product, your analytics and the reports customers ask for most, and the person who decides what ships.
+
+**Where our part stops.** Attribution models, data pipelines and CRM configuration stay with your marketing operations, data or CRM specialists; our design makes their work readable. AI models stay with your engineers.
+
+One analytics screen may only need [dashboard design](/services/product-design/data-visualisation), and AI drafts, scores or agents added to an established tool sit under [AI Product UX](/services/ai-product-ux).
+
+## What clients say {#testimonials}
+
+> “We’re impressed by how good they were at documenting their research and creating the user interaction flow. They were highly methodical and process-driven as well. We also appreciated that their team was willing to interview a lot of users for us.”  
 > **Russell Miler, COO, Ryzeo**
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
 
-### Omny AI: budget and content tools that show who did what
+> “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
+> **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-Omny AI helps brands and agencies selling on Amazon plan budgets and write listing content. We designed each budget screen around the question a planner has at that moment, such as how to allocate spend or what a figure is being compared with.
+> “Tcules interviewed people in all six roles that touch one of our quotations, then designed a single shared quotation where each role works on its own part. That shared quotation is the backbone of our MVP.”  
+> **Ashok Mohanty, Founder, Auxentios**
 
-Colour separates what the system supplied from what a person added, in budget planning as well as listing content.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+## How we work together {#how-we-work-together}
 
-### Auxentios: a quote that changes hands many times
+For a marketing or sales product, a good first piece of work is the report customers open most, redesigned so it points to a next step.
 
-In industrial sales, a quote moves between CRM records, internal messages, pricing rules and service contracts, and maintenance work can change the offer late in the process. Auxentios asked us to design the first version of a quoting product for this work.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-We interviewed eight people across six roles. A sales representative needs progress and customer context; a pricing expert needs the commercial rules. We designed one shared quote in which each role works on its own part.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-## Why MarTech and SalesTech teams work with us {#why-tcules}
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-**We hear from your users before we redesign.** At Ryzeo, customers said they wanted reports that helped them act, and that request set the priority.
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-**AI features your users can stand behind.** Your customers answer for what goes out under their name, so we make the AI's part in it plain to see.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-## Questions about MarTech and SalesTech products {#faq}
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-### Do you design CRM, CPQ and sales tools?
+## Why teams choose Tcules {#why-tcules}
 
-Yes. Auxentios' configure-price-quote product is one example. The same thinking applies to CRM records, pipelines and approval steps shared by sales, finance and operations.
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** In Doodle's scheduling research, one interview showed that a person's availability depends on how much the meeting matters, and priority became part of the model. [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+
+- **We know what to leave alone in a product people rely on.** Benchmark Gensuite's customers had built fast habits on its suite, so we tried each modernised pattern in coded prototypes and checked it against those habits before wider implementation. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed GT Tools' Shopify store, so the thinking behind product discovery went all the way into the store buyers use. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about MarTech product design {#faq}
+
+### Do you design CRM and sales tools?
+
+Yes, new ones included, such as the first version of Auxentios' quoting product. The same thinking applies to CRM records, pipelines and approval steps shared by sales, finance and operations. Our article sets out [how to design CPQ software sales teams will use](/insights/cpq-ux-design).
 
 ### How should AI-generated marketing content be reviewed?
 
-Keep suggestions apart from approved content, make accepting one a deliberate action, and mark what the AI wrote. That is the approach we designed for Omny AI's content tools.
+Keep suggestions apart from approved content, make accepting one a deliberate action, and mark what the AI wrote. That is the approach we designed for Omny AI's content tools, with purple marking AI content and blue marking a person's.
 
-### Can you redesign our reporting without rebuilding the whole product?
+### Can you redesign our reporting without rebuilding the product?
 
-Yes. We redesign the area customers struggle with most and set shared rules the rest of the product can adopt later, as we did with Ryzeo's reports.
+Yes. Tcules redesigns the area customers struggle with most and sets shared rules the rest of the product can adopt later, as we did with Ryzeo's reports.
+
+### How should a sales tool show what an AI agent changed?
+
+Each agent change appears in the record's history with the agent named, what it changed and why. Changes that affect a customer or a forecast wait for a rep's approval, and any of them can be undone from the record.
 
 ## Tell us what customers should do after reading a report {#enquiry}
 

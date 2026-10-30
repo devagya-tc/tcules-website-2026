@@ -1,0 +1,316 @@
+{
+  "template": "expertise-industry",
+  "route": "/expertise/fintech",
+  "slug": "fintech",
+  "name": "FinTech",
+  "pageType": "expertise",
+  "expertiseKind": "domain_context",
+  "seo": {
+    "title": "FinTech UX Design for Lending & Payment Apps | Tcules",
+    "description": "FinTech UX design for lending, payment and business finance products: statuses that mean one thing, declines with reasons and failures with a way forward.",
+    "canonical": "https://www.tcules.com/expertise/fintech",
+    "robots": "index,follow",
+    "ogImageAlt": "IMAGE_ASSET_REQUIRED"
+  },
+  "social": {
+    "og_title": "FinTech UX Design for Lending & Payment Apps | Tcules",
+    "og_description": "FinTech UX design for lending, payment and business finance products: statuses that mean one thing, declines with reasons and failures with a way forward.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "IMAGE_ASSET_REQUIRED",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Expertise",
+      "url": "/expertise"
+    },
+    {
+      "name": "FinTech",
+      "url": "/expertise/fintech"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "FinTech UX and product design",
+    "primaryBuyerQuestion": "How should a lending, payment or business finance product make status, decisions and responsibility clear enough for customers and staff to act?",
+    "supportingQuestions": [
+      "Which FinTech products do you design?",
+      "How should a product explain a decision made with AI, or a payment an AI agent made?",
+      "Can a Tcules designer work inside our FinTech team?",
+      "Do you make sure our product is compliant?",
+      "Do you design insurance products as well?"
+    ],
+    "primaryQuery": "FinTech UX design",
+    "secondaryQueries": [
+      "FinTech UX design services",
+      "FinTech app design",
+      "lending software UX",
+      "payment app UX design",
+      "FinTech product design",
+      "explain AI credit decisions to customers",
+      "FinTech compliance and UX",
+      "banking app UX design",
+      "FinTech UI design",
+      "designer inside our FinTech team"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "EXCELLENCE_DRAFT_W3_2026-10-14",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": {
+    "form": "project_enquiry",
+    "anchor": "enquiry",
+    "visibleFields": [
+      "Email",
+      "What are you working on?",
+      "Product or company URL"
+    ],
+    "optionalFields": [
+      "Product or company URL"
+    ],
+    "submitLabel": "Send enquiry",
+    "hiddenContext": [
+      "origin_route",
+      "placement",
+      "family",
+      "service_or_audit",
+      "referrer",
+      "campaign"
+    ],
+    "onSuccess": {
+      "heading": "Your enquiry has reached us.",
+      "body": "We'll reply within one business day.",
+      "retainEnteredData": true
+    },
+    "processor": "cms_record_and_notify",
+    "schedulingLabel": null
+  },
+  "hero": {
+    "eyebrow": "Expertise · FinTech",
+    "title": "FinTech UX design for lending and payments, with each status explained",
+    "lede": [
+      "A borrower checks a loan status at night, a finance manager approves a payment between meetings, and a support agent explains why another one failed. Money products are judged in those minutes. Tcules provides FinTech UX design for lending, payments and business finance products, new or already live."
+    ],
+    "actions": [
+      {
+        "label": "Tell us about your FinTech product",
+        "href": "#enquiry"
+      }
+    ],
+    "proofLines": [],
+    "studioFacts": true,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Rich section",
+      "id": "what-we-design",
+      "heading": "What we design in FinTech",
+      "body": "- **Mobile lending apps**, from sign-up to loan issuance · [OctiFi](/case-studies/octifi-mobile-lending-product-design)\n- **Payment apps for small shops** and the people who run them · Researched for [a merchant payments client](/case-studies/ux-research-for-kirana-store-payment-app)\n- **Business finance tools** for spending, approvals and payouts, including finance inside SaaS products · Each approval shows its limit and who signs next\n- **Staff review screens** for identity checks, credit approvals and fraud cases · Each case with its evidence and the reviewer's limit in view\n- **Banking and money management apps** for balances, transfers and savings goals · One meaning for every status\n- **Insurance quote, claims and underwriting tools** · Cover explained before anyone pays"
+    },
+    {
+      "block": "Selected work",
+      "id": "selected-work",
+      "heading": "Selected FinTech UX design work",
+      "intro": "Two FinTech clients, and the closest work from outside finance: a sign-off chain where one reviewer answers for every call.",
+      "cases": [
+        {
+          "case": "optimising-microlending-fintech-app-for-a-y-combinator-batch-startup",
+          "copySlug": "octifi-mobile-lending-product-design",
+          "heading": "OctiFi: lending flows prototyped with realistic figures",
+          "body": "OctiFi was preparing its mobile lending app for a second market. We designed onboarding, loan issuance and new features in rough wireframes first, then in prototypes with realistic figures that product, engineering and marketing could review before anyone invested in code. OctiFi handled engineering, lending policy and regulation.",
+          "linkLabel": "Read the OctiFi case",
+          "media": {
+            "id": "fintech_octifi_card",
+            "role": "demonstrate",
+            "card": "octifi",
+            "status": "SCREEN_REQUIRED",
+            "source": "no OctiFi app screen in the case files; text card until the screen library supplies one (design-system.md §4.6; placeholder mobile_octifi)"
+          }
+        },
+        {
+          "case": "ux-research-for-kirana-store-payment-app",
+          "copySlug": null,
+          "heading": "Merchant payments: twenty interviews before any build",
+          "body": "A client planning a payment app for kirana stores, India's neighbourhood grocery shops, had to choose which merchant problems to fund. Twenty interviews, alongside stakeholder, competitor and app-store research, became product priorities and a UX strategy while changing direction was still cheap.",
+          "linkLabel": "Read the merchant payments case",
+          "media": {
+            "id": "fintech_merchant_card",
+            "role": "demonstrate",
+            "card": "merchant-payments",
+            "status": "SCREEN_REQUIRED",
+            "source": "research case with no product screen; text card"
+          }
+        },
+        {
+          "case": "ai-quality-control-expert-review-buildtwin",
+          "copySlug": null,
+          "heading": "BuildTwin: an overrule that keeps its reason",
+          "body": "In BuildTwin's structural-engineering software, a quality engineer signs off each drawing the AI has checked and must defend the call. In the redesign, every check shows its source, and changing a result takes a reason that stays on the record, as a credit or fraud reviewer's would.",
+          "linkLabel": "Read the BuildTwin case",
+          "media": {
+            "id": "fintech_buildtwin_review_feed",
+            "role": "demonstrate",
+            "card": "buildtwin",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif",
+            "altIntent": "BuildTwin continuous review feed, where a quality engineer sees each AI check with its source and can change a result with a reason that stays on the record.",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media (case-studies__ai-quality-control-expert-review-buildtwin.md, buildtwin_review_feed)"
+          }
+        }
+      ]
+    },
+    {
+      "block": "Rich section",
+      "id": "hard-parts",
+      "heading": "FinTech app design for approvals, statuses and money in motion",
+      "body": "A money product makes a promise on every screen: each status says something about someone's money, several people act on one application, and the rules decide what a screen may say. So we map every state a loan, payment or claim can reach before drawing any screen.\n\n### One status, read the same way by customer and staff\n\n| Moment | What the customer is wondering |\n|---|---|\n| Signing up | \"Why do you need all this, and how long will it take?\" |\n| Applying | \"Will I qualify, and what exactly am I agreeing to?\" |\n| Waiting | \"Is it pending, approved or stuck?\" |\n| Paying | \"Did that go through, and when will it arrive?\" |\n| Approving a payment at work | \"Can I sign this off, or does it need someone else?\" |\n\nPending, approved, funded, failed and reversed each get a plain label, a short explanation and a next step. When a customer and an operations agent read the same record, they should reach the same answer. Where they differ, the gap becomes a support call.\n\nExample: our design for OctiFi covered joining, loan issuance and understanding the offer, and the flows were revisited as OctiFi prepared for a second market. Payment methods, identity checks and rules differ between countries, so each market gets its own pass.\n\n### Approvals with a limit and a name on them\n\nA spend request in a business finance tool, and a credit approval or fraud case in a lender's back office, both wait on someone with the right authority. Their screens answer the same questions: who may approve, up to what amount, what they are looking at and what changes when they act.\n\nWhen a model helps approve an application or flags a payment, the reviewer sees what the result rests on and can overrule it with a reason. The customer gets the main reasons in plain words, within the limits your compliance team sets.\n\n### Money that moves in parts\n\nA loan may fund in stages, a payout lands days after the sale, and a lender may fund some invoices in a request and not others. A bare *declined* on half a request sends a business owner straight to the phone.\n\nWe give each part its own status: what was funded, what wasn't, the reason where your compliance team allows one, and something the customer can do now. That might be adding a document, waiting for their own customer to pay or asking for a review.\n\nEvery reason has to make sense on a phone at nine in the evening.\n\n### Declines, checks and holds with a way forward\n\nIdentity checks required by know-your-customer and anti-money-laundering rules say why they ask, and progress is saved for people who stop halfway. A declined application, a failed payment or a missing document shows what happened and what to do next.\n\nThe rules shape the words. Most online card payments in Europe and the UK need strong customer authentication, and credit offers must show their true cost before anyone agrees.\n\nExplanations are becoming a duty as well. US lenders must give the main reasons for refusing credit. The FCA's Consumer Duty expects UK firms to check that customers understand what they are told, and the EU AI Act treats AI credit scoring of individuals as high-risk.\n\nYour compliance team decides what each rule requires. We design how a customer meets it: the wording, the order, the moment it appears and what a staff member sees when the customer calls.\n\n### Insurance quotes, claims and underwriter screens\n\nPolicyholders meet an insurance product when they buy cover, sometimes at another product's checkout, renew or claim. Underwriters, brokers and claims handlers use it all day.\n\nWe design quotes that make cover, cost and terms clear before anyone pays, and claims that show one status at a time and ask plainly for a photo or document.\n\nUnderwriter and broker screens sort submissions by what needs a person first. An AI recommendation shows what it rests on, so a professional can check, change or overrule it. Our piece on [how a review step hands control back to the reviewer](/insights/confidence-scores-dont-fix-trust-when-review-step-never) works through an example. Your underwriting and claims specialists set the rules."
+    },
+    {
+      "block": "What you get",
+      "id": "what-you-get",
+      "heading": "What you get when Tcules designs your FinTech product",
+      "intro": "We take on the customer journeys and the staff screens behind them, for a new product or a live app.",
+      "itemsLabel": "What you receive",
+      "items": [
+        {
+          "title": "a status map:",
+          "body": "every state a loan, payment or claim can reach, with what the customer sees, what staff see and what happens next"
+        },
+        {
+          "title": null,
+          "body": "customer journeys from sign-up and identity checks to repayment or payout, with every decline and failure designed beside the main path"
+        },
+        {
+          "title": null,
+          "body": "review and approval screens that show the case, its evidence, the approver's limit and who acts next"
+        },
+        {
+          "title": null,
+          "body": "reasons, disclosures and consent wording drafted with your compliance team, and checked on a small phone screen"
+        },
+        {
+          "title": null,
+          "body": "research with the people the product is for, where the concept still needs testing"
+        },
+        {
+          "title": null,
+          "body": "prototypes with realistic figures that product, engineering and marketing can review before code"
+        },
+        {
+          "title": null,
+          "body": "designs ready for your engineers, or Tcules developers who build with them"
+        }
+      ],
+      "whoDoesTheWork": "One senior product designer leads it and designs the screens, and an account lead keeps it moving. A researcher joins when a concept needs testing with customers, and design engineers or developers when the work moves into code.",
+      "whatWeNeedFromYou": "Your compliance or risk lead's time on wording and decline reasons, and the policy rules behind each status. We also need the support calls each status causes, time with customers and with the staff who review cases, and the person on your side who makes product calls.",
+      "whereOurPartStops": "Lending policy, credit models, fraud rules and regulatory sign-off stay with your compliance, risk and legal teams; our designs present their rules clearly. Payment integrations stay with your engineers unless [Software Development](/services/software-development) builds with you.",
+      "after": "A concept that needs testing with real users first can start with [UX Research](/services/product-design/ux-research) or [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing)."
+    },
+    {
+      "block": "Testimonials",
+      "id": "testimonials",
+      "heading": "What clients say",
+      "intro": "Amin Nordin speaks for a FinTech client; the others are clients from other fields on working with us.",
+      "testimonials": [
+        "FP-OCTIFI-REASONING",
+        "DRAFT-KNOVOS-CANDOUR",
+        "CL-RINGIER-COLLAB"
+      ],
+      "showPlatformRating": true
+    },
+    {
+      "block": "How we work together",
+      "id": "how-we-work-together",
+      "heading": "How we work together",
+      "intro": "For a FinTech product, a good first piece of work is the status that sends the most customers to support, redesigned with the wording agreed with your compliance team.",
+      "shared": "how-we-work-together:default"
+    },
+    {
+      "block": "Why Tcules",
+      "id": "why-tcules",
+      "heading": "Why teams choose Tcules",
+      "shared": "why-tcules:default",
+      "reasons": [
+        {
+          "reason": 1,
+          "evidence": "Our audit of Dealpath's deal-management software found that one action assumed every listing was a new deal, and our redesign changed that step. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)"
+        },
+        {
+          "reason": 6,
+          "evidence": "Primelis brought us in as an ongoing partnership three years ago, and we have designed each of its products since."
+        },
+        {
+          "reason": 4,
+          "evidence": "ConnectX's AI workspace went from our coded demo to a production-ready module, live since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)"
+        }
+      ]
+    },
+    {
+      "block": "Industries",
+      "id": "industries",
+      "heading": "Other industries we know",
+      "expertise": [
+        "b2b-saas-workflow-software",
+        "data-analytics-decision-products",
+        "proptech-contech-field-operations",
+        "climatetech-energy",
+        "ai-products-developer-tools",
+        "content-knowledge-discovery-platforms",
+        "martech-salestech",
+        "commerce-transactional-products",
+        "edtech-learning",
+        "healthtech",
+        "marketplaces-multi-sided-platforms"
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Questions about FinTech UX design",
+      "items": [
+        {
+          "question": "Do you make sure our product is compliant?",
+          "answer": "Your compliance and legal specialists decide what the rules require, and Tcules designs every screen to those requirements: what to ask for, when to explain it and how to show the result. The design makes their rules clear to the customer and to your staff."
+        },
+        {
+          "question": "How should an app explain AI credit decisions and agent payments?",
+          "answer": "Give the main reasons in plain words, what the customer can do about each and a route to a person, within limits your compliance team sets. When an agent pays for someone, show what they allowed, a receipt naming the agent and a way to dispute it."
+        },
+        {
+          "question": "Do you design banking and money management apps?",
+          "answer": "Yes. Balances, transfers, cards and savings goals need what lending and payments need: one meaning per status, a reason for every block and a clear next step. We design the customer app and the staff tools behind it together."
+        },
+        {
+          "question": "Can a designer work inside our FinTech team?",
+          "answer": "Yes, as an ongoing partnership: a senior Tcules designer works in your tools and channels next to your product and engineering people. OctiFi's first design assignment grew into continuing design work on its app. [See how ongoing work is set up](/how-we-work#ongoing)"
+        }
+      ]
+    },
+    {
+      "block": "Enquiry",
+      "id": "enquiry",
+      "heading": "Tell us which status sends customers to support",
+      "intro": "Share the product, the step and roughly how often it happens.",
+      "form": "conversion"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/expertise__fintech.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

@@ -4,13 +4,13 @@ slug: ai-product-ux-readiness-check
 page_name: AI Product UX Readiness Check
 page_type: tool
 seo:
-  title: 'AI Product UX readiness check: free worksheet | Tcules'
-  description: Review one AI use case for purpose, authority, evidence and recovery. Download unresolved product decisions and the tests needed before release.
+  title: 'AI Feature Readiness Checklist: Free Worksheet | Tcules'
+  description: 'A free AI feature readiness checklist for one use case: what the AI may do, what users can see and check, and how mistakes get put right.'
   canonical: https://www.tcules.com/tools/ai-product-ux-readiness-check
   robots: index,follow
 social:
-  og_title: 'AI Product UX readiness check: free worksheet | Tcules'
-  og_description: Review one AI use case for purpose, authority, evidence and recovery. Download unresolved product decisions and the tests needed before release.
+  og_title: 'AI Feature Readiness Checklist: Free Worksheet | Tcules'
+  og_description: 'A free AI feature readiness checklist for one use case: what the AI may do, what users can see and check, and how mistakes get put right.'
   og_image: https://www.tcules.com/assets/og/tools.png
   og_image_alt: Tcules social card headed Tools, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI Product UX readiness check: free worksheet | Tcules'
-  twitter_description: Review one AI use case for purpose, authority, evidence and recovery. Download unresolved product decisions and the tests needed before release.
+  twitter_title: 'AI Feature Readiness Checklist: Free Worksheet | Tcules'
+  twitter_description: 'A free AI feature readiness checklist for one use case: what the AI may do, what users can see and check, and how mistakes get put right.'
   twitter_image: https://www.tcules.com/assets/og/tools.png
 search_context:
   primary_intent: check whether an AI feature is ready to build
@@ -43,6 +43,17 @@ search_context:
     - How should I interpret an unknown or a gap?
     - What can I take into the next team review?
     questions_withheld: []
+  primary_query: AI feature readiness checklist
+  secondary_queries:
+  - AI product readiness checklist
+  - AI feature launch checklist
+  - AI use case worksheet
+  - AI feature risk assessment
+  - AI product UX checklist
+  - is our AI feature ready to build
+  - what the AI may do
+  - what users can see and check
+  - how AI mistakes get put right
 navigation:
   breadcrumb:
   - name: Home
@@ -53,11 +64,14 @@ navigation:
     url: /tools/ai-product-ux-readiness-check
 render:
   band_order:
+  - who-its-for
   - how-to-use-it
   - workspace
-  - reading-your-results
-  - what-this-does-not-tell-you
+  - example
+  - marking
+  - specialists
   - next
+  - faq
 page_composition:
   visual_plan: tool_record_and_worked_example
   tool:
@@ -72,11 +86,14 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      how-to-use-it: argument_thesis
+      who-its-for: buyer_situation
+      how-to-use-it: method_process
       workspace: argument_thesis
-      reading-your-results: argument_thesis
-      what-this-does-not-tell-you: argument_thesis
+      example: argument_thesis
+      marking: argument_thesis
+      specialists: argument_thesis
       next: argument_thesis
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -85,7 +102,7 @@ page_composition:
   visual_requirements:
   - id: v11_tool_interface
     status: ASSET_REQUIRED
-    supports_section: how-to-use-it
+    supports_section: workspace
     communication_job: Show the actual tool or a representative interactive state.
     asset_uri: null
     alt_caption_intent: Describe what the artefact demonstrates, not merely what it looks like.
@@ -94,6 +111,7 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 release:
@@ -123,52 +141,97 @@ content_governance:
   language: en-GB
 ---
 
-*Free tools · AI product decisions*
+*Free tool · AI features*
 
-# Work out what still needs deciding before your AI feature ships
+# AI feature readiness checklist: agree what the AI may do before launch
 
-The AI Product UX Readiness Check tests whether one AI use case is ready for product work, including what the AI may do, what users can inspect and how mistakes are handled. An AI feature that drafts a reply and one that sends it are different products to the person responsible for the customer relationship.
+The AI Product UX Readiness Check is a free AI feature readiness checklist. Take one AI use case through what the AI may do, what users can see and check, and how mistakes get put right. You end with a clear list of what stops your team explaining, checking and correcting what the feature does.
 
-You leave with unresolved decisions and tests for the next product review.
+An AI feature that drafts a reply and one that sends it are different products to the person who answers for that customer.
+
+Bring someone who knows the task well and someone who can say what the feature does. You leave with the open questions and the tests to take to your next product review.
+
 [Check one AI use case](#workspace)
 
-## Treat an unknown as a release question, not a score {#how-to-use-it}
-In the AI Product UX Readiness Check, an unknown means the team does not yet have enough evidence or an accepted decision for that item. Keep it open rather than scoring it as a failure or assuming a default. The next useful step is to identify what evidence, owner or product decision would close it.
+## Who the AI feature launch checklist suits {#who-its-for}
 
-Name the user, the task and the change the AI is meant to make. Record how the person does that work today. Bring someone who understands the task and someone who can explain the feature's actual behaviour.
+It suits a product team adding AI to software people already rely on: a product manager, a designer and an engineer, joined by someone who knows the task well. Run it before the build, while answers are still cheap to change, or before launch, to see what is still open.
 
-Use evidence available, decision only, open or not applicable for each check. A written decision is useful, but it is not evidence that the interaction works.
+One record covers one use case. A product with several AI features gets a record for each, starting with the feature whose mistakes would reach a customer first. Once the feature is live or in beta, testing it on real tasks shows more than a worksheet can.
 
-## Build a decision record before judging AI readiness {#workspace}
+AI features are moving from drafting to acting: agents that update records, send messages and chain steps across tools. Each step up in authority adds weight to the Authority and Recovery areas below, so run the check again whenever the feature is given more to do.
 
-| Decision area | Questions to answer | Evidence worth bringing |
+## How to use the AI product readiness checklist {#how-to-use-it}
+
+1. **Choose one use case.** Pick the one where a wrong output would cost the most, such as a reply that reaches a customer or a change to an account. One use case per record keeps every question answerable.
+
+2. **Work down the six areas.** Fill in the table below with what you know and what you could show. Leave a gap blank where nobody knows yet.
+
+3. **Mark every check.** Use the four marks set out further down, and keep each unknown open with a note of what would close it.
+
+4. **Test the gap that worries you most.** Run the example built to fail, such as an out-of-date record, and watch whether a person catches it.
+
+5. **Download the record and hand out the questions.** Give each open question one owner, then bring the list to the meeting where launch gets agreed.
+
+## AI use case worksheet: six areas to answer for one feature {#workspace}
+
+Start by naming the user, the task and the change the AI is meant to make. Write down how the person does that work today. Then go through each area.
+
+| Area | Questions to answer | What to bring |
 |---|---|---|
-| Purpose | What outcome improves? What would make the AI version worse than the current route? | A real task and a comparison plan |
-| Authority | Does the AI suggest, prepare or act? Which action needs approval? Who is accountable? | Role rules and the actual confirmation path |
-| Basis | What data supports the output? What happens when sources are missing, stale or contradictory? | Representative inputs and visible source behaviour |
-| Failure | What specific wrong result matters? How is it detected and contained? | A deliberately failed or ambiguous example |
-| Recovery | What can be corrected? Which effects cannot be undone? Who handles downstream changes? | A tested recovery path and named responsibility |
-| Evaluation over time | What will you observe after release? When should the feature be limited or withdrawn? | Evaluation cases, monitoring owner and decision criteria |
+| Purpose | What gets better for the user? What would make the AI version worse than their current way of working? | A real task and a plan to compare the two |
+| Authority | Does the AI suggest, prepare or act? Which actions need approval? Who answers for the result? | The rules for each role and the real confirmation step |
+| Basis | What data is the output built on? What happens when sources are missing, out of date or contradict each other? | Typical inputs, and how the product shows its sources |
+| Failure | Which wrong result would matter most? How would anyone spot it and stop it spreading? | An example built to fail, or one that could go either way |
+| Recovery | What can be corrected? What can't be undone? Who deals with the knock-on changes? | A recovery path you have tried, and the person responsible for it |
+| After release | What will you watch? When should the feature be limited or switched off? | Test cases, who monitors them and the point at which you would act |
 
-Record each unresolved question separately. That makes it possible to assign the permission rule to one owner and the recovery test to another.
+Write each open question on its own line. Then the permission rule can go to one owner and the recovery test to another.
 
-## A missing decision should produce a test, not a prediction {#reading-your-results}
+## AI feature risk assessment: a support assistant on an old record {#example}
 
-Worked example, not a client result. A support assistant prepares a reply using an account record. The record may be out of date, and the interface does not show when it was last refreshed.
+*Illustration, not client work.* A support assistant drafts a reply from a customer's account record. The record may be out of date, and the screen gives no sign of when it was last refreshed.
 
-The finding is an untested stale-data condition. The next test is to use an outdated account record and observe whether the reviewer can detect and correct the error before sending. The product decision is what the assistant should do when freshness cannot be established.
+That is a case nobody has tested: the assistant working from out-of-date information. The test is to give the assistant an old record and watch whether the reviewer spots the mistake and fixes it before sending. The product question is what the assistant should do when it can't tell how fresh its data is.
 
-Review unresolved authority and recovery questions before enabling consequential actions. Purpose questions need a task comparison. Missing source behaviour needs representative inputs. A decision with no test belongs in the evaluation queue. These categories do not add up to a release score.
+## Mark each check and keep unknowns open until someone answers them {#marking}
 
-## This check covers the interaction around the model {#what-this-does-not-tell-you}
+Give each check one of four marks: "evidence available", "decision only", "open" or "not applicable". A written decision still needs a test to show the interaction works, so "decision only" stays on your list.
 
-The questions draw on [Microsoft's human-AI interaction guidelines](https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/) and the context, measurement and responsibility concerns in the [NIST AI RMF playbook](https://airc.nist.gov/airmf-resources/playbook/).
+Leave an unknown open until someone can answer it, and note what would close it: the evidence, the owner or the product decision it is waiting for.
 
-The AI Product UX Readiness Check does not assess model performance, security, privacy or regulatory compliance. Those reviews may change what the interaction is allowed to do. A complete record here is a product-review input, not permission to launch.
+Then choose where to start. Resolve open questions about authority and recovery before the AI can take actions that change things. Purpose questions need a task comparison, missing sources need typical inputs to test with, and a decision without a test joins the queue for evaluation.
 
-## Take one consequential output further {#next}
+## What this AI product UX checklist covers, and what goes to specialists {#specialists}
 
-Use the [AI Trust and Control Canvas](/tools/ai-trust-control-canvas) to specify inspection, approval and recovery for the output carrying the greatest consequence.
+The questions draw on [Microsoft's human-AI interaction guidelines](https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/) and on the measurement and responsibility concerns in the [NIST AI RMF playbook](https://airc.nist.gov/airmf-resources/playbook/).
 
-If the team needs help resolving the questions against its product, bring the record to a conversation about [AI Product UX](/services/ai-product-ux).
+This check owns the interaction around the model: the part users see and answer for. Model performance, security, privacy and regulatory compliance run their own reviews, and what they find can change what the feature may do. The launch call brings both together, so take your finished record into that product review.
 
+## After the checklist: test the live feature or get design help {#next}
+
+For the output that could do the most harm, the [AI Trust and Control Canvas](/tools/ai-trust-control-canvas) sets out what people can check, approve and undo.
+
+If the feature is live or in beta, the [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) tests it on real tasks and gives you a ranked list of what to fix first. For help answering the questions in your own product, talk to us about [AI Product UX](/services/ai-product-ux).
+
+## AI feature readiness checklist FAQs {#faq}
+
+### Is there a checklist for whether an AI feature is ready to build?
+
+This page is one: the AI Product UX Readiness Check takes a single AI use case through six areas, from purpose to life after release. It records what is agreed, what is open and what still needs a test. It is free, needs no sign-up and ends in a record you can download.
+
+### What should we decide before shipping an AI feature?
+
+Start with whether the AI suggests, prepares or acts, and what users can see and check before relying on it. Then work out how a mistake gets put right, including anything that can't be undone. Last, agree what you will watch after release, and the point at which you would limit or switch off the feature.
+
+### How do we assess the risk of an AI use case?
+
+Start from the wrong result that would matter most, then ask how anyone would spot it and stop it spreading. Risk rises as the AI moves from suggesting to acting, so check who approves each action and what can be reversed. For the riskiest output, the [AI Trust and Control Canvas](/tools/ai-trust-control-canvas) plans its controls.
+
+### What evidence should we record for an AI feature review?
+
+Use the "What to bring" column: a real task to compare against, the rules for each role and typical inputs. Add an example built to fail, a recovery path you have tried, and test cases with someone watching them. Mark a check "evidence available" only once someone has seen it work.
+
+### Who checks model accuracy, security and compliance?
+
+Your specialists do. This checklist covers how people work with the feature, so accuracy, security, privacy and the law each get a separate review. Their findings can narrow what the feature is allowed to do, so bring them in before anyone agrees the launch.

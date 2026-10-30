@@ -5,13 +5,13 @@ page_name: AI Products & Developer Tools
 page_type: expertise
 expertise_kind: product_shape
 seo:
-  title: Product Design for AI Platforms & Developer Tools | Tcules
-  description: 'Product design for AI platforms and developer tools: clear starting points, docs beside the work and results people can check. Work for Eden AI and BuildTwin.'
+  title: 'AI Product Design for Platforms & Developer Tools | Tcules'
+  description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
   canonical: https://www.tcules.com/expertise/ai-products-developer-tools
   robots: index,follow
 social:
-  og_title: Product Design for AI Platforms & Developer Tools | Tcules
-  og_description: 'Product design for AI platforms and developer tools: clear starting points, docs beside the work and results people can check. Work for Eden AI and BuildTwin.'
+  og_title: 'AI Product Design for Platforms & Developer Tools | Tcules'
+  og_description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,8 +19,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Product Design for AI Platforms & Developer Tools | Tcules
-  twitter_description: 'Product design for AI platforms and developer tools: clear starting points, docs beside the work and results people can check. Work for Eden AI and BuildTwin.'
+  twitter_title: 'AI Product Design for Platforms & Developer Tools | Tcules'
+  twitter_description: 'AI product design for model platforms and developer tools: first steps that work, docs beside the task, and results people can check and overrule.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: AI product and developer tool Product Design
@@ -29,7 +29,18 @@ search_context:
   - Is designing an AI product the same as designing a chatbot?
   - Do you design developer portals and API dashboards?
   - Can you start from our demo or prototype?
-  primary_query: AI product design
+  primary_query: 'AI product design'
+  secondary_queries:
+  - 'AI platform UX design'
+  - 'AI product design process'
+  - 'AI product design for startups'
+  - 'AI product design examples'
+  - 'developer portal design'
+  - 'API dashboard design'
+  - 'LLM platform design'
+  - 'designing an AI product vs a chatbot'
+  - 'start from our AI demo'
+  - 'AI product design company'
 navigation:
   breadcrumb:
   - name: Home
@@ -57,67 +68,98 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: capability_user_job_evidence_control_recovery
+  selected_work:
+  - eden-ai-workflow-builder-search-redesign
+  - ai-native-building-energy-product-connectx
+  - novus-insights-ai-survey-product-design
+  why_tcules_reasons: [5, 4, 1]
   case_study_slugs:
   - eden-ai-workflow-builder-search-redesign
-  - ai-quality-control-expert-review-buildtwin
   - ai-native-building-energy-product-connectx
+  - novus-insights-ai-survey-product-design
+  - ai-quality-control-expert-review-buildtwin
   - omny-ai-suggestion-trust-redesign
   media_bindings:
-  - id: ai_eden
+  - id: ai_eden_unified_search
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: eden-ai
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
-    alt_intent: Eden AI unified search and workflow-builder entry.
+    source: current public Tcules case media (case-studies__eden-ai-workflow-builder-search-redesign.md, eden_unified_search)
+    alt_intent: Eden AI workflow builder with one search box for templates, AI-assisted creation and a blank start.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ai_connectx_workspace
+    role: demonstrate
+    supports_section: selected-work
+    card: connectx
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
+    source: current public Tcules case media (case-studies__ai-native-building-energy-product-connectx.md, connectx_workspace)
+    alt_intent: ConnectX coded workspace opened by a plain-language question, with building data, modules and digital twin.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ai_novus_card
+    role: demonstrate
+    supports_section: selected-work
+    card: novus-insights
+    asset_uri: null
+    source: no product screen in the Novus Insights case files yet; text card until the screen library supplies one (design-system.md §4.6)
+    status: SCREEN_REQUIRED
+  - id: ai_buildtwin_review_feed
+    role: demonstrate
+    supports_section: hard-parts
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
+    source: current public Tcules case media (case-studies__ai-quality-control-expert-review-buildtwin.md, buildtwin_review_feed)
+    alt_intent: BuildTwin continuous review feed keeping each AI check beside its source, status and conclusion.
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-EDEN-PLATFORM
-  client_recognition:
-    component_type: curated_client_recognition
-    clients:
-    - Eden AI
-    - BuildTwin
-    - Novus Insights
-    - ConnectX
-    placement: compact_hero_followup
-    label: Selected Tcules client relationships across the practice
-    source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
+  - DRAFT-CONNECTX-CHAT-WINDOW
+  - DRAFT-NOVUS-RESEARCH
+  - DRAFT-PRIMELIS-THREE-YEARS
+  testimonial_context: 'CURATED_VERBATIM_CLIENT_VOICE (all four voices registered for AI products)'
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    verified_client_reviews_separately: 12
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - Eden AI
+    - ConnectX
+    - Novus Insights
+    - BuildTwin
+    - Omny AI
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
   proof_claim_policy: CASE_ARTIFACT_REVIEW;EDEN_QUOTE_CONTEXT
-  content_composition:
-    primary_intent: AI product design
-    recognition_count: 3
-    signature_model_type: annotated-decision-path
-    proof_component: source_bound_named_case_or_explicit_proof_gap
-    testimonial_component: verbatim_quote_with_source_scope_in_cms
-    form_anchor: enquiry
-    mobile_table_policy: stack_as_labelled_rows
-  signature_explanatory_object:
-    type: annotated-decision-path
-    sequence:
-    - User intent
-    - AI-assisted option
-    - Inspect and edit
-    - Committed product state
-    label: Editorial explanatory diagram; not a client artefact
-    media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
   source_evidence_boundary: AI Product UX covers the human/AI experience. Production model/tool orchestration, evaluations, security and operational controls belong to an agreed engineering scope.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: For AI-native platforms and developer tools, the interface around the model is part of the product, not an optional wrapper.
 structured_data:
   types:
   - WebPage
@@ -135,87 +177,177 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - CASE_ARTIFACT_REVIEW;EDEN_QUOTE_CONTEXT
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__ai-products-developer-tools.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__ai-products-developer-tools.md; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct, tag ind1; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · AI products and developer tools*
 
-# AI product design for model platforms and developer tools
+# AI product design for developer platforms, from first demo to daily use
 
-People try an AI tool once, then judge it. Our AI product design covers first steps, documentation, results and review, so a first try can become regular use for beginners and experts alike.
+Developers judge an AI platform in their first session, by whether the docs and a first call work. Reviewers judge it every day after, by whether they can see what the model checked before they sign. Tcules provides AI product design for model platforms, developer tools and AI-native products, new or established.
 
-[Start a conversation](#enquiry)
+[Tell us what your product does](#enquiry)
 
-*Selected work: Eden AI · BuildTwin · Novus Insights · ConnectX*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Where AI and developer products lose people {#hard-parts}
+## What we design in AI platforms and developer tools {#what-we-design}
 
-| What goes wrong | What we design |
-|---|---|
-| People sign up, try one thing and leave | A clear place to start, matched to what each person came to do |
-| The docs live in another tab | Documentation and previews beside the work, so nobody loses their place |
-| Beginners want templates and experts want a blank page | Several ways to start that share one entry point and lead into the same product |
-| The output looks confident even when it is wrong | Results that show what the system looked at, and a way for a person to overrule them |
-| Generated material slips into the work unchecked | Suggestions that stay suggestions until someone accepts them |
+- **Model and API platforms** with workflow builders, search and documentation · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-Designing for a technical audience still means designing for people. Developers appreciate a good default as much as anyone, and a keyboard shortcut more than most.
+- **AI review tools** where an engineer signs off each result · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin)
 
-For copilots, agents and AI search inside an existing SaaS product, see our [AI Product UX](/services/ai-product-ux) service.
+- **AI-native products** shaped from an early idea · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)
 
-## AI products people can steer and question {#proof}
+- **AI-assisted survey and research products** · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design)
 
-### Eden AI: one builder for beginners and experts
+- **AI writing suggestions** added to an existing product · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)
 
-Eden AI's workflow builder serves developers at every level: some want a template, some want AI to sketch the workflow, and experienced users want a blank canvas. We kept all three ways to start and made switching into AI help a keyboard action.
+- **UX troubleshooting** for an AI software firm · Knovos
 
-Deeper technical detail sits one step behind each result, so beginners are not buried and experts are not slowed down. Workflow steps run left to right, so a developer can read the sequence at a glance.
+## Selected AI product design work {#selected-work}
 
-[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+### Eden AI: templates, AI help and a blank canvas in one box
 
-### BuildTwin: AI checks an engineer can question before sign-off
+Developers on Eden AI's platform had three ways in: pick a template, ask the AI, or open a blank canvas. We kept all three and brought them into one search box that recognises how someone wants to begin, with the Tab key as the deliberate step into AI help. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-BuildTwin was adding AI checks to structural-engineering drawings, and a quality engineer had to stand behind every result before approval. The client expected engineers to doubt the checks at first. So we designed each result to open onto the drawing and document behind it.
+### ConnectX: a question that opens a workspace, from demo to production
 
-A check that could not run asks for the missing input. An engineer who disagrees can reject a result, and the reason is kept on record.
+ConnectX's users ask about a building in plain words and get a working view back, with data, assets and a digital twin. We shaped eight scenarios, proved them in a coded demo on sample data, then took the demo to a production-ready module that has run since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
-[Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+### Novus Insights: the AI drafts, the researcher decides
 
-### More AI product work
+We took Novus Insights' AI-assisted survey product from market and stakeholder research to the design of its first version. The AI drafts a starting questionnaire and proposes more questions, and the researcher keeps the final say on purpose, wording and order. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
 
-[Novus Insights](/case-studies/novus-insights-ai-survey-product-design): an AI survey tool where the researcher keeps the final say on every question.
+## Where AI products and developer tools get hard {#hard-parts}
 
-[ConnectX](/case-studies/ai-native-building-energy-product-connectx): an AI energy product where a question opens a working view of the building, with its data and controls.
+People try an AI tool once, then judge it. The hard parts sit where the model meets a person: the first session, the result an expert has to sign and the text that leaves the product under someone's name.
 
-## Why AI teams bring us in {#why-tcules}
+### A first session that ends in a working call
 
-**Your engineers own the model. We design how people use it.** At Eden AI, that meant shaping how developers find, combine and test the platform's capabilities, while Eden's team kept building the engine underneath.
+On day one a developer portal has a single job: sign-up, an API key, a code sample that runs and an error message that says what to fix. Documentation and previews belong beside the work, so nobody loses their place in another tab.
 
-<!-- awaiting client sign-off -->
+LLM platform design adds its own questions: which model ran, what it cost, how long it took and why two runs differed. Platform engineers and data scientists need those views, and the product people beside them need a simpler way in.
+
+Developers like a good default as much as anyone, and a keyboard shortcut more than most.
+
+Example: in Eden AI's builder, each search result previews the capability and opens its documentation in one step, so developers see what it does before it joins their workflow. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+
+### Results an expert has to sign
+
+Some AI products put a person's name on every result: an engineering sign-off, a financial check, a clinical review. The output sounds just as sure when it is wrong. So each result shows what the system looked at and what it could not check, with a way to overrule it.
+
+Example: BuildTwin uses AI to check structural-engineering drawings, and a quality engineer approves each one. In our design, a check that cannot run names the missing input, and an engineer who disagrees changes the status with a reason while the original result stays in view. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+The record of who disagreed, and why, matters as much as the output. Our article on [how a review step hands control back to people](/insights/confidence-scores-dont-fix-trust-when-review-step-never) explains why.
+
+### AI drafts that go out under a person's name
+
+A listing, a questionnaire or a report drafted by AI still goes out under a person's name. Suggestions stay suggestions until someone accepts them, and the product keeps a visible line between what the model wrote and what a person changed.
+
+Example: in our MVP design for Novus Insights, every AI-written question carried its source prompt, and a question the researcher rewrote kept the model's version visible underneath. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+## What you get when Tcules designs your AI product {#what-you-get}
+
+Our AI product design process follows the model's output to the person using it: how they start, what they see, and how they check and correct what it produces.
+
+**What you receive**
+
+- the path from sign-up to a first working result, with keys, code samples and error messages
+
+- documentation, previews, consoles, usage and billing views placed beside the work, and the limits people meet as they grow
+
+- for each step, a written split between what the system proposes and what a person checks, edits or approves
+
+- results that show their sources and limits, and review screens that keep the original beside any correction
+
+- prototypes tested with your users and your engineers, clickable or in code
+
+- specs your developers build from, or Tcules developers through [AI Product Engineering](/services/software-development/ai-product-engineering)
+
+**Who does the work.** The product designer who leads your project is senior and does the design; an account lead keeps it running. Design engineers try uncertain behaviour in code, and our developers join if we build it.
+
+**What we need from you.** Your demo, prototype, model endpoint or live product. Early time with your ML engineers on what the system can report: sources, confidence and the cases it cannot handle. That sets what the screen can honestly show. New users to watch, and one person with the final word on product questions.
+
+**Where our part stops.** The model, prompts, evaluations, infrastructure and security stay with your engineers. Where rules such as the EU AI Act apply, your legal team sets the requirements and we design how the product shows them to the people using it.
+
+AI features added to an established SaaS product sit under [AI Product UX](/services/ai-product-ux). A feature already in use can start with an [AI Product UX Readiness Review](/audits/ai-product-ux-readiness), and a founder with an idea and no product yet with [New Product Design & First Release](/services/new-product-design-first-release).
+
+## What clients say {#testimonials}
+
 > “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-**We try ideas in code.** [Coded prototypes](/services/design-engineering/coded-prototyping) let your engineers test the behaviour while it is still cheap to change.
+> “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-## Questions from AI product teams {#faq}
+> “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
+> **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
+
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For an AI product, a good first piece of work is the path from sign-up to a first result people trust, designed end to end and tested with new users.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We design AI that people can check and correct.** In Omny AI's listing tools, nothing the AI wrote reached a listing until a person chose it, and every line showed who wrote it. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+
+- **One studio can take it into working software, with the designers staying in the build.** For CuramCare, we redesigned the web platform and both apps, and our developers coded the frontend for each one.
+
+- **We work out what the product has to know before we draw it.** For BuildTwin's AI review, we first mapped the detailer, the quality engineer and the approver, and the four questions the engineer has to answer before signing. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about AI product design {#faq}
 
 ### Is designing an AI product the same as designing a chatbot?
 
-Only sometimes. Chat is one way to ask. Most AI products also need places to review, compare, edit and keep results, which is why ConnectX's conversation opens a workspace.
+No. Chat is one way to ask, and most AI products need much more around it: people review, compare, edit and keep results. That is why a question in ConnectX's product opens a working view of the building with its data and controls.
 
 ### Do you design developer portals and API dashboards?
 
-Yes. We design the developer-facing product: sign-up and first steps, documentation layout, consoles, usage dashboards and error messages. The API can stay with your engineers, or our [Backend & API Development](/services/software-development/backend-api-development) team can build it with them.
+Yes. Tcules designs the developer-facing product: sign-up and first steps, documentation layout, consoles, usage dashboards and error messages. The API stays with your engineers, or a [Backend & API Development](/services/software-development/backend-api-development) project can take it on with them.
 
-### Can you start from our demo or prototype?
+### Can a design team start from our AI demo?
 
-Yes. Many AI products arrive as a working demo. We find out what users need around it, then design the product that turns a good demo into something people use every week.
+Yes. A working demo is a sound place to start, and many AI products begin as one. We find out what users need around it, then design the product around it: the first session, results people can check, and the work they return to.
+
+### When should an AI startup bring in product design?
+
+Once a demo works and the first users are trying it. That is when sign-up, first results and trust problems show up, and they are easier to fix before people rely on the product.
+
+### Which agencies design AI platforms and developer tools?
+
+Look for a studio that has designed AI products where people check, edit and overrule results, and ask to see the cases. Ours include Eden AI's model platform, BuildTwin's AI review tool, Novus Insights' survey product and ConnectX's building-energy product, each with a case study on this site.
 
 ## Show us where people stop after the first try {#enquiry}
 

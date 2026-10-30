@@ -4,13 +4,13 @@ slug: interaction-ui-design
 page_name: Interaction & UI Design
 page_type: service
 seo:
-  title: Interaction & UI Design Services for SaaS | Tcules
-  description: 'SaaS UI and interaction design for every state your product can be in: loading, errors, permissions and small screens, with specs developers can build from.'
+  title: 'UI Design Services for SaaS and Web Apps | Tcules'
+  description: 'UI design services for SaaS and web apps: interaction and visual design for every state, from loading and errors to permissions, with specs to build from.'
   canonical: https://www.tcules.com/services/product-design/interaction-ui-design
   robots: index,follow
 social:
-  og_title: Interaction & UI Design Services for SaaS | Tcules
-  og_description: 'SaaS UI and interaction design for every state your product can be in: loading, errors, permissions and small screens, with specs developers can build from.'
+  og_title: 'UI Design Services for SaaS and Web Apps | Tcules'
+  og_description: 'UI design services for SaaS and web apps: interaction and visual design for every state, from loading and errors to permissions, with specs to build from.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Interaction & UI Design Services for SaaS | Tcules
-  twitter_description: 'SaaS UI and interaction design for every state your product can be in: loading, errors, permissions and small screens, with specs developers can build from.'
+  twitter_title: 'UI Design Services for SaaS and Web Apps | Tcules'
+  twitter_description: 'UI design services for SaaS and web apps: interaction and visual design for every state, from loading and errors to permissions, with specs to build from.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: interaction and UI design services for SaaS and complex software
@@ -29,7 +29,19 @@ search_context:
   - Can you work inside our existing design system?
   - How do you hand designs to our developers?
   - Do you write the interface text too?
-  primary_query: SaaS UI design
+  primary_query: UI design services
+  secondary_queries:
+  - SaaS UI design
+  - interaction design services
+  - web app UI design services
+  - SaaS UI design examples
+  - B2B SaaS UI design
+  - UI design for complex software
+  - UI design for enterprise software
+  - interface copy and microcopy
+  - interaction design vs UI design
+  - can you work inside our design system
+  - how do you hand designs to developers
 navigation:
   breadcrumb:
   - name: Home
@@ -59,10 +71,14 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
   - what-we-design
-  - proof
+  - selected-work
+  - every-state
+  - routes
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -70,17 +86,37 @@ page_composition:
   media_bindings:
   - id: interaction_buildtwin_review_feed
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
-    alt_intent: BuildTwin continuous expert-review feed showing how AI findings remain reviewable rather than becoming final authority.
+    alt_intent: BuildTwin's continuous review feed, where each AI check on a structural drawing shows what was inspected, its source, its status and its conclusion in one scrolling reading path, with search and filters above.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: interaction_eden_unified_search
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
+    alt_intent: Eden AI's workflow builder with one search box for templates, capabilities and AI-assisted creation, and preview cards for inspecting a capability before adding it.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: interaction_benchmark_scope_selector
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    alt_intent: Redesigned Benchmark Gensuite scope selector with three views, Browse, Recents and Favourites, and Nearby, each with its own search boundary.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
+  - FP-EDEN-DEVELOPERS
   - FP-EDEN-USERS
+  - FP-GOLDIMAGE-NAVIGATION
+  - DRAFT-DOODLE-COMPONENTS
+  - CL-RINGIER-COLLAB
   client_recognition:
     component_type: curated_client_recognition
     clients:
-    - Eden AI
     - BuildTwin
+    - Benchmark Gensuite
+    - Eden AI
     - Dealpath
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
@@ -91,9 +127,18 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
-  proof_claim_policy: DEALPATH_PRODUCT_MODEL_BOUNDARY;BUILDTWIN_REVIEW_PROTOTYPE
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  proof_claim_policy: DEALPATH_PRODUCT_MODEL_BOUNDARY;BUILDTWIN_REVIEW_PROTOTYPE;BENCHMARK_CODED_PROTOTYPE_BEFORE_WIDER_IMPLEMENTATION
   content_composition:
     primary_intent: interaction design services
     recognition_count: 3
@@ -133,7 +178,6 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - DEALPATH_PRODUCT_MODEL_BOUNDARY;BUILDTWIN_REVIEW_PROTOTYPE
 content_governance:
@@ -143,76 +187,137 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-design__interaction-ui-design.md
 ---
 
-*Interaction & UI design*
+*Product Design · Interaction and UI design*
 
-# UI design that makes the next step obvious
+# UI design services for SaaS screens that make the next step obvious
 
-For SaaS products, we design the interaction and the interface: how each screen looks and behaves when people click, wait, make mistakes or come back later.
+Your product is judged on its screens all day long. The people who work in it judge it, prospects judge it in a demo, and support hears about every confusing step. Tcules provides UI design services for SaaS and complex software: every screen's look, words and behaviour in every state, specified for your developers.
 
-[Start a conversation](#enquiry)
+*Selected work: [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-*Selected work: Eden AI · BuildTwin · Dealpath*
+[Show us the screens that need work](#enquiry)
 
-## Where interfaces usually go wrong {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"It looked perfect in the design review."** Then real data, long names and empty accounts arrived.
+## What you get from our interaction and UI design services {#what-we-design}
 
-**"Users hesitate before every button."** Nobody can tell what an action will change, or whether it can be undone.
+**What you receive**
 
-**"The error message says 'Something went wrong'."** And nothing about what to do next.
+- **Every state.** Each important screen in its default, empty, loading, error, partial-data and no-permission versions, tested with long names and large tables.
 
-**"The button is greyed out and nobody knows why."** The permission rule is invisible to the person it blocks.
+- **Interaction patterns.** What each important action triggers, what people see next and how they undo or recover, including confirmations, mode switches and keyboard use.
 
-**"On a phone, everything just stacks."** The task falls apart somewhere below the fold.
+- **Visual design.** Type, spacing, colour, layout and hierarchy that put the right action first, in your design system or a new visual direction. A beautiful screen that highlights the wrong button is still a bug.
 
-## What we design {#what-we-design}
+- **Small screens.** What stays together, what collapses and what moves on a phone, so the task still works.
 
-**Behaviour for each state.** For every important action: what triggers a change, what the person sees, what they can do next and how they recover if it fails.
+- **Accessibility.** Labels, keyboard use, reading order, contrast and error messages, designed in from the first screen.
 
-**Visual hierarchy.** Type, spacing, colour and layout that put the right action first. A beautiful screen that highlights the wrong button is still a bug.
+- **Interface text.** The microcopy: labels, buttons, empty states and error messages, written with their screens.
 
-**Responsive layouts.** What stays together, what collapses and what moves on a small screen, so the task still works.
+- **Specifications.** Every screen annotated with its states and edge cases, plus rules for each reusable part.
 
-**Accessible interactions.** Labels, focus order, keyboard use, contrast and error messages, designed in from the start.
+- **Handover and build review.** A walkthrough with your engineers, answers while they build, and a check of the built screens against the design.
 
-**Specifications your developers can build from.** Annotated states, edge cases and component rules, then a review of what gets built.
+**Who does the work.** A senior product designer leads and does the work, with an account lead keeping it on track. They start with your hardest screen, agree the visual direction there and carry it across. Design engineers join when an interaction needs trying in code.
 
-## The details that make a screen work {#proof}
+**What we need from you.** Access to the product, someone who can make the calls, and real or realistic content: long names, empty accounts and permission rules, before any layout is drawn.
 
-### Eden AI: one search box for three ways to start a workflow
+**Where our part stops.** You sign off each screen, and your design system stays yours. Your developers build, unless you add [Design Engineering](/services/design-engineering) to take the trickiest interactions into code, or [Frontend Development](/services/software-development/frontend-development) for a working front end.
 
-People could begin a workflow in Eden AI's builder from a template, with AI help or from a blank canvas. We designed one adaptive search entry that serves all three.
+## Selected SaaS UI design work {#selected-work}
 
-In the design, pressing Tab switches from search to AI help, so people always know which one they are using. Preview cards and documentation links let people inspect a capability before adding it.
+Three SaaS UI design examples, from a new review step in an AI product to an established enterprise suite.
 
-> “Our users gave us great feedback about the new design, and they came forward and told us without us asking for it.”  
+### BuildTwin: one review feed in place of folding panels
+
+BuildTwin's quality engineers sign off drawings the AI has checked. We replaced folding panels with one review feed showing each check's source, status and conclusion, and a line stays only if it helps the engineer judge, check or act. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+### Eden AI: one search box, with AI help as its own mode
+
+Developers could start an Eden AI workflow from a template, with AI help or from a blank canvas, so we designed one search box for all three. In the design, Tab moves people into AI help, so they always know whether they are searching or asking. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+
+### Benchmark Gensuite: a modern scope selector that keeps customers' habits
+
+Benchmark Gensuite's scope selector decides which part of the organisation people see, in a safety and sustainability suite customers have used for years. We split it into three views, Browse, Recents and Favourites, and Nearby, each stating what its search covers. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+## Every state your customers meet, designed before it is built {#every-state}
+
+Screens get approved with tidy sample data. Then real accounts arrive: long names, a workspace that is empty on day one, a table with thousands of rows, a button greyed out by a rule nobody explained. That is where people stall, and where each team patches its own version of the same control.
+
+We design those states with the screen. An empty account shows what to do first, a failed save says how to recover, and a blocked action says why and who can unblock it. On a phone, the task still holds together.
+
+Example: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)'s listing card shows one property on the dashboard, in a map list and on a map pin. In the redesign, its three zones keep one order at every size, so the small card still reads as the same listing.
+
+## UI design, a design system or design engineering: which do you need? {#routes}
+
+Pick by what is going wrong today.
+
+| Service | What it covers | Best for |
+|---|---|---|
+| **Interaction and UI design** | Screen behaviour, look, interface text and specs | New screens, or screens people hesitate over |
+| **[Information Architecture & Workflow Design](/services/product-design/information-architecture-workflow-design)** | Records, roles, statuses and navigation | Screens that contradict each other because the structure underneath is unclear |
+| **[Design Systems](/services/design-systems)** | Shared components and rules used across teams | Several teams whose screens should look and behave alike |
+| **[Design Engineering](/services/design-engineering)** | Interfaces built and checked in code | Interactions whose problems only show in a browser |
+| **[Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing)** | Prototypes tested with people like your users | Choosing between two directions |
+| **[SaaS Product Redesign](/services/product-modernisation/product-redesign)** | An established product's workflows, structure and screens, changed step by step | A dated feel that runs deeper than the screens |
+| **[UX & Product Audit](/audits/ux-product-audit)** | The causes of friction in a live product, ranked by harm | Knowing something hurts, without knowing which screens |
+
+## What clients say {#testimonials}
+
+> “Our developers enjoyed working on the platform with the right UI/UX specs. Our users gave us great feedback about the new design, and they came forward and told us without us asking for it.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+> “We’ve had positive feedback from staff and clients. A lot of people comment on how easy our site is to navigate.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-### BuildTwin: an AI check an engineer can challenge
+> “Tcules reused our existing components wherever they could, and designed new ones only for the calendar and scheduling work our system didn't cover yet. Everything they added was organised to fit the system we already had.”  
+> **Stephanie Leue, Doodle**
 
-The first concept tucked each AI quality check inside an accordion, which hid the supporting detail behind repeated clicks.
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-We replaced it with one scrolling list where each check shows what the AI saw, where it came from, its status and its conclusion, with nothing hidden behind clicks. In the redesign, an engineer who overrides a result must give a reason, and the original result stays visible beside it.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-[Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+## How we work together {#how-we-work-together}
 
-### Dealpath: one listing card, three sizes
+For interaction and UI design, a good first piece of work is the flow that costs you most, such as setup or a dense table, redesigned with every state specified.
 
-Dealpath's listing card appears on the dashboard, in a map list and in map-pin details. We grouped its information into three zones and kept them in the same order at every size.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-The compact versions still read as the same property, so nobody has to relearn the card when it shrinks to fit a map.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-## Why Tcules {#why-tcules}
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-**We design the awkward states too.** Odd states are designed alongside the main screen, so nothing looks unfinished once real customers arrive.
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-**Designers who work in code.** When an interaction can only be judged in a browser, our [Design Engineering](/services/design-engineering) team builds it and checks it.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-## Frequently asked questions {#faq}
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that availability depended on a meeting's priority, and the scheduling interface was designed around it.
+
+- **We know what to leave alone in a product people rely on.** For [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), we changed the Add to pipeline step and kept the other three listing actions as they were.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we proved the AI dashboard in a coded demo on sample data before taking it through to a production-ready module.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about UI design services {#faq}
+
+### Who offers UI design services for SaaS products?
+
+Product design studios, specialist freelancers and in-house designers all do. Tcules is a studio that designs the screens of SaaS and complex web products, new or long established: states, interaction patterns, visual design, interface text and specifications. It is part of our [Product Design](/services/product-design) work.
 
 ### What's the difference between interaction design and UI design?
 
@@ -220,19 +325,15 @@ Interaction design decides how the product behaves when people act, wait, fail o
 
 ### Can you work inside our existing design system?
 
-Yes. We use your components, add the states they're missing and flag any rule that forces the wrong interaction. For bigger system work, see [Design Systems](/services/design-systems).
+Yes. We use your system's existing parts, add the screen states it is missing, such as empty, error and loading, and flag any rule that forces the wrong interaction. For bigger system work, see [Design Systems](/services/design-systems).
 
-### How do you hand designs to our developers?
+### Do you design screens where AI acts for the user?
 
-With every state annotated, including empty, loading, error, partial and no-permission, plus the rules behind each. We stay available to review what your team builds.
-
-### Do you write the interface text too?
-
-Yes. Labels, buttons, empty states and error messages are part of the design, because unclear words cause as much trouble as unclear layouts.
+Yes. We design what the screen shows before the AI acts, how it marks what the AI did and how a person undoes it. In BuildTwin's design, an engineer overrules an AI check with a new status and a reason, and the original stays beside it. Deeper AI work sits with [AI Product UX](/services/ai-product-ux).
 
 ## Tell us which screens need designing {#enquiry}
 
-New screens or ones that confuse people. Send the product or designs, and any loading, empty or error screens still to draw.
+Send a link to the product or the designs. Point us to the screens people struggle with, the ones that look out of step, or the loading, empty and error states nobody has drawn yet.
 
 **Enquiry form**
 

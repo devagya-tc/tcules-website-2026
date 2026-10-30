@@ -12,6 +12,7 @@
 export {
   InsightResources,
   ListingIndex,
+  caseFinder,
   caseViews,
   insightFinder,
   insightViews,
@@ -26,6 +27,7 @@ export type {
   InsightFormat,
   InsightItem,
   InsightKind,
+  ListingBands,
   ListingClosing,
   ListingFinder,
   ListingHero,
@@ -47,7 +49,10 @@ export { ServicePage } from './ServicePage';
 export type { ServicePageProps } from './ServicePage';
 export {
   AboutPage,
+  ContactPage,
+  CorpusBandView,
   HomePage,
+  PlainPage,
   LongformPage,
   OfferPage,
   ToolPage,
@@ -55,6 +60,8 @@ export {
   coverFor,
   gatewayBoardItems,
   gatewayItems,
+  gatewayPaths,
+  whyTcules,
   kindOf,
   planOffer,
   proofQuote,
@@ -66,7 +73,10 @@ export {
 } from './CorpusPage';
 export type {
   AboutPageProps,
+  ContactPageProps,
+  CorpusBandViewProps,
   HomePageProps,
+  PlainPageProps,
   LongformFamily,
   LongformPageProps,
   OfferPageProps,

@@ -112,7 +112,7 @@ function CasePage({
 
       {peers ? <ImpactBand band={peers} /> : null}
       {related ? <RelatedBand page={page} band={related} caseRefs={caseRefs} /> : null}
-      {close ? <EnquiryBand page={page} band={close} surface="tint" /> : null}
+      {close ? <EnquiryBand page={page} band={close} /> : null}
     </>
   );
 }
@@ -151,6 +151,7 @@ function TermPage({ page }: { page: CorpusPage }) {
     rest.length > 0
       ? {
           id: 'definition-2',
+          anchored: false,
           heading: [],
           headingText: '',
           blocks: rest.map((runs) => ({ type: 'paragraph' as const, runs })),
@@ -213,7 +214,6 @@ function CloseBand({ band }: { band: CorpusBand }) {
         id={band.id}
         data-band="L"
         arrangement="open"
-        surface="tint"
         heading={band.headingText}
         body={paragraphs[0] ? [plain(paragraphs[0])] : undefined}
         actions={[{ label: link.labelText, href: link.href }]}

@@ -12,6 +12,7 @@ import type {
   CorpusMediaBinding,
   CorpusPage,
 } from '../../corpus-types.ts';
+import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS } from '../../../lib/routes.ts';
 import { parseBody } from './parse-body.ts';
 
 /** The corpus directory: `_pages/` at the repo root, one markdown file per page. */
@@ -46,6 +47,7 @@ function mediaBinding(raw: unknown): CorpusMediaBinding {
     id: str(b.id) ?? '',
     role: str(b.role) ?? '',
     supportsSection: str(b.supports_section) ?? '',
+    card: str(b.card),
     assetUri,
     altIntent: str(b.alt_intent),
     status,
@@ -64,10 +66,33 @@ function composition(raw: unknown): CorpusComposition {
     ? strs(recognition.clients)
     : strs(c.logo_client_ids);
   const caseMeta = dict(c.case_meta);
+  const hasRecognition = Object.keys(recognition).length > 0;
+  /* `selected_work` is a list of slugs or of `{slug|case|card}` records, depending on the page. */
+  const selected = (Array.isArray(c.selected_work) ? c.selected_work : []).map((x) =>
+    typeof x === 'string' ? x : (str(dict(x).slug) ?? str(dict(x).case) ?? str(dict(x).card)),
+  );
+  const caseSlugs = [
+    ...new Set(
+      [...selected, ...strs(c.case_study_slugs), ...strs(c.featured_case_slugs)]
+        /* Some entries carry a note after the slug: `benchmark-… (related work; …)`. */
+        .map((x) => (x ? (/^[a-z0-9-]+/.exec(x.trim())?.[0] ?? null) : null))
+        .filter((x): x is string => !!x),
+    ),
+  ];
   return {
     visualPlan: str(c.visual_plan),
     mediaBindings: Array.isArray(c.media_bindings) ? c.media_bindings.map(mediaBinding) : [],
     logoClients,
+    clientRecognition: hasRecognition
+      ? {
+          componentType: str(recognition.component_type),
+          placement: str(recognition.placement),
+          clients: strs(recognition.clients),
+          label: str(recognition.label),
+          assetPolicy: str(recognition.asset_policy),
+        }
+      : null,
+    caseSlugs,
     testimonialIds: strs(c.testimonial_ids).length
       ? strs(c.testimonial_ids)
       : strs(dict(c.commercial_system).testimonial_ids),
@@ -130,6 +155,36 @@ function assignTestimonialIds(bands: readonly CorpusBand[], ids: readonly string
 }
 
 /** Parse one corpus file's text into a page. Throws with the file name on a malformed file. */
+/**
+ * Every link to a case study points at its LIVE slug (component-map C3, 29 Oct 2026), and every link
+ * to an insight the copy files elsewhere at its live path (INSIGHT_PATH_REDIRECTS, 29 Oct 2026). The copy links
+ * the slugs its own case pages were planned under; the 20 live cases keep Strapi's (owner, 11 Oct
+ * 2026), and `CASE_SLUG_REDIRECTS` names the move. Rewritten here, at the seam, so no page reaches a
+ * case through a redirect and no template learns that two slugs exist. Pure: a new tree, the words
+ * untouched.
+ */
+const CASE_PATH = /^\/case-studies\/([^/#?]+)(.*)$/;
+function liveHref(href: string): string {
+  /* An insight the copy files under another format or slug (INSIGHT_PATH_REDIRECTS), likewise. */
+  const [path = '', ...rest] = href.split('#');
+  const insight = INSIGHT_PATH_REDIRECTS[path];
+  if (insight) return [insight, ...rest].join('#');
+  const match = CASE_PATH.exec(href);
+  const live = match ? CASE_SLUG_REDIRECTS[match[1] ?? ''] : undefined;
+  return live ? `/case-studies/${live}${match?.[2] ?? ''}` : href;
+}
+function liveCaseLinks<T>(node: T): T {
+  if (Array.isArray(node)) return node.map(liveCaseLinks) as T;
+  if (node && typeof node === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(node)) {
+      out[key] = key === 'href' && typeof value === 'string' ? liveHref(value) : liveCaseLinks(value);
+    }
+    return out as T;
+  }
+  return node;
+}
+
 export function parseCorpusFile(file: string, text: string): CorpusPage {
   try {
     const { data, body } = splitFrontmatter(text);
@@ -140,7 +195,9 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
     const nav = dict(data.navigation);
     const render = dict(data.render);
     const release = dict(data.release);
-    const { hero, bands } = parseBody(body);
+    const search = dict(data.search_context);
+    const structured = dict(data.structured_data);
+    const { hero, bands } = liveCaseLinks(parseBody(body));
     const comp = composition(data.page_composition);
     assignTestimonialIds(bands, comp.testimonialIds);
     return {
@@ -163,6 +220,19 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
       ),
       conversion: conversion(data.conversion),
       bandOrder: strs(render.band_order),
+      searchContext: {
+        primaryIntent: str(search.primary_intent),
+        primaryBuyerQuestion: str(search.primary_buyer_question),
+        supportingQuestions: strs(search.supporting_questions),
+        primaryQuery: str(search.primary_query),
+        secondaryQueries: strs(search.secondary_queries),
+        keyEntities: strs(search.key_entities),
+      },
+      structuredData: {
+        types: strs(structured.types),
+        organizationRef: str(structured.organization_ref),
+        raw: structured,
+      },
       composition: comp,
       release: {
         contentState: str(release.content_state),

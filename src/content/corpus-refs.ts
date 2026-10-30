@@ -1,5 +1,12 @@
-import type { CorpusCaseRef, CorpusMediaBinding } from './corpus-types';
-import { getCorpusPage, listCorpusPages } from './source';
+import type { CorpusCaseRef, CorpusInsightRef, CorpusMediaBinding } from './corpus-types';
+import { CASE_SLUG_REDIRECTS, INSIGHT_PATH_REDIRECTS, caseStudyPath } from '@/lib/routes';
+
+import {
+  getCaseStudyListingPage,
+  getCorpusPage,
+  getCorpusRecord,
+  listCorpusPages,
+} from './source';
 
 /**
  * The cases a page cites, as each case's OWN corpus page describes it (page-mapping M8, rule 5.2).
@@ -14,13 +21,47 @@ export async function getCaseRefs(
   routes: readonly string[],
 ): Promise<Record<string, CorpusCaseRef>> {
   const refs: Record<string, CorpusCaseRef> = {};
+  /* Links reach a case by its live slug (the seam rewrites them); a case's own page in the copy may
+     still sit at the slug it was planned under, so that is looked up too. */
+  const planned = new Map(
+    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [
+      `/case-studies/${to}`,
+      `/case-studies/${from}`,
+    ]),
+  );
+  /* The live list, by live route: a case's thumbnail is its cover wherever its corpus page binds
+     none, the same picture the /case-studies listing shows. Without the list, refs carry none. */
+  const listing = routes.length
+    ? await getCaseStudyListingPage('case-studies').catch(() => null)
+    : null;
+  const live = new Map(
+    (listing?.items ?? []).map((record) => [caseStudyPath(record.slug), record] as const),
+  );
+  const liveSlug = new Map(
+    Object.entries(CASE_SLUG_REDIRECTS).map(([from, to]) => [
+      `/case-studies/${from}`,
+      `/case-studies/${to}`,
+    ]),
+  );
   for (const route of routes) {
-    const page = await getCorpusPage(route);
+    const alias = planned.get(route);
+    const page = (await getCorpusPage(route)) ?? (alias ? await getCorpusPage(alias) : null);
     if (!page) continue;
+    const thumb = (live.get(route) ?? live.get(liveSlug.get(route) ?? ''))?.thumbnail;
     refs[route] = {
       route,
       title: page.hero.titleText,
       cover: page.composition.mediaBindings.find((b) => b.bound) ?? null,
+      thumbnail: thumb?.src
+        ? {
+            src: thumb.src,
+            alt: thumb.alt,
+            /* A record without a measured size is drawn at the cover's 16:9. */
+            width: thumb.width ?? 1600,
+            height: thumb.height ?? 900,
+            ...(thumb.sources ? { sources: thumb.sources } : {}),
+          }
+        : null,
     };
   }
   return refs;
@@ -42,4 +83,36 @@ export async function getCorpusBindings(
     }
   }
   return found;
+}
+
+/**
+ * The insights a page links, as each piece's OWN corpus page describes it: its format and its length
+ * as displayed (CorpusInsightRef). Links reach a piece at its live path (the seam rewrites them); a
+ * piece's own page in the copy may sit at the path the copy filed it under, so that is looked up too.
+ * A route with no page in the corpus is absent from the result.
+ */
+export async function getInsightRefs(
+  routes: readonly string[],
+): Promise<Record<string, CorpusInsightRef>> {
+  const planned = new Map(
+    Object.entries(INSIGHT_PATH_REDIRECTS).map(([from, to]) => [to, from]),
+  );
+  const refs: Record<string, CorpusInsightRef> = {};
+  for (const route of routes) {
+    const alias = planned.get(route);
+    const page =
+      (await getCorpusRecord(route)) ?? (alias ? await getCorpusRecord(alias) : null);
+    if (!page) continue;
+    const editorial = page.frontmatter.editorial;
+    const length =
+      editorial && typeof editorial === 'object' && 'reading_time_as_displayed' in editorial
+        ? (editorial as Record<string, unknown>).reading_time_as_displayed
+        : null;
+    refs[route] = {
+      route,
+      format: page.pageType,
+      length: typeof length === 'string' && length.trim() ? length.trim() : null,
+    };
+  }
+  return refs;
 }

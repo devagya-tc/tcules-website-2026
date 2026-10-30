@@ -257,7 +257,9 @@ const ABOUT: SiteNavItem = {
   label: 'About',
   form: 'link',
   href: ROUTES.about,
-  matchPaths: [ROUTES.team, ROUTES.careers, ROUTES.security, ROUTES.contact],
+  /* Not /contact: the bar's own action, "Start a project", is the way there, so lighting About on
+     the enquiry page said the visitor was somewhere they were not (review 29 Oct). */
+  matchPaths: [ROUTES.team, ROUTES.careers, ROUTES.security],
   children: [
     soon('About', ROUTES.about),
     soon('Team', ROUTES.team),

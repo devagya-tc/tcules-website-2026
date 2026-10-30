@@ -1,16 +1,16 @@
 ---
 route: /glossary/design-engineering
 slug: design-engineering
-page_name: Frontend Design Engineering
+page_name: Design Engineering
 page_type: defined_term
 seo:
-  title: What is design engineering? Meaning and example | Tcules
-  description: 'Design engineering connects product design to working code: coded prototypes, component libraries and interfaces that behave the way they were designed.'
+  title: 'What is design engineering? Meaning and examples | Tcules'
+  description: 'What is design engineering? Exploring, refining and building product experiences in code. What a design engineer does, examples and how the role compares.'
   canonical: https://www.tcules.com/glossary/design-engineering
   robots: index,follow
 social:
-  og_title: What is design engineering? Meaning and example | Tcules
-  og_description: 'Design engineering connects product design to working code: coded prototypes, component libraries and interfaces that behave the way they were designed.'
+  og_title: 'What is design engineering? Meaning and examples | Tcules'
+  og_description: 'What is design engineering? Exploring, refining and building product experiences in code. What a design engineer does, examples and how the role compares.'
   og_image: https://www.tcules.com/assets/og/glossary.png
   og_image_alt: Tcules social card headed Glossary, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,16 +18,23 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is design engineering? Meaning and example | Tcules
-  twitter_description: 'Design engineering connects product design to working code: coded prototypes, component libraries and interfaces that behave the way they were designed.'
+  twitter_title: 'What is design engineering? Meaning and examples | Tcules'
+  twitter_description: 'What is design engineering? Exploring, refining and building product experiences in code. What a design engineer does, examples and how the role compares.'
   twitter_image: https://www.tcules.com/assets/og/glossary.png
 search_context:
   primary_intent: what is design engineering
   primary_buyer_question: What does frontend design engineering mean in software product development?
+  primary_query: 'what is design engineering'
+  secondary_queries:
+  - 'what does a design engineer do'
+  - 'design engineering meaning'
+  - 'design engineer vs frontend developer'
+  - 'design engineering role'
+  - 'design engineering examples'
   key_entities:
   - Design Engineering
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -38,8 +45,11 @@ navigation:
     url: /glossary/design-engineering
 render:
   band_order:
+  - role
   - practice
   - comparison
+  - related-terms
+  - faq
   - next
 page_composition:
   visual_plan: design_to_code_correspondence
@@ -47,8 +57,11 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      practice: argument_thesis
-      comparison: argument_thesis
+      role: definition
+      practice: case_or_artefact_proof
+      comparison: comparison_decision
+      related-terms: related_link
+      faq: faq
       next: argument_thesis
   media_bindings: []
   commercial_system:
@@ -60,6 +73,7 @@ structured_data:
   - WebPage
   - DefinedTerm
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
   defined_term_set_ref: https://www.tcules.com/glossary#glossary
@@ -92,33 +106,74 @@ content_governance:
 
 *Glossary · Design Engineering*
 
-# Frontend design engineering
+# What is design engineering? Meaning, role and examples
 
-In digital product development, frontend design engineering is the practice of carrying product and interaction decisions into coded prototypes, component systems and frontend implementation. When it matters: It becomes necessary when decisions keep dying between a persuasive design file and the shipped interface, in the gap where state, permissions and real content change the outcome.
+Design engineering is the practice of exploring, refining and building product experiences directly in code, from early prototypes to production. It matters whenever how a product behaves counts as much as how it looks. Permissions, loading states and real content all change what people experience.
 
-Design engineering operates between product design and software engineering. A design engineer reasons about state, responsive hierarchy, accessibility, component APIs, runtime behaviour and implementation constraints. The practice does not replace either discipline; it reduces loss between them.
+Some teams call it front-end design engineering, after the part of a product people see and use. It sits between product design and software engineering. Design judgement and technical craft meet in the same work, so less is lost between the two.
 
-For example, a permission-sensitive approval state starts as an interaction decision. It then needs a component API, coded role checks, responsive behaviour and acceptance evidence. [Design intent](/glossary/design-intent) names what must survive; [design to code](/glossary/design-to-code) describes the translation and continuing correspondence.
+A screen where only managers can approve a request starts as a design choice. It then needs coded role checks, a layout that works on a phone and a way to test both.
 
-Explore [Frontend Design Engineering](/services/design-engineering).
+[Design intent](/glossary/design-intent) names what must survive the build. [Design to code](/glossary/design-to-code) describes how a design becomes software and stays in step with it.
 
-## How is Design Engineering used in practice? {#practice}
+Explore [Design Engineering](/services/design-engineering).
 
-Design Engineering is useful when a product decision cannot be settled or preserved in static design alone. The work may involve a coded prototype, a real component family, a design-to-code reference or implementation QA in the running product. The common thread is that interaction intent is examined in the medium where it will actually behave.
+## The design engineering role: what a design engineer does {#role}
 
-Tcules uses [Design Engineering](/services/design-engineering) selectively. A product may need it for one difficult interaction while the client's engineers continue to own the wider application.
+A design engineer works out how a screen behaves when data is missing, when the window resizes and when a user lacks permission. They build coded prototypes, turn designs into production components and screens, and check the running product against the design.
 
-## How does Design Engineering differ from Software Development? {#comparison}
+The role reads a design file and a codebase with the same care. Questions that would otherwise bounce between designer and developer get answered inside the work.
 
-The table distinguishes carrying product intent into the frontend from taking broader application-delivery responsibility.
+## Design engineering examples: Benchmark Gensuite and ConnectX {#practice}
 
-| Practice | Primary responsibility | Typical scope |
-|---|---|---|
-| Design Engineering | Preserve and test product and interaction intent in running frontend work | Coded prototypes, design-to-code, frontend systems and implementation QA |
-| Software Development | Deliver the agreed application scope through build, testing and release | Frontend, backend, APIs, integrations, data and release work as agreed |
+Design engineering fits when a product question cannot be answered, or kept answered, in static design. The work may be a coded prototype, a set of real components, production screens or checks on the running product. In each, the intended behaviour is tested where it will actually run.
 
-## Why frontend design engineering matters in product work {#next}
+For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), Tcules built shared patterns and a three-view scope selector as working prototypes in HTML, CSS and JavaScript. A Benchmark engineering stakeholder reviewing them asked whether drag and drop would need an external library, while the team could still act on it.
 
-Keeping product intent alive between design and running software is the responsibility this term describes.
+For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), early directions explored detailed 3D buildings. The team chose a simpler 2.5D view focused on the asset that matters in each scenario, then tested it in a coded demo.
 
-[See Frontend Design Engineering](/services/design-engineering)
+At Tcules, design engineers explore, refine and build experiences directly in code, from early prototypes to production. They work alongside your engineers, or on the code side of a project Tcules has taken on.
+
+## Design engineer vs frontend developer, and where software development fits {#comparison}
+
+The roles overlap in code and differ in what they own. A design engineer owns how the experience behaves while it is still being shaped. A frontend developer owns delivering and maintaining that experience once it is agreed.
+
+| Practice | Main job | Typical scope | Best for |
+|---|---|---|---|
+| Design Engineering | Explore, refine and build the experience in code, from early prototype to production | Coded prototypes, production screens and components, design to code, implementation QA | Interactions, states and components where behaviour is still an open question |
+| Frontend development | Build and maintain the part of the application people use, to the agreed design | Screens, client-side logic, connections to APIs, performance and upkeep | Delivering features once design and behaviour are agreed |
+| Software Development | Deliver the agreed application through build, testing and release | Front end, back end, connections to other systems, data and release work as agreed | Building and running the whole application |
+
+## Terms related to design engineering {#related-terms}
+
+[Coded prototype](/glossary/coded-prototype): working software built to test what a design file can't show, such as real amounts of data or keyboard use.
+
+[Design to code](/glossary/design-to-code): turning designs into working software and keeping the two in step, from behaviour and content to accessibility.
+
+[Design system](/glossary/design-system): the shared building blocks, code and guidance that several products or teams build with, which design engineers often build and maintain in code.
+
+## Design engineering FAQs {#faq}
+
+### What does a design engineer do?
+
+A design engineer turns design choices into behaviour people can try. They build coded prototypes and production components, work out states such as empty, loading and no permission, and check the running product against the design.
+
+### How is a design engineer different from a frontend developer?
+
+A design engineer shapes and tests the experience in code while it is still being decided. A frontend developer builds and maintains the agreed experience as part of the application. On many teams the two work side by side, and some people do both.
+
+### Why do product teams hire design engineers?
+
+Teams hire them when details keep getting lost between design and build, or when an interaction can only be judged in running code. A design engineer lets the team see an idea working before it commits to the full build.
+
+### Is design engineering a role or a practice?
+
+Both. Some companies hire people with the title, while others treat design engineering as a way of working shared by designers who code and engineers with a strong eye for design.
+
+## Seeing an idea working in code before the full build {#next}
+
+Design engineering keeps design judgement in the work until the product is running, so a team sees an idea working in code before it commits to the full build.
+
+AI coding tools are pulling more design work into code. Design engineering is how that code stays good design: someone with design judgement, working in the running product, decides what the generated code should do and spots where it drifts.
+
+[See Design Engineering](/services/design-engineering)

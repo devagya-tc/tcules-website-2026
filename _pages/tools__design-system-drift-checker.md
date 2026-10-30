@@ -4,13 +4,13 @@ slug: design-system-drift-checker
 page_name: Design System Drift Checker
 page_type: tool
 seo:
-  title: Design system drift checker for product teams | Tcules
-  description: Trace a component through Figma, code and the live product. Record each difference and its owner, then download a brief for fixing the drift.
+  title: 'Design System Drift Checker: Free Template | Tcules'
+  description: 'A free design system drift checker: follow one component through Figma, Storybook and the live product, and record each difference and who owns it.'
   canonical: https://www.tcules.com/tools/design-system-drift-checker
   robots: index,follow
 social:
-  og_title: Design system drift checker for product teams | Tcules
-  og_description: Trace a component through Figma, code and the live product. Record each difference and its owner, then download a brief for fixing the drift.
+  og_title: 'Design System Drift Checker: Free Template | Tcules'
+  og_description: 'A free design system drift checker: follow one component through Figma, Storybook and the live product, and record each difference and who owns it.'
   og_image: https://www.tcules.com/assets/og/tools.png
   og_image_alt: Tcules social card headed Tools, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Design system drift checker for product teams | Tcules
-  twitter_description: Trace a component through Figma, code and the live product. Record each difference and its owner, then download a brief for fixing the drift.
+  twitter_title: 'Design System Drift Checker: Free Template | Tcules'
+  twitter_description: 'A free design system drift checker: follow one component through Figma, Storybook and the live product, and record each difference and who owns it.'
   twitter_image: https://www.tcules.com/assets/og/tools.png
 search_context:
   primary_intent: check design system drift
@@ -43,6 +43,16 @@ search_context:
     - How should I interpret an unknown or a gap?
     - What can I take into the next team review?
     questions_withheld: []
+  primary_query: design system drift checker
+  secondary_queries:
+  - check component drift
+  - Figma vs Storybook vs live product
+  - track component differences
+  - design system consistency check
+  - who owns component drift
+  - design system drift template
+  - component drift checker
+  - free design system audit template
 navigation:
   breadcrumb:
   - name: Home
@@ -53,15 +63,18 @@ navigation:
     url: /tools/design-system-drift-checker
 render:
   band_order:
+  - who-its-for
   - how-to-use-it
   - workspace
   - reading-your-results
-  - what-this-does-not-tell-you
+  - wider
   - next
+  - faq
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 release:
@@ -97,11 +110,13 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      how-to-use-it: argument_thesis
+      who-its-for: buyer_situation
+      how-to-use-it: method_process
       workspace: argument_thesis
       reading-your-results: argument_thesis
-      what-this-does-not-tell-you: argument_thesis
+      wider: argument_thesis
       next: argument_thesis
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -110,7 +125,7 @@ page_composition:
   visual_requirements:
   - id: v11_tool_interface
     status: ASSET_REQUIRED
-    supports_section: how-to-use-it
+    supports_section: workspace
     communication_job: Show the actual tool or a representative interactive state.
     asset_uri: null
     alt_caption_intent: Describe what the artefact demonstrates, not merely what it looks like.
@@ -123,59 +138,90 @@ content_governance:
   language: en-GB
 ---
 
-*Free tools · Design systems*
+*Free tool · Design systems*
 
-# Find where a shared component becomes a local exception
+# Design system drift checker: trace one component from Figma to production
 
-The Design System Drift Checker traces one shared component across Figma, Storybook and the shipped product to show where divergence enters. The same field can be current in Figma, correct in Storybook and three releases behind in the product. Fixing its appearance will not explain how it got there.
+The free Design System Drift Checker follows one shared component through Figma, Storybook (where coded components are previewed) and the live product to show where the differences creep in.
 
-You leave with observed differences, possible causes and the next check needed to separate them. Bring the design reference, the coded component and a running product that uses it.
+The same field can be current in Figma, correct in Storybook and three releases behind in the product. Fixing how it looks won't tell you how it got there.
+
+Bring the design file, the coded component and a running product that uses it. You leave with the differences you saw, their likely causes and the next check to tell those causes apart.
+
 [Open the checker](#workspace)
 
-## Trace the version people actually use {#how-to-use-it}
+## A design system consistency check for teams sharing components {#who-its-for}
 
-Choose a component family that a team has copied, overridden or stopped updating. Record a specific state, such as a select field with no available options. Compare like with like: product version, theme, content and permissions can all explain a difference.
+It suits design system leads, front-end leads and product designers where several products or teams use the same components. The signs are familiar: local copies, overrides nobody remembers agreeing, and products several releases behind the shared library.
 
-For each finding, capture the design reference, code version and product location. Mark it aligned, difference found, unknown or intentional exception. An exception needs an owner and a reason; a mismatch needs investigation before it gets a diagnosis.
+The checker covers one component at a time. Use it when one difference keeps coming back, or before you ask for budget to fix drift across the system, so the request rests on a traced example.
 
-## Build the drift investigation around one shared component {#workspace}
+Drift is about to speed up. AI coding assistants now produce components from prompts and screenshots, and each one can start a new local copy. A traced example keeps the shared library the version that those tools, and your people, learn from.
 
-Start with one finding. Add records for other states or consuming products when they help test the same suspected cause. The record builder collects your observations and produces a portable investigation brief. It does not connect to Figma, Storybook or your repository.
+## How to check component drift, starting with one component people copy {#how-to-use-it}
 
-### What should a design-system drift check inspect? {#what-should-a-design-system-drift-check-inspect}
+Choose a component family that a team has copied, overridden or stopped updating. Record one specific state, such as a select field with no options to choose from. Compare like with like: the product version, theme, content and the user's permissions can all explain a difference.
 
-| Follow the component through | Record | Check before drawing a conclusion |
+Start with one finding. Add records for other states, or for other products that use the component, when they help test the same suspected cause. The checker works from what you type in and turns your notes into a brief you can share. Your Figma files, Storybook and code stay where they are.
+
+## Figma vs Storybook vs live product: follow the component through four places {#workspace}
+
+| Follow it through | Record | Check before you draw a conclusion |
 |---|---|---|
-| Design | Intended state, permitted variants and reference version | Is the design definition current? |
-| Shared code | Component version, properties, token mapping and behaviour | Is the difference an agreed implementation adaptation? |
-| Running product | Actual import or copy, local overrides, content and role | Is the product using the version you inspected? |
-| Contribution and release | Why the local answer exists, request history and migration owner | Was the shared answer unavailable, unsuitable or simply not adopted? |
+| Design | The intended state, the variants allowed and which version of the design it is | Is this the current design? |
+| Shared code | The component version, its settings, its colour and spacing values and its behaviour | Is the difference a change the team agreed during the build? |
+| Live product | Whether it uses the shared component or a copy, local overrides, the content and the user's role | Is the product running the version you checked? |
+| Requests and releases | Why the local version exists, what was asked for, and who owns moving to the shared one | Was the shared version missing, unsuitable, or simply never adopted? |
 
-Different names can map to the same intended token. Equal colour values can conceal different meanings. Follow the mapping and behaviour rather than requiring identical names everywhere.
+Figma and code can use different names for the same colour or spacing value, and two identical colours can mean different things. Follow what each value is for and how the component behaves.
 
-## An unknown means the component trace is incomplete {#reading-your-results}
-In the Design System Drift Checker, an unknown means the trace cannot yet distinguish intentional variation from unsupported drift. Keep the observation separate from the explanation. Check the relevant design, code, product version and ownership decision before calling the difference a defect, a local exception or a missing shared capability.
+For each finding, note the design version, the code version and where it appears in the product. Mark it "aligned", "difference found", "unknown" or "intentional exception". An exception needs an owner and a reason. A difference needs looking into before anyone names its cause.
 
-Worked example, not a client result. An orders team uses a copied multi-select because the shared field supports only one selection. Both versions follow the same spacing and colours.
+"Unknown" means the trace can't yet tell an agreed variation from drift. Keep what you saw apart from why you think it happened.
 
-The observation is a local copy. The suspected cause is a missing supported interaction. Before proposing a replacement, check whether multi-select belongs in the shared component, a separate component or a product-specific composition. Ask the team what it requested and what prevented the shared route from meeting the need.
+## Worked example: tracing a copied multi-select {#reading-your-results}
 
-| Finding | Next investigation | A useful closure condition |
+*Illustration, not client work.* An orders team uses its own copy of a multi-select because the shared field allows only one choice.
+
+What you saw is a local copy. The likely cause is an interaction the shared component lacks. Before proposing a replacement, check where multi-select belongs: in the shared component, as a separate component or built for this one product. Ask the team what it asked for, and what stopped the shared route meeting the need.
+
+| What you found | What to look at next | When it's closed |
 |---|---|---|
-| Design and code disagree | Establish which definition is current and which behaviour is intended | An agreed mapping and a test of the affected state |
-| Code is aligned; product differs | Inspect the consuming version, overrides and context | The intended behaviour works in that product |
-| A local version fills a legitimate gap | Review the requirement with the component owner | A supported solution or an owned exception |
-| Products remain on old versions | Examine compatibility, migration effort and release ownership | An agreed migration or retention decision |
+| Design and code disagree | Which definition is current, and which behaviour is intended | Both agree, and the affected state has been tested |
+| Code matches; the product differs | The version the product uses, its overrides and how it is used there | The intended behaviour works in that product |
+| A local version fills a real gap | The need, reviewed with the component's owner | A shared fix, or an exception someone owns |
+| Products stay on old versions | Compatibility, the effort of moving and who owns releases | An agreed plan to move, or to stay |
 
-## One trace is a finding, not a system-wide diagnosis {#what-this-does-not-tell-you}
+## Test a second product before calling the drift widespread {#wider}
 
-Compare another consuming product before calling the problem widespread. A manual trace cannot calculate adoption, inspect your whole codebase or establish accessibility conformance. Check keyboard use, names, errors and content in the running workflow as well as the isolated component.
+Compare another product that uses the component before calling the problem widespread. One trace gives you a precise example; a wider review adds adoption figures, a search of the whole codebase and confirmed accessibility.
 
-The method separates appearance, behaviour and context, informed by [Storybook's UI testing guidance](https://storybook.js.org/docs/writing-tests). The interpretation belongs to the people who can inspect the sources.
+Check keyboard use, labels, errors and content in the running workflow as well as in Storybook. The method looks separately at appearance, behaviour and where the component is used, drawing on [Storybook's UI testing guidance](https://storybook.js.org/docs/writing-tests). Download the record, and the people who can open the files make the final call.
 
-## Take the finding to the person who can close it {#next}
+## Who owns component drift fixes, and where to take the finding {#next}
 
-Download the investigation record and review it with the component and product owners. A code mismatch may need [Figma and Storybook alignment](/services/design-systems/figma-storybook-alignment); a slow contribution path may need [governance and adoption work](/services/design-systems/governance-adoption).
+Download the record and go through it with the component's owner and the product owner. A gap between Figma and code may call for [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment). A slow route for requesting changes may call for [Design System Governance & Adoption](/services/design-systems/governance-adoption).
 
-If the evidence points in different directions, bring one trace to a [Design System Audit](/audits/design-system-audit).
+If the clues point different ways, bring one trace to a [Design System Audit](/audits/design-system-audit), where we follow your most-used patterns from Figma to code to the live product.
 
+## Design system drift checker FAQs {#faq}
+
+### How do I check where a shared component has drifted?
+
+Pick one component a team has copied or overridden, and one specific state of it. Record that state in the design, the shared code, the live product and the requests behind it, comparing like with like. Mark each finding before you name a cause.
+
+### Is there a free template to track design system drift?
+
+This checker is one. It turns your notes on one component into a brief you can download and share, with each finding marked "aligned", "difference found", "unknown" or "intentional exception". It works from what you type in, so there is nothing to connect to Figma, Storybook or your codebase.
+
+### How do we compare a component across Figma, Storybook and production?
+
+Fix the version, theme, content and user role first, because any of them can explain a difference. Then compare what each value is for and how the component behaves, since Figma and code can name the same colour differently. Note where in the product each finding appears.
+
+### Who should own design system drift fixes?
+
+The component's owner and the product owner, joined by whoever runs releases when products sit on old versions. Each intentional exception needs a named owner and a reason. If nobody has time to own it, our guide on [when to hire a design system consultant](/insights/when-to-hire-a-design-system-consultant) sets out what outside help should deliver.
+
+### How is design system drift different from an agreed exception?
+
+Drift is an unplanned difference between the shared component and what a product actually uses. An agreed exception is deliberate, with an owner and a reason written down. Until you can tell which you have, mark the finding "unknown". The glossary entry on [design system drift](/glossary/design-system-drift) explains the term.

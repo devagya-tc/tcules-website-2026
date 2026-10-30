@@ -2,15 +2,20 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import {
+  getCaseRefs,
   getCorpusPage,
+  getInsightRefs,
   getPlaceholderReasons,
   getProposedEyebrows,
   getTestimonialAvatars,
   getTestimonialRatings,
 } from '@/content';
+import { caseRoutesIn, insightRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { HomePage } from '@/templates';
+
+import { landedReasonFigure } from './_corpus/reason-figure';
 
 /**
  * `/` — read from the `_pages/` corpus and composed by the home template. Composition only: the
@@ -28,11 +33,13 @@ export default async function Home() {
   /* "Why teams choose Tcules" shows stand-in reasons (PLACEHOLDER, P48) until the content team
      writes the six the Reasons band is built for. */
   /* Bands the owner asked to carry an eyebrow the corpus does not author (PROPOSED, P49). */
-  const [ratings, avatars, reasons, eyebrows] = await Promise.all([
+  const [ratings, avatars, reasons, eyebrows, caseRefs, insightRefs] = await Promise.all([
     getTestimonialRatings(ids),
     getTestimonialAvatars(ids),
     getPlaceholderReasons(page.route),
     getProposedEyebrows(page.route),
+    getCaseRefs(caseRoutesIn(page)),
+    getInsightRefs(insightRoutesIn(page)),
   ]);
   return (
     <HomePage
@@ -41,6 +48,9 @@ export default async function Home() {
       avatars={avatars}
       reasons={reasons}
       eyebrows={eyebrows}
+      caseRefs={caseRefs}
+      insightRefs={insightRefs}
+      reasonFigure={landedReasonFigure}
     />
   );
 }

@@ -1,7 +1,7 @@
 ---
 title: "No testimonial band on a listing index, for now"
 date: 2026-10-22
-status: active
+status: superseded
 area: [proof, layout]
 source: "Owner, 22 Oct 2026 (after the case cards lost their quotes, PR #139)"
 supersedes: []

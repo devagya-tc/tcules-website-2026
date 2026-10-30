@@ -235,6 +235,39 @@ export const STORY: Partial<Record<SketchName, ReactNode>> = {
       <Glyph name="arrow-right-up" cx={250} cy={90} size={12} className={styles.releaseMark} />
     </>
   ),
+
+  /* The finding is traced: from the problem on the screen the route runs to the findings, ranked by
+     the harm each does, and the first lights (Audits, owner 29 Oct 2026: "traces visible problems
+     back to their cause. Each finding is ranked by the harm it does"). */
+  audits: (
+    <>
+      <rect className={styles.frame} x="30" y="30" width="120" height="120" rx="8" />
+      <path className={styles.copyQuiet} d="M46,50 L98,50" />
+      <path className={styles.copy} d="M46,62 L110,62" />
+      <rect className={styles.tile} x="46" y="80" width="64" height="20" rx="4" />
+      <path className={styles.copyQuiet} d="M54,90 L86,90" />
+      <Glyph name="danger-triangle" cx={126} cy={90} size={14} className={styles.glyph} />
+      <path className={styles.copyQuiet} d="M46,118 L118,118" />
+      <path className={styles.copyQuiet} d="M46,130 L90,130" />
+      <circle className={styles.node} cx="150" cy="90" r="2.5" />
+      <Trace d="M150,90 L164,90 A6,6 0 0 0 170,84 L170,56 A6,6 0 0 1 176,50 L197,50" />
+      <path className={cx(styles.solid, styles.grow)} d="M204,50 L197,54 L197,46 Z" />
+      <rect className={styles.frame} x="190" y="30" width="100" height="120" rx="8" />
+      <rect
+        className={cx(styles.halo, styles.grow)}
+        x="198"
+        y="34"
+        width="84"
+        height="32"
+        rx="10"
+      />
+      <rect className={styles.block} x="204" y="40" width="72" height="20" rx="4" />
+      <rect className={styles.tile} x="204" y="80" width="72" height="20" rx="4" />
+      <path className={styles.copyQuiet} d="M212,90 L244,90" />
+      <rect className={styles.tile} x="204" y="120" width="72" height="20" rx="4" />
+      <path className={styles.copyQuiet} d="M212,130 L228,130" />
+    </>
+  ),
 };
 
 /** Each story drawing's drawn edge (its bare frame's viewBox), strokes and halos included. */
@@ -247,4 +280,5 @@ export const STORY_DRAWN: Partial<
   'ai-product-ux': [46, 26, 228, 128],
   'design-engineering': [26, 26, 268, 128],
   'software-development': [46, 26, 228, 128],
+  audits: [26, 26, 268, 128],
 };

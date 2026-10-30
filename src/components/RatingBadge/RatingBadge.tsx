@@ -46,6 +46,16 @@ export type RatingBadgeProps = {
    * the link keeps a target taller than 24 (WCAG 2.5.8). Placement is still the parent's.
    */
   frame?: 'pill' | 'plain';
+  /**
+   * What the claim says beyond the pill, for assistive technology and machines only — in practice
+   * the copy's own words after the score: "from 13 reviews. Read the reviews" (owner, 29 Oct 2026:
+   * a rating is always the badge, never text and a link; "from 13 reviews" is not shown wherever a
+   * badge is, and "Read the reviews" is the badge's name, not visible text). It follows the visible
+   * words in visually hidden text, so the link's accessible name STARTS with what the eye reads
+   * (WCAG 2.5.3 label in name) and goes on: "4.8 on Clutch from 13 reviews. Read the reviews (opens
+   * in a new tab)". An `aria-label` would replace the visible words rather than extend them.
+   */
+  detail?: string;
 };
 
 /**
@@ -70,6 +80,7 @@ export function RatingBadge({
   showScore = true,
   scale,
   frame = 'pill',
+  detail,
 }: RatingBadgeProps) {
   return (
     <a
@@ -106,6 +117,7 @@ export function RatingBadge({
           {scale ? ` out of ${scale}` : null}
         </span>
       )}
+      {detail?.trim() ? <span className={styles.hint}> {detail.trim()}</span> : null}
       <span className={styles.hint}> (opens in a new tab)</span>
     </a>
   );

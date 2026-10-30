@@ -4,13 +4,13 @@ slug: ai-search-recommendation
 page_name: AI Search & Recommendation
 page_type: service
 seo:
-  title: 'AI Search UX Design: Results Users Can Check | Tcules'
-  description: 'AI search UX design for SaaS and knowledge products: visible sources, explained rankings, easy correction and recommendations people can check and act on.'
+  title: 'AI Search UX Design for Answers and Recommendations | Tcules'
+  description: 'AI search UX design for SaaS and knowledge products: answers with visible sources, explained recommendations and results people can check and act on.'
   canonical: https://www.tcules.com/services/ai-product-ux/ai-search-recommendation
   robots: index,follow
 social:
-  og_title: 'AI Search UX Design: Results Users Can Check | Tcules'
-  og_description: 'AI search UX design for SaaS and knowledge products: visible sources, explained rankings, easy correction and recommendations people can check and act on.'
+  og_title: 'AI Search UX Design for Answers and Recommendations | Tcules'
+  og_description: 'AI search UX design for SaaS and knowledge products: answers with visible sources, explained recommendations and results people can check and act on.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'AI Search UX Design: Results Users Can Check | Tcules'
-  twitter_description: 'AI search UX design for SaaS and knowledge products: visible sources, explained rankings, easy correction and recommendations people can check and act on.'
+  twitter_title: 'AI Search UX Design for Answers and Recommendations | Tcules'
+  twitter_description: 'AI search UX design for SaaS and knowledge products: answers with visible sources, explained recommendations and results people can check and act on.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: AI search and recommendation UX design
@@ -29,6 +29,15 @@ search_context:
   - Should AI search always give a generated answer?
   - How should a recommendation explain itself?
   primary_query: AI search UX design
+  secondary_queries:
+  - AI search UX
+  - AI search vs ordinary search
+  - AI answers with sources
+  - recommendation UX design
+  - RAG UX design
+  - explain a recommendation
+  - should AI search always generate an answer
+  - search results users can check
 navigation:
   breadcrumb:
   - name: Home
@@ -58,11 +67,13 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - search-jobs
-  - scope
-  - proof
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -70,16 +81,28 @@ page_composition:
   media_bindings:
   - id: ai_search_eden
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
-    alt_intent: Eden AI workflow builder showing unified search, templates and AI-assisted creation as distinct entry modes.
+    alt_intent: Eden AI's workflow builder start, with one search box for templates and capabilities, AI-assisted creation as a separate mode, and preview cards for checking a capability before adding it.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ai_search_buildtwin_sources
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
+    alt_intent: BuildTwin's review feed, where each AI check on a structural drawing shows its drawing reference, source document, observation and conclusion in one reading path.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-EDEN-PLATFORM
+  - DRAFT-PRIMELIS-TEAM
+  - DRAFT-CONNECTX-SCENARIOS
   client_recognition:
     component_type: curated_client_recognition
     clients:
     - Eden AI
+    - BuildTwin
+    - Omny AI
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -89,12 +112,20 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: hero
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
-  proof_claim_policy: EDEN_SEARCH_WORKFLOW_PROOF;NO_SEARCH_SUCCESS_METRIC
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: testimonials
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  proof_claim_policy: EDEN_SEARCH_WORKFLOW_PROOF;NO_SEARCH_SUCCESS_METRIC;BUILDTWIN_OMNY_LABELLED_CLOSEST_RELATED
   content_composition:
     primary_intent: AI search UX design
-    recognition_count: 3
     signature_model_type: search-to-commit-flow
     proof_component: source_bound_named_case_or_explicit_proof_gap
     testimonial_component: verbatim_quote_with_source_scope_in_cms
@@ -123,15 +154,13 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: ROLLOUT_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - EDEN_SEARCH_WORKFLOW_PROOF;NO_SEARCH_SUCCESS_METRIC
 content_governance:
@@ -143,84 +172,147 @@ content_governance:
 
 *AI Product UX · AI search*
 
-# AI search users can check before they act on it
+# AI search UX design for answers and recommendations users can check
 
-Search, generated answers and recommendations for SaaS and knowledge products, showing where each result came from and why it ranks there, then carrying it into the work.
+AI search is tested when a prospect types a real question in the demo, and every day after, when a customer wants the source before acting on an answer. Support hears about each answer that had none. Tcules provides AI search UX design for SaaS and knowledge products: search, generated answers and recommendations.
 
-[Start a conversation](#enquiry)
+*Selected work: [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)*
 
-*Selected work: Eden AI*
+[Show us what your users search for](#enquiry)
 
-## Where AI search lets users down {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**The answer has no visible source.** People cannot tell whether a sentence came from a document or was written by the model.
+## What you get from our AI search UX design {#what-you-get}
 
-**Exact matches and AI suggestions share one list.** Users cannot tell a record that matched their words from one the system guessed they might want.
+The whole path from the search box to the next step in the work, tried on your own content before it is built.
 
-**Recommendations never explain themselves.** They sound plausible, so people either follow them blindly or ignore them.
+**What you receive**
 
-**The right result leads nowhere.** Users find what they need, then copy it by hand into the screen where the real work happens.
+- **Search entry.** Exact lookups and plain-language questions in one box, with a one-key switch between them.
 
-## Design for what the user came to do {#search-jobs}
+- **Results that show their source.** Cards and previews with the source, its date and what it covers.
 
-People search for different reasons, and each one needs a different result.
+- **AI answers with sources.** Generated summaries kept visibly apart from the passages behind them, and a plain message when nothing in your content supports an answer.
 
-**To find a known item.** Fast, exact results, with the AI kept out of the way.
+- **Recommendations that explain themselves.** The reasons behind each pick, what was left out, what happens on accepting it, and preferences people can change.
 
-**To understand a topic.** A short generated summary, with each statement linked to the passage that supports it.
+- **Corrections.** Exclude a source, fix a name, narrow the search or fall back to the raw results, plus a way to flag a bad answer that your team learns from.
 
-**To compare options.** Results side by side, with the criteria visible and adjustable.
+- **The next step.** The chosen result carried straight into the screen where the work happens, so nobody copies it across by hand.
 
-**To choose one.** A recommendation that shows why it was picked, what was left out and what happens if the user accepts it.
+- **A test on your own content.** A coded version run against a sample of your documents, showing where answers drift before engineering builds it.
 
-## What we design {#scope}
+**Who does the work.** Your senior product designer starts from the queries people type today, sorted by the job behind each. A design engineer runs the test on your content, and an account lead handles scheduling.
 
-| | What users get |
-|---|---|
-| **Search entry** | Exact lookups and plain-language questions in one box, with a clear switch between them (at Eden AI, the Tab key) |
-| **Results** | Cards and previews that show the source, its date and what it covers |
-| **Answers** | Generated summaries kept visibly apart from their sources, and a plain message when nothing supports an answer |
-| **Recommendations** | The reasons behind each pick, and preferences users can change |
-| **Corrections** | Exclude a source, fix a name, change a preference or go back to the raw results |
-| **Next step** | The chosen result carried straight into the workflow |
+**What we need from you.** A set of real queries, a sample of your documents, and what people do with a result once they find it.
 
-An honest "nothing found" beats a confident guess.
+**Where our part stops.** We design what people see, check and do. Retrieval, ranking and model quality stay with your engineers, or with ours through [AI Product Engineering](/services/software-development/ai-product-engineering).
 
-## Eden AI: one search box for exact lookups and AI help {#proof}
+## Selected AI search UX work {#selected-work}
 
-Eden AI's workflow builder let people start from a template, ask AI for help or begin from scratch. Each route had its own way of finding things, and documentation drifted away from the task.
+The nearest work we have is one search redesign, and two AI products where people check what the system found or suggested before it counts.
 
-We redesigned the start around one adaptive search box. Search and AI assistance sit together but stay distinct: pressing Tab switches into AI mode.
+### Eden AI: search and AI help in one box, as two modes
 
-Preview cards and documentation links let people check a capability before adding it. Whatever they choose carries straight into the builder, where configuration and test feedback stay attached to the step being changed.
+Eden AI gives developers one platform for hundreds of AI models. We redesigned the start around one search box for templates and capabilities, with AI help as a separate mode. Preview cards and documentation let people inspect a capability before it joins the workflow. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
 
-<!-- awaiting client sign-off -->
+### BuildTwin: every AI result traced to the document behind it
+
+BuildTwin's AI checks structural drawings, and a quality engineer has to trust each result before signing off. In the review design, a check links to its drawing reference, source document, observation and conclusion, and one that could not run names the information it lacked. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+### Omny AI: suggestions that wait beside the work
+
+Omny AI, acquired by Primelis, suggests product benefits and use cases for Amazon listings. We moved its suggestions into a panel beside an empty content area, so a pick reaches the listing only when a person clicks to add it. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+
+## AI search vs ordinary search: which result fits each job {#search-jobs}
+
+People search for different reasons, and each needs a different kind of result. Sometimes the best AI search keeps the AI out of the way. Eden AI's founder talks through [why to build AI around the user's job](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo) in our podcast.
+
+| Result | What users see | Best for |
+|---|---|---|
+| **Exact results** | Fast matches for the words they typed | Finding a known record, file or customer |
+| **Generated summary** | A short answer, each statement linked to the passage behind it | Understanding a topic spread across several sources |
+| **Side-by-side comparison** | Options with the criteria visible and adjustable | Weighing a handful of options |
+| **Recommendation** | One pick, why it was chosen, what was left out and what happens on accepting it | Choosing one and moving on |
+
+The hard cases are mixed lists and missing sources. When exact matches and AI guesses share a list, users cannot tell a record that matched their words from one the system guessed at. When an answer shows no source, nobody knows whether a sentence came from a document or the model.
+
+We keep each apart, and an honest "nothing found" beats a confident guess.
+
+In many products the search box is becoming the front door. A person describes what they need, and the product gathers the records and offers the next step. We design the first release with room for answers, actions and the sources between them, so each new capability has a place to land.
+
+## What clients say {#testimonials}
+
 > “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
 > **Samy Melaine, Founder & CPTO, Eden AI**
 
-Samy Melaine, Eden AI's founder, talks through the product thinking behind this work in [our podcast conversation](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo).
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
 
-[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+> “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-## Why Tcules for AI search {#why-tcules}
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-**The search is designed around the task.** Finding, comparing and choosing each get the screen they need.
+## How we work together {#how-we-work-together}
 
-**People can check a result before they commit to it.** We put previews and links to the underlying material beside each result, as we did for Eden AI's workflow builder.
+For AI search, a good first piece of work is one product area's real queries, sorted by the job behind each, with its results redesigned to show their sources.
 
-## Frequently asked questions {#faq}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We design AI that people can check and correct.** For [Novus Insights](/case-studies/novus-insights-ai-survey-product-design), we kept the AI's original visible beneath any survey question the researcher rewrites.
+
+- **We work out what the product has to know before we draw it.** At [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that availability depended on a meeting's priority, so the design compares times by how likely each is to hold.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), a coded demo on sample data showed each question with its data before any live integration.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms)
+
+## Questions about AI search UX design {#faq}
 
 ### How is AI search different from ordinary search?
 
-AI search can understand a plain-language request, and it can summarise, recommend or answer as well as list matches. So the interface has to show which parts came straight from a source and which the system worked out or wrote.
+AI search understands a plain-language request, and it can summarise, recommend or answer as well as list matches. So the interface has to show which parts came straight from a source and which the system worked out or wrote.
+
+### How should AI search show where its answer came from?
+
+By linking each statement to the passage that supports it, with the document's title and date in view. Tcules keeps quoted text and the AI's own summary visibly apart, and shows a plain message when nothing in your content supports an answer.
 
 ### Should AI search always give a generated answer?
 
-No. For many tasks a ranked list or a side-by-side comparison is quicker to check. A generated answer is worth showing when it spares the user from reading several sources.
+No. Where users need to compare or verify, Tcules recommends a ranked list or a side-by-side comparison, which is quicker to check. A generated answer earns its place when it spares the user from reading several sources.
 
 ### How should a recommendation explain itself?
 
-By naming the few criteria that most affected it, in plain words, and letting users adjust the ones they are entitled to change. Long technical explanations rarely help anyone choose.
+By naming the few criteria that most affected it, in plain words, and letting users adjust the ones they are entitled to change. Long technical explanations slow people down when they are trying to choose.
+
+### Do you design for RAG-based search?
+
+Yes. Retrieval-augmented generation, or RAG, finds passages in your content before the model writes an answer. The design work is showing those passages, saying when they are thin or out of date, and letting people search the sources directly.
+
+### When does conversational search help?
+
+It helps when people refine a loose request over several turns, such as narrowing a set of documents. When people already know what they want, a filter is quicker than a sentence, so Tcules keeps filters and results in view beside the conversation.
 
 ## Tell us what your users search for {#enquiry}
 

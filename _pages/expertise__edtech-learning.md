@@ -5,13 +5,13 @@ page_name: EdTech & Learning
 page_type: expertise
 expertise_kind: domain_context
 seo:
-  title: EdTech Product Design for Learning Platforms | Tcules
-  description: 'EdTech product design for learning platforms: clear next steps for learners, useful views for teachers and designs that work inside Moodle or your LMS.'
+  title: 'EdTech Product Design for Learning Platforms | Tcules'
+  description: 'EdTech product design for learning platforms and LMS courses: a clear next step for learners, a useful view for teachers, carried into Moodle or your LMS.'
   canonical: https://www.tcules.com/expertise/edtech-learning
   robots: index,follow
 social:
-  og_title: EdTech Product Design for Learning Platforms | Tcules
-  og_description: 'EdTech product design for learning platforms: clear next steps for learners, useful views for teachers and designs that work inside Moodle or your LMS.'
+  og_title: 'EdTech Product Design for Learning Platforms | Tcules'
+  og_description: 'EdTech product design for learning platforms and LMS courses: a clear next step for learners, a useful view for teachers, carried into Moodle or your LMS.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,17 +19,29 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: EdTech Product Design for Learning Platforms | Tcules
-  twitter_description: 'EdTech product design for learning platforms: clear next steps for learners, useful views for teachers and designs that work inside Moodle or your LMS.'
+  twitter_title: 'EdTech Product Design for Learning Platforms | Tcules'
+  twitter_description: 'EdTech product design for learning platforms and LMS courses: a clear next step for learners, a useful view for teachers, carried into Moodle or your LMS.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: EdTech and learning platform product design
   primary_buyer_question: How should the product support learning progress while giving educators the right evidence and control?
   supporting_questions:
   - Can you improve our course experience without moving to a new LMS?
-  - How do you make learning engaging without gimmicks?
+  - How do you make learning engaging?
   - Do you work on training platforms and teacher tools too?
-  primary_query: EdTech product design
+  - Can we try this on one course first?
+  primary_query: 'EdTech product design'
+  secondary_queries:
+  - 'EdTech UX design'
+  - 'course experience design'
+  - 'Moodle UX design'
+  - 'LMS UX design'
+  - 'training platform design'
+  - 'learning platform design'
+  - 'eLearning UX design'
+  - 'education app design'
+  - 'teacher dashboard design'
+  - 'improve courses without a new LMS'
 navigation:
   breadcrumb:
   - name: Home
@@ -57,63 +69,78 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: learner_state_practice_feedback_educator_oversight_progression
+  selected_work:
+  - wandering-raven-edtech-moodle-experience
+  - ai-quality-control-expert-review-buildtwin
+  - novus-insights-ai-survey-product-design
+  why_tcules_reasons: [1, 6, 4]
   case_study_slugs:
   - wandering-raven-edtech-moodle-experience
+  - ai-quality-control-expert-review-buildtwin
+  - novus-insights-ai-survey-product-design
   media_bindings:
-  - id: edtech_asset
+  - id: edtech_raven_card
     role: demonstrate
-    supports_section: proof
-    status: ASSET_REQUIRED
-    communication_job: Show an approved Wandering Raven or other learning-product artefact with learner workflow or educator context.
+    supports_section: selected-work
+    card: the-wandering-raven
+    asset_uri: null
+    source: no product screen in The Wandering Raven case files yet; request the Moodle theme screen (DIAGNOSIS card)
+    status: SCREEN_REQUIRED
+  - id: edtech_buildtwin_review_feed
+    role: demonstrate
+    supports_section: selected-work
+    card: buildtwin
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
+    source: current public Tcules case media (case-studies__ai-quality-control-expert-review-buildtwin.md, buildtwin_review_feed); related work, labelled as such in the section
+    alt_intent: BuildTwin review feed where an engineer signs off each AI check with its source in view.
+    status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - FP-WANDERING-PICTURE
-  - SSOT-TRISHANYA-RAJU-FOUNDER-THE-WANDERING-RAV
-  client_recognition:
-    component_type: curated_client_recognition
-    clients:
-    - The Wandering Raven
-    placement: compact_hero_followup
-    label: Selected Tcules client relationships across the practice
-    source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
+  - DRAFT-RAVEN-WHOLE-PICTURE
+  - DRAFT-JOVE-SIX-MONTHS
+  - DRAFT-NOVUS-RESEARCH
+  testimonials_general: true
+  testimonial_context: 'GENERAL_BAND: two EdTech voices (The Wandering Raven, JoVE; registered) and one studio voice (Novus Insights), said in the band line'
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    verified_client_reviews_separately: 12
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - The Wandering Raven
+    - JoVE
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
   proof_claim_policy: WANDERING_RAVEN_IMPLEMENTATION_SCOPE;NO_LEARNING_OUTCOME_METRIC
-  content_composition:
-    primary_intent: EdTech product design
-    recognition_count: 3
-    signature_model_type: learning-loop
-    proof_component: source_bound_named_case_or_explicit_proof_gap
-    testimonial_component: verbatim_quote_with_source_scope_in_cms
-    form_anchor: enquiry
-    mobile_table_policy: stack_as_labelled_rows
-  signature_explanatory_object:
-    type: learning-loop
-    sequence:
-    - Activity as practice
-    - Learner response
-    - Useful feedback
-    - Educator visibility
-    - Next attempt
-    label: Editorial explanatory diagram; not a client artefact
-    media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
   source_evidence_boundary: The Wandering Raven shows Product Design and Moodle implementation. It does not provide a verified change in student learning outcomes.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: The learning experience must feel coherent to the learner and remain possible within the actual delivery platform.
 structured_data:
   types:
   - WebPage
@@ -131,82 +158,188 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - WANDERING_RAVEN_IMPLEMENTATION_SCOPE;NO_LEARNING_OUTCOME_METRIC
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__edtech-learning.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__edtech-learning.md; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct, tag ind1; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · EdTech and learning*
 
-# EdTech product design for learners, teachers and your LMS
+# EdTech product design for learning platforms, courses and teacher tools
 
-We design learning products with a clear next step for learners and a useful view for teachers, and we can carry the design into Moodle or your chosen LMS ourselves.
+Learners meet your platform on a phone between lessons, teachers when they check who is stuck, and your team every time a course changes in the LMS. Tcules' EdTech product design covers learning platforms, courses and teacher tools, carried into Moodle or your chosen LMS.
 
-[Start a conversation](#enquiry)
+[Tell us about your learners](#enquiry)
 
-*Selected work: The Wandering Raven*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## What learners, teachers and platforms each need {#hard-parts}
+## What we design in EdTech and learning {#what-we-design}
 
-**Learners need to know what to do next, and why.** Too often the content is there and the next activity is buried.
+- **LMS and Moodle course experiences**, with custom themes and plugins · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience)
 
-**Teachers need to see who is stuck.** Completions, comments and time spent show that people were busy. They say little about whether anyone improved.
+- **Creative learning products** for young people aged eight to eighteen · The Wandering Raven
 
-**The platform has to carry the design.** Plenty of learning products look magical in the mock-up and generic in Moodle.
+- **Growth projects** inside a learning platform's product team · JoVE
 
-## How we design learning products {#approach}
+- **Workplace training and apprenticeship apps** · Practice that fits between shifts
 
-**A clear next step for every learner.** Each screen shows the current activity, what to do and how to take part, on a phone as well as a laptop.
+- **Assessment and skills sign-off tools** · Evidence, witness and assessor on one record
 
-**Practice and feedback first, rewards second.** Prompts, exercises and peer feedback carry the learning. Badges and progress markers make that effort visible.
+- **Teacher dashboards and educator views** · Who is stuck, seen early enough to help
 
-**A separate view for educators.** We design teacher views around assignments and who is stuck, without reducing a learner to one score.
+## Selected EdTech product design work {#selected-work}
 
-**Designed for the platform you use.** We work with the real plugins, themes and settings of your LMS from the start, so the experience survives the move into it.
+Work closest to EdTech: our learning-platform work for The Wandering Raven, and two products where an expert reviews what the software produced, as a teacher or an assessor does.
 
-<!-- awaiting client sign-off -->
+### The Wandering Raven: we built the Moodle theme ourselves
+
+The Wandering Raven runs creative-writing courses for eight- to eighteen-year-olds. A design handed to a separate platform team can lose its character in the theming. So we installed and configured the Moodle plugins and created the custom theme, leaving the client free for its courses. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+### BuildTwin: a sign-off with the source in view
+
+At BuildTwin, a quality engineer signs off each AI check on a structural drawing and has to defend the call. Our review feed keeps every observation beside its source, and a correction needs a reason, which is the shape an assessor's sign-off takes too. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+### Novus Insights: the AI drafts the questions, a person decides
+
+In Novus Insights' survey product, AI drafts a starting questionnaire. In our design the researcher keeps the final say, and a rewritten question keeps the AI's version visible beneath it, the record a teacher needs when AI drafts the practice questions. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+## Where learning products get hard {#hard-parts}
+
+A learning product answers to three people at once: the learner, the teacher and whoever signs off the result.
+
+### Learners who find the content and still miss the next step
+
+Too often the content is there and the next activity is buried. Each screen shows the current activity, what to do and how to take part, on a phone as well as a laptop.
+
+Practice and feedback carry the learning, and badges and progress markers make that effort visible. Characters, language and tasks suit the people learning, because an eight-year-old and an adult learner need different voices.
+
+Example: for The Wandering Raven, we reorganised the content so each learner can see their current activity and the next step. A world of creatures and characters ties the prompts, exercises and community together, so the course feels like one place. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+### Teachers who need to see who is stuck, and whether anyone improved
+
+Completions, comments and time spent show that people were busy. They say little about whether anyone improved. We design teacher views around assignments and who is stuck, without reducing a learner to one score, and keep signs of activity apart from signs of learning.
+
+A free chatbot now tutors step by step, so a learning product earns its place with what the chatbot lacks: planned practice, feedback teachers can see and a record of progress. An AI tutor inside the course should hand the teacher what it noticed and leave the learner doing the thinking.
+
+Example: The Wandering Raven's progress indicators and badges make activity visible. For any learning product, we suggest agreeing up front what would show that learners improved. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+### Rules for children, students and public bodies
+
+In the US, COPPA applies to services that collect personal information from children under 13, and FERPA governs student records that schools share with vendors. The UK's Age Appropriate Design Code sets high privacy defaults for under-18s.
+
+Universities and colleges serve learners with every kind of need, and public bodies in many countries must meet accessibility regulations. So course pages, readers and assessments work with a keyboard, a screen reader and low bandwidth.
+
+Your legal team owns those requirements; we design the defaults, consent steps and parent views that follow them.
+
+### Practical skills an assessor has to sign off
+
+Workplace training answers to employers and regulators. Assessors need a record they can defend, mentors need a quick way to confirm, and managers need to see who is overdue.
+
+*Illustration, not client work*
+
+An apprentice has to show they can wire a new circuit before an assessor signs it off. In a new app for that, the apprentice records the job at work: two photos and a sentence in their own words.
+
+Their workplace mentor opens the record on a phone between jobs and confirms what a witness has to vouch for, such as that the apprentice did the work. The assessor sees the record beside the standard, then signs it off or asks for one more thing.
+
+We would spend longest on the mentor's step, because we would expect apprentices to stop logging once confirming takes more than a minute. What a mentor confirms comes from your assessment specialists; our part is making it quick.
+
+## What you get when Tcules designs your learning product {#what-you-get}
+
+We design the learning experience and carry it into your platform, as a project or with a senior designer inside your product team.
+
+**What you receive**
+
+- research with learners and educators, on the devices they really use
+
+- an audit of content structure, mobile use, consistency and community features, each with a plain verdict
+
+- content regrouped so every learner can see the current activity and what follows it
+
+- teacher, mentor and assessor views built around who needs help
+
+- hybrid wireframes that put the course structure and the visual direction in front of you at once
+
+- defaults, consent steps and parent views for younger learners
+
+- the theme, plugins and settings configured in Moodle or your LMS by our team
+
+**Who does the work.** One senior product designer leads and does the design, and an account lead runs the project day to day. Our developers configure the platform. We can also work inside your product team, as we did beside JoVE's product managers and designers for six months.
+
+**What we need from you.** Time with learners and educators, and access to your LMS with its plugins, themes and settings. The course content, your instructional designers and subject experts, and a person who can make the product calls for you.
+
+**Where our part stops.** Course content, assessment standards and accreditation stay with your instructional designers and subject experts. Privacy requirements for younger learners stay with your legal team.
+
+A learning app that exists only as an idea or a prototype can start with [New Product Design & First Release](/services/new-product-design-first-release). If engagement is dropping and nobody can say why, start with a [UX & Product Audit](/audits/ux-product-audit).
+
+## What clients say {#testimonials}
+
+Two voices from learning platforms, and one from a client outside education.
+
 > “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
 > **Trishanya Raju, Founder, The Wandering Raven**
 
-## A learning product we designed and set up in Moodle {#proof}
+> “For six months Tcules worked beside our own product managers and designers on several product growth projects. They integrated well with our team and contributed high-fidelity design work across those projects.”  
+> **Dhanur Aashray Majety, Director, Product Management, JoVE**
 
-### The Wandering Raven: a creative-writing world inside Moodle
+> “Tcules interviewed our stakeholders and studied the market before drawing a single screen. In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
+> **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-The Wandering Raven runs creative-writing courses for young people between eight and eighteen. Its existing site had problems with how information was organised, mobile use, consistency and community participation.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-We researched learner and educator needs, reorganised the content so learners can see their current activity and the next step, and created a world of unusual creatures and characters. Writing prompts, exercises, peer feedback, forums and live sessions give learners different ways to take part.
+## How we work together {#how-we-work-together}
 
-Then we carried it into Moodle. We installed and configured selected plugins and created a custom theme, leaving the client free to focus on its courses.
+For a learning product, a good first piece of work is one course, or a learner's first week, redesigned inside the LMS you already run.
 
-> “As a business that focuses on creative writing and online learning, we were looking for someone to understand not only the EdTech space, but also the magic and creativity we were trying to bring to our students through our program. Tcules was a great partner to work with.”  
-> **Trishanya Raju, Founder, The Wandering Raven**
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-## Why learning teams work with us {#why-tcules}
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-**Design and platform work under one roof.** The people who design your learning experience also work inside your LMS, so there is no handover where the design gets watered down.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-**Designed for the age of your learners.** Characters, language and tasks are pitched at the age of the people using them, from eight-year-olds to older teenagers.
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-## Questions about EdTech products {#faq}
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-### Can you improve our course experience without moving to a new LMS?
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-Yes. Most of what learners notice sits in how content is organised, how clear the next step is and how the theme presents it. All of that can change inside the platform you already run.
+## Why teams choose Tcules {#why-tcules}
 
-### How do you make learning engaging without gimmicks?
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-Start with practice that feels worthwhile and feedback that helps. Characters, badges and progress markers then support that work instead of standing in for it.
+- **We work out what the product has to know before we draw it.** At Gold Image Printing, we watched staff handle orders in the existing system before redesigning the screens they rely on. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+
+- **Senior people do the work, and clients keep us for years.** Primelis has stayed with us for three years, and we have designed each of its products in that time.
+
+- **One studio can take it into working software, with the designers staying in the build.** We designed GT Tools' Shopify store and then developed it, including the custom work the platform needed. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about EdTech product design {#faq}
+
+### Can you improve our course experience without moving LMS?
+
+Yes. Most of what learners notice can change inside the platform you already run: how content is organised, how clear the next step is and how the theme presents it. Your teachers can then set one redesigned course beside the ones left as they were.
 
 ### Do you work on training platforms and teacher tools too?
 
-Yes. Workplace training, course authoring and educator dashboards share the same needs: a clear next step, useful feedback and an honest view of progress.
+Yes. Our eLearning UX design covers workplace training, course authoring and educator dashboards, which share the same needs: a clear next step, useful feedback and an honest view of progress.
+
+### Do you design for Moodle specifically?
+
+Yes. For The Wandering Raven, Tcules installed and configured selected Moodle plugins and created a custom theme, so the design held together on the live platform. The same method applies to other LMSs: work with the real plugins and settings from the first screen.
+
+### How do you design for children and younger learners?
+
+Voice, characters and tasks are pitched at the age of the learner, because an eight-year-old and a teenager need different things. Privacy defaults, consent and parent views are designed in from the start, to the rules your legal team sets.
 
 ## Tell us where learners lose the thread {#enquiry}
 

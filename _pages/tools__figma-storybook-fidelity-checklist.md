@@ -4,13 +4,13 @@ slug: figma-storybook-fidelity-checklist
 page_name: Figma to Storybook Fidelity Checklist
 page_type: tool
 seo:
-  title: Figma to Storybook fidelity checklist | Tcules
-  description: Compare one component in Figma and Storybook across states, interaction and meaning. Record acceptance checks, then download the list of corrections.
+  title: 'Figma to Storybook Checklist: Free Component QA | Tcules'
+  description: 'A free Figma to Storybook checklist: test one component across states, keyboard use and screen readers, then download corrections anyone can repeat.'
   canonical: https://www.tcules.com/tools/figma-storybook-fidelity-checklist
   robots: index,follow
 social:
-  og_title: Figma to Storybook fidelity checklist | Tcules
-  og_description: Compare one component in Figma and Storybook across states, interaction and meaning. Record acceptance checks, then download the list of corrections.
+  og_title: 'Figma to Storybook Checklist: Free Component QA | Tcules'
+  og_description: 'A free Figma to Storybook checklist: test one component across states, keyboard use and screen readers, then download corrections anyone can repeat.'
   og_image: https://www.tcules.com/assets/og/tools.png
   og_image_alt: Tcules social card headed Tools, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Figma to Storybook fidelity checklist | Tcules
-  twitter_description: Compare one component in Figma and Storybook across states, interaction and meaning. Record acceptance checks, then download the list of corrections.
+  twitter_title: 'Figma to Storybook Checklist: Free Component QA | Tcules'
+  twitter_description: 'A free Figma to Storybook checklist: test one component across states, keyboard use and screen readers, then download corrections anyone can repeat.'
   twitter_image: https://www.tcules.com/assets/og/tools.png
 search_context:
   primary_intent: compare Figma component to coded implementation
@@ -43,6 +43,17 @@ search_context:
     - How should I interpret an unknown or a gap?
     - What can I take into the next team review?
     questions_withheld: []
+  primary_query: Figma to Storybook checklist
+  secondary_queries:
+  - Storybook component review
+  - component states checklist
+  - Figma vs code component comparison
+  - keyboard accessibility component check
+  - component corrections list
+  - Storybook QA
+  - component fidelity checklist
+  - design system component review template
+  - check a component in every state
 navigation:
   breadcrumb:
   - name: Home
@@ -53,15 +64,19 @@ navigation:
     url: /tools/figma-storybook-fidelity-checklist
 render:
   band_order:
-  - why-fidelity-is-not-the-same-as-looking-right
+  - how-to-use-it
   - workspace
-  - scoring-it-honestly
-  - what-this-does-not-tell-you
+  - compare
+  - example
+  - who-its-for
+  - corrections
   - next
+  - faq
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 release:
@@ -97,11 +112,14 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      why-fidelity-is-not-the-same-as-looking-right: argument_thesis
+      how-to-use-it: method_process
       workspace: argument_thesis
-      scoring-it-honestly: argument_thesis
-      what-this-does-not-tell-you: argument_thesis
+      compare: argument_thesis
+      example: argument_thesis
+      who-its-for: buyer_situation
+      corrections: argument_thesis
       next: argument_thesis
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -110,7 +128,7 @@ page_composition:
   visual_requirements:
   - id: v11_tool_interface
     status: ASSET_REQUIRED
-    supports_section: why-fidelity-is-not-the-same-as-looking-right
+    supports_section: workspace
     communication_job: Show the actual tool or a representative interactive state.
     asset_uri: null
     alt_caption_intent: Describe what the artefact demonstrates, not merely what it looks like.
@@ -123,53 +141,98 @@ content_governance:
   language: en-GB
 ---
 
-*Free tools · Component acceptance*
+*Free tool · Component checks*
 
-# Check what the component does when the default view is gone
+# Figma to Storybook checklist: test each component in every state
 
-The Figma to Storybook Fidelity Checklist checks component behaviour beyond visual matching, including keyboard paths, state handling and repeated actions. A select field can match Figma perfectly and still trap a keyboard user. A save button can have the right loading spinner and submit the same request twice. The Figma to Storybook Fidelity Checklist turns those differences into acceptance checks.
+The free Figma to Storybook Fidelity Checklist tests one component past its looks: keyboard paths, empty and error states, and buttons pressed twice. A select field can match Figma perfectly and still trap a keyboard user. A save button can show the right spinner and send the same request twice.
 
-Compare one component's intended behaviour with its implementation, record the evidence and leave with corrections someone can verify.
+Compare what the component should do with what it does, note what you saw, and leave with corrections someone else can check.
+
 [Start a component check](#workspace)
 
-## Agree what you are comparing {#why-fidelity-is-not-the-same-as-looking-right}
+## How to run a Storybook component review with this checklist {#how-to-use-it}
 
-Open the design reference and the corresponding Storybook story. Record their versions, the theme and the content you are using. Identify who can resolve a disagreement about expected behaviour.
+1. **Open both versions.** Put the Figma design beside the matching Storybook story, and note the version of each.
 
-Figma properties and code APIs do not need identical names. They need a documented correspondence that expresses the same product behaviour. If the definition is missing, record an unresolved requirement rather than failing an implementation against a rule nobody agreed.
+2. **List the states it can really reach.** Empty, long, loading, error, read-only: only the ones your product can produce.
 
-## Write a check another person can repeat {#workspace}
+3. **Try each state by hand.** Use the keyboard, press buttons twice, let a request fail and listen with a screen reader.
 
-For each applicable state, record the action, expected result, observed result and evidence. Use pass, gap, untested or not applicable. A pass needs an observation. “Not applicable” needs a reason.
+4. **Mark every check.** Pass, gap, untested or not applicable, each with a note of what you saw.
 
-| Area | Try | Evidence to keep |
+5. **Order the corrections.** Put blockers first, and give each one an owner and a check anyone can repeat.
+
+## Component states checklist: try it the way people will use it {#workspace}
+
+For each state that applies, record the action, what should happen, what did happen and how you saw it.
+
+| Area | Try | Keep a note of |
 |---|---|---|
-| Structure and tokens | Required variants, content slots, themes and mapped token values | Reference and story versions; intentional differences |
-| Content and state | Empty, long, missing, loading, error, selected and read-only content | The state or fixture that reproduces the result |
-| Interaction | Keyboard path, repeated activation, pending request and failed request | Action and expected next state, including focus |
-| Semantics | Accessible name, role, error association and status announcement | Manual observations and relevant automated results |
-| Product context | Component inside a real form, dialog or dense table | Whether the surrounding workflow preserves the behaviour |
+| Structure and design values | Required variants, content slots, themes and the colour and spacing values behind them | Which Figma and Storybook versions you used, and any agreed differences |
+| Content and state | Empty, long, missing, loading, error, selected and read-only content | The state or sample data that shows the result |
+| Interaction | The keyboard path, pressing twice, a request still pending and a request that fails | The action and what should happen next, including where focus goes |
+| Accessibility | What a screen reader announces: names, roles, linked error messages and status updates | What you saw by hand, plus any automated results |
+| Product context | The component inside a real form, dialog or dense table | Whether the surrounding workflow keeps the behaviour |
 
-Only test states the component can legitimately enter. An exhaustive-looking list of irrelevant states makes acceptance harder to understand.
+Test the states the component can really get into. A long list of states it never reaches makes acceptance harder to follow.
 
-## Mark what cannot be compared yet {#scoring-it-honestly}
-In the Figma to Storybook Fidelity Checklist, a gap is an observed mismatch against an accepted expectation; an unknown is something the reviewer has not established yet. Do not score an untested or disputed state as a failure. Record the evidence needed to decide whether design, code or the expectation itself should change.
+## Compare Figma and code: agree the versions, then mark each check {#compare}
 
-Worked example, not a client result. A dialog looks correct and opens from the expected button. Pressing Escape closes it, but focus returns to the top of the page instead of the opening control.
+Open the Figma design and the matching Storybook story, which is the component previewed in isolation. Note their versions, the theme and the content you are using, and who can resolve a disagreement about how it should behave.
 
-Record the keyboard path and observed focus location. The acceptance check is to close the dialog and confirm that focus returns to the appropriate control in its actual workflow. A fresh screenshot cannot close this finding.
+Figma and code can name things differently. Write down which Figma option matches which code setting, so both describe the same behaviour. Where nobody has agreed how something should behave, record an open requirement: a build can only fall short of a rule someone agreed.
 
-The result is a correction list, not a fidelity percentage. Put findings that block an essential action or misrepresent a consequential state first. Keep untested states separate from confirmed defects. Assign a correction owner and a repeatable check before accepting a gap as closed.
+Mark each check "pass", "gap", "untested" or "not applicable". A pass needs something you saw. "Not applicable" needs a reason. A gap is a mismatch against an agreed expectation, and "untested" covers anything nobody has checked yet.
 
-## Visual tests and accessibility tests answer different questions {#what-this-does-not-tell-you}
+## Keyboard accessibility component check: a dialog that loses focus {#example}
 
-[Storybook's testing guidance](https://storybook.js.org/docs/writing-tests) covers appearance and interaction as separate checks. Its [accessibility testing guidance](https://storybook.js.org/docs/writing-tests/accessibility-testing) adds automated checks, which still need human evaluation in context.
+*Illustration, not client work.* A dialog looks right and opens from the right button. Press Escape and it closes, but focus jumps to the top of the page when it should return to the button that opened it.
 
-The manual checklist neither runs those tests nor certifies the component or application. It gives the people doing the work a shared acceptance record.
+Note the keyboard path and where focus landed. The acceptance check: close the dialog in its real workflow and confirm focus goes back to the control that opened it. A fresh screenshot can't close this one.
 
-## Use the record in the next implementation review {#next}
+## For designers and developers who sign off shared components {#who-its-for}
 
-Take the downloaded checks to the designer and frontend engineer responsible for the component. If the isolated component passes but the product still differs, use the [Design System Drift Checker](/tools/design-system-drift-checker) to follow the consuming version.
+Use it when a component is about to join the shared library, after a Figma library update, or when a component looks right and still behaves wrongly in the product. It suits a designer and a front-end developer working side by side, with QA or an accessibility specialist joining for the screen reader checks.
 
-For a disagreement that spans design, code and the running workflow, see the [Design-to-Code Audit](/audits/design-to-code-audit).
+Run it one component at a time. For a whole library, start with the components people use most, and keep the checklist as the design system component review template the team repeats on each.
 
+Components written or edited by AI coding tools need this check most. A prompt rarely mentions a failed request, a second click or where focus should land, so those are the states generated code skips first.
+
+## Turn what you found into a component corrections list {#corrections}
+
+Put first anything that blocks an essential action or shows an important state wrongly. Keep untested and disputed states on their own list, with a note of what would show whether the design, the code or the expectation should change.
+
+Give each correction an owner and a check anyone can repeat, and close it when that check passes.
+
+[Storybook's testing guidance](https://storybook.js.org/docs/writing-tests) treats appearance and interaction as separate checks. Its [accessibility testing guidance](https://storybook.js.org/docs/writing-tests/accessibility-testing) adds automated checks, which still need a person to judge them in the real workflow. Run those tests alongside this checklist. The checklist gives the people doing the work a shared record of what was accepted.
+
+## Take the Storybook QA results to the next build review {#next}
+
+Take the downloaded checks to the designer and the developer who look after the component. If the component passes on its own and the product still differs, the [Design System Drift Checker](/tools/design-system-drift-checker) follows the version the product actually uses.
+
+When the disagreement spans design, code and the running product, the [Design-to-Code Audit](/audits/design-to-code-audit) traces each gap from the approved design to what users see and shows where its fix belongs.
+
+If the same kinds of gap keep appearing between your Figma library and your coded components, [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment) is the service that brings the two back together.
+
+## Figma to Storybook checklist FAQs {#faq}
+
+### Is there a checklist to compare a Figma component with Storybook?
+
+This page is one, and it is free. You record each state the component can reach, try it by hand and mark what you saw against the Figma design and the agreed behaviour. The result downloads as a list of corrections.
+
+### How do we check a component in every state?
+
+Start with the states it can really get into: empty, long, missing, loading, error, selected and read-only content. Try each with realistic data, then try the interaction around it, such as a request that fails or a button pressed twice. Leave out states the product never produces.
+
+### What should a component review cover beyond visuals?
+
+Keyboard paths, where focus goes, what a screen reader announces, and how the component behaves inside a real form, dialog or dense table. A perfect visual match can still hide a keyboard trap, so behaviour gets its own checks.
+
+### Is there a free Storybook QA checklist?
+
+This checklist works as one. Run it alongside Storybook's own visual, interaction and accessibility tests. The automated checks catch some problems, and a person still needs to judge the results in the real workflow.
+
+### How does this checklist differ from the drift checker?
+
+This checklist tests one component against its design, on its own and inside a real workflow. The [Design System Drift Checker](/tools/design-system-drift-checker) follows the version a product actually uses, so it suits a component that passes here and still looks different in the product.

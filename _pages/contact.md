@@ -4,13 +4,13 @@ slug: contact
 page_name: Contact / Start a Project
 page_type: page
 seo:
-  title: 'Contact Tcules: Talk to a Product Design Studio'
-  description: Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.
+  title: 'Contact Tcules: Talk to a Product Design Studio | Tcules'
+  description: 'Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.'
   canonical: https://www.tcules.com/contact
   robots: index,follow
 social:
-  og_title: 'Contact Tcules: Talk to a Product Design Studio'
-  og_description: Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.
+  og_title: 'Contact Tcules: Talk to a Product Design Studio | Tcules'
+  og_description: 'Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,15 +18,22 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Contact Tcules: Talk to a Product Design Studio'
-  twitter_description: Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.
+  twitter_title: 'Contact Tcules: Talk to a Product Design Studio | Tcules'
+  twitter_description: 'Contact Tcules about a new product, a redesign, modernisation or AI features. Tell us in a few lines what you are building or what needs to change.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: Submit a project enquiry to Tcules
   primary_buyer_question: How do I contact Tcules about a product or software challenge?
   supporting_questions:
   - Can you work with our own product or engineering team?
-  primary_query: Contact Tcules
+  - Where are you based, and does our working day overlap?
+  primary_query: 'contact Tcules'
+  secondary_queries:
+  - 'start a project with Tcules'
+  - 'how do I contact Tcules about a project'
+  - 'Tcules office Ahmedabad'
+  - 'Tcules working hours overlap'
+  - 'how fast does Tcules reply to enquiries'
 navigation:
   breadcrumb:
   - name: Home
@@ -55,24 +62,15 @@ render:
   - enquiry
   - brief
   - next-steps
-  - reassurance
+  - testimonials
   - confidentiality
   - faq
 page_composition:
   visual_plan: form_first_with_nearby_social_proof_and_no_competing_terminal_cta
-  client_recognition:
-    component_type: client_logo_strip
-    placement: adjacent_to_form
-    clients:
-    - Doodle
-    - Ringier Media Switzerland
-    - JoVE
-    - Eden AI
-    - Dealpath
-    - Benchmark Gensuite
-    asset_policy: Client relationship only; use approved assets, text fallback; do not imply a common role or outcome.
   testimonial_ids:
   - CL-RINGIER-COLLAB
+  - FP-AUXENTIOS-RESEARCH
+  - DRAFT-PRIMELIS-TEAM
 structured_data:
   types:
   - ContactPage
@@ -99,11 +97,11 @@ content_governance:
 
 *Contact*
 
-# Contact Tcules about your product
+# Contact Tcules about the product you're building or changing
 
-Tell us what you're building or changing, and we'll suggest where to start.
+Tcules is a digital product design studio for ambitious new software and established products ready to go further. Tell us what you're building or changing, and we'll suggest where to start.
 
-## Start here {#enquiry}
+## Tell us about your project to start working with Tcules {#enquiry}
 
 Your email, what you're working on, and a link if you have one. That's the whole form.
 
@@ -117,41 +115,58 @@ Your email, what you're working on, and a link if you have one. That's the whole
 
 **After sending:** We'll reply within one business day.
 
-## What to tell us {#brief}
+Or email [hello@tcules.com](mailto:hello@tcules.com).
 
-A few lines is plenty:
+## What to include in your first message {#brief}
 
 - **The product:** what it does, or the idea you're exploring.
 - **The situation:** what isn't working, what's uncertain or what you want to make possible.
-- **What's next:** a decision, a milestone, a first release or an improvement you're working towards.
-- **Your team:** who's already involved on the product, design or engineering side.
+- **What's next:** a deadline, a milestone, a first release or an improvement you're working towards.
+- **Your team:** who is involved on the product, design or engineering side.
 
 Unknowns are welcome. They often show us where the work should start.
 
-## What happens next {#next-steps}
+## What happens after you contact Tcules {#next-steps}
 
-**1. We read your message** and write back to you.
+**1. We read your message** and a senior designer writes back. If the work involves building, an engineer joins the first call.
 
-**2. We suggest a sensible next step.** A call, a few questions, or a focused review before anything bigger.
+**2. We suggest a next step.** A call, a few questions, or a small [pilot project](/how-we-work#engagement-shapes) with a result you can use whether or not we do more.
 
-**3. We agree how to work together.** Scope, roles and who decides what, all clear before work starts.
+**3. We put it in writing.** What we'll do, who does it and who decides, all agreed before work starts.
 
-## Some of the teams we've worked with {#reassurance}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-Doodle · Ringier Media Switzerland · JoVE · Eden AI · Dealpath · Benchmark Gensuite
+## What working with us is like {#testimonials}
 
 > “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
 > **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**Founded 2017 · More than 90 projects · Clients in 19 countries**
+> “The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.”  
+> **Ashok Mohanty, Founder, Auxentios**
+
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Keep the first message high-level {#confidentiality}
 
-Please don't send passwords, keys, credentials or sensitive personal information through this form. If you need an NDA or a secure way to share details, say so and we'll set one up first.
+An outline is all we need to begin. Keep passwords, keys, credentials and sensitive personal information out of the form. If you need an NDA or a secure way to share details, say so and we'll set one up first.
 
-## Quick answer {#faq}
+## Questions about contacting Tcules {#faq}
+
+### How do I contact Tcules about a project?
+
+Use the enquiry form at the top of this page, or email [hello@tcules.com](mailto:hello@tcules.com). A few lines about the product and what you want to change is enough to begin, and a link helps if you have one.
+
+### How fast does Tcules reply to enquiries?
+
+We'll reply within one business day. A senior designer reads your message and writes back, usually with a suggested next step or a few questions.
 
 ### Can you work with our own product or engineering team?
 
-Yes. We can take on a defined piece of work alongside your team. [How we work](/how-we-work)
+Yes. Tcules takes on defined pieces of work alongside your team, or joins it month to month. A senior designer leads, with whoever else the work needs. [How we work](/how-we-work)
 
+### Where is the Tcules office, and do our working hours overlap?
+
+Tcules is based at 614, Silver Radiance 2, Sola, Ahmedabad, India. Most clients work several time zones away, so we agree shared hours before each project starts. [Working across time zones](/how-we-work#time-zones)

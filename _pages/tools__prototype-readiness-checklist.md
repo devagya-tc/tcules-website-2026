@@ -6,13 +6,13 @@ redirect_from:
 page_name: Prototype Readiness Checklist
 page_type: tool
 seo:
-  title: Prototype readiness checklist and build brief | Tcules
-  description: Separate demonstrated behaviour, simulation and unknowns in a prototype. Download a build brief with decisions, dependencies and acceptance checks.
+  title: 'Prototype Readiness Checklist: Free Build Brief | Tcules'
+  description: 'A free prototype readiness checklist: sort what your prototype really does from what it simulates, AI-built ones included, and download a build brief.'
   canonical: https://www.tcules.com/tools/prototype-readiness-checklist
   robots: index,follow
 social:
-  og_title: Prototype readiness checklist and build brief | Tcules
-  og_description: Separate demonstrated behaviour, simulation and unknowns in a prototype. Download a build brief with decisions, dependencies and acceptance checks.
+  og_title: 'Prototype Readiness Checklist: Free Build Brief | Tcules'
+  og_description: 'A free prototype readiness checklist: sort what your prototype really does from what it simulates, AI-built ones included, and download a build brief.'
   og_image: https://www.tcules.com/assets/og/tools.png
   og_image_alt: Tcules social card headed Tools, on a white background with the Tcules wordmark.
   og_type: website
@@ -20,8 +20,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Prototype readiness checklist and build brief | Tcules
-  twitter_description: Separate demonstrated behaviour, simulation and unknowns in a prototype. Download a build brief with decisions, dependencies and acceptance checks.
+  twitter_title: 'Prototype Readiness Checklist: Free Build Brief | Tcules'
+  twitter_description: 'A free prototype readiness checklist: sort what your prototype really does from what it simulates, AI-built ones included, and download a build brief.'
   twitter_image: https://www.tcules.com/assets/og/tools.png
 search_context:
   primary_intent: assess a prototype and prepare a development brief
@@ -46,6 +46,17 @@ search_context:
     - How should I interpret an unknown or a gap?
     - What can I take into the next team review?
     questions_withheld: []
+  primary_query: prototype readiness checklist
+  secondary_queries:
+  - simulated vs real features
+  - MVP readiness checklist
+  - prototype checklist
+  - prototype build brief template
+  - prototype to developer handover
+  - vibe-coded prototype checklist
+  - AI-built prototype checklist
+  - what does our prototype really do
+  - free prototype readiness template
 navigation:
   breadcrumb:
   - name: Home
@@ -56,15 +67,18 @@ navigation:
     url: /tools/prototype-readiness-checklist
 render:
   band_order:
+  - example
+  - who-its-for
   - before-you-start
   - workspace
-  - reading-your-results
-  - what-this-does-not-tell-you
+  - brief
   - next
+  - faq
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 release:
@@ -99,11 +113,13 @@ page_composition:
     version: semantic-v11
   editorial_review:
     section_components:
-      before-you-start: argument_thesis
+      example: argument_thesis
+      who-its-for: buyer_situation
+      before-you-start: method_process
       workspace: argument_thesis
-      reading-your-results: argument_thesis
-      what-this-does-not-tell-you: argument_thesis
+      brief: argument_thesis
       next: argument_thesis
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -112,7 +128,7 @@ page_composition:
   visual_requirements:
   - id: v11_tool_interface
     status: ASSET_REQUIRED
-    supports_section: before-you-start
+    supports_section: workspace
     communication_job: Show the actual tool or a representative interactive state.
     asset_uri: null
     alt_caption_intent: Describe what the artefact demonstrates, not merely what it looks like.
@@ -125,51 +141,86 @@ content_governance:
   language: en-GB
 ---
 
-*Free tools · From prototype to build brief*
+*Free tool · Prototypes*
 
-# Show a developer what the prototype has proved and what it has skipped
+# Prototype readiness checklist: show developers what is real and what is simulated
 
-The Prototype Readiness Checklist separates demonstrated behaviour, simulation and unknowns so engineering can see what a prototype has actually proved. The demo saves an order. That may mean it wrote to a database, stored something in this browser, or changed a number on the screen. Those are different starting points for a build.
+The free Prototype Readiness Checklist sorts what a prototype really does from what it only simulates. It works for any prototype, including ones built with AI tools.
 
-You leave with the questions, dependencies and acceptance checks needed for a useful development brief.
+The demo saves an order: that could mean it wrote to a database, kept something in this browser or changed a number on the screen. Each is a different starting point for a build.
+
+You leave with the questions and checks a development brief needs.
+
 [Review a prototype workflow](#workspace)
 
-## Choose the decision this prototype was built to test {#before-you-start}
+## Simulated vs real features: an invitation screen with no email service {#example}
 
-Was it meant to test demand, task comprehension, a difficult interaction or technical feasibility? Judge it against that purpose first. A prototype can answer its research question while deliberately leaving persistence, permissions and operational support unfinished.
+*Illustration, not client work.* An invitation flow shows "Invitation sent", but no email service is connected.
 
-Open the prototype and follow one workflow from start to finish. Use sample data you are authorised to work with. If you cannot determine how a behaviour works, record unknown and ask the builder; guessing creates a misleading brief.
+If the research question was whether a team owner understands invitations, the simulation may have done its job.
 
-## An unproven condition belongs in the build plan {#workspace}
-In the Prototype Readiness Checklist, an unknown is behaviour the prototype does not establish. It is not automatically a defect. Record whether the missing answer concerns persistence, permissions, recovery, an external dependency or another product rule, then name the decision or implementation evidence required before the prototype becomes a reliable build reference.
+The build brief still has to cover delivery, expired links, people who already have an account, resend rules and what happens when delivery fails. With that written down, a developer can size the real work, beyond what the success screen shows.
 
-| Inspect | Questions for the brief |
+## An MVP readiness checklist for founders and product teams {#who-its-for}
+
+It suits founders with an MVP prototype, product managers about to hand a prototype to a development team, and designers whose prototype has done its research job. It works the same for a clickable design, a coded prototype or an app made with an AI app builder.
+
+If your prototype was vibe-coded, the checklist shows which parts are real before anyone prices the build. The sorting matters most there, because a generated app can look finished while saving nothing.
+
+AI app builders keep getting better at looking finished, and some now connect real databases and payments in a few clicks. That makes the sort more valuable: the checklist separates a real saved order from a convincing one, before anyone budgets the build.
+
+## How to use the checklist: start with what the prototype was for {#before-you-start}
+
+Was it built to test demand, whether people understand the task, a tricky interaction or whether the thing can be built at all? Judge it against that purpose first. A prototype can answer its research question and leave saving, permissions and day-to-day support for later, on purpose.
+
+Open the prototype and follow one workflow from start to finish, using sample data you are allowed to work with. If you can't tell how something works, mark it unknown and ask whoever built it. A guess makes a misleading brief.
+
+## Prototype checklist: seven things to check in one workflow {#workspace}
+
+| Check | Questions for the brief |
 |---|---|
-| Records and persistence | What gets saved, where, and what survives refresh or another session? |
+| Records and saving | What gets saved, where, and what survives a refresh or a new session? |
 | Roles and access | Who should see and change the record? Where are those rules enforced? |
-| State and recovery | What happens during delay, failure, repeat submission or concurrent edits? |
-| Dependencies | Which APIs, payments, messages or AI responses are real, mocked or still to be selected? |
-| Product decisions | Which names, defaults, rules and states have been chosen deliberately? |
-| Usability and access | Can the intended person complete the task with realistic content, narrow screens and keyboard input? |
-| Evidence | What did participants actually do, what was observed and what remains untested? |
+| State and recovery | What happens during a delay, a failure, a repeat submission or two people editing at once? |
+| Dependencies | Which outside services, payments, messages or AI responses are real, mocked or still to be chosen? |
+| Product decisions | Which names, defaults, rules and states were chosen on purpose? |
+| Usability and access | Can the intended person finish the task with realistic content, a narrow screen and a keyboard? |
+| Evidence | What did participants do, what was observed and what is still untested? |
 
-Record demonstrated, simulated, unknown or not applicable for each item. “Demonstrated” describes the recorded example; it does not imply production acceptance.
+Mark each item "demonstrated", "simulated", "unknown" or "not applicable". "Demonstrated" describes what you saw in this example; going live takes further checks. "Unknown" marks behaviour the prototype hasn't shown yet.
 
-## A simulated success needs a different next step from a failed interaction {#reading-your-results}
+For each unknown, note what it is about (saving, permissions, recovery, an outside service or another product rule) and the decision or build work that would answer it.
 
-Worked example, not a client result. An invitation flow always displays “Invitation sent”, but no email service is connected.
+## Prototype build brief template: turn the record into three lists {#brief}
 
-If the research question was whether a team owner understands invitations, the simulation may have served its purpose. The build brief still needs delivery behaviour, expired links, existing users, resend rules and what happens when delivery fails. A developer can then assess the implementation instead of estimating from the success screen alone.
+Group what you found into three lists: decisions to make, research to run and build work to scope. Give each item an owner and a check that would close it. Bring engineering in early, because some decisions only become clear once an engineer has looked.
 
-Group the output into decisions to settle, research to run and implementation to scope. Give each item an owner and a check that would close it. Do not require every product decision to be settled before involving engineering; some need engineering evidence to become decidable.
+Give code quality, security, infrastructure and data protection each a specialist review and a named owner in the brief. [GOV.UK's prototyping guidance](https://www.gov.uk/service-manual/design/making-prototypes) explains why code written for a prototype may need rework before it goes live.
 
-## Production readiness needs more than this worksheet {#what-this-does-not-tell-you}
+## Prototype to developer handover: take the brief into the build {#next}
 
-[GOV.UK's prototyping guidance](https://www.gov.uk/service-manual/design/making-prototypes) explains why realistic prototype code may not be suitable for production. This checklist does not audit security, infrastructure, data protection or code quality. Record the need for those reviews in the brief and assign them to the appropriate specialists.
+Download the brief and share it with the prototype link. It tells a developer which behaviour to keep, which assumptions to question and what still needs proving.
 
-## Bring the record into the build conversation {#next}
+For a review of one workflow by a senior designer, with an engineer reading the code if you share it, see the [Prototype Readiness Review](/audits/prototype-readiness-review). If the bigger question is whether the idea works for users, start with [Prototyping & Usability Testing](/services/product-design/prototyping-usability-testing).
 
-Download the brief alongside the prototype link. It should tell a developer which behaviour to preserve, which assumptions to challenge and what evidence is still needed.
+## Prototype readiness checklist FAQs {#faq}
 
-For a practitioner review of one workflow, see the [Prototype Readiness Review](/audits/prototype-readiness-review). If the main uncertainty is whether the idea works for users, start with [Prototyping and Usability Testing](/services/product-design/prototyping-usability-testing).
+### Is there a checklist to see what our prototype really proves?
 
+This checklist does that, free. Follow one workflow and mark each of seven areas "demonstrated", "simulated", "unknown" or "not applicable". Judge the result first against what the prototype was built to test.
+
+### How do I hand an AI-built prototype to developers?
+
+Share the prototype link with a brief that says which behaviour is real, which is simulated and what is still unknown. Mark AI responses and outside services as real, mocked or still to be chosen. Our article on [taking a vibe-coded app to production](/insights/vibe-coded-app-production-ready) covers what comes next.
+
+### What should a build brief from a prototype include?
+
+Three lists: decisions to make, research to run and build work to scope, each item with an owner and a check that would close it. Add the specialist reviews the build needs, such as code quality, security and data protection, each with an owner.
+
+### How do we tell simulated features from real ones?
+
+Test what survives. Refresh the page, start a new session, sign in as a second user and let something fail: a real feature keeps its record and handles the failure. If you can't tell, ask whoever built it and mark it unknown until they answer.
+
+### When does a prototype need a specialist review?
+
+When the brief holds more unknowns than answers, or before you commit a build budget to it. In our [Prototype Readiness Review](/audits/prototype-readiness-review), a senior designer goes through one workflow, and an engineer can read the code when you share it.

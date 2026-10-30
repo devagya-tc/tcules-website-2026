@@ -17,7 +17,11 @@ export type ProfileCardProps = {
   role?: string;
   /** What they lead and care about: plain text, or inline content the caller renders. */
   bio?: ReactNode;
-  /** Their portrait, cropped square from the centre. Absent, the head is the name alone. */
+  /**
+   * Their portrait, cropped square from the centre. Absent, their initials hold the square on a plain
+   * ground, so a set keeps one head height and nothing reads as a broken image. Never pass a labelled
+   * placeholder panel here: at 80px its label cannot be read (review 29 Oct).
+   */
   portrait?: MediaImage;
   /** `square` (default): the 8 radius, the house photograph corner. `circle`: as a testimonial's avatar. */
   portraitShape?: 'square' | 'circle';
@@ -28,6 +32,14 @@ export type ProfileCardProps = {
   /** The list item's tag when the card is a member of a set. Default `li`. */
   as?: 'li' | 'div';
 };
+
+/** The first letters of a name's first and last words ("Jatin Leuva" → "JL"). */
+function initialsOf(name: string): string {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  const first = words[0]?.charAt(0) ?? '';
+  const last = words.length > 1 ? (words.at(-1)?.charAt(0) ?? '') : '';
+  return `${first}${last}`.toUpperCase();
+}
 
 /**
  * ProfileCard — a person (owner, 12 Oct 2026: "would be somewhat like the testimonial card. image
@@ -62,7 +74,18 @@ export function ProfileCard({
                 sizes="96px"
               />
             </span>
-          ) : null}
+          ) : (
+            <span
+              aria-hidden="true"
+              className={cx(
+                styles.portrait,
+                styles.initials,
+                portraitShape === 'circle' && styles.circle,
+              )}
+            >
+              {initialsOf(name)}
+            </span>
+          )}
           <Layout rowGap="inline" className={styles.who}>
             <Name className={styles.name}>{name}</Name>
             {role ? <p className={styles.role}>{role}</p> : null}

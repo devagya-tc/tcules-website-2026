@@ -22,13 +22,20 @@ export type PlaceholderImage = {
   kind: 'capture';
 };
 
+/** The register's fallback row, for a slot that has no row of its own yet. */
+const UNREGISTERED = '/_unregistered#slot';
+
 function record(key: string): PlaceholderImage {
-  const slot = PLACEHOLDER_SLOTS[key];
-  if (!slot) {
-    throw new Error(
-      `No placeholder for "${key}". Add a row to docs/image-register.md and run \`npm run placeholders\`.`,
+  /* A slot with no register row takes the register's one FALLBACK row rather than crash the build:
+     the 26 Oct 2026 copy added bands whose slots the register has not met yet. It warns in
+     development, and each such slot still wants a row of its own. */
+  const slot = PLACEHOLDER_SLOTS[key] ?? PLACEHOLDER_SLOTS[UNREGISTERED];
+  if (!PLACEHOLDER_SLOTS[key] && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      `No placeholder for "${key}": showing the fallback. Add a row to docs/image-register.md and run \`npm run placeholders\`.`,
     );
   }
+  if (!slot) throw new Error(`The register has no fallback row (${UNREGISTERED}).`);
   return {
     src: slot.src,
     alt: `Image to come: ${slot.kind}`,

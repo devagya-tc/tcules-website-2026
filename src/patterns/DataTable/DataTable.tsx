@@ -45,8 +45,16 @@ export type DataTableColumn = {
 export type DataTableNodeCell = { node: ReactNode };
 
 export type DataTableRow = {
-  /** Plain-text row header — `<th scope="row">`. */
+  /** Plain-text row header — `<th scope="row">`. Always given: it is the row's name for the
+   *  warnings, the split's weighing and any reader that wants the words without markup. */
   header: string;
+  /**
+   * The row header as TRUSTED, seam-sanitised inline HTML (the same contract as `cellsHtml`), for a
+   * key that is a link: "which do you need" and router tables name each option as a link to its page
+   * (component-map C6, 29 Oct 2026). Rendered in place of `header`, in the key's own voice; `header`
+   * must still carry the same words as plain text.
+   */
+  headerHtml?: string;
   /**
    * One cell per data column, in column order. A string is TRUSTED, seam-sanitised rich text — the
    * same contract as `Prose`'s `html` — and an empty string is an empty cell. A `{ node }` is a
@@ -299,7 +307,11 @@ export function DataTable({
               return (
                 <tr key={rowIndex} className={styles.row}>
                   <th scope="row" className={cx(styles.key, BEHAVIOUR_CLASS[keyBehaviour])}>
-                    <span className={styles.keyText}>{row.header}</span>
+                    {row.headerHtml ? (
+                      <Prose as="span" html={row.headerHtml} className={styles.keyRich} />
+                    ) : (
+                      <span className={styles.keyText}>{row.header}</span>
+                    )}
                   </th>
                   {columns.map((column, index) => {
                     const cell = row.cellsHtml[index] ?? '';

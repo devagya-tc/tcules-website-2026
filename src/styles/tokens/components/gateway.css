@@ -59,6 +59,27 @@
   /* How far the focus ring stands off the item, so it does not cut the drawing or the title's
      first glyph. An optical offset, not a layout distance (gap rule 1). */
   --gwy-card-ring-offset: var(--space-12);
+  /* `GatewayPaths` (home, 29 Oct 2026, component-map C10): two paths, not six situations. With two
+     the title takes a step up (h3, the serif) and stays under the band's h2; the drawing's box is
+     taller than the board's 140 because two drawings share the row, yet stays well under the
+     words' block so the title, not the picture, is the item's hero
+     (decisions/2026-10-10-gateway-title-is-the-hero). A component size. */
+  --gwy-path-visual-height: 180px;
+  --gwy-path-title-text: var(--text-h3);
+  --gwy-path-title-tracking: var(--text-h3-tracking);
+  --gwy-path-body-text: var(--text-body);
+  /* A path's compact service rows (owner, 29 Oct 2026). The scene's plate width is a component
+     size: wide enough that the flat drawing still reads at a glance (16:9, so 63 tall), small
+     enough that the row stays one line of words beside it. The label is the h6 role (16, medium): the
+     action is the row's words, a step under the path's body only in weight, never a button label. The
+     arrow is a lg button glyph's size, 8 after the last word (a side bearing), and moves 4 toward its destination on hover — an optical nudge
+     from the space ramp, not a layout distance (gap rule 1). */
+  --gwy-service-art-width: 112px;
+  --gwy-service-label-text: var(--text-h6);
+  --gwy-service-label-tracking: var(--text-h6-tracking);
+  --gwy-service-arrow-size: var(--icon-size-24);
+  --gwy-service-arrow-shift: var(--space-4);
+  --gwy-service-arrow-inset: var(--space-8);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

@@ -1,0 +1,111 @@
+{
+  "template": "author",
+  "route": "/insights/authors/varun-mashru",
+  "slug": "varun-mashru",
+  "name": "Varun Mashru",
+  "pageType": "author",
+  "author": {
+    "record": "author:varun-mashru",
+    "name": "Varun Mashru",
+    "jobTitle": "Product Designer",
+    "portrait": "IMAGE_ASSET_REQUIRED",
+    "knowsAbout": [
+      "CPQ software UX",
+      "Configure-price-quote software",
+      "Sales quoting workflows",
+      "Approval workflows"
+    ],
+    "articles": [
+      "/insights/cpq-ux-design"
+    ]
+  },
+  "seo": {
+    "title": "Varun Mashru, Product Designer: CPQ software UX | Tcules",
+    "description": "Varun Mashru, Product Designer at Tcules, writes about CPQ software UX: designing configure-price-quote tools that sales teams will use.",
+    "canonical": "https://www.tcules.com/insights/authors/varun-mashru",
+    "robots": "index,follow",
+    "ogImageAlt": "Varun Mashru, Tcules."
+  },
+  "social": {
+    "og_title": "Varun Mashru, Product Designer: CPQ software UX | Tcules",
+    "og_description": "Varun Mashru, Product Designer at Tcules, writes about CPQ software UX: designing configure-price-quote tools that sales teams will use.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "Varun Mashru, Tcules.",
+    "og_type": "profile",
+    "twitter_card": "summary"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Insights",
+      "url": "/insights"
+    },
+    {
+      "name": "Authors",
+      "url": "/insights/authors"
+    },
+    {
+      "name": "Varun Mashru",
+      "url": "/insights/authors/varun-mashru"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "read what Varun Mashru has written for Tcules",
+    "primaryBuyerQuestion": null,
+    "supportingQuestions": [],
+    "primaryQuery": "Varun Mashru product designer",
+    "secondaryQueries": [
+      "Varun Mashru CPQ UX",
+      "Varun Mashru articles"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "ProfilePage",
+      "Person",
+      "BreadcrumbList"
+    ]
+  },
+  "release": {
+    "contentState": "AUTHOR_PROFILE_DRAFT_2026-10-13",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": null,
+  "hero": {
+    "eyebrow": "Insights · Authors",
+    "title": "Varun Mashru, Product Designer at Tcules",
+    "lede": [
+      "Product Designer, Tcules",
+      "Varun Mashru is a Product Designer at Tcules who writes about CPQ software UX: designing the configure-price-quote tools that sales teams use to build and send quotes.",
+      "The CPQ article treats the quote as the one record everyone works on. It covers who contributes and with what authority. It also covers rules and price changes that explain themselves. Approvals show before anyone submits, and a quote can be revised without starting over."
+    ],
+    "actions": [],
+    "proofLines": [],
+    "studioFacts": false,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Related reading",
+      "id": "articles",
+      "heading": "Varun Mashru's article on CPQ software UX",
+      "derivedFrom": "insights where editorial.author = this author",
+      "entries": [
+        {
+          "href": "/insights/cpq-ux-design",
+          "label": null,
+          "blurb": null
+        }
+      ]
+    }
+  ],
+  "bandOrderAuthored": false,
+  "_example": {
+    "source": "_pages/_pages/insights__authors__varun-mashru.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

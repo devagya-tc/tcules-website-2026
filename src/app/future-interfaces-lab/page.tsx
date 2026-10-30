@@ -260,7 +260,6 @@ export default async function FutureInterfacesLabPage() {
         page.misc.action ? (
           <CtaSection
             arrangement="open"
-            surface="tint"
             eyebrow={page.misc.eyebrow || undefined}
             heading={page.misc.heading}
             body={page.misc.body}

@@ -98,11 +98,63 @@ export default function OfferSheetSpecimen() {
       />
 
       <Variation
+        id="drawn-three"
+        title="1c · Drawn, five three across"
+        note="`scene` on every item and `across={3}` (the 26 Oct copy's five deliverables on /services/product-design, 29 Oct 2026): from 1024 each drawing heads its words, three to a row, 3 + 2; below 1024 one column, each drawing beside its words from 768. The first scene, outcome-brief, is drawn for a tested brief: what goes in, what waits, what stays out."
+      />
+      <OfferSheet
+        heading="What you get"
+        headingId="ofs-drawn-three"
+        items={[
+          {
+            title: 'A tested brief',
+            body: 'What goes in, what waits and what stays out, checked against the people who use the product.',
+            scene: 'outcome-brief',
+          },
+          ...FOUR.slice(1).map((item, index) => ({
+            ...item,
+            scene: (['outcome-rules', 'outcome-build', 'outcome-finished'] as const)[index],
+          })),
+          {
+            title: 'Proof before the build.',
+            body: 'The riskiest idea put in front of the people who will use it, before engineers start.',
+            scene: 'symptom-test',
+          },
+        ]}
+        across={3}
+      />
+
+      <Variation
         id="no-aside"
         title="2 · No aside"
         note="Without a voice the promises take the full column, still two up: a sheet, not a row of four."
       />
       <OfferSheet heading="What you get" headingId="ofs-none" items={FOUR} />
+
+      <Variation
+        id="statements"
+        title="2b · Statements, no titles"
+        note="Promises authored as one sentence with no lead: each in the body role, no h3. A set is titled throughout or not at all (review 29 Oct, product-design What you get)."
+      />
+      <OfferSheet
+        heading="What you receive"
+        headingId="ofs-statements"
+        across={3}
+        items={[
+          {
+            id: 's1',
+            body: 'A tested brief: what goes in, what waits and what stays out, checked against the people who use the product.',
+          },
+          {
+            id: 's2',
+            body: 'A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.',
+          },
+          {
+            id: 's3',
+            body: 'Clickable or coded prototypes, tested with people who match your users.',
+          },
+        ]}
+      />
 
       <Variation
         id="three-across"
@@ -158,6 +210,61 @@ export default function OfferSheetSpecimen() {
         items={FOUR}
         surface="tint"
         aside={<TestimonialCard item={VOICE} fill />}
+      />
+
+      <Variation
+        id="lead-list"
+        title="5 · A lead, a list label and the terms (the 26 Oct copy's What you get)"
+        note="`lead` under the heading at the lead role, `listLabel` over the promises in the label voice (the copy's &ldquo;What you receive&rdquo;), five promises three across (3 + 2), the terms as the note (component-map C4)."
+      />
+      <OfferSheet
+        heading="What you get from our product design services"
+        headingId="ofs-lead"
+        lead="Our digital product design services cover the thinking behind your product and every screen in it. We size each part to what your team already knows."
+        listLabel="What you receive"
+        items={[
+          {
+            title: 'A tested brief',
+            body: 'What goes in, what waits and what stays out, checked against the people who use the product.',
+          },
+          {
+            title: 'A model of roles, records, permissions and workflows',
+            body: 'Drawn before the screens, so every screen agrees with the next.',
+          },
+          { title: 'Interaction and visual design for every screen and state' },
+          { title: 'Clickable or coded prototypes, tested with people who match your users.' },
+          { title: 'Designs ready to build, and our review of what your engineers ship.' },
+        ]}
+        across={3}
+        note={
+          <p className={t.body}>
+            Who does the work. A senior product designer leads your project and does the design.
+          </p>
+        }
+      />
+
+      <Variation
+        id="linked"
+        title="6 · Promises named as links (a catalogue)"
+        note="`href` on an item: its title is the link, underlined on the mark's ink (component-map C7, an expertise page's &ldquo;What we design&rdquo;). The item is still not a card."
+      />
+      <OfferSheet
+        heading="What we design"
+        headingId="ofs-linked"
+        items={[
+          {
+            title: 'Care coordination platforms',
+            href: '#care',
+            body: 'that connect families with carers at home · CuramCare',
+          },
+          {
+            title: 'Clinical research tools',
+            href: '#research',
+            body: 'that turn survey data into findings · Novus Insights',
+          },
+          { title: 'Patient portals', body: 'that people return to between appointments' },
+        ]}
+        across={3}
       />
     </>
   );

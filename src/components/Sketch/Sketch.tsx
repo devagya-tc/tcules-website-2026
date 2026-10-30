@@ -21,6 +21,7 @@ import type { SketchName } from '@/lib/sketches';
  *   ai-product-ux          a suggestion, and the person's cursor accepting it
  *   design-engineering     the design and its code side by side, one component shared
  *   software-development   three layers of a product, joined, the release lit
+ *   audits                 a problem on the screen traced to the findings, ranked, the first lit
  * And the ARTICLE scenes, each drawn for one insight from its own argument, its cover until a real
  * one exists (owner, 13 Oct 2026; @/lib/sketches `ArticleSceneName`): code-review,
  * security-checklist, prototype-to-production. And the KIT scenes (./kit): EngagementOptions' scopes
@@ -31,7 +32,12 @@ import type { SketchName } from '@/lib/sketches';
 export type { SketchName };
 
 export type SketchProps = {
-  name: SketchName;
+  /**
+   * The scene. Absent: the EMPTY PLATE, its dot field and nothing drawn on it, where a set of scenes
+   * names a subject whose own scene is not drawn yet (GatewayPaths' service rows, owner 29 Oct 2026:
+   * a scene is never borrowed from another subject). Plate frame only; a bare frame draws nothing.
+   */
+  name?: SketchName;
   /**
    * `plate` (default): the drawing on its 16:9 dot-field plate, filling its box's width.
    * `bare`: the drawing alone, cropped to its own drawn edge and set at its own size in drawing
@@ -73,18 +79,19 @@ const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number
  */
 export function Sketch({ name, frame = 'plate', story = false, end = false }: SketchProps) {
   const bare = frame === 'bare';
-  const storyDrawing = STORY[name];
+  const storyDrawing = name ? STORY[name] : undefined;
   /* A story scene moves only where it is asked to, in the bare frame; anywhere else it is held solved. */
   const moving = storyDrawing !== undefined && story && bare;
-  const Still =
-    STILL[name] ??
-    (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
-    (name in OFFER ? OFFER[name as keyof typeof OFFER] : undefined);
+  const Still = name
+    ? (STILL[name] ??
+      (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
+      (name in OFFER ? OFFER[name as keyof typeof OFFER] : undefined))
+    : undefined;
   const [x, y, w, h] =
     (bare &&
       (storyDrawing
-        ? STORY_DRAWN[name]
-        : (DRAWN[name] ?? OFFER_DRAWN[name as keyof typeof OFFER_DRAWN]))) ||
+        ? name && STORY_DRAWN[name]
+        : name && (DRAWN[name] ?? OFFER_DRAWN[name as keyof typeof OFFER_DRAWN]))) ||
     ([0, 0, W, H] as const);
   return (
     <svg

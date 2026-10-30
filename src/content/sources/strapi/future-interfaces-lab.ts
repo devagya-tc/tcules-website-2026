@@ -16,7 +16,7 @@ import type {
   StrapiFutureInterfacesLabLink,
   StrapiFutureInterfacesLabResponse,
 } from './future-interfaces-lab-types';
-import { escapeHtml, richTextToPlainText, safeContentHref } from './rich-text';
+import { cmsHeadingText, escapeHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const FUTURE_INTERFACES_LAB_SLUG = 'future-interfaces-lab';
@@ -148,14 +148,14 @@ function mapCard(
   cardIndex: number,
   graphqlUrl: string,
 ): FutureInterfacesLabCard | undefined {
-  const title = value(card.heading);
+  const title = cmsHeadingText(card.heading);
   if (!title) return undefined;
 
   const icon = mapImage(card.icon, graphqlUrl);
   const image = mapImage(card.cardImage, graphqlUrl);
   const action = mapAction(firstLink(card.button), graphqlUrl);
   const tiles = (card.cardTiles ?? []).flatMap((tile, tileIndex) => {
-    const tileTitle = value(tile.heading);
+    const tileTitle = cmsHeadingText(tile.heading);
     if (!tileTitle) return [];
 
     return [
@@ -226,7 +226,7 @@ function mapFutureInterfacesLab(
   const cmsSlug = normaliseSlug(rawPage.seo?.slug);
   if (cmsSlug && cmsSlug !== requestedSlug) return null;
 
-  const heading = value(rawPage.heroSection?.heading);
+  const heading = cmsHeadingText(rawPage.heroSection?.heading);
   const body = heroBody(
     rawPage.heroSection?.highlightedDescription,
     rawPage.heroSection?.description,
@@ -236,7 +236,7 @@ function mapFutureInterfacesLab(
   const sections = (rawPage.detailSection ?? [])
     .filter(isCardSection)
     .flatMap((section, index) => {
-      const sectionHeading = value(section.heading);
+      const sectionHeading = cmsHeadingText(section.heading);
       if (!sectionHeading) return [];
 
       return [
@@ -251,7 +251,7 @@ function mapFutureInterfacesLab(
       ];
     });
 
-  const miscHeading = value(rawPage.miscSection?.heading);
+  const miscHeading = cmsHeadingText(rawPage.miscSection?.heading);
   const miscDescription = value(rawPage.miscSection?.description);
   const miscAction = mapAction(rawPage.miscSection?.button, graphqlUrl);
   const misc =
@@ -269,7 +269,7 @@ function mapFutureInterfacesLab(
     ? {
         id: value(rawPage.interfaceLabs.id) || 'interface-labs',
         cards: (rawPage.interfaceLabs.labsInterfaceCards ?? []).flatMap((card, index) => {
-          const title = value(card.heading);
+          const title = cmsHeadingText(card.heading);
           if (!title) return [];
 
           const icon = mapImage(card.icon, graphqlUrl);

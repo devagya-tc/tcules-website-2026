@@ -1,0 +1,267 @@
+{
+  "template": "listing",
+  "route": "/insights/articles",
+  "slug": "articles",
+  "name": "Articles",
+  "pageType": "knowledge_collection",
+  "seo": {
+    "title": "Product Design Articles: AI, SaaS & Design Systems | Tcules",
+    "description": "Product design articles on AI trust, design systems, vibe-coded prototypes, CPQ UX and SaaS design, plus interviews with people who ship products.",
+    "canonical": "https://www.tcules.com/insights/articles",
+    "robots": "index,follow",
+    "ogImageAlt": "Tcules Articles."
+  },
+  "social": {
+    "og_title": "Product Design Articles: AI, SaaS & Design Systems | Tcules",
+    "og_description": "Product design articles on AI trust, design systems, vibe-coded prototypes, CPQ UX and SaaS design, plus interviews with people who ship products.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "Tcules Articles.",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Insights",
+      "url": "/insights"
+    },
+    {
+      "name": "Articles",
+      "url": "/insights/articles"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "find the product design article that answers a current question",
+    "primaryBuyerQuestion": "Which Tcules articles are relevant to the product question I am working on?",
+    "supportingQuestions": [],
+    "primaryQuery": "product design articles",
+    "secondaryQueries": [
+      "AI UX articles",
+      "design system articles",
+      "SaaS design articles",
+      "product design interviews",
+      "product design writing"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "CollectionPage",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "BATCH5_DRAFT_2026-10-08",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": null,
+  "hero": {
+    "eyebrow": "Insights · Articles",
+    "title": "Product design articles on AI, design systems and SaaS",
+    "lede": [
+      "Twelve articles by Tcules designers and the product people we interview, on AI inside products, design systems, prototypes heading for production and the everyday design of SaaS. Each one takes a position and says what a team should do about it."
+    ],
+    "actions": [],
+    "proofLines": [],
+    "studioFacts": false,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Comparison",
+      "id": "which-article",
+      "heading": "Which product design article answers your question?",
+      "table": {
+        "columns": [
+          "If your question is about…",
+          "Start with",
+          "Best for"
+        ],
+        "rows": [
+          [
+            "Showing people what an AI feature is doing",
+            "[Trust and transparency in AI interfaces](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces)",
+            "Teams adding AI answers or actions to a product people rely on"
+          ],
+          [
+            "AI output that people must check",
+            "[AI confidence scores in UX](/insights/confidence-scores-dont-fix-trust-when-review-step-never)",
+            "Products where usage stays flat after a review step was added"
+          ],
+          [
+            "Where AI fits in a SaaS workflow",
+            "[Seven generative AI product patterns for SaaS and the controls each needs](/insights/articles/generative-ai-product-patterns-for-saas)",
+            "Product leaders choosing their first or next AI feature"
+          ],
+          [
+            "Getting outside help with a design system",
+            "[When to hire a design system consultant](/insights/when-to-hire-a-design-system-consultant)",
+            "Teams weighing a consultant against their own designers"
+          ],
+          [
+            "A design system teams work around",
+            "[How to build a SaaS design system](/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency)",
+            "Systems where product teams keep making local copies"
+          ],
+          [
+            "Quiet decline between releases",
+            "[Silent UI regressions: how to catch them before customers lose confidence](/insights/articles/silent-ui-regression-debt)",
+            "Established products whose completion rates hide slipping trust"
+          ],
+          [
+            "Quoting software",
+            "[CPQ UX design](/insights/cpq-ux-design)",
+            "Teams whose sales reps still quote in spreadsheets"
+          ],
+          [
+            "Bias in product choices",
+            "[Cognitive bias as a design risk](/insights/articles/cognitive-biases-in-ecommerce-and-saas-products)",
+            "Teams reading behavioural data before a redesign"
+          ],
+          [
+            "Which discipline owns a problem",
+            "[UX vs CX vs design thinking](/insights/articles/design-thinking-vs-cx-vs-ux-explained)",
+            "Leaders sorting out who owns experience work"
+          ]
+        ]
+      }
+    },
+    {
+      "block": "Related reading",
+      "id": "ai",
+      "heading": "AI UX articles: trust, review and generative patterns",
+      "entries": [
+        {
+          "href": "/insights/confidence-scores-dont-fix-trust-when-review-step-never",
+          "label": "AI confidence scores in UX: design the review step people control",
+          "blurb": "Why a confidence score, a warning and a review step can leave usage flat, and how to design the moment a person takes control back."
+        },
+        {
+          "href": "/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces",
+          "label": "Trust and transparency in AI interfaces: what to show, and how much",
+          "blurb": "What an AI feature should show: its role, sources, authority and uncertainty, and the way to recover. The higher the stakes, the more review it needs."
+        },
+        {
+          "href": "/insights/articles/generative-ai-product-patterns-for-saas",
+          "label": "Seven generative AI product patterns for SaaS and the controls each needs",
+          "blurb": "Generate, transform, retrieve, recommend, predict, orchestrate and act: what each pattern asks of the product, and the control each one needs."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "design-systems",
+      "heading": "Design system articles: outside help and everyday use",
+      "entries": [
+        {
+          "href": "/insights/when-to-hire-a-design-system-consultant",
+          "label": "When to hire a design system consultant, and how to judge one",
+          "blurb": "When outside help is worth paying for, when it is the wrong call, and what your own team should be able to run once the consultant leaves."
+        },
+        {
+          "href": "/insights/articles/design-systems-for-saas-boosting-efficiency-and-ux-consistency",
+          "label": "How to build a SaaS design system product teams keep using",
+          "blurb": "Follow one missing piece of the library from a product team's request to a shared release, and see what the path reveals about the system."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "quality",
+      "heading": "From prototype to production, and quality between releases",
+      "entries": [
+        {
+          "href": "/insights/vibe-coded-app-production-ready",
+          "label": "Taking a vibe-coded app to production: what to check, in order",
+          "blurb": "What an AI-built app must answer before real users arrive: what it stores, who can see each record, what happens when a step fails and who fixes it."
+        },
+        {
+          "href": "/insights/articles/silent-ui-regression-debt",
+          "label": "Silent UI regressions: how to catch them before customers lose confidence",
+          "blurb": "Four ways an interface decays between releases while completion rates look healthy, and the question to ask before the next release."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "saas",
+      "heading": "SaaS design articles: quoting software, bias and shared terms",
+      "entries": [
+        {
+          "href": "/insights/cpq-ux-design",
+          "label": "CPQ UX design: quoting software sales reps choose over spreadsheets",
+          "blurb": "Practical advice on configuration rules that explain themselves, prices and approvals visible before submission, and revisions that keep earlier work, with a checklist."
+        },
+        {
+          "href": "/insights/articles/cognitive-biases-in-ecommerce-and-saas-products",
+          "label": "Cognitive biases in UX: use them ethically, starting with your own team",
+          "blurb": "Start with the bias in your own team's reading of the data, then test a behavioural explanation before designing around it."
+        },
+        {
+          "href": "/insights/articles/design-thinking-vs-cx-vs-ux-explained",
+          "label": "UX vs CX vs design thinking: the difference, and when to use each",
+          "blurb": "What each term covers, where they overlap, and how to tell which one is big enough to explain the problem in front of you."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "interviews",
+      "heading": "Product design interviews: My Experiments with UX",
+      "intro": "Conversations with people who ship products, on how AI is changing the way they design and make product calls.",
+      "entries": [
+        {
+          "href": "/insights/articles/my-experiments-with-ux-karthik-pasupathy",
+          "label": "Karthik Pasupathy interview: product design, clarity and the core task",
+          "blurb": "Fyno's then head of marketing on how technical writing, product analytics and AI changed the way he approaches product work."
+        },
+        {
+          "href": "/insights/articles/my-experiments-with-ux-aishwarya-ashok",
+          "label": "Aishwarya Ashok on the AI-first product experience: an interview",
+          "blurb": "How she took the visual collaboration product VaniHQ from idea to beta at Zoho, and why she researches where people complain."
+        }
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Product design articles FAQs",
+      "items": [
+        {
+          "question": "Where can I find articles on SaaS product design?",
+          "answer": "Every piece on this page is written for people building SaaS or business software. Start with CPQ UX design if you make quoting tools, the design system pieces if your library is slipping, and the generative AI patterns if you are planning an AI feature. The table above matches each question to a piece."
+        },
+        {
+          "question": "Which articles explain AI trust in interfaces?",
+          "answer": "Two pieces cover it from different sides. Trust and transparency in AI interfaces sets out what an AI feature should show, and how review should grow with the stakes. AI confidence scores in UX looks at the review step itself, and why a score alone leaves usage flat."
+        },
+        {
+          "question": "Are there interviews with product leaders on UX?",
+          "answer": "Yes. My Experiments with UX is our interview series with people who ship products. Karthik Pasupathy talks about context, clarity and core functionality, and Aishwarya Ashok about building an AI-first product experience. For recorded conversations, see the podcasts."
+        },
+        {
+          "question": "What has Tcules written about CPQ UX?",
+          "answer": "CPQ UX design covers configuration rules that explain themselves, prices and approvals visible before submission, and revisions that keep earlier work. It ends with a checklist. The [Auxentios case study](/case-studies/auxentios-cpq-product-mvp-design) shows our design work on a CPQ product from interviews to MVP."
+        },
+        {
+          "question": "When should I read an article instead of a guide?",
+          "answer": "Read an article when you want a position argued, such as why a confidence score leaves trust unchanged. Reach for a guide when you need to carry out a job step by step, such as onboarding or a UX audit. Many readers use both, argument first and method second."
+        }
+      ]
+    },
+    {
+      "block": "Rich section",
+      "id": "talk",
+      "heading": "Tell us which article matches your product",
+      "body": "Want step-by-step help? Browse the [guides](/insights/guides). If an article matches something in your own product, [write to us](/contact) and tell us what you are seeing."
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/insights__articles.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

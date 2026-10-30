@@ -36,16 +36,32 @@ export type CorpusConversion = {
   schedulingLabel: string | null;
 };
 
+/**
+ * A media slot's `status`, as the copy (26 Oct 2026) authors it. Only BOUND_EXISTING_PUBLIC_ASSET
+ * (and SATISFIED_BY_EXISTING_ASSET, which names an asset bound elsewhere) carries a URL; the three
+ * REQUIRED states are open slots, `asset_uri` null. The string fallback keeps an unknown state
+ * parseable; `corpus:census` lists every slot that is not bound.
+ */
+export type CorpusMediaStatus =
+  | 'BOUND_EXISTING_PUBLIC_ASSET'
+  | 'SATISFIED_BY_EXISTING_ASSET'
+  | 'IMAGE_ASSET_REQUIRED'
+  | 'ASSET_REQUIRED'
+  | 'SCREEN_REQUIRED'
+  | (string & {});
+
 /** One image slot the frontmatter binds. `bound` is true only for an existing public asset. */
 export type CorpusMediaBinding = {
   id: string;
   role: string;
   /** The band id the image supports (`supports_section`). */
   supportsSection: string;
+  /** The card the image belongs to inside that band (`card`: a case slug on selected work), or null. */
+  card: string | null;
   /** The asset URL as authored, or null when the slot has none yet. */
   assetUri: string | null;
   altIntent: string | null;
-  status: string;
+  status: CorpusMediaStatus;
   /** `status === BOUND_EXISTING_PUBLIC_ASSET` with a real URL: use it. Otherwise it is a placeholder. */
   bound: boolean;
   source: string | null;
@@ -53,11 +69,28 @@ export type CorpusMediaBinding = {
   attribution: string | null;
 };
 
+/** `page_composition.client_recognition`: the logo strip a page declares. */
+export type CorpusClientRecognition = {
+  componentType: string | null;
+  /** The band id (or position) the strip sits in, as authored. */
+  placement: string | null;
+  clients: string[];
+  label: string | null;
+  assetPolicy: string | null;
+};
+
 export type CorpusComposition = {
   visualPlan: string | null;
   mediaBindings: CorpusMediaBinding[];
   /** Client names for the logo strip (`client_recognition.clients` / `logo_client_ids`). */
   logoClients: string[];
+  /** The full `client_recognition` block, or null when the page declares none. */
+  clientRecognition: CorpusClientRecognition | null;
+  /**
+   * Case-study slugs the page cites (`selected_work`, `case_study_slugs`, `featured_case_slugs`),
+   * in authored order, de-duplicated. Every one must resolve to a live case's slug.
+   */
+  caseSlugs: string[];
   /**
    * Testimonial ids the page cites, in the order its quotes appear: `page_composition.testimonial_ids`,
    * or `page_composition.commercial_system.testimonial_ids` where a page files them there (About).
@@ -142,9 +175,29 @@ export type CorpusBlock =
 export type CorpusBand = {
   /** The `{#id}` on the `##`, or a slug of the heading when none was authored. */
   id: string;
+  /** True when the `{#id}` was authored on the `##`; false when `id` is a slug of the heading. */
+  anchored: boolean;
   heading: InlineRun[];
   headingText: string;
   blocks: CorpusBlock[];
+};
+
+/** `search_context`: the query and buyer question a page answers. Never rendered; it steers SEO. */
+export type CorpusSearchContext = {
+  primaryIntent: string | null;
+  primaryBuyerQuestion: string | null;
+  supportingQuestions: string[];
+  primaryQuery: string | null;
+  secondaryQueries: string[];
+  keyEntities: string[];
+};
+
+/** `structured_data`: the schema.org types a page emits, and its other keys as authored. */
+export type CorpusStructuredData = {
+  types: string[];
+  organizationRef: string | null;
+  /** Everything else (`article_authors`, `has_part_routes`…), untouched. */
+  raw: Record<string, unknown>;
 };
 
 export type CorpusPage = {
@@ -157,8 +210,13 @@ export type CorpusPage = {
   breadcrumb: CorpusBreadcrumb[];
   /** The enquiry form the page carries, or null when it has none. */
   conversion: CorpusConversion | null;
-  /** `render.band_order`, verbatim. Document order is `bands`; the two are checked to agree. */
+  /**
+   * `render.band_order`, verbatim. Document order is `bands`; the two are checked to agree. Empty
+   * when the page authors none (the legal pages, the authors index): document order stands.
+   */
   bandOrder: string[];
+  searchContext: CorpusSearchContext;
+  structuredData: CorpusStructuredData;
   composition: CorpusComposition;
   release: { contentState: string | null; siteReleaseState: string | null };
   hero: CorpusHero;
@@ -174,6 +232,12 @@ export interface CorpusContentSource {
   getCorpusPage(route: string): Promise<CorpusPage | null>;
   /** Every page, in route order, optionally only one `pageType`. */
   listCorpusPages(type?: string): Promise<CorpusPage[]>;
+  /**
+   * One page's RECORD by route, including a piece filed under a format (`/insights/podcasts/…`),
+   * which the corpus authors but no corpus route renders: a page that links it reads its format and
+   * length from it (`getInsightRefs`). Null when the corpus has no file for the route.
+   */
+  getCorpusRecord(route: string): Promise<CorpusPage | null>;
 }
 
 /**
@@ -186,6 +250,34 @@ export type CorpusCaseRef = {
   route: string;
   title: string;
   cover: CorpusMediaBinding | null;
+  /**
+   * The live case's own Strapi thumbnail, the picture its record carries, for a case whose corpus
+   * page binds no asset. Read at the seam, so a case shows ONE cover on every route that cites it
+   * (review 29 Oct: Auxentios on home, Gold Image Printing on /services). Null when the live list
+   * has no record or no thumbnail for it.
+   */
+  thumbnail: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    sources?: readonly { src: string; width: number }[];
+  } | null;
+};
+
+/**
+ * An insight a page links, as that piece's OWN corpus page describes it (home's "Selected thinking",
+ * 29 Oct 2026): its format, from `page_type`, and its length as the piece displays it
+ * (`editorial.reading_time_as_displayed`, "12 min read"). Read at the seam (`getInsightRefs`), so a
+ * template never reads another page and never writes a length nobody authored. Null where the piece
+ * authors none.
+ */
+export type CorpusInsightRef = {
+  route: string;
+  /** `article`, `guide`, `podcast`, `research`, `video`: the piece's `page_type`, verbatim. */
+  format: string;
+  /** "12 min read", as authored; null when the piece's page carries none. */
+  length: string | null;
 };
 
 /**

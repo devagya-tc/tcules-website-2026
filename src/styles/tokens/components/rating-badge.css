@@ -15,8 +15,12 @@
   --rbadge-padding-inline: var(--space-14);
   --rbadge-radius: var(--radius-full);
   --rbadge-rule-width: var(--border-width-hairline);
-  --rbadge-text: var(--text-ui-sm);
-  --rbadge-tracking: var(--text-ui-sm-tracking);
+  /* 14px text and 16px marks (owner, 29 Oct 2026: the badge read too small for the claim it
+     carries). One size everywhere the badge appears: the footer, the logo grid, a testimonial
+     band's footer, the enquiry close and a hero's eyebrow. */
+  --rbadge-text: var(--text-ui-lg);
+  --rbadge-tracking: var(--text-ui-lg-tracking);
+  --rbadge-mark-size: var(--icon-size-16);
   --rbadge-transition-duration: var(--duration-fast);
   --rbadge-transition-easing: var(--easing-standard);
   --rbadge-ring-width: var(--focus-ring-width);

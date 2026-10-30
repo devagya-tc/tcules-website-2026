@@ -15,8 +15,16 @@ import styles from './OfferSheet.module.css';
 
 /** One promise: what the buyer gets, then what it means. */
 export type OfferSheetItem = {
-  /** The promise in a few words, as authored, its full stop kept ("Complex rules, simple screens."). */
-  title: string;
+  /**
+   * The promise in a few words, as authored, its full stop kept ("Complex rules, simple screens.").
+   * Optional: a promise authored as one sentence with no lead of its own is a STATEMENT, set whole in
+   * the body role under its drawing or rule, never promoted to the title role (review 29 Oct: four
+   * 20px five-line "titles" on product-design). A set is titled throughout or not at all; the caller
+   * decides, because only it knows how the items were authored.
+   */
+  title?: string;
+  /** A stable key for the item, where it has no title (React key). */
+  id?: string;
   /** The sentence that says what the promise means. Plain text. */
   body?: string;
   /** Or trusted HTML from the content seam, for a body that carries a link or emphasis. */
@@ -27,6 +35,12 @@ export type OfferSheetItem = {
    * sheet is two rows of two, each drawing beside its words.
    */
   scene?: SketchName;
+  /**
+   * The page the promise names, when the title is authored as a link (an expertise page's "What we
+   * design": "**[Care coordination platforms](/…)** that connect families with carers", component-map
+   * C7). The title becomes that link; the item is still not a card, so nothing else about it moves.
+   */
+  href?: string;
 };
 
 export type OfferSheetProps = {
@@ -35,6 +49,18 @@ export type OfferSheetProps = {
   /** "What you get": the h2, the band's accessible name. */
   heading: string;
   headingId: string;
+  /**
+   * The sentence that frames the offer, under the heading at the lead role ("Our digital product
+   * design services cover the thinking behind your product…", component-map C4). Optional: most
+   * sheets open straight on their promises.
+   */
+  lead?: string;
+  /**
+   * A label over the promises when the copy names the list ("What you receive", component-map C4):
+   * set in the label voice above the first rule, so the authored words stay and the h2 stays the
+   * band's one heading.
+   */
+  listLabel?: string;
   /** Two to six promises. Four is the shape: two rows of two beside the aside. */
   items: readonly OfferSheetItem[];
   /**
@@ -81,6 +107,8 @@ export function OfferSheet({
   id,
   heading,
   headingId,
+  lead,
+  listLabel,
   items,
   aside,
   asideImage,
@@ -88,7 +116,10 @@ export function OfferSheet({
   across = 2,
   surface = 'paper',
 }: OfferSheetProps) {
-  const shown = items.filter((item) => item.title.trim().length > 0);
+  const shown = items.filter(
+    (item) => (item.title ?? item.body ?? item.bodyHtml ?? '').trim().length > 0,
+  );
+  const keyOf = (item: OfferSheetItem) => item.id ?? item.title ?? item.body ?? item.bodyHtml;
   if (process.env.NODE_ENV !== 'production' && (shown.length < 2 || shown.length > 6)) {
     console.warn(`OfferSheet: ${shown.length} promises; the sheet is built for two to six.`);
   }
@@ -102,7 +133,17 @@ export function OfferSheet({
   }
   const words = (item: OfferSheetItem) => (
     <Layout rowGap="text">
-      <h3 className={styles.title}>{item.title}</h3>
+      {item.title ? (
+        <h3 className={styles.title}>
+          {item.href ? (
+            <a href={item.href} className={styles.titleLink}>
+              {item.title}
+            </a>
+          ) : (
+            item.title
+          )}
+        </h3>
+      ) : null}
       {item.bodyHtml ? (
         <p className={styles.body} dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
       ) : item.body ? (
@@ -110,12 +151,21 @@ export function OfferSheet({
       ) : null}
     </Layout>
   );
+  /* Drawn three across (five or six promises, `across={3}`): from 1024 each drawing heads its words,
+     as a Bento tile's does, so three fit a row; below it, one column, each drawing beside its words
+     again. Two across keeps the approved form, the drawing beside its words from 768. */
+  const drawnThree = drawn && across === 3;
   const promises = drawn ? (
-    <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="gutter" rowGap="stack">
+    <Layout
+      as="ul"
+      columns={{ base: 1, lg: drawnThree ? 3 : 2 }}
+      colGap="gutter"
+      rowGap="stack"
+    >
       {shown.map((item) => (
-        <li key={item.title}>
+        <li key={keyOf(item)}>
           <Layout
-            columns={{ base: 1, md: [5, 6] }}
+            columns={drawnThree ? { base: 1, md: [5, 6], lg: 1 } : { base: 1, md: [5, 6] }}
             colGap="gutter"
             rowGap="block"
             align="center"
@@ -134,20 +184,28 @@ export function OfferSheet({
       rowGap="stack"
     >
       {shown.map((item) => (
-        <li key={item.title} className={styles.item}>
+        <li key={keyOf(item)} className={styles.item}>
           {words(item)}
         </li>
       ))}
     </Layout>
   );
 
-  const sheet = note ? (
-    <Layout rowGap="stack">
+  const labelled = listLabel ? (
+    <Layout rowGap="block">
+      <p className={styles.listLabel}>{listLabel}</p>
       {promises}
-      {note}
     </Layout>
   ) : (
     promises
+  );
+  const sheet = note ? (
+    <Layout rowGap="stack">
+      {labelled}
+      {note}
+    </Layout>
+  ) : (
+    labelled
   );
   const side = drawn
     ? undefined
@@ -161,9 +219,18 @@ export function OfferSheet({
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
       <Layout rowGap="stack">
-        <h2 id={headingId} className={styles.heading}>
-          {heading}
-        </h2>
+        {lead ? (
+          <Layout rowGap="block">
+            <h2 id={headingId} className={styles.heading}>
+              {heading}
+            </h2>
+            <p className={styles.lead}>{lead}</p>
+          </Layout>
+        ) : (
+          <h2 id={headingId} className={styles.heading}>
+            {heading}
+          </h2>
+        )}
         {side ? (
           <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
             {sheet}

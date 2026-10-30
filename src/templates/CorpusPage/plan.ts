@@ -46,6 +46,20 @@ export type OfferKind =
   | 'faq'
   | 'enquiry'
   | 'voice'
+  /* 29 Oct 2026, the 26 Oct copy (docs/page-build/component-map.md § A, § B). */
+  | 'quotes'
+  | 'industries'
+  | 'catalog'
+  | 'challenges'
+  | 'method'
+  | 'related'
+  | 'recognition'
+  | 'destinations'
+  | 'directory'
+  | 'text'
+  | 'note'
+  | 'close'
+  /** No rule names this band: it renders every block plainly and warns (a planning gap). */
   | 'generic';
 
 /** Which half of a split a unit is. `whole` is a band that did not split. */
@@ -100,7 +114,8 @@ function sigOf(block: CorpusBlock): Sig | null {
   }
 }
 
-function signature(band: CorpusBand): string {
+/** A band's shape: one letter per block (comments skipped). Read by `npm run corpus:census` too. */
+export function signature(band: CorpusBand): string {
   return band.blocks
     .map(sigOf)
     .filter((sig): sig is Sig => sig !== null)
@@ -128,26 +143,242 @@ function labelIsQuoted(block: CorpusBlock): boolean {
   return label !== undefined && QUOTE_MARK.test(plain(label));
 }
 
+/** The kind a band takes when its id alone does not decide it: read from the band's shape. */
+type ShapeRule = (band: CorpusBand, sig: string) => OfferKind;
+
+const personaOrChallenges: ShapeRule = (band) =>
+  isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'challenges';
+/** A term index (`A` lines) where the copy uses the same id for a tool group (`L` + `P`). */
+const termsOrTools: ShapeRule = (_band, sig) => (/^A+P?$/.test(sig) ? 'related' : 'directory');
+
 /**
- * Bands the structure cannot tell apart, named by the id the content team gave them. Each entry says
- * what the band IS, not how it looks: the arrangement is the plan's.
+ * THE LOOKUP, SECTION ID FIRST (component-map § A and § B, 29 Oct 2026). The content team's band ids
+ * are its own vocabulary for what a band IS, so a band is classified by its id before its shape: a
+ * `testimonials` band is the proof wall whatever its paragraph count. Each entry names the kind, or
+ * (for the few ids the copy spells in more than one shape) a rule over the shape. A band whose id is
+ * not here falls back to `kindByShape`, and one that matches neither is `generic`, which renders every
+ * block plainly and warns, in development and in the census.
  */
-const ROLE_BY_ID: Readonly<Record<string, OfferKind>> = {
+export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
+  /* ── § A · common bands ── */
+  faq: 'faq',
+  'frequently-asked-questions': 'faq',
+  enquiry: 'enquiry',
+  testimonials: 'quotes',
+  'selected-work': 'cases',
+  'why-tcules': 'reasons',
+  'how-we-work-together': 'tiles',
+  industries: 'industries',
+  'what-you-get': (_band, sig) => (/^T/.test(sig) ? 'table' : 'outcomes'),
+  'related-reading': (_band, sig) => (/^P+$/.test(sig) ? 'text' : 'related'),
+  'related-terms': 'related',
+  'hard-parts': personaOrChallenges,
+  'what-we-design': 'catalog',
+  compare: 'table',
+  routes: 'table',
+  articles: 'related',
+  'client-recognition': 'recognition',
+  method: 'method',
+  scope: (_band, sig) =>
+    /U/.test(sig) && /L/.test(sig) ? 'outcomes' : /T/.test(sig) ? 'table' : 'text',
+  deliverables: 'deliverables',
+  'services-on-their-own': 'router',
+  /* ── G11 · option and record tables ── */
+  'company-record': 'table',
+  'gap-map': 'table',
+  'client-list': 'table',
+  'design-run': 'table',
+  autonomy: 'table',
+  authority: 'table',
+  'search-jobs': 'table',
+  'review-options': 'table',
+  recovery: 'table',
+  fidelity: 'table',
+  handoff: 'table',
+  'which-check': 'table',
+  'component-contract': 'table',
+  'which-do-you-need': 'table',
+  finding: 'table',
+  'status-example': 'table',
+  'one-component': 'table',
+  'which-service': 'table',
+  'which-first': 'table',
+  mapping: 'table',
+  'which-job': 'table',
+  'change-path': 'table',
+  models: 'table',
+  options: 'table',
+  'hand-offs': 'table',
+  'cross-check': 'table',
+  strategies: 'table',
+  continuity: 'table',
+  transition: 'table',
+  contracts: 'table',
+  states: 'table',
+  platforms: 'table',
+  alternatives: 'table',
+  /* ── G12 · hub routers: a 3-column table stays a table with linked keys (Q6 default) ── */
+  choose: 'table',
+  'service-guide': 'table',
+  services: (_band, sig) => (/^[KU]$/.test(sig) ? 'router' : 'text'),
+  /* ── G13 · labelled claim sets ── */
+  'how-we-work': (_band, sig) => (/[ULI]/.test(sig) ? 'outcomes' : 'text'),
+  'what-we-look-for': 'outcomes',
+  'people-decide': 'outcomes',
+  contents: 'outcomes',
+  'hard-cases': 'outcomes',
+  format: 'outcomes',
+  'change-types': 'outcomes',
+  brief: (_band, sig) => (/^U/.test(sig) ? 'outcomes' : 'text'),
+  /* ── G14 · steps and stages ── */
+  trace: 'thread',
+  'next-steps': 'method',
+  'how-it-runs': 'method',
+  decisions: 'method',
+  'every-number': 'method',
+  discovery: 'method',
+  /* ── G15 · argued item sets ── */
+  difference: 'outcomes',
+  'who-uses-tcules': 'outcomes',
+  'product-responsibility': 'outcomes',
+  'why-join': 'outcomes',
+  'who-we-are-looking-for': 'outcomes',
+  'what-youll-gain': 'outcomes',
+  'what-youll-do': 'outcomes',
+  essentials: 'outcomes',
+  'engagement-shapes': 'tiles',
+  principles: (_band, sig) => (/I/.test(sig) ? 'outcomes' : 'text'),
+  /* ── G16 · destinations ── */
+  'what-we-do': 'destinations',
+  /* Two titled card sets with the pages' photographs (G16, § E /expertise; HubBands). */
+  'product-types': 'destinations',
+  'design-work': 'destinations',
+  'ai-interfaces': 'destinations',
+  'product-situations': 'destinations',
+  /* ── G18 · open roles · G6 term indexes ── */
+  'open-roles': 'related',
+  'ai-in-products': 'related',
+  'ai-in-practice': 'related',
+  'design-and-code': 'related',
+  structure: 'related',
+  /* ── G23 · tool hub groups, or a term index where the same id names one ── */
+  ai: termsOrTools,
+  'design-systems': termsOrTools,
+  modernisation: termsOrTools,
+  prototypes: 'directory',
+  /* ── G19 · prose bands on composed pages ── */
+  /* /audits: the sixth audit, one linked row under its lead (§ E /audits). */
+  prototype: 'related',
+  ahmedabad: 'text',
+  'product-work': 'text',
+  'ai-fluency': 'text',
+  'returning-clients': 'text',
+  direction: 'text',
+  threshold: 'text',
+  'your-team': 'text',
+  'working-loop': 'text',
+  'design-to-release': 'text',
+  'product-knowledge': 'text',
+  'what-stays': 'text',
+  'whats-next': 'text',
+  use: 'text',
+  'beyond-the-file': 'text',
+  'every-state': 'text',
+  testing: 'text',
+  knowledge: 'text',
+  'build-loop': 'text',
+  studio: 'text',
+  /* Three instructions as plain paragraphs: numbered steps (MethodBand), so the glossary opens on a
+     shape before its five term groups (review 29 Oct). */
+  'how-to-use': 'method',
+  /* ── G20 · closes and notes ── */
+  'work-with-tcules': 'close',
+  lab: 'close',
+  apply: 'close',
+  'case-studies': (_band, sig) => (/^P$/.test(sig) ? 'close' : 'text'),
+  purpose: 'close',
+  promotion: 'close',
+  join: 'close',
+  'artefact-access': 'close',
+  'your-rules': 'close',
+  talk: 'close',
+  confidentiality: 'note',
+  /* ── G21 · one worked example; and the ids the earlier copy used ── */
+  'signature-work': 'record',
   'complex-products': 'cases',
   proof: 'cases',
-  trace: 'thread',
-  deliverables: 'deliverables',
   'worked-example': 'record',
   engagement: 'tiles',
   approach: 'principles',
-  'why-tcules': 'reasons',
-  'hard-parts': 'personas',
+  /* ── G24 · home's own bands (HomePage composes them; this is the shared fallback) ── */
+  'product-design': 'destinations',
+  people: 'text',
+  'ai-native-practice': 'text',
+  insights: 'related',
+  expertise: 'industries',
 };
 
+/**
+ * The ids a page's own template composes itself, by route (HomePage `BANDS`, AboutPage
+ * `ABOUT_BANDS`, each typed against this list). Every other band of those pages renders as
+ * `BAND_KINDS` names it; the census reads this to know a band is drawn and not skipped.
+ */
+export const TEMPLATE_BANDS = {
+  '/': [
+    'client-recognition',
+    'product-situations',
+    'product-design',
+    'selected-work',
+    'testimonials',
+    'people',
+    'ai-native-practice',
+    'expertise',
+    'insights',
+  ],
+  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record'],
+  /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
+  '/contact': ['brief', 'next-steps', 'confidentiality'],
+  /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,
+     proof wall, FAQ, enquiry) render by the plan's kind around it (component-map C13). */
+  '/insights': [
+    'new-product',
+    'ai-product-ux',
+    'design-systems',
+    'modernisation',
+    'saas-ux',
+    'formats',
+    'talk',
+  ],
+  '/case-studies': [
+    'featured',
+    'new-products',
+    'established-products',
+    'ai-products',
+    'designed-and-built',
+    'enquiry',
+  ],
+} as const satisfies Readonly<Record<string, readonly string[]>>;
+
+/** The kind the id table gives a band, or undefined when its id is not in the table. */
+export function kindById(band: CorpusBand): OfferKind | undefined {
+  const rule = BAND_KINDS[band.id];
+  if (rule === undefined) return undefined;
+  return typeof rule === 'function' ? rule(band, signature(band)) : rule;
+}
+
+/**
+ * A band's kind: its id first (`BAND_KINDS`), then its shape. A form is always the enquiry. The shape
+ * rules are the fallback for a band the content team named outside the table; `generic` is what
+ * neither recognises.
+ */
 export function kindOf(band: CorpusBand): OfferKind {
   const sig = signature(band);
   if (sig.includes('F')) return 'enquiry';
+  return kindById(band) ?? kindByShape(band, sig);
+}
 
+/** The shape fallback: the rules OfferPage applied before the id table, still right for an unnamed band. */
+export function kindByShape(band: CorpusBand, sig: string = signature(band)): OfferKind {
   const items = band.blocks.filter(
     (b): b is Extract<CorpusBlock, { type: 'item' }> => b.type === 'item',
   );
@@ -167,15 +398,11 @@ export function kindOf(band: CorpusBand): OfferKind {
   if (labelled.length >= 3 && labelled.every(labelIsQuoted) && /^L+$/.test(sig))
     return 'symptoms';
 
-  const byId = ROLE_BY_ID[band.id];
-  if (byId === 'personas' && !isPersonaTable(band.blocks.find((b) => b.type === 'table'))) {
-    return /T/.test(sig) ? 'table' : 'generic';
-  }
-  if (byId) return byId;
-
   if (/^PT/.test(sig))
     return isPersonaTable(band.blocks.find((b) => b.type === 'table')) ? 'personas' : 'table';
   if (/^L{3,6}Q?$/.test(sig)) return 'outcomes';
+  if (/^P?Q+L?$/.test(sig)) return 'quotes';
+  if (/^P+K?$/.test(sig)) return 'text';
   return 'generic';
 }
 
@@ -205,11 +432,22 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
   'personas',
   'principles',
   'caseStories',
+  'industries',
+  'recognition',
+  'destinations',
+  'directory',
 ]);
 
 type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
 };
+
+/**
+ * Bands their template always sets with a photograph, bound or not (HomePage's `ai-native-practice`
+ * Banner takes its placeholder studio photo until the shoot), so the rhythm check reads them as the
+ * visual band they render as.
+ */
+const PHOTOGRAPH_BANDS: ReadonlySet<string> = new Set(['ai-native-practice']);
 
 function drafts(page: CorpusPage): Draft[] {
   const units: Draft[] = [];
@@ -224,7 +462,16 @@ function drafts(page: CorpusPage): Draft[] {
       band,
       kind,
       part,
-      visual: kind === 'generic' ? false : VISUAL.has(kind),
+      /* A prose band or the hard parts with a photograph of their own read as visual. */
+      visual:
+        kind === 'generic'
+          ? false
+          : VISUAL.has(kind) ||
+            PHOTOGRAPH_BANDS.has(band.id) ||
+            ((kind === 'challenges' || kind === 'text') &&
+              page.composition.mediaBindings.some(
+                (m) => m.bound && m.supportsSection === band.id,
+              )),
       ...extra,
     });
   };
@@ -288,7 +535,8 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
   for (const draft of raw) {
     /* Tint is the proof band (page-mapping § 1.7): a voice always sits on it. The close is home's
        island on a paper band (owner, 26 Oct 2026), so it takes no tint of its own. */
-    const surface: OfferUnit['surface'] = draft.kind === 'voice' ? 'tint' : 'paper';
+    const surface: OfferUnit['surface'] =
+      draft.kind === 'voice' || draft.kind === 'quotes' ? 'tint' : 'paper';
     if (draft.kind === 'voice') {
       planned.push({ ...draft, surface, side: voiceSide });
       voiceSide = voiceSide === 'start' ? 'end' : 'start';
@@ -316,7 +564,7 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
   /* A worked example is a story on its own ground: tint, unless a neighbour is already tint (two tints
      never touch). */
   planned.forEach((unit, index) => {
-    if (unit.kind !== 'record') return;
+    if (unit.kind !== 'record' && unit.kind !== 'close') return;
     const touches = [planned[index - 1], planned[index + 1]].some((n) => n?.surface === 'tint');
     if (!touches) unit.surface = 'tint';
   });
@@ -324,6 +572,14 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
   /* Rhythm: never two text-heavy bands adjacent (page-mapping § 3). A warning, not a refusal: the
      page renders as written and the fault is visible on it. */
   if (process.env.NODE_ENV !== 'production') {
+    /* A band no rule names is a planning gap, not a design: it says so (the census flags it too). */
+    for (const unit of planned) {
+      if (unit.kind === 'generic') {
+        console.warn(
+          `OfferPage ${page.route}: band "${unit.id}" (${signature(unit.band)}) reaches 'generic'; name it in BAND_KINDS (plan.ts).`,
+        );
+      }
+    }
     planned.forEach((unit, index) => {
       const next = planned[index + 1];
       if (

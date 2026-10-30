@@ -1,5 +1,7 @@
 # CtaSection
 
+> **Amended 29 Oct 2026 (owner, second review of the 26 Oct copy pages) — supersedes every note below on the split's ground, the form panel, the offer with a form and the open close's ground.** A form sits ONLY on an island: `split` always renders `Island`, `island?: 'blue' | 'ink'` (default `blue`), with or without `art`; the plain split on tint, its `.formPanel` and `--cta-panel-radius`, and the offer-with-form shape are removed (decisions/2026-10-29-forms-only-on-the-island). `open` is always an ink island with `TextureFlow` across it, the lede on still water; it takes no `island` prop (decisions/2026-10-29-cta-band-is-an-ink-island). A close's island on a band of its own ground swaps blue ↔ ink, never to paper or tint.
+
 > **Amended, home round 3 (11 Oct 2026).** The split close makes the FORM the band's primary object: [5, 7] from 1024 with the form in the 7 on a raised panel (a nested surface one step off the band's ground, `--cta-panel-ground`, 8 radius, `block` inset) and the copy beside it at the offer's h2, centred on the panel. See docs/page-mapping.md § 19.
 
 > **Owner amendment, 8 Oct 2026 — r7-buttons** (`docs/kit/review-7-oct.md`, visual-direction § 4.5,

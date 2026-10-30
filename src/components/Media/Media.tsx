@@ -414,10 +414,11 @@ export function Media({
 
   /* The focal point, as the one custom property the crop reads. On the style prop because a class
      cannot express a per-asset value (ClientMark's precedent); absent, the stylesheet's anchor
-     stands — the centre for a ratio crop, --media-fill-position for a fill. */
+     stands — the centre for a ratio crop, --media-fill-position for a fill. A `contain` placement
+     reads only a `focus` passed for it, never the record's crop point. */
   const anchor = focus ?? image.focus;
   const style =
-    anchor && (cropRatio || fit === 'fill')
+    anchor && (cropRatio || fit === 'fill' || (fit === 'contain' && focus))
       ? ({ '--media-focus': `${percent(anchor.x)} ${percent(anchor.y)}` } as CSSProperties)
       : undefined;
 

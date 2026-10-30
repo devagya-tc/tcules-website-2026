@@ -4,13 +4,13 @@ slug: coded-prototyping
 page_name: Coded Prototyping
 page_type: service
 seo:
-  title: Coded Prototyping Services for SaaS Products | Tcules
-  description: 'Coded prototyping for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before your engineers commit to a build.'
+  title: 'Coded Prototyping Services: Test Before You Build | Tcules'
+  description: 'Coded prototyping services for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before engineers commit.'
   canonical: https://www.tcules.com/services/design-engineering/coded-prototyping
   robots: index,follow
 social:
-  og_title: Coded Prototyping Services for SaaS Products | Tcules
-  og_description: 'Coded prototyping for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before your engineers commit to a build.'
+  og_title: 'Coded Prototyping Services: Test Before You Build | Tcules'
+  og_description: 'Coded prototyping services for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before engineers commit.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Coded Prototyping Services for SaaS Products | Tcules
-  twitter_description: 'Coded prototyping for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before your engineers commit to a build.'
+  twitter_title: 'Coded Prototyping Services: Test Before You Build | Tcules'
+  twitter_description: 'Coded prototyping services for SaaS teams: working prototypes in the browser that test real data, edge cases and interactions before engineers commit.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: coded prototyping for SaaS and complex product decisions
@@ -29,7 +29,16 @@ search_context:
   - Can a coded prototype go straight into production?
   - Can you use our real data?
   - What happens after the prototype?
-  primary_query: coded prototyping
+  primary_query: coded prototyping services
+  secondary_queries:
+  - coded prototyping
+  - when to use a coded prototype
+  - high-fidelity coded prototype
+  - interactive prototype development
+  - prototype with real data
+  - React prototype
+  - can a coded prototype go into production
+  - what happens after the prototype
 navigation:
   breadcrumb:
   - name: Home
@@ -59,28 +68,43 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
+  - hard-cases
   - fidelity
-  - scope
-  - proof
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: static_concept_to_coded_prototype_to_hardened_prototype_to_production
   media_bindings:
-  - id: coded_benchmark
+  - id: coded_connectx_workspace
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
+    alt_intent: 'ConnectX''s coded demo workspace on sample data: a plain-language request, the data behind it and the building''s digital twin shown together in one view.'
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: coded_benchmark_attachments
+    role: demonstrate
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    alt_intent: Benchmark Gensuite legacy and redesigned attachments experience used in coded prototype review.
+    alt_intent: 'Benchmark Gensuite''s legacy attachments area beside the redesigned one, built as a coded prototype with nested folders, previews and reordering for engineers to review.'
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-CONNECTX-SCENARIOS
+  - FP-AUXENTIOS-VALIDATED
+  - FP-DOODLE-EFFICIENCY
   client_recognition:
     component_type: curated_client_recognition
     clients:
-    - Benchmark Gensuite
     - ConnectX
+    - Benchmark Gensuite
+    - Gold Image Printing
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -90,9 +114,18 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
-  proof_claim_policy: BENCHMARK_CODED_PROTOTYPES;CONNECTX_INTERIM_DATA
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  proof_claim_policy: BENCHMARK_CODED_PROTOTYPES;CONNECTX_CODED_DEMO_ON_INTERIM_DATA_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025
   content_composition:
     primary_intent: coded prototyping
     recognition_count: 3
@@ -124,7 +157,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
@@ -132,9 +165,8 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
-  - BENCHMARK_CODED_PROTOTYPES;CONNECTX_INTERIM_DATA
+  - BENCHMARK_CODED_PROTOTYPES;CONNECTX_CODED_DEMO_ON_INTERIM_DATA_THEN_PRODUCTION_READY_MODULE_LIVE_SINCE_LATE_2025
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
@@ -144,90 +176,149 @@ content_governance:
 
 *Design Engineering · Coded prototyping*
 
-# Coded prototypes for interactions too tricky to judge in Figma
+# Coded prototyping services to test real behaviour before you build
 
-Real data, many states, drag and drop, small screens: some answers only appear in a browser. We build a working prototype so your team can try it before engineering commits.
+Coded prototyping is for the review where engineers try the drag, the slow answer and the crowded table in a browser. It is also for the roadmap call that follows: build it, change it or stop. Tcules provides coded prototyping services for SaaS and AI products, on real or representative data.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)*
 
-*Selected work: Benchmark Gensuite · ConnectX*
+[Tell us what you need to see working](#enquiry)
 
-## When a coded prototype is worth it {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-Code earns its place when a static design can only describe the answer. Typical questions:
+## What you get from a coded prototype {#what-you-get}
 
-- Does the interaction still make sense once people can drag, reorder or nest things?
+One high-fidelity coded prototype in the browser, built to answer one question your team cannot answer from a picture.
 
-- What happens when real data makes the layout dense or uneven?
+**What you receive**
 
-- Does the flow hold up on a phone, or when the window is resized?
+- **The question, agreed first.** One sentence the prototype must answer, and what would count as an answer, written down before any code.
 
-- Will the design run into a technical limit that engineering should know about now?
+- **The hard cases before the happy path.** Empty, loading, error, long content, dense data and different user roles, built first because they are most likely to break the idea.
 
-If a sketch or a clickable Figma flow can answer the question, we use that and save you the code.
+- **Real or representative data.** Your own records when access and privacy allow, or sample data shaped like them.
 
-## Choose the right level of prototype {#fidelity}
+- **A working session.** Your team, and users where it helps, work through the prototype in the browser with us.
 
-| Level | Good for |
-|---|---|
-| Sketch or flow | Structure, order of steps, early ideas |
-| Clickable prototype | Navigation and layout, tested with users or stakeholders |
-| Coded prototype | Real behaviour: states, data, responsive layouts, keyboard use |
-| Production software | Real customers, with security, testing, monitoring and support in place |
+- **A short write-up.** What we learned, what is still open, and our recommendation to build it, change it or stop, with the reasons for anyone who missed the session.
 
-Each step up costs more, so we stop at the cheapest one that answers the question.
+**Who does the work.** Design engineers build the prototype, in HTML, CSS and JavaScript or in your own framework, such as React. The product designer who owns the question works beside them, and an account lead keeps the prototype to its question.
 
-## What goes into one of our coded prototypes {#scope}
+**What we need from you.** The question, and what you would do differently depending on the answer. The data, or the rules for realistic sample data. And an engineer who will judge whether the result can be built.
 
-- The question it has to answer, agreed before we write any code
+**Where our part stops.** A prototype answers a question; it leaves out the security, testing and monitoring real customers need. If the answer is to build, [Design to Code](/services/design-engineering/design-to-code) carries it into your product with your engineers, or [Software Development](/services/software-development) builds the feature.
 
-- The states that test the idea hardest: empty, loading, error, long content, dense data and different user roles
+## Selected coded prototyping work {#selected-work}
 
-- Representative data, or your real data when access and privacy allow
+Two of these ran in code. The third shows the level below code, where an interactive prototype answered the question.
 
-- A short write-up of what we learned, what is still open and what we recommend next
+### ConnectX: a request, its data and the twin, seen working together
 
-Sometimes the right recommendation is to stop. If the prototype settled the question, it has done its job.
+ConnectX was defining an AI-native building-energy product. Before any live integration, our coded demo on sample data showed a plain-language request, its data and the digital twin working as one product. That demo later became a production-ready module. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
 
-## Two prototypes, two different questions {#proof}
+### Benchmark Gensuite: drag and drop raised a build question in review
 
-### Benchmark Gensuite: can engineering build what we designed?
+We built the suite's attachments area as a working prototype: nested folders, previews, reordering and the screens in between. One of Benchmark's engineers asked whether drag and drop needed an external library with Bootstrap 5, early enough for the team to act on it. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-We built Benchmark's new interface patterns as working prototypes in HTML, CSS and JavaScript. The attachments prototype covered nested folders, previews, reordering and the states in between.
+### Gold Image Printing: interactive prototypes before implementation
 
-Reviewing the prototypes, a Benchmark engineer asked whether we used an external library for drag and drop, since Bootstrap 5 doesn't support it natively. That question came up while the design could still change, which is exactly when you want it.
+For Gold Image Printing's store and production system, hybrid wireframes carried interaction detail into the earliest drafts. Interactive prototypes then let stakeholders review the intended flow before implementation began. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+## When to use a coded prototype: what it has to survive {#hard-cases}
 
-### ConnectX: does the product idea hold together?
+Code earns its place when a static design can only describe the answer. These are the cases we build into a prototype first.
 
-ConnectX was defining an AI building-energy product. We turned its early material into eight scenarios and built a coded demonstration on interim data. ConnectX could then review a request, the data behind it and the digital twin together, instead of judging separate dashboard concepts.
+**Movement.** Does the idea still make sense once people can drag, reorder or nest things, by mouse and by keyboard?
 
-Once the idea held together, we turned the demo into a production-ready module, live since late 2025.
+**Real data.** What happens when long names, empty records and uneven numbers make the layout dense?
 
-<!-- awaiting client sign-off -->
+**Size.** Does the screen still work on a phone, or when someone narrows the window halfway through a task?
+
+**Waiting and failing.** What do people see while something loads, when it fails, and when an AI answer is slow, unsure or wrong?
+
+**A technical limit.** Will something in the platform change the design, and does engineering need to know now?
+
+An AI feature never behaves the same way twice, so a static design captures one moment of it. A prototype on sample data lets your team watch the slow answer, the unsure one and the wrong one, and decide how the product handles each before the build.
+
+## Sketch, clickable or coded: which prototype do you need? {#fidelity}
+
+| Level | What it answers | Best for |
+|---|---|---|
+| Sketch or static design | Structure, order of steps, early ideas | The idea is still taking shape |
+| [Clickable prototype](/services/product-design/prototyping-usability-testing) | Navigation and layout, tested with users or your team | People need to move through it to judge it |
+| Coded prototype | Real behaviour: loading and error screens, real data, layouts that resize, keyboard use | The answer depends on real data or the browser |
+| Production software | Security, testing, monitoring and support, for real customers | The open questions are answered and you are ready to build |
+
+We pick the level that answers the question soonest, and go further only when the question needs it.
+
+## What clients say {#testimonials}
+
 > “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
 > **Pratik Ghoshal, CEO, ConnectX**
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+> “We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
+> **Ashok Mohanty, Founder, Auxentios**
 
-## Frequently asked questions {#faq}
+> “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback.”  
+> **Stephanie Leue, Doodle**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For coded prototyping, a good first piece of work is one interaction or one AI behaviour, built in code to answer a single question.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, with the custom work needed to fit the design to the platform.
+
+- **We know what to leave alone in a product people rely on.** On [Dealpath's](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) deal-management software, our redesign changed one step, Add to pipeline, and left the other three listing actions largely as users knew them.
+
+- **We work out what the product has to know before we draw it.** At [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that people's availability depended on how important a meeting was, and priority became part of the product model.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools)
+
+## Questions about coded prototyping services {#faq}
 
 ### When is a coded prototype better than a Figma prototype?
 
-When the answer depends on behaviour: real data, many states, responsive layouts, keyboard use or technical limits. For questions about layout and navigation, a Figma prototype is usually enough.
+When the answer depends on behaviour: real data, many states, responsive layouts, keyboard use or technical limits. A Figma prototype answers questions about layout and navigation well, and Tcules uses one when that is enough.
 
 ### Can a coded prototype go straight into production?
 
-No. A prototype is built to answer a question, so it leaves out the security, testing and monitoring that production software needs. If you plan to build on one, a [Prototype Readiness Review](/audits/prototype-readiness-review) shows what is missing.
+Yes, once it gains the security, testing and monitoring that real customers need, which a prototype built to answer a question leaves out. Tcules takes prototypes through that stage, as we did when ConnectX's coded demo became a production-ready module.
 
-### Can you use our real data?
+### Can a coded prototype use our real data?
 
 Yes, when access and privacy allow and the question needs it. Representative data is often enough to test behaviour, and it keeps sensitive records out of a prototype.
 
-### What happens after the prototype?
+### Can you prototype an AI feature in code?
 
-If the answer is to build, our [Design to Code](/services/design-engineering/design-to-code) work carries the design into your product with your engineers. If you want us to build the whole feature, that is [Software Development](/services/software-development).
+Yes. A coded prototype shows how an AI feature behaves when its answer is slow, uncertain or wrong, which a static design struggles to show. We use sample data where real data is not available yet.
+
+### Do you build React prototypes?
+
+Yes. When your product runs on React, a React prototype lets your developers read and reuse what we learned. For a plain test of behaviour, HTML, CSS and JavaScript are often enough, as they were for Benchmark Gensuite.
 
 ## Tell us what you need to see working {#enquiry}
 

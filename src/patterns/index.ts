@@ -372,13 +372,23 @@ export {
 /* Gateway — the situation selector: six reader situations, one lit, its answer beside it (home
    "What do you need next?", round 6, 11 Oct 2026). */
 export { Gateway, type GatewayArrangement, type GatewayItem, type GatewayProps } from './Gateway';
+/* GatewayPaths — the two-door form: two paths, each its drawing, words and links (home, 29 Oct 2026). */
+export { GatewayPaths, type GatewayPath, type GatewayPathsProps } from './Gateway';
 
 /* Product-design round 6 (11 Oct 2026, page-mapping § 23): four bands designed for their job. */
 /* OfferSheet — what the buyer gets, as one offer, the client's words anchored beside it. */
 export { OfferSheet, type OfferSheetItem, type OfferSheetProps } from './OfferSheet';
 
 /* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
-export { Reasons, type ReasonsArrangement, type ReasonsItem, type ReasonsProps } from './Reasons';
+export {
+  Reasons,
+  type ReasonsArrangement,
+  type ReasonsFigure,
+  type ReasonsItem,
+  type ReasonsMark,
+  type ReasonsProof,
+  type ReasonsProps,
+} from './Reasons';
 
 /* VoiceLedger — complaints in the customer's own words, each answered by where we start. */
 export { VoiceLedger, type VoiceLedgerItem, type VoiceLedgerProps } from './VoiceLedger';
@@ -421,8 +431,10 @@ export {
    stack, beside, or as a row with an end thumbnail (insights hub and format pages, 16 Oct 2026). */
 export {
   Teaser,
+  TEASER_FORMAT_ICON,
   type TeaserArrangement,
   type TeaserDate,
+  type TeaserFormat,
   type TeaserImage,
   type TeaserMedia,
   type TeaserProps,
@@ -431,4 +443,12 @@ export {
 
 /* Bento — linked tiles of two sizes on four tracks, each a name, a line and its drawing, over one
    continuous texture per row (home "What we do", owner 19 Oct 2026). */
-export { Bento, type BentoItem, type BentoProps } from './Bento';
+/* ServiceTile is one bento tile on its own, for a named service sitting as a card in another set
+   (an insights shelf's related service), 29 Oct 2026. */
+export {
+  Bento,
+  ServiceTile,
+  type BentoItem,
+  type BentoProps,
+  type ServiceTileProps,
+} from './Bento';

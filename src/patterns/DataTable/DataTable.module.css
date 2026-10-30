@@ -214,6 +214,16 @@
   text-wrap: var(--text-title-wrap);
 }
 
+/* A linked row header (`headerHtml`, component-map C6): the same voice as `.keyText`, set on the
+   Prose span that carries the link, so the link takes Prose's own ink, rule and states. The two
+   classes outrank Prose's single-class flow type, which would otherwise set the key in body type. */
+.key .keyRich {
+  font: var(--text-h6);
+  letter-spacing: var(--text-h6-tracking);
+  color: var(--dtab-key-ink);
+  text-wrap: var(--text-title-wrap);
+}
+
 /* The cell's rich text is Prose, which owns its ink, links, marks and paragraph rhythm. This class
    says only what a cell needs from its content box. */
 .value {

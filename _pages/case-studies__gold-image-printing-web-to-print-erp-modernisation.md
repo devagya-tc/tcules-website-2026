@@ -4,13 +4,13 @@ slug: gold-image-printing-web-to-print-erp-modernisation
 page_name: Modernising connected web-to-print and production workflows without a sudden replacement
 page_type: case_study
 seo:
-  title: 'Gold Image Printing: from order to production | Tcules'
-  description: Tcules connected Gold Image Printing’s web-to-print ordering and ERP redesign around the downstream work each customer order creates in fulfilment.
+  title: 'Gold Image Printing ERP modernisation case study | Tcules'
+  description: 'Gold Image Printing web-to-print ERP modernisation case study: one set of components and a style guide linking customer orders to production work.'
   canonical: https://www.tcules.com/case-studies/gold-image-printing-web-to-print-erp-modernisation
   robots: index,follow
 social:
-  og_title: 'Gold Image Printing: from order to production | Tcules'
-  og_description: Tcules connected Gold Image Printing’s web-to-print ordering and ERP redesign around the downstream work each customer order creates in fulfilment.
+  og_title: 'Gold Image Printing ERP modernisation case study | Tcules'
+  og_description: 'Gold Image Printing web-to-print ERP modernisation case study: one set of components and a style guide linking customer orders to production work.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,20 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Gold Image Printing: from order to production | Tcules'
-  twitter_description: Tcules connected Gold Image Printing’s web-to-print ordering and ERP redesign around the downstream work each customer order creates in fulfilment.
+  twitter_title: 'Gold Image Printing ERP modernisation case study | Tcules'
+  twitter_description: 'Gold Image Printing web-to-print ERP modernisation case study: one set of components and a style guide linking customer orders to production work.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'Gold Image Printing ERP modernisation'
+  secondary_queries:
+  - 'Gold Image Printing ERP modernisation case study'
+  - Gold Image Printing web-to-print ERP modernisation case study
+  - 'order to production workflow design'
+  - 'web-to-print ERP redesign'
+  - 'print production software UX'
+  - 'legacy ERP UX modernisation'
+  - 'modernisation without a sudden replacement'
+  - 'ERP modernisation case study'
   primary_intent: web-to-print legacy ERP modernisation case study
   primary_buyer_question: How did Tcules connect Gold Image Printing’s ordering and production experience?
   key_entities:
@@ -30,7 +40,7 @@ search_context:
   - ERP
   - production workflow
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +64,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +75,8 @@ render:
   - a-shared-language-reduced-design-discontinuity
   - what-this-case-establishes
   - use-this-when-an-old-interface-holds-learned-beh
-  - delivery-impact
+  - testimonials
+  - faq
   - related
   - enquiry
 page_composition:
@@ -84,12 +95,15 @@ page_composition:
       a-shared-language-reduced-design-discontinuity: argument_thesis
       what-this-case-establishes: argument_thesis
       use-this-when-an-old-interface-holds-learned-beh: argument_thesis
-      delivery-impact: argument_thesis
+      testimonials: testimonial_proof
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
+  testimonial_ids:
+  - QB-10
+  - QB-12
   commercial_system:
-    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
   visual_requirements:
@@ -104,10 +118,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#gold-image-printing
 release:
@@ -154,66 +169,89 @@ content_governance:
 
 *Case study · Gold Image Printing*
 
-# A clearer path from print order to production
+# Gold Image Printing ERP modernisation: print store and production system redesigned together
 
-Gold Image Printing's online orders continued into artwork, production instructions, scheduling, inventory, fulfilment and customer communication across a commerce site and internal ERP. Tcules observed the operational work, redesigned customer and production workflows, and developed a shared interface foundation so both sides of the system could change without treating checkout as the end of the product.
+Gold Image Printing's online orders continued into artwork, production instructions, scheduling, inventory, fulfilment and customer communication, across a commerce site and an internal ERP.
 
-The aim was a product that stayed understandable as an order moved from purchase into production.
+Tcules observed the operational work and redesigned the customer and production workflows. We also created a shared design foundation, so both sides of the system could change together.
 
-## At a glance {#case-context}
+The store and the production system share one design foundation, so an order reads the same from purchase into production.
+
+## Gold Image Printing at a glance {#case-context}
 
 | Product | Gold Image Printing's web-to-print store and the internal ERP its production staff use. |
 |---|---|
 | Our role | Operational research, workflow redesign and a shared interface direction, working with Gold Image Printing's technical team on implementation. |
 | The key question | How can customer ordering and production work share one clear product without upsetting the way staff already work? |
 | What we delivered | A shared design foundation, with components and a style guide, linking customer ordering to production across the store and the ERP. |
+| What an order touches | Artwork, production instructions, scheduling, inventory, fulfilment and customer communication. |
+| Research and design methods | Observation of the existing system, a review of order management with stakeholders and analytics, hybrid wireframes and interactive prototypes. |
 
 Related Tcules services: [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation) and [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design).
 
-## What did Tcules learn by following an order beyond checkout? {#shadowing-connected-the-storefront-to-operationa}
-A visual review could identify inconsistent screens, but it could not show what happened after an order entered production. Tcules observed people using the existing system and examined the order-management process with stakeholders and available analytics.
+## Order to production workflow design: following an order past checkout {#shadowing-connected-the-storefront-to-operationa}
 
-Following the order beyond checkout made the dependency visible: a change that simplified customer ordering could still create ambiguity for production staff. An ERP change could improve one internal task and make order status less legible elsewhere. The product situation was continuity across an order, not separate website and back-office redesigns.
+A visual review could find inconsistent screens. To see what happened after an order entered production, Tcules observed people using the existing system. We also examined the order-management process with stakeholders and available analytics.
 
-## Components connected decisions across both surfaces {#components-connected-decisions-across-both-surfa}
+That made the dependency visible. A change that simplified customer ordering could still confuse production staff. An ERP change could improve one internal task and make order status harder to read elsewhere. The job was continuity across the whole order, from website to back office.
 
-Tcules built the components first, then used them across the storefront and ERP. Recurring actions and information began to share one interaction language, giving the team a consistent way to design the next screen as well as improve the existing ones.
+## Web-to-print ERP redesign: one set of components for both {#components-connected-decisions-across-both-surfa}
 
-Hybrid wireframing brought more visual and interaction detail into early artefacts than a conventional low-fidelity sequence. Interactive prototypes gave stakeholders a way to review the intended flow before implementation. The team worked with Gold Image Printing's technical group to make the design direction interpretable within the product's constraints.
+Tcules designed the components first, then used them across the storefront and the ERP. Recurring actions and information began to look and behave the same way. That gave the team a consistent way to design the next screen as well as improve the existing ones.
 
-## One style guide for the store and the back office {#a-shared-language-reduced-design-discontinuity}
+Hybrid wireframing put more visual and interaction detail into the early design drafts than a conventional low-fidelity sequence would. Interactive prototypes let stakeholders review the intended flow before implementation. Tcules worked alongside Gold Image Printing's technical group, so the design fitted the systems the business already runs.
 
-Tcules developed a style guide and applied it across the storefront and ERP direction. The purpose was not to make both surfaces visually identical. It was to give recurring controls, information and states enough consistency that people did not have to relearn the product at every boundary.
+## One style guide for the print store and the production system {#a-shared-language-reduced-design-discontinuity}
 
-Components created a clearer conversation with engineering: a repeated interaction could be discussed once, then applied in the contexts where it remained valid.
+Tcules created a style guide and applied it across the storefront and the ERP direction. Recurring controls and the information around them stay consistent, so people moving between the two surfaces recognise one product.
 
-## A shared foundation for customer and production work {#what-this-case-establishes}
+Components made the conversation with engineering clearer. A repeated interaction could be discussed once, then applied wherever it fit.
 
-Gold Image Printing gained a shared design foundation for changes on both sides of the order. Customer experience and internal operations could be improved together, with recurring interactions resolved once and reused where they belonged.
+## What Gold Image Printing gained: one design foundation for orders and production {#what-this-case-establishes}
 
-When connected systems have to change one stage at a time, see [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation).
+Gold Image Printing gained a shared design foundation for changes on both sides of the order. Customer experience and internal operations could be improved together. Each recurring interaction was resolved once and reused where it belonged.
 
-## Use this when an old interface holds learned behaviour {#use-this-when-an-old-interface-holds-learned-beh}
+Every later improvement starts from that foundation. A new product option or production step can be designed once to behave the same on both sides, for the customer who orders and the staff who produce the order.
 
-An established product should not be treated as a collection of old screens. Its current interface contains learned behaviour, workarounds, integrations and operational commitments. A responsible modernisation starts by deciding:
+Tcules' [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation) work covers connected systems that have to change one stage at a time.
 
-1. What must remain continuous?
-2. Which states and exceptions cross surfaces?
-3. Which changes can be separated safely?
-4. Which shared component rules reduce later divergence?
-5. What evidence will determine whether the next release should expand?
+## Before changing an old interface: what to write down first {#use-this-when-an-old-interface-holds-learned-beh}
 
-## What the staged modernisation made possible {#delivery-impact}
+An established product carries a lot beyond its screens: learned behaviour, workarounds, integrations and operational commitments. Before changing an old interface, write down:
 
-| Impact dimension | What changed |
-|---|---|
-| System continuity | Customer ordering and internal production work were treated as one connected service rather than two unrelated interface redesigns. |
-| Reuse | Recurring actions and information gained a shared interaction language that could be reused across customer and ERP surfaces. |
-| Implementation alignment | Design work was developed with the technical team so interface decisions could be carried into the systems already running the operation. |
+- what has to keep working
+- which order statuses cross between the store and the back office
+- which changes can go first
 
-## Related modernisation work {#related}
+## What Gold Image Printing says about the redesign {#testimonials}
 
-Two other cases where connected systems were modernised in sequence rather than at once.
+> “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
+
+> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
+
+## Questions about the Gold Image Printing modernisation {#faq}
+
+### What did Tcules do for Gold Image Printing?
+
+Tcules observed the operational work and redesigned the customer and production workflows across Gold Image Printing's web-to-print store and internal ERP. We created a shared design foundation, with components and a style guide, used on both sides. Tcules worked with the company's technical team on implementation, so the design fitted the product's constraints.
+
+### How do you modernise web-to-print and ERP systems together?
+
+Follow an order past checkout to see how a store change affects production staff, and how an ERP change affects order status. Tcules designed components first and used them across the storefront and the ERP, so recurring actions looked and behaved the same way. Interactive prototypes let stakeholders review the intended flow before implementation.
+
+### Can legacy business software be modernised in stages?
+
+Yes. Gold Image Printing's connected systems were changed one stage at a time. Before changing an old interface, write down what has to keep working, which order statuses cross between the store and the back office, and which changes can go first.
+
+### What is hybrid wireframing?
+
+Hybrid wireframing puts more visual and interaction detail into early design drafts than a conventional low-fidelity sequence would. On Gold Image Printing, interactive prototypes followed, so stakeholders could review the intended flow before implementation.
+
+## Two more products changed step by step {#related}
+
+Benchmark Gensuite and Dealpath were also changed one stage at a time.
 
 [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
@@ -221,6 +259,10 @@ Two other cases where connected systems were modernised in sequence rather than 
 
 [See Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation)
 
-## Tell us what cannot be replaced all at once {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us which systems have to change one stage at a time {#enquiry}
 
 Describe the connected systems, what still earns its place and what has become a constraint.

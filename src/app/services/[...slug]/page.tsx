@@ -21,6 +21,8 @@ import {
   type ServiceSection,
 } from '@/content';
 import { OfferRoute, isCorpusOffer, offerMetadata, offerSlugs } from '@/app/_corpus/offer';
+import { heroNeedsMedia } from '@/lib/hero-media';
+import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES, servicePath } from '@/lib/routes';
 import { eyebrowBesideTrail, heroTrail, pageName, slugLabel } from '@/lib/trail';
 import {
@@ -428,6 +430,15 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         body={[service.hero.description]}
         actions={heroActions}
         surface="paper"
+        /* A level-1 service is a high-traffic page: its hero always carries an illustration or an
+           image (owner, 29 Oct 2026; src/lib/hero-media.ts), the register's labelled placeholder
+           until the art arrives. A deeper service keeps the text hero. */
+        {...(heroNeedsMedia(route)
+          ? {
+              arrangement: 'beside' as const,
+              media: { type: 'image' as const, image: placeholderImage(route, 'hero') },
+            }
+          : {})}
       >
         {service.hero.tags.length > 0 ? (
           <Cluster as="ul" colGap="text" rowGap="tight">
@@ -502,7 +513,6 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
         ) : (
           <CtaSection
             arrangement="open"
-            surface="tint"
             heading={service.capabilitiesCta.heading}
             body={service.capabilitiesCta.body}
             points={service.capabilitiesCta.points}

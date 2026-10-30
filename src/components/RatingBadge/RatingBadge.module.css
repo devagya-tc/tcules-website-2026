@@ -71,6 +71,14 @@
   text-box: trim-both cap alphabetic;
 }
 
+/* The marks' size is the badge's (owner, 29 Oct 2026: marks 16 beside 14px text), whatever size
+   the caller gave the Icon or the BrandMark it composed — as Button sizes the glyph it is handed. */
+.star svg,
+.mark svg {
+  inline-size: var(--rbadge-mark-size);
+  block-size: var(--rbadge-mark-size);
+}
+
 /* Tighter than the badge's own gap, so the mark and the name read as one lockup. */
 .lockup {
   display: inline-flex;

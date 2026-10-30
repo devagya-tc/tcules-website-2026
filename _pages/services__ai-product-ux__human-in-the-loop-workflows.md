@@ -4,13 +4,13 @@ slug: human-in-the-loop-workflows
 page_name: Human-in-the-Loop Workflows
 page_type: service
 seo:
-  title: Human-in-the-Loop Design for AI Workflows | Tcules
-  description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see, what they can change and what the record keeps afterwards.'
+  title: 'Human-in-the-Loop Design for AI Review Workflows | Tcules'
+  description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see and change, and what the record keeps after an override.'
   canonical: https://www.tcules.com/services/ai-product-ux/human-in-the-loop-workflows
   robots: index,follow
 social:
-  og_title: Human-in-the-Loop Design for AI Workflows | Tcules
-  og_description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see, what they can change and what the record keeps afterwards.'
+  og_title: 'Human-in-the-Loop Design for AI Review Workflows | Tcules'
+  og_description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see and change, and what the record keeps after an override.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Human-in-the-Loop Design for AI Workflows | Tcules
-  twitter_description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see, what they can change and what the record keeps afterwards.'
+  twitter_title: 'Human-in-the-Loop Design for AI Review Workflows | Tcules'
+  twitter_description: 'Human-in-the-loop design for AI products: what sends work to a person, what reviewers see and change, and what the record keeps after an override.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: human-in-the-loop AI workflow design
@@ -27,9 +27,18 @@ search_context:
   supporting_questions:
   - What does human in the loop mean in a product?
   - How do you stop reviewers rubber-stamping AI output?
-  - What should a reviewer see before deciding?
   - Should the original AI result be kept after an override?
   primary_query: human-in-the-loop design
+  secondary_queries:
+  - human in the loop AI
+  - human review of AI output
+  - human in the loop design pattern
+  - AI review workflow design
+  - AI approval workflow
+  - keep the original AI result after an override
+  - human in the loop AI agent
+  - reviewer workload design
+  - stop reviewers rubber-stamping AI output
 navigation:
   breadcrumb:
   - name: Home
@@ -59,10 +68,13 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - review-design
-  - proof
+  - what-you-get
+  - selected-work
+  - review-options
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -70,16 +82,28 @@ page_composition:
   media_bindings:
   - id: hitl_buildtwin_review
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918366/buildtwin_05_continuous_review_60aeb8e46c.gif
-    alt_intent: BuildTwin continuous expert-review feed showing AI quality-control findings as reviewable product state.
+    alt_intent: BuildTwin's continuous review feed, where a quality engineer reads each AI check on a structural drawing with its source, status and conclusion before signing off or overruling it.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: hitl_connectx_scenario
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
+    alt_intent: ConnectX coded workspace in an AI-assisted energy scenario, with the affected assets and the data behind a suggestion in view for the person who makes the call.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-NOVUS-RESEARCHER
+  - DRAFT-CONNECTX-PEAKPRICE-26OCT
+  - DRAFT-PRIMELIS-TEAM
   client_recognition:
     component_type: curated_client_recognition
     clients:
     - BuildTwin
+    - Novus Insights
+    - ConnectX
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -89,12 +113,20 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: hero
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: testimonials
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   proof_claim_policy: BUILDTWIN_EXPERT_REVIEW_UX;NO_REVIEW_ACCURACY_METRIC
   content_composition:
     primary_intent: human in the loop UX
-    recognition_count: 3
     signature_model_type: review-authority-contract
     proof_component: source_bound_named_case_or_explicit_proof_gap
     testimonial_component: verbatim_quote_with_source_scope_in_cms
@@ -110,7 +142,7 @@ page_composition:
     - Continue or escalate
     label: Editorial explanatory diagram; not a client artefact
     media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: GENERAL_STUDIO_ENDORSEMENT_NOT_ROUTE_SPECIFIC
+  testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
   source_evidence_boundary: Domain policy, legal accountability and model acceptance criteria belong with qualified owners; the interface should represent those decisions faithfully.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
   signature_proposition: A human-in-the-loop product must specify the reviewer’s powers, evidence, decision record and what happens after intervention.
@@ -123,16 +155,15 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: ROLLOUT_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
   route_dependencies:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
-  - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
+  - CONNECTX_PEAKPRICE_QUOTE_AWAITS_CLIENT_SIGNATURE
   - BUILDTWIN_EXPERT_REVIEW_UX;NO_REVIEW_ACCURACY_METRIC
 content_governance:
   language: en-GB
@@ -143,79 +174,149 @@ content_governance:
 
 *AI Product UX · Human review*
 
-# Human-in-the-loop review where people can change the outcome
+# Human-in-the-loop design for AI review steps experts actually use
 
-We design the points where a person checks, corrects or approves AI work in your product: what sends work to them, what they see, what they can change and what happens next.
+The review step is where your AI meets the people who answer for its work. The expert signs off each item, a manager watches the queue and a customer waits on the result. Tcules provides human-in-the-loop design for AI products, setting what reaches a person, what they see and what the record keeps.
 
-[Start a conversation](#enquiry)
+*Selected work: [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin) · [Novus Insights](/case-studies/novus-insights-ai-survey-product-design) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)*
 
-*Selected work: BuildTwin*
+[Show us your review step](#enquiry)
 
-## Signs your review step needs work {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**Reviewers see the answer and nothing behind it.** They are asked to approve AI output without the sources, inputs or gaps that produced it.
+## What you get from human-in-the-loop design {#what-you-get}
 
-**There is one button, and it says "Approve".** At that point the product is collecting signatures, and judgement has nowhere to go.
+The review step designed as part of the product, from what sends an item to a person to what happens after they decide.
 
-**Queues grow in silence.** Work waits for a reviewer while the person who started it cannot see where it is.
+**What you receive**
 
-**Overrides vanish.** A reviewer's correction quietly replaces the AI result, so nobody can learn from the disagreement.
+- **Review triggers.** Each reason work reaches a person, tied to what a mistake would cost: a costly action, a policy rule, missing information or an unusual result.
 
-## Five things every review step needs {#review-design}
+- **The review card.** The AI's proposal, what it was based on, what is missing and what approval will change, in the reviewer's reading path.
 
-| | What we design |
-|---|---|
-| **Why it reached a person** | A costly action, a policy rule, missing information or a result outside the usual range |
-| **What the reviewer sees** | The AI's proposal, what it was based on, what is missing and what approval will change |
-| **What they can do** | Approve, edit, reject, ask for more, overrule with a reason or pass it to someone senior |
-| **Where it goes next** | Who picks it up, what happens if nobody does, and what the original requester can see |
-| **What is kept** | The original AI result, the reviewer's choice, the reason and the action that followed |
+- **What the reviewer can do.** Approve, edit, reject, ask for more, overrule with a reason or pass it to someone senior.
 
-We tie each review trigger to what is at stake. An uncertain result on a draft may need nobody, while a confident one that moves money may still need a person.
+- **Routing and the queue.** Who picks an item up, what happens if nobody does, and what the person who asked can see while they wait.
 
-## BuildTwin: engineers who can overrule the AI {#proof}
+- **The record.** The original AI result, the reviewer's choice, the reason and the action that followed.
 
-BuildTwin was adding AI checks to structural-engineering drawing review, and a quality engineer still had to stand behind every approval.
+- **A day's workload.** How much a person can judge properly in a day, riskiest items first and routine ones cleared in groups.
 
-We mapped the three people involved: the detailer who prepares a drawing, the quality engineer who reviews it and the approver who moves it on. Then we designed the AI review step into that sequence.
+- **A path to spot checks.** The rules for moving a type of work from full review to sampling, and back again.
 
-**Every check links to its source.** A result connects to its drawing reference, source document, observation and conclusion.
+- **A test on past cases.** A coded version loaded with a sample of past items, so your reviewers try it before the build.
 
-**Blocked checks say what they need.** When a check cannot run, the screen names the missing information so the engineer can supply it and try again.
+**Who does the work.** The lead is a senior product designer, hands-on from the first day, who starts by sitting with your reviewers to learn what they check and answer for. A design engineer joins for the test on past cases, with an account lead looking after the plan.
 
-**Disagreement stays on record.** An engineer changes the status, gives a reason and can raise an issue against the observation. The original AI result stays visible beside the correction.
+**What we need from you.** Access to the people who review the AI's output, a sample of past items, and the rules or standards they work to.
 
-[Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+**Where our part stops.** Domain policy, legal accountability and the model's acceptance criteria stay with your qualified owners; we design the screens that carry them. Your engineers build those screens, or [AI Product Engineering](/services/software-development/ai-product-engineering) builds them with you. AI that suggests inside a user's own work belongs with [Trust, Control & Recovery](/services/ai-product-ux/trust-control-recovery).
 
-## Why Tcules for human review {#why-tcules}
+## Selected human-in-the-loop design work {#selected-work}
 
-**We start with the reviewer's job.** What they check, what they can change and what they are accountable for come before any screen. For Novus Insights, the reviewer was a researcher checking AI-written survey questions.
+Three AI products where a person with something at stake has the final say over the AI's work.
 
-<!-- awaiting client sign-off -->
+### BuildTwin: engineers who can overrule an AI check
+
+A BuildTwin quality engineer signs off each structural drawing the AI has checked. We mapped the detailer, reviewer and approver, then designed a review where the engineer can change a check's status with a reason and raise an issue. The original AI result stays visible beside the correction. [Read the BuildTwin case](/case-studies/ai-quality-control-expert-review-buildtwin)
+
+### Novus Insights: the researcher has the final word on every question
+
+In the survey MVP we designed for Novus Insights, the AI drafts a questionnaire and the researcher checks each question for validity, bias and fit with the audience. Review and editing sit inside the main workflow, and the researcher stays responsible for the final questionnaire. [Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
+
+### ConnectX: the operator decides with the data in view
+
+In ConnectX's peak-price scenario, an operator sees the suggested battery action alongside the affected assets, the data behind the suggestion and what the action would change. We proved the scenarios in a coded demo, then took the demo through to a production-ready module. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+## Human review of AI output that experts keep using {#review-options}
+
+A review step fails quietly. Reviewers are asked to approve output with no sources behind it, and queues grow while the person who asked cannot see where their work is. A correction overwrites the AI's result, so nobody learns from the disagreement. When the only button says "Approve", the product is collecting signatures.
+
+So we start by choosing the right set-up for each kind of work.
+
+| Set-up | How it works | Best for |
+|---|---|---|
+| **AI acts, person can undo** | The AI makes the change and the person can reverse it | Low-cost, reversible work at volume |
+| **AI approval workflow** | The AI prepares, and a person approves before it counts | Actions that move money, reach customers or are hard to reverse |
+| **Expert review with override** | A specialist checks each item and can edit or overrule it with a reason | Professional or regulated work someone has to sign |
+| **Spot checks** | A person reviews a sample and flags patterns | Steady output where full review would swamp the reviewers |
+
+Each trigger is tied to what is at stake. An uncertain result on a draft may need nobody, while a confident one that moves money may still need a person. A confidence score alone decides little, as our article on [why confidence scores don't build trust until the review step hands control back](/insights/confidence-scores-dont-fix-trust-when-review-step-never) explains.
+
+As models improve, the question moves from whether a person should check the AI to which items still need one.
+
+We keep every override with its reason, so the record shows where the AI and your experts disagree. When the record supports it, your team can move a type of work to spot checks, or back. With agents, review can also move earlier, to approving a plan before the work starts.
+
+## What clients say {#testimonials}
+
 > “In the survey tool they designed for us, the AI suggests and the researcher decides, and every generated question shows the prompt behind it.”  
 > **Pranjal Dev Goswami, Sr. Solution Architect, Novus Insights**
 
-**We design the wait as well as the review.** Handoffs, queued work and what the requester can see get the same attention as the review card.
+> “In the scenarios Tcules designed with us, an operator asking about a peak-price event sees the suggested action together with the assets it affects, the data behind it and what it would change. The person makes the call with everything in front of them.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-## Frequently asked questions {#faq}
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For human-in-the-loop design, a good first piece of work is one review step, from what sends an item to a person to what the record keeps after they decide.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We design AI that people can check and correct.** In the [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) redesign, nothing the AI wrote reached a listing until a person chose it.
+
+- **We work out what the product has to know before we draw it.** For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we modelled how clients, candidates, jobs and talent pools connect before redesigning four workflows around that model.
+
+- **We prove the hard parts in code while they can still change.** While reviewing our coded prototypes for [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), an engineer asked about drag and drop in Bootstrap 5 while the choice was still open.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+
+## Questions about human-in-the-loop design {#faq}
 
 ### What does human in the loop mean in a product?
 
-A person has a defined point in the workflow where their judgement changes what the system does next. Showing AI output to someone is only the start; they also need the power to correct, reject or redirect it.
+A person has a defined point in the workflow where their judgement changes what the system does next. Showing AI output to someone is the start. They also need the power to correct, reject or redirect it.
 
 ### How do you stop reviewers rubber-stamping AI output?
 
-Give them fewer items to approve and more to work with. Send only the work that needs judgement, show what each item is based on, and make editing or rejecting as easy as approving.
-
-### What should a reviewer see before deciding?
-
-The AI's proposal, the sources or inputs behind it, anything missing, why the item was sent for review and what approving or rejecting will change. More detail than that slows review without improving it.
+Give them fewer items to approve and more to work with. Tcules routes the work that needs judgement to a reviewer, shows what each item is based on, and makes editing or rejecting as easy as approving.
 
 ### Should the original AI result be kept after an override?
 
-Usually, yes. Keeping it beside the correction and the reason shows the approver what changed, and gives your product team a record of where the AI falls short.
+In most products, yes. Keeping it beside the correction and the reason shows the approver what changed, and gives your product team a record of where the AI falls short.
 
-## Is your reviewer approving, or just clicking ‘approve’? {#enquiry}
+### How does human in the loop work for an AI agent?
+
+The agent pauses at agreed points and shows its plan and the action it proposes. A person approves, edits or takes over that step, and the agent carries on from there. [AI Copilots & Agents](/services/ai-product-ux/ai-copilots-agents) covers how those pauses are designed.
+
+### How is an AI approval workflow different from an ordinary approval step?
+
+The approver is checking work nobody on the team wrote, so they need the sources and gaps behind it in view. Tcules puts those in the reading path, asks for a reason when someone overrules the output and keeps the original beside the correction.
+
+## Tell us who reviews your AI's output, and what they can change {#enquiry}
 
 Share the AI output, who reviews it and what happens when they disagree.
 

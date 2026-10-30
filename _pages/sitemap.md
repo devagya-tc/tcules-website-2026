@@ -4,13 +4,13 @@ slug: sitemap
 page_name: Sitemap
 page_type: utility
 seo:
-  title: Sitemap | Tcules
-  description: 'Every page on the Tcules website: services, audits, expertise, case studies, insights, tools, glossary terms, company pages and legal information.'
+  title: 'Tcules sitemap: every page on tcules.com | Tcules'
+  description: 'The Tcules sitemap: every page on tcules.com, from services, audits and expertise to case studies, insights, tools, glossary terms, company and legal pages.'
   canonical: https://www.tcules.com/sitemap
   robots: index,follow
 social:
-  og_title: Sitemap | Tcules
-  og_description: 'Every page on the Tcules website: services, audits, expertise, case studies, insights, tools, glossary terms, company pages and legal information.'
+  og_title: 'Tcules sitemap: every page on tcules.com | Tcules'
+  og_description: 'The Tcules sitemap: every page on tcules.com, from services, audits and expertise to case studies, insights, tools, glossary terms, company and legal pages.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Sitemap.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Sitemap | Tcules
-  twitter_description: 'Every page on the Tcules website: services, audits, expertise, case studies, insights, tools, glossary terms, company pages and legal information.'
+  twitter_title: 'Tcules sitemap: every page on tcules.com | Tcules'
+  twitter_description: 'The Tcules sitemap: every page on tcules.com, from services, audits and expertise to case studies, insights, tools, glossary terms, company and legal pages.'
   twitter_image: IMAGE_ASSET_REQUIRED
 navigation:
   breadcrumb:
@@ -58,6 +58,9 @@ search_context:
   primary_intent: browse Tcules website pages
   primary_buyer_question: Where can I find the relevant Tcules page?
   primary_query: Tcules sitemap
+  secondary_queries:
+  - all Tcules pages
+  - find a page on tcules.com
 page_composition:
   testimonial_ids: []
 structured_data:
@@ -69,7 +72,7 @@ structured_data:
 
 *Sitemap*
 
-# Tcules sitemap
+# Tcules sitemap: find any page on tcules.com
 
 Every page on the Tcules website, grouped by section.
 
@@ -87,6 +90,7 @@ Every page on the Tcules website, grouped by section.
 
 - [How We Work](/how-we-work)
 - [AI-native Product Design](/how-we-work/ai-native-product-design)
+- [AI Transparency](/how-we-work/ai-transparency)
 
 ## Studio projects {#studio-projects}
 
@@ -174,7 +178,7 @@ Every page on the Tcules website, grouped by section.
 
 ### By industry
 
-- [FinTech & InsurTech](/expertise/fintech-insurtech)
+- [FinTech](/expertise/fintech)
 - [HealthTech](/expertise/healthtech)
 - [EdTech & Learning](/expertise/edtech-learning)
 - [MarTech & SalesTech](/expertise/martech-salestech)
@@ -225,7 +229,7 @@ Every page on the Tcules website, grouped by section.
 #### AI inside the product
 
 - [Confidence scores and the AI review step](/insights/confidence-scores-dont-fix-trust-when-review-step-never)
-- [Calibrated trust in AI interfaces](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces)
+- [Trust in AI features as the stakes rise](/insights/articles/building-trust-and-transparency-in-ai-first-user-interfaces)
 - [Generative AI patterns for SaaS](/insights/articles/generative-ai-product-patterns-for-saas)
 
 #### Design systems
@@ -252,6 +256,8 @@ Every page on the Tcules website, grouped by section.
 ### Guides
 
 - [All guides](/insights/guides)
+- [How to choose a product design agency](/insights/guides/how-to-choose-a-product-design-agency)
+- [SaaS design agencies compared](/insights/guides/best-saas-design-agencies)
 - [Ecommerce product experience](/insights/guides/ecommerce-product-experience-decision-guide)
 - [Using a UX and product audit](/insights/guides/how-to-use-a-ux-product-audit)
 - [Inclusive design for older and disabled people](/insights/guides/inclusive-product-design-for-older-and-disabled-people)
@@ -264,18 +270,24 @@ Every page on the Tcules website, grouped by section.
 ### Events
 
 - [All events](/insights/events)
-- [Design systems for everyone](/insights/events/design-systems-for-everyone-from-basics-to-advanced)
-- [Product design and filmmaking](/insights/events/product-design-and-filmmaking)
 
 ### Podcasts
 
 - [All podcasts](/insights/podcasts)
 - [Eden AI on building AI for users](/insights/podcasts/do-ai-not-for-ai-s-sake-but-for-your-user-insights-from-eden-ai-s-ctpo)
-- [Mastering design decisions](/insights/podcasts/mastering-design-decisions)
+- [How product, engineering and design leaders decide together](/insights/podcasts/mastering-design-decisions)
 
-### Videos
+### Authors
 
-- [All videos](/insights/videos)
+- [All authors](/insights/authors)
+- [Shoghi Bagul](/insights/authors/shoghi-bagul)
+- [Rushali Bhatt](/insights/authors/rushali-bhatt)
+- [Yash Bhatt](/insights/authors/yash-bhatt)
+- [Rakesh Chitroda](/insights/authors/rakesh-chitroda)
+- [Preksha Kharidia](/insights/authors/preksha-kharidia)
+- [Jatin Leuva](/insights/authors/jatin-leuva)
+- [Varun Mashru](/insights/authors/varun-mashru)
+- [Devagya Sharma](/insights/authors/devagya-sharma)
 
 ## Tools {#tools}
 
@@ -307,7 +319,7 @@ Every page on the Tcules website, grouped by section.
 ### From design to working code
 
 - [Coded prototype](/glossary/coded-prototype)
-- [Frontend design engineering](/glossary/design-engineering)
+- [Design engineering](/glossary/design-engineering)
 - [Design intent](/glossary/design-intent)
 - [Design to code](/glossary/design-to-code)
 - [Prototype hardening](/glossary/prototype-hardening)

@@ -21,6 +21,43 @@
   }
 }
 
+/* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
+   texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
+   where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
+   below, where the grid is two tracks or one, it takes a whole row. Placement of this unit's own
+   cell inside the Layout it renders, as `.wide`. */
+.note {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+}
+
+@media (min-width: 768px) {
+  .note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .note[data-span='1'] {
+    grid-column: auto;
+  }
+
+  .note[data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .note[data-span='3'] {
+    grid-column: span 3;
+  }
+}
+
+.noteText {
+  max-inline-size: var(--bnt-body-measure);
+  color: var(--bnt-body-ink);
+  font: var(--bnt-body-text);
+  text-wrap: var(--text-running-wrap);
+}
+
 /* The tile is the link and the frame: its hairline at rest, its inset inside that hairline (a
    `block` in a single tile, a `gutter` in a wide one), its corners. Positioned and isolated so its
    two texture layers sit between its ground and its content. `display: block` sizes the anchor to
@@ -144,6 +181,16 @@
   }
 }
 
+/* A lone tile (`ServiceTile`): it shares no row, so at every width its wave is fitted to itself, the
+   form a bento tile takes below 1024. Two classes, so it outranks the row's window from 1024. Sizing. */
+.cell.solo {
+  --bnt-wave: url('/textures/bento-wave-tile.svg');
+  --bnt-wave-size: 100% 100%;
+  --bnt-wave-x: 0%;
+
+  block-size: 100%;
+}
+
 /* ── Words and drawing ──────────────────────────────────────────────────────── */
 .title {
   color: var(--bnt-title-ink);
@@ -186,6 +233,55 @@
     --skt-scale: var(--bnt-art-scale-m);
 
     justify-self: start;
+  }
+}
+
+/* ── The lone tile as a card (ServiceTile) ─────────────────────────────────────
+   Its eyebrow in the mono label voice; the drawing centred in the spare height between the words
+   and the action (self-alignment of the child in its own row); a picture in the drawing's place
+   fills the tile's width at 16:9 with the card crop box's radius. A wide tile takes the wide
+   tile's inset. */
+.eyebrow {
+  color: var(--bnt-eyebrow-ink);
+  font: var(--bnt-eyebrow-text);
+  letter-spacing: var(--bnt-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.artCentred {
+  align-self: center;
+  justify-self: center;
+}
+
+.picture {
+  align-self: center;
+  overflow: hidden;
+  border-radius: var(--bnt-picture-radius);
+}
+
+@media (min-width: 768px) {
+  .tileWide {
+    padding: var(--gap-gutter);
+  }
+
+  .wideWords {
+    align-self: end;
+  }
+
+  .wideVisual {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .wideAction {
+    grid-column: 1;
+    align-self: start;
+  }
+
+  .tileWide .title {
+    font: var(--bnt-title-text-wide);
+    letter-spacing: var(--bnt-title-tracking-wide);
   }
 }
 

@@ -57,6 +57,8 @@
    the bg texture light blue"): 400, so at the grid's 21% peak, feathered, the halo reads as a pale
    blue field rather than the hard placements' measured 500 (300 all but vanished). */
 --tex-ink-soft:var(--color-brandeis-400);
+/* TextureFlow's moving field (owner, 23 Oct 2026): the hard ink, as on every surface but ink. */
+--tex-flow-ink:var(--color-brandeis-500);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────
@@ -71,6 +73,7 @@
 [data-surface="tint"]{
 --tex-ink:var(--color-neutral-400);
 --tex-ink-soft:var(--color-neutral-900);
+--tex-flow-ink:var(--color-neutral-400);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
@@ -80,6 +83,9 @@
 /* TextureFrame on the ink island (owner, 16 Oct 2026): a mid grey, a quiet grain on the dark
    ground (white read harsh). */
 --tex-ink-soft:var(--color-neutral-500);
+/* The moving field on the ink island (the open close, owner 29 Oct 2026): the island's mid-grey
+   grain, as TextureFrame takes it there. The hard 500 blue all but vanished on neutral-900. */
+--tex-flow-ink:var(--color-neutral-500);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────
@@ -90,4 +96,6 @@
 /* TextureFrame on the blue island (owner, 16 Oct 2026): a light blue, 200, a tone of the ground
    rather than white on it (white read harsh). */
 --tex-ink-soft:var(--color-brandeis-200);
+/* The approved field on the blue island (owner, 23 Oct 2026): white. */
+--tex-flow-ink:var(--color-white);
 }

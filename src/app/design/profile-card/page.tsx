@@ -53,7 +53,7 @@ export default function ProfileCardSpecimen() {
                 />
               </Layout>
             </Specimen>
-            <Specimen title={`P.2 · no portrait, no link · ${surface}`}>
+            <Specimen title={`P.2 · no portrait (the initials hold its square), no link · ${surface}`}>
               <Layout columns={{ base: 1, md: 2 }} colGap="gutter" rowGap="gutter">
                 <ProfileCard as="div" name="A name only" role="Position" bio={BIO} />
                 <ProfileFollow body="A follow banner with no photograph." link={LINK} />
