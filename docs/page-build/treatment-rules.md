@@ -111,3 +111,14 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 
 The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a
 citation; only a band whose subject is the evidence (home's proof band, selected work) shows covers.
+
+## 7 · Owner, 30 Oct afternoon (mockup review)
+
+- **One register per section** (one-register-per-section): What you get draws "Who does the work" flat, not as a photo.
+- **Flat graphics:** only frames on the plate; routes between frames allowed; draw the TITLE's idea (flat-graphics-sit-in-frames).
+- **Hard parts:** small illustration | claim; the example a compact case link + sentence under the claim; no cover, no card (hard-parts-claims-lead-proof-footnotes).
+- **What you get:** four rows, a label column; row 1 the five deliverables as a strip; rows 2–4 compact, a 16:9 visual beside the text (still proposed).
+- **CTA card:** dotted outline, one half per question, arrow links, no button (cta-card-is-dotted-halves).
+- **How we work together:** shared terms a plain text row, no rail (engagement-terms-plain-row).
+- **Industries:** the standard 3-column card grid (industries-are-a-card-grid).
+

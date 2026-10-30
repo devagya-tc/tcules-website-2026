@@ -11,7 +11,7 @@ enforced_by: review
 ---
 
 A band of claims backed by examples (the hard parts) draws each claim itself, and attaches its example as a
-citation under the text: the client's mark, the case name and its link. A case cover is not the visual of a
+footnote under the text (2026-10-30-hard-parts-claims-lead-proof-footnotes). A case cover is not the visual of a
 claim: it shows the client, not the point.
 
 **The mistake it prevents.** Round 5 put each cited case's cover above the claim ("evidence → the case's
