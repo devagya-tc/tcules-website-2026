@@ -16,7 +16,9 @@ line there?" Each slab gets three such edges:
 - the crease, where its two visible side faces meet, drawn mid-corner;
 - the two silhouette edges, drawn where the rounded corner turns away.
 
-They take the front outline's weight.
+They take the front outline's weight. They "start and end exactly at the corners and not overshoot them by even a
+pixel": square (butt) ends, with each end on the front or back outline. Where a slab's side is two-toned,
+the shadow ends exactly on the crease: "shadows should then reach those corner edges" (second round, 30 Oct).
 
 **Why.** Without them, a rounded slab's side reads as a flat colour band rather than a volume.
 
@@ -24,4 +26,5 @@ They take the front outline's weight.
 standing screen. They were drawn as 13–31 stacked fills with no edge between the faces.
 
 **How to apply.** `scripts/illustrations/polish.mjs` adds them from the slab's own geometry. It works out
-which faces are visible from the depth direction. If promoted, it belongs to ch05 §4a's Construction row.
+which faces are visible from the depth direction. It also re-splits a two-tone side gradient so the split line
+runs through the crease in the depth direction. The old diagonal, set in the box's own units, missed it. If promoted, it belongs to ch05 §4a's Construction row.

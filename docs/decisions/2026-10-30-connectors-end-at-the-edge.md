@@ -27,7 +27,9 @@ diagram laid on top. Ending at the edge keeps the 3D reading, as does
 - Modernisation J11's dotted line drawn over the nearer screens.
 
 **How to apply.**
-- Trim the end to the target's outline, and drop any end dot or knob there.
+- Trim the end to the target's outline. The circle at a line's end stays: "i don't mind keeping the circles
+  at the end of lines". It moves to the new end.
+- Lines that left one point still leave one point, on the edge, with one dot.
 - Mask the line where a nearer object covers it.
 
 `scripts/illustrations/polish.mjs` does both from a per-drawing list of targets and occluders. If promoted,

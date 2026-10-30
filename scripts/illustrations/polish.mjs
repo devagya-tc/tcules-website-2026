@@ -46,7 +46,20 @@ const result = await p.evaluate((cfg) => {
   const nonScaling = (el) => el.getAttribute('vector-effect') === 'non-scaling-stroke' || getComputedStyle(el).vectorEffect === 'non-scaling-stroke';
 
   // ---- 1 + 2: slabs -------------------------------------------------------
+  // A slab is a back rect, a run of fill-only copies stepping toward the viewer, and a front face. Its outline is
+  // redrawn in three parts so no fill ever sits on an outline: the front outline on top of the face's own content;
+  // the visible part of the back outline joined to the two silhouette edges, on top of the fills; and the crease,
+  // where the two visible side faces meet. Every part ends exactly on a corner (butt caps), and a two-tone side
+  // fill is re-split so its shadow ends exactly on the crease.
   const visited = new Set();
+  const fmt = (q) => `${q[0].toFixed(2)} ${q[1].toFixed(2)}`;
+  const strokeLike = (el, from, w, ns) => {
+    el.setAttribute('fill', 'none');
+    el.setAttribute('stroke', from.getAttribute('stroke'));
+    el.setAttribute('stroke-width', w);
+    if (from.getAttribute('stroke-opacity')) el.setAttribute('stroke-opacity', from.getAttribute('stroke-opacity'));
+    if (ns) el.setAttribute('vector-effect', 'non-scaling-stroke');
+  };
   for (const g of root.querySelectorAll('g')) {
     if (visited.has(g)) continue;
     const m0 = mat(g), r0 = rectOf(g);
@@ -59,64 +72,123 @@ const result = await p.evaluate((cfg) => {
     run.forEach((x) => visited.add(x));
     const back = run[0], front = run[run.length - 1];
     const mb = mat(back), mf = mat(front), rb = rectOf(back), rf = rectOf(front);
-    const fStroke = rf.el.getAttribute('stroke'), fW = +(rf.el.getAttribute('stroke-width') || 0);
-    if (!fStroke || !fW) continue;
+    if (!rf.el.getAttribute('stroke') || !+rf.el.getAttribute('stroke-width')) continue;
+    const fW = +rf.el.getAttribute('stroke-width');
     const fNS = nonScaling(rf.el);
-
-    // 1 · the back outline matches the front
-    const before = `${rb.el.getAttribute('stroke')} ${rb.el.getAttribute('stroke-width')}${nonScaling(rb.el) ? ' ns' : ''}`;
-    rb.el.setAttribute('stroke', fStroke);
-    rb.el.setAttribute('stroke-width', fW);
-    if (rf.el.getAttribute('stroke-opacity')) rb.el.setAttribute('stroke-opacity', rf.el.getAttribute('stroke-opacity'));
-    if (fNS) rb.el.setAttribute('vector-effect', 'non-scaling-stroke'); else rb.el.removeAttribute('vector-effect');
-
-    // 2 · corner edges, in the parent's coordinates
-    const [a, bb, c, d, e, f] = mf;
-    const v = [mb[4] - e, mb[5] - f];
-    const P = (x, y) => [a * x + c * y + e, bb * x + d * y + f];
+    const [a, bb, c, d] = mf;
     const det = a * d - bb * c;
+    const v = [mb[4] - mf[4], mb[5] - mf[5]];
+    const Pm = (m, q) => [m[0] * q[0] + m[2] * q[1] + m[4], m[1] * q[0] + m[3] * q[1] + m[5]];
     const nScreen = ([nx, ny]) => [(d * nx - bb * ny) / det, (-c * nx + a * ny) / det]; // A^-T n
-    const vis = (nl) => { const s = nScreen(nl); return s[0] * v[0] + s[1] * v[1] > 1e-9; };
+    const vis = (nl) => { const sN = nScreen(nl); return sN[0] * v[0] + sN[1] * v[1] > 1e-9; };
     const faces = { top: vis([0, -1]), right: vis([1, 0]), bottom: vis([0, 1]), left: vis([-1, 0]) };
-    const { x, y, w, h } = rf; const rx = Math.min(rf.rx, w / 2, h / 2);
-    const corners = [
-      { k: 'TL', cx: x + rx, cy: y + rx, t0: Math.PI, f1: 'top', f2: 'left' },
-      { k: 'TR', cx: x + w - rx, cy: y + rx, t0: 1.5 * Math.PI, f1: 'top', f2: 'right' },
-      { k: 'BR', cx: x + w - rx, cy: y + h - rx, t0: 0, f1: 'bottom', f2: 'right' },
-      { k: 'BL', cx: x + rx, cy: y + h - rx, t0: 0.5 * Math.PI, f1: 'bottom', f2: 'left' },
+    const geo = (r) => ({ ...r, rx: Math.min(r.rx, r.w / 2, r.h / 2) });
+    const F = geo(rf), B = geo(rb);
+    const CORNERS = [
+      { k: 'TL', sx: 0, sy: 0, t0: Math.PI, f1: 'top', f2: 'left' },
+      { k: 'TR', sx: 1, sy: 0, t0: 1.5 * Math.PI, f1: 'top', f2: 'right' },
+      { k: 'BR', sx: 1, sy: 1, t0: 0, f1: 'bottom', f2: 'right' },
+      { k: 'BL', sx: 0, sy: 1, t0: 0.5 * Math.PI, f1: 'bottom', f2: 'left' },
     ];
-    const lines = [];
-    for (const k of corners) {
-      const v1 = faces[k.f1], v2 = faces[k.f2];
-      if (!v1 && !v2) continue;
-      let th;
-      if (v1 && v2) th = k.t0 + Math.PI / 4; // the crease: the middle of the corner
-      else { // a silhouette: where the corner's screen tangent runs along the extrusion
-        let best = 1e9;
-        for (let s = 0; s <= 400; s++) {
-          const t = k.t0 + (s / 400) * (Math.PI / 2);
-          const tl = [-Math.sin(t), Math.cos(t)];
-          const T = [a * tl[0] + c * tl[1], bb * tl[0] + d * tl[1]];
-          const cr = Math.abs(T[0] * v[1] - T[1] * v[0]) / Math.hypot(...T);
-          if (cr < best) { best = cr; th = t; }
-        }
+    const arcPt = (R, k, t) => {
+      const cx = k.sx ? R.x + R.w - R.rx : R.x + R.rx, cy = k.sy ? R.y + R.h - R.rx : R.y + R.rx;
+      return [cx + R.rx * Math.cos(t), cy + R.rx * Math.sin(t)];
+    };
+    const silTheta = (k) => {
+      let best = 1e9, th = k.t0;
+      for (let st = 0; st <= 2000; st++) {
+        const t = k.t0 + (st / 2000) * (Math.PI / 2);
+        const tl = [-Math.sin(t), Math.cos(t)];
+        const T = [a * tl[0] + c * tl[1], bb * tl[0] + d * tl[1]];
+        const cr = Math.abs(T[0] * v[1] - T[1] * v[0]) / Math.hypot(...T);
+        if (cr < best) { best = cr; th = t; }
       }
-      const p0 = P(k.cx + rx * Math.cos(th), k.cy + rx * Math.sin(th));
-      lines.push(`M${p0[0].toFixed(2)} ${p0[1].toFixed(2)} L${(p0[0] + v[0]).toFixed(2)} ${(p0[1] + v[1]).toFixed(2)}`);
-    }
-    // the drawn width on screen: a scaling front stroke is shrunk by the matrix
+      return th;
+    };
+    // the back face's perimeter, clockwise from TL's start, as [corner index, angle] stops
+    const perim = (R, from, to) => { // from/to: {i, t}; walk clockwise, sampling arcs
+      const out = [];
+      let i = from.i, t = from.t;
+      for (let guard = 0; guard < 6; guard++) {
+        const k = CORNERS[i];
+        const end = i === to.i && to.t >= t - 1e-9 ? to.t : k.t0 + Math.PI / 2;
+        const steps = Math.max(1, Math.ceil(((end - t) / (Math.PI / 2)) * 24));
+        for (let st = 0; st <= steps; st++) out.push(arcPt(R, k, t + ((end - t) * st) / steps));
+        if (i === to.i && end === to.t) return out;
+        i = (i + 1) % 4; t = CORNERS[i].t0;
+      }
+      return out;
+    };
+    const sil = [], crease = [];
+    CORNERS.forEach((k, i) => {
+      const v1 = faces[k.f1], v2 = faces[k.f2];
+      if (v1 && v2) crease.push({ i, t: k.t0 + Math.PI / 4 });
+      else if (v1 || v2) sil.push({ i, t: silTheta(k), vis: v1 ? k.f1 : k.f2 });
+    });
+    if (sil.length !== 2) continue;
+    // walk from the silhouette whose visible face comes next clockwise
+    const order = ['top', 'right', 'bottom', 'left'];
+    const startSil = sil.find((s) => order[(CORNERS[s.i].k === 'TL' ? 0 : CORNERS[s.i].k === 'TR' ? 1 : CORNERS[s.i].k === 'BR' ? 2 : 3)] === s.vis) || sil[0];
+    const endSil = sil.find((s) => s !== startSil);
+    const backPts = perim(B, startSil, endSil).map((q) => Pm(mb, q));
+    const s1f = Pm(mf, arcPt(F, CORNERS[startSil.i], startSil.t));
+    const s2f = Pm(mf, arcPt(F, CORNERS[endSil.i], endSil.t));
+    const outline = [s1f, ...backPts, s2f];
+
     const screenW = fNS ? fW : fW * Math.sqrt(Math.abs(det));
-    const edge = document.createElementNS(NS, 'path');
-    edge.setAttribute('d', lines.join(' '));
-    edge.setAttribute('fill', 'none');
-    edge.setAttribute('stroke', fStroke);
-    edge.setAttribute('stroke-width', screenW.toFixed(2));
-    if (rf.el.getAttribute('stroke-opacity')) edge.setAttribute('stroke-opacity', rf.el.getAttribute('stroke-opacity'));
-    edge.setAttribute('stroke-linecap', 'round');
-    edge.setAttribute('vector-effect', 'non-scaling-stroke');
-    edge.dataset.polish = 'corner-edges';
-    front.after(edge);
-    log.push(`slab ${rf.w}x${rf.h} rx${rf.rx} ×${run.length}: back ${before} → ${fStroke} ${fW}${fNS ? ' ns' : ''}; edges ${lines.length} (${Object.entries(faces).filter(([, s]) => s).map(([k]) => k).join('+')})`);
+    const make = (dd, tag) => {
+      const pth = document.createElementNS(NS, 'path');
+      pth.setAttribute('d', dd);
+      strokeLike(pth, rf.el, screenW.toFixed(2), true);
+      pth.setAttribute('stroke-linecap', 'butt');
+      pth.setAttribute('stroke-linejoin', 'round');
+      pth.dataset.polish = tag;
+      return pth;
+    };
+    // the back outline and both silhouettes, as one stroke, above the fills and below the front face
+    const before = `${rb.el.getAttribute('stroke')} ${rb.el.getAttribute('stroke-width')}`;
+    rb.el.removeAttribute('stroke'); rb.el.removeAttribute('stroke-width');
+    front.before(make(`M${outline.map(fmt).join(' L')}`, 'slab-outline'));
+    // the crease, from the front corner to the back corner
+    for (const k of crease) {
+      const cf = Pm(mf, arcPt(F, CORNERS[k.i], k.t)), cb = Pm(mb, arcPt(B, CORNERS[k.i], k.t));
+      front.before(make(`M${fmt(cf)} L${fmt(cb)}`, 'slab-crease'));
+    }
+    // the front outline, drawn after the face's own content so nothing sits on it
+    const ring = rf.el.cloneNode(false);
+    ring.removeAttribute('fill'); ring.removeAttribute('fill-opacity');
+    strokeLike(ring, rf.el, fW, fNS);
+    ring.dataset.polish = 'front-outline';
+    rf.el.parentNode.appendChild(ring);
+    rf.el.removeAttribute('stroke');
+
+    // a two-tone side fill splits exactly on the crease
+    let resplit = 0;
+    if (crease.length === 1) {
+      const fills = run.slice(0, run.length - 1).map(rectOf).filter(Boolean);
+      const url = (fills[0]?.el.getAttribute('fill') || '').match(/^url\(#([^)]+)\)$/);
+      const grad = url && document.getElementById(url[1]);
+      if (grad && grad.tagName === 'linearGradient' && (grad.getAttribute('gradientUnits') || 'objectBoundingBox') === 'objectBoundingBox') {
+        const R = geo(fills[0]);
+        const pc = arcPt(R, CORNERS[crease[0].i], crease[0].t);
+        const dl = [(d * v[0] - c * v[1]) / det, (-bb * v[0] + a * v[1]) / det]; // A^-1 v: the crease's direction, local
+        let gv = [-dl[1], dl[0]];
+        const L = Math.hypot(...gv); gv = [(gv[0] / L) * 1000, (gv[1] / L) * 1000];
+        const num = (n2, dflt) => { const raw = grad.getAttribute(n2); return raw === null ? dflt : raw.endsWith('%') ? parseFloat(raw) / 100 : +raw; };
+        const od = [(num('x2', 1) - num('x1', 0)) * R.w, (num('y2', 0) - num('y1', 0)) * R.h];
+        const sx = (q) => a * q[0] + c * q[1];
+        if (Math.sign(sx(gv)) !== Math.sign(sx(od))) gv = [-gv[0], -gv[1]];
+        const ng = grad.cloneNode(true);
+        ng.id = `${grad.id}-crease-${visited.size}`;
+        ng.setAttribute('gradientUnits', 'userSpaceOnUse');
+        ng.setAttribute('x1', (pc[0] - gv[0]).toFixed(3)); ng.setAttribute('y1', (pc[1] - gv[1]).toFixed(3));
+        ng.setAttribute('x2', (pc[0] + gv[0]).toFixed(3)); ng.setAttribute('y2', (pc[1] + gv[1]).toFixed(3));
+        grad.after(ng);
+        for (const fr of fills) fr.el.setAttribute('fill', `url(#${ng.id})`);
+        resplit = fills.length;
+      }
+    }
+    log.push(`slab ${F.w.toFixed(0)}x${F.h.toFixed(0)} ×${run.length}: back ${before} → redrawn; ${crease.length} crease, 2 silhouettes; front outline on top${resplit ? `; side fill re-split on the crease (${resplit} layers)` : ''}`);
   }
 
   // ---- 3: connectors ------------------------------------------------------
@@ -175,9 +247,18 @@ const result = await p.evaluate((cfg) => {
 
   for (const c of cfg.connectors || []) {
     const el = byI(c.path);
-    if (c.start) { const r = trimEnd(el, 'start', c.start.map(pick)); log.push(`connector ${c.path}: start moved ${(r.t * 100).toFixed(0)}% in`); }
-    if (c.end) { const r = trimEnd(el, 'end', c.end.map(pick)); const dot = pick(c.endDot); if (dot) dot.remove(); /* the line ends flush at the target edge; a dot there would overlap it again */ log.push(`connector ${c.path}: end moved ${(r.t * 100).toFixed(0)}% in`); }
+    if (c.start) { const r = trimEnd(el, 'start', c.start.map(pick)); const sd = pick(c.startDot); if (sd) { const k = c.startDotKeep ? sd : sd.cloneNode(true); delete k.dataset.i; const S2 = toScreen(el, ...r.pt); const L2 = toLocal(sd, S2); k.setAttribute('cx', L2.x.toFixed(1)); k.setAttribute('cy', L2.y.toFixed(1)); if (!c.startDotKeep) sd.after(k); } log.push(`connector ${c.path}: start moved ${(r.t * 100).toFixed(0)}% in`); }
+    if (c.end) { const r = trimEnd(el, 'end', c.end.map(pick)); const dot = pick(c.endDot); if (dot) { const S2 = toScreen(el, ...r.pt); const L2 = toLocal(dot, S2); dot.setAttribute('cx', L2.x.toFixed(1)); dot.setAttribute('cy', L2.y.toFixed(1)); } log.push(`connector ${c.path}: end moved ${(r.t * 100).toFixed(0)}% in`); }
     if (c.behind) maskBehind(el, c.behind.map((x) => (typeof x === 'number' ? byI(x) : commentNext(x))).filter(Boolean));
+  }
+  // lines that left one point (a fan) keep one point: every start moves to the trimmed start of the middle
+  // line, and the one start dot sits there
+  if (cfg.fan) {
+    const via = byI(cfg.fan.via); const p0 = pts(via)[0];
+    for (const i of cfg.fan.paths) { const el = byI(i); const q = pts(el); q[0] = p0; setPts(el, q); }
+    const dot = byI(cfg.fan.dot);
+    if (dot) { const L2 = toLocal(dot, toScreen(via, ...p0)); dot.setAttribute('cx', L2.x.toFixed(1)); dot.setAttribute('cy', L2.y.toFixed(1)); }
+    log.push(`fan: ${cfg.fan.paths.length} lines leave one point on the edge, one dot`);
   }
   for (const i of cfg.remove || []) byI(i).remove();
   if (cfg.removeComment) for (const [text, count] of cfg.removeComment) { let n = commentNext(text); for (let k = 0; k < count && n; k++) { const nx = n.nextElementSibling; n.remove(); n = nx; } }
