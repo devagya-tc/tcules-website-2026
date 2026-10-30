@@ -54,6 +54,23 @@ const OUTCOME: readonly SketchName[] = [
   'outcome-finished',
   'outcome-brief',
 ];
+/** The term scenes of "What you get" (round 6): what we need from you, and where our part stops. */
+const TERMS: readonly SketchName[] = [
+  'needs-product-design',
+  'needs-ai-product-ux',
+  'needs-design-engineering',
+  'needs-design-systems',
+  'needs-new-product',
+  'needs-product-modernisation',
+  'needs-software-development',
+  'stops-product-design',
+  'stops-ai-product-ux',
+  'stops-design-engineering',
+  'stops-design-systems',
+  'stops-new-product',
+  'stops-product-modernisation',
+  'stops-software-development',
+];
 const SURFACES: readonly SectionSurface[] = ['paper', 'tint', 'ink'];
 /** The scenes with a STORY drawing: the six the home bento shows, and Audits (About's eighth tile). */
 const STORY: readonly SketchName[] = NAMES.filter((name) => name !== 'new-product');
@@ -152,6 +169,19 @@ export default function SketchSpecimen() {
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
               {OUTCOME.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Sketch name={name} />
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.7 · the term scenes · ${surface}`}
+            note="Round 6, 30 Oct 2026 (decisions/2026-10-30-what-you-get-titled-terms-four-parts). needs-* is the handover, read left to right: the client's inputs on their panel routed into our frame, the decisive input lit. stops-* is the boundary: our last piece left of the dashed line with the lit check, what stays theirs on the panel. One pair per service page, drawn from that page's own words."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {TERMS.map((name) => (
                 <Layout key={name} rowGap="tight">
                   <Sketch name={name} />
                   <code>{name}</code>

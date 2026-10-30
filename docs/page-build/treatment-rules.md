@@ -42,8 +42,8 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **A band's closing terms** (who does the work / what we need / where our part stops) belong to the whole band, never read as one more row of the set. PROVISIONAL arrangement (owner iterating, 30 Oct; not a ruling): the band's FOOT, a section beat (96) under the whole set, no hairline, one term per row with its title in the set's first track and its words across the other two, a role smaller than the items. Never side by side on the set's own tracks, where they read as one more row (2026-10-30-what-you-get-titled-terms-foot; round 5 critic, 30 Oct).
-- **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
+- **What you get is four parts** (OfferParts; 2026-10-30-what-you-get-titled-terms-four-parts, proposed): the drawn deliverables in one row under "What you receive", then who does the work, what we need and where our part stops as three peers on the column seam (64), each an h3 at one role over a 16:9 visual (the studio photograph; a needs drawing; a stops drawing) and its words. One body role (14). No numbers, hairlines or containers. Never the terms as a text foot or as more items on the deliverables' tracks. Until a page's drawings exist the old sheet stands.
+- **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set. Except on What you get, where it titles the first of the four parts.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
 - **A cell filling a hole in a tile grid is a cell of its own kind** (dashed edge, grid radius and inset), at every track count; never a whole row of its own.
@@ -75,7 +75,7 @@ rulings generalised into the tables above, so every service page maps the same w
 1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE.
 2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
 3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE.
-4. **What you get**: titled drawn deliverables, terms as the band's foot, the onward cell. DONE.
+4. **What you get**: four parts (OfferParts), round 6.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
 
@@ -84,7 +84,7 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 - Deliverable titles on the other service pages are kept (short bold lead + the rest of the sentence).
 - The "Why teams choose Tcules" outline button stays and /why-tcules gets built, after the service-page set is improved.
 - Service pages keep both asks: the ink "Tell us what you're working on" island and the closing enquiry form (2026-10-30-service-pages-keep-both-asks).
-- What you get foot: keep the current build for now; no ruling, the owner will change it further.
+- What you get foot: superseded by 2026-10-30-what-you-get-titled-terms-four-parts (four parts, round 6).
 
 ## 6 · Balancing the visual registers (owner, 30 Oct; logged)
 
@@ -100,7 +100,7 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 | **Claims backed by examples** (hard parts) | an illustration per claim; the example as a citation (client mark + case name + link) | the cited case's cover as the claim's picture | claim-visual-depicts-the-claim |
 | **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
 | **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers |
-| **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed) |
+| **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed), what-you-get-titled-terms-four-parts (proposed) |
 | **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
 | **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
 | **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |

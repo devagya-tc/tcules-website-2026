@@ -253,6 +253,11 @@ const SPECIMENS = [
         note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
       },
       {
+        href: '/design/offer-parts',
+        name: 'OfferParts',
+        note: 'what you get in four parts — the deliverables across, then who does the work, what we need and where our part stops as three peers each led by its visual; five, four and six deliverables, two parts, one part, an undrawn part, tint',
+      },
+      {
         href: '/design/bento',
         name: 'Bento',
         note: 'linked tiles of two sizes on four tracks over one continuous texture per row — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',

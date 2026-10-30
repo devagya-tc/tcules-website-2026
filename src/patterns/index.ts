@@ -383,6 +383,15 @@ export {
   type OfferSheetTerm,
 } from './OfferSheet';
 
+/* OfferParts — "What you get" in four parts: the deliverables across, three peer parts under them. */
+export {
+  OfferParts,
+  type OfferPart,
+  type OfferPartsDeliverable,
+  type OfferPartsProps,
+  type OfferPartsVisual,
+} from './OfferParts';
+
 /* Reasons — why choose us: argued reasons, each with a drawing of its claim, in three arrangements. */
 export {
   Reasons,

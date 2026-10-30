@@ -1,7 +1,7 @@
 ---
 title: "What you get: titled deliverables, and the band's terms in its foot"
 date: 2026-10-30
-status: proposed
+status: superseded
 area: [components, layout]
 source: "Owner, 30 Oct 2026, /services/product-design review (round 5)"
 supersedes: []

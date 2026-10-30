@@ -83,6 +83,16 @@ export function Focus({ x, y, glyph, size }: { x: number; y: number; glyph: Icon
   );
 }
 
+/** A glyph in its chip, at a frame's top-left corner. */
+export function Chip({ x, y, glyph }: { x: number; y: number; glyph: IconName }) {
+  return (
+    <>
+      <rect className={styles.chip} x={x} y={y} width="16" height="16" rx="4" />
+      <Glyph name={glyph} cx={x + 8} cy={y + 8} size={10} className={styles.glyphAccent} />
+    </>
+  );
+}
+
 /* The lens over the code: centre, radius, and its handle at 135°, from the rim outwards. */
 const LENS = { x: 154, y: 88, r: 26 } as const;
 const HANDLE = 'M134.9,107.1 L118.6,123.4';
