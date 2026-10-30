@@ -653,6 +653,9 @@ export function ChallengesBand({
           });
           const mark = clientMark(example.name);
           const title = caseRefs[caseRouteOf(example.href)]?.title ?? example.name;
+          const cut = title.lastIndexOf(' ');
+          const titleHead = cut > 0 ? title.slice(0, cut) : '';
+          const titleLast = cut > 0 ? title.slice(cut + 1) : title;
           return (
             <li key={row.title}>
               <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
@@ -677,13 +680,17 @@ export function ChallengesBand({
                   </Layout>
                   <Cluster colGap="block" rowGap="tight" align="center">
                     {mark ? <ClientMark {...mark} size="sm" /> : null}
+                    {/* The title is running text and its last word is glued to the arrow, so the
+                        arrow always ends the title's last line and never wraps onto a line of its
+                        own (a wrapping Cluster put it alone under the title at 390). */}
                     <a href={example.href} className={styles.citation}>
-                      <Cluster as="span" colGap="tight" align="center">
-                        {title}
+                      {titleHead ? `${titleHead} ` : null}
+                      <span className={styles.citationTail}>
+                        {titleLast}
                         <span className={styles.citationArrow} aria-hidden="true">
                           <Icon name="arrow-right" />
                         </span>
-                      </Cluster>
+                      </span>
                     </a>
                   </Cluster>
                 </Layout>

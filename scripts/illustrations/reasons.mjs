@@ -133,7 +133,11 @@ mkdirSync(outDir, { recursive: true });
 let stale = 0;
 let wrote = 0;
 const sizes = {};
-for (const figs of Object.values(SETS)) {
+/* Sets drawn for a start-anchored slot are start-aligned in the shared box (the artwork's left edge on
+   the margin), so every drawing's visible start lands on its title's start. Home's set predates this
+   and stays centred: its figures were approved as they stand. */
+const START_ALIGNED = new Set(['offer']);
+for (const [set, figs] of Object.entries(SETS)) {
   for (const [ground, hex] of Object.entries(GROUNDS)) {
     G = hex;
     const scenes = Object.entries(figs).map(([n, fn]) => [n, fn(hex)]);
@@ -142,7 +146,8 @@ for (const figs of Object.values(SETS)) {
     for (const [name, s] of scenes) {
       const cx = (s.box[0] + s.box[2]) / 2;
       const by = s.box[3] + M;
-      const vb = [cx - W / 2, by - H, W, H].map((n) => Math.round(n * 100) / 100);
+      const x0 = START_ALIGNED.has(set) ? s.box[0] - M : cx - W / 2;
+      const vb = [x0, by - H, W, H].map((n) => Math.round(n * 100) / 100);
       sizes[name] = [Math.round(vb[2]), Math.round(vb[3])];
       const body = (s.defs.length ? `<defs>${s.defs.join('')}</defs>` : '') + s.art.join('');
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" width="${Math.round(vb[2])}" height="${Math.round(vb[3])}" aria-hidden="true">${body.replaceAll('{{id}}', `${s.id}-${ground}`)}</svg>\n`;

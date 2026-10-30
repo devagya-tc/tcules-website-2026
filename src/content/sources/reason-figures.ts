@@ -24,7 +24,7 @@ export type ReasonFigureRef = {
 
 /** Each set's exported size (one shared viewBox per set). */
 export const REASON_FIGURE_SIZE = {
-  offer: { width: 444, height: 375 },
+  offer: { width: 458, height: 402 },
   home: { width: 352, height: 349 },
 } as const;
 

@@ -49,22 +49,55 @@ export function draw(G) {
     for (let i = 0; i <= k; i++) s.onPanel(at, 12 + 26 * i, 16, 20, 30, { fill: G, stroke: quiet });
   }
 
+  // each seat's tie to its product: from the product's foot along y to the partnership's back edge,
+  // painted before the slab so it hides the rise on its hidden back face (§4a occlusion)
+  const SEATS = [290, 180, 70];
+  for (const x of SEATS)
+    s.thread([
+      [x, 70, z],
+      [x, 120, z],
+    ]);
+
   // the partnership, in front of every year: the one solid blue plane
   const zb = s.slab(10, 110, 340, 70, z, 14);
 
-  // our seat in the earlier years: built echoes, each on its product's centre line
-  s.echo(265, 130, 50, 30, zb, { state: 'built' });
-  s.echo(155, 130, 50, 30, zb, { state: 'built' });
+  // on the blue plane the thread is paper: ink dashes on blue fall below a readable contrast
+  const paper = { color: HEX.paper };
+  // the ties come on over the edge to each seat's back edge
+  for (const x of SEATS)
+    s.thread(
+      [
+        [x, 110, zb],
+        [x, 130, zb],
+      ],
+      paper,
+    );
+  // and the track holds the one seat along the years, seat edge to seat edge
+  s.thread(
+    [
+      [265, 145, zb],
+      [205, 145, zb],
+    ],
+    paper,
+  );
+  s.thread(
+    [
+      [155, 145, zb],
+      [95, 145, zb],
+    ],
+    paper,
+  );
 
-  // the thread: one seat held along the years, through each echo's centre to the station's back
-  // face. Drawn over the echoes (flat tiles on the same plane) so it reads through them.
-  s.thread([
-    [290, 145, zb],
-    [95, 145, zb],
-  ]);
+  // our seat in the earlier years: built echoes, each on its product's centre line, each marked as
+  // a person's place (a mark, never a figure, §4a Figures)
+  for (const x of [265, 155]) {
+    s.echo(x, 130, 50, 30, zb, { state: 'built' });
+    s.plane(x + 19, 139, 12, 12, zb, { fill: HEX.ink, stroke: 'none' });
+  }
 
-  // this year's seat, solid once: a station block in front of the newest product. Drawn last.
-  s.itemSolid(45, 130, 50, 30, zb, 44);
+  // this year's seat, solid once, at the cards' scale, carrying the same mark. Drawn last.
+  s.itemSolid(45, 130, 50, 30, zb, 16);
+  s.plane(64, 139, 12, 12, zb + 16, { fill: HEX.ink, stroke: 'none' });
 
   return s;
 }

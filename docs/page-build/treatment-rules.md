@@ -105,5 +105,9 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 | **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
 | **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |
 
+4. **A band's illustration set is drawn as one set** (proposed): each drawing start-aligned in the shared box so it
+   lands on its text column; a route over the blue plane in one opaque colour; one light base plate with the blue
+   slab as its centrepiece; no unexplained frame or stray mark. 2026-10-30-illustration-set-craft.
+
 The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a
 citation; only a band whose subject is the evidence (home's proof band, selected work) shows covers.

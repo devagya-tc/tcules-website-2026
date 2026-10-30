@@ -6,8 +6,9 @@
  * scripts/illustrations/claims/<name>.mjs) and filed in CLAIM_FIGURES (src/content/sources/
  * claim-figures.ts) with the title it draws.
  *
- * One shared world box for the set, so a band's rows sit at one scale. Each drawing is centred and
- * bottom-aligned in it, as reasons.mjs does. The annotation layer is never emitted. Writes
+ * One shared world box for the set, so a band's rows sit at one scale. Each drawing is start-aligned
+ * (its left edge on the margin) and bottom-aligned in it: the band anchors a figure at its start, so a
+ * centred drawing's visible edge would land 20–70px in from its neighbour's. The annotation layer is never emitted. Writes
  * public/illustrations/claims/<name>.<ground>.svg, aria-hidden. Generated, never hand-edited.
  * `--check` fails if a file is stale or an artwork's aspect is outside 0.75–1.35; `--sizes` prints
  * the size.
@@ -46,9 +47,10 @@ for (const [ground, hex] of Object.entries(GROUNDS)) {
       console.error(`claims: ${name} artwork aspect ${aspect.toFixed(2)} is outside 0.75–1.35.`);
       stale++;
     }
-    const cx = (s.box[0] + s.box[2]) / 2;
+    // start-aligned: the band anchors the figure at its start, so the artwork's left edge sits on
+    // the margin and every drawing's visible start lands at the same place beside its words
     const by = s.box[3] + M;
-    const vb = [cx - W / 2, by - H, W, H].map((n) => Math.round(n * 100) / 100);
+    const vb = [s.box[0] - M, by - H, W, H].map((n) => Math.round(n * 100) / 100);
     size = [Math.round(vb[2]), Math.round(vb[3])];
     const body = (s.defs.length ? `<defs>${s.defs.join('')}</defs>` : '') + s.art.join('');
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.join(' ')}" width="${size[0]}" height="${size[1]}" aria-hidden="true">${body.replaceAll('{{id}}', `${s.id}-${ground}`)}</svg>\n`;

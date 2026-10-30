@@ -27,6 +27,9 @@
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
   --cpg-claim-figure-height: 320px; /* a hard-parts claim's drawing box: a component size */
+  /* the box's ratio, the labelled slot's 6:5 (the drawings, about 1.12, sit inside it, contained and
+     start-anchored; an illustration draws no edge, so only the slot's own hairline shows the box) */
+  --cpg-claim-figure-ratio: 6 / 5;
   --cpg-citation-text: var(--text-label); /* sans semibold 14 */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
 }

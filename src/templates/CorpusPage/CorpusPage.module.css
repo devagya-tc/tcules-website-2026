@@ -110,9 +110,15 @@
    its start so it faces its words. From 1024 it takes the row's end track, the same explicit placement
    as Reasons' `.headAction`; below it, DOM order puts the drawing above its claim. No plate, no
    hairline: an illustration is never boxed (ch05 §4a). */
+/* The box is the figure's own ratio at the row's height, never the track's width, so the slot's
+   hairline (Media .capture) wraps the slot itself and no empty strip beside it; as Reasons .figure.
+   The inline size is stated, not auto: the row's Layout stretches its items, and a stretched auto
+   width beats the aspect ratio. */
 .claimFigure {
-  inline-size: 100%;
   block-size: var(--cpg-claim-figure-height);
+  inline-size: calc(var(--cpg-claim-figure-height) * var(--cpg-claim-figure-ratio));
+  aspect-ratio: var(--cpg-claim-figure-ratio);
+  max-inline-size: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -134,7 +140,18 @@
   text-decoration: underline;
 }
 
+/* The title's last word and its arrow, kept on one line. */
+.citationTail {
+  white-space: nowrap;
+}
+
+/* Inline in running text, so inline-block: a transform does not apply to an inline box. Its inset
+   before the glyph is the word-to-arrow join (the gap-scale's tight step), the one distance a
+   Cluster gave it before; a Cluster cannot keep the arrow on the title's last line. */
 .citationArrow {
+  display: inline-block;
+  vertical-align: middle;
+  padding-inline-start: var(--gap-tight);
   color: var(--cpg-mark);
   transition: transform var(--duration-slow) var(--easing-ease);
 }

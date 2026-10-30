@@ -284,9 +284,58 @@ export class Scene {
     this.line(list, { stroke: HEX.p400, width: 7.5, opacity: 0.55 });
   }
 
-  /** The dashed ink thread — one item holding one position on several planes (§4b). */
-  thread(list) {
-    this.line(list, { stroke: rgba(HEX.ink, 0.7), dash: DASH });
+  /**
+   * The carried item's route as one opaque path in one colour (peridot-200), butt-ended with mitred
+   * corners: for a route that crosses the blue plane, where the 55% route turns grey-teal and its
+   * round caps double up at a plane change. `on` = [x, y, w, d, z], the plane this run lies on: the
+   * run is clipped to that plane's footprint, so where the route comes up over the plane's edge it
+   * starts exactly on the edge, with no cap past it. Pass each plane's run as its own call, the
+   * hidden run (under or behind a block) painted before the block.
+   */
+  routeSolid(list, { on } = {}) {
+    const st =
+      'stroke-width="7.5" stroke-linejoin="miter" stroke-linecap="butt" vector-effect="non-scaling-stroke"';
+    const line = `<polyline points="${this.pts(list)}" fill="none" stroke="${HEX.p200}" ${st}/>`;
+    if (!on) return void this.art.push(line);
+    const [x, y, w, d, z] = on;
+    const id = `${this.id}-clip${this.defs.length}`;
+    const pts = [
+      [x, y, z],
+      [x + w, y, z],
+      [x + w, y + d, z],
+      [x, y + d, z],
+    ]
+      .map((q) => this.p(...q).map(r2).join(','))
+      .join(' ');
+    this.defs.push(`<clipPath id="${id}"><polygon points="${pts}"/></clipPath>`);
+    this.art.push(`<g clip-path="url(#${id})">${line}</g>`);
+  }
+
+  /**
+   * A short arrow lying on a horizontal plane, along one axis: a solid shaft ending in a solid head
+   * in the plane, its tip on the last point. For a move (a block moved out of a slot), not a link.
+   */
+  arrow([a, b], { color = HEX.paper, head = 10 } = {}) {
+    const [x1, y1, z] = b;
+    const ux = Math.sign(b[0] - a[0]);
+    const uy = Math.sign(b[1] - a[1]);
+    const base = [x1 - ux * head, y1 - uy * head, z];
+    this.line([a, base], { stroke: color, width: 2 });
+    const side = [uy * (head * 0.6), ux * (head * 0.6)];
+    this.poly(
+      [
+        [x1, y1, z],
+        [base[0] + side[0], base[1] + side[1], z],
+        [base[0] - side[0], base[1] - side[1], z],
+      ],
+      { fill: color, stroke: 'none' },
+    );
+  }
+
+  /** The dashed ink thread — one item holding one position on several planes (§4b). On the blue
+   *  plane pass `color: HEX.paper`: ink dashes on blue fall below a readable contrast. */
+  thread(list, { color = rgba(HEX.ink, 0.7) } = {}) {
+    this.line(list, { stroke: color, dash: DASH });
   }
 
   /** The carried item, solid once: shipped, on screen, real to the user (§4b). */
@@ -396,7 +445,7 @@ export class Scene {
   /** A cut face, hatched at 13% (§4a texture). */
   hatch(list) {
     const pid = `${this.id}-hatch`;
-    if (!this.defs.length)
+    if (!this.defs.some((d) => d.includes(`id="${pid}"`)))
       this.defs.push(
         `<pattern id="${pid}" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="none"/><line x1="0" y1="0" x2="0" y2="6" stroke="${HEX.blue}" stroke-opacity="0.52" stroke-width="1.5"/></pattern>`,
       );
