@@ -9,7 +9,8 @@ import { PLACEHOLDER_REASONS, figureOf } from './sources/fixtures/placeholder-re
 import { PROPOSED_EYEBROWS } from './sources/fixtures/proposed-eyebrows';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { OFFER_SCENES } from './sources/offer-scenes';
-import type { OfferScenes } from '@/lib/sketches';
+import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
+import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
 import { corpusSource } from './sources/corpus/index.ts';
 import { aboutSource } from './sources/strapi/about';
@@ -170,6 +171,7 @@ export const getToolPage = toolsSource.getToolPage.bind(toolsSource);
 export const listSitePages = sitePagesSource.listSitePages.bind(sitePagesSource);
 export const getCorpusPage = corpusPagesSource.getCorpusPage.bind(corpusPagesSource);
 export const listCorpusPages = corpusPagesSource.listCorpusPages.bind(corpusPagesSource);
+export const getCorpusRecord = corpusPagesSource.getCorpusRecord.bind(corpusPagesSource);
 
 /**
  * Star ratings for the testimonials a page cites, keyed by testimonial id. PLACEHOLDER values today
@@ -209,6 +211,20 @@ export async function getTestimonialAvatars(
  */
 export async function getOfferScenes(route: string): Promise<OfferScenes> {
   return OFFER_SCENES[route] ?? { items: {}, stories: {} };
+}
+
+/**
+ * The drawing a Why Tcules reason carries in the Reasons band (sources/reason-figures.ts), by the
+ * reason's title as authored, exported on the band's ground: `paper`, or `paper-deep` for a tint
+ * band. Undefined for a title with no drawing; a band draws only when every reason has one.
+ */
+export function getReasonFigure(
+  title: string,
+  ground: 'paper' | 'paper-deep' = 'paper',
+): { src: string; width: number; height: number } | undefined {
+  const ref = REASON_FIGURES[offerSceneKey(title)];
+  if (!ref) return undefined;
+  return { src: `/illustrations/reasons/${ref.name}.${ground}.svg`, ...REASON_FIGURE_SIZE[ref.set] };
 }
 
 /** A route's proposed band eyebrows (PROPOSED, fixtures/proposed-eyebrows.ts), keyed by band id. */

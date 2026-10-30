@@ -4,13 +4,13 @@ slug: glossary
 page_name: Glossary
 page_type: glossary_hub
 seo:
-  title: Product Design, AI and Software Glossary | Tcules
-  description: Plain definitions of product design, AI Product UX, design system, design-to-code and modernisation terms, each with an example and related services.
+  title: 'Product design glossary: UX and AI terms defined | Tcules'
+  description: 'A product design glossary of plain definitions: AI Product UX, design systems, design to code and modernisation terms, each with an example and FAQs.'
   canonical: https://www.tcules.com/glossary
   robots: index,follow
 social:
-  og_title: Product Design, AI and Software Glossary | Tcules
-  og_description: Plain definitions of product design, AI Product UX, design system, design-to-code and modernisation terms, each with an example and related services.
+  og_title: 'Product design glossary: UX and AI terms defined | Tcules'
+  og_description: 'A product design glossary of plain definitions: AI Product UX, design systems, design to code and modernisation terms, each with an example and FAQs.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Glossary.
   og_type: website
@@ -18,13 +18,22 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Product Design, AI and Software Glossary | Tcules
-  twitter_description: Plain definitions of product design, AI Product UX, design system, design-to-code and modernisation terms, each with an example and related services.
+  twitter_title: 'Product design glossary: UX and AI terms defined | Tcules'
+  twitter_description: 'A product design glossary of plain definitions: AI Product UX, design systems, design to code and modernisation terms, each with an example and FAQs.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: define Tcules Product Design and software terms
   primary_buyer_question: What does Tcules mean by the product, AI and implementation terms used across this website?
-  primary_query: Product Design glossary
+  primary_query: 'product design glossary'
+  secondary_queries:
+  - 'UX glossary'
+  - 'AI product design terms'
+  - 'design system glossary'
+  - 'SaaS product terms'
+  - 'UX terms and definitions'
+  - 'design engineering terms'
+  buyer_question_evidence:
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -33,15 +42,18 @@ navigation:
     url: /glossary
 render:
   band_order:
+  - how-to-use
   - ai-in-products
   - ai-in-practice
   - design-and-code
   - design-systems
   - structure
+  - faq
 structured_data:
   types:
   - CollectionPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
   content_state: BATCH5_DRAFT_2026-10-08
@@ -61,56 +73,84 @@ page_composition:
 
 *Glossary*
 
-# Product design, AI and software glossary
+# Product design glossary: plain definitions of UX, AI and engineering terms
 
-Plain definitions of the terms we use across this site, from AI Product UX to UX debt. Each comes with examples and links to the service, audit or tool where the idea gets put to use.
+This product design glossary gives plain definitions of the UX, AI, design system and engineering terms SaaS product teams meet, from AI Product UX to UX debt. Each entry opens with a definition you can quote, then adds an example and points to the work that puts the idea to use.
 
-## AI inside your product {#ai-in-products}
+Several of these terms are on the move. Agents now act inside products, AI tools turn ideas into working prototypes, and more design happens directly in code, so entries say where a meaning is shifting.
 
-[AI Product UX](/glossary/ai-product-ux): how people understand, direct, check and recover from what an AI model does inside a product. It covers everything from the sources shown to undoing a mistake.
+## How to use this UX glossary {#how-to-use}
 
-[Agentic UX](/glossary/agentic-ux): designing for AI that plans and carries out several steps on its own. It settles which steps need approval and how a wrong change gets reversed.
+Start with the group closest to your question. Each term below has a one-line definition. Its own page adds an example, related terms, a short FAQ and, where it helps, the term people often confuse it with.
 
-[Human in the loop](/glossary/human-in-the-loop): a review step that counts. The person reviewing AI output has the information, authority and time to step in before the result takes effect.
+The first two sentences of every entry stand on their own. Quote them in a brief, a product spec or your team wiki, and link back for the example.
+
+Where a term names work Tcules does, the entry links to that service, so you can go from the meaning to a next step.
+
+## AI product design terms: how AI behaves inside a product {#ai-in-products}
+
+[AI Product UX](/glossary/ai-product-ux): the design of how people understand, direct, check and undo what an AI does inside a product.
+
+[Agentic UX](/glossary/agentic-ux): the design of AI that carries out several steps on its own. It sets which steps need approval and how a wrong change is reversed.
+
+[Human in the loop](/glossary/human-in-the-loop): a person reviewing an AI's work who has the information, authority and time to stop the result before it takes effect.
 
 ## How product teams use AI in their own work {#ai-in-practice}
 
-[AI-native Product Design](/glossary/ai-native-product-design): a way of working in which designers direct AI agents and automation through parts of research, design and checking. People still make the calls that matter.
+[AI-native product design](/glossary/ai-native-product-design): a way of working in which designers direct AI agents and automation through parts of the work. People make the calls that matter.
 
-[AI-assisted product development](/glossary/ai-assisted-product-development): AI tools used in research, design, prototyping, engineering or testing, with practitioners still answerable for what gets accepted and released.
+[AI-assisted product development](/glossary/ai-assisted-product-development): AI tools used in research, design, prototyping, engineering or testing, with people still answerable for what gets released.
 
-## From design to working code {#design-and-code}
+## Design engineering terms: from design to working code {#design-and-code}
 
-[Coded prototype](/glossary/coded-prototype): working software built to test what a design file can't show, such as streaming states, real data volumes or keyboard use.
+[Coded prototype](/glossary/coded-prototype): working software built to test what a design file can't show, such as real amounts of data or keyboard use.
 
-[Frontend design engineering](/glossary/design-engineering): carrying interaction choices into coded prototypes, components and frontend code, so permissions, states and real content behave as designed.
+[Design engineering](/glossary/design-engineering): exploring, refining and building product experiences directly in code, from early prototype to production, so permissions and real content behave as designed.
 
-[Design intent](/glossary/design-intent): what the build must keep from the design, such as which information comes first. It holds even when content or screen size forces a change.
+[Design intent](/glossary/design-intent): what the build must keep from the design, such as which information comes first, even when content or screen size forces a change.
 
-[Design to code](/glossary/design-to-code): turning designs into working software and keeping the two in step, covering states, content and accessibility as well as appearance.
+[Design to code](/glossary/design-to-code): turning designs into working software and keeping the two in step, from behaviour and content to accessibility.
 
-[Prototype hardening](/glossary/prototype-hardening): replacing a demo's shortcuts, like pretend sign-in or sample data, with the real thing. That means roles, data handling, security, tests and support before real users arrive.
+[Prototype hardening](/glossary/prototype-hardening): the engineering that replaces a demo's shortcuts, such as pretend sign-in or sample data, with the real thing before customers arrive. If a prototype exists, the [Prototype Readiness Review](/audits/prototype-readiness-review) is a good place to start, and Tcules can take it on to a [first release](/services/new-product-design-first-release).
 
-## Design systems {#design-systems}
+## Design system glossary: shared components and the rules around them {#design-systems}
 
-[Design system](/glossary/design-system): the shared foundations, components, code, guidance and rules for change that several products or teams build with.
+[Design system](/glossary/design-system): the shared building blocks, code and guidance that several products or teams build with, plus the rules for how they change.
 
 [Design system adoption](/glossary/design-system-adoption): whether teams really use the shared system in product work, judged by reuse, overrides and contributions instead of download counts.
 
-[Design system drift](/glossary/design-system-drift): what happens when Figma, code, documentation and live products slowly stop agreeing on what a shared component does.
+[Design system drift](/glossary/design-system-drift): what happens when Figma, code, documentation and live products slowly stop agreeing on how a shared component behaves.
 
-[Design system governance](/glossary/design-system-governance): who can propose, approve, release and retire shared components. It also decides what happens when a product needs something the system lacks.
+[Design system governance](/glossary/design-system-governance): who can propose, approve, release and retire shared components, and what happens when a product needs something the system lacks.
 
-## Product structure and change {#structure}
+## UX terms for product structure and change {#structure}
 
-[Information architecture](/glossary/information-architecture): how a product's records, labels and routes are organised, so people can predict where things live and how they connect.
+[Information architecture](/glossary/information-architecture): how a product's records, labels and menus are organised, so people can predict where things live.
 
 [Product modernisation](/glossary/product-modernisation): updating an established product's workflows, interface and code while keeping the behaviour and data customers still rely on.
 
-[User journey mapping](/glossary/user-journey-mapping): following a person's actions and experience across stages such as sales, setup and support. The map shows where the product helps them and where it lets them down.
+[User journey mapping](/glossary/user-journey-mapping): following a person across stages such as sales, setup and support. It shows where the product helps and where it lets them down.
 
 [UX debt](/glossary/ux-debt): the growing cost of past design shortcuts, visible when every change takes longer and workarounds end up in the training material.
 
-[Workflow design](/glossary/workflow-design): how work moves through roles, rules, states and handoffs, including what happens when the normal path fails.
+[Workflow design](/glossary/workflow-design): how work moves between roles, rules and handoffs, including what happens when the normal path fails.
 
 Want to talk through one of these in your own product? [Talk to us](/contact).
+
+## Product design glossary FAQs {#faq}
+
+### What is the difference between design engineering and design to code?
+
+[Design engineering](/glossary/design-engineering) is the wider practice of exploring, refining and building product experiences in code, from early prototype to production. [Design to code](/glossary/design-to-code) is one job within it: turning an approved design into working software and checking that its states, content and behaviour arrive intact.
+
+### What do design system terms like drift and governance mean?
+
+[Design system drift](/glossary/design-system-drift) is the slow gap that opens between a system's design files, code, documentation and products. [Design system governance](/glossary/design-system-governance) is who can propose, approve, release and retire shared components. [Adoption](/glossary/design-system-adoption) is how far teams use the system in shipped work.
+
+### Is there a glossary of AI product UX terms?
+
+Yes: start with [AI Product UX](/glossary/ai-product-ux), the design of how people understand, direct, check and undo what an AI does inside a product. [Agentic UX](/glossary/agentic-ux) and [human in the loop](/glossary/human-in-the-loop) cover AI that acts over several steps and the people who review it.
+
+### Which term describes the gap between a design and the built product?
+
+Start with [design intent](/glossary/design-intent): what the build must keep from the design. [Design to code](/glossary/design-to-code) covers how a design becomes software. Across a shared library, the term is [design system drift](/glossary/design-system-drift).

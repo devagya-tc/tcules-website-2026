@@ -1,0 +1,393 @@
+{
+  "template": "service-l1",
+  "route": "/services/product-design",
+  "slug": "product-design",
+  "name": "Product Design",
+  "pageType": "service",
+  "seo": {
+    "title": "Product Design Services for New and Growing SaaS | Tcules",
+    "description": "Product design services for new and established SaaS products: research, product thinking, interaction and visual design, tested and carried into code.",
+    "canonical": "https://www.tcules.com/services/product-design",
+    "robots": "index,follow",
+    "ogImageAlt": "Tcules Product Design for SaaS and complex software."
+  },
+  "social": {
+    "og_title": "Product Design Services for New and Growing SaaS | Tcules",
+    "og_description": "Product design services for new and established SaaS products: research, product thinking, interaction and visual design, tested and carried into code.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "Tcules Product Design for SaaS and complex software.",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Services",
+      "url": "/services"
+    },
+    {
+      "name": "Product Design",
+      "url": "/services/product-design"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "Product Design agency for SaaS and complex software",
+    "primaryBuyerQuestion": "Can Tcules resolve the product decisions beneath the interface and make them specific enough to test and build?",
+    "supportingQuestions": [
+      "Is Product Design the same as UI/UX design?",
+      "What do we receive at the end?",
+      "What is your product design process?",
+      "How much research do we need?",
+      "Can you hand over to our developers, or do you build it?",
+      "When should we start with an audit instead?",
+      "What kinds of software do you design?"
+    ],
+    "primaryQuery": "product design services",
+    "secondaryQueries": [
+      "digital product design services",
+      "software product design services",
+      "SaaS product design",
+      "B2B SaaS product design",
+      "product design for startups",
+      "product design for enterprise software",
+      "product design process",
+      "product design deliverables",
+      "product design vs UI/UX design",
+      "product design handover to developers",
+      "how much does product design cost"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "PILOT_DRAFT_V3_2026-10-26",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": {
+    "form": "project_enquiry",
+    "anchor": "enquiry",
+    "visibleFields": [
+      "Email",
+      "What are you working on?",
+      "Product or company URL"
+    ],
+    "optionalFields": [
+      "Product or company URL"
+    ],
+    "submitLabel": "Send enquiry",
+    "hiddenContext": [
+      "origin_route",
+      "placement",
+      "family",
+      "service_or_audit",
+      "referrer",
+      "campaign"
+    ],
+    "onSuccess": {
+      "heading": "Your enquiry has reached us.",
+      "body": "We'll reply within one business day.",
+      "retainEnteredData": true
+    },
+    "processor": "cms_record_and_notify",
+    "schedulingLabel": null
+  },
+  "hero": {
+    "eyebrow": "Product Design services",
+    "title": "Product design services that get the product right before the screens",
+    "lede": [
+      "Good product design shows up all week. It is in people who use the software all day without carrying half the task in their heads, and in a roadmap meeting that starts from what customers do. It is in engineers who begin each sprint with their questions answered.",
+      "Tcules provides product design services for SaaS and complex software, from a founder's first release to a product customers have relied on for years."
+    ],
+    "actions": [
+      {
+        "label": "Start a Product Design enquiry",
+        "href": "#enquiry"
+      }
+    ],
+    "proofLines": [
+      "Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) · [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux)"
+    ],
+    "studioFacts": true,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Selected work",
+      "id": "selected-work",
+      "heading": "Selected product design work",
+      "cases": [
+        {
+          "case": "enterprise-workflow-redesign-dealpath-real-estate",
+          "copySlug": null,
+          "heading": "Dealpath: one assumption reversed, the rest kept familiar",
+          "body": "Dealpath's deal-management software opened a new deal whenever someone added a listing to the pipeline, even one the team already tracked. After an audit, our redesign changed that one step to find the existing deal first, and left the other three listing actions largely as users knew them.\n\n[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)",
+          "linkLabel": null,
+          "media": {
+            "id": "product_design_dealpath",
+            "role": "demonstrate",
+            "card": "dealpath",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp",
+            "altIntent": "Dealpath listing redesign in which Add to pipeline asks people to find and attach an existing deal before creating a new one",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media"
+          }
+        },
+        {
+          "case": "consumer-grade-ux-in-enterprise-saas-a-case-study-on-mvp-design-for-cpq-software",
+          "copySlug": null,
+          "heading": "Auxentios: six specialist roles, one quotation",
+          "body": "Auxentios was defining a new industrial quoting product, where sales, product, solution, pricing and maintenance specialists all add to each quote. Eight interviews showed who contributes what, so we shaped the MVP around one shared quotation and designed interface parts for a product planned to run to more than 200 screens.\n\n[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)",
+          "linkLabel": null,
+          "media": {
+            "id": "product_design_auxentios",
+            "role": "demonstrate",
+            "card": "auxentios",
+            "altIntent": "Auxentios shared quotation screen used by six specialist roles",
+            "status": "IMAGE_ASSET_REQUIRED",
+            "source": "Auxentios case has no bound screen; pull one from the live case media"
+          }
+        },
+        {
+          "case": "unifying-workflow-creation-through-intelligent-search",
+          "copySlug": null,
+          "heading": "Eden AI: three ways to start, one search box",
+          "body": "Developers on Eden AI could begin a workflow three ways: pick a template, ask the AI or start blank. Each route led somewhere slightly different. In our redesign, one search box recognises how you want to start, Tab moves you into AI help, and settings and test results stay beside the step you are changing.\n\n[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)",
+          "linkLabel": null,
+          "media": {
+            "id": "product_design_eden",
+            "role": "demonstrate",
+            "card": "eden-ai",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp",
+            "altIntent": "Eden AI workflow builder redesign showing the single search box and AI-assisted creation",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media"
+          }
+        }
+      ]
+    },
+    {
+      "block": "What you get",
+      "id": "what-you-get",
+      "heading": "What you get from our product design services",
+      "intro": "Our digital product design services cover the thinking behind your product and every screen in it. We size each part to what your team already knows, so the budget goes on what it has not learned yet, and we agree the deliverables before work starts.",
+      "itemsLabel": "What you receive",
+      "items": [
+        {
+          "title": null,
+          "body": "A tested brief: what goes in, what waits and what stays out, checked against the people who use the product."
+        },
+        {
+          "title": null,
+          "body": "A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next."
+        },
+        {
+          "title": null,
+          "body": "Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos."
+        },
+        {
+          "title": null,
+          "body": "Clickable or coded prototypes, tested with people who match your users."
+        },
+        {
+          "title": null,
+          "body": "Designs ready to build, and our review of what your engineers ship."
+        }
+      ],
+      "whoDoesTheWork": "Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.",
+      "whatWeNeedFromYou": "The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product calls.",
+      "whereOurPartStops": "You make the product calls: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build."
+    },
+    {
+      "block": "Rich section",
+      "id": "hard-parts",
+      "heading": "The hard parts of SaaS product design",
+      "body": "**Rules nobody has written down.** People who use a product follow rules the brief never mentions, such as which meetings matter enough to move another. We find those rules in research and give them a place in the product before anyone draws a screen.\n\nExample: for [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that people's availability depends on how important a meeting is, so priority became part of the new scheduling MVP.\n\n**Several people working on one record.** In staffing, quoting or deal software, different roles change the same record, with different permissions and in no fixed order. We design the records, roles and hand-offs first, so each person finds their part of the job.\n\nExample: for [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we redesigned four staffing workflows around one model of clients, candidates and jobs.\n\n**Customers and staff on the same records.** An order a customer places becomes work for your staff, and both sides have to read it the same way. We design the two sides as one product.\n\nExample: we redesigned [Gold Image Printing's](/case-studies/gold-image-printing-web-to-print-erp-modernisation) web store and staff production system on one set of components and a style guide, so an order reads the same from purchase into production.\n\n**Screens people work in for hours.** Someone who spends the day in your product meets every empty table, slow load, error and missing permission. Those screens get the same interaction and visual care as the ones in the demo, with shared rules that keep later work consistent.\n\nExample: for [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), we redesigned reporting and documented shared rules for filters, states and data, so later work across the product has the same logic to follow.",
+      "media": [
+        {
+          "id": "product_design_doodle",
+          "role": "demonstrate",
+          "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1766139496/660d1d45ed4ca3f2169cdb83_tricky_part_real_32fb6878e0.webp",
+          "altIntent": "Doodle object model connecting meeting priority, availability and scheduling behaviour",
+          "status": "BOUND_EXISTING_PUBLIC_ASSET",
+          "source": "current public Tcules case media"
+        }
+      ]
+    },
+    {
+      "block": "Routes",
+      "id": "services-on-their-own",
+      "heading": "Product design services you can hire on their own",
+      "intro": "Most projects draw on several of these. When one problem stands out, each can be hired alone.",
+      "rowHeader": "Service",
+      "columns": [
+        "Best for"
+      ],
+      "rows": [
+        {
+          "page": "/services/product-design/ux-research",
+          "label": "UX Research",
+          "cells": [
+            "Teams about to spend on an assumption nobody has tested"
+          ]
+        },
+        {
+          "page": "/services/product-design/information-architecture-workflow-design",
+          "label": "Information Architecture & Workflow Design",
+          "cells": [
+            "Products where work passes between people, or the menu keeps growing"
+          ]
+        },
+        {
+          "page": "/services/product-design/interaction-ui-design",
+          "label": "Interaction & UI Design",
+          "cells": [
+            "Products whose structure works but whose screens confuse people"
+          ]
+        },
+        {
+          "page": "/services/product-design/data-visualisation",
+          "label": "Data Visualisation",
+          "cells": [
+            "Dashboards that people export to a spreadsheet"
+          ]
+        },
+        {
+          "page": "/services/product-design/prototyping-usability-testing",
+          "label": "Prototyping & Usability Testing",
+          "cells": [
+            "Choosing between directions before engineers start"
+          ]
+        },
+        {
+          "page": "/services/new-product-design-first-release",
+          "label": "New Product Design & First Release",
+          "cells": [
+            "Founders turning an idea or prototype into an MVP"
+          ]
+        },
+        {
+          "page": "/audits/ux-product-audit",
+          "label": "UX & Product Audit",
+          "cells": [
+            "Teams who know something is wrong but not yet what"
+          ]
+        }
+      ],
+      "after": "Want the riskiest screens tried in code, or the whole product built? [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) carry the design on. Already have finished screens? [Design to Code](/services/design-engineering/design-to-code) takes them from there."
+    },
+    {
+      "block": "Testimonials",
+      "id": "testimonials",
+      "heading": "What clients say",
+      "testimonials": [
+        "DRAFT-EDENAI-SPECS",
+        "SSOT-ASHOK-MOHANTY-FOUNDER-AUXENTIOS",
+        "DRAFT-DOODLE-RESEARCH",
+        "CLUTCH-RINGIER-SAILER"
+      ],
+      "showPlatformRating": true
+    },
+    {
+      "block": "How we work together",
+      "id": "how-we-work-together",
+      "heading": "How we work together",
+      "intro": "For product design, a good first piece of work is one workflow redesigned in full, or an audit first when the cause is unclear, as at Dealpath.",
+      "shared": "how-we-work-together:default"
+    },
+    {
+      "block": "Why Tcules",
+      "id": "why-tcules",
+      "heading": "Why teams choose Tcules",
+      "shared": "why-tcules:default",
+      "reasons": [
+        {
+          "reason": 1,
+          "evidence": "For [BuildTwin](/case-studies/ai-quality-control-expert-review-buildtwin), we mapped the detailer, the quality engineer and the approver, and the four questions a reviewer asks of an AI check, before redesigning the review screen."
+        },
+        {
+          "reason": 3,
+          "evidence": "One of [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers, reviewing our coded prototypes of the suite's new shared patterns, asked how drag and drop would work in Bootstrap 5 while the choice was still open."
+        },
+        {
+          "reason": 6,
+          "evidence": "Primelis has worked with us for three years as an ongoing partnership, and we have designed every one of its products in that time."
+        }
+      ]
+    },
+    {
+      "block": "Industries",
+      "id": "industries",
+      "heading": "Industries we know well",
+      "expertise": [
+        "b2b-saas-workflow-software",
+        "data-analytics-decision-products",
+        "proptech-contech-field-operations",
+        "climatetech-energy",
+        "ai-products-developer-tools",
+        "content-knowledge-discovery-platforms",
+        "martech-salestech",
+        "commerce-transactional-products",
+        "edtech-learning",
+        "fintech",
+        "healthtech",
+        "marketplaces-multi-sided-platforms"
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Questions about product design services",
+      "items": [
+        {
+          "question": "Is product design the same as UI/UX design?",
+          "answer": "Product design includes UI and UX design, and goes further. Tcules also works out what the product should do, for whom, and how its workflows fit together. It then designs each screen, empty and error screens included. The work can carry on into code with our design engineers and developers."
+        },
+        {
+          "question": "What is your product design process?",
+          "answer": "It is the studio's own process, sized to your product. We start from what you already hold, research where knowledge is thin, and model roles, records and workflows before drawing screens. Then we design and test every screen and state, and hand over to your engineers or carry the design into code with ours."
+        },
+        {
+          "question": "How much research does a product design project need?",
+          "answer": "Tcules sizes research to the problem: a handful of user interviews, your analytics and support tickets, or research you already have. We size it so your team can make the product calls with confidence, and agree the scope before work starts."
+        },
+        {
+          "question": "Can you hand over to our developers, or do you build it?",
+          "answer": "Tcules does both, whichever suits your team. Your developers can build from our designs while we review what they ship, or our engineers build it through [Software Development](/services/software-development). For ConnectX, we proved an AI workspace in a coded demo on sample data, then took it to a production-ready module, live since late 2025."
+        },
+        {
+          "question": "When should we start with an audit instead?",
+          "answer": "Start with a [UX & Product Audit](/audits/ux-product-audit) when you know something is wrong but not what. It finds the cause first, so the redesign budget goes where it helps, and it can cover one workflow."
+        },
+        {
+          "question": "How much do product design services cost?",
+          "answer": "Product design is priced up front, once the scope is agreed, so the figure depends on the problem and how much of the product it touches. Redesigning one workflow is a smaller piece of work than defining a whole product. [How pricing works](/how-we-work#engagement-shapes)"
+        },
+        {
+          "question": "What kinds of software do you design?",
+          "answer": "Mostly B2B SaaS, such as scheduling, quoting, staffing and deal-management products, and enterprise suites like the one Benchmark Gensuite's specialist teams use every day. We also design other business applications, data-rich interfaces, consumer products and AI-powered products. Founders bring us new products to define, and product teams bring established ones to take further."
+        }
+      ]
+    },
+    {
+      "block": "Enquiry",
+      "id": "enquiry",
+      "heading": "Tell us what you're building or improving",
+      "intro": "A new idea, a live product or one stubborn workflow your users keep tripping over. Any of them is enough to start.",
+      "form": "conversion"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/services__product-design.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

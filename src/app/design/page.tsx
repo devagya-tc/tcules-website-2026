@@ -335,7 +335,7 @@ const SPECIMENS = [
       {
         href: '/design/listing-index',
         name: 'ListingIndex',
-        note: 'the one listing page type: the insights hub, curated BY TYPE until something is picked in the finder (the filters in the rail: ?type=articles&topic=… — the picks as chips over a three-track grid of results, Show more in place, Nothing matches keeps the picks) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group shaped by its count) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
+        note: 'the one listing page type: the insights hub, curated BY TYPE until something is picked in the finder (the filters in the rail: ?type=articles&topic=… — the picks as chips over a three-track grid of results, Show more in place, Nothing matches keeps the picks) and the case-study index (?data=cases: BY STAGE / BY INDUSTRY, each group its featured cases as the card-less horizontal lead, one to a row, then the same three-track grid as the hub) — one hero, rail, section head and close; ?state=sparse thins either, ?state=empty has nothing to list',
       },
       {
         href: '/design/case-story',

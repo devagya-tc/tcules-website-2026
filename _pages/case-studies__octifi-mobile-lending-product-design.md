@@ -1,16 +1,16 @@
 ---
 route: /case-studies/octifi-mobile-lending-product-design
 slug: octifi-mobile-lending-product-design
-page_name: From a pilot concept to continuing mobile-lending product work
+page_name: From a pilot concept to wider mobile-lending product work
 page_type: case_study
 seo:
-  title: 'OctiFi: a pilot that became a product partnership | Tcules'
-  description: An initial pilot grew into continuing product-design work for OctiFi across mobile onboarding, loan issuance, new features and market preparation.
+  title: 'OctiFi mobile lending app design case study | Tcules'
+  description: 'OctiFi mobile lending app design case study: a design pilot that grew into product design for onboarding, loan issuance, new features and a second market.'
   canonical: https://www.tcules.com/case-studies/octifi-mobile-lending-product-design
   robots: index,follow
 social:
-  og_title: 'OctiFi: a pilot that became a product partnership | Tcules'
-  og_description: An initial pilot grew into continuing product-design work for OctiFi across mobile onboarding, loan issuance, new features and market preparation.
+  og_title: 'OctiFi mobile lending app design case study | Tcules'
+  og_description: 'OctiFi mobile lending app design case study: a design pilot that grew into product design for onboarding, loan issuance, new features and a second market.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,17 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'OctiFi: a pilot that became a product partnership | Tcules'
-  twitter_description: An initial pilot grew into continuing product-design work for OctiFi across mobile onboarding, loan issuance, new features and market preparation.
+  twitter_title: 'OctiFi mobile lending app design case study | Tcules'
+  twitter_description: 'OctiFi mobile lending app design case study: a design pilot that grew into product design for onboarding, loan issuance, new features and a second market.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'OctiFi mobile lending app design'
+  secondary_queries:
+  - 'OctiFi mobile lending app design case study'
+  - 'FinTech lending app case study'
+  - 'mobile loan onboarding design'
+  - 'loan issuance UX'
+  - 'pilot to product partnership'
   primary_intent: mobile lending product design case study
   primary_buyer_question: How did a Tcules pilot grow into continuing mobile-product work for OctiFi?
   key_entities:
@@ -30,14 +37,14 @@ search_context:
   - onboarding
   - mobile lending workflow
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
     url: /
   - name: Case Studies
     url: /case-studies
-  - name: From a pilot concept to continuing mobile-lending product work
+  - name: From a pilot concept to wider mobile-lending product work
     url: /case-studies/octifi-mobile-lending-product-design
 conversion:
   form: project_enquiry
@@ -54,7 +61,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -64,7 +71,8 @@ render:
   - product-design-entered-a-fast-engineering-rhythm
   - what-this-case-establishes
   - use-this-when-a-pilot-has-to-earn-a-larger-respo
-  - delivery-impact
+  - testimonials
+  - faq
   - related
   - enquiry
 page_composition:
@@ -82,12 +90,14 @@ page_composition:
       product-design-entered-a-fast-engineering-rhythm: method_process
       what-this-case-establishes: argument_thesis
       use-this-when-a-pilot-has-to-earn-a-larger-respo: argument_thesis
-      delivery-impact: argument_thesis
+      testimonials: testimonial_proof
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
+  testimonial_ids:
+  - SSOT-OCTIFI-CASE
   commercial_system:
-    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
   visual_requirements:
@@ -102,10 +112,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#octifi
 release:
@@ -151,68 +162,87 @@ content_governance:
 
 *Case study · OctiFi*
 
-# A pilot earned a place in OctiFi’s product team
+# OctiFi mobile lending app design: pilot to product partnership
 
-OctiFi began with a contained mobile-lending design assignment while operating in Singapore and preparing for another Southeast Asian market. Tcules explored several versions of the concept, then expanded into ongoing product-design work covering onboarding, loan issuance, new features and adaptation of the existing application for a second market.
+OctiFi tested Tcules with one contained mobile-lending design assignment, while operating in Singapore and preparing for a second market. Tcules explored several versions of the concept, and the pilot earned a wider role.
 
-OctiFi started with a contained assignment. The work earned Tcules a continuing role across the application, giving the startup a design partner that could stay close as features and market requirements changed.
+The work then grew into continuing product design covering onboarding, loan issuance, new features and adapting the existing app for the second market.
 
 ## At a glance {#case-context}
 
-| Product | OctiFi's mobile lending app, used by borrowers in Singapore, with a second Southeast Asian market in preparation. |
+| Product | OctiFi's mobile lending app, for borrowers in Singapore, at a time when OctiFi was preparing to launch in a second market. |
 |---|---|
-| Our role | Product design only: a pilot that grew into onboarding, loan issuance, new features and adapting the app for a second market. OctiFi handled lending policy, regulation and engineering. |
+| Our role | Product design: a pilot that grew into onboarding, loan issuance, new features and adapting the app for a second market. |
 | The key question | Could a small design pilot keep pace with OctiFi's engineering team and earn a wider design role? |
 | What we delivered | Concept directions during the pilot, then continuing design work on the app and its next market. The engagement is complete, and OctiFi has since ceased operations. |
 
 Related Tcules services: [Prototyping and Usability Testing](/services/product-design/prototyping-usability-testing) and [Interaction and UI Design](/services/product-design/interaction-ui-design).
 
-## What did the pilot need to prove beyond the interface? {#the-pilot-was-a-test-of-collaboration-as-well-as}
-A short initial assignment can reduce buying risk when it examines a real product question. It gives the client evidence of the partner's judgement and gives the partner evidence of the product context, access and decision process.
+## Pilot to product partnership: what the first assignment tested {#the-pilot-was-a-test-of-collaboration-as-well-as}
+
+A short first assignment reduces buying risk when it tackles a real product question. The client sees how the design team judges. The team sees the product, the access it will have and how choices get made.
 
 Tcules explored several concept directions during the pilot. OctiFi then expanded the relationship into continuing product-design work on the application.
 
-## Product design entered a fast engineering rhythm {#product-design-entered-a-fast-engineering-rhythm}
+## Onboarding and loan issuance, prototyped with realistic data before code {#product-design-entered-a-fast-engineering-rhythm}
 
-OctiFi operated with the pace and changing priorities of a growth-stage startup. Tcules used low-fidelity iteration to examine flows before developing [high-fidelity prototypes with realistic data](/services/product-design/prototyping-usability-testing). Those prototypes allowed product, engineering and marketing stakeholders to review the intended experience before code investment.
+OctiFi moved at the pace of a growth-stage startup, with priorities that kept changing. Tcules iterated on low-fidelity versions first, to test the flows. We then made [high-fidelity prototypes with realistic data](/services/product-design/prototyping-usability-testing). Product, engineering and marketing stakeholders could review the intended experience in those prototypes before anyone invested in code.
 
-The design work covered the steps that matter in a lending application: joining the service, moving through loan issuance and understanding the offer. As OctiFi prepared for another market, the team could revisit those flows without starting the design relationship again.
+The design work covered the steps that matter in a lending app: joining the service, moving through loan issuance and understanding the offer. As OctiFi prepared for a second market, the team could revisit those flows with the design relationship already in place.
 
-> “They are intuitive, empirical and are very effective communicators. These characteristics they possess has made it a clear joy to work with them. They deliver the works required on time. They deliberate sufficiently and outline clear thought processes in the flows. And they are also proactive in exploring an intuitive and aesthetically designed output. Highly recommended. Would love to work with them in the future.”
-> Amin Nordin, Head of Growth, OctiFi
+## What OctiFi gained: a design team that grew with the app {#what-this-case-establishes}
 
-## A design partner that could grow with the scope {#what-this-case-establishes}
+OctiFi moved from a first concept to continuing application work with a team that already understood the product and its working rhythm. Each new feature, and the move towards a second market, started from what the team had already learned. The relationship covered new features, onboarding, loan issuance and preparation for a second market.
 
-OctiFi could move from a first concept to ongoing application work with a team that already understood the product and its working rhythm. The relationship covered new features, onboarding, loan issuance and preparation for another market.
+## What to agree before a design pilot starts {#use-this-when-a-pilot-has-to-earn-a-larger-respo}
 
-## Use this when a pilot has to earn a larger responsibility {#use-this-when-a-pilot-has-to-earn-a-larger-respo}
+A pilot works when both sides agree, before it starts, what it must show and what result would justify the next piece of work. That conversation should also cover:
 
-A pilot is useful when it contains a real decision and a clear path to larger responsibility. It is weak when it is only discounted production work. Before starting, both teams should agree:
+- the access and client expertise the pilot needs
+- what Tcules will own
+- how the work will be reviewed
 
-1. What the pilot must decide or demonstrate.
-2. Which access and client expertise it requires.
-3. What Tcules will own.
-4. How the work will be reviewed.
-5. What evidence would justify the next scope.
+Discounted production work makes a weak pilot.
 
-## What the pilot proved beyond the interface {#delivery-impact}
+How pilots work with us today is on [How we work](/how-we-work).
 
-| Impact dimension | What changed |
-|---|---|
-| Pilot-to-partnership | The initial pilot expanded into continuing product-design work on the existing application and a further Southeast Asian market direction. |
-| Delivery fit | Product design worked inside OctiFi’s fast engineering rhythm rather than operating as a separate design phase. |
-| Product continuity | The continuing relationship let the same product context carry into onboarding, loan issuance and subsequent product work. |
+## In OctiFi's words {#testimonials}
 
-## Related product-design work {#related}
+> “They are intuitive, empirical and are very effective communicators. These characteristics they possess has made it a clear joy to work with them. They deliver the works required on time. They deliberate sufficiently and outline clear thought processes in the flows.”  
+> **Amin Nordin, Head of Growth, OctiFi**
 
-Two other cases that began before the product was committed to.
+## Questions about the OctiFi lending app design {#faq}
+
+### What did Tcules design for OctiFi?
+
+Tcules designed OctiFi's mobile lending app for borrowers in Singapore. The work began as a pilot that explored several concept directions, then grew into onboarding, loan issuance, new features and adapting the app for a second market.
+
+### Who built the OctiFi app?
+
+OctiFi handled engineering, along with lending policy and regulation. Tcules' role was product design: concept directions in the pilot, then low-fidelity flows and high-fidelity prototypes with realistic data that product, engineering and marketing could review before code.
+
+### How did a pilot project grow into a product partnership?
+
+A pilot that tackles a real product question shows the client how the design team judges, and shows the team how the product works. In OctiFi's pilot, Tcules explored several concept directions, and OctiFi then expanded the relationship into continuing product design on the app.
+
+### Which lending steps did the design cover?
+
+Joining the service, moving through loan issuance and understanding the offer. As OctiFi prepared for a second market, the team could revisit those flows with the design relationship already in place. Related payment and lending work sits under [FinTech](/expertise/fintech).
+
+## More early-stage case studies, including merchant payments research {#related}
+
+Both began while the product was still being defined.
 
 [Read the merchant payments research case](/case-studies/ux-research-for-kirana-store-payment-app)
 
-[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+[Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
 
 [See Prototyping and Usability Testing](/services/product-design/prototyping-usability-testing)
 
-## Tell us what the pilot still has to prove {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-Describe the concept, what the pilot has shown so far and the decision that comes next.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us what you need to find out first {#enquiry}
+
+Describe the product, what you already know and the decision that comes next.

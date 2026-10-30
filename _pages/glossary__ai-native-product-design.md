@@ -4,13 +4,13 @@ slug: ai-native-product-design
 page_name: AI-native Product Design
 page_type: glossary
 seo:
-  title: What is AI-native product design? | Tcules
-  description: AI-native product design is a way of working in which experienced designers use AI for suitable tasks and keep the product decisions that matter.
+  title: 'What is AI-native product design? | Tcules'
+  description: 'What is AI-native product design? A way of working in which designers direct AI tools through suitable tasks and keep the calls that matter. Examples, FAQs.'
   canonical: https://www.tcules.com/glossary/ai-native-product-design
   robots: index,follow
 social:
-  og_title: What is AI-native product design? | Tcules
-  og_description: AI-native product design is a way of working in which experienced designers use AI for suitable tasks and keep the product decisions that matter.
+  og_title: 'What is AI-native product design? | Tcules'
+  og_description: 'What is AI-native product design? A way of working in which designers direct AI tools through suitable tasks and keep the calls that matter. Examples, FAQs.'
   og_image: https://www.tcules.com/assets/og/services.png
   og_image_alt: Tcules social card headed AI-native Product Design, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,21 +18,25 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is AI-native product design? | Tcules
-  twitter_description: AI-native product design is a way of working in which experienced designers use AI for suitable tasks and keep the product decisions that matter.
+  twitter_title: 'What is AI-native product design? | Tcules'
+  twitter_description: 'What is AI-native product design? A way of working in which designers direct AI tools through suitable tasks and keep the calls that matter. Examples, FAQs.'
   twitter_image: https://www.tcules.com/assets/og/services.png
 search_context:
   primary_intent: AI-native Product Design definition
-  primary_buyer_question: What is AI-native Product Design and how is it different from AI-assisted or autonomous design?
+  primary_buyer_question: 'What is AI-native product design?'
   supporting_questions: []
   key_entities:
   - Tcules
   - Product Design
-  primary_query: AI-native Product Design
+  primary_query: 'what is AI-native product design'
+  secondary_queries:
+  - 'AI-native design examples'
+  - 'AI-native product design definition'
+  - 'AI-native product design principles'
   heading_strategy: query_or_entity_alignment_by_page_role; descriptive_answer_headings; natural_language_only
   answer_unit_strategy: direct answer; nuance; evidence; proof; semantic internal links; demand-led FAQs
   buyer_question_evidence:
-    status: NEW_ROUTE_RESEARCH_REQUIRED_BEFORE_FAQ_PUBLICATION
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -45,8 +49,11 @@ conversion: {}
 render:
   band_order:
   - ai-assisted-vs-ai-native-product-design
+  - examples
   - ai-native-vs-agentic
   - ai-native-does-not-mean-autonomous-design
+  - related-terms
+  - faq
 page_composition:
   cms_contract:
     version: semantic-v11
@@ -59,15 +66,19 @@ page_composition:
     testimonial_ids: []
   editorial_review:
     section_components:
-      ai-assisted-vs-ai-native-product-design: comparison_decision
-      ai-native-vs-agentic: comparison_decision
+      ai-assisted-vs-ai-native-product-design: method_process
+      examples: definition
+      ai-native-vs-agentic: definition
       ai-native-does-not-mean-autonomous-design: argument_thesis
+      related-terms: related_link
+      faq: faq
   media_bindings: []
 structured_data:
   types:
   - WebPage
   - DefinedTerm
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
   content_state: CONTENT_READY
@@ -96,32 +107,60 @@ content_governance:
   language: en-GB
 ---
 
-*Glossary*
+*Glossary · AI-native Product Design*
 
-# AI-native Product Design
+# What is AI-native product design? Meaning, principles and examples
 
-**AI-native Product Design** is a working model in which experienced product designers direct agents, deterministic automation and purpose-built tools through suitable parts of research, product inspection, synthesis, exploration, production, implementation and verification, while people remain responsible for the consequential product decisions.
+**AI-native product design** is a way of working in which experienced designers direct AI agents, fixed automation and purpose-built tools through the work they suit. It runs from research through to implementation and checking. It changes how a project is run and keeps people responsible for the calls that shape the product.
 
-The term describes how the practice operates, not the type of product being designed.
+The term describes how the practice works, whatever the product, including products with no AI in them.
 
-## AI-assisted vs AI-native Product Design {#ai-assisted-vs-ai-native-product-design}
+## How AI-native product design changes the design process {#ai-assisted-vs-ai-native-product-design}
 
-**AI-assisted Product Design** keeps a primarily human-operated workflow and uses AI at individual steps, such as summarising research or generating interface alternatives.
+In an AI-native practice the workflow itself changes. Suitable tasks go to AI agents or automation, which are given the product knowledge they need. Their output is reviewed against criteria agreed beforehand.
 
-**AI-native Product Design** changes the workflow itself. Suitable tasks can be delegated to software, connected to product context and reviewed against explicit acceptance criteria.
+Designers spend less of the project on repeat work and more on the calls only they can make. The brief, the checks and the final say stay with them.
 
-## AI-native vs agentic {#ai-native-vs-agentic}
+## AI-native design examples across a project {#examples}
 
-“Agentic” usually describes software capable of carrying multi-step work or taking actions with some delegated authority.
+Tools can walk through a live product, capture each screen and group similar patterns, so a designer sees the whole product before proposing a change. Interviews and notes can be transcribed and sorted, so each finding traces back to what someone said.
 
-An AI-native Product Design practice can use agents, but it also uses deterministic automation, direct human work and ordinary software. Agentic is one execution mode, not the whole practice.
+Design files can be compared with the live product, screen by screen, before a release. In each case a designer decides what the result means and what happens next.
 
-## AI-native does not mean autonomous design {#ai-native-does-not-mean-autonomous-design}
+## Where AI agents fit in AI-native product design {#ai-native-vs-agentic}
 
-Product framing, trade-offs, stakeholder decisions, interpretation, acceptance and other consequential calls often remain human work.
+"Agentic" usually describes software that carries out multi-step work with some authority handed to it.
 
-The useful boundary depends on the structure of the task, clarity of the objective, available context, verifiability and consequence of error.
+An AI-native practice can use agents for that kind of work. It also uses fixed automation, direct human work and ordinary software, so agentic work is one mode within the practice.
 
-[Read the full Tcules practice definition](/how-we-work/ai-native-product-design)
+## AI-native product design principles: people make the calls {#ai-native-does-not-mean-autonomous-design}
 
-Related concepts: [AI-Assisted Product Development](/glossary/ai-assisted-product-development) · [Agentic UX](/glossary/agentic-ux) · [Human in the Loop](/glossary/human-in-the-loop) · [Design Engineering](/glossary/design-engineering)
+Framing the problem, weighing trade-offs, interpreting findings and accepting the work stay with people. Which tasks go to software depends on how clear the goal is and whether the result can be checked. It also depends on how well the tool knows the product and what a mistake would cost.
+
+From there, a few principles hold. A task goes to software when its goal is clear and its result can be checked. The tool gets the same project material a designer would use. A result counts once it passes the agreed checks or a designer's review.
+
+The practice is moving quickly. As agents carry more of a product's history and rules, they take on longer stretches of research, comparison and checking, and designers spend more of the project on the calls that shape the product.
+
+[See what Tcules designers cover with AI, and what people decide](/how-we-work/ai-native-product-design)
+
+## Terms related to AI-native product design {#related-terms}
+
+[AI-assisted product development](/glossary/ai-assisted-product-development): AI tools used in research, design, prototyping, engineering or testing, with people still answerable for what gets released.
+
+[Design engineering](/glossary/design-engineering): exploring, refining and building product experiences directly in code, from early prototype to production.
+
+[Coded prototype](/glossary/coded-prototype): working software built to test what a design file can't show, such as real amounts of data or keyboard use.
+
+## AI-native product design FAQs {#faq}
+
+### How does AI-native design change the design process?
+
+Tasks with a clear goal and a checkable result go to agents, automation or purpose-built tools, which get the product knowledge they need. Designers set the criteria, review the output and decide what goes forward.
+
+### What are examples of AI-native design work?
+
+One example is a tool that walks through a live product and groups similar screens. Others are research notes transcribed and sorted so findings stay traceable, and design files compared with the live product screen by screen, each judged by a designer.
+
+### Does AI-native product design mean the AI designs the product?
+
+People still design the product. They frame the problem, weigh trade-offs, interpret findings and accept the work, while software takes tasks whose goal is clear and whose result can be checked.

@@ -4,13 +4,13 @@ slug: backend-api-development
 page_name: Backend & API Development
 page_type: service
 seo:
-  title: Backend & API Development Services for SaaS | Tcules
-  description: 'Backend and API development for SaaS products: data models, business rules, permissions and integrations, built to cope when other systems fail.'
+  title: 'Backend Development Services: APIs & Integrations | Tcules'
+  description: 'Backend development services for SaaS: data models, business rules, permissions, APIs and third-party integrations that recover safely when other systems fail.'
   canonical: https://www.tcules.com/services/software-development/backend-api-development
   robots: index,follow
 social:
-  og_title: Backend & API Development Services for SaaS | Tcules
-  og_description: 'Backend and API development for SaaS products: data models, business rules, permissions and integrations, built to cope when other systems fail.'
+  og_title: 'Backend Development Services: APIs & Integrations | Tcules'
+  og_description: 'Backend development services for SaaS: data models, business rules, permissions, APIs and third-party integrations that recover safely when other systems fail.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,17 +18,31 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Backend & API Development Services for SaaS | Tcules
-  twitter_description: 'Backend and API development for SaaS products: data models, business rules, permissions and integrations, built to cope when other systems fail.'
+  twitter_title: 'Backend Development Services: APIs & Integrations | Tcules'
+  twitter_description: 'Backend development services for SaaS: data models, business rules, permissions, APIs and third-party integrations that recover safely when other systems fail.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: backend and API development for SaaS products
   primary_buyer_question: Which product contracts must the backend make dependable for the interface and operation to work?
   supporting_questions:
   - Can you build APIs for an existing frontend?
-  - Do you handle third-party integrations?
-  - Can you take over an existing backend?
-  primary_query: backend and API development
+  - Do your backend developers also handle third-party integrations?
+  - Can you take over our existing backend?
+  - Who handles hosting and infrastructure?
+  - Do you build backends for mobile apps?
+  - Which languages and API styles do you build in?
+  primary_query: backend development services
+  secondary_queries:
+  - backend and API development services
+  - API development services
+  - SaaS backend development
+  - API integration services
+  - third-party integrations development
+  - take over an existing backend
+  - APIs for an existing frontend
+  - mobile app backend development services
+  - hosting and infrastructure for SaaS
+  - REST API development services
 navigation:
   breadcrumb:
   - name: Home
@@ -58,28 +72,56 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - contracts
-  - integrations
-  - design-link
-  - proof
+  - routes
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: entities_rules_permissions_transitions_integrations_observability
   media_bindings:
+  - id: backend_connectx
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
+    alt_intent: ConnectX workspace where a question brings up the building's energy data, assets and digital twin. Public image shows the coded demonstration on sample data.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: backend_chain_hut
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
+    alt_intent: The Chain Hut case cover for the Magento store Tcules designed and built. Check the cover shows the storefront before release; otherwise bind chain_hut_audit.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: backend_gt_tools
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
+    alt_intent: GT Tools Shopify store as developed, with navigation and product discovery for specialist automotive-glass equipment.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
   - id: backend_contract_asset
     role: demonstrate
-    supports_section: proof
+    supports_section: contracts
     status: ASSET_REQUIRED
-    communication_job: Show a safely redacted product/API contract tracing one meaningful user action through data, permissions, integration and failure states.
+    communication_job: Show a safely redacted product/API contract tracing one meaningful user action through data, permissions, integration and failure states (Vovisto supplier integration preferred once its case is published).
   testimonial_ids:
-  - UW-WEB-ROCKSTAR
+  - DRAFT-VOVISTO-GOMES
+  - DRAFT-CONNECTX-SCENARIOS
+  - SSOT-EAGLES-SUPPORT
   client_recognition:
     component_type: curated_client_recognition
     clients:
-    - Gold Image Printing
+    - ConnectX
+    - The Chain Hut
+    - GT Tools
+    - Vovisto
     placement: compact_hero_followup
     label: Selected Tcules client relationships across the practice
     source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
@@ -89,12 +131,21 @@ page_composition:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   proof_claim_policy: ANONYMOUS_CHECKOUT_TECHNICAL_REVIEW;API_ARTIFACT_NEEDED
   content_composition:
     primary_intent: backend and API development
-    recognition_count: 3
+    recognition_count: 1
     signature_model_type: api-contract-lifecycle
     proof_component: source_bound_named_case_or_explicit_proof_gap
     testimonial_component: verbatim_quote_with_source_scope_in_cms
@@ -111,7 +162,7 @@ page_composition:
     label: Editorial explanatory diagram; not a client artefact
     media_rights: Conceptual only; real project visuals require approval
   testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
-  source_evidence_boundary: Existing client evidence supports a bounded checkout fix, not a broad architecture-scale or specific-cloud capability claim.
+  source_evidence_boundary: Vovisto - Tcules led development and coordinated the supplier API integrations and their testing (never 'built by us'). No architecture-scale or specific-cloud capability claim. Infrastructure position (owner, 12 Oct) - large infrastructure and cloud moves stay with the client's platform team or a specialist partner; agreed parts such as hosting and deployment can be taken on.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
   signature_proposition: 'Endpoints matter because of the real product contract they enforce: record meaning, user authority, and recovery when external services fail.'
 structured_data:
@@ -123,7 +174,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: ROLLOUT_SD_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
@@ -132,7 +183,6 @@ release:
   - CLAIM_EVIDENCE_VERIFICATION
   - BACKEND_API_CONTRACT_ARTEFACT_REQUIRED
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - ANONYMOUS_CHECKOUT_TECHNICAL_REVIEW;API_ARTIFACT_NEEDED
 content_governance:
@@ -144,82 +194,153 @@ content_governance:
 
 *Software Development · Backend and APIs*
 
-# Backend and API development built for the bad days
+# Backend and API development services for SaaS products customers rely on
 
-Every integration works on demo day. After that, systems slow down, go offline, send duplicates and hit rate limits. We plan for each of those before writing an endpoint.
+Backend work is for the customer whose payment goes through once, the admin whose permissions hold on every screen, and the engineer on call when a supplier's system goes down. Tcules provides backend development services for SaaS products: data, business rules, permissions, APIs and third-party integrations.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)*
 
-*Selected work: Vovisto · Gold Image Printing*
+[Tell us what your backend handles](#enquiry)
 
-## When the problem sits underneath the screen {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**The same rule lives in three places.** The frontend, the backend and an operations spreadsheet each say something slightly different.
+## What you get from our backend and API development {#what-you-get}
 
-**Integrations fail quietly.** A payment or sync half-completes, and nobody knows which records changed.
+The data, rules, permissions, APIs and integrations behind screens you already have or are building now, for a new product or one that is live.
 
-**Permissions are patched screen by screen.** The interface hides a button, but the API still accepts the request.
+**What you receive**
 
-**The API mirrors the database.** The frontend makes five calls and stitches the answers together to show one screen.
+- **The rules written down.** What each record means, who may do what and which system holds the true value, agreed before the code (the five answers below).
 
-## What we settle before writing an endpoint {#contracts}
+- **The riskiest gaps closed first.** Permissions the API fails to enforce and integrations that half-complete come before new features.
+
+- **Tested endpoints.** Each one ships with tests for its failure cases, including retries that charge only once.
+
+- **Integrations planned for failure.** Payment providers, CRMs, ERPs, sign-in providers and the other platforms you depend on, each with a plan for duplicates, timeouts and outages.
+
+- **An API that agents can use safely.** Actions with clear names and plain errors, and permissions that know whether a person or an AI agent is acting. Limits on what an agent may do alone, and a log of who did what on whose behalf.
+
+- **A backend your team can run.** The agreed hosting, deployment, monitoring and alerts, with runbooks and notes in your repository.
+
+**Who does the work.** Our engineers build the backend, and designers work through the rules people meet on screen as error messages, missing buttons and statuses. A senior engineer reviews each change, and an account lead keeps the work running.
+
+**What we need from you.** For a live backend: the code, data model, deployment set-up and the screens that call the API. A new product starts from the designs.
+
+**Where our part stops.** Large infrastructure and cloud moves stay with your platform team, and who owns each part is written down before the build starts. Afterwards your team runs the backend from the runbooks, or we look after it through [Product Maintenance & Evolution](/services/software-development/product-maintenance).
+
+## Selected backend development work {#selected-work}
+
+The backend work closest to this service is Vovisto's platform, where we coordinated the supplier integrations and their testing; it has no case page yet and is described below. These three builds show the data paths and platform rules we have worked within.
+
+### ConnectX: each question routed to permitted data
+
+Behind ConnectX's energy workspace, a question is first matched to a known situation, and only permitted tools retrieve the building data. We proved that path in a coded demo on sample data before ConnectX's module went into live use in late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### The Chain Hut: Magento's purchase workflow left intact
+
+We built The Chain Hut's store on Magento and kept the platform's core purchase workflow intact. The journeys around it, from navigation and search to a checkout without distractions, were the part we changed. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+
+### GT Tools: custom work where Shopify fell short
+
+Specialist buyers need stock, pre-order status, product codes and options before they commit. We developed GT Tools' redesigned store on Shopify and added custom work where the product pages needed more than the platform offers. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+## API development services that start with five agreed answers {#contracts}
+
+One rule lives in the frontend, the backend and an operations spreadsheet, and each says something slightly different. The interface hides a button, but the API still accepts the request. We start by agreeing five answers.
 
 | Question | What it covers |
 |---|---|
-| **What do the records mean?** | Entities, relationships, lifecycle states and the history the product needs to keep |
+| **What do the records mean?** | What each record is, how records connect, the stages each passes through, and the history kept |
 | **Who can do what?** | Account boundaries, roles, record ownership, delegated access and admin powers |
-| **What does the API promise?** | Inputs, outputs, validation, and safe retries, so a double click charges a customer once |
+| **What does the API promise?** | Inputs, outputs, validation and safe retries: a double click charges once |
 | **What happens on failure?** | Timeouts, partial success, conflicts and which system holds the true value |
-| **How will your team know?** | Logs and alerts that show what failed, for which account, and whether it is safe to repeat |
+| **How will your team know?** | Logs and alerts showing what failed, for whom, and whether repeating is safe |
 
-The interface can explain a rule, but only the backend can enforce it.
+The interface can explain a rule, but only the backend can enforce it. For each third-party system we also decide whether work happens at once or in the background, how retries avoid duplicates and what users see while they wait.
 
-## Integrations built for bad days {#integrations}
+Designers and engineers work these out together, so the API and the screen tell the same story.
 
-Every integration works on the day of the demo. After that, third-party systems change on their own schedule: they slow down, go offline, send duplicates and hit rate limits.
+Example: Vovisto's platform draws flight and hotel inventory from outside travel suppliers. We coordinated those supplier API integrations and their testing alongside the budget and approval workflows, and we still look after the platform.
 
-For each integration we decide which system owns the truth, whether work happens at once or in the background, how retries avoid duplicates and what users see while they wait.
+## Backend work, a full application or modernisation: which do you need? {#routes}
 
-## Backend rules your users can understand {#design-link}
+| Service | What it covers | Best for |
+|---|---|---|
+| **Backend & API Development** | Data, rules, permissions, APIs and integrations behind screens you have or are building | Teams with a frontend in hand, or a backend that keeps letting them down |
+| **[SaaS & Web Application Development](/services/software-development/saas-web-app-development)** | The whole application, frontend and backend, built together | New products and large modules built from the ground up |
+| **[Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation)** | An ageing system changed one stage at a time while it keeps running | Older platforms where a rebuild in one go would stop the business |
+| **[Product Maintenance & Evolution](/services/software-development/product-maintenance)** | Ongoing fixes, updates and features on a live backend | Live products that need a team that knows them |
 
-Users meet backend rules through the interface: an error message, a missing button, a status that never updates. Our designers and engineers settle these together, so the API and the screen tell the same story.
+## What clients say {#testimonials}
 
-## Where orders, stock and suppliers meet {#proof}
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
 
-### Vovisto: supplier travel inventory inside a custom platform
+> “Tcules turned our early ideas into eight scenarios, built around the questions our operators, finance leaders and sustainability leads actually ask. Their coded demo let us see each question with its data and the digital twin in one view, before any live integration.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-Vovisto's platform draws flight and hotel inventory from outside travel suppliers, so trips for healthcare professionals can be arranged in one place. We coordinated those supplier API integrations and their testing alongside the platform's budget and approval workflows. Integration testing is under way.
+> “Always helping, the support team were very reactive and efficient. They are very dedicated and committed to the project and they are now like a member of our family.”  
+> **Eagles Security Aruba & Hotel California Aruba**
 
-### Gold Image Printing: ordering and production treated as one service
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-Gold Image Printing's orders run from the online store into artwork, scheduling, inventory and fulfilment in an internal ERP. We traced orders past checkout to find where a change on one side would confuse people on the other.
+## How we work together {#how-we-work-together}
 
-We redesigned the customer and production workflows as one service, then worked with Gold Image Printing's technical team so the design fitted the order and production systems already in place.
+For backend work, a good first piece of work is a review of the backend you have, ending in its riskiest gaps in the order we would close them.
 
-[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-## Why Tcules for backend work {#why-tcules}
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-**One team from the interface to the database.** The people designing a workflow and the people building its rules work side by side.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-**We check what the system needs before we build it.** For NO STATUS QUO, we moved a Webflow site onto its own Azure hosting and back end.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-> “This is a rockstar team of web developers! They listen and think critically to what's needed - then delivers!”  
-> **Stan St-Fleur, Founder & Executive Director, NO STATUS QUO, INC.**
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-## Frequently asked questions {#faq}
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **One studio can take it into working software, with the designers staying in the build.** CuramCare's web platform and both its apps were redesigned by our designers, and our developers then coded the frontend of all three from those designs, in the same studio.
+
+- **We prove the hard parts in code while they can still change.** Because [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers reviewed working prototypes, one could ask whether drag and drop needed an external library with Bootstrap 5 before the choice was made.
+
+- **Senior people do the work, and clients keep us for years.** Three years on, Primelis still treats us as part of its product team, and we have designed every product it runs in that time.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[HealthTech](/expertise/healthtech)
+
+Vovisto's healthcare platform, where we coordinated the supplier integrations, is the backend work we can name by industry. The related work above comes from [ClimateTech](/expertise/climatetech-energy) and [Commerce](/expertise/commerce-transactional-products).
+
+## Questions about backend and API development {#faq}
 
 ### Can you build APIs for an existing frontend?
 
-Yes. We start from what the screens need: the data, the permissions and the errors they must handle. Then we design endpoints around those needs instead of around the database tables.
+Yes. We start from what the screens need: the data, the permissions and the errors they must handle. Then we design the API around those needs instead of around the database tables.
 
-### Do you handle third-party integrations?
+### Can you take over our existing backend?
 
-Yes: payment providers, CRMs, ERPs, sign-in providers and the other platforms your product depends on. Each one gets a plan for failures, duplicates and which system holds the true value.
+Yes. We read the code, data model and deployment set-up first, write down the rules we find and fix the riskiest gaps before adding features. You get a short list of what we found, in the order we would fix it.
 
-### Can you take over an existing backend?
+### Who handles hosting and infrastructure?
 
-Yes. We read the code, data model and deployment set-up first, write down the rules we find and fix the riskiest gaps before adding features.
+We set up the agreed hosting, deployment, monitoring and alerts for the products we build, on the cloud agreed for your product. Larger infrastructure work stays with your platform team.
+
+### Do you build backends for mobile apps?
+
+Yes. A mobile app usually shares the backend and API of the web product, plus rules for syncing after a dead zone, resolving clashes when two people edit one record, and push notifications. We build those into the same API, so the [app](/services/software-development/mobile-app-development) and the web product follow one set of rules.
+
+### Which languages and API styles do you build in?
+
+For an existing backend, the language it already uses. For a new one, we suggest well-supported languages and frameworks that fit where you host and that engineers you hire later can work on. You see our reasons before the first line of code.
 
 ## Tell us what your backend has to handle {#enquiry}
 

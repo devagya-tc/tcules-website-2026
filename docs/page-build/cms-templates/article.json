@@ -1,0 +1,319 @@
+{
+  "template": "article",
+  "route": "/insights/cpq-ux-design",
+  "slug": "cpq-ux-design",
+  "name": "CPQ UX design: quoting software sales reps choose over spreadsheets",
+  "pageType": "article",
+  "editorial": {
+    "authors": [
+      "author:varun-mashru"
+    ],
+    "authorRole": "Product Designer, Tcules",
+    "reviewer": null,
+    "publishedAt": null,
+    "modifiedAt": "2026-10-26",
+    "dateAsDisplayed": "Updated 26 October 2026",
+    "readingTimeAsDisplayed": "12 min read",
+    "topicTags": [
+      "SaaS",
+      "Data-heavy"
+    ],
+    "standfirst": "CPQ UX design around the quote itself: who contributes, rules and prices that explain themselves, approvals shown early and revisions reps can trust.",
+    "keyTakeaways": [
+      "Design CPQ software around the quote itself, the one record every contributor works on.",
+      "Decide who contributes to a quote, and with what authority, before designing screens. The Auxentios research mapped six roles.",
+      "Configuration rules and prices should explain themselves, and reps should be able to revise an earlier choice without starting over.",
+      "Show approval thresholds while the rep is still editing, and make it clear which version the customer saw.",
+      "If you are re-platforming, re-model the quote before carrying any screen across."
+    ],
+    "series": null
+  },
+  "subscription": null,
+  "relatedContent": [
+    {
+      "anchor": "Auxentios CPQ case study",
+      "target": "/case-studies/auxentios-cpq-product-mvp-design"
+    }
+  ],
+  "seo": {
+    "title": "CPQ UX design: quoting software reps will use | Tcules",
+    "description": "CPQ UX design around the quote itself: who contributes, rules and prices that explain themselves, approvals shown early and revisions reps can trust.",
+    "canonical": "https://www.tcules.com/insights/cpq-ux-design",
+    "robots": "index,follow",
+    "ogImageAlt": "Tcules social card headed Insights, on a white background with the Tcules wordmark."
+  },
+  "social": {
+    "og_title": "CPQ UX design: quoting software reps will use | Tcules",
+    "og_description": "CPQ UX design around the quote itself: who contributes, rules and prices that explain themselves, approvals shown early and revisions reps can trust.",
+    "og_image": "https://www.tcules.com/assets/og/insights.png",
+    "og_image_alt": "Tcules social card headed Insights, on a white background with the Tcules wordmark.",
+    "og_type": "article",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Insights",
+      "url": "/insights"
+    },
+    {
+      "name": "CPQ UX design: quoting software sales reps choose over spreadsheets",
+      "url": "/insights/cpq-ux-design"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "CPQ UX design",
+    "primaryBuyerQuestion": "How should configure-price-quote software be designed so sales teams use it?",
+    "supportingQuestions": [],
+    "primaryQuery": "CPQ UX design",
+    "secondaryQueries": [
+      "CPQ UX",
+      "CPQ software design",
+      "configure price quote UX",
+      "CPQ usability",
+      "quoting software UX",
+      "CPQ UI design"
+    ],
+    "keyEntities": [
+      "CPQ",
+      "configure-price-quote",
+      "quote approval",
+      "quote revision",
+      "Auxentios"
+    ]
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "Article",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "LIVE_CAPTURE_2026-10-08",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": null,
+  "hero": {
+    "eyebrow": "Insights · Article",
+    "title": "CPQ UX design: quoting software sales reps choose over spreadsheets",
+    "lede": [
+      "This article on CPQ UX design shows how to design configure-price-quote (CPQ) software that sales teams choose over their spreadsheets. The core idea is to design around the quote itself, the one record every contributor works on.",
+      "Decide who contributes to a quote and with what authority. Make configuration rules and price changes explain themselves. Let people revise without starting over. Show what needs approval before anyone submits. The test reps apply is whether the software is faster and safer than their spreadsheet."
+    ],
+    "actions": [],
+    "proofLines": [
+      "Key takeaways"
+    ],
+    "studioFacts": false,
+    "media": null,
+    "bylineDerivedFromEditorial": "By [Varun Mashru](/insights/authors/varun-mashru) · Updated 26 October 2026 · 12 min read"
+  },
+  "sections": [
+    {
+      "block": "Rich section",
+      "id": "how-should-cpq-software-be-designed",
+      "heading": "CPQ software design: where quoting gets hard",
+      "body": "Published guides to CPQ UX tend to treat it as an interface problem for the sales rep. They recommend a clear, simple layout, onboarding, consistent visual design and integration with the CRM ([UXmatters](https://www.uxmatters.com/mt/archives/2023/03/using-ux-design-to-enhance-the-performance-of-cpq-systems.php)). That advice is sound as far as it goes. It says little about where quoting gets hard, which is when several people each own part of a quote.\n\nGartner describes CPQ suites as software supporting the configuration, pricing and quote generation that accompany solution and negotiated selling. They are typically built from rules or constraint engines, pricing engines and proposal generators, with approval workflows around them ([Gartner glossary](https://www.gartner.com/en/information-technology/glossary/configure-price-quote-cpq-application-suites)). Each of those parts produces a decision someone has to trust:\n\n- this configuration is valid;\n- this price is right;\n- this discount is allowed, or who has to allow it;\n- this version is the one the customer saw.\n\nThe design job is to show each of those decisions to the person who has to act on it, at the moment they act."
+    },
+    {
+      "block": "Comparison",
+      "id": "decide-which-kind-of-quote-you-are-designing-for",
+      "heading": "Rep-assembled or expert-assembled: which quote are you designing for?",
+      "intro": "Before any screen, agree what a typical quote in your product looks like. The split below is our own working judgement, and it changes almost every later decision.",
+      "table": {
+        "columns": [
+          "",
+          "Rep-assembled quote",
+          "Expert-assembled quote"
+        ],
+        "rows": [
+          [
+            "Typical contents",
+            "Plans, seats, add-ons, term, discount",
+            "Configured or engineered products, solution design, service and maintenance terms"
+          ],
+          [
+            "Who changes it",
+            "The rep, with a manager or deal desk for discounts",
+            "The rep plus product, solution, pricing and service specialists"
+          ],
+          [
+            "What slows it down",
+            "Fields, clicks and waiting for discount approval",
+            "Waiting for specialist input, lost context between hand-offs, rework after a late change"
+          ],
+          [
+            "Design priority",
+            "Speed to a valid quote, good defaults, clear guardrails",
+            "Visible ownership, hand-offs, state and revision history"
+          ]
+        ]
+      },
+      "after": "A product can sit anywhere between the two. The expensive mistake is designing for one while your customers live in the other. You see it in a fast single-user form for quotes that really need three specialists, or in a heavy collaborative workflow for a seat-count renewal."
+    },
+    {
+      "block": "Rich section",
+      "id": "the-quote-is-the-shared-object",
+      "heading": "What the Auxentios CPQ research showed: the quote is the shared object",
+      "body": "When Tcules designed the MVP for Auxentios, an industrial CPQ product, the research included eight qualitative interviews with people in six roles. The roles were sales representative, sales manager, product expert, pricing expert, solution expert and maintenance expert. The existing work moved between CRM records, internal communication, product knowledge, pricing, service contracts and customer revisions.\n\nEach role carried different knowledge and authority into the same quotation. The sales representative needed progress and customer context. The pricing expert needed commercial rules. Product and solution experts needed configuration detail. Maintenance work could change the offer after the initial product decision. Designing for one generic \"enterprise user\" would have hidden the coordination the product actually had to do.\n\nSo the research became a responsibility map. It showed who contributes what to a quote, where information changes, and where a person needs a hand-off or a way out of a fixed sequence. The product was expected to need more than 200 screens, so the interface system came after that model. Use cases were mapped to screens, and repeated needs were extracted into components. A component library built before the role model would have standardised visual fragments while leaving the product logic unresolved.\n\nThe case study sets out five questions for any workflow that crosses roles with different authority. They apply to any quoting product where more than one role touches the quote:\n\n1. What shared object are these roles changing?\n1. What evidence can each role see and contribute?\n1. Who decides, approves or returns the work?\n1. Which states and exceptions must survive a hand-off?\n1. Which interface rules can become reusable without erasing role-specific work?\n\nThat work was MVP design that Auxentios could take into development. The [Auxentios CPQ case study](/case-studies/auxentios-cpq-product-mvp-design) shows how Tcules modelled a multi-role quote and what the MVP could express."
+    },
+    {
+      "block": "Rich section",
+      "id": "make-the-configuration-rules-explain-themselves",
+      "heading": "Configure price quote UX: rules that explain themselves",
+      "body": "The configurator is where a CPQ earns or loses trust. The user research here studied web and sales configurators, which sit close to rep-facing B2B tools, so treat it as indirect evidence.\n\nLeclercq, Abbasi, Dumas, Remiche and Heymans surveyed web configurator users in 2022. They found that the validity of the configured product, and how well it matched the user's needs, were the most desired perceived values. Missing usability, missing product visualisation and a missing progress or state indicator were the worst defects ([Proceedings of the ACM on Human-Computer Interaction, 2022](https://doi.org/10.1145/3534519)). For a rep, validity is the whole point: a quote the factory or the billing system later rejects is worse than a slow one.\n\nFour design moves follow.\n\n**Say why an option is unavailable.** \"Unavailable\" teaches reps nothing. \"Not available with a 12-month term\" tells them what to change. This is the plain-language error rule in [Nielsen's heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/): name the problem precisely and suggest a fix. Configuration research treats detecting and diagnosing conflicting constraints and requirements as a subject in its own right ([Felfernig et al., 2014](https://tugraz.elsevierpure.com/en/publications/conflict-detection-and-diagnosis-in-configuration/)). The interface is where that diagnosis has to reach a person.\n\n**Let people change an earlier choice without starting over.** Trentin, Perin and Forza call this flexible navigation ([Trentin, Perin and Forza, 2012](https://ceur-ws.org/Vol-958/paper9.pdf); journal version in [Computers in Industry, 2013](https://www.sciencedirect.com/science/article/abs/pii/S0166361513000213)). A person can change a choice made at any earlier step. They revise only the later choices that the change made invalid, and they keep a saved configuration to return to. In a CPQ, a change of region or term should flag the specific lines it broke and leave the rest of the quote intact.\n\n**Show where the quote stands.** Which sections are complete, which are waiting on someone, which are invalid. The same survey ranked a missing progress and state indicator among the worst defects.\n\n**Give experienced reps a direct path.** Guided selling questionnaires can help new reps and slow down experienced ones. Nielsen's flexibility heuristic applies: shortcuts, hidden from novice users, that let experts move faster ([NN/g](https://www.nngroup.com/articles/ten-usability-heuristics/)). Offer the guided path and a straight route to the catalogue, and let both produce the same valid quote.\n\nThe people who maintain the rules are users too. In the Auxentios research the pricing expert needed commercial rules. In any CPQ product someone, in product, pricing or sales operations, has to keep the rules current. If they can't see which rule blocked a quote, reps will route around the rule and it stays broken."
+    },
+    {
+      "block": "Rich section",
+      "id": "make-the-price-and-the-approval-visible-before-submission",
+      "heading": "CPQ UI design for prices and approvals reps see before submitting",
+      "body": "A total with no build-up invites a spreadsheet check. Show how the price was reached: list price, rule-driven adjustments, the rep's discount, and which of those the rep controls.\n\nTrentin, Perin and Forza's \"benefit-cost communication\" makes the same point for configurators ([Trentin, Perin and Forza](https://ceur-ws.org/Vol-958/paper9.pdf)). Show what each option gives and what it costs, including non-monetary costs such as a longer delivery lead time. Their paper also cautions that this can add choice complexity, for example when each option is priced individually. Pair it with navigation that narrows the options first.\n\nApprovals need the same treatment. If a discount above a threshold needs a manager, show the threshold while the rep is still editing, early enough to change the discount before submitting. When a rejected quote comes back, re-ask only what changed.\n\nSalesforce's Advanced Approvals implements this as Smart Approvals: on resubmission, approvers aren't asked again for a condition whose tested value hasn't changed ([Salesforce Trailhead](https://trailhead.salesforce.com/content/learn/modules/advanced-approvals-for-admins/use-smart-approvals-to-evaluate-changes)). The principle holds whatever platform you build on. Every unnecessary re-approval teaches reps that the tool costs time."
+    },
+    {
+      "block": "Rich section",
+      "id": "design-for-the-revision-not-the-first-draft",
+      "heading": "Quote revisions: make the customer's version clear",
+      "body": "The quote that closes is often a later version than the first. Oracle's Siebel CRM documentation describes the negotiation phase plainly. Users add or remove products and compare features and price. A revision creates a new record under the same quote number, and the original becomes read-only. The documentation also notes that editing a quote does not by itself create a version ([Oracle documentation](https://docs.oracle.com/cd/G30557_01/books/OrdMgt/c-Revising-a-Quote-rq1004447.html)). That last detail is a design decision with consequences. If versions are opt-in, someone will overwrite the version the customer is holding.\n\nIn the Auxentios work, customer and internal communication continued while the quotation was revised. Design for that:\n\n- Make \"which version did the customer see?\" answerable at a glance.\n- Compare versions side by side and highlight what changed, and which change moved the price. Trentin, Perin and Forza describe this as easy comparison: showing which choices caused the price difference between two configurations ([Trentin, Perin and Forza](https://ceur-ws.org/Vol-958/paper9.pdf)).\n- Keep the specialists' contributions attached to the version they applied to, so a late maintenance change doesn't silently invalidate an earlier pricing decision."
+    },
+    {
+      "block": "Rich section",
+      "id": "how-to-tell-whether-reps-are-using-it",
+      "heading": "CPQ usability: signs reps are working around the tool",
+      "body": "The workarounds tell you more than login counts do. A quote that keeps leaving the product marks the part of the job the product has stopped supporting. It might go to a spreadsheet, a chat thread to the pricing team or an emailed PDF edited by hand.\n\nSignals worth watching (from our own judgement):\n\n- quotes built elsewhere and entered into the CPQ at the end;\n- questions to product or pricing specialists asked in chat, away from the quote;\n- quotes rejected at approval for reasons the rep could have seen while editing;\n- resubmissions that re-trigger approvals nobody needed;\n- disputes about which version the customer accepted.\n\nThe most reliable method is still the plainest: watch a few reps build real quotes, including one awkward deal. If the team disputes the cause of the trouble, a structured [UX & Product Audit](/audits/ux-product-audit) can separate interface problems from model and rule problems. It does so before anything is redesigned."
+    },
+    {
+      "block": "Rich section",
+      "id": "if-you-are-re-platforming-move-the-model-not-the-screens",
+      "heading": "Re-platforming a CPQ: move the quote model before the screens",
+      "body": "Move the quote model first.\n\nSalesforce no longer sells new Salesforce CPQ licences to new customers. The product is in a maintenance phase with no announced end-of-life date, and Salesforce points new investment to Revenue Cloud Advanced ([Salesforce](https://www.salesforce.com/sales/cpq/end-of-life/)). Existing customers can keep using it, and there is no forced migration.\n\nSome teams do move, to Revenue Cloud, another CPQ or a product of their own. Our advice to them is to re-model the quote before any screen is carried across. Treat the move as the chance to do it. Porting screens carries the old workarounds across with them. Re-mapping roles, rules, approvals and revisions first is slower at the start and gives the new build something coherent to express.\n\nWhere the quoting tool sits inside an ageing product, that is [Product Modernisation](/services/product-modernisation) work as much as a CPQ project."
+    },
+    {
+      "block": "Comparison",
+      "id": "cpq-ux-checklist",
+      "heading": "CPQ UX checklist: what good looks like, and the warning signs",
+      "table": {
+        "columns": [
+          "Question",
+          "What good looks like",
+          "Warning sign"
+        ],
+        "rows": [
+          [
+            "Who changes a quote?",
+            "Named roles, each seeing what they need and contributing on the quote itself",
+            "Specialists answer in chat or email; the rep re-keys it"
+          ],
+          [
+            "Is the configuration valid?",
+            "Conflicts explained in plain language, with a way to fix them",
+            "Disabled options with no reason"
+          ],
+          [
+            "What happens after an earlier change?",
+            "Only the invalidated choices are flagged",
+            "The quote resets or silently keeps invalid lines"
+          ],
+          [
+            "Why is the price what it is?",
+            "A visible build-up, with rep-controlled parts marked",
+            "Reps check totals in a spreadsheet"
+          ],
+          [
+            "Will this need approval?",
+            "Thresholds visible while editing; only changed conditions re-approved",
+            "Surprise rejections; repeat approvals for unchanged terms"
+          ],
+          [
+            "Which version is live?",
+            "Versions created deliberately, compared side by side, customer-facing version clear",
+            "Overwritten quotes; disputes over what was sent"
+          ],
+          [
+            "Can experts move fast?",
+            "A direct path alongside guided selling",
+            "Experienced reps click through required questions to get past them"
+          ],
+          [
+            "Can rule owners see what blocked a quote?",
+            "Blocked quotes traceable to a named rule",
+            "Reps quietly route around rules"
+          ]
+        ]
+      }
+    },
+    {
+      "block": "Rich section",
+      "id": "where-this-work-sits",
+      "heading": "Where Tcules designs quoting software UX",
+      "body": "Tcules designs software with many roles and rules, and models roles, records and hand-offs before drawing screens. We apply that approach across [B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software). To see it applied to a quoting product, read the [Auxentios CPQ case study](/case-studies/auxentios-cpq-product-mvp-design). It covers six specialist roles, eight interviews and one quotation workflow, modelled before the interface system was built.\n\nQuoting is also where AI is arriving next: suggested configurations, drafted proposals and recommended discounts. Each is one more decision someone has to trust, and the model that serves six human roles is the model an AI assistant has to fit into. We design that seat at the table too, deciding what the assistant may propose, who approves it and which version the customer finally sees."
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "CPQ UX design FAQs",
+      "items": [
+        {
+          "question": "How should CPQ software be designed so sales reps use it?",
+          "answer": "Design it around the quote, the one record every contributor works on, and make it faster and safer than the spreadsheet. That means configuration rules that say why, a visible price build-up, approval thresholds shown while editing and revisions that keep the customer-facing version clear."
+        },
+        {
+          "question": "What makes CPQ software hard to use?",
+          "answer": "Usually the coordination more than the screens. Quotes stall when specialists answer in chat away from the quote, when options are disabled with no reason given, and when an earlier change resets the whole quote. Surprise rejections at approval and disputes over which version went out do the rest."
+        },
+        {
+          "question": "How do pricing rules explain themselves in a CPQ tool?",
+          "answer": "By naming the rule and the fix at the point of conflict: \"Not available with a 12-month term\" tells a rep what to change. Show the price build-up, from list price through rule-driven adjustments to the rep's discount, and mark the parts the rep controls. Rule owners need to see which rule blocked a quote as well."
+        },
+        {
+          "question": "Who should contribute to a quote in CPQ?",
+          "answer": "Everyone whose knowledge or authority the quote depends on. In the Auxentios research that meant six roles: sales representative, sales manager, and product, pricing, solution and maintenance experts. Each should contribute on the quote itself, with hand-offs and approvals visible to the rep."
+        },
+        {
+          "question": "What is CPQ UX design?",
+          "answer": "It is the design of configure-price-quote software around the people who build, check and approve quotes. It covers configuration, pricing, approvals, revisions and the hand-offs between roles. Good CPQ UX design makes a valid quote quicker to reach than the spreadsheet it replaces."
+        }
+      ]
+    },
+    {
+      "block": "Related reading",
+      "id": "related-reading",
+      "heading": "Related reading on quoting and workflow software",
+      "entries": [
+        {
+          "href": "/case-studies/auxentios-cpq-product-mvp-design",
+          "label": "Auxentios CPQ case study",
+          "blurb": "six roles, eight interviews and one quotation workflow."
+        },
+        {
+          "href": "/glossary/workflow-design",
+          "label": "What is workflow design?",
+          "blurb": "How work moves between roles, rules and hand-offs."
+        },
+        {
+          "href": "/insights/guides/how-to-use-a-ux-product-audit",
+          "label": "How to use a UX audit, from first question to ranked plan",
+          "blurb": null
+        },
+        {
+          "href": "/services/product-design/information-architecture-workflow-design",
+          "label": "Information Architecture and Workflow Design",
+          "blurb": "the service that models roles and records before screens."
+        },
+        {
+          "href": "/contact",
+          "label": "Tell us where quotes slow down or need rework",
+          "blurb": null
+        }
+      ]
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/insights__cpq-ux-design.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

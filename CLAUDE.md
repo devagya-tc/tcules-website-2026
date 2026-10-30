@@ -425,6 +425,9 @@ Clean does not mean plain, and "not busy" is not an argument for "not designed".
   lead above them at full width, so the cards read as the heading's continuation — never a head track
   beside the grid. And it carries no decorative image: the cards are the band's shape. A photograph
   may sit beside items nobody clicks, with those items continuing under the heading in its column.
+- **Never two horizontal media items side by side.** A picture beside its words takes a whole row, or the
+  set uses the vertical card in a grid. `Layout` spans any child declaring `data-media-row` (owner,
+  29 Oct 2026; decisions/2026-10-29-media-rows-take-a-whole-row).
 - **Two tinted bands are never adjacent**, the close included: where two would meet, one drops to paper.
 - **An icon heads its card.** Glyph, then title, then body, each on its own row — never the glyph
   inline beside the title. A tile led by its own drawing carries no glyph at all (owner, 19 Oct 2026;

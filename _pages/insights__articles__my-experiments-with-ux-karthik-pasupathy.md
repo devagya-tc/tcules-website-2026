@@ -1,37 +1,44 @@
 ---
 route: /insights/articles/my-experiments-with-ux-karthik-pasupathy
 slug: my-experiments-with-ux-karthik-pasupathy
-page_name: Karthik Pasupathy on context, clarity and core functionality
+page_name: 'Karthik Pasupathy interview: product design, clarity and the core task'
 page_type: article
 seo:
-  title: Karthik Pasupathy on context, clarity and function | Tcules
-  description: A May 2025 conversation with Karthik Pasupathy on the core task, B2B user testing and the interface changes he expects from AI product teams.
+  title: 'Karthik Pasupathy product design interview | Tcules'
+  description: 'Karthik Pasupathy in a product design interview with Tcules: building around the core task, B2B user testing and the interface changes he expects from AI.'
   canonical: https://www.tcules.com/insights/articles/my-experiments-with-ux-karthik-pasupathy
   robots: index,follow
 social:
-  og_title: Karthik Pasupathy on context, clarity and function | Tcules
-  og_description: A May 2025 conversation with Karthik Pasupathy on the core task, B2B user testing and the interface changes he expects from AI product teams.
+  og_title: 'Karthik Pasupathy product design interview | Tcules'
+  og_description: 'Karthik Pasupathy in a product design interview with Tcules: building around the core task, B2B user testing and the interface changes he expects from AI.'
   og_image: https://www.tcules.com/assets/og/insights.png
   og_image_alt: Tcules social card headed Insights, on a white background with the Tcules wordmark.
   og_type: article
   article_published_time: '2025-05-02'
-  article_modified_time: '2026-09-08'
+  article_modified_time: '2026-10-26'
   og_url: https://www.tcules.com/insights/articles/my-experiments-with-ux-karthik-pasupathy
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Karthik Pasupathy on context, clarity and function | Tcules
-  twitter_description: A May 2025 conversation with Karthik Pasupathy on the core task, B2B user testing and the interface changes he expects from AI product teams.
+  twitter_title: 'Karthik Pasupathy product design interview | Tcules'
+  twitter_description: 'Karthik Pasupathy in a product design interview with Tcules: building around the core task, B2B user testing and the interface changes he expects from AI.'
   twitter_image: https://www.tcules.com/assets/og/insights.png
 search_context:
-  primary_intent: product interview on interface clarity and AI-native UX
+  primary_query: 'Karthik Pasupathy product design interview'
+  secondary_queries:
+  - 'Karthik Pasupathy interview'
+  - 'B2B user testing advice'
+  - 'core task focus in UX'
+  - 'interface changes from AI'
+  - 'context and clarity in product design'
+  primary_intent: 'Karthik Pasupathy product design interview'
   primary_buyer_question: What separates an interface that works from one that only looks finished?
   key_entities:
   - Karthik Pasupathy
   - Fyno
   - My Experiments with UX
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -40,7 +47,7 @@ navigation:
     url: /insights
   - name: Articles
     url: /insights/articles
-  - name: Karthik Pasupathy on context, clarity and core functionality
+  - name: 'Karthik Pasupathy interview: product design, clarity and the core task'
     url: /insights/articles/my-experiments-with-ux-karthik-pasupathy
 subscription:
   form: insights_newsletter
@@ -63,29 +70,38 @@ render:
   - the-step-nobody-runs
   - what-ai-actually-changes
   - what-to-take-from-it
+  - faq
+  - related-reading
 structured_data:
   types:
   - WebPage
   - Article
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   article_publisher_ref: https://www.tcules.com/#organization
   article_author_source: editorial.author
   article_date_published_source: editorial.published_at
   article_date_modified_source: editorial.modified_at
   article_date_published: '2025-05-02'
-  article_date_modified: '2026-09-08'
+  article_date_modified: '2026-10-26'
   article_authors:
   - type: Person
     name: Jatin Leuva
-    profile_url: null
-    profile_status: PROFILE_ROUTE_REQUIRED
+    profile_url: https://www.tcules.com/insights/authors/jatin-leuva
 editorial:
   author: Jatin Leuva
   reviewer: null
   published_at: '2025-05-02'
-  modified_at: '2026-09-08'
+  modified_at: '2026-10-26'
+  date_as_displayed: Updated 26 October 2026
   series: My Experiments with UX
+  reading_time_as_displayed: 5 min read
+  key_takeaways:
+  - "Build the interface around the one thing a person opened it to find out, as Karthik Pasupathy's Ather app redesign did."
+  - "Karthik finds that many organisations skip testing with users, and argues that B2B startups should copy the consumer feedback loop."
+  - "Karthik expects that, as products become conversational, what sets them apart will shift to what they understand and the judgement they express."
+  - "Design guardrails as well as the happy path, and ask what else a capability makes possible."
 release:
   content_state: CONTENT_READY
   site_release_state: SITE_RELEASE_HOLD
@@ -121,6 +137,8 @@ page_composition:
       the-step-nobody-runs: argument_thesis
       what-ai-actually-changes: case_or_artefact_proof
       what-to-take-from-it: argument_thesis
+      faq: faq
+      related-reading: related_link
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -144,34 +162,66 @@ page_composition:
 
 *Insights · Article*
 
-# Karthik Pasupathy on context, clarity and core functionality
+# Karthik Pasupathy interview: product design, clarity and the core task
 
-In Tcules’ May 2025 interview, Karthik Pasupathy Ramachandran, then head of marketing at Fyno, explains how technical writing, product analytics and AI changed the way he approaches product decisions. The conversation focuses on concrete experiments with UX rather than treating AI as a separate design discipline.
+By [Jatin Leuva](/insights/authors/jatin-leuva) · Published 2 May 2025 · Updated 26 October 2026 · 5 min read
 
-By Jatin Leuva · Published 2 May 2025 · Updated 8 September 2026
+In Tcules’ May 2025 interview, Karthik Pasupathy Ramachandran, then head of marketing at Fyno, explains how technical writing, product analytics and AI changed the way he approaches product work. The conversation stays with concrete experiments in UX and treats AI as part of ordinary design work.
 
-The Karthik Pasupathy interview is the first conversation in My Experiments with UX, a series about how people who ship products are changing the way they think as AI moves into the interface.
+This interview with Karthik is the first conversation in My Experiments with UX. The series covers how people who ship products are changing the way they think as AI moves into the interface.
 
-## Show the person what they came for {#show-the-person-what-they-came-for}
+**Key takeaways**
 
-KP's redesign of the Ather scooter app went around because of what it left out. The first screen carries the battery percentage, the time to charge, the nearest station and the next action. Nothing else. "A lot of users resonated with how the app should be," he says. The original app contained the information; his redesign brought it into the first view.
+- Build the interface around the one thing a person opened it to find out, as Karthik Pasupathy's Ather app redesign did.
+- Karthik finds that many organisations skip testing with users, and argues that B2B startups should copy the consumer feedback loop.
+- Karthik expects that, as products become conversational, what sets them apart will shift to what they understand and the judgement they express.
+- Design guardrails as well as the happy path, and ask what else a capability makes possible.
 
-The principle underneath it is that an interface should be built around the one thing a person opened it to find out. A payment app, in his words, "should enable you to make that payment in one tap or one click". His own journaling tool, DayNotes, holds itself to the same line: entries capped at 280 characters, a plain calendar, and AI summaries kept deliberately to the side rather than made the point of the product.
+## Core task focus in UX: the Ather app redesign {#show-the-person-what-they-came-for}
 
-## Put users back into the feedback loop {#the-step-nobody-runs}
+Karthik's redesign of the Ather scooter app got noticed for what it left out. The first screen carries the battery percentage, the time to charge, the nearest station and the next action. Nothing else. "A lot of users resonated with how the app should be," he says. The original app contained the information; his redesign brought it into the first view.
 
-Asked where teams go wrong, KP does not name a design failure. He names a missing step. "The whole step of testing it from a user perspective is basically missing," he says, in a lot of organisations.
+The principle underneath it is that an interface should be built around the one thing a person opened it to find out. A payment app, in his words, "should enable you to make that payment in one tap or one click". His own journaling tool, DayNotes, holds itself to the same line. Entries are capped at 280 characters, the calendar is plain, and AI summaries sit deliberately to one side of the product.
 
-Karthik Pasupathy connects the point to a difference in feedback loops. Consumer SaaS companies stay in contact with the people using the product because they have to. B2B startups, he argues, too often design from other products, building against a reference rather than a user. His recommendation is blunt: B2B startups should copy that feedback loop.
+## B2B user testing: copy the consumer feedback loop {#the-step-nobody-runs}
 
-## AI changes the product when it changes the user’s work {#what-ai-actually-changes}
+Asked where teams go wrong, Karthik points to a missing step. "The whole step of testing it from a user perspective is basically missing," he says, in a lot of organisations.
 
-KP expects explicit interface elements to matter less as products become conversational, and he is careful about what follows from that. If everything becomes a chat surface, the differentiator stops being the control layout and becomes what the product understands and how it carries a brand's judgement. That puts more weight on the quality of the response, its understanding of the user’s context and the judgement it expresses.
+Karthik ties this to a difference in feedback loops. Consumer SaaS companies stay in contact with the people using the product because they have to. B2B startups, he argues, too often design from other products, building against a reference instead of a user. His recommendation is blunt: B2B startups should copy the consumer feedback loop.
 
-Karthik Pasupathy also makes the case for design as a set of guardrails rather than a happy path. KP describes a story he had heard about a bill-upload tool being used as free cloud storage. The example raises a useful design question: what else does this capability make possible, and does the product need a limit or a different route for that use?
+## How AI changes interfaces, and what will set products apart {#what-ai-actually-changes}
 
-## What to take from it {#what-to-take-from-it}
+Karthik expects visible interface controls to matter less as products become conversational, and he is careful about what follows. If everything becomes a chat surface, what sets one product apart is no longer the layout of its controls. It is what the product understands and how it carries a brand's judgement. That puts more weight on the quality of the response, its grasp of the user’s context and the judgement it expresses.
 
-Five things run through the conversation: strip an interface to what matters, design for the context the person is actually in, put function before style, keep the core task first and the extras out of the way, and rethink rather than port an interface when the product becomes AI-native.
+Karthik also makes the case for designing guardrails as well as the happy path. He describes a story he had heard about a bill-upload tool that people used as free cloud storage. It raises a useful design question: what else does this capability make possible, and does the product need a limit or a different route for that use?
 
-The last of those is where most of the current work sits. Deciding what a model may propose and what a person must be able to inspect or change is the substance of [AI product UX](/services/ai-product-ux), and the testing step KP says goes missing is [prototyping and usability testing](/services/product-design/prototyping-usability-testing).
+## Context and clarity in product design: five ideas to keep {#what-to-take-from-it}
+
+Five ideas run through the conversation. Strip an interface to what matters. Design for the situation the person is actually in. Put function before style. Keep the core task first, with the extras out of the way. When the product is built around AI, rethink the interface instead of porting the old one across.
+
+The last idea is where much of the current work in product design sits. Deciding what a model may propose and what a person must be able to inspect or change is the substance of [AI product UX](/services/ai-product-ux). The testing step Karthik says goes missing is [prototyping and usability testing](/services/product-design/prototyping-usability-testing).
+
+## Questions about the Karthik Pasupathy interview {#faq}
+
+These answers come from the interview as published on this page.
+
+### Who is Karthik Pasupathy?
+
+Karthik Pasupathy Ramachandran was head of marketing at Fyno at the time of the May 2025 interview. He talks about how technical writing, product analytics and AI changed his approach to product work, and about his own journaling tool, DayNotes. His is the first conversation in Tcules' My Experiments with UX series.
+
+### What does Karthik Pasupathy say about B2B user testing?
+
+He says that in a lot of organisations the step of testing from a user's perspective is missing. In his view, B2B startups too often design from other products, building against a reference instead of a user. His recommendation is that they copy the feedback loop consumer SaaS companies keep with their users.
+
+### How will AI change software interfaces?
+
+Karthik expects visible controls to matter less as products become conversational. If everything becomes a chat surface, what sets a product apart shifts to what it understands and the judgement it carries. He also makes the case for designing guardrails as well as the happy path.
+
+### Why focus on the core task in product design?
+
+People open an interface to find out or do one thing, and the first view should serve it. Karthik's Ather redesign put battery percentage, time to charge, the nearest station and the next action on the first screen. His payment example is a payment made in one tap or one click.
+
+## More interviews and reading on interface clarity {#related-reading}
+
+- [Aishwarya Ashok interview: why write product principles before features?](/insights/articles/my-experiments-with-ux-aishwarya-ashok)
+- [Prototyping and Usability Testing](/services/product-design/prototyping-usability-testing): putting real users into the loop before the build.

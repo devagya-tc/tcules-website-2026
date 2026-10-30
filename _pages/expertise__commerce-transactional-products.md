@@ -5,13 +5,13 @@ page_name: Commerce & Transactional Products
 page_type: expertise
 expertise_kind: product_shape
 seo:
-  title: Ecommerce UX Design for Complex Purchases | Tcules
-  description: 'Ecommerce UX design for purchases that need explaining: compatibility, variants, stock and order status. We redesigned and built GT Tools'' Shopify store.'
+  title: 'Ecommerce UX Design for Complex Purchases | Tcules'
+  description: 'Ecommerce UX design for technical and made-to-order products: product pages that answer fit, stock and delivery questions, and orders customers can track.'
   canonical: https://www.tcules.com/expertise/commerce-transactional-products
   robots: index,follow
 social:
-  og_title: Ecommerce UX Design for Complex Purchases | Tcules
-  og_description: 'Ecommerce UX design for purchases that need explaining: compatibility, variants, stock and order status. We redesigned and built GT Tools'' Shopify store.'
+  og_title: 'Ecommerce UX Design for Complex Purchases | Tcules'
+  og_description: 'Ecommerce UX design for technical and made-to-order products: product pages that answer fit, stock and delivery questions, and orders customers can track.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -19,18 +19,29 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Ecommerce UX Design for Complex Purchases | Tcules
-  twitter_description: 'Ecommerce UX design for purchases that need explaining: compatibility, variants, stock and order status. We redesigned and built GT Tools'' Shopify store.'
+  twitter_title: 'Ecommerce UX Design for Complex Purchases | Tcules'
+  twitter_description: 'Ecommerce UX design for technical and made-to-order products: product pages that answer fit, stock and delivery questions, and orders customers can track.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: ecommerce and transactional product design
-  primary_buyer_question: How do we help a buyer make the right commitment and keep the product coherent when fulfillment or recovery becomes complicated?
+  primary_buyer_question: How do we help a buyer make the right commitment and keep the product coherent when fulfilment or recovery becomes complicated?
   supporting_questions:
-  - Do you design and build Shopify stores?
+  - Can you take a Shopify store from design to a live store?
   - Can you redesign our storefront and back-office system together?
   - What should a product page include for technical products?
   - Do you design B2B ordering and trade portals?
-  primary_query: ecommerce product design
+  primary_query: 'ecommerce UX design'
+  secondary_queries:
+  - 'ecommerce UX design services'
+  - 'ecommerce product discovery'
+  - 'Shopify UX design'
+  - 'storefront and back-office redesign'
+  - 'B2B ecommerce UX'
+  - 'ecommerce UX consultant'
+  - 'product page UX for technical products'
+  - 'Magento UX design'
+  - 'checkout UX design'
+  - 'ecommerce product design'
 navigation:
   breadcrumb:
   - name: Home
@@ -58,66 +69,88 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
+  - what-we-design
+  - selected-work
   - hard-parts
-  - approach
-  - proof
+  - what-you-get
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
+  page_family: industry
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, industry order)
   signature_model: fit_selection_commitment_fulfillment_recovery
+  selected_work:
+  - gt-tools-shopify-product-discovery
+  - gold-image-printing-web-to-print-erp-modernisation
+  - omny-ai-suggestion-trust-redesign
+  why_tcules_reasons: [1, 4, 6]
   case_study_slugs:
   - gt-tools-shopify-product-discovery
   - gold-image-printing-web-to-print-erp-modernisation
+  - omny-ai-suggestion-trust-redesign
+  - auxentios-cpq-product-mvp-design
+  - ux-ui-design-and-development-for-magento-of-a-silver-chain-store
   media_bindings:
-  - id: commerce_gt
+  - id: commerce_gt_storefront
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
+    card: gt-tools
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
-    alt_intent: GT Tools implemented specialist product-discovery storefront.
+    source: current public Tcules case media (case-studies__gt-tools-shopify-product-discovery.md, gt_tools_implemented_header)
+    alt_intent: GT Tools Shopify storefront with navigation and product discovery, designed and developed by Tcules.
     status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: commerce_gold_image_card
+    role: demonstrate
+    supports_section: selected-work
+    card: gold-image-printing
+    asset_uri: null
+    source: no product screen in the Gold Image Printing case files yet; request storefront and back-office screens (DIAGNOSIS card)
+    status: SCREEN_REQUIRED
+  - id: commerce_omny_card
+    role: demonstrate
+    supports_section: selected-work
+    card: omny-ai
+    asset_uri: null
+    source: no product screen in the Omny AI case files yet; text card until the screen library supplies one
+    status: SCREEN_REQUIRED
   testimonial_ids:
-  - FP-GOLDIMAGE-NAVIGATION
-  client_recognition:
-    component_type: curated_client_recognition
-    clients:
-    - GT Tools
-    - Gold Image Printing
-    - Omny AI
-    placement: compact_hero_followup
-    label: Selected Tcules client relationships across the practice
-    source_note: Only named cases prove this route-specific work; other names establish studio breadth. Logo asset rights need confirmation. Use approved name-only fallback.
+  - DRAFT-GOLD-IMAGE-EASIER-SITE
+  - DRAFT-CURAMCARE-HANDOVER
+  - CL-RINGIER-COLLAB
+  testimonials_general: true
+  testimonial_context: 'GENERAL_BAND: one commerce voice (Gold Image Printing, registered) and two studio voices (CuramCare, Ringier), said in the band line'
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    verified_client_reviews_separately: 12
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - GT Tools
+    - Gold Image Printing
+    - Omny AI
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
   proof_claim_policy: GT_TOOLS_IMPLEMENTED_CASE;GOLD_IMAGE_CLIENT_REPORTED_OUTCOMES
-  content_composition:
-    primary_intent: ecommerce product design
-    recognition_count: 3
-    signature_model_type: purchase-evidence-chain
-    proof_component: source_bound_named_case_or_explicit_proof_gap
-    testimonial_component: verbatim_quote_with_source_scope_in_cms
-    form_anchor: enquiry
-    mobile_table_policy: stack_as_labelled_rows
-  signature_explanatory_object:
-    type: purchase-evidence-chain
-    sequence:
-    - Find a product
-    - Check compatibility
-    - Choose variant
-    - Confirm availability
-    - Buy with clarity
-    label: Editorial explanatory diagram; not a client artefact
-    media_rights: Conceptual only; real project visuals require approval
-  testimonial_context: CURATED_VERBATIM_CLIENT_VOICE
   source_evidence_boundary: Tcules’ role depends on each engagement. GT Tools demonstrates an implemented Shopify interface; Gold Image Printing demonstrates linked ordering and operational workflow design.
   editorial_proof_review: REVIEW_IF_SOURCE_PROOF_SECTION_ALREADY_HAS_CAVEAT; NEVER_ATTRIBUTE_METRICS_FROM_GENERIC_TESTIMONIAL
-  signature_proposition: An ecommerce decision can fail long before checkout when compatibility, variant, availability or fulfillment logic is not visible.
 structured_data:
   types:
   - WebPage
@@ -135,99 +168,184 @@ release:
   - FORM_ENDPOINT_VERIFICATION
   - CLAIM_EVIDENCE_VERIFICATION
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - GT_TOOLS_IMPLEMENTED_CASE;GOLD_IMAGE_CLIENT_REPORTED_OUTCOMES
 content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__commerce-transactional-products.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/expertise__commerce-transactional-products.md; studio-spine roll-out 26 Oct 2026 evening (43-rollout-26-oct, tag ind1; industry order, three selected pieces, hard parts as the core, spine sections word for word)
 ---
-
 *Expertise · commerce and transactional products*
 
-# Ecommerce that answers buyers' questions before checkout
+# Ecommerce UX design for technical and made-to-order products, from search to delivery
 
-Fit, variants, stock, delivery and warranty: when buyers have to check before they pay, the product page does the explaining. We design ecommerce and ordering products that answer those questions and keep orders clear after payment.
+Every technical order is tested on the product page, where the buyer checks fit and stock, in the support inbox if they guessed, and in production after payment. Tcules provides ecommerce UX design for stores and ordering systems, and builds the store when you want one team for both.
 
-[Start a conversation](#enquiry)
+[Tell us what customers keep asking](#enquiry)
 
-*Selected work: GT Tools · Gold Image Printing · Omny AI*
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-## Where complicated purchases go wrong {#hard-parts}
+## What we design in ecommerce and ordering {#what-we-design}
 
-**"Customers email us to ask if it fits."** Compatibility and specifications are buried, so buyers stop and ask.
+- **Specialist Shopify stores** where buyers check fit before buying · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)
 
-**"They ordered the wrong variant."** Options, part numbers and stock status are hard to read at a glance.
+- **Web-to-print and made-to-order ordering** · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-**"Once they pay, nobody knows where the order is."** Production and delivery steps are invisible to customers and awkward for staff.
+- **Production and fulfilment systems** behind the store · Gold Image Printing
 
-**"The storefront and the back office tell different stories."** One side was redesigned and the other was left as it was.
+- **Listing-content tools** for Amazon sellers · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)
 
-## How we design a purchase from search to delivery {#approach}
+- **B2B ordering and trade portals** · Reorders, account prices and approvals made quick
 
-**Find.** Navigation and search that work for buyers who know the part number and for buyers still comparing options.
+- **Subscriptions and repeat ordering** · Skips, swaps and renewals customers manage themselves
 
-**Choose.** Variants, compatibility, stock, shipping, warranty and finance on the product page, next to the price.
+## Selected ecommerce UX design work {#selected-work}
 
-**Buy.** The price and buy button stay in view while people read the technical detail.
+### GT Tools: every buying question answered beside the price
 
-**Track.** Order, production and delivery status that customers and the staff handling the order can both follow.
+GT Tools sells equipment for automotive-glass repair, and its buyers often confirm compatibility before they pay. Product pages gained stock and pre-order indicators, product codes, configurable options, shipping, warranty and finance, with the price and buy button pinned in view. We then developed the store on Shopify, custom work included. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
 
-## Product pages and production floors {#proof}
+### Gold Image Printing: one set of components for store and production
 
-### GT Tools: a Shopify store for specialist buyers
+Gold Image Printing's online orders run on into artwork, scheduling, inventory and fulfilment in an internal ERP. We designed one set of components and one style guide for both, so an order looks the same to the customer and to the staff producing it. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
 
-GT Tools sells equipment for automotive-glass repair and replacement, where buyers may need to confirm compatibility before they buy. We reworked navigation, search and category pages for buyers who know a part number and those still comparing equipment.
+### Omny AI: sellers choose what reaches the listing
 
-Product pages gained stock and pre-order indicators, product codes, configurable options, shipping and warranty details and a finance option, with the price and buy button pinned in view. We then developed the store on Shopify ourselves, so the design carried through into the live store.
+Omny AI, acquired by Primelis, drafts product benefits and use cases for brands selling on Amazon. In our redesign the listing text starts empty, AI drafts wait in a panel beside it, and nothing reaches the listing until the seller adds it. Colour marks who wrote each part. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-[Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+## Where technical and made-to-order purchases go wrong {#hard-parts}
 
-### Gold Image Printing: from print order to production
+A complicated purchase has two halves: the questions before payment and the work after it.
 
-At Gold Image Printing, an online order is only the start: artwork, production instructions, scheduling and fulfilment follow. We watched staff handle orders, then redesigned customer ordering and production workflows together.
+### Fit, variant and stock, answered before payment
 
-We designed one set of interface components for the storefront and the production system alike, then helped Gold Image's technical team carry it into their systems.
+Compatibility and specifications get buried, so buyers stop and email to ask. Options, part numbers and stock status are hard to read at a glance, and the wrong variant ships. Navigation and search have to serve the buyer who knows the part number and the one still comparing.
 
-<!-- awaiting client sign-off -->
+Trade buyers ask the same questions, then reorder the same parts on account, at their own prices, often with a manager's approval above a spending limit. A B2B ecommerce portal has to make that quick for the buyer and visible to the approver.
+
+AI shopping assistants and procurement agents read product pages too. Those answers belong in structured product details as well as the copy, with a clear point where a person confirms the spend.
+
+Example: on GT Tools' category and product-list pages, the details that narrow a choice sit on the list itself, so comparing starts before anyone opens a product. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+### The order after checkout
+
+Once a customer pays, artwork, production instructions, scheduling and fulfilment begin, often in a back-office system nobody redesigned. Customers cannot see where the order is, and staff piece it together. A storefront change that makes ordering simpler can still confuse the people producing the order.
+
+Example: at Gold Image Printing, we watched staff handle orders in the existing system and reviewed order management with stakeholders before redesigning anything they touch. It showed that an ERP change could ease one internal task and make order status harder to read elsewhere. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+
+### Checkouts for made-to-measure goods
+
+Made-to-measure goods are usually excluded from the EU's 14-day right of withdrawal, so the checks have to happen before payment. In Europe and the UK, strong customer authentication applies to most online card payments. Since June 2025, the European Accessibility Act has covered most online shops selling into the EU.
+
+Your legal and payments teams own those rules; we design checkouts that follow them without losing the buyer.
+
+*Illustration, not client work*
+
+The buyer of a made-to-measure blind types a width, pays, and finds the mistake when the blind arrives two centimetres short. For a new store selling them, we would put the measuring inside the order.
+
+The product page asks which blind it is and whether it fits inside the window recess or on the wall around it, then shows the measuring steps for that combination.
+
+Before payment, a short check reads the figures back and asks a friendly question about any that look unusual for that fitting. The order takes a minute longer. For a product that can't be sent back, we would make that trade.
+
+## What you get when Tcules designs your store {#what-you-get}
+
+We take on the purchase from first search to delivery, and the systems behind it.
+
+**What you receive**
+
+- research from support emails, search terms and abandoned baskets, and from watching staff handle orders
+
+- navigation, search and product pages that answer fit, variant, stock, delivery and warranty beside the price
+
+- a checkout with the measuring, approvals and checks your products need before payment
+
+- order, production and delivery status that customers and staff can both follow
+
+- one set of components and a style guide shared by the store and the back office, so a repeated interaction is agreed once with engineering
+
+- prototypes tested with buyers who know the part number and buyers still comparing
+
+- the store built on Shopify or Magento by our developers, or specs for your own team
+
+**Who does the work.** Your lead is a senior product designer who also does the design, with an account lead keeping the work on track. Researchers join for the observation, and our developers build the store when you want one team for both.
+
+**What we need from you.** Support emails, search terms and analytics, and time with the staff who handle orders. Buyers or trade accounts to test with, access to the store platform and back office, and someone who makes the calls.
+
+**Where our part stops.** Ads, email campaigns and testing programmes stay with your performance marketing specialists. Consumer rules and payment authentication stay with your legal and payments teams.
+
+A store that loses buyers at a step nobody can name can start with a [UX & Product Audit](/audits/ux-product-audit). An ERP or order system that has to change in stages sits under [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation), and two-sided stores with independent sellers under [marketplace product design](/expertise/marketplaces-multi-sided-platforms).
+
+## What clients say {#testimonials}
+
+One voice from our commerce work, and two from clients in other fields on working with the studio.
+
 > “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
 > **David Aghaei, Senior Partner, Gold Image Printing**
 
-[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-### Omny AI: sellers choose what goes into the listing
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-A wrong claim in an Amazon listing reaches shoppers under the seller's name. Omny AI drafts product benefits and use cases for those sellers, and we redesigned its content tools so the listing text starts empty.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-AI drafts wait in a panel beside it. Nothing reaches the listing until the seller picks it, and each listing shows which text came from the AI and which a person wrote.
+## How we work together {#how-we-work-together}
 
-[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+For a store, a good first piece of work is the product page buyers keep emailing about, redesigned around the questions they ask.
 
-## Why commerce teams work with us {#why-tcules}
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-**Designers and engineers work together through the build.** GT Tools went from research and redesign to a working Shopify store without a handover in between.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-**We follow the order past checkout.** At Gold Image Printing, customer ordering and production were redesigned as one service.
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-## Questions about commerce products {#faq}
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-### Do you design and build Shopify stores?
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-Yes. GT Tools' store, above, is one: we redesigned it and developed it on Shopify ourselves.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-### Can you redesign our storefront and back-office system together?
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-Yes, and it often works better that way. A change that makes ordering simpler for customers can confuse production staff unless both sides are designed together, as they were at Gold Image Printing.
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We work out what the product has to know before we draw it.** We interviewed people in all six specialist roles that touch an Auxentios quotation before designing a single component. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+
+- **One studio can take it into working software, with the designers staying in the build.** For The Chain Hut, we began with a UX audit, designed the store mobile first and built it on Magento. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+
+- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and in that time we have designed each of its products alongside its own product team.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Other industries we know {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and field operations](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content and knowledge](/expertise/content-knowledge-discovery-platforms) · [MarTech and SalesTech](/expertise/martech-salestech) · [EdTech](/expertise/edtech-learning) · [FinTech](/expertise/fintech) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about ecommerce UX design {#faq}
+
+### Can a design team take a Shopify store from design to live?
+
+Yes. GT Tools' store is one: Tcules researched and redesigned it, then developed it on Shopify, including the custom work needed to fit the design to the platform.
+
+### Can you redesign our storefront and back office together?
+
+Yes, and often better that way. A change that makes ordering simpler for customers can confuse production staff unless both sides are designed together. That is how we worked at Gold Image Printing, fitting the design to its systems with its technical team. Interactive prototypes let its stakeholders review the new flow before implementation.
 
 ### What should a product page include for technical products?
 
-Every answer a buyer needs before committing: fit, variant, stock, delivery, warranty, support and price. If customers regularly email to ask, the answer belongs on the page.
+Every answer a buyer needs before committing: fit, variant, stock, delivery, warranty, support and price. If customers regularly email to ask, the answer belongs on the page, beside the price and buy button.
 
-### Do you design B2B ordering and trade portals?
+### Do you work on Magento and other ecommerce platforms?
 
-Yes. Trade buyers face the same questions about fit, stock and order status, usually with repeat orders, account pricing and approvals on top.
+Yes. Tcules built The Chain Hut's store on Magento and GT Tools' on Shopify, with the same method on both. Answer the buyer's questions on the page, then fit the design to what the platform allows.
+
+### How should checkout work for made-to-order products?
+
+Measuring and options belong inside the order, with a read-back of the figures before payment, because made-to-order goods can rarely be sent back. Our guide on [where ecommerce shoppers lose confidence](/insights/guides/ecommerce-product-experience-decision-guide) covers the steps before and after checkout.
 
 ## Tell us what customers keep emailing to ask {#enquiry}
 

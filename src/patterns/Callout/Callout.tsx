@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { Layout, Prose } from '@/components';
 import { cx } from '@/lib/cx';
 
@@ -30,6 +32,13 @@ export type CalloutProps = {
    *            caption floating above the steps.
    */
   tone?: CalloutTone;
+  /**
+   * A glyph that heads the note (an `Icon`, composed by the caller): glyph, then key, then sentence,
+   * each on its own row, as an icon heads its card. For a note that stands as its own band (the
+   * contact page's confidentiality boundary, review 29 Oct), where a muted sentence alone made a
+   * third text band in a row. The note sizes nothing; the caller picks the glyph and its size.
+   */
+  icon?: ReactNode;
 };
 
 export type CalloutTone = 'note' | 'example';
@@ -47,7 +56,7 @@ export type CalloutTone = 'note' | 'example';
  * it went from beside the sentence to above it on 30 Sep 2026, because a key and a sentence set
  * side by side read as two columns of one thing.
  */
-export function Callout({ html, label, tone = 'note' }: CalloutProps) {
+export function Callout({ html, label, tone = 'note', icon }: CalloutProps) {
   if (html.trim().length === 0) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('Callout: html must contain visible content; rendering nothing.');
@@ -58,23 +67,46 @@ export function Callout({ html, label, tone = 'note' }: CalloutProps) {
   const keyText = label?.trim();
   const root = cx(styles.root, tone === 'example' && styles.example);
 
+  const glyph = icon ? (
+    <span className={styles.glyph} aria-hidden="true">
+      {icon}
+    </span>
+  ) : null;
+
   if (!keyText) {
     return (
       <div role="note" className={root}>
-        <Prose html={html} className={styles.content} />
+        {glyph ? (
+          <Layout rowGap="block">
+            {glyph}
+            <Prose html={html} className={styles.content} />
+          </Layout>
+        ) : (
+          <Prose html={html} className={styles.content} />
+        )}
       </div>
     );
   }
 
+  /* The key sits ABOVE the sentence, never beside it (owner, 30 Sep 2026): two lines of text set
+     left and right read as two columns of one thing. The 8 seam is the key's bind to what it keys;
+     a glyph heads both, a `block` above them. */
+  const keyed = (
+    <Layout rowGap="tight">
+      <span className={styles.label}>{keyText}</span>
+      <Prose html={html} className={styles.content} />
+    </Layout>
+  );
   return (
     <div role="note" className={root}>
-      {/* The key sits ABOVE the sentence, never beside it (owner, 30 Sep 2026): two lines of
-          text set left and right read as two columns of one thing. The 8 seam is the key's bind
-          to what it keys. */}
-      <Layout rowGap="tight">
-        <span className={styles.label}>{keyText}</span>
-        <Prose html={html} className={styles.content} />
-      </Layout>
+      {glyph ? (
+        <Layout rowGap="block">
+          {glyph}
+          {keyed}
+        </Layout>
+      ) : (
+        keyed
+      )}
     </div>
   );
 }

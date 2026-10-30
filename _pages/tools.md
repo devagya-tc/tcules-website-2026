@@ -4,13 +4,13 @@ slug: tools
 page_name: Tools
 page_type: tool_hub
 seo:
-  title: Free Product Design Tools and Checklists | Tcules
-  description: 'Free worksheets for product teams: AI feature readiness, AI controls, design system drift, component checks, modernisation options and prototype readiness.'
+  title: 'Free Product Design Checklists and Worksheets | Tcules'
+  description: 'Free product design checklists for product teams: AI feature readiness, AI controls, design system drift, component checks, rebuild routes and prototypes.'
   canonical: https://www.tcules.com/tools
   robots: index,follow
 social:
-  og_title: Free Product Design Tools and Checklists | Tcules
-  og_description: 'Free worksheets for product teams: AI feature readiness, AI controls, design system drift, component checks, modernisation options and prototype readiness.'
+  og_title: 'Free Product Design Checklists and Worksheets | Tcules'
+  og_description: 'Free product design checklists for product teams: AI feature readiness, AI controls, design system drift, component checks, rebuild routes and prototypes.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Tcules Tools.
   og_type: website
@@ -18,13 +18,20 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Free Product Design Tools and Checklists | Tcules
-  twitter_description: 'Free worksheets for product teams: AI feature readiness, AI controls, design system drift, component checks, modernisation options and prototype readiness.'
+  twitter_title: 'Free Product Design Checklists and Worksheets | Tcules'
+  twitter_description: 'Free product design checklists for product teams: AI feature readiness, AI controls, design system drift, component checks, rebuild routes and prototypes.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: self-service Product Design tools and decision aids
   primary_buyer_question: Which Tcules tool can help me work through this product decision before I need a larger engagement?
-  primary_query: Product Design tools
+  primary_query: free product design checklists
+  secondary_queries:
+  - free product design worksheets
+  - AI product checklists
+  - product team worksheets
+  - design system worksheets
+  - product decision templates
+  - free UX checklists
 navigation:
   breadcrumb:
   - name: Home
@@ -34,13 +41,16 @@ navigation:
 render:
   band_order:
   - ai
+  - compare
   - design-systems
   - modernisation
   - prototypes
+  - faq
 structured_data:
   types:
   - CollectionPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
 release:
   content_state: BATCH5_DRAFT_2026-10-08
@@ -60,40 +70,82 @@ page_composition:
 
 *Tools*
 
-# Free product design tools and checklists
+# Free product design checklists: pick one question, leave with a brief
 
-Six free worksheets for product teams, with no sign-up. Each takes one question, such as whether an AI feature is ready or why a component keeps drifting, and leaves you with a brief your team can act on.
+Six free product design checklists and worksheets, with no sign-up. Each takes one question, such as whether an AI feature is ready or why a component keeps drifting, and ends in a brief your team can act on. Pick the one that matches the question in front of you.
 
-## AI features in your product {#ai}
+## AI product checklists for features in your product {#ai}
 
-**[Work out what still needs deciding before your AI feature ships](/tools/ai-product-ux-readiness-check)**
+**[AI feature readiness checklist: agree what the AI may do before launch](/tools/ai-product-ux-readiness-check)**
 
 The AI Product UX Readiness Check takes one AI use case through what the AI may do, what users can inspect and how mistakes get handled. You leave with the open questions and the tests to bring to your next product review.
 
-**[Decide what a person must be able to check before AI changes something](/tools/ai-trust-control-canvas)**
+**[AI trust and control canvas: plan what people check, approve and undo](/tools/ai-trust-control-canvas)**
 
-The AI Trust and Control Canvas follows one AI output to the action it can trigger. It ends in a short brief listing the evidence, approvals and ways to undo that the output needs.
+The AI Trust and Control Canvas follows one AI output to the action it can trigger. It ends in a short brief listing what people can check, approve and undo before that action happens.
 
-## Design systems and components {#design-systems}
+| Tool | Best for | You leave with |
+|---|---|---|
+| **AI Product UX Readiness Check** | One AI feature before you build or launch it | Open questions, and the tests to run before launch |
+| **AI Trust and Control Canvas** | One AI output that can change a record, send a message or start an action | A control brief your designer and engineer can build from |
 
-**[Find where a shared component becomes a local exception](/tools/design-system-drift-checker)**
+With both questions on the table, start with the readiness check. The canvas then goes deeper on the output that could do the most harm.
 
-The Design System Drift Checker follows one component through Figma, Storybook and the shipped product. It records the differences you found, their likely causes and the next check to run.
+Both are written for AI that acts as well as suggests. They stay useful as a feature takes on more authority, from a drafted reply to an agent that changes records on its own.
 
-**[Check that a component works in every state, beyond how it looks in Figma](/tools/figma-storybook-fidelity-checklist)**
+## Product team worksheets compared: components, routes and prototypes {#compare}
+
+Four more worksheets, for shared components, established products and prototypes heading into a build. Each row says when to open it.
+
+| Tool | Best for | Bring | You leave with |
+|---|---|---|---|
+| **Design System Drift Checker** | A shared component that looks or behaves differently in one product | The design file, the coded component and a running product that uses it | The differences, their likely causes and who can close each |
+| **Figma to Storybook Fidelity Checklist** | Signing off one component in every state | The Figma design and the matching Storybook story | Corrections, each with an owner and a repeatable check |
+| **Audit, Redesign, Modernise or Rebuild worksheet** | Choosing a route for one part of an established product | A product owner, an engineer and someone who knows the daily use | The case for each route and the next test |
+| **Prototype Readiness Checklist** | Handing a prototype to developers | The prototype and sample data you may work with | A build brief: decisions, research and build work |
+
+## Design system worksheets for shared components and their states {#design-systems}
+
+**[Design system drift checker: trace one component from Figma to production](/tools/design-system-drift-checker)**
+
+The Design System Drift Checker follows one component through Figma, Storybook (where coded components are previewed) and the live product. It records the differences you found, their likely causes and who can close each one.
+
+**[Figma to Storybook checklist: test each component in every state](/tools/figma-storybook-fidelity-checklist)**
 
 The Figma to Storybook Fidelity Checklist tests a component beyond its looks: keyboard paths, empty and error states, and buttons pressed twice. The result is a list of corrections someone else can check.
 
-## Changing an established product {#modernisation}
+## Product decision templates for changing an established product {#modernisation}
 
-**[Compare the rebuild with the options it would replace](/tools/audit-redesign-modernise-rebuild)**
+**[Redesign or rebuild worksheet: compare every route before you commit](/tools/audit-redesign-modernise-rebuild)**
 
-The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. The finished worksheet sets out the case for and against each route, and the next test before you commit.
+The Audit, Redesign, Modernise or Rebuild worksheet compares at least two routes for one part of your product, including the move from old to new. It ends in the case for and against each route, and the next test before you commit.
 
-## Prototypes heading for production {#prototypes}
+## A free UX checklist for prototypes heading into production {#prototypes}
 
-**[Show a developer what the prototype has proved and what it has skipped](/tools/prototype-readiness-checklist)**
+**[Prototype readiness checklist: show developers what is real and what is simulated](/tools/prototype-readiness-checklist)**
 
-The Prototype Readiness Checklist walks through one workflow and sorts what really works from what is simulated or still unknown. You leave with the questions and checks a development brief needs.
+The Prototype Readiness Checklist walks through one workflow of any prototype, AI-built ones included. It sorts what really works from what is simulated or still unknown, and leaves you with the questions and checks a development brief needs.
 
-When a tool turns up a question your team can't settle alone, one of our [audits](/audits) can look at it in your product, or [talk to us](/contact) directly.
+When a tool raises a question that needs eyes on your product, one of our [audits](/audits) takes it from there. Or [talk to us](/contact).
+
+## Questions about free product design checklists {#faq}
+
+### Where can I find free product design checklists?
+
+Tcules publishes six free product design checklists, listed on this page. Each is built around one question a product team faces and ends in a brief you can download and share.
+
+### Is there a free worksheet to check whether an AI feature is ready?
+
+Yes. The [AI Product UX Readiness Check](/tools/ai-product-ux-readiness-check) takes one AI use case through what the AI may do, what users can see and check, and how mistakes get put right. For the output that could do the most harm, follow it with the AI Trust and Control Canvas.
+
+### Which template helps decide between redesign and rebuild?
+
+The [Audit, Redesign, Modernise or Rebuild worksheet](/tools/audit-redesign-modernise-rebuild). It compares at least two routes for one part of your product, counts the cost of moving from old to new, and ends with the next test to run before you commit.
+
+### Are there free tools to check design system drift?
+
+Two. The [Design System Drift Checker](/tools/design-system-drift-checker) follows one component through Figma, Storybook and the live product to find where differences start. The [Figma to Storybook Fidelity Checklist](/tools/figma-storybook-fidelity-checklist) tests one component in every state, so open it first when the question is whether the component itself is right.
+
+### Do the tools need a sign-up or access to our files?
+
+Neither. You type your answers into the page and download the result as a brief. The tools never ask for your design files, code or product.

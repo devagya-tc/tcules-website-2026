@@ -27,9 +27,19 @@ search_context:
   supporting_questions:
   - Can AI tools turn our Figma files into production code?
   - What if our developers changed the design for a good reason?
-  - Do you design with our existing component library?
+  - Who answers our developers' questions once the build starts?
   - When do we need a Design-to-Code Audit instead?
   primary_query: design to code services
+  secondary_queries:
+  - Figma design to code
+  - design handoff checklist
+  - design handoff to developers
+  - Figma to React
+  - Figma to code service
+  - Figma to React components
+  - can AI turn Figma into production code
+  - who answers developer questions during the build
+  - developers changed the design for a good reason
 navigation:
   breadcrumb:
   - name: Home
@@ -59,38 +69,62 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - handoff
-  - handover
-  - proof
+  - which-check
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: product_rule_to_design_to_system_context_to_implementation_to_runtime_evidence
   media_bindings:
-  - id: dtc_benchmark
+  - id: dtc_eden_unified_search
     role: demonstrate
-    supports_section: proof
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    alt_intent: Benchmark Gensuite coded product interface used to review whether intended behaviour survived implementation.
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp
+    alt_intent: 'Eden AI''s workflow builder with one search box for templates, capabilities and AI-assisted creation, the design Tcules specified for Eden AI''s developers to build from.'
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: dtc_gt_tools_implemented_header
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
+    alt_intent: 'GT Tools'' implemented Shopify storefront, designed and developed by Tcules, showing navigation and product discovery as built.'
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - FP-DOODLE-MVP
+  - DRAFT-EDEN-PLATFORM
+  - DRAFT-CURAMCARE-ONEILL
+  - DRAFT-CONNECTX-GHOSHAL
+  - DRAFT-GOLDIMAGE-COMPONENTS
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
-    - Doodle
-    - Benchmark Gensuite
+    - Eden AI
     - GT Tools
+    - ConnectX
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -101,7 +135,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_UNVERIFIED
   production: NOT_PRODUCTION_VERIFIED
@@ -120,76 +154,152 @@ content_governance:
 
 *Design Engineering · Design to code*
 
-# Figma to code, with every state developers ask about
+# Design to code services: Figma screens developers can build without guessing
 
-Empty lists, long names, failed saves, permissions, small screens. We work out what happens behind each screen, then hand your developers a buildable spec, a working example or the code itself.
+Design to code is for the sprint where developers build from screens that answer the empty list, the failed save and the missing permission, and for the release review after it. Tcules provides design to code services for SaaS teams, in your own components.
 
-[Start a conversation](#enquiry)
+*Selected work: [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [ConnectX](/case-studies/ai-native-building-energy-product-connectx)*
 
-*Selected work: Doodle · Benchmark Gensuite · GT Tools*
+[Tell us where developers are guessing](#enquiry)
 
-## Where the handover breaks {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Engineering keeps asking what happens when…"** An empty list, a very long name, a failed save. The screens don't say.
+## What you get from design to code {#what-you-get}
 
-**"The screen matches. The workflow doesn't."** It looks right until a permission check or a slow response kicks in.
+Every state and rule a Figma screen leaves out, resolved, then handed to your developers as a spec, a working example or code, or a mix of the three.
 
-**"Every team builds the same component differently."** Nobody said which shared component to use, or with which options.
+**What you receive**
 
-**"An AI tool turned our designs into convincing screens."** They look finished and skip the product rules underneath.
+- **The missing states, designed.** Empty, long, failed, slow, restricted and small-screen versions of each screen, before the build starts.
 
-## What developers need besides the screens {#handoff}
+- **Each part mapped to your components.** Every piece of the screen points to a building block you already have, or a new one agreed with your team.
+
+- **What must stay exact, marked.** Which details are fixed and which engineering is free to choose, so your team spends less time going back and forth.
+
+- **A buildable spec,** if your team has frontend time: annotated designs covering every state.
+
+- **A working example,** for interactions easier to show than describe: a coded version of the hardest part, so developers watch the behaviour instead of reading about it.
+
+- **Code in your product,** if you are short of frontend time: React or other frontend code written by our design engineers in your codebase, merged only after your developers review it.
+
+- **Answers during the build.** We answer developers' questions while they build and review what ships, unless you prefer a clean handover.
+
+**Who does the work.** Design engineers, working with the designer who made the screens, ours or yours. An account lead agrees the handover format with you before the build starts.
+
+**What we need from you.** The Figma designs, your component library, codebase access if we are writing code, and time with the developers who will build it for a walkthrough of the screens.
+
+**Where our part stops.** Your developers own the codebase and decide what is merged. For a whole interface built to an agreed design, see [Frontend Development](/services/software-development/frontend-development).
+
+## Selected design to code work {#selected-work}
+
+Three handovers: a spec, our own build, and a demo taken into production.
+
+### Eden AI: specs its developers could build from
+
+Our redesign of Eden AI's workflow builder gave templates, AI help and a blank start a single search box, and specified keyboard use throughout. Eden AI's developers then had specs they could build from. [Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)
+
+### GT Tools: our design, carried into Shopify by us
+
+We redesigned GT Tools' store and then developed it on Shopify, with custom work wherever the design asked for more than the platform's defaults. A header keeps price and add-to-cart in view while specialist buyers read long technical detail. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+### ConnectX: from a coded demo to a production-ready module
+
+The AI workspace we designed for ConnectX was first proved in a coded demo on sample data. We then took that demo through to a production-ready module, live in ConnectX's product since late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+## Design handoff checklist: what a finished-looking screen leaves out {#handoff}
+
+Designs show the happy path, and the product has to handle everything else. A screen can also match the design until a role or a slow connection changes what people see. Screens an AI tool generated raise the same problem from the other side: they look finished while the product rules underneath are missing.
+
+This is the checklist we resolve for every screen before your developers start.
 
 | Area | What we resolve |
 |---|---|
 | Data and content | Realistic records, long text, empty lists and error messages |
 | Interaction | Validation, focus, keyboard use and what happens after each action |
-| Components | Which shared components to use, with which options and states |
+| Components | Which of your existing building blocks to use, and how each behaves |
 | Product rules | Roles, permissions and how people recover from mistakes |
-| Layout and access | How screens respond across devices, and the accessibility checks they must pass |
+| Layout and access | How screens respond across devices, and the accessibility checks they meet |
 
-We also mark what must stay exactly as designed and what engineering is free to choose. That one note saves a surprising number of meetings.
+## Design to code, QA or an audit: which do you need? {#which-check}
 
-## Three ways we hand over {#handover}
+| Option | Covers | Best for |
+|---|---|---|
+| **Design to Code** | Missing states designed, each part mapped to your components, then a spec, an example or code | A feature about to be built from Figma |
+| **[Implementation QA](/services/design-engineering/implementation-qa)** | The finished build checked against the agreed design, with a fix list | A release about to go out |
+| **[Design-to-Code Audit](/audits/design-to-code-audit)** | Where the design keeps changing on its way into the build: in the design itself, the handover, the components or the review | Mismatches that return release after release |
+| **[Frontend Development](/services/software-development/frontend-development)** | The whole interface built to an agreed design | A full build, by our developers |
 
-**A buildable spec.** Annotated designs covering every state above, ready for your developers to pick up.
+## What clients say {#testimonials}
 
-**A working example.** A coded version of the hardest part, so developers can see the behaviour instead of reading about it.
+> “Eden AI gives developers one way into hundreds of AI models, so the product has to be easy to find your way around. Tcules understood that quickly. Our developers had specs they could build from, and our users told us they loved the new design without being asked.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
 
-**Code in your product.** Our design engineers write the frontend code in your repository, reviewed by your team.
+> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-Once it's built, [Implementation QA](/services/design-engineering/implementation-qa) checks the result against the design.
+> “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-## Three ways our designs reach the code {#proof}
+> “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-**Buildable spec: Doodle.** Doodle's own engineers were set to build the scheduling engine and calendar integrations. We worked out how meeting priority and tentative availability should shape a booking and designed the screens around it, so the MVP had a clear specification before that work began. [Read the case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-> “Collaborative approach led to a clear, well-defined MVP.”  
-> **Stephanie Leue, Doodle**
+## How we work together {#how-we-work-together}
 
-**Working example: Benchmark Gensuite.** Benchmark's engineers clicked through coded prototypes of the new shared patterns and scope selector, so they could see the behaviour they were being asked to build. [Read the case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+For design to code, a good first piece of work is one feature's screens, with every missing state designed and handed over the way your developers prefer.
 
-**Code in the product: GT Tools.** We redesigned GT Tools' Shopify store around the questions specialist buyers ask before they purchase, then developed it, including custom work to fit the design to Shopify.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-One detail carried into the finished store: a persistent header that keeps price and add-to-cart in view while buyers read long technical detail. [Read the case](/case-studies/gt-tools-shopify-product-discovery)
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-## Frequently asked questions {#faq}
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We prove the hard parts in code while they can still change.** When [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers reviewed our coded prototypes, one asked whether drag and drop needed an external library with Bootstrap 5, a feasibility question raised while the design could still change.
+
+- **One studio can take it into working software, with the designers staying in the build.** We redesigned CuramCare's web platform and both its apps, and our developers coded the frontend for each one from those designs.
+
+- **We know what to leave alone in a product people rely on.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we kept Magento's core purchase flow intact and improved the shopper journeys around it, then built the store.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about design to code services {#faq}
+
+### What does a design-to-code service include?
+
+The states and rules each screen leaves out, mapped to your components, then a spec, a working example or the code itself. Tcules can also stay through the build to answer questions and check what ships against the design.
+
+### Can you convert our Figma designs into React components?
+
+Yes. Our design engineers write React or other frontend code inside your product, reusing the components you already have. Nothing is merged until your developers have reviewed it.
 
 ### Can AI tools turn our Figma files into production code?
 
-They can produce a useful first draft. Before it ships, that draft still needs your real components, every state, accessibility checks and a person who tests it against how the product should behave.
+Yes, with design engineers in charge of the result. AI tools turn Figma files into a useful first draft, and Tcules takes it the rest of the way with your real components, every state and the accessibility checks. A person then tests it against how the product should behave.
 
 ### What if our developers changed the design for a good reason?
 
-Then the design should change too. We record why, update the design file and keep the two in agreement. Unexplained differences are the ones worth fixing.
+The design should change too. Tcules records the reason and updates the design file, so a deliberate change shows up in the design as well as in the code.
 
-### Do you design with our existing component library?
+### How do we stop details getting lost in design handoff?
 
-Yes. We specify with your components first and flag where a new one is genuinely needed, so the handover doesn't add to your library by accident.
-
-### When do we need a Design-to-Code Audit instead?
-
-When the same mismatches keep appearing across teams and nobody knows why. The [Design-to-Code Audit](/audits/design-to-code-audit) finds where design intent gets lost: in the design, the handover, the components or the review.
+Agree what must stay exact and what engineering may choose, design every state before the build, and keep a designer on hand for questions. Tcules then checks the release against the design with [Implementation QA](/services/design-engineering/implementation-qa).
 
 ## Tell us where developers are guessing {#enquiry}
 

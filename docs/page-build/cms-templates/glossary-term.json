@@ -1,0 +1,179 @@
+{
+  "template": "glossary-term",
+  "route": "/glossary/design-system-drift",
+  "slug": "design-system-drift",
+  "name": "Design System Drift",
+  "pageType": "defined_term",
+  "seo": {
+    "title": "What is design system drift? Meaning and causes | Tcules",
+    "description": "What is design system drift? The slow gap between a design system's files, code, documentation and products. Causes, how to spot it and how it differs.",
+    "canonical": "https://www.tcules.com/glossary/design-system-drift",
+    "robots": "index,follow",
+    "ogImageAlt": "Tcules social card headed Glossary, on a white background with the Tcules wordmark."
+  },
+  "social": {
+    "og_title": "What is design system drift? Meaning and causes | Tcules",
+    "og_description": "What is design system drift? The slow gap between a design system's files, code, documentation and products. Causes, how to spot it and how it differs.",
+    "og_image": "https://www.tcules.com/assets/og/glossary.png",
+    "og_image_alt": "Tcules social card headed Glossary, on a white background with the Tcules wordmark.",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Glossary",
+      "url": "/glossary"
+    },
+    {
+      "name": "Design System Drift",
+      "url": "/glossary/design-system-drift"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "what is design-system drift",
+    "primaryBuyerQuestion": "What is design-system drift?",
+    "supportingQuestions": [],
+    "primaryQuery": "what is design system drift",
+    "secondaryQueries": [
+      "design system drift",
+      "design system drift meaning",
+      "causes of design system drift",
+      "component drift",
+      "design drift vs code drift"
+    ],
+    "keyEntities": [
+      "Design System Drift"
+    ]
+  },
+  "structuredData": {
+    "types": [
+      "WebPage",
+      "DefinedTerm",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "CONTENT_READY",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": null,
+  "hero": {
+    "eyebrow": "Glossary · Design System Drift",
+    "title": "What is design system drift? Meaning, causes and how to spot it",
+    "lede": [
+      "Design system drift is the slow, unintended gap that opens between a design system's design files, code, documentation and the products that use it. Suspect it when the same component behaves differently across products, or when designers and engineers each trust a different version.",
+      "Left unchecked, it can turn one shared system back into several parallel ones.",
+      "Figma may show a screen for when something goes wrong that the code leaves out, while one product has quietly copied and changed the status behaviour. The cost goes beyond inconsistent looks. Users get different meanings, and teams can no longer predict what an update will change.",
+      "Some differences are deliberate. A product variation that is documented and owned can be legitimate, and the [design system](/glossary/design-system) needs a clear way to record that.",
+      "The [Design System Drift Checker](/tools/design-system-drift-checker) lets a team trace one component family themselves. A [Design System Audit](/audits/design-system-audit) follows drift into the products that use the system. [Figma and Storybook Alignment](/services/design-systems/figma-storybook-alignment) works to bring design files and the coded component library back into agreement."
+    ],
+    "actions": [],
+    "proofLines": [],
+    "studioFacts": false,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Rich section",
+      "id": "causes",
+      "heading": "Causes of design system drift",
+      "body": "Drift usually starts with a reasonable local fix. A team needs a state the system lacks, copies the component and ships. If contributing back is slow or unclear, the copy stays.\n\nOther causes are quieter. Design files change without a matching code release, or the code moves on while the files stand still. Documentation keeps describing an older version. When nobody owns the gap between these sources, small differences pile up."
+    },
+    {
+      "block": "Rich section",
+      "id": "practice",
+      "heading": "How to spot component drift",
+      "body": "Drift shows up when two versions of a supposedly shared choice no longer mean the same thing. Figma may offer a state the code lacks. A product may copy a component to meet a real need. The documentation may describe an old release.\n\nAsk why the difference exists before anyone tries to make the files match.\n\nA practical start is one component family, such as status labels. Compare it in the design file, the coded library, the documentation and two live products, and note every state, label and behaviour that differs.\n\nThe [Drift Checker](/tools/design-system-drift-checker) and [Design System Audit](/audits/design-system-audit) trace those differences through design, code, documentation and product use."
+    },
+    {
+      "block": "Comparison",
+      "id": "comparison",
+      "heading": "Design system drift vs intentional variation",
+      "table": {
+        "columns": [
+          "Difference",
+          "Meaning",
+          "Right response"
+        ],
+        "rows": [
+          [
+            "Design system drift",
+            "Shared versions disagree with no current product reason",
+            "Find the source, the effect on users and the release path, then repair or migrate"
+          ],
+          [
+            "Intentional variation",
+            "A product has a legitimate local need the shared system should not absorb",
+            "Keep the variation visible, and record the reason and the owner"
+          ]
+        ]
+      }
+    },
+    {
+      "block": "Rich section",
+      "id": "design-vs-code-drift",
+      "heading": "Design drift vs code drift",
+      "body": "Design drift opens in the design files. A component changes in Figma, a designer builds a local variant for one screen, or a style moves away from the library.\n\nCode drift opens in the products. A team copies and alters a component in its own codebase, keeps an old version, or adds a state the design files never showed. Both are design system drift.\n\nDesign drift is repaired in the files and their documentation; code drift needs a release, and often a migration in each product that holds a copy."
+    },
+    {
+      "block": "Related reading",
+      "id": "related-terms",
+      "heading": "Terms related to design system drift",
+      "entries": [
+        {
+          "href": "/glossary/design-system",
+          "label": "Design system",
+          "blurb": "the shared building blocks, code and guidance that several products or teams build with, plus the rules for how they change."
+        },
+        {
+          "href": "/glossary/design-system-governance",
+          "label": "Design system governance",
+          "blurb": "who can propose, approve, release and retire shared components, which decides whether a difference becomes drift or an agreed variation."
+        },
+        {
+          "href": "/glossary/design-system-adoption",
+          "label": "Design system adoption",
+          "blurb": "whether teams really use the shared system in product work. Low adoption and drift often feed each other."
+        }
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Design system drift FAQs",
+      "items": [
+        {
+          "question": "What causes design system drift?",
+          "answer": "Most drift starts with a local fix: a team needs a state the system lacks and copies the component. Slow contribution routes, design and code released on different schedules, and out-of-date documentation let those copies stay."
+        },
+        {
+          "question": "How do you spot component drift?",
+          "answer": "Pick one shared component and compare it across the design file, the coded library, the documentation and the live products that use it. Differences in states, labels or behaviour are the drift. Then ask why each one exists before deciding what to change."
+        },
+        {
+          "question": "How is design drift different from code drift?",
+          "answer": "Design drift is a gap that opens in the design files, such as a changed component or a one-off variant. Code drift opens in the products, such as a copied and altered component or an old version left in place. Fixing code drift usually needs a release in every product affected."
+        },
+        {
+          "question": "Is every difference between design and code a sign of drift?",
+          "answer": "A difference is drift when it has no current product reason. A documented variation with an owner and a reason is legitimate, and the system should record it so teams can tell the two apart."
+        }
+      ]
+    },
+    {
+      "block": "Rich section",
+      "id": "next",
+      "heading": "Check one component family yourself",
+      "body": "The free checker walks one component family and shows where the shared answer stopped being the easy one.\n\nDrift has a new source. AI tools that generate interface code copy whatever patterns they find, local overrides included, so a system with clear, current rules gives them the right answer to copy.\n\n[Use the Drift Checker](/tools/design-system-drift-checker)"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/glossary__design-system-drift.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

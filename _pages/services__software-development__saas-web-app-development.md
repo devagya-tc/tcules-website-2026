@@ -4,13 +4,13 @@ slug: saas-web-app-development
 page_name: SaaS & Web Application Development
 page_type: service
 seo:
-  title: Web Application Development for SaaS | Tcules
-  description: 'Web application development for SaaS products, designed and built by one team: accounts, roles, workflows, data, integrations, testing and release.'
+  title: 'Web Application Development Services for SaaS | Tcules'
+  description: 'Web application development services for SaaS: accounts, roles, workflows, data, integrations and release, with designers in the build team until launch.'
   canonical: https://www.tcules.com/services/software-development/saas-web-app-development
   robots: index,follow
 social:
-  og_title: Web Application Development for SaaS | Tcules
-  og_description: 'Web application development for SaaS products, designed and built by one team: accounts, roles, workflows, data, integrations, testing and release.'
+  og_title: 'Web Application Development Services for SaaS | Tcules'
+  og_description: 'Web application development services for SaaS: accounts, roles, workflows, data, integrations and release, with designers in the build team until launch.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,17 +18,30 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Web Application Development for SaaS | Tcules
-  twitter_description: 'Web application development for SaaS products, designed and built by one team: accounts, roles, workflows, data, integrations, testing and release.'
+  twitter_title: 'Web Application Development Services for SaaS | Tcules'
+  twitter_description: 'Web application development services for SaaS: accounts, roles, workflows, data, integrations and release, with designers in the build team until launch.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: SaaS and web application development for product teams
   primary_buyer_question: What complete product slice should Tcules own from accepted product direction through working release?
   supporting_questions:
-  - Which technology stack do you use?
-  - Do you build on platforms like Shopify or Moodle?
-  - Can we start with one module before committing to the whole product?
-  primary_query: web application development
+  - Which tech stack should a SaaS web app use?
+  - Do you build React web applications?
+  - Do you build on platforms like Shopify, Moodle or Magento?
+  - Can we build one module before committing to the whole product?
+  - How much does custom web application development cost?
+  - Do you take on enterprise web application development?
+  primary_query: web application development services
+  secondary_queries:
+  - SaaS application development
+  - custom web application development services
+  - SaaS web app development
+  - B2B web app development
+  - web application development for SaaS
+  - enterprise web application development services
+  - React web application development
+  - build on Shopify or Moodle
+  - start with one module first
 navigation:
   breadcrumb:
   - name: Home
@@ -58,37 +71,63 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
   - scope
+  - selected-work
   - build-loop
-  - proof
+  - routes
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: product_behaviour_system_release_ownership
   media_bindings:
+  - id: saas_connectx
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp
+    alt_intent: ConnectX workspace where a question brings up the building's digital twin with the relevant energy data and assets. Public image shows the coded demonstration on sample data.
+    status: BOUND_EXISTING_PUBLIC_ASSET
   - id: saas_gt_tools
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
-    alt_intent: GT Tools implemented Shopify product-discovery interface connecting specialist product selection with purchase.
+    alt_intent: GT Tools Shopify store as developed by Tcules, with navigation and product discovery for specialist buyers.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
-  - UW-WEB-ROCKSTAR
+  - DRAFT-CONNECTX-GHOSHAL
+  - DRAFT-CURAMCARE-APPS
+  - DRAFT-VOVISTO-GOMES
+  - DRAFT-WANDERING-MOODLE-26OCT
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
-    - GT Tools
+    - ConnectX
     - The Wandering Raven
+    - GT Tools
+    - CuramCare
+    - Vovisto
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -99,7 +138,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: ROLLOUT_SD_STUDIO_SPINE_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_UNVERIFIED
   production: NOT_PRODUCTION_VERIFIED
@@ -118,76 +157,151 @@ content_governance:
 
 *Software Development · SaaS and web apps*
 
-# SaaS web app development, led by designers
+# Web application development services for SaaS products, with designers in the build
 
-Accounts and roles, core workflows, data, integrations, automated tests and release. Our designers sit in the build team, so questions that surface in code reach the people who designed it.
+Web application development is for the people in your product's workflows all day, the admin setting up roles for a new customer, and the engineers who extend the code next year. Tcules provides web application development services for SaaS products, with designers in the build team from the first module to release.
 
-[Start a conversation](#enquiry)
+*Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)*
 
-*Selected work: Vovisto · GT Tools · The Wandering Raven*
+[Tell us what your web app must do](#enquiry)
 
-## Who we build applications for {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**Founders with designs or a prototype.** You need working software with real accounts, data and edge cases. Starting from an idea? See [New Product Design & First Release](/services/new-product-design-first-release).
+## What you get from web application development {#scope}
 
-**Product leaders with a crowded roadmap.** A reporting area, admin console or new customer workflow needs building without pulling your own team off their plans.
+B2B web app development for a SaaS product, or one module of it, taken from approved designs, a working prototype or a live codebase to software customers can use.
 
-**CTOs who need more engineers who think about users.** We join your codebase and take on a clearly bounded part of it.
+**What you receive**
 
-> “This is a rockstar team of web developers! They listen and think critically to what's needed - then delivers!”  
-> **Stan St-Fleur, Founder & Executive Director, NO STATUS QUO, INC.**
+- **Accounts and roles.** Sign-up, sign-in, permissions, team and admin views.
 
-**Businesses that run on their own software.** Ordering, scheduling or internal tools that have to connect cleanly to what customers see.
+- **Core workflows in every state.** The main tasks, with loading, empty, error and success states.
 
-## What an application build covers {#scope}
+- **Data and rules.** Records, validation and the business logic behind each action.
 
-| Part of the product | What we build |
-|---|---|
-| **Accounts and roles** | Sign-up, sign-in, permissions, team and admin views |
-| **Core workflows** | The main tasks, with every state: loading, empty, error and success |
-| **Data and rules** | Records, validation and the business logic behind each action |
-| **Integrations** | Payment providers, third-party platforms and your existing systems |
-| **Release** | Automated tests, environments, deployment and a plan for rolling back |
+- **Integrations.** Payment providers, third-party platforms and your existing systems.
 
-Architecture is sized to the product. A first release needs room to grow, not servers for a million users it hasn't met yet.
+- **Admin and reporting.** Admin consoles, exports and the reports teams check every week.
 
-## Design questions that surface during the build {#build-loop}
+- **Release with a way back.** Automated tests, environments, deployment and a rollback plan, so a bad release can be undone cleanly.
+
+- **Foundations ready for AI.** Records with clear meanings, permissions for agents as well as people, and a history of every change. A first AI feature then reads the right record, and people can check what it did. [AI Product Engineering](/services/software-development/ai-product-engineering) builds the AI itself.
+
+- **Code your team can carry on.** Code, tests and notes your engineers can take into their own work, with room planned for the capacity the product will need next.
+
+**Who does the work.** Engineers build, with designers in the build team who review each release against the design in a test environment your team can try. A senior engineer on our side reviews every change on its way into your codebase, and an account lead runs the day to day.
+
+**What we need from you.** Whatever exists: designs, a prototype, research or a live codebase, which we read in full before proposing a plan. Still shaping the MVP? [New Product Design & First Release](/services/new-product-design-first-release) starts earlier.
+
+**Where our part stops.** You sign off the scope and each release. Your engineers can take over the code whenever you choose, and if they already cover one half of the product, we build only the [frontend](/services/software-development/frontend-development) or the [backend](/services/software-development/backend-api-development).
+
+## Selected web application development work {#selected-work}
+
+Three builds with roles, data and other systems to talk to: a module in an AI energy product, a learning platform on Moodle and a store on Shopify.
+
+### ConnectX: a live module that answers questions about a building
+
+Facilities, finance and sustainability teams ask ConnectX about a building and get a working view with the data and assets that matter. We designed how each question is answered, proved it in a coded demo, then took it to the production-ready module that went live in late 2025. [Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+
+### The Wandering Raven: Moodle set up as part of the design
+
+Its creative-writing world for learners aged eight to eighteen had to hold together inside Moodle. We chose and configured the plugins and created a custom theme, which removed a hand-off between interface design and platform set-up. [Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+### GT Tools: a Shopify store fitted to specialist buyers
+
+GT Tools' buyers need compatibility, stock, warranty and finance answered on the product page. We redesigned the store around those questions and developed it on Shopify, adding custom work where the platform needed more. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+## Design questions that surface in the build, and who answers them {#build-loop}
 
 Working software raises questions no plan predicted. Real content breaks a layout. An integration forces a new error state. A data rule shows that one screen is really two jobs.
 
-Our designers work alongside the engineers through the build, so these questions go back to the product instead of being settled quietly in code. Joining an existing codebase? We read how it handles data, permissions and components before we change them.
+Our designers work alongside the engineers through the build, so these questions go back to the product instead of being decided quietly in code. Joining an existing product's code? We learn how it handles data, permissions and components before touching them.
 
-## Choosing between a custom build and a platform {#proof}
+Example: Vovisto needed sponsorship budgets, participant onboarding, travel packages, approvals and documents in one system, with flight and hotel inventory from outside suppliers. We designed a custom platform with role-based access and its own portal for healthcare professionals, then led it into development, and we still look after it.
 
-### Vovisto: one platform for sponsorship, travel and approvals
+## Custom build, a platform or one module first: which do you need? {#routes}
 
-Vovisto needed sponsorship budgets, participant onboarding, travel packages, approvals and documents in one system, with flight and hotel inventory drawn from outside suppliers. We designed a custom platform with role-based access and its own portal for healthcare professionals, and oversaw its development. It is in implementation and integration testing.
+A platform earns its place when it already does most of the job; a custom build earns it when the workflow is what customers pay for.
 
-### GT Tools: a specialist store on Shopify
+| Option | What it means | Best for |
+|---|---|---|
+| **Custom web application** | Your own product, with accounts, roles, data and integrations built to your rules | SaaS products whose workflow is the thing customers pay for |
+| **Extend a platform** | Shopify, Moodle or a similar platform, configured and extended with custom work | Stores, courses and content where the platform already does most of the job |
+| **One module first** | A single workflow built end to end before the rest is planned | Teams that want to see how we build before committing to the whole product |
+| **[Prototype Readiness Review](/audits/prototype-readiness-review) first** | A fixed-price check of an early build or prototype | Founders unsure which parts of a prototype are ready for customers |
+| **[Frontend](/services/software-development/frontend-development) or [backend](/services/software-development/backend-api-development) only** | One layer of the product, built alongside your engineers | Teams whose own engineers cover the other half |
 
-GT Tools sells specialist equipment online. We redesigned the store around the questions its buyers ask and developed it on Shopify, adding custom work only where the pages needed more than the platform offers.
+## What clients say {#testimonials}
 
-[Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+> “We didn't want another AI chat window. Tcules designed a dashboard where you ask a question and the digital twin of your building answers, with the right data and assets in view. They proved it in a working demo, then made it production-ready.”  
+> **Pratik Ghoshal, CEO, ConnectX**
 
-### The Wandering Raven: a learning world inside Moodle
+> “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-The Wandering Raven teaches creative writing to young learners. Its courses run partly through Moodle, so we shaped Moodle around the world we designed for it.
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
 
-[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+> “Tcules designed our creative-writing world for young learners, then installed and configured the Moodle plugins and created a custom theme, so it all holds together on Moodle. That left us free to concentrate on our courses.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
 
-## Frequently asked questions {#faq}
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-### Which technology stack do you use?
+## How we work together {#how-we-work-together}
 
-For an existing product, yours. For a new one, we recommend a mainstream stack that suits your hosting and that future engineers can maintain, and we explain the choice before any code is written.
+For web application development, a good first piece of work is one module built end to end from approved designs, with its roles, data and checks written down.
 
-### Do you build on platforms like Shopify or Moodle?
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-Yes. GT Tools' store on Shopify and The Wandering Raven's learning space on Moodle are both our platform work. We extend a platform when it fits the product, and recommend a custom build when it would hold you back.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-### Can we start with one module before committing to the whole product?
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-Yes. Many builds start with one workflow, agreed end to end with its data, integrations and release checks. It shows you how we work before you commit to more.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **One studio can take it into working software, with the designers staying in the build.** For [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), we started with a UX audit, designed the store mobile first and built it on Magento.
+
+- **We prove the hard parts in code while they can still change.** A [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineer raised a drag-and-drop question about Bootstrap 5 during design review of our coded prototypes, while the suite's shared patterns could still change.
+
+- **Senior people do the work, and clients keep us for years.** Over three years Primelis has had us design every one of its products, and we now help shape the AI features its customers check and trust.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[ClimateTech](/expertise/climatetech-energy) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## Questions about web application development services {#faq}
+
+### Which tech stack should a SaaS web app use?
+
+For an existing product, usually the one it already runs on. For a new one, we recommend a mainstream stack that suits your hosting and that future engineers can maintain and hire for, and we explain the choice before any code is written.
+
+### Do you build React web applications?
+
+Yes. React is one of the frameworks we build web applications in, and it suits SaaS products with busy, data-heavy screens. We still choose the stack product by product, so a team already working in another framework keeps it.
+
+### Do you build on platforms like Shopify, Moodle or Magento?
+
+Yes, where the platform does the job well. We developed GT Tools' Shopify store and [The Chain Hut's Magento store](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store), and set up Moodle for The Wandering Raven. When a platform would hold your product back, we recommend a custom build and say so before work starts.
+
+### How much does custom web application development cost?
+
+The cost follows the scope: the roles, workflows, data and integrations the product needs. Each build is priced once that scope is agreed, and [How We Work](/how-we-work#engagement-shapes) explains how projects and ongoing work are set up.
+
+### Do you take on enterprise web application development?
+
+Yes, including products with many roles, permissions and connected systems. The state of the product shapes the work, whether it is new, scaling or mature, whatever the size of the organisation behind it.
 
 ## Tell us what your web app needs to do {#enquiry}
 

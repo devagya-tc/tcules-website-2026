@@ -4,13 +4,13 @@ slug: ux-ui-design-and-development-for-magento-of-a-silver-chain-store
 page_name: "The Chain Hut: an online store for a UK fashion jewellery brand"
 page_type: case_study
 seo:
-  title: 'The Chain Hut: a Magento store for UK jewellery | Tcules'
-  description: 'Magento UX and UI design and development for The Chain Hut, a UK silver jewellery store: product discovery, the mobile experience and checkout.'
+  title: 'The Chain Hut Magento ecommerce case study | Tcules'
+  description: 'The Chain Hut Magento ecommerce case study: a UX audit, a mobile-first design and style guide, and a store built on Magento for a new UK jewellery brand.'
   canonical: https://www.tcules.com/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store
   robots: index,follow
 social:
-  og_title: 'The Chain Hut: a Magento store for UK jewellery | Tcules'
-  og_description: 'Magento UX and UI design and development for The Chain Hut, a UK silver jewellery store: product discovery, the mobile experience and checkout.'
+  og_title: 'The Chain Hut Magento ecommerce case study | Tcules'
+  og_description: 'The Chain Hut Magento ecommerce case study: a UX audit, a mobile-first design and style guide, and a store built on Magento for a new UK jewellery brand.'
   og_image: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
   og_image_alt: Cover image for The Chain Hut case study.
   og_type: website
@@ -18,10 +18,18 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'The Chain Hut: a Magento store for UK jewellery | Tcules'
-  twitter_description: 'Magento UX and UI design and development for The Chain Hut, a UK silver jewellery store: product discovery, the mobile experience and checkout.'
+  twitter_title: 'The Chain Hut Magento ecommerce case study | Tcules'
+  twitter_description: 'The Chain Hut Magento ecommerce case study: a UX audit, a mobile-first design and style guide, and a store built on Magento for a new UK jewellery brand.'
   twitter_image: https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png
 search_context:
+  primary_query: 'The Chain Hut Magento ecommerce'
+  secondary_queries:
+  - 'The Chain Hut Magento ecommerce case study'
+  - 'Magento UX and UI design case study'
+  - 'jewellery ecommerce case study'
+  - 'Magento store design and development'
+  - 'UK fashion ecommerce launch'
+  - 'new brand online store design'
   primary_intent: Magento ecommerce UX/UI design and development case study
   primary_buyer_question: How did Tcules design and build The Chain Hut's Magento jewellery store?
   key_entities:
@@ -31,7 +39,7 @@ search_context:
   - mobile-first design
   - checkout
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -40,13 +48,36 @@ navigation:
     url: /case-studies
   - name: "The Chain Hut: an online store for a UK fashion jewellery brand"
     url: /case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store
+conversion:
+  form: project_enquiry
+  anchor: enquiry
+  visible_fields:
+  - Email
+  - What are you working on?
+  - Product or company URL
+  optional_fields:
+  - Product or company URL
+  submit_label: Send enquiry
+  scheduling_label: See available times
+  scheduling_behavior: lazy_secondary
+  hidden_context: origin_route, placement, case, referrer, campaign
+  on_success:
+    heading: Your enquiry has reached us
+    body: We'll reply within one business day.
+    retain_entered_data: true
+  processor: cms_record_and_notify
 render:
   band_order:
+  - case-context
   - problem
   - solution
   - about-client
   - e-commerce-design-approach
   - final-outcome
+  - testimonials
+  - faq
+  - related
+  - enquiry
 page_composition:
   case_meta:
     component_type: case_meta
@@ -92,15 +123,19 @@ page_composition:
       about-client: capability_scope
       e-commerce-design-approach: capability_scope
       final-outcome: argument_thesis
+      testimonials: testimonial_proof
+      faq: faq
+      related: related_link
+      enquiry: enquiry
   commercial_system:
-    testimonial_ids:
-    - FP-CHAINHUT-HOLISTIC
+    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
@@ -152,7 +187,9 @@ content_governance:
 
 *Case study · The Chain Hut*
 
-# The Chain Hut: an online store for a UK fashion jewellery brand
+# The Chain Hut Magento ecommerce store: designed mobile first, then built
+
+The Chain Hut was entering the UK online fashion jewellery market against established stores. Tcules started with a UX audit, designed a mobile-first store with clearer navigation, search and checkout, and built it on Magento, with a style guide to keep the brand consistent.
 
 ## At a glance {#case-context}
 
@@ -161,61 +198,102 @@ content_governance:
 | Our role | UX audit, information architecture, mobile-first design, branding and style guide, and development of the Magento store. |
 | The key question | How could a new UK jewellery brand help shoppers find the right chain and buy quickly, starting on mobile? |
 | What we delivered | A mobile-first Magento store with clearer navigation and search, a simpler checkout, campaign landing pages and a style guide. |
+| Platform | Magento, with its core purchase workflow kept intact. |
+| Started | February 2018, with a UX audit. |
 
-## Problem {#problem}
+Related Tcules services: [Product Design](/services/product-design) and [Software Development](/services/software-development).
 
-As a new entrant in the UK online jewellery market, the client needed an optimised e-commerce experience to help users easily discover products and complete purchases while competing with established online stores.
+## A new UK jewellery brand up against established online stores {#problem}
 
-## Solution {#solution}
+The Chain Hut was a new entrant in the UK online jewellery market. It had to compete with established online stores, so shoppers needed to find products easily and complete their purchases without trouble.
 
-We designed a mobile-first store with clearer navigation, simpler routes to purchase and a distraction-free checkout, set up for the brand's planned marketing campaigns.
+## A mobile-first store design, ready for the brand's campaigns {#solution}
 
-## About Client {#about-client}
+We designed a mobile-first store, set up for the brand's planned marketing campaigns. The design gave it:
 
-In February 2018, The Chain Hut approached us with a vision to enter the UK's thriving online fashion jewellery market. We decided to go for a comprehensive e-commerce UX design approach, starting with a thorough UX Audit and culminating in a fully functional, optimised website built on the Magento e-commerce platform.
+- clearer navigation
+- simpler routes to purchase
+- a distraction-free checkout
 
-## E-Commerce design approach {#e-commerce-design-approach}
+## How the jewellery ecommerce project began {#about-client}
 
-### Design Audit {#design-audit}
+In February 2018, The Chain Hut approached us with a plan to enter the UK online fashion jewellery market. We started with a UX audit and finished with a working website built on the Magento ecommerce platform.
 
-We began by creating user personas, conducting interviews, benchmarking competitors, and performing heuristic analysis. This resulted in a comprehensive report outlining our recommendations for optimising The Chain Hut's online presence.
+## Magento store design and development, step by step {#e-commerce-design-approach}
 
-### Information Architecture {#information-architecture}
+### Design audit: personas, interviews and competitor benchmarks {#design-audit}
 
-Collaborating closely with the client, we designed an information architecture that streamlined navigation, search, and discovery of their extensive range of silver chains.
+We began by creating user personas, running interviews, benchmarking competitors and carrying out a heuristic analysis, which is an expert check against usability rules. The result was a report with our recommendations for The Chain Hut's online presence.
 
-### User Journey {#user-journey}
+### Organising the range for browsing and search {#information-architecture}
 
-Based on the User Personas we created during the audit phase, we mapped the user journeys with Magento’s default workflow. Our challenge was to keep the core purchase workflow of the Magento platform intact and optimise the user flows.
+Working closely with the client, we designed an information architecture that streamlined navigation, search and discovery across their extensive range of silver chains.
 
-### Design Review Iterate {#design-review-iterate}
+### Mapping shopper journeys onto Magento's workflow {#user-journey}
 
-From paper sketches to Figma wireframes, we underwent multiple iterations to create low-fidelity designs that were both platform-compatible and developer-friendly. Recognising the growing trend of mobile users in the online fashion jewellery market, we adopted a mobile-first design approach, creating separate versions for desktop, tablet, and mobile devices.
+Using the personas from the audit, we mapped shopper journeys against Magento’s default workflow. The challenge was to keep Magento's core purchase workflow intact while improving the journeys around it.
 
-### Branding {#branding}
+### Sketches to wireframes, mobile first {#design-review-iterate}
 
-After finalising the low-fidelity wireframes, we focused on elevating the e-commerce UX design by finessing the branding and style guide. This included selecting fonts, typography, colour schemes, and product icons to ensure a cohesive and engaging user experience.
+We moved from paper sketches to Figma wireframes over several iterations. The low-fidelity designs were shaped to the platform from the start, so they were straightforward for developers to build. Mobile shoppers were a growing share of the online fashion jewellery market, so we designed mobile first, with separate versions for desktop, tablet and mobile.
+
+### Branding and a style guide {#branding}
+
+Once the low-fidelity wireframes were final, we refined the branding and style guide. That meant choosing fonts, typography, colour schemes and product icons, so the store looked and felt like one brand.
 
 ### A simpler checkout {#seamless-checkout-experience}
 
-All the user journeys reach the final destination when the user resolves to make a purchase. Hence, we prioritised creating a distraction-free, convenient purchase experience to minimise drop-offs and maximise order value.
+Shopper journeys end at the point of purchase. So we prioritised a distraction-free, convenient checkout, to reduce drop-offs and raise order value.
 
-### Integration with Marketing Strategies {#integration-with-marketing-strategies}
+### Landing pages for the brand's campaigns {#integration-with-marketing-strategies}
 
-Any new brand venturing into the direct-to-consumer market relies on acquiring visitors from non-organic channels such as ads, social media campaigns etc. We ensured that the landing pages and features were designed and developed in accordance with their content strategy and planned marketing campaigns. By focusing on intuitive navigation, search functionality, and product discovery, we aimed to convert casual visitors into prospective buyers.
+A new direct-to-consumer brand depends on visitors from non-organic channels such as ads and social media campaigns. We shaped the landing pages and features around the brand's content strategy and planned campaigns. Clear navigation, search and product discovery were there to turn casual visitors from those campaigns into buyers.
 
-## Final Outcome {#final-outcome}
+## What The Chain Hut received, from style guide to Magento build {#final-outcome}
 
-The final outcome of our collaboration with The Chain Hut resulted in:
+- A store that improves the journeys around Magento's standard purchase flow and keeps that flow intact.
+- An information architecture and landing pages designed for an easy-flowing shopper journey.
+- A style guide that helps maintain brand consistency.
 
-1. A store design that kept Magento's standard purchase flow intact and was straightforward for developers to build.
-2. An optimised Information Architecture and landing pages for an easy flowing user journey on the website.
-3. A styling guide that helps maintain brand consistency.
+In all, The Chain Hut went from audit and research to a mobile-first store design, a style guide and a website built on Magento. A new brand entered a crowded UK market with a store designed for the phone in a shopper's hand, a style guide to keep it consistent as it grew, and pages ready for its campaigns.
 
-Our eCommerce UX design process took The Chain Hut from audit and research to a mobile-first store design, a style guide, and a website built on Magento.
+## In The Chain Hut's words {#testimonials}
 
-> Their advice is impartial and holistic - not favoring one aspect of e-commerce over another, whether it be user experience, UI design, technical, marketing, branding or something else.
->
+> “Their advice is impartial and holistic - not favoring one aspect of e-commerce over another, whether it be user experience, UI design, technical, marketing, branding or something else.”  
 > **Tushar G, Owner, The Chain Hut**
 
-To talk about a commerce store of your own, [contact Tcules](/contact).
+## Questions about The Chain Hut Magento store {#faq}
+
+### What did Tcules build for The Chain Hut?
+
+A mobile-first online store on the Magento ecommerce platform, which Tcules also designed. The work ran from a UX audit through information architecture, wireframes, branding and a style guide to the working website.
+
+### How do you help a new jewellery brand compete online?
+
+For The Chain Hut, shoppers had to find the right chain easily and buy without trouble. Tcules organised the range for browsing and search, designed mobile first, simplified the checkout and shaped landing pages around the brand's planned campaigns.
+
+### How did the design fit Magento's default workflow?
+
+Tcules mapped shopper journeys against Magento's default workflow, using the personas from the audit. The design kept Magento's core purchase workflow intact while improving the journeys around it, and the low-fidelity designs had to be straightforward for developers to build.
+
+### Why design the store mobile first?
+
+Mobile shoppers were a growing share of the online fashion jewellery market. So the team designed mobile first, with separate versions for desktop, tablet and mobile, moving from paper sketches to Figma wireframes over several iterations.
+
+## More ecommerce and platform case studies {#related}
+
+Two more projects shaped around an existing platform: Shopify for GT Tools, Moodle for The Wandering Raven.
+
+[Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+[Read The Wandering Raven case](/case-studies/wandering-raven-edtech-moodle-experience)
+
+[See commerce and transactional products](/expertise/commerce-transactional-products)
+
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us what shoppers can't find {#enquiry}
+
+Describe the store, the range and where shoppers drop out before they buy.

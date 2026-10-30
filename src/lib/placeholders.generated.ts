@@ -11,6 +11,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     { src: string; width: number; height: number; kind: string; shows: string }
   >
 > = {
+  '/_unregistered#slot': {
+    src: '/placeholders/unregistered--slot.svg',
+    width: 1600,
+    height: 1067,
+    kind: 'studio photo',
+    shows:
+      'FALLBACK, not a slot: what a page shows where its copy (26 Oct 2026) needs an image this register has no row for yet. `placeholderImage` warns in development for each one; give each its own row.',
+  },
   '/#ai-native-practice': {
     src: '/placeholders/home--ai-native-practice.svg',
     width: 1600,
@@ -67,6 +75,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       'Designers and engineers at work together in the Ahmedabad studio, critiquing one piece of work, framed wide enough to read as the whole studio. Banner `below`, added in the critic pass.',
   },
+  '/about#hero': {
+    src: '/placeholders/about--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'studio photo',
+    shows:
+      "The Tcules team in the Ahmedabad studio working through one client's product together, designers and engineers at the same wall and screen: the studio, its people and its practice in one frame. High-traffic page, hero image always (owner, 29 Oct 2026).",
+  },
   '/about#leadership:jatin-leuva': {
     src: '/placeholders/about--leadership--jatin-leuva.svg',
     width: 1600,
@@ -122,6 +138,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "The Wandering Raven's creative-writing learning world for young learners, built inside Moodle. Its own slot (critic, B2: the 16:9 cover master cropped to the story split lost its label). The story is a case card beside its client's quote; 16:9 since home round 3 (every card cover is 16:9, it was 2:1). If the case page later binds a cover, that cover replaces this panel.",
+  },
+  '/contact#hero': {
+    src: '/placeholders/contact--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "A first message reaching the studio: a product link, a screenshot and two lines about the problem arriving at a senior designer's desk, the reply already being written. A high-traffic page always has a hero image or illustration (owner, 29 Oct 2026); this panel holds the slot until the drawing arrives.",
   },
   '/expertise/healthtech#approach': {
     src: '/placeholders/expertise-healthtech--approach.svg',
@@ -188,6 +212,38 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "Lab illustration: experiments becoming product — a few experiments on the bench, the one that works carried into a product people use, the Future Interfaces Lab's argument. Drawn for an ink band (ch05 illustration rules: faces left toward the copy, the concept from the band's argument, three or more varied layers, exact anchoring, no type). Owner, 13 Oct 2026: commissioned later; a placeholder holds the slot.",
   },
+  '/services/ai-product-ux#hero': {
+    src: '/placeholders/services-ai-product-ux--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "An AI feature people can check, correct and undo: the AI's suggestion held apart from the user's own work, the evidence behind it shown, and a person editing or undoing it before it is accepted. High-traffic page, hero image always (owner, 29 Oct 2026).",
+  },
+  '/services/design-engineering#hero': {
+    src: '/placeholders/services-design-engineering--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One interaction carried from the first prototype to production by designers who code: the prototype in a browser, the build question raised while it is cheap to change, and the released screen behaving as designed down to the keyboard and the loading state. High-traffic page, hero image always (owner, 29 Oct 2026).',
+  },
+  '/services/design-systems#hero': {
+    src: '/placeholders/services-design-systems--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'One set of parts serving every team: a single library of components, in Figma and in code, feeding several product screens built by different teams that all match, with the rules for using and changing the parts beside it. High-traffic page, hero image always (owner, 29 Oct 2026).',
+  },
+  '/services/new-product-design-first-release#hero': {
+    src: '/placeholders/services-new-product-design-first-release--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      'What the first release must do, and what it leaves out: the few jobs the first paying customer needs carried into the release, the rest set aside for the second, then designed, built and launched. High-traffic page, hero image always (owner, 29 Oct 2026).',
+  },
   '/services/product-design#hero': {
     src: '/placeholders/services-product-design--hero.svg',
     width: 1600,
@@ -195,6 +251,22 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'illustration',
     shows:
       'Uncertainty mapped to the design medium that resolves it (research, workflow, interface, prototype, code), with Doodle, Dealpath, Eden AI, Auxentios and Scissors pinned where their work sat (`visual_plan`). Replaces the interim service-line illustration.',
+  },
+  '/services/product-modernisation#hero': {
+    src: '/placeholders/services-product-modernisation--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "An established product changed part by part while customers keep working: the familiar product still running, one part at a time replaced by its new version, nobody's work interrupted. High-traffic page, hero image always (owner, 29 Oct 2026).",
+  },
+  '/services/software-development#hero': {
+    src: '/placeholders/services-software-development--hero.svg',
+    width: 1600,
+    height: 1280,
+    kind: 'illustration',
+    shows:
+      "One product built from launch day to the tenth release: frontend, backend, integrations, AI features and the mobile app as one system, built from the studio's own design and readable by the engineers who extend it. High-traffic page, hero image always (owner, 29 Oct 2026).",
   },
   '/tools/design-system-drift-checker#how-to-use-it': {
     src: '/placeholders/tools-design-system-drift-checker--how-to-use-it.svg',
@@ -211,6 +283,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "Auxentios' industrial quoting product: one shared quoting workflow where six specialist roles contribute to the same quote.",
+  },
+  'case-cover:curamcare': {
+    src: '/placeholders/case-cover--curamcare.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "CuramCare's web platform and its two apps, side by side: a family member and a carer each seeing their own part of the same care arrangement. The case study is coming soon; the index lists it unlinked.",
   },
   'case-cover:gold-image-printing': {
     src: '/placeholders/case-cover--gold-image-printing.svg',
@@ -283,5 +363,13 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "The Wandering Raven's creative-writing world for young learners inside Moodle, as the case's cover wherever another page cites it. The case binds no cover yet (`ASSET_REQUIRED`); the same first approved screen serves home's why-tcules panel and the case index slot.",
+  },
+  'case-cover:vovisto': {
+    src: '/placeholders/case-cover--vovisto.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "Vovisto's healthcare event and travel platform: a travel coordinator's view of one congress trip (budget, approval, flights, hotel). The case study is coming soon; the index lists it unlinked.",
   },
 };

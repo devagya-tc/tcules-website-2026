@@ -29,7 +29,15 @@ search_context:
   - Can we audit one workflow instead of the whole product?
   - What should we give you?
   - Do we have to hire you to fix what you find?
-  primary_query: software product audit
+  primary_query: 'software product audit'
+  secondary_queries:
+  - 'which audit do we need'
+  - 'software product audit deliverables'
+  - 'UX audit company'
+  - 'product audit before a redesign'
+  - 'audit one workflow instead of the whole product'
+  - 'how long does a product audit take'
+  - 'do we have to hire you to fix the findings'
 navigation:
   breadcrumb:
   - name: Home
@@ -56,16 +64,54 @@ conversion:
 render:
   band_order:
   - choose
-  - what-you-get
-  - proof
+  - prototype
+  - selected-work
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  visual_plan: symptom_to_decision_to_assessment
-  media_bindings: []
+  page_family: hub
+  standard: 42-first-principles-26-oct/BLUEPRINT.md (studio spine, hub order)
+  visual_plan: hub_chooser_table_then_prototype_review_apart_then_three_case_selected_work_then_studio_spine
+  separation_note: the Prototype Readiness Review keeps its own short section after the chooser, because rulebook section 2 keeps it out of any section or comparison that holds the AI Product UX Readiness Review
+  selected_work:
+  - enterprise-workflow-redesign-dealpath-real-estate
+  - omny-ai-suggestion-trust-redesign
+  - benchmark-gensuite-enterprise-suite-modernisation
+  why_tcules_reasons: [7, 1, 4]
+  media_bindings:
+  - id: audits_dealpath
+    role: demonstrate
+    supports_section: selected-work
+    card: dealpath
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (dealpath_workflow)
+    alt_intent: Dealpath workflow redesign for attaching a listing to an existing deal before creating a new record
+  - id: audits_omny
+    role: demonstrate
+    supports_section: selected-work
+    card: omny-ai
+    asset_uri: null
+    status: IMAGE_ASSET_REQUIRED
+    source: Omny AI case has no bound screen; request the before-and-after suggestion screen (also unblocks MarTech and Trust, Control and Recovery)
+    alt_intent: Omny AI listing editor with an empty content area and AI suggestions in their own panel
+  - id: audits_benchmark_scope_selector
+    role: demonstrate
+    supports_section: selected-work
+    card: benchmark-gensuite
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    status: BOUND_EXISTING_PUBLIC_ASSET
+    source: current public Tcules case media (benchmark_scope_selector)
+    alt_intent: Redesigned Benchmark Gensuite scope selector separating Browse, Recents and Favourites, and Nearby
   testimonial_ids:
-  - UW-AUDIT-INSIGHTS
+  - CL-KNOVOS-CANDOUR
+  - UW-RAZEO-METHOD
+  - FP-WANDERING-PICTURE
+  - CLUTCH-RINGIER-SAILER
 structured_data:
   types:
   - WebPage
@@ -75,7 +121,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH5_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_HUB_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: NOT_COMPOSITION_VALIDATED
   production: NOT_PRODUCTION_VALIDATED
@@ -86,98 +132,148 @@ content_governance:
   language: en-GB
   direct_quote_policy: preserve_verbatim_source_checked
   governing_rules: Tcules-VNext-Working-2026-10-08/00_RULEBOOK.md
-  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/audits.md
+  source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/audits.md; studio-spine hub rebuild 26 Oct 2026 evening (43-rollout-26-oct/log-hubs.md; hub order, chooser first, three selected pieces, spine sections word for word)
 ---
 
 *Audits & Assessments*
 
-# Product and UX audits for teams arguing about the cause
+# Software product audits for teams that disagree about the cause
 
-Audits for SaaS and complex software, each built for a different symptom. Every one traces the problem to its cause and ends in a ranked plan your team can act on, with or without us.
+An audit is for the steering meeting where product, design and engineering each have a theory, and for a redesign budget meant for what customers will notice.
 
-[Start a conversation](#enquiry)
+A Tcules software product audit finds the cause behind what your team sees and ranks what to fix first. It suits live software, with a particular focus on SaaS, and prototypes heading for customers.
 
-*Selected work: Omny AI*
+Know what to fix, and what the product could become, before you fund the redesign. Your team can run with the plan, or our designers and engineers can carry it into the product.
 
-## What are you seeing? {#choose}
+*Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-Six audits, each built for a different problem. Start with the one that describes your week.
+[Not sure which audit fits? Describe the symptom](#enquiry)
 
-### Customers get stuck, and every team has a theory
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-[UX & Product Audit](/audits/ux-product-audit). For established SaaS and complex software where people stall in a workflow or abandon onboarding. You get the causes behind the friction, ordered by how much harm each one does.
+## Which audit do you need? Match it to what you are seeing {#choose}
 
-### Users second-guess what your AI feature just did
+Each of these five audits starts with about two days on one focused piece: a single workflow, one family of components or one AI feature. The price is fixed and agreed before work begins, and you can widen the scope later.
 
-[AI Product UX Readiness Review](/audits/ai-product-ux-readiness). For copilots, AI search and agents about to reach more of your users. We test the feature on real tasks and show where people struggle to see what it did, check it or undo it, with the fixes in order.
+| Audit | Best for | You get |
+|---|---|---|
+| [UX & Product Audit](/audits/ux-product-audit) | Established SaaS where people stall in a workflow or drop out of onboarding, and every team has a theory | The causes of the friction, ranked by harm |
+| [AI Product UX Readiness Review](/audits/ai-product-ux-readiness) | Copilots, AI search and agents about to reach more users | The feature tested on real tasks, and where people struggle to see, check or undo what the AI did |
+| [Design System Audit](/audits/design-system-audit) | A shared library that teams keep working around | Your most-used patterns checked in Figma, in code and on live screens, then a repair list and the habits behind the drift |
+| [Design-to-Code Audit](/audits/design-to-code-audit) | Screens that pass design review, then ship looking or behaving differently | Every gap sorted by cause, so each fix lands in the design, the code or the review step |
+| [Product Modernisation Assessment](/audits/product-modernisation-assessment) | Established software that needs real change, with the team split between redesign, a new platform and a rebuild | A recommended route for each area, what must stay and the order of work |
 
-### Teams keep working around the design system
+## Auditing a prototype before it meets real customers {#prototype}
 
-[Design System Audit](/audits/design-system-audit). For companies whose shared library exists but keeps getting bypassed. We check your most-used patterns in Figma, in code and on live screens. The result is a repair list, plus the habits that let the drift in.
+The sixth audit starts from a working prototype, and also takes about two days on one core workflow.
 
-### The live product keeps drifting from the approved design
+[Prototype Readiness Review](/audits/prototype-readiness-review). For working prototypes, including AI-built ones, that customers or investors now want to use for real. We map what the prototype proved, what it left out and how to close the gaps.
 
-[Design-to-Code Audit](/audits/design-to-code-audit). For screens and components that pass design review, then ship looking or behaving differently. Every gap is sorted by cause, so each fix lands in the design, the code or the review step.
+## Selected work that started with the cause {#selected-work}
 
-### The team is split between redesign, replatform and rebuild
+Dealpath's work began with an audit. The other two are the closest related work: an AI feature traced back to its cause, and modernisation choices tested in code first.
 
-[Product Modernisation Assessment](/audits/product-modernisation-assessment). For established software that needs real change, where picking the wrong route would be expensive. The assessment recommends a route for each area of the product, and sets out what must stay and the order of work.
+### Dealpath: one assumption found, one step redesigned
 
-### A prototype is about to meet real customers
+Our audit found the fault in one assumption: in Dealpath's listing workspace, adding a listing to the pipeline always opened a new deal. The redesign asks people to find the existing deal first and keeps the listing's other actions largely as they were. Dealpath's team owned implementation.
 
-[Prototype Readiness Review](/audits/prototype-readiness-review). For working prototypes, including ones made with AI tools, that customers or investors now want to use for real. The review maps what the prototype has proved, what it left out and how to close the gaps.
+[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
 
-Still unsure? Describe the symptom in the form below and we'll suggest where to start. If the problem and the fix are already clear, you may need no audit at all: go straight to our [services](/services).
+### Omny AI: the cause sat in one default
 
-## What every audit gives you {#what-you-get}
+Users held Omny accountable for AI suggestions they had not properly reviewed, which filled the listing before anyone chose them. The redesign starts the content area empty, and each suggestion takes a deliberate click. Afterwards, Omny reported that users relied on the AI more knowingly, and forgave it more readily when a suggestion was wrong.
 
-The method changes from one audit to the next. The report keeps the same shape: a short list of findings, ranked, each tied to something we saw in your product.
+[Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-For every finding you will know:
+### Benchmark Gensuite: modernisation choices checked in code first
 
-- **what we saw,** and where to see it yourself
-- **why it matters** to the people using the product, or to the business
-- **how confident we are,** from observed in use to worth testing first
-- **the next move:** fix it, test it, or leave it alone
+We built the suite's new shared patterns and a three-view scope selector as coded prototypes. Benchmark could then check each choice against customers' habits, and its engineers could check it would build, before wider implementation. The selector separates browsing, recent places and finding a site nearby, each with its own search boundary.
 
-> “Communication was prompt, the deliverable was clearly defined ahead of engagement and the outcome met our expectations and contained useful insights which we will now be working to improve.”  
-> **Alex Tawfik, Marketing Head, TiiPii Bed**
+[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
 
-People do the judging. Software can help us cover more of a product, but a practitioner decides what counts as a finding and how much it matters.
+## What clients say {#testimonials}
 
-## Finding the real cause first {#proof}
+> “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
+> **Akshay Vyas, Creative Head, Knovos**
 
-**Omny AI.** Before redesigning anything, we traced why sellers using Omny AI's Amazon listing tools were holding the company responsible for AI suggestions that turned out to be wrong. The cause sat in one default: the suggestions filled the content area before the seller did anything, so accepting them took no deliberate step.
+> “We’re impressed by how good they were at documenting their research and creating the user interaction flow. They were highly methodical and process-driven as well. We also appreciated that their team was willing to interview a lot of users for us.”  
+> **Russell Miler, COO, Ryzeo**
 
-We redesigned how suggestions enter the work. The listing now starts empty, suggestions sit in a separate panel, and adding one takes a click. Omny later said its users had grown more conscious of how they relied on the AI, and more forgiving of a wrong suggestion. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+> “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
 
-## Why teams choose Tcules for an audit {#why-tcules}
+> “It was simply the most successful long-distance 3rd party collaboration I have seen. The company is on eye-level or above for the services they offer. Their staff were really good.”  
+> **Roland Sailer, Director of Product, Ringier Media Switzerland**
 
-**We can make the fixes too.** Designers and engineers work in one studio, so the people writing the findings know what each fix takes in a live product.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-**A long record across many products.** More than 90 projects since 2017, for clients in 19 countries, rated 4.8 on Clutch from 13 reviews.
+## How we work together {#how-we-work-together}
 
-## Frequently asked questions {#faq}
+After an audit, your team can work from the report alone, or our designers and engineers can carry the findings into a redesign or a build.
 
-### Should we start with an audit or go straight to a project?
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-Start with an audit when the team agrees something is wrong but disagrees about the cause or the fix. If you already know what needs changing, go straight to the work and we'll scope it with you.
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-### Can we audit one workflow instead of the whole product?
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-Yes. One important journey or a handful of components is often the better start, because the findings go deeper. You can widen the scope later.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-### What should we give you?
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-Product or prototype access, plus whatever material you already hold: analytics, support tickets, research, design files or code, depending on the audit. Tell us the question the team keeps arguing about, too.
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We tell you what is really wrong.** For [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp), an expert usability review, stakeholder conversations, user interviews and product analytics, read together, put reporting first.
+
+- **We work out what the product has to know before we draw it.** For [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux), we modelled how clients, candidates and jobs connect before redesigning four staffing workflows: onboarding, shortlisting, talent pools and job creation.
+
+- **One studio can take it into working software, with the designers staying in the build.** We redesigned and developed [GT Tools'](/case-studies/gt-tools-shopify-product-discovery) Shopify store, so the answers specialist buyers need before they pay sit beside the price in the store they use.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+
+## Questions about choosing a software product audit {#faq}
+
+### Should we audit our product before a redesign?
+
+A Tcules software product audit suits teams that agree something is wrong but disagree about the cause or the fix. If you already know what needs changing, go straight to the work and we'll scope it with you. If the open question is whether to redesign, replatform or rebuild, start with the [Product Modernisation Assessment](/audits/product-modernisation-assessment).
+
+### Can an audit cover only one workflow?
+
+Yes, and that is how every audit begins: with one focused piece, such as a single workflow or one family of components. A focused start is enough to find the cause. Once you have seen the findings, you can widen the scope.
+
+### How long does a software product audit take?
+
+The first piece takes about two days of work, whichever audit you choose. A wider scope takes longer, and the proposal states how long before anything starts. The fixed price is agreed at the same time.
+
+### What do software product audit deliverables include?
+
+Ranked findings, each tied to something we saw, with our confidence marked from observed in use to worth testing first. Each says where to look, why it matters and whether to fix, test or leave it. A senior designer runs the audit, decides what counts as a finding and is your main contact.
+
+### What is the difference between a UX audit and a design-to-code audit?
+
+A [UX & Product Audit](/audits/ux-product-audit) looks at where people get stuck using the product and why. A [Design-to-Code Audit](/audits/design-to-code-audit) looks at where the live product differs from the approved design, and whether each gap starts in the design, the code or the review step. Pick by the symptom your team keeps seeing.
+
+### What do you need from us to start?
+
+Tcules needs access to the product or prototype, plus whatever you already hold, such as analytics, support tickets, research, design files or code. Interviews, analytics and support history sit beside our own review of the screens. Tell us the question the team keeps arguing about.
 
 ### Do we have to hire you to fix what you find?
 
-No. Every report is written so your own team can act on it. If you'd like help, our designers and engineers can take the findings into the work.
+No. Every Tcules audit report is written for your own team to act on, and our guide shows [how to turn audit findings into decisions your team can own](/insights/guides/how-to-use-a-ux-product-audit). As a UX audit company with designers and engineers in one studio, we can also take the findings straight into the work.
 
 ## Tell us what's going wrong {#enquiry}
 
-Describe the symptom, who it affects and what you've tried. We'll suggest which audit fits.
+Not sure which audit fits? Describe the symptom, who it affects and what you've tried, and we'll suggest one.
 
 **Enquiry form**
 

@@ -1,6 +1,14 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Cluster, Icon, Layout, Media, type SectionSurface } from '@/components';
+import {
+  BrandMark,
+  Cluster,
+  Icon,
+  Layout,
+  Media,
+  RatingBadge,
+  Section,
+} from '@/components';
 import {
   Accordion,
   Breadcrumbs,
@@ -11,9 +19,12 @@ import {
   EnquiryForm,
   type EnquiryDress,
   ListCard,
+  LogoGrid,
   PageHero,
   Proof,
+  Slider,
   type AccordionItem,
+  type CtaContact,
   type HeroActions,
   type HeroCredit,
   type HeroDates,
@@ -22,7 +33,9 @@ import {
   type ProofQuote,
   TestimonialWall,
   type TestimonialItem,
+  type LogoGridMark,
 } from '@/patterns';
+import { CLIENT_MARKS, clientMark } from '@/lib/client-marks';
 import { parseAttribution } from '@/lib/attribution';
 import type {
   CorpusBand,
@@ -35,7 +48,12 @@ import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { linkProofLine } from '@/lib/case-links';
 import { renderInline } from '@/lib/inline-render';
 import { HEAD_TRACK } from '@/lib/image-sizes';
+import { corpusImage } from '@/lib/corpus-images';
+import { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
+import { heroNeedsMedia } from '@/lib/hero-media';
+import { placeholderImage } from '@/lib/placeholders';
 import { ENDPOINTS } from '@/lib/routes';
+import { isStudioRecord, recordFigures } from '@/lib/studio-record';
 import { heroTrail } from '@/lib/trail';
 
 import styles from './CorpusPage.module.css';
@@ -87,6 +105,28 @@ export type CorpusHeroProps = {
  * …") renders above the actions as the extras row, in its authored italic; a label-less run of facts
  * becomes `tags`.
  */
+/**
+ * A title too long for half the column at display. /services (79 characters) set seven display lines
+ * in the `beside` track and pushed its router two screens down, and /expertise set five with
+ * "expertise" alone on one (review 29 Oct). A title that would set five lines or more there reads
+ * across the column above the split instead (PageHero `titleAcross`), still at display; four lines
+ * or fewer keep the approved split (product-design sets four). The estimate wraps on words at
+ * 18 characters a line, which is what Newsreader at display (67) fits in the 572 track: measured
+ * against /services 7, /expertise 5, /glossary 5, product-design 4, /tools 4, /audits 4.
+ */
+const HALF_TRACK_CHARACTERS = 18;
+function long(title: string): boolean {
+  let lines = 0;
+  let line = 0;
+  for (const word of title.trim().split(/\s+/)) {
+    if (line === 0 || line + 1 + word.length > HALF_TRACK_CHARACTERS) {
+      lines += 1;
+      line = word.length;
+    } else line += 1 + word.length;
+  }
+  return lines >= 5;
+}
+
 export function CorpusHero({
   page,
   arrangement = 'stacked',
@@ -98,6 +138,11 @@ export function CorpusHero({
   texture,
 }: CorpusHeroProps) {
   const { hero } = page;
+  /* A high-traffic page's hero always carries an illustration or an image (owner, 29 Oct 2026;
+     src/lib/hero-media.ts): where its template handed none, its own bound hero asset, else its
+     labelled placeholder, beside the words. */
+  const heroMedia = media ?? (heroNeedsMedia(page.route) ? requiredHeroMedia(page) : undefined);
+  const heroArrangement = media ? arrangement : heroMedia ? 'beside' : 'stacked';
   const crumbs = page.breadcrumb.map((crumb) => ({ label: crumb.name, href: crumb.url }));
   const paragraphs = (ledes ?? hero.lede).map(plain).filter(Boolean);
   const actions = hero.actions.slice(0, 2).map((action) => ({
@@ -108,9 +153,15 @@ export function CorpusHero({
   const byline = editorialByline(page);
   /* The authored byline line is the same record the byline strip now presents, so it is not shown
      twice; any other proof line still is. */
-  const [firstProof] = byline
+  const proofs = byline
     ? hero.proofLines.filter((line) => !plain(line).includes(byline.author))
     : hero.proofLines;
+  /* The studio's record line is figures wherever it is authored, never a line of facts (owner,
+     29 Oct 2026; decisions/2026-10-29-studio-record-is-figures): a template that passes no `stats`
+     still gets them from the hero's own record, and the record is never also printed as a line. */
+  const recordLine = proofs.find((line) => isStudioRecord(plain(line)));
+  const figures = stats ?? (recordLine ? recordFigures(plain(recordLine)) : undefined);
+  const [firstProof] = proofs.filter((line) => line !== recordLine);
   return (
     <PageHero
       data-band="A"
@@ -123,10 +174,11 @@ export function CorpusHero({
       title={hero.titleText}
       body={paragraphs.length > 0 ? (paragraphs as [string, ...string[]]) : undefined}
       actions={actions}
-      arrangement={media ? arrangement : 'stacked'}
-      media={media}
+      arrangement={heroArrangement}
+      titleAcross={long(hero.titleText)}
+      media={heroMedia}
       tags={tags}
-      stats={stats}
+      stats={figures && figures.length > 0 ? figures : undefined}
       texture={texture}
       credits={byline?.credits}
       dates={byline?.dates}
@@ -137,6 +189,17 @@ export function CorpusHero({
       ) : null}
     </PageHero>
   );
+}
+
+/** The hero asset a high-traffic page binds, or its register placeholder (`<route>#hero`). */
+function requiredHeroMedia(page: CorpusPage): HeroMedia {
+  const binding = page.composition.mediaBindings.find(
+    (b) => b.bound && b.supportsSection === 'hero',
+  );
+  return {
+    type: 'image',
+    image: binding ? corpusImage(binding) : placeholderImage(page.route, 'hero'),
+  };
 }
 
 /**
@@ -240,13 +303,28 @@ export function QuoteCompact({ block }: { block: QuoteBlock }) {
 
 /* ── Quotes only (M5) ─────────────────────────────────────────────────────────── */
 
+/** From this many quotes a band is the wall; fewer turn one at a time (owner, 29 Oct 2026). */
+const WALL_FROM = 6;
+
 /**
- * M5 — a band that is only client quotes, shown as ONE composed group of rated testimonial cards
- * (home round 2, 10 Oct 2026: "a better component so we can show the testimonial and a star rating
- * alongside"). Never a slider: a slider hides every quote but the first from most readers (round 1).
- * On the page's tint under a centred head, with the band's lead when it authors one; the cards are
- * paper on the tint. The wall decides its own shape from the count (TestimonialWall): up to three is
- * one row of peers, four a 2 × 2, five or six three columns of stacks in authored order.
+ * M5 — a band that is only client quotes, on the page's tint under a centred head, with the band's
+ * lead when it authors one. Its shape is decided by the count (owner, 29 Oct 2026):
+ *
+ *   6 or more  the wall of rated testimonial cards (TestimonialWall: three columns of stacks).
+ *   fewer      ONE quote at a time: the centred italic quote with its stars, speaker and role
+ *              (Proof `display`, `align="center"`), in the kit's one-up Slider with its plain bars
+ *              (2026-10-09-testimonial-slider-controls). Five, four or three cards made a wall with
+ *              holes and a row of equal boxes; one voice at a time is the band's one idea. The owner's
+ *              explicit exception to "no hidden cards", for testimonials only: every slide is in the
+ *              page as it loads.
+ *
+ * The independent score the copy closes the band on ("**4.8 on Clutch** from 13 reviews. [Read the
+ * reviews](…)") is the band's footer as the RatingBadge ALONE (owner, 29 Oct 2026): the badge is the
+ * link to the reviews, and "from 13 reviews. Read the reviews" is its accessible name, not visible
+ * text. Under the slider it sits BELOW the quotes in a fixed place, outside the turning row, so it
+ * never moves with a slide: the head then the voice is the band's path, a badge between them would
+ * stack its star over the quote's five, and below it is where the wall already carries it, so the
+ * score has one place whatever the count.
  *
  * A quote awaiting client sign-off renders as written; the flag is a comment in the source.
  */
@@ -254,25 +332,210 @@ export function QuoteGroupBand({
   band,
   ratings,
   avatars,
+  surface = 'tint',
 }: {
   band: CorpusBand;
   ratings?: RatingsById;
   avatars?: AvatarsById;
+  /** Default tint (the proof band). The plan passes paper where a neighbour is already tint. */
+  surface?: 'paper' | 'tint';
 }) {
-  const lead = band.blocks.find((block) => block.type === 'paragraph');
-  const items = band.blocks.flatMap((block) =>
-    block.type === 'quote' ? [testimonialItem(block, ratings, avatars)] : [],
+  const firstQuote = band.blocks.findIndex((block) => block.type === 'quote');
+  const lead = band.blocks.find(
+    (block, index): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+      block.type === 'paragraph' && index < firstQuote && !ratingOf(block),
   );
+  const quotes = band.blocks.filter((block): block is QuoteBlock => block.type === 'quote');
+  const ratingBlock = band.blocks.find(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> =>
+      block.type === 'paragraph' && ratingOf(block) !== undefined,
+  );
+  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const wall = quotes.length >= WALL_FROM;
+  const footer = rating ? (
+    <Cluster colGap="tight" rowGap="tight" align="center" justify="center">
+      <ScoreBadge rating={rating} />
+    </Cluster>
+  ) : undefined;
   return (
     <ContentSection
       {...head(band)}
+      /* Under the wall the head stays the band's h2; one quote at a time, it is the h2 in the
+         eyebrow's voice, so the quote is the band's emphasis (owner, 29 Oct 2026;
+         decisions/2026-10-29-quote-slider-head-is-an-eyebrow). */
+      headingSize={wall ? undefined : 'eyebrow'}
       data-band="G"
-      surface="tint"
+      surface={surface}
       align="center"
-      lead={lead?.type === 'paragraph' ? plain(lead.runs) : undefined}
+      lead={lead ? plain(lead.runs) : undefined}
+      footer={footer}
     >
-      <TestimonialWall items={items} />
+      {wall ? (
+        <TestimonialWall
+          items={quotes.map((block) => testimonialItem(block, ratings, avatars))}
+        />
+      ) : (
+        <QuoteSlider
+          label={band.headingText}
+          quotes={quotes}
+          ratings={ratings}
+          avatars={avatars}
+        />
+      )}
     </ContentSection>
+  );
+}
+
+/**
+ * The one-up quote slider: each slide the centred Proof with the client's stars. A portrait shows on
+ * every slide or on none, the wall's rule (review 29 Oct: some faces and some not read as unevenly
+ * finished). One quote is no slider: it stands alone.
+ */
+function QuoteSlider({
+  label,
+  quotes,
+  ratings,
+  avatars,
+}: {
+  label: string;
+  quotes: readonly QuoteBlock[];
+  ratings?: RatingsById;
+  avatars?: AvatarsById;
+}) {
+  const portraits = quotes.map((block) =>
+    block.testimonialId ? avatars?.[block.testimonialId] : undefined,
+  );
+  const withPortraits = portraits.every(Boolean);
+  const slides: ProofQuote[] = quotes.map((block, index) => {
+    const stars = block.testimonialId ? ratings?.[block.testimonialId]?.value : undefined;
+    const portrait = withPortraits ? portraits[index] : undefined;
+    return {
+      ...proofQuote(block),
+      ...(stars !== undefined ? { stars } : {}),
+      ...(portrait
+        ? {
+            portrait: {
+              src: portrait.src,
+              width: portrait.width,
+              height: portrait.height,
+              sources: portrait.sources,
+            },
+          }
+        : {}),
+    };
+  });
+  const [only] = slides;
+  if (slides.length === 1 && only) return <Proof quote={only} align="center" />;
+  return (
+    <Slider
+      label={label}
+      slideName="testimonial"
+      perView={1}
+      align="center"
+      slideAlign="center"
+      autoplay
+    >
+      {slides.map((quote, index) => (
+        <li key={`${index}-${quote.name}`}>
+          <Proof quote={quote} align="center" />
+        </li>
+      ))}
+    </Slider>
+  );
+}
+
+/** An independent score as the copy authors it, parsed by `ratingOf`. */
+export type ScoreLine = NonNullable<ReturnType<typeof ratingOf>>;
+
+/**
+ * The Clutch score as the RatingBadge, the ONLY form a rating takes (owner, 29 Oct 2026: never text
+ * and a link). The copy's words after the score ("from 13 reviews.") and its link's words ("Read the
+ * reviews") are not shown: they follow the badge's visible words in its accessible name, so a
+ * screen reader and a crawler read the whole authored line and the eye reads the badge.
+ */
+export function ScoreBadge({ rating }: { rating: ScoreLine }) {
+  const detail = [rating.detail, rating.linkLabel].filter(Boolean).join(' ');
+  return (
+    <RatingBadge
+      score={rating.score}
+      platform={rating.platform}
+      href={rating.href}
+      icon={<Icon name="star" size="sm" />}
+      mark={<BrandMark name="clutch" />}
+      {...(detail ? { detail } : {})}
+    />
+  );
+}
+
+/**
+ * An independent score line: "**4.8 out of 5 on Clutch** across 13 independent client reviews.
+ * [Read the reviews](…)" (earlier copy) or "**4.8 on Clutch** from 13 reviews. [Read the reviews](…)"
+ * (26 Oct copy). The score, the platform, the reviews' link and its words, and the words between the
+ * claim and the link ("from 13 reviews.") as `detail`.
+ */
+export function ratingOf(
+  block: CorpusBlock,
+):
+  | { score: string; platform: string; href: string; detail?: string; linkLabel?: string }
+  | undefined {
+  if (block.type !== 'paragraph') return undefined;
+  const link = block.runs.find((run) => run.type === 'link');
+  if (!link || link.type !== 'link') return undefined;
+  const [first, ...rest] = block.runs;
+  const claim = first?.type === 'strong' ? plain(first.children) : '';
+  const sentence = plain(block.runs.filter((run) => run !== link)).trim();
+  const match =
+    /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+?)\.?$/.exec(claim) ??
+    /^(\d+(?:\.\d+)?)\s+(?:out of \d+\s+)?on\s+(\S+)/.exec(sentence);
+  if (!match) return undefined;
+  const detail = claim ? plain(rest.filter((run) => run !== link)).trim() : undefined;
+  const linkLabel = plain(link.children).trim();
+  return {
+    score: match[1] ?? '',
+    platform: (match[2] ?? '').replace(/\.$/, ''),
+    href: link.href,
+    ...(detail ? { detail } : {}),
+    ...(linkLabel ? { linkLabel } : {}),
+  };
+}
+
+/* ── Client recognition (home, and every hub that opens on it) ───────────────── */
+
+/**
+ * Who has worked with us: the boxed LogoGrid, centred, its heading the band's (kit home 2; owner,
+ * 10 Oct 2026). The clients the copy names lead, in its order, where the studio holds their file;
+ * the rest of the approved wall follows. A rating authored in the band leads the grid as its badge.
+ * Shared by home and the hubs (component-map § A `client-recognition`).
+ */
+export function RecognitionBand({ band }: { band: CorpusBand }) {
+  const paragraphsIn = band.blocks.filter(
+    (block): block is Extract<CorpusBlock, { type: 'paragraph' }> => block.type === 'paragraph',
+  );
+  const namesBlock = paragraphsIn.find((block) => !ratingOf(block));
+  const ratingBlock = paragraphsIn.find((block) => ratingOf(block));
+  const names = namesBlock ? plain(namesBlock.runs).split(' · ') : [];
+  const named = names.flatMap((name) => {
+    const mark = clientMark(name);
+    return mark ? [mark] : [];
+  });
+  const marks: LogoGridMark[] = [
+    ...named,
+    ...CLIENT_MARKS.filter((mark) => !named.includes(mark)),
+  ];
+  const rating = ratingBlock ? ratingOf(ratingBlock) : undefined;
+  const id = headingIdOf(band);
+  return (
+    <Section id={band.id} data-band="H" aria-labelledby={id}>
+      <LogoGrid
+        marks={marks}
+        badge={rating ? <ScoreBadge rating={rating} /> : undefined}
+        context={band.headingText}
+        contextAs="h2"
+        headingId={id}
+        align="center"
+        edges="closed"
+      />
+    </Section>
   );
 }
 
@@ -372,27 +635,7 @@ export function FaqItems({ band }: { band: CorpusBand }) {
 
 /* ── Enquiry (M2) ─────────────────────────────────────────────────────────────── */
 
-/**
- * The island close's drawing (owner, 16 Oct 2026): a designer's desk with nobody at it, facing the
- * form. Generated by scripts/enquiry-desk.mjs; decorative, so its alt is empty — the heading and
- * lede beside it carry the meaning.
- */
-export const ENQUIRY_DESK = {
-  src: '/illustrations/enquiry/designer-desk.svg',
-  alt: '',
-  width: 396,
-  height: 459,
-  kind: 'illustration',
-} as const;
-
-/** The halves close's drawing (owner, 25 Oct 2026; scripts/enquiry-sketch-to-shipped.mjs). */
-export const ENQUIRY_SKETCH_TO_SHIPPED = {
-  src: '/illustrations/enquiry/sketch-to-shipped.svg',
-  alt: '',
-  width: 455,
-  height: 379,
-  kind: 'illustration',
-} as const;
+export { ENQUIRY_DESK, ENQUIRY_SKETCH_TO_SHIPPED } from '@/lib/enquiry-illustrations';
 
 /**
  * The island close's two form dresses (owner, 16 Oct 2026). Their framing words are not in the
@@ -423,71 +666,82 @@ export const ENQUIRY_DRESS: Record<'card' | 'message', EnquiryDress> = {
 };
 
 /**
- * M2 — the enquiry band: the L close, split (copy | form), `id="enquiry"` so the hero's "#enquiry"
- * lands on it. Fields, submit label and success words come from the page's `conversion` as
- * authored; the lead is the band's one paragraph. Hidden context names the page and its family so
- * a submission is attributable. A scheduling link appears only where `conversion.schedulingLabel`
- * is set, and none is yet (no scheduling destination exists in `routes.ts`).
+ * M2 — the enquiry band: the L close, always on an island (owner, 29 Oct 2026;
+ * decisions/2026-10-29-forms-only-on-the-island), `id="enquiry"` so the hero's "#enquiry" lands on
+ * it. Fields, submit label and success words come from the page's `conversion` as authored; the
+ * lead is the band's one paragraph. Hidden context names the page and its family so a submission is
+ * attributable. A scheduling link appears only where `conversion.schedulingLabel` is set, and none
+ * is yet (no scheduling destination exists in `routes.ts`).
  */
+
+export type EnquiryIsland = {
+  /** brandeis (`blue`, the default) or `ink`. */
+  surface?: 'blue' | 'ink';
+  /** The form's dress. Default `card` (untitled, as home's). */
+  dress?: 'card' | 'message';
+  /**
+   * `halves` (default; owner, 25 Oct 2026): the island split 1:1, the sketch-to-shipped drawing
+   * above the words, the TextureFlow field across the island, fading at the start. `beside`: the
+   * desk drawing, heading and lede beside the form, TextureFrame framing it. The drawing and the
+   * field come with the arrangement, so the two never mix.
+   */
+  arrangement?: 'beside' | 'halves';
+  /** With the drawing (default) or without (owner, 29 Oct 2026). */
+  illustration?: boolean;
+};
 
 export function EnquiryBand({
   page,
   band,
-  surface,
-  island,
+  island = {},
 }: {
   page: CorpusPage;
   band: CorpusBand;
-} & (
-  | { surface: SectionSurface; island?: never }
-  | {
-      /**
-       * The island close (home, owner 16 Oct 2026): the desk drawing, heading and lede beside the
-       * form, all on a blue or ink island on a paper band, the form on a paper panel in one of its
-       * two dresses, the island's texture framing it. It takes no `surface`: the band goes paper.
-       */
-      island: {
-        surface: 'blue' | 'ink';
-        dress: 'card' | 'message';
-        /**
-         * `beside` (default): the desk drawing, heading and lede beside the form, TextureFrame
-         * framing it. `halves` (owner, 25 Oct 2026): the island split 1:1, the sketch-to-shipped
-         * drawing above the words, the TextureFlow field across the island, fading at the start.
-         * The drawing and the field come with the arrangement, so the two never mix.
-         */
-        arrangement?: 'beside' | 'halves';
-      };
-      surface?: never;
-    }
-)) {
+  island?: EnquiryIsland;
+}) {
   const lead = band.blocks.find((block) => block.type === 'paragraph');
   const body = lead && lead.type === 'paragraph' ? ([plain(lead.runs)] as const) : undefined;
-  if (island?.arrangement === 'halves') {
+  /* The band's other lines, kept in the copy half: the independent score ("**4.8 on Clutch** from 13
+     reviews. [Read the reviews]") as the RatingBadge alone (owner, 29 Oct 2026: a rating is always
+     the badge, never a key and a link), and the other ways in ("Or email [hello@tcules.com]") as the
+     close's contact strip, each its words as the key and its link as the value. Text never crosses
+     the island edge. */
+  const score = band.blocks.flatMap((block) => {
+    const found = block === lead ? undefined : ratingOf(block);
+    return found ? [found] : [];
+  })[0];
+  const contact = band.blocks.flatMap((block): CtaContact[] => {
+    if (block === lead || block.type !== 'paragraph' || ratingOf(block)) return [];
+    const link = block.runs.find(
+      (run): run is Extract<InlineRun, { type: 'link' }> => run.type === 'link',
+    );
+    if (!link) return [];
+    const words = plain(block.runs.filter((run) => run !== link))
+      .replace(/\s+([.,])/g, '$1')
+      .replace(/[.\s]+$/, '')
+      .trim();
+    return [{ label: words, value: plain(link.children), href: link.href }];
+  });
+  const contactProps = {
+    ...(contact.length > 0 ? { contact } : {}),
+    ...(score ? { rating: <ScoreBadge rating={score} /> } : {}),
+  };
+  const surface = island.surface ?? 'blue';
+  const dress = ENQUIRY_DRESS[island.dress ?? 'card'];
+  const drawn = island.illustration ?? true;
+  if ((island.arrangement ?? 'halves') === 'halves') {
     return (
       <CtaSection
         id={band.id}
         data-band="L"
-        island={island.surface}
+        island={surface}
         islandArrangement="halves"
         islandTexture="flow"
-        art={<Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" />}
+        art={drawn ? <Media image={ENQUIRY_SKETCH_TO_SHIPPED} sizes="300px" /> : undefined}
         heading={band.headingText}
         body={body}
-        form={corpusEnquiryForm(page, band, { dress: ENQUIRY_DRESS[island.dress] })}
-      />
-    );
-  }
-  if (island) {
-    return (
-      <CtaSection
-        id={band.id}
-        data-band="L"
-        island={island.surface}
-        islandTexture="frame"
-        art={<Media image={ENQUIRY_DESK} sizes="240px" />}
-        heading={band.headingText}
-        body={body}
-        form={corpusEnquiryForm(page, band, { dress: ENQUIRY_DRESS[island.dress] })}
+        {...contactProps}
+        form={corpusEnquiryForm(page, band, { dress })}
       />
     );
   }
@@ -495,12 +749,12 @@ export function EnquiryBand({
     <CtaSection
       id={band.id}
       data-band="L"
-      surface={surface}
-      /* A conversation glyph as the eye's entry into the close (owner, 11 Oct 2026). */
-      mark={<Icon name="chat-round-dots" size="xl" />}
+      island={surface}
+      islandTexture="frame"
+      art={drawn ? <Media image={ENQUIRY_DESK} sizes="240px" /> : undefined}
       heading={band.headingText}
-      body={lead && lead.type === 'paragraph' ? [plain(lead.runs)] : undefined}
-      form={corpusEnquiryForm(page, band)}
+      body={body}
+      form={corpusEnquiryForm(page, band, { dress })}
     />
   );
 }

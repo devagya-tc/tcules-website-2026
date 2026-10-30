@@ -20,7 +20,8 @@ import styles from './TableOfContents.module.css';
  * target is an id on a heading the page has already rendered.
  *
  * The label is a MARKER, not the heading (owner, 26 Oct 2026): two or three words naming the
- * section, authored as `navigationLabel`, so the outline reads as one line per entry.
+ * section, authored as `navigationLabel`, so the outline reads as one short line per entry. A longer
+ * label wraps to a new line; it is never cut (owner, 29 Oct 2026).
  */
 export type TocItem = { label: string; href: `#${string}` };
 
@@ -81,7 +82,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
     const tooLong = named.filter((label) => label.trim().length > LABEL_MAX);
     if (tooLong.length > 0) {
       warn(
-        `${tooLong.length} label(s) exceed ${LABEL_MAX} characters and will be cut to one line ` +
+        `${tooLong.length} label(s) exceed ${LABEL_MAX} characters and will wrap to more than one line ` +
           `(${JSON.stringify(tooLong)}). Author a short navigationLabel: ` +
           `two or three words that name the section.`,
       );

@@ -10,7 +10,8 @@ export type ServiceSceneName =
   | 'design-systems'
   | 'ai-product-ux'
   | 'design-engineering'
-  | 'software-development';
+  | 'software-development'
+  | 'audits';
 
 /**
  * ARTICLE scenes (owner, 13 Oct 2026): each drawn for ONE insight, from that article's own argument,
@@ -49,13 +50,16 @@ export type TraceSceneName =
  * OFFER scenes (owner, 26 Oct 2026, product-design page): drawn for one item of a service page's
  * band from that item's own words, and assigned item by item at the content seam
  * (src/content/sources/offer-scenes.ts). `outcome-*` for "What you get", `symptom-*` for "Where we
- * start", `specialist-*` for the specialist services bento, `case-*` for a worked example's story.
+ * start", `specialist-*` for the specialist services bento (seven since the 26 Oct copy: New Product
+ * Design and the UX & Product Audit joined the five, owner 29 Oct 2026, Q7), `case-*` for a worked
+ * example's story.
  */
 export type OfferSceneName =
   | 'outcome-explain'
   | 'outcome-rules'
   | 'outcome-build'
   | 'outcome-finished'
+  | 'outcome-brief'
   | 'symptom-stuck'
   | 'symptom-messy'
   | 'symptom-test'
@@ -66,6 +70,8 @@ export type OfferSceneName =
   | 'specialist-ui'
   | 'specialist-dataviz'
   | 'specialist-prototype'
+  | 'specialist-new-product'
+  | 'specialist-audit'
   | 'case-dealpath-problem'
   | 'case-dealpath-did';
 
@@ -80,11 +86,36 @@ const BY_ROUTE: Readonly<Record<string, ServiceSceneName>> = {
   '/services/ai-product-ux': 'ai-product-ux',
   '/services/design-engineering': 'design-engineering',
   '/services/software-development': 'software-development',
+  '/audits': 'audits',
 };
 
 /** The scene for a service page's route, or undefined for a route that has none. */
 export function sketchForRoute(href: string): ServiceSceneName | undefined {
   return BY_ROUTE[href.split('#')[0] ?? href];
+}
+
+/**
+ * The specialist services' own scenes, each drawn for that one service from its own words (owner,
+ * 26 Oct 2026; the UX & Product Audit's on 29 Oct). A service page's specialist band assigns the same
+ * drawings at the content seam; this is the same drawing for the same service wherever it is named.
+ */
+const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName>> = {
+  '/services/product-design/ux-research': 'specialist-research',
+  '/services/product-design/information-architecture-workflow-design': 'specialist-ia',
+  '/services/product-design/interaction-ui-design': 'specialist-ui',
+  '/services/product-design/data-visualisation': 'specialist-dataviz',
+  '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
+  '/audits/ux-product-audit': 'specialist-audit',
+};
+
+/**
+ * The SERVICE TILE's scene for a named service (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles):
+ * the service line's own scene, else the specialist service's. Undefined for a service with no
+ * drawing of its own: a set naming one is not drawn, never given another subject's scene.
+ */
+export function serviceSceneFor(href: string): ServiceSceneName | OfferSceneName | undefined {
+  const route = href.split('#')[0] ?? href;
+  return BY_ROUTE[route] ?? SPECIALIST_BY_ROUTE[route];
 }
 
 /**

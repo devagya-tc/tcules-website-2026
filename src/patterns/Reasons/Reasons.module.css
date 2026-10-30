@@ -1,4 +1,4 @@
-/* Reasons — type, ink, the drawing's box and the three ways the set is ruled.
+/* Reasons — type, ink, the drawing's box and the `boxed` frame's rules.
 
    Section paints the band; Layout owns every seam and every track. Every value is an --rsn-* token
    (tokens/components/reasons.css) or a gap-scale step. No margins: a cell's padding is the inside of
@@ -16,6 +16,14 @@
   letter-spacing: var(--rsn-heading-tracking);
   text-wrap: var(--text-title-wrap);
   color: var(--rsn-heading-ink);
+}
+
+/* The set's framing sentence (`lead`), at the system's lead role and measure. */
+.lead {
+  font: var(--rsn-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--rsn-lead-ink);
+  max-inline-size: var(--rsn-lead-measure);
 }
 
 /* The second clause of the same sentence, stepped back. Its measure is the heading's. */
@@ -38,21 +46,12 @@
   max-inline-size: var(--rsn-body-measure);
 }
 
-/* The drawing's box beside its words: a fixed size, the figure contained in it (Media `contain`). */
+/* The drawing's box, heading its words (owner, 29 Oct 2026): a fixed height, as wide as the set's
+   widest ratio (the figures run 1.05–1.2), so it starts at the track's edge with its words; the
+   figure is contained in it (Media `contain`). */
 .figure {
-  inline-size: var(--rsn-figure-width);
   block-size: var(--rsn-figure-height);
-}
-
-/* `beside` from 768: the drawing heads its words. Its box is shorter and as wide as the drawing's
-   own ratio (the set's figures run 1.05–1.2), so it starts at the column's edge with its words
-   rather than floating in the middle of a 206 track. */
-@media (min-width: 768px) {
-  .figureAbove {
-    inline-size: auto;
-    block-size: var(--rsn-figure-height-sm);
-    aspect-ratio: var(--rsn-figure-ratio);
-  }
+  aspect-ratio: var(--rsn-figure-ratio);
 }
 
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────
@@ -113,27 +112,61 @@
   overflow: hidden;
 }
 
-/* ── beside: hairline verticals between columns only ──────────────────────────
-   From 768 the set is three across, or two for four reasons (`.two`). Every reason but the first
-   in its row rules its inline-start edge and opens on the `block` inset; every reason but the last
-   closes on it. So the first column starts flush with the band and the last ends flush, and the
-   only lines are the ones between columns: one for two across, two for three.
-   Placement of this unit's own cells inside the Layout it renders, at the breakpoint where it
-   applies (LogoGrid's precedent). Layout's breakpoints: md 768. */
-@media (min-width: 768px) {
-  .ruled > .item {
-    padding-inline: var(--gap-block);
-    border-inline-start: var(--rsn-rule-width) solid var(--rsn-rule-ink);
-  }
+/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home) ─────────
+   The full width of the track. From 1024, where the reasons stand side by side, one box height for
+   the set (--rsn-proof-height), so the three titles sit on one line and the row reads level: a Layout
+   fills the box and its content centres in it. Below 1024 the reasons are one column, so each proof
+   is its own height and no reason carries air another needed. Sizing, not arrangement. */
+.proof {
+  inline-size: 100%;
+}
 
-  .ruled:not(.two) > .item:nth-child(3n + 1),
-  .two > .item:nth-child(odd) {
-    padding-inline-start: 0;
-    border-inline-start: 0;
+@media (min-width: 1024px) {
+  .proof {
+    block-size: var(--rsn-proof-height);
   }
+}
 
-  .ruled:not(.two) > .item:nth-child(3n),
-  .two > .item:nth-child(even) {
-    padding-inline-end: 0;
-  }
+.proofFill {
+  block-size: 100%;
+}
+
+/* The case's own cover: 16:9 at a set height (what the box leaves over its figure), never wider than
+   the track; the image fills it with Media's anchored crop. Its corners are the photograph radius.
+   Sized from its height, so it starts on the track's edge with the words under it. */
+.cover {
+  position: relative;
+  justify-self: start;
+  inline-size: auto;
+  block-size: var(--rsn-cover-height);
+  aspect-ratio: 16 / 9;
+  max-inline-size: 100%;
+  border-radius: var(--rsn-cover-radius);
+  overflow: hidden;
+  background: var(--rsn-cover-ground);
+}
+
+/* The fact, large and in the accent, the way a figure is (numerals are a foreground mark). */
+.proofValue {
+  font: var(--rsn-proof-value-text);
+  letter-spacing: var(--rsn-proof-value-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-proof-value-ink);
+}
+
+/* Whose it is: the mono label voice, uppercase in presentation only. */
+.proofLabel {
+  font: var(--rsn-proof-label-text);
+  letter-spacing: var(--rsn-proof-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-proof-label-ink);
+}
+
+/* A client with no approved mark: its name typeset in the wordmark role, in the marks' ink, so it sits
+   among drawn marks as a mark does (ch05 §10: never an invented logo). */
+.wordmark {
+  font: var(--text-wordmark);
+  letter-spacing: var(--text-wordmark-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--rsn-wordmark-ink);
 }

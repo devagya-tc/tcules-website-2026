@@ -4,13 +4,13 @@ slug: enterprise-workflow-redesign-dealpath-real-estate
 page_name: Dealpath enterprise workflow redesign case
 page_type: case_study
 seo:
-  title: 'Dealpath: redesigning the add-to-pipeline workflow | Tcules'
-  description: How Tcules clarified listing information and changed an add-to-pipeline workflow while preserving useful complexity in Dealpath's real-estate software.
+  title: 'Dealpath enterprise workflow redesign case study | Tcules'
+  description: 'Dealpath enterprise workflow redesign case study: a clearer listing layout and an add-to-pipeline flow that searches existing deals before creating one.'
   canonical: https://www.tcules.com/case-studies/enterprise-workflow-redesign-dealpath-real-estate
   robots: index,follow
 social:
-  og_title: 'Dealpath: redesigning the add-to-pipeline workflow | Tcules'
-  og_description: How Tcules clarified listing information and changed an add-to-pipeline workflow while preserving useful complexity in Dealpath's real-estate software.
+  og_title: 'Dealpath enterprise workflow redesign case study | Tcules'
+  og_description: 'Dealpath enterprise workflow redesign case study: a clearer listing layout and an add-to-pipeline flow that searches existing deals before creating one.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,18 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Dealpath: redesigning the add-to-pipeline workflow | Tcules'
-  twitter_description: How Tcules clarified listing information and changed an add-to-pipeline workflow while preserving useful complexity in Dealpath's real-estate software.
+  twitter_title: 'Dealpath enterprise workflow redesign case study | Tcules'
+  twitter_description: 'Dealpath enterprise workflow redesign case study: a clearer listing layout and an add-to-pipeline flow that searches existing deals before creating one.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'Dealpath enterprise workflow redesign'
+  secondary_queries:
+  - 'Dealpath enterprise workflow redesign case study'
+  - 'Dealpath case study'
+  - 'listing information design'
+  - 'add-to-pipeline workflow redesign'
+  - 'preserving useful complexity'
+  - 'real estate software UX case study'
   primary_intent: Dealpath enterprise workflow redesign case study
   primary_buyer_question: How do you improve an established workflow without discarding useful behaviour?
   key_entities:
@@ -30,7 +38,7 @@ search_context:
   - listing information
   - deal pipeline
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +62,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -66,7 +74,7 @@ render:
   - the-hierarchy-had-to-survive-different-container
   - what-this-supports-and-what-it-does-not
   - the-decision-another-mature-product-can-reuse
-  - delivery-impact
+  - faq
   - related
   - enquiry
 page_composition:
@@ -98,7 +106,7 @@ page_composition:
       the-hierarchy-had-to-survive-different-container: argument_thesis
       what-this-supports-and-what-it-does-not: argument_thesis
       the-decision-another-mature-product-can-reuse: comparison_decision
-      delivery-impact: argument_thesis
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   commercial_system:
@@ -109,10 +117,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#dealpath
 release:
@@ -160,83 +169,114 @@ content_governance:
 
 *Case study · Dealpath*
 
-# A better way to add listings to Dealpath’s pipeline
+# Dealpath enterprise workflow redesign: search existing deals before creating one
 
-Dealpath's listing workspace carried the property information an acquisitions team needed to judge an opportunity, but one consequential action assumed every listing should become a new deal. Tcules audited the product and selectively redesigned the workflow so people could search existing deals before creating another record while preserving useful surrounding patterns.
+Dealpath's listing workspace carried the property information an acquisitions team needed to judge an opportunity. One consequential action, though, assumed every listing should become a new deal.
 
-Tcules began with a broader product audit, then used Connect Listings as a focused place to act on the findings. The work covered information hierarchy, workflow logic and component behaviour within Dealpath’s existing product and technical constraints. Dealpath’s team owned implementation; we resolved the product decisions the change depended on.
+Tcules audited the product and selectively redesigned the workflow, so people could search existing deals before creating another record. Everything around it that already worked was largely kept, so the redesign asks people to relearn one step.
 
-## At a glance {#case-context}
+The work covered the order of information on each listing, the logic of the workflow and how the cards behave, all designed to fit the product and technology Dealpath already ran.
+
+## Dealpath case study at a glance {#case-context}
 
 | Product | Dealpath, deal-management software used by real-estate acquisitions teams. |
 |---|---|
 | Our role | A product audit, then a focused redesign of the listing-to-deal workflow inside the existing product. |
 | The key question | How can a listing help the team judge an opportunity, and stop people creating a duplicate deal by default? |
 | What we delivered | A clearer listing layout and a search-before-create flow, with the surrounding actions kept as they were. |
+| Where the listing appears | The dashboard, a map list and map-pin details, with the same information order in each. |
+| Implementation | Dealpath's team owned it. Tcules answered the product questions the change depended on. |
 
 Related Tcules services: [Product Redesign](/services/product-modernisation/product-redesign) and [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design).
 
-## What was the listing interface actually asking the acquisitions team to decide? {#the-complexity-belonged-to-the-decision}
-A cleaner card could have been produced by removing fields. It would also have made the product less useful to the people comparing assets and deciding which opportunities deserved attention.
+## Listing information design: the same property data in a clearer order {#the-complexity-belonged-to-the-decision}
 
-The useful distinction was between complexity required by the work and friction accumulated by the interface. Property data was required. A flat reading order was not.
+Removing fields would have made a cleaner card. It would also have made the product less useful to the people comparing assets and judging which opportunities deserved attention.
+
+The useful split was between detail the work required and friction the interface had accumulated. The work required the property data. The flat reading order was friction.
 
 The redesigned listing created three recognisable zones:
 
-1. image, source and listing status;
-2. property identity and distinguishing highlights;
-3. core values for closer comparison.
+1. image, source and listing status
+2. property identity and distinguishing highlights
+3. core values for closer comparison
 
-The same decision information remained available, but the first scan could answer a clearer question: is this opportunity worth investigating further?
+All the information needed to judge a listing stayed available. The first scan now answered a clearer question: is this opportunity worth investigating further?
 
-## What assumption was hidden inside creating a new deal? {#one-action-contained-a-deeper-product-assumption}
-Improving the card clarified the first decision. The more consequential issue appeared after a user selected Add to pipeline.
+## Add-to-pipeline workflow redesign: search existing deals first {#one-action-contained-a-deeper-product-assumption}
 
-The existing route opened Create deal immediately. That was appropriate when the listing represented a genuinely new opportunity. It was the wrong first assumption when the related deal was already being tracked.
+The clearer card improved the first judgement. The bigger problem came after a user selected Add to pipeline.
 
-Tcules reversed the order. The revised flow first asked the user to search for and attach an existing deal. Creating a new deal remained available when no suitable record existed, but became a deliberate fallback rather than the default.
+The existing route opened Create deal immediately. That suited a genuinely new opportunity. It was the wrong first assumption when the deal was already being tracked.
 
-## Restraint was part of the redesign {#restraint-was-part-of-the-redesign}
+Tcules reversed the order. The new flow first asked the user to search for and attach an existing deal. Creating a new deal stayed available, as a deliberate fallback when no suitable record existed.
 
-The listing experience supported four related actions: view the listing, add it to the pipeline, mark it as a comparable or pass on it. Only the pipeline action contained the structural problem.
+## Preserving useful complexity: three listing actions kept as they were {#restraint-was-part-of-the-redesign}
 
-Tcules changed that path and largely preserved the comparable and pass behaviours. This mattered because mature software contains learned sequences, implementation dependencies and regression risk. A redesigned interaction should earn the cost of making users relearn it.
+The listing experience supported four related actions:
 
-The surrounding actions stayed as they were because nothing in the research showed they needed to change.
+- view the listing
+- add it to the pipeline
+- mark it as a comparable
+- pass on it
 
-## The hierarchy had to survive different containers {#the-hierarchy-had-to-survive-different-container}
+Only the pipeline action contained the structural problem.
 
-The listing card appeared across the dashboard, a map list and map-pin details. Each context offered different space, but all represented the same opportunity.
+Tcules changed that path and largely preserved the comparable and pass behaviours. Mature software holds learned sequences, dependencies between parts and the risk of breaking what already works. A redesigned interaction should earn the cost of making users relearn it.
 
-The component could compress. Its product language could not become inconsistent. Property identity, status and core values therefore remained recognisable and retained their order across the three views.
+The surrounding actions stayed as they were, because the research pointed to the pipeline action alone.
 
-Interface hierarchy becomes part of the product model at this point. A compact variant should not force the user to relearn what the same object means.
+## One listing card across the dashboard, map list and map pins {#the-hierarchy-had-to-survive-different-container}
 
-## A clearer listing, a better default, fewer unnecessary changes {#what-this-supports-and-what-it-does-not}
+The listing card appeared across the dashboard, a map list and map-pin details. Each view offered different space, but all represented the same opportunity.
 
-Dealpath got a listing hierarchy that helped people compare opportunities, an attach-before-create flow that accounted for deals already in the pipeline, and consistent card behaviour across three viewing contexts.
+The card could shrink, but what it said had to stay the same. Property identity, status and core values stayed recognisable and kept their order across the three views.
 
-The surrounding actions stayed familiar. The design effort went into the part of the workflow that needed to change, keeping the scope focused and giving engineering a clear intervention to implement.
+At this point the order of information is part of the product itself. In a compact card, the same listing should still mean the same thing to the user.
 
-## The decision another mature product can reuse {#the-decision-another-mature-product-can-reuse}
+## What the redesign gave Dealpath's acquisitions teams {#what-this-supports-and-what-it-does-not}
 
-Product simplification is not a contest to remove the most information. It is the work of separating necessary complexity from accidental friction.
+Dealpath got:
 
-When a workflow feels crowded, first ask which information the decision genuinely requires. Then inspect the defaults and sequence. A single incorrect assumption in the workflow may create more risk than the visible density on the screen.
+- a listing layout that helped people compare opportunities
+- an attach-before-create flow that accounted for deals already in the pipeline
+- consistent card behaviour across three views
 
-Tcules approaches this kind of change as [SaaS Product Redesign](/services/product-modernisation/product-redesign): established software, live customers and continuity obligations. Related domain work sits under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
+The surrounding actions stayed familiar. The design effort went into the one part of the workflow that needed to change. That kept the scope focused and gave engineering a clear change to build.
 
-## What changed in the enterprise workflow {#delivery-impact}
+The search-before-create step protects more than one screen. A pipeline is only as useful as its records are single and complete, and asking for an existing deal first is designed to keep each opportunity's history in one place.
 
-| Impact dimension | What changed |
-|---|---|
-| Workflow integrity | The consequential action changed from assuming a new deal to checking whether the listing belonged to an existing deal first. |
-| Change restraint | Useful surrounding patterns were retained while the product changed the decision that created avoidable workflow risk. |
-| Interface continuity | Property identity, status and core values kept a recognisable hierarchy across the listing’s different containers. |
+## How to simplify a mature workflow and keep the detail it needs {#the-decision-another-mature-product-can-reuse}
 
-## Related workflow work {#related}
+Simplifying a product means separating the detail the work needs from the friction that crept in.
 
-Two other cases where the work stayed complex and the screens became easier to use.
+When a workflow feels crowded, first ask which information people need to make the call. Then look at the defaults and the sequence. One wrong assumption in a workflow can carry more risk than a dense screen.
+
+The hardest call in a mature product is often what to leave alone. Tcules looks for the one assumption costing the most, changes it, and protects everything users have already learned.
+
+Tcules treats this kind of change as [SaaS Product Redesign](/services/product-modernisation/product-redesign): established software, live customers and continuity to protect. Related domain work sits under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
+
+## Questions about the Dealpath workflow redesign {#faq}
+
+### What did Tcules do for Dealpath?
+
+Tcules audited Dealpath's deal-management software, then redesigned the listing-to-deal workflow inside the existing product. The work clarified the reading order on each listing and changed Add to pipeline, so people search for an existing deal before creating a new one. Dealpath's team owned implementation.
+
+### How do you simplify an enterprise workflow and keep the useful complexity?
+
+Separate the detail the work needs from the friction the interface has gathered. On Dealpath, every property field stayed, and the listing was reordered into three zones for a clearer first scan. Of four listing actions, only Add to pipeline changed, because the research pointed to it alone.
+
+### Why search for an existing deal before creating a new one?
+
+The old route opened Create deal straight away. That suited a new opportunity and was the wrong first step when the deal was already being tracked. The new flow asks the user to search for and attach an existing deal first, and creating a new deal stays available as a deliberate fallback.
+
+### Who uses Dealpath's listing workspace?
+
+Real-estate acquisitions teams, who use Dealpath's deal-management software to judge listings and track deals. Tcules audited the product and redesigned the listing-to-deal workflow for them. Related work sits under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
+
+## More workflow redesigns in demanding B2B products {#related}
+
+The work stayed demanding in these products too, and the screens became easier to use.
 
 [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -244,6 +284,10 @@ Two other cases where the work stayed complex and the screens became easier to u
 
 [See SaaS Product Redesign](/services/product-modernisation/product-redesign)
 
-## Tell us which part of the workflow keeps costing time {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us which step in your workflow people keep working around {#enquiry}
 
 Describe the workflow, who runs it and the step that keeps being worked around.

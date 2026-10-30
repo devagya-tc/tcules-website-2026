@@ -4,13 +4,13 @@ slug: about
 page_name: About Tcules
 page_type: page
 seo:
-  title: About Tcules | Product Design Studio in Ahmedabad
-  description: Tcules is a digital product design studio shaped in Ahmedabad, working on new and established software for businesses across the world.
+  title: 'Product Design Studio in Ahmedabad Since 2017 | Tcules'
+  description: 'Tcules is a product design studio in Ahmedabad, India, founded in 2017. What it does, how it differs, who leads it, how it works and the key facts.'
   canonical: https://www.tcules.com/about
   robots: index,follow
 social:
-  og_title: About Tcules | Product Design Studio in Ahmedabad
-  og_description: Tcules is a digital product design studio shaped in Ahmedabad, working on new and established software for businesses across the world.
+  og_title: 'Product Design Studio in Ahmedabad Since 2017 | Tcules'
+  og_description: 'Tcules is a product design studio in Ahmedabad, India, founded in 2017. What it does, how it differs, who leads it, how it works and the key facts.'
   og_image: https://www.tcules.com/assets/og/company.png
   og_image_alt: Tcules social card headed Tcules, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,20 +18,19 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: About Tcules | Product Design Studio in Ahmedabad
-  twitter_description: Tcules is a digital product design studio shaped in Ahmedabad, working on new and established software for businesses across the world.
+  twitter_title: 'Product Design Studio in Ahmedabad Since 2017 | Tcules'
+  twitter_description: 'Tcules is a product design studio in Ahmedabad, India, founded in 2017. What it does, how it differs, who leads it, how it works and the key facts.'
   twitter_image: https://www.tcules.com/assets/og/company.png
 search_context:
   primary_intent: about Tcules product design studio
   primary_buyer_question: What is Tcules, who does it work with and what makes its Product Design practice different?
   supporting_questions:
   - What does Tcules do?
+  - What makes Tcules different from other product design studios?
+  - Who uses Tcules?
   - Who founded Tcules and how has the studio evolved?
-  - Who does Tcules work best with?
-  - What makes Tcules' Product Design practice different?
-  - How does Tcules work with client product and engineering teams?
-  - What does Tcules mean by an AI-native Product Design practice?
-  - What is it like to work at Tcules?
+  - How does Tcules work with clients?
+  - What are the key facts about Tcules?
   key_entities:
   - Tcules
   - Tcules UX Private Limited
@@ -41,27 +40,37 @@ search_context:
   - Product Design studio
   - Ahmedabad, India
   - Product Design
+  - New Product Design & First Release
   - Product Modernisation
-  - Design Systems
   - AI Product UX
+  - Design Systems
   - Design Engineering
   - Software Development
-  primary_query: Tcules product design studio
+  - Audits
+  primary_query: 'product design studio in Ahmedabad'
+  h1_mode: brand
+  secondary_queries:
+  - 'what does Tcules do'
+  - 'product design studio in India'
+  - 'who founded Tcules'
+  - 'Tcules leadership'
+  - 'how Tcules works with clients'
+  - 'Tcules key facts'
   heading_strategy: brand_or_query_alignment_by_page_role; descriptive_answer_headings; natural_language_only
   answer_unit_strategy: direct answer; nuance; evidence; visual/proof; semantic internal link; demand-led FAQs
   buyer_question_evidence:
     source_registry: _system/buyer-question-coverage-v7.yaml
-    editorial_method: manual_readthrough_in_v7; owner-led about-page revision
+    editorial_method: manual_readthrough_in_v7; owner-led about-page revision; owner-structured rebuild 2026-10-23
     questions_retained_or_exposed:
+    - Where is Tcules based, and can it work across time zones?
+    - Who owns the work Tcules produces?
+    - How do we start working with Tcules?
+    - Does Tcules build software as well as design it?
     - Can Tcules work alongside our existing product, design or engineering team?
     - Does Tcules only work with SaaS companies?
-    - Does Tcules only design products, or can you build them too?
-    - How does an engagement with Tcules usually begin?
-    - Can Tcules work effectively with teams outside India?
-    - What does Tcules mean by an AI-native Product Design practice?
-    - Why is Tcules based in Ahmedabad rather than one of India's larger technology hubs?
-    - What is it like to work at Tcules?
-    - What does Tcules look for when hiring designers and engineers?
+    - How is Tcules priced?
+    - Does Tcules use AI in its own work?
+    - Why is Tcules based in Ahmedabad?
     questions_withheld: []
 navigation:
   breadcrumb:
@@ -71,20 +80,15 @@ navigation:
     url: /about
 render:
   band_order:
-  - ahmedabad-is-part-of-how-we-work
-  - the-practice-keeps-moving
   - what-we-do
-  - who-we-work-with
   - difference
-  - how-we-work
+  - who-uses-tcules
   - leadership
-  - work-you-can-inspect
-  - testimonials
+  - how-we-work
   - company-record
+  - testimonials
   - frequently-asked-questions
-  - what-remains-constant
   - work-with-tcules
-  - careers
 page_composition:
   visual_plan: studio_people_place_practice_proof_and_company_facts
   cms_contract:
@@ -94,22 +98,17 @@ page_composition:
     status: LOCAL_COMPONENT_PREVIEW; PRODUCTION_THEME_UNVERIFIED
   editorial_review:
     record: editorial-decision-review/decisions.json
-    thesis: 'Make About the canonical Tcules entity home: Ahmedabad-shaped institutional story, Product Design evolution, leadership, client fit, operating model, proof, company facts and future-team context.'
+    thesis: 'Make About the canonical Tcules entity home in the owner''s order: value proposition, services, sourced differences from named studios, who uses Tcules, the team and founding story, how engagements run, key facts, client voices and buyer FAQs.'
     section_components:
-      ahmedabad-is-part-of-how-we-work: method_process
-      the-practice-keeps-moving: argument_thesis
       what-we-do: capability_overview
-      who-we-work-with: buyer_situation
       difference: argument_thesis
-      how-we-work: method_process
+      who-uses-tcules: buyer_situation
       leadership: people
-      work-you-can-inspect: case_or_artefact_proof
-      testimonials: testimonial_proof
+      how-we-work: method_process
       company-record: facts
+      testimonials: testimonial_proof
       frequently-asked-questions: faq
-      what-remains-constant: argument_thesis
       work-with-tcules: enquiry
-      careers: careers_cta
   media_bindings:
   - id: about_team
     role: humanise
@@ -124,7 +123,7 @@ page_composition:
     motion_alternative: not_applicable
   - id: about_studio_review
     role: humanise
-    supports_section: ahmedabad-is-part-of-how-we-work
+    supports_section: how-we-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186528/Image_2_6b09ca7e30.webp
     source: current public Tcules About media
     alt_intent: Tcules team in an in-studio presentation and review session
@@ -135,7 +134,7 @@ page_composition:
     motion_alternative: not_applicable
   - id: about_work_wall
     role: demonstrate
-    supports_section: work-you-can-inspect
+    supports_section: what-we-do
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1788186507/Image_1_c048010957.webp
     source: current public Tcules About media
     alt_intent: Working wall showing discovery, product thinking, UX and visual design material
@@ -148,7 +147,7 @@ page_composition:
     testimonial_ids:
     - FP-EDEN-USERS
     - CL-RINGIER-COLLAB
-    - UW-JOVE-INTEGRATION
+    - DRAFT-PRIMELIS-TEAM
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
 structured_data:
@@ -172,6 +171,7 @@ release:
   route_dependencies:
   - CLAIM_EVIDENCE_VERIFICATION
   - HUMAN_MARKETING_REVIEW
+  - COMPETITOR_COMPARISON_RECHECK
   feature_dependencies: []
   legal_dependencies: []
 migration:
@@ -180,205 +180,196 @@ content_governance:
   master_contract: "Tcules Website V11: Editorial Embodiment & Visual Proof Pass"
   editorial_pass: V11_EDITORIAL_EMBODIMENT_VISUAL_PROOF
   pre_review_repair: V11.1_PRE_REVIEW_REPAIR
+  language: en-GB
   owner_about_source: OWNER_SUPPLIED_2026_09_26
+  owner_about_rebuild: OWNER_STRUCTURE_2026_10_23
+  story_restored: OWNER_DECISION_2026_10_26 (Ahmedabad, practice moving with AI, Product Design philosophy, work to inspect; words from about-before-23-oct-rebuild.md)
+  comparison_sources: about/sources.md
   canonical_founders:
   - Jatin Leuva
   - Rakesh Chitroda
 ---
 
-*About Tcules*
+*About Tcules · Product design studio in Ahmedabad, India*
 
-# **Tcules is a digital product design studio shaped in Ahmedabad, creating software products for businesses across the world.**
+# We create ambitious new software products and make established ones better
 
-For generations, Ahmedabad has turned ideas into things people live with. Making, design and enterprise have long sat unusually close together here. NID and CEPT helped establish modern design education in India, and today they are part of a much broader design ecosystem across the city.
+**Tcules is a digital product design studio in Ahmedabad, India, for founders and product teams with something important to build, rethink or take further. SaaS is a particular focus.**
 
-Tcules was founded here in 2017 by Jatin Leuva and Rakesh Chitroda. Since then, we have worked on more than 90 projects across 19 countries, from new products to established software and complex operational systems.
+Product Design is the foundation, combining research, product thinking, interaction design and visual craft. We look past the screens to the people, systems and business behind a product, question the brief where it falls short and give complicated ideas a form people want to use. Then we carry the design all the way into software that works in everyday life.
 
-Product Design sits at the centre of the studio.
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-For us, that means understanding people and systems well enough to make better product decisions, giving complicated ideas useful form, and carrying those decisions through to software that works in everyday life.
-
-## Ahmedabad is part of how we work {#ahmedabad-is-part-of-how-we-work}
-
-Tcules spent its first five and a half years working remotely. In 2022, we opened our Ahmedabad studio and brought the team together.
-
-The change was about more than having an office. Working in the same place makes it easier for designers and engineers to share context, inspect the same product, challenge one another's thinking and take responsibility for the quality of the whole rather than only the output of a function.
-
-It also made another ambition more tangible: creating a place where talented people can build a career in Ahmedabad while doing product work that reaches far beyond it.
-
-We want ambitious designers and engineers here to be able to do some of the most interesting work of their careers without assuming that the best opportunities must exist somewhere else.
-
-## The practice keeps moving {#the-practice-keeps-moving}
-
-The products we work on are becoming more intelligent, adaptive and capable of acting on people's behalf. AI is also changing how software itself gets researched, imagined, designed, built and tested.
-
-Tcules has worked across AI-native products, copilots, AI-powered features and integrations, and is extending that experience into increasingly agentic software.
-
-Our response is not to attach new tools to an old design process. We are changing the practice itself: learning where machines can now do useful work, what new product experiences become possible, where people need greater visibility and control, and where experienced human judgement becomes more important.
-
-That is consistent with how Tcules has evolved over the years. Product Design remains the centre. The capabilities and methods around it continue to evolve with technology, products and the ambitions of our clients.
-
-## What Tcules does {#what-we-do}
+## What Tcules does, from Product Design to software and audits {#what-we-do}
 
 ### Product Design
 
-We research, frame and model products; structure information and workflows; design interactions and interfaces; prototype and test directions; and support the decisions needed to move the product forward.
-
-The outcome is not simply a set of screens. It is greater clarity about what the product should do, how it should behave and how people should experience it.
+Tcules works out what a product should do, for whom and how its parts fit together, then designs the workflows, interactions, interfaces and visual detail. Research, prototyping and testing are part of the work. You come away with a product people understand and use, and a clear design your engineers, or Tcules, can build from.
 
 [Explore Product Design](/services/product-design)
 
+### New Product Design & First Release
+
+Tcules turns an idea, a concept or a working prototype into an MVP built around the work customers do every day. Together with the founder or product team, it agrees who the first release is for and what it leaves out, and can carry that release through to launch-ready software.
+
+[Explore New Product Design & First Release](/services/new-product-design-first-release)
+
 ### Product Modernisation
 
-We help established software move forward without assuming everything old needs to disappear.
-
-That can mean simplifying accumulated workflows, restructuring information, redesigning parts of the experience, strengthening the underlying system or changing the product selectively while preserving knowledge and behaviours that still matter.
+Tcules updates established software part by part, alongside the team that runs it, simplifying workflows and restructuring what has grown tangled over the years. Customers keep the habits that still serve them, and the product becomes able to do what the business needs next.
 
 [Explore Product Modernisation](/services/product-modernisation)
 
-### Design Systems
-
-We turn repeated design decisions into systems that help teams build more coherently as products and organisations grow.
-
-The work can span foundations, components, patterns, governance and adoption, with the system connected to the product rather than maintained as a parallel design exercise.
-
-[Explore Design Systems](/services/design-systems)
-
 ### AI Product UX
 
-We design how intelligent products communicate, recommend, ask for authority, take action, show evidence and return control to people.
-
-The work ranges from AI-powered features and copilots to AI-native and increasingly agentic products where trust, uncertainty, review and recovery are part of the product behaviour itself.
+Tcules designs what an AI feature or agent does, how people steer it and, where the stakes call for it, how they check its work before it counts. The outcome is AI that people can follow, check and correct, so they are willing to hand it real work.
 
 [Explore AI Product UX](/services/ai-product-ux)
 
+### Design Systems
+
+Tcules creates design systems in Figma and in code: foundations, components, patterns and the rules for using them. Every team then builds from one look and one set of parts, so new work looks like your product from the start.
+
+[Explore Design Systems](/services/design-systems)
+
 ### Design Engineering
 
-We take Product Design closer to the working medium, using prototypes, frontend code and design-system implementation where the browser can resolve questions that static design tools cannot.
-
-This shortens the distance between design intent and what ultimately ships.
+Tcules design engineers explore, refine and build product experiences in code, from the first prototype to production, beside your developers. You see an idea running before you commit to it, and the build keeps to the design.
 
 [Explore Design Engineering](/services/design-engineering)
 
 ### Software Development
 
-When the product needs broader ownership, Tcules can continue into frontend, backend, integrations, [AI engineering](/services/software-development/ai-product-engineering), testing and release.
-
-Software Development expands how far we can carry a product decision. Product Design remains the organising discipline of the studio.
+When a product needs building, Tcules can carry it through frontend, backend, integrations, testing and release. New products reach launch-ready software, established applications keep evolving, and the designers stay involved through the build.
 
 [Explore Software Development](/services/software-development)
 
-## Who Tcules works best with {#who-we-work-with}
+### Audits
 
-Three situations recur:
+A Tcules audit looks at a product, a design system or the match between design and code, and traces visible problems back to their cause. Each finding is ranked by the harm it does, so your team knows what to fix first and can act on the plan with or without Tcules.
 
-- **Growth-stage and post-PMF SaaS teams** dealing with complex workflows, accumulated design debt or a roadmap that needs stronger Product Design responsibility.
-- **Established software companies** modernising products, strengthening systems or introducing AI into consequential workflows.
-- **Founders and product teams creating new software** where the opportunity is real but the product model, interaction or first-release boundary still needs to be worked out.
+[Explore Audits](/audits)
 
-The common thread is not company size.
+## How Tcules compares with other product design studios {#difference}
 
-It is that the product decision matters enough to deserve experienced design attention.
+The comparisons below come from each studio's own website, as published in October 2026.
 
-## What makes the practice different {#difference}
+### Product Design, Design Engineering and Software Development in one practice
 
-### Product Design is the centre, not a stage
+All three sit in one practice, so Tcules can take a product from research to released software. You choose where the work stops: designs for your engineers, a finished interface, or a defined part of the application. Eleken describes its development work as a working front end, delivered for the client's developers to connect to the backend.
 
-At Tcules, Product Design is not a phase between requirements and engineering.
+### Any starting point, from an idea to an established product
 
-Research, product modelling, workflows, interaction, interface design, prototyping, Design Systems and implementation decisions can all belong to the same responsibility. The work is organised around making and preserving good product decisions rather than producing a predetermined quantity of artefacts.
+Tcules can begin from an idea, a concept or a working prototype, or join the team behind an established product. Its more than 90 projects since 2017 range from new products to established software and operational systems.
 
-### Complex software is treated as a design material
+### An optional fixed-price pilot
 
-Real products contain roles, rules, states, exceptions, data, dependencies, customer habits and technical constraints.
+A first engagement can be a small pilot at a fixed price agreed up front, such as a redesigned flow, a UI concept, an audit or one feature. You keep the work when it ends. Eleken's first step is a free three-day trial in which it designs one or two screens.
 
-We work through that complexity rather than simplifying it away in the presentation. A mature SaaS product may need to change without erasing what existing users know. A new platform may need several workflows to become one coherent product model. An AI product may need authority and recovery designed before people can confidently let it act.
+### A fixed monthly fee for ongoing work
 
-### Senior judgement stays close to the work
+Ongoing work costs a fixed monthly fee, agreed before it starts. The fee changes when the team changes, and a busy month leaves it where it is. Clay offers time and materials, a fixed fee or a retainer, recommending one after discovery and setting it out in a custom proposal.
 
-The people shaping the product direction remain involved as the work moves forward.
+### Month to month, with two weeks' notice
 
-Clients work directly with the practitioners responsible for the product, while specialists can join where a particular problem requires deeper research, data visualisation, Design Systems, Design Engineering or other expertise.
+Ongoing work has no minimum term. Two weeks' notice changes the team or ends the work. Eleken's pricing page sets a minimum contract of two months and asks for a month's notice before cancelling a monthly subscription.
 
-### Design and engineering can stay connected
+## Who uses Tcules: founders, product teams and established software companies {#who-uses-tcules}
 
-Some product decisions survive a hand-off easily. Others weaken somewhere between the design file and the working product.
+Fit depends on the state of the product and the size of the ambition, never the size of the company. Tcules works with:
 
-Bringing design and code into the same practice allows Tcules to continue where continuity matters, without turning the studio into a production engineering supplier.
+- founders and early product teams creating a first release
+- product teams at growth-stage and post-product-market-fit B2B SaaS companies
+- established software companies modernising a product their customers rely on
+- product teams adding AI to workflows that people answer for
+- teams whose design system no longer matches what ships
 
-### AI is changing both sides of our work
+SaaS is a particular focus. Tcules also designs business applications, data-rich interfaces, consumer products and AI-powered experiences.
 
-We design products that use AI, and we increasingly use AI to practise Product Design itself.
+### Work you can inspect
 
-Agents, automation and purpose-built tools can support research, product inspection, synthesis, exploration, production, implementation and verification. What matters is deciding where they improve the work, where they introduce new risk and where a person still needs to make the call.
-
-[How AI-native Product Design works at Tcules](/how-we-work/ai-native-product-design)
-
-## How Tcules works {#how-we-work}
-
-### Start where the uncertainty is
-
-An engagement does not need to begin with a large transformation programme.
-
-It can start with an audit, an assessment, one difficult workflow or a defined product problem and stop there if that is all the client needs. Larger engagements can continue through sustained Product Design, modernisation, Design Engineering or a wider build.
-
-### Work directly with the people doing the work
-
-Tcules works with founders, product leaders, designers and engineers rather than putting an account-management layer between the client and the practitioners responsible for the product.
-
-A lead designer guides the work and is your main point of contact. Specialists join when the problem needs them.
-
-### Work inside the client's product environment
-
-We can work within the client's existing tools, Design System, codebase and review rhythm rather than creating a separate agency process that has to be translated back into the organisation.
-
-That is particularly important when Tcules is working alongside an established product or engineering team.
-
-### Stay connected across markets and time zones
-
-The studio works from Ahmedabad with clients across markets and time zones.
-
-Working hours are agreed for each engagement to create meaningful working-day overlap with the client team.
-
-### Match the commercial shape to the work
-
-Audits and assessments can be fixed-price. Defined product projects can be fixed-scope. Ongoing product partnerships can run monthly.
-
-The engagement boundary follows the responsibility being taken rather than forcing every client into the same model.
-
-## The people behind the studio {#leadership}
-
-### Jatin Leuva, Founder & CEO
-
-Jatin leads Tcules' product and practice direction. His current focus includes Product Design for complex software, the changing relationship between design and implementation, and how AI changes both products and the work required to create them.
-
-[Follow Jatin on LinkedIn](https://in.linkedin.com/in/jatinuva)
-
-### Rakesh Chitroda, Co-founder and commercial lead
-
-Rakesh leads the commercial side of Tcules and works with founders and product teams to understand where the studio can make a meaningful contribution. His background in software-services sales and business development brings commercial continuity to a practice centred on Product Design.
-
-[Follow Rakesh on LinkedIn](https://www.linkedin.com/in/rakeshchitroda)
-
-The wider Tcules studio brings designers and engineers together in Ahmedabad around the products they are responsible for.
-
-[Follow Tcules on LinkedIn](https://www.linkedin.com/company/tcules)
-
-## See the practice in the work {#work-you-can-inspect}
-
-[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) shows research changing the underlying product model for enterprise scheduling.
+[Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) shows research changing the product model behind enterprise scheduling.
 
 [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) shows modernisation balancing new expectations with established customer habits.
 
-[Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) shows AI behaviour redesigned around deliberate human choice.
+[Omny AI](/case-studies/omny-ai-suggestion-trust-redesign) shows AI behaviour redesigned around a deliberate human choice.
 
-[GT Tools](/case-studies/gt-tools-shopify-product-discovery) shows Product Design carried through implementation rather than ending at hand-off.
+[GT Tools](/case-studies/gt-tools-shopify-product-discovery) shows Product Design carried all the way into a built Shopify store.
 
-The [Future Interfaces Lab](/future-interfaces-lab) is where we explore emerging product behaviours and new ways of practising Product Design when the work is developed enough to inspect.
+The [Future Interfaces Lab](/future-interfaces-lab) is where we work on what comes next: agents, voice, AI workflows and new ways of practising Product Design.
 
 [Explore all case studies](/case-studies)
 
-## What clients say {#testimonials}
+## Who founded Tcules, and the team that leads it {#leadership}
+
+Jatin Leuva and Rakesh Chitroda founded Tcules in Ahmedabad in 2017. The team worked remotely for its first five and a half years, then opened its Ahmedabad studio in 2022 and brought everyone together in one place.
+
+### Jatin Leuva, Founder & CEO
+
+Jatin leads Tcules' product and practice direction. His focus includes Product Design for complex software, the changing relationship between design and implementation, and how AI changes both products and the work of making them.
+
+[Jatin Leuva on LinkedIn](https://in.linkedin.com/in/jatinuva)
+
+### Rakesh Chitroda, Co-founder
+
+Rakesh leads the commercial side of Tcules and works with founders and product teams to find where the studio can make the biggest difference to their product. He brings a background in software-services sales and business development.
+
+[Rakesh Chitroda on LinkedIn](https://www.linkedin.com/in/rakeshchitroda)
+
+### The Ahmedabad studio
+
+For generations, Ahmedabad has turned ideas into things people live with. Making, design and enterprise have long sat unusually close together here. NID and CEPT helped establish modern design education in India, and today they are part of a much broader design ecosystem across the city.
+
+Opening the studio in 2022 was about more than having an office. Working in the same place makes it easier for designers and engineers to share what they know, inspect the same product, challenge one another's thinking and take responsibility for the quality of the whole.
+
+It also made another ambition more tangible: a place where talented people can build a career in Ahmedabad while doing product work that reaches far beyond it. Ahmedabad is where the practice took shape. The world is where the work goes.
+
+### The practice keeps moving
+
+AI is changing how software gets researched, imagined, designed, built and tested, and we mean to help set the standard for doing product design well with it. Our designers already hand well-defined work in research, design and code to AI tools, and spend what they gain on the judgement, taste and product thinking that stay with people.
+
+Product Design remains the centre. Around it, the practice keeps widening: designers who explore directly in code, direct AI through the repetitive work and put a working version of an idea in front of clients earlier in the conversation. [How AI-native Product Design works at Tcules](/how-we-work/ai-native-product-design)
+
+[Tcules on LinkedIn](https://www.linkedin.com/company/tcules) · [Tcules on Clutch](https://clutch.co/profile/tcules-saas-product-design-studio) · [Careers at Tcules](/careers)
+
+## How Tcules works with clients {#how-we-work}
+
+- **Who you work with.** One senior designer leads your work and does it, with an account lead alongside who looks after the team and the arrangements. Specialists, such as a researcher or a design-systems specialist, join when the work needs them.
+
+- **Communication.** The work happens in your own tools: your design files, tracker and chat. You see it as it happens, and you can raise anything with your senior designer or account lead.
+
+- **Response time.** Enquiries get a reply within one business day.
+
+- **Getting started.** A first conversation, then a written proposal and an agreement setting out the work, the fees and when invoices are due. Work starts once both are agreed.
+
+- **Turnaround.** A pilot's length is stated in its proposal before it begins. Defined projects run to their agreed scope, and ongoing work runs month to month.
+
+- **Working hours.** The hours Tcules shares with your team are agreed for each engagement before it starts.
+
+[See how engagements work](/how-we-work)
+
+## Tcules key facts at a glance {#company-record}
+
+| Fact | Detail |
+| --- | --- |
+| Company Name | Tcules (Tcules UX Private Limited) |
+| Type | Digital product design studio |
+| Founded | 2017, in Ahmedabad, India |
+| Founder | Jatin Leuva (Founder & CEO) and Rakesh Chitroda (Co-founder) |
+| Headquarters | Ahmedabad, India |
+| Website | [tcules.com](https://www.tcules.com) |
+| Core Offering | Product Design for new and established software products, with a particular focus on SaaS |
+| Pricing | Fixed-price pilot projects and audits; defined projects priced on agreed scope; ongoing work at a fixed monthly fee |
+| Contract Terms | Ongoing work runs month to month, with no minimum term and two weeks' notice to change the team or end the work. Clients own the code and designs Tcules makes for them, once paid for. |
+| Services | Product Design; New Product Design & First Release; Product Modernisation; AI Product UX; Design Systems; Design Engineering; Software Development; Audits |
+| Communication | In the client's own tools. A senior designer leads hands-on, with an account lead alongside. Working hours are agreed per engagement. Enquiries get a reply within one business day. |
+| Notable Clients | Doodle, Dealpath, Benchmark Gensuite, Eden AI, ConnectX, JoVE, Ringier Media Switzerland, Primelis |
+| Customers Served | Founders and product teams, with clients in 19 countries |
+| Projects Delivered | More than 90 |
+| Competitors | Product design studios such as Eleken, MetaLab, Cieden and Clay |
+| Social | [LinkedIn](https://www.linkedin.com/company/tcules) · [Clutch](https://clutch.co/profile/tcules-saas-product-design-studio) |
+
+## What clients say about working with Tcules {#testimonials}
 
 > "Our users gave us great feedback about the new design, and they came forward and told us without us asking for it."
 
@@ -390,110 +381,53 @@ Founder & CPTO, Eden AI
 **Roland Sailer**  
 Director of Product, Ringier Media Switzerland
 
-> "The Tcules team integrated well with our internal PMs and designers, contributing meaningfully to high-fidelity design deliverables that most often met our product standards."
+> "For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust."
 
-**Dhanur Aashray Majety**  
-Director, Product Management, JoVE
+**Clément Contamine**  
+CPO, Primelis
 
-## Tcules at a glance {#company-record}
+## Questions about Tcules as a product design studio in India {#frequently-asked-questions}
 
-| Fact | Current public record |
-| --- | --- |
-| Company | Tcules UX Private Limited |
-| Category | Digital product design studio |
-| Founded | 2017 |
-| Founders | Jatin Leuva and Rakesh Chitroda |
-| Headquarters and studio | Ahmedabad, India |
-| Core practice | Product Design |
-| Services | Product Design, Product Modernisation, Design Systems, AI Product UX, Design Engineering and Software Development |
-| Projects | More than 90 |
-| Client reach | 19 countries |
-| Typical clients | Growth-stage and post-PMF SaaS teams, established software companies, and founders or product teams creating new software |
-| Selected clients and products | Doodle, Eden AI, Dealpath, Omny AI, Benchmark Gensuite, Knovos, Primelis and GT Tools |
-| Engagement models | Fixed-price audits and assessments, fixed-scope product projects, and ongoing monthly product partnerships |
-| Working model | Ahmedabad-based studio working directly with product teams across markets and time zones |
-| Collaboration | A lead designer guides the work and is your main point of contact. Specialists join when the problem needs them. Working overlap is agreed with the client. |
-| Website | tcules.com |
-| LinkedIn | linkedin.com/company/tcules |
+### Where is Tcules based, and can it work across time zones?
 
-## Frequently asked questions {#frequently-asked-questions}
+Tcules is based in Ahmedabad, India, and has worked with clients in 19 countries. Before each project starts, Tcules and the client agree the hours they will share. Where working days overlap a lot, the team works through most of the client's day; where they barely overlap, a regular time for calls and reviews is agreed.
+
+### Who owns the work Tcules produces?
+
+The client owns the code and designs Tcules makes for them, once they are paid for. Any third-party code, fonts or images included in the work come with a licence to use them, as set out in the agreement. Product direction and release sign-off stay with the client throughout.
+
+### How do we start working with Tcules?
+
+Send a few lines about what you're working on, and a senior designer replies. After a first conversation, Tcules sends a written proposal and an agreement covering the work, the price and, for a pilot, how long it runs. A fixed-price pilot is a good first step, and it is optional.
+
+### Does Tcules build software as well as design it?
+
+Yes. Design Engineering takes design work into code, from early prototypes to production interfaces, and Software Development carries products through frontend, backend, integrations, [AI engineering](/services/software-development/ai-product-engineering), testing and release. Some clients have their own engineers build from Tcules designs; others ask Tcules to work in their code, deliver a finished interface or build a defined part of the application.
 
 ### Can Tcules work alongside our existing product, design or engineering team?
 
-Yes. Tcules can own a defined product problem or work alongside an existing team where additional Product Design judgement or specialist capability is needed.
-
-The work can happen within the client's existing tools, Design System, codebase and review rhythm rather than through a separate agency environment.
+Yes. Tcules can own a defined product problem or join an existing team where more Product Design judgement or specialist skill is needed. The work happens in your existing tools, design system, codebase and review rhythm.
 
 ### Does Tcules only work with SaaS companies?
 
-No. SaaS is an important part of our experience, but Tcules has also worked across consumer products, marketplaces, operational platforms and software in areas including analytics, productivity, FinTech, PropTech, HealthTech and EdTech.
+No. SaaS is a particular focus, from shaping new product ideas to helping established platforms evolve. Tcules also designs business applications, data-rich interfaces, consumer products, marketplaces and AI-powered experiences, in areas including analytics, productivity, FinTech, PropTech, HealthTech and EdTech.
 
-The stronger predictor of fit is product complexity rather than a particular business model.
+### How is Tcules priced?
 
-### Does Tcules only design products, or can you build them too?
+Every engagement is priced before work starts. Pilot projects and audits have a fixed price agreed up front, defined projects are priced on their agreed scope, and ongoing work is a fixed monthly fee. The written proposal sets out the figure for your project.
 
-Tcules can carry responsibility beyond design.
+### Does Tcules use AI in its own work?
 
-Design Engineering lets us move into working frontend experiences, while Software Development can extend an engagement through backend engineering, integrations, [AI engineering](/services/software-development/ai-product-engineering), testing and release when the product requires broader ownership.
+Yes. AI is part of how Tcules researches, explores options, prototypes and checks its work, and people make the product calls and review everything before it reaches you. If your organisation has rules about AI tools, they are agreed at the start.
 
-### How does an engagement with Tcules usually begin?
+[How Tcules uses AI in its Product Design practice](/how-we-work/ai-native-product-design)
 
-It begins at the point where the product needs clarity or additional responsibility.
+### Why is Tcules based in Ahmedabad?
 
-That might be an audit, one difficult workflow, research and product modelling, an embedded Product Design engagement, a modernisation programme or a defined product build. A bounded engagement does not have to become a larger one.
+Tcules was founded in Ahmedabad, a city with a deep design tradition, strong design schools such as NID and CEPT, and an entrepreneurial culture. Keeping the team together in one studio lets designers and engineers share what they know, critique work closely and build careers in Ahmedabad while working on products across the world.
 
-### Can Tcules work effectively with teams outside India?
+## Tell us what you are creating or changing {#work-with-tcules}
 
-Yes. Tcules has worked across 19 countries and collaborates directly with product teams across markets and time zones.
-
-Working hours are agreed around the engagement so there is meaningful overlap between the Ahmedabad studio and the people making decisions on the client side.
-
-### What does Tcules mean by an AI-native Product Design practice?
-
-It means AI increasingly participates in both the products we design and the way we design them.
-
-Tcules uses agents, automation and other AI-assisted methods where they can improve research, inspection, synthesis, exploration, production, implementation or verification. We also design the behaviour of intelligent products themselves, including authority, uncertainty, evidence, review, control and recovery.
-
-[Read about AI-native Product Design at Tcules](/how-we-work/ai-native-product-design)
-
-### Why is Tcules based in Ahmedabad rather than one of India's larger technology hubs?
-
-Ahmedabad gives Tcules an unusual place from which to build a Product Design practice: a deep design inheritance, strong educational institutions, an entrepreneurial culture and access to emerging design and engineering talent.
-
-Keeping the practice together here also lets designers and engineers develop shared context, critique work closely and build careers in Ahmedabad while working on products across the world.
-
-### What is it like to work at Tcules?
-
-Tcules is an on-site product studio. People are expected to understand the product they are working on, question assumptions, explain decisions, critique work, learn new methods and take increasing responsibility for the result.
-
-The environment suits designers and engineers who care about software, craft and developing stronger judgement over time.
-
-### What does Tcules look for when hiring designers and engineers?
-
-Formal education can be useful, but it is not the only evidence that matters.
-
-We look for the ability to observe, reason, communicate, learn and make. As AI takes over more routine production, the ability to frame problems, inspect evidence, direct machines intelligently and remain accountable for the outcome becomes more important.
-
-[Explore careers at Tcules](/careers)
-
-## What remains constant {#what-remains-constant}
-
-Software is our material.
-
-We care about how it behaves, how clearly people understand it, how confidently they can use it and whether the thinking behind it survives the journey from an idea to a working product.
-
-Ahmedabad is where the practice took shape.
-
-The world is where the work goes.
-
-## Work with Tcules {#work-with-tcules}
-
-If you are creating a new product, modernising established software or working through a consequential Product Design or AI problem, tell us what is changing.
+Tell us what you want your product to become, whether it is a first release taking shape or an established product ready to go further.
 
 [Start a conversation](/contact)
-
-## Build your career here {#careers}
-
-If you want to practise Product Design, Design Engineering or software development somewhere the work and the people around you are expected to keep evolving, see what is open.
-
-[Explore careers at Tcules](/careers)

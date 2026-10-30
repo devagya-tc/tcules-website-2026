@@ -18,7 +18,7 @@ import styles from './Banner.module.css';
  * The three forms of the banner family (visual-direction § 3.4, I and the strip).
  *
  *   below   a stacked head over a 3:1 photograph at the full column (1240 × 413 at 1470): eyebrow →
- *           heading → lead in one column at `block`, the action a `stack` under the lead, then the
+ *           heading → lead in one column at `block`, the action a `block` under the lead, then the
  *           photograph a `stack` beneath. One column at every width (owner, 7 Oct 2026: the H-row,
  *           heading in a 1 track and lead + action in a 2 track, is retired — a text-only head is
  *           never split left/right). Below 1024 the photograph crops 3:2 — a 3:1 at the 326 phone
@@ -89,15 +89,20 @@ type BannerHeadProps = {
    * One sentence under the heading, ≤ 18 words (below) or ≤ 3 lines in 477 (beside). A node so a
    * sentence that names a case can carry the case's link (owner, 11 Oct 2026); inline content only,
    * since it renders inside the lead's `<p>`.
-   */
-  lead?: ReactNode;
-  /**
-   * The head's action, a `stack` under the lead — in practice a `CtaRow` with `rule={false}`, so the
-   * one blue link is the caller's composition and a pattern never imports a pattern.
    *
-   * ONE link, never a solid (r7-buttons, 8 Oct 2026): a banner is in-band, and the page's one main
-   * action — the blue solid and its ghost — belongs to the hero and the close. Until then a solid
-   * CtaRow that took `converts` was allowed here.
+   * An array is a lead written as several paragraphs (home's "The people behind Tcules", 26 Oct
+   * copy): each its own `<p>` at the lead role and measure, `text` (16) apart, so the second
+   * paragraph reads as the lead going on rather than as a body at another measure and ink.
+   */
+  lead?: ReactNode | readonly ReactNode[];
+  /**
+   * The head's actions, a `block` under the text they finish (owner, 29 Oct 2026;
+   * decisions/2026-10-29-banner-two-actions-one-row) — in practice a `CtaRow` with `rule={false}`,
+   * so the actions are the caller's composition and a pattern never imports a pattern.
+   *
+   * One link, or a pair in ONE row with a hierarchy: an outlined button, then the quieter link
+   * (CtaRow's pair). Never a solid (r7-buttons, 8 Oct 2026): a banner is in-band, and the page's
+   * one main action — the blue solid and its ghost — belongs to the hero and the close.
    */
   actions?: ReactNode;
   /**
@@ -121,9 +126,10 @@ type BelowProps = BannerHeadProps & {
   mediaSide?: never;
   /**
    * Where the head's action sits (owner, 7 Oct 2026) — ContentSection's `actionsAt`, the same
-   * decision. `below` (default) a `stack` under the lead; `end` at the inline end of the heading's
-   * row from 1024, its top on the heading's top, in a content-sized track a `column` (64) from the
-   * text, the eyebrow on its own line above both. Below 1024 it falls back under the lead.
+   * decision. `below` (default) a `block` under the lead; `end` at the inline end of the heading's
+   * row from 1024, vertically centred on the heading (owner, 29 Oct 2026), in a content-sized track
+   * a `column` (64) from it, the eyebrow on its own line above and the lead under the row. Below
+   * 1024 it sits a `block` under the heading, above the lead.
    */
   actionsAt?: 'below' | 'end';
 };
@@ -249,7 +255,17 @@ export function Banner(props: BannerProps) {
     </Heading>
   );
   const supportEl = support ?? null;
-  const leadEl = lead ? (
+  const leadEl = Array.isArray(lead) ? (
+    lead.length > 0 ? (
+      <Layout rowGap="text">
+        {lead.map((paragraph, index) => (
+          <p key={index} className={styles.lead} data-copy="lead">
+            {paragraph}
+          </p>
+        ))}
+      </Layout>
+    ) : null
+  ) : lead ? (
     <p className={styles.lead} data-copy="lead">
       {lead}
     </p>
@@ -261,19 +277,19 @@ export function Banner(props: BannerProps) {
     form === 'below' && Boolean(actions) && 'actionsAt' in props && props.actionsAt === 'end';
 
   if (form === 'below' && actionsAtEnd) {
-    /* Actions at the end (owner, 7 Oct 2026): the eyebrow on its own line, then heading and lead
-       in the 1fr track and the action in a content-sized one from 1024, both on the heading's
-       top, `column` (64) apart. Below 1024 one track, the action a `stack` under the lead. */
+    /* Actions at the end (owner, 7 Oct 2026; centred, 29 Oct 2026 —
+       decisions/2026-10-29-head-end-action-centred-on-heading): the eyebrow on its own line, then
+       the heading in the 1fr track and the action in a content-sized one from 1024, one row,
+       centred on each other, `column` (64) apart; the lead under that row. Below 1024 one track:
+       heading, action, lead, each a `block` apart. */
     arranged = (
       <Layout rowGap="stack">
         <Layout rowGap="block">
           {eyebrowEl}
-          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="stack" align="start">
-            <Layout rowGap="block">
-              {headingEl}
-              {leadEl}
-            </Layout>
+          <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
+            {headingEl}
             {actions}
+            {leadEl}
           </Layout>
         </Layout>
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
@@ -281,8 +297,9 @@ export function Banner(props: BannerProps) {
     );
   } else if (form === 'below') {
     /* The head is one column, the ContentSection stacked head (owner, 7 Oct 2026): eyebrow →
-       heading → lead at `block`, the action a `stack` under the lead (§ 1.2), the photograph a
-       `stack` under the head. It was the H-row — heading | lead + action — and with no image beside
+       heading → lead at `block`, the actions a `block` under the text they finish (owner, 29 Oct
+       2026; decisions/2026-10-29-banner-two-actions-one-row), the photograph a `stack` under the
+       head. It was the H-row — heading | lead + action — and with no image beside
        the text the reading order was unclear and the action floated in a mostly empty track. */
     arranged = (
       <Layout rowGap="stack">
@@ -290,8 +307,8 @@ export function Banner(props: BannerProps) {
           {eyebrowEl}
           {headingEl}
           {leadEl}
+          {actions}
         </Layout>
-        {actions}
         {supportEl}
         <Media image={image} ratio={{ base: '3/2', lg: '3/1' }} sizes={FULL_COLUMN} />
       </Layout>
@@ -315,8 +332,8 @@ export function Banner(props: BannerProps) {
             {eyebrowEl}
             {headingEl}
             {leadEl}
+            {actions}
           </Layout>
-          {actions}
           {supportEl}
         </Layout>
         {/* A plain wrapper so the image keeps its crop in a row that centres it. A photograph crops

@@ -396,6 +396,7 @@ export function parseBody(body: string): { hero: CorpusHero; bands: CorpusBand[]
     const heading = parseInline(t.text);
     bands.push({
       id: t.id ?? slugify(textOf(heading)),
+      anchored: t.id !== null,
       heading,
       headingText: textOf(heading),
       blocks: blocksFrom(rest, pos, 2),

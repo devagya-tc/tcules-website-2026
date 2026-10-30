@@ -4,13 +4,13 @@ slug: implementation-qa
 page_name: Implementation QA
 page_type: service
 seo:
-  title: 'Design QA: Check Your Build Against the Design | Tcules'
-  description: 'Design QA for SaaS releases: implementation QA compares your working product with the agreed design, sorts every difference and gives engineers clear fixes.'
+  title: 'Design QA Services: Check the Build Before Release | Tcules'
+  description: 'Design QA for SaaS releases: we compare your working product with the agreed design, sort every difference and give engineers a clear fix list.'
   canonical: https://www.tcules.com/services/design-engineering/implementation-qa
   robots: index,follow
 social:
-  og_title: 'Design QA: Check Your Build Against the Design | Tcules'
-  og_description: 'Design QA for SaaS releases: implementation QA compares your working product with the agreed design, sorts every difference and gives engineers clear fixes.'
+  og_title: 'Design QA Services: Check the Build Before Release | Tcules'
+  og_description: 'Design QA for SaaS releases: we compare your working product with the agreed design, sort every difference and give engineers a clear fix list.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Design QA: Check Your Build Against the Design | Tcules'
-  twitter_description: 'Design QA for SaaS releases: implementation QA compares your working product with the agreed design, sorts every difference and gives engineers clear fixes.'
+  twitter_title: 'Design QA Services: Check the Build Before Release | Tcules'
+  twitter_description: 'Design QA for SaaS releases: we compare your working product with the agreed design, sort every difference and give engineers a clear fix list.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: design implementation QA for SaaS and complex products
@@ -30,6 +30,18 @@ search_context:
   - What do you need from us?
   - Do you check that fixes worked?
   primary_query: design QA
+  secondary_queries:
+  - design QA services
+  - what is design QA
+  - design QA for product teams
+  - design QA checklist
+  - Figma vs build comparison
+  - design QA process
+  - implementation QA vs design-to-code audit
+  - visual QA
+  - UI design QA
+  - design QA before release
+  - do you check that fixes worked
 navigation:
   breadcrumb:
   - name: Home
@@ -59,31 +71,62 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - coverage
-  - triage
+  - what-you-get
+  - selected-work
   - finding
+  - compare
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: match_legitimate_adaptation_defect_missing_state_unresolved_product_decision
   media_bindings:
-  - id: implementation_qa_asset
+  - id: qa_dealpath_workflow
     role: demonstrate
-    supports_section: proof
-    status: ASSET_REQUIRED
-    communication_job: Show a real or safely redacted design-to-runtime comparison or implementation-QA finding with intended behaviour, observed runtime behaviour, classification and accepted correction.
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    alt_intent: 'Dealpath''s redesigned Add to pipeline flow, which asks people to search for and attach an existing deal before creating a new one.'
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: qa_gt_tools_implemented_header
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
+    alt_intent: 'GT Tools'' Shopify storefront as built by Tcules from its own design, showing navigation and product discovery.'
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-KNOVOS-CANDOUR
+  - DRAFT-CURAMCARE-ONEILL
+  - FP-EDEN-DEVELOPERS
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_near_hero
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Verify these institution-level facts at publication. Reuse their sources, not hardcoded display values.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
+  client_recognition:
+    component_type: client_recognition
+    placement: hero_followup_or_contextual_proof
+    clients:
+    - Dealpath
+    - GT Tools
+    - The Chain Hut
+    asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope. The Chain Hut is not yet in CLIENTS-REGISTER.
   proof_claim_policy: NO_STANDALONE_QA_CASE;EDEN_SPECS_QUOTE_ADJACENT_ONLY
   content_composition:
     primary_intent: design implementation QA
@@ -116,7 +159,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_REQUIRES_FINAL_VISUAL_DESIGN
   production: NOT_PRODUCTION_VERIFIED
@@ -125,7 +168,6 @@ release:
   - CLAIM_EVIDENCE_VERIFICATION
   - IMPLEMENTATION_QA_ARTEFACT_REQUIRED
   - EXACT_OCT1_ASSEMBLED_BODY_DIFF
-  - CLIENT_TESTIMONIAL_PERMISSION
   - CASE_MEDIA_AND_CLAIM_REVIEW
   - NO_STANDALONE_QA_CASE;EDEN_SPECS_QUOTE_ADJACENT_ONLY
 content_governance:
@@ -137,36 +179,57 @@ content_governance:
 
 *Design Engineering · Implementation QA*
 
-# Design QA: a clear fix list before you release
+# Design QA services that check your build against the design before release
 
-Each finding names what was expected, what happened, how to reproduce it, why it matters and who owns the fix. We retest after the fix and close it once the product behaves as agreed.
+Design QA is for the days before a release. The product owner wants to know where the build differs from the design, and engineers want a fix list they can start on without a meeting. Tcules provides design QA for SaaS teams: every difference sorted, owned and retested.
 
-[Start a conversation](#enquiry)
+*Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery) · [The Chain Hut](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)*
 
-## When teams bring us in {#recognition}
+[Show us the build before your customers see it](#enquiry)
 
-**"The same bugs come back after every handoff."** Responsive and keyboard issues reappear release after release.
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Designers and developers argue about what counts as a bug."** Nobody agreed which differences matter.
+## What you get from design QA {#what-you-get}
 
-**"Our screenshot tests flag everything."** Hundreds of pixel changes, and no way to tell which ones matter to users.
+A check of the working product against the agreed design, starting with the tasks where a miss would cost your users most.
 
-**"Nobody has checked the edge cases."** The main screen looks right. The empty, error and permission states are anyone's guess.
+**What you receive**
 
-## What we check {#coverage}
+- **The build checked screen by screen.** A Figma vs build comparison of layout and components, including your design system. Then the loading, empty, error and disabled states, each user role, and small or resized windows. Then keyboard use, focus order and screen-reader labels, and real content: long names, missing data, large numbers.
 
-We start with the flows where a miss would cost your users most, then work outwards.
+- **Every difference sorted.** Each one typed as a defect, a justified change, a missing state or an open question, with a named owner.
 
-- Layout and components, against the design and your design system
-- Loading, empty, error and disabled states
-- Different user roles and permissions
-- Small screens and resized windows
-- Keyboard use, focus order and screen-reader labels
-- Real content: long names, missing data, large numbers
+- **A fix list engineers can act on.** Each finding states what was expected, what happened, how to reproduce it, why it matters to users, and who owns it.
 
-## Sort every difference before anyone writes a ticket {#triage}
+- **Retests until it closes.** Each fix is checked in the build, and anything still failing goes back to its owner with the new result.
 
-Screenshot tools are good at spotting change and hopeless at judging it. So each difference gets a type and a next step.
+- **Fixes, if you want them.** Our design engineers can correct interface issues in your code, or hand every finding to your team.
+
+**Who does the work.** Design engineers who know why the design is the way it is, so a finding explains the reason as well as the bug. An account lead plans the order of checks around your release date.
+
+**What we need from you.** The agreed designs and rules for this release, a test environment, the release date, the areas you are least sure about, and someone who can make product calls on open questions.
+
+**Where our part stops.** You choose who fixes what, and product calls on open questions stay with your product owner. When the same mismatches return release after release, the [Design-to-Code Audit](/audits/design-to-code-audit) looks at why.
+
+## Selected design QA work {#selected-work}
+
+The nearest work is projects where we compared a design with what a build or a platform would allow. No case study yet covers a QA pass on its own, and our UI and UX troubleshooting for Knovos, an AI software firm, has no case page.
+
+### Dealpath: an audit that found the one step to change
+
+Our audit of Dealpath's listing workflow traced the trouble to one assumption: that every listing should become a new deal. The redesign changed that step, Add to pipeline, and Dealpath's team owned implementation, with us answering the product questions it raised. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+### GT Tools: our own design, carried through our own build
+
+We designed GT Tools' Shopify store and then developed it, with custom work wherever the design needed more than the platform gives by default. Price and add-to-cart stay in view on long product pages, as designed. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+### The Chain Hut: what the platform sets, and what design can change
+
+We mapped shopper journeys against Magento's default workflow before building The Chain Hut's store. Magento's core purchase flow stayed intact, with clearer navigation and search and a simpler checkout around it. [Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
+
+## Our design QA process: one finding an engineer can act on {#finding}
+
+Screenshot tools are good at spotting change and poor at judging it. A long list of pixel differences tells nobody which ones users will notice, so each difference gets a type and a next step.
 
 | Type | What it means | What happens next |
 |---|---|---|
@@ -175,53 +238,95 @@ Screenshot tools are good at spotting change and hopeless at judging it. So each
 | Missing state | Nobody designed this case | Design it, then build it |
 | Open question | The build exposed a product question | Your product owner decides |
 
-Aim for a product where every difference is understood, rather than one that matches pixel for pixel.
+If a shared component is wrong across the whole product, the finding says so and names who owns the fix. Our article explains [why interface regressions cost confidence before any metric shows it](/insights/articles/silent-ui-regression-debt).
 
-## What a finding looks like {#finding}
+*Illustration, not client work*
 
-Each finding is written so an engineer can act on it without a meeting. Here is an illustrative one.
+One entry from a fix list for a SaaS product's account settings release.
 
-| Field | Example |
+| Field | Entry |
 |---|---|
 | Expected | A missing required field shows an error next to that field |
 | Actual | A general banner appears at the top of the form, and the field is unmarked |
 | To reproduce | Leave "Company name" empty and select Save on a narrow screen |
-| Why it matters | On a phone, users can't see which field failed |
+| Why it matters | On a phone, the banner scrolls out of view and users cannot see which field failed |
 | Type and owner | Defect, frontend team |
 
-If a shared component is wrong across the whole product, the finding says so and names who owns the fix.
+## Implementation QA vs design-to-code audit: which do you need? {#compare}
 
-## Why Tcules {#why-tcules}
+| Check | What it covers | Best for |
+|---|---|---|
+| **Visual QA** | Screenshot comparisons that flag pixel changes between builds | Catching unintended visual change on every commit |
+| **Design QA** | The build against the agreed design: states, behaviour, roles, keyboard use and real content | One release or product area before it goes out |
+| **[Design-to-Code Audit](/audits/design-to-code-audit)** | Where your process changes the design on its way into the build | Mismatches that keep coming back across releases |
+| **[Usability testing](/services/product-design/prototyping-usability-testing)** | Whether people can complete their tasks | Questions about whether the design itself works |
 
-**We read the design and the code.** Our design engineers know why the design is the way it is, so findings explain the intent as well as the bug.
+## What clients say {#testimonials}
 
-**We have taken a design through the build ourselves.** On GT Tools we designed the storefront and developed it in Shopify, fitting the design to the platform's limits. It helps us tell a defect from a justified change. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
-
-**We can fix as well as find.** Our design engineers can correct frontend issues in your repository, or hand findings to your team.
-
-<!-- awaiting client sign-off -->
 > “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
 > **Akshay Vyas, Creative Head, Knovos**
 
-## Frequently asked questions {#faq}
+> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
+
+> “Our developers enjoyed working on the platform with the right UI/UX specs.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For design QA, a good first piece of work is one release's riskiest workflow, checked, sorted and retested until every finding closes.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We prove the hard parts in code while they can still change.** [Benchmark Gensuite's](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) engineers checked our coded prototypes in the browser, and one noted that Bootstrap 5 lacks native drag and drop while the choice was still open.
+
+- **One studio can take it into working software, with the designers staying in the build.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we took the AI workspace from a coded demo on sample data through to a production-ready module.
+
+- **We know what to leave alone in a product people rely on.** In [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) scheduling MVP, standard interactions stayed with the components Doodle already had, and only the calendar and bookability work got new ones.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[AI products](/expertise/ai-products-developer-tools)
+
+## Questions about design QA {#faq}
+
+### What is design QA, and who is it for?
+
+Design QA checks a built product against its agreed design before customers see it, covering behaviour and states as well as looks. It suits product teams with a release coming, and anyone tired of finding design bugs after launch.
+
+### What should a design QA checklist include?
+
+Every state of each screen as well as its look: empty, loading, error, long content, each user role and keyboard use. Each finding records where the build differs, why it matters to users and who owns the fix.
 
 ### Is implementation QA the same as visual QA?
 
-No. Visual checks are one part. We also check states, behaviour, keyboard use, user roles and real content, which is where users tend to run into trouble.
-
-### How is this different from a Design-to-Code Audit?
-
-Implementation QA checks one release or product area before it goes out. The [Design-to-Code Audit](/audits/design-to-code-audit) looks across teams and releases to find where your process keeps losing design intent.
-
-### What do you need from us?
-
-Access to a test environment, the agreed designs, and someone who can make product calls on open questions.
+Visual checks are one part of Tcules' implementation QA. We also check states, behaviour, keyboard use, user roles and real content, which is where users tend to run into trouble. Tools flag the visual changes on every release, and our design engineers sort what they find.
 
 ### Do you check that fixes worked?
 
-Yes. We retest each finding after the fix and close it only when the product behaves as agreed.
+Yes. Tcules retests each finding after the fix and closes it once the product behaves as agreed. Anything that still fails goes back to its owner with the new result.
 
-## Check the build before your customers do {#enquiry}
+## Show us the build before your customers see it {#enquiry}
 
 Send the product area, the agreed designs and the screens you're least sure about.
 

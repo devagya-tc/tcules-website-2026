@@ -64,6 +64,7 @@
    is how a control ends up with no line-height at all and inherits body's 1.6.   */
 :root {
   --btn-padding-x: var(--space-8); /* optical, not --gap-tight */
+  --btn-padding-y: var(--space-8); /* optical: the air above and below a label that wraps to two lines */
   --btn-label-margin: var(--space-4); /* optical, not --gap-inline */
   --btn-gap: var(--space-4); /* optical, not --gap-inline */
   --btn-gap-bare: var(--space-8); /* link emphasis has no box and no label margin */
@@ -143,9 +144,10 @@
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
   --btn-outline-primary-fg: var(--color-brandeis-500); /* 6.17:1 on paper */
   --btn-outline-primary-rule: var(--color-brandeis-300); /* decoration; the glyph names it */
-  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
-  --btn-outline-primary-fg-hover: var(--color-white); /* 6.23:1 on 500 */
+  --btn-outline-primary-fg-hover: var(--color-brandeis-600); /* the link's own step */
+  --btn-outline-primary-rule-hover: var(--color-brandeis-500); /* the line firms; never a fill */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-50); /* press only: ghost's hover tint */
+  --btn-outline-primary-rule-pressed: var(--color-brandeis-600);
   --btn-disabled-rule: var(--color-neutral-300); /* the stepper's circle, off — still a circle */
   --btn-disabled-bg: var(--color-neutral-100);
   --btn-disabled-fg: var(--color-neutral-500);
@@ -186,9 +188,10 @@
   --btn-link-neutral-fg-busy: var(--color-brandeis-600);
   --btn-outline-primary-fg: var(--color-brandeis-500); /* 5.51:1 on paper-deep */
   --btn-outline-primary-rule: var(--color-brandeis-300);
-  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
-  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-outline-primary-fg-hover: var(--color-brandeis-600);
+  --btn-outline-primary-rule-hover: var(--color-brandeis-500);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-100); /* 50 vanishes on paper-deep */
+  --btn-outline-primary-rule-pressed: var(--color-brandeis-600);
   --btn-disabled-rule: var(--color-neutral-400); /* 300 all but vanished on paper-deep (fix round 2) */
   --btn-disabled-bg: var(--color-neutral-200);
   --btn-disabled-fg: var(--color-neutral-500);
@@ -235,9 +238,10 @@
   --btn-link-neutral-fg-busy: var(--color-brandeis-200);
   --btn-outline-primary-fg: var(--color-brandeis-200); /* 10.48:1; blue as ink fails here */
   --btn-outline-primary-rule: var(--color-brandeis-400);
-  --btn-outline-primary-bg-hover: var(--color-brandeis-500);
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-600);
-  --btn-outline-primary-fg-hover: var(--color-white);
+  --btn-outline-primary-fg-hover: var(--color-brandeis-100);
+  --btn-outline-primary-rule-hover: var(--color-brandeis-200);
+  --btn-outline-primary-bg-pressed: var(--color-neutral-900); /* ghost's neutral step, never blue */
+  --btn-outline-primary-rule-pressed: var(--color-brandeis-100);
   --btn-disabled-rule: var(--color-neutral-800);
   --btn-disabled-bg: var(--color-neutral-800);
   --btn-disabled-fg: var(--color-neutral-600);
@@ -284,9 +288,10 @@
   --btn-link-neutral-fg-busy: var(--color-brandeis-100);
   --btn-outline-primary-fg: var(--color-white); /* 6.23:1 */
   --btn-outline-primary-rule: var(--color-brandeis-200);
-  --btn-outline-primary-bg-hover: var(--color-paper); /* fills white, the inverted primary */
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-100);
-  --btn-outline-primary-fg-hover: var(--color-brandeis-500); /* 6.17:1 on paper */
+  --btn-outline-primary-fg-hover: var(--color-brandeis-50); /* 5.57:1, the link's step */
+  --btn-outline-primary-rule-hover: var(--color-white);
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-600); /* ghost's hover step */
+  --btn-outline-primary-rule-pressed: var(--color-white);
   --btn-disabled-rule: var(--color-brandeis-400);
   --btn-disabled-bg: var(--color-brandeis-600);
   --btn-disabled-fg: var(--color-brandeis-300);

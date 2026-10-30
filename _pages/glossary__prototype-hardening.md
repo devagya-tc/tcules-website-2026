@@ -4,13 +4,13 @@ slug: prototype-hardening
 page_name: Prototype Hardening
 page_type: defined_term
 seo:
-  title: What is prototype hardening? Meaning and example | Tcules
-  description: Prototype hardening is the work of replacing demonstration shortcuts with production-ready product, data, security and operational behaviour.
+  title: 'What is prototype hardening? Meaning and steps | Tcules'
+  description: 'What is prototype hardening? Swapping a demo''s shortcuts for real sign-in, data, security and tests. The steps, and how prototype and production code differ.'
   canonical: https://www.tcules.com/glossary/prototype-hardening
   robots: index,follow
 social:
-  og_title: What is prototype hardening? Meaning and example | Tcules
-  og_description: Prototype hardening is the work of replacing demonstration shortcuts with production-ready product, data, security and operational behaviour.
+  og_title: 'What is prototype hardening? Meaning and steps | Tcules'
+  og_description: 'What is prototype hardening? Swapping a demo''s shortcuts for real sign-in, data, security and tests. The steps, and how prototype and production code differ.'
   og_image: https://www.tcules.com/assets/og/glossary.png
   og_image_alt: Tcules social card headed Glossary, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,16 +18,23 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is prototype hardening? Meaning and example | Tcules
-  twitter_description: Prototype hardening is the work of replacing demonstration shortcuts with production-ready product, data, security and operational behaviour.
+  twitter_title: 'What is prototype hardening? Meaning and steps | Tcules'
+  twitter_description: 'What is prototype hardening? Swapping a demo''s shortcuts for real sign-in, data, security and tests. The steps, and how prototype and production code differ.'
   twitter_image: https://www.tcules.com/assets/og/glossary.png
 search_context:
+  primary_query: 'what is prototype hardening'
+  secondary_queries:
+  - 'prototype hardening meaning'
+  - 'hardening a prototype for production'
+  - 'prototype vs production code'
+  - 'prototype hardening checklist'
+  - 'prototype hardening steps'
   primary_intent: what is prototype hardening
   primary_buyer_question: What is prototype hardening?
   key_entities:
   - Prototype Hardening
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -39,12 +46,16 @@ navigation:
 render:
   band_order:
   - practice
+  - steps
+  - prototype-vs-production
   - comparison
+  - faq
   - next
 structured_data:
   types:
   - WebPage
   - DefinedTerm
+  - FAQPage
   - BreadcrumbList
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
@@ -80,6 +91,9 @@ page_composition:
       practice: artefact_proof
       comparison: artefact_proof
       next: artefact_proof
+      steps: method_process
+      prototype-vs-production: comparison_decision
+      faq: faq
   media_bindings: []
   commercial_system:
     testimonial_ids: []
@@ -91,38 +105,77 @@ page_composition:
 
 *Glossary · Prototype Hardening*
 
-# Prototype hardening
+# What is prototype hardening? Meaning and the steps to production
 
-Prototype hardening is the decision and engineering work required to replace demonstration shortcuts with dependable product state, data, identity, security, accessibility, performance, tests and operations. When it matters: The question arrives the moment a persuasive demonstration is proposed for real users, real data or a hiring decision.
+Prototype hardening is the engineering work that replaces a demo's shortcuts with the real thing. That means working sign-in and roles, real data, security, accessibility, speed, tests and a way to run and support the product. It matters the moment a convincing demo is proposed for real users, real data or investors.
 
 What was simulated must be named before anyone builds on it.
 
-For example, mock identity may need to become real roles, permission checks, revocation, audit history and failure recovery before operational use. A working demonstration alone does not establish those properties.
+Pretend sign-in, for example, may need to become real roles, permission checks, removal of access, an audit trail and recovery when things fail. A working demo does not prove any of that on its own.
 
-Hardening is a broad transition, and it usually spans several disciplines: product and design decisions, engineering work, security assessment and operational readiness. No single review covers all of them.
+Hardening spans several disciplines: product and design choices, engineering, security assessment and operational readiness. No single review covers all of them.
 
-Tcules works on the product-decision layer of that transition. The [Prototype Readiness Checklist](/tools/prototype-readiness-checklist) works through the common gaps without technical knowledge, and the [Prototype Readiness Review](/audits/prototype-readiness-review) establishes which product decisions are still open before development. Code audit, security assessment and infrastructure review are separate specialisms, and a readiness review should tell you when you need them. The related [coded prototype](/glossary/coded-prototype) definition explains what a prototype did and did not test.
+If a prototype exists, a good place to start is the [Prototype Readiness Review](/audits/prototype-readiness-review). It checks the experience and, when you share access to the code, the code itself.
 
-See [Coded Prototyping](/services/design-engineering/coded-prototyping) when code is needed to answer the product question before hardening is considered.
+The review then sorts what the demo proved from what it skipped. Tcules can take the prototype on to a first release through [New Product Design & First Release](/services/new-product-design-first-release).
 
-## How is prototype hardening used in practice? {#practice}
+The free [Prototype Readiness Checklist](/tools/prototype-readiness-checklist) works through the common gaps and needs no technical knowledge. The review flags when you need a specialist security or infrastructure review.
 
-Prototype hardening is the work of finding decisions a convincing prototype did not need to settle. A demonstration may assume one user, perfect data or a single successful path. Before engineering treats it as a build reference, the team needs to expose permissions, real records, interruptions, partial completion, errors, accessibility and the boundaries between simulated and live services.
+The related [coded prototype](/glossary/coded-prototype) definition explains what a prototype did and did not test. See [Coded Prototyping](/services/design-engineering/coded-prototyping) when code is needed to answer a product question before anyone builds on it.
 
-The [Prototype Readiness Review](/audits/prototype-readiness-review) turns those gaps into decisions rather than treating prototype code as proof of production readiness.
+## Where prototype hardening starts: the questions a demo skipped {#practice}
 
-## How does prototype hardening differ from making a prototype production-ready? {#comparison}
+Hardening starts with the questions a convincing prototype skipped. A demo may assume one user, perfect data and a single successful path. Before engineers build on it, the team needs to bring out permissions, real records, interruptions, half-finished tasks, errors and accessibility. It also needs to mark the line between simulated and live services.
 
-The table separates a decision review from a claim that the prototype itself should become production software.
+The [Prototype Readiness Review](/audits/prototype-readiness-review) turns those gaps into a plan of what to keep, redesign or replace. Hardening is the engineering that follows.
 
-| Prototype hardening | Production implementation |
+## Prototype hardening steps, from demo to first release {#steps}
+
+Hardening a prototype for production follows a steady order. Skipping the early steps is how teams end up rebuilding twice.
+
+1. **Name what was simulated.** List every shortcut the demo took: pretend sign-in, sample data, skipped errors and services that only looked live.
+2. **Agree what to keep.** Sort the prototype's code and behaviour into keep, redesign or replace, with a reason for each.
+3. **Specify the missing behaviour.** Write down permissions, real-data rules, error and recovery paths, and accessibility needs before building.
+4. **Build and test it properly.** Engineers extend or rebuild the agreed parts with automated tests, security checks and performance targets.
+5. **Prepare to run it.** Add monitoring, backups, a release process and a way to support real users.
+
+## Prototype vs production code: what hardening changes {#prototype-vs-production}
+
+| Area | In a typical prototype | In production |
+|---|---|---|
+| **Sign-in and roles** | Pretend sign-in, one user who can do everything | Real accounts, roles, permission checks and removal of access |
+| **Data** | Sample or hard-coded records | Real records, validation, migration and backups |
+| **Errors** | One successful path | Failed requests, timeouts, half-finished tasks and recovery |
+| **Security** | Shortcuts such as keys written into the code | Keys stored safely, access reviewed and an audit trail |
+| **Quality** | Checked by eye | Automated tests, accessibility checks and performance targets |
+| **Running it** | A preview link on one person's account | Monitoring, logging, planned releases and support |
+
+## Prototype hardening vs a Prototype Readiness Review {#comparison}
+
+| Prototype Readiness Review | Prototype hardening |
 |---|---|
-| Identifies missing product, technical and operational decisions | Implements the agreed behaviour in the production architecture |
-| May recommend keeping, specifying, redesigning or replacing prototype work | Produces maintained code, tests and release artefacts in scope |
-| Can conclude that prototype code should not be carried forward | Requires an explicit decision about what code and behaviour will ship |
+| Finds the missing product, technical and operational choices | Builds the agreed behaviour into the production system |
+| Decides what to keep, specify, redesign or replace | Produces maintained code, tests and release material within the agreed scope |
+| Can conclude that prototype code should not be carried forward | Carries forward only the code and behaviour the review agreed to keep |
 
-## Why prototype hardening matters in product work {#next}
+## Prototype hardening questions {#faq}
 
-The free checklist walks the states, rules and edge cases a demo usually leaves undecided.
+### How do you harden a prototype for production?
+
+Start by naming everything the prototype simulated, then agree which code and behaviour to keep. Specify the missing permissions, data rules and error paths, and build them with tests and security checks. Finish with monitoring, backups and a release process, so real users can rely on it.
+
+### What does hardening an AI-built prototype involve?
+
+The same steps apply, with extra care for code nobody on the team wrote line by line. Prototypes made with AI tools often look finished while hiding shortcuts, such as sign-in that lets anyone in or keys written into the code. The [Prototype Readiness Review](/audits/prototype-readiness-review) separates what such a prototype proved from the shortcuts it took.
+
+### Is there a prototype hardening checklist?
+
+Yes. The free [Prototype Readiness Checklist](/tools/prototype-readiness-checklist) walks through the common gaps in plain language and needs no technical knowledge. It also shows where a specialist security or infrastructure review is worth booking before launch.
+
+## Check your prototype yourself with the free checklist {#next}
+
+The free tool walks through the gaps a demo usually leaves open, such as permissions, real records and failed requests. Once hardening starts, [design to code](/glossary/design-to-code) covers keeping the build true to the agreed design.
+
+When a product begins as a prototype built with AI tools, hardening is the step between a promising demo and a first release.
 
 [Use the Prototype Readiness Checklist](/tools/prototype-readiness-checklist)

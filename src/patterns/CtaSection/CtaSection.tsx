@@ -1,4 +1,4 @@
-import { isValidElement, useId, type ReactElement, type ReactNode } from 'react';
+import { useId, type ReactElement, type ReactNode } from 'react';
 
 import {
   Button,
@@ -6,7 +6,6 @@ import {
   Icon,
   Island,
   ISLAND_BAND,
-  islandSurfaceOn,
   Layout,
   Media,
   Section,
@@ -130,9 +129,9 @@ type CtaSectionBaseProps = {
    * A prop here rather than an inherited attribute, and it is the same conclusion `SiteNav` and
    * `PageHero` reached: this component IS the band, so it has no ancestor to read `data-surface`
    * from. Passing it through is not the same as owning the ground — the stylesheet paints nothing.
-   * The CLOSES (`split`, `open`) default to tint (owner, 7 Oct 2026): the page's last band reads
-   * as a closer, stepping paper → tint → the ink footer. The mid-page `offer` defaults to paper — a
-   * tinted offer would spend the signal that says "this is the end". Pass `surface` to override.
+   * The CLOSES (`split`, `open`) are islands (owner, 29 Oct 2026), so their band defaults to
+   * paper around the island (`ISLAND_BAND`); the island carries the close's weight. The mid-page
+   * `offer` defaults to paper too. Pass `surface` to override.
    */
   surface?: SectionSurface;
   /**
@@ -165,17 +164,17 @@ type CtaPointsProps =
       points?: readonly CtaIconPoint[];
     };
 
-/* ── Four members for three arrangements, and the fourth is not redundant ────────
-   Each member below encodes a constraint that would otherwise be a review comment, and the reason
-   there are four rather than three is `offer` alone:
+/* ── Three members for three arrangements ────────────────────────────────────────
+   Each member below encodes a constraint that would otherwise be a review comment:
 
-     split   requires a form. A split with an empty right-hand column is the `open` arrangement
-             misnamed, so the form is required rather than optional.
+     split   requires a form, and the form is always on an ISLAND, blue (default) or ink (owner,
+             29 Oct 2026; decisions/2026-10-29-forms-only-on-the-island). The copy-beside-a-panel
+             close on a tint band is retired: there is no prop that renders it.
      open    forbids a form and requires actions. A closing block that asks for nothing has no
-             reason to exist.
-     offer   accepts EITHER shape — a form or actions — but must refuse `proof` in both. One member
-             cannot say "either of these two shapes, and never that third thing", so it takes two,
-             each pinning `proof?: never`. That is the whole reason for the fourth member.
+             reason to exist. Always an ink island with the texture on it (owner, 29 Oct 2026;
+             decisions/2026-10-29-cta-band-is-an-ink-island).
+     offer   actions only, and never `proof`. The offer with a form was retired with the split
+             close on paper (owner, 29 Oct 2026): a form appears only on an island.
 
    The `proof` asymmetry is deliberate and load-bearing: the mid-page offer and the closing block
    appear on the same 37 pages, and the fastest way to make them look like the same block twice is
@@ -193,12 +192,18 @@ type CtaPointsProps =
    (tracker 2.17), so CtaSection takes no `scheduleHref`: EnquiryForm's enquiry and audit variants
    require it, which is where the 56-instance constraint lives — and that is its whole scope. */
 
+/**
+ * The grounds a FORM's island may take (owner, 29 Oct 2026; decisions/2026-10-29-forms-only-on-the-island):
+ * brandeis (`blue`, the default) or `ink`. Paper and tint islands carry no form.
+ */
+export type CtaFormIsland = Extract<IslandSurface, 'blue' | 'ink'>;
+
 type CtaSplitProps = {
   arrangement?: 'split';
   /**
    * The full EnquiryForm. A `ReactElement`, not a `ReactNode`, so `form={null}` (or `false`) does
    * not compile: a split close with nothing in its 7-track reserved the track and its 96 seam for
-   * nothing. The runtime test is `isValidElement` as well, for a value that escaped the types.
+   * nothing.
    */
   form: ReactElement;
   actions?: readonly [];
@@ -218,13 +223,20 @@ type CtaSplitProps = {
    */
   contact?: readonly CtaContact[];
   /**
-   * The island close (owner, 16 Oct 2026, the home enquiry close): the copy and the form on a
-   * floating island of this surface, the form on a paper panel inside it. Blue and ink are the
-   * close's grounds (Island.md amendment); the band takes the other ground unless `surface` says
-   * otherwise (`ISLAND_BAND`, paper for both). This lifts 13 Oct's ruling that a split has no island:
-   * the panel is the island's one object, not a box in a box.
+   * An independent score, composed by the caller — in practice one `RatingBadge` (owner, 29 Oct
+   * 2026: a rating is always the badge, never a key and a link in the contact strip). It closes the
+   * words' column, a `block` under the lede and the contact strip, at its own width. A node, so a
+   * pattern composes no sibling's control.
    */
-  island?: IslandSurface;
+  rating?: ReactNode;
+  /**
+   * The island the close sits on (owner, 16 Oct 2026, the home enquiry close; ALWAYS since 29 Oct
+   * 2026): the copy and the form on a floating island of this surface, the form on a paper panel
+   * inside it. Default `blue`; `ink` the other. The band takes paper unless `surface` says otherwise
+   * (`ISLAND_BAND`). There is no form without an island: the copy beside a panel on a tint band was
+   * retired (decisions/2026-10-29-forms-only-on-the-island).
+   */
+  island?: CtaFormIsland;
   /**
    * The island close's drawing, above the heading: an illustration the caller composes (a `Media`
    * of kind `illustration`), at --cta-art-inline-size and never cropped. Island only.
@@ -269,31 +281,9 @@ type CtaOpenProps = {
   proof?: ReactNode;
   media?: never;
   contact?: never;
-  /**
-   * The island variant (13 Oct 2026): the close on a floating box of its own ground inside the
-   * band, the band's ground around it on every side (`Island`). The value is the island's surface,
-   * chosen per instance. Without `surface`, the band takes the other light ground (`ISLAND_BAND`):
-   * `island="tint"` puts the close's tint on the island and the band goes paper, so the page still
-   * steps paper → tint → the ink footer, the tint now a floating object rather than a band. An
-   * island equal to its band is refused (no edge to read by) and takes the other light ground.
-   *
-   * Refused on an offer, and that is a type: an offer interrupts mid-page, and a floating box there
-   * would outweigh the close the page ends on. (It was `open` only until 16 Oct 2026, when the split
-   * close took a blue or ink island for the enquiry close; see `CtaSplitProps.island`.)
-   */
-  island?: IslandSurface;
-  art?: never;
-  islandTexture?: never;
-  islandArrangement?: never;
-};
-
-type CtaOfferWithFormProps = {
-  arrangement: 'offer';
-  form: ReactNode;
-  actions?: readonly [];
-  proof?: never;
-  media?: never;
-  contact?: never;
+  rating?: never;
+  /* No `island` prop: the open close is ALWAYS an ink island with the moving field on it (owner,
+     29 Oct 2026; decisions/2026-10-29-cta-band-is-an-ink-island). */
   island?: never;
   art?: never;
   islandTexture?: never;
@@ -319,6 +309,7 @@ type CtaOfferWithActionsProps = {
    */
   media?: CtaMedia;
   contact?: never;
+  rating?: never;
   island?: never;
   art?: never;
   islandTexture?: never;
@@ -327,7 +318,7 @@ type CtaOfferWithActionsProps = {
 
 export type CtaSectionProps = CtaSectionBaseProps &
   CtaPointsProps &
-  (CtaSplitProps | CtaOpenProps | CtaOfferWithFormProps | CtaOfferWithActionsProps);
+  (CtaSplitProps | CtaOpenProps | CtaOfferWithActionsProps);
 
 /**
  * Is there anything in this slot to render? `null`, `undefined`, a boolean and an empty string all
@@ -460,7 +451,6 @@ function CtaPointContent({ point, reading = false }: { point: CtaPoint; reading?
  *          too narrow to put a marker in front of a step name and still read as a row. Each point is
  *          opened by a hairline the width of its track, the text-only card's top edge (§ 3.1), and
  *          the 32 gutter breaks the rule between them so the row reads as three objects. `open`.
- *   grid   2-up from md and 3-up from lg. The offer with a form, where the list is a strip under it.
  *   line   the K offer beside its photograph: the marker and the label, ONE line each, no detail
  *          (§ 3.4 K: "≤ 3 one-line points"; final fix round). With a detail under every label the
  *          copy column became a six-line list and the band read as a document beside a photo; the
@@ -469,13 +459,13 @@ function CtaPointContent({ point, reading = false }: { point: CtaPoint; reading?
  *          the open close's centred column (cmp-cta fix round 1). A rule under a centred column
  *          reads as a table's header line; the centring and the 32 gutter separate the three.
  */
-type CtaPointsShape = 'line' | 'stack' | 'rows' | 'row' | 'grid' | 'centred';
+type CtaPointsShape = 'line' | 'stack' | 'rows' | 'row' | 'centred';
 
 /**
  * The points, in one of four shapes with one of three markers. Nothing about the content, the
  * order or the numbering moves between them; only where the marker sits and what it is.
  *
- * In `stack` and `grid` the marker sits in FRONT of the label on one non-wrapping row — a nowrap
+ * In `stack` the marker sits in FRONT of the label on one non-wrapping row — a nowrap
  * Cluster, so a marker can never orphan onto a line of its own (the failure a wrapping Cluster had
  * at 390). A numeral sits on the label's first baseline (`baseline`); a glyph has no baseline, so it
  * tops out with the label's line box (`start`) — a 24 glyph against the h5 label's ~28 line box.
@@ -582,22 +572,6 @@ function CtaPoints({
   if (shape === 'row' || shape === 'centred') {
     return (
       <Layout as={listElement} columns={{ base: 1, md: 3 }} colGap="gutter" rowGap="gutter">
-        {items}
-      </Layout>
-    );
-  }
-
-  /* Two tracks from md and three from lg, so four, five and six points fill complete columns and a
-     second row starts under the first row's first label. Three from md was declined: at 768 a
-     third is 213px and the numeral's track would be narrower than the numeral. */
-  if (shape === 'grid') {
-    return (
-      <Layout
-        as={listElement}
-        columns={{ base: 1, md: 2, lg: 3 }}
-        colGap="gutter"
-        rowGap="gutter"
-      >
         {items}
       </Layout>
     );
@@ -733,13 +707,13 @@ const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
  *
  * THREE ARRANGEMENTS, and they are three jobs rather than three densities of one shape:
  *
- *   split   L, the close that asks for an ENQUIRY — [10, 7] from 1280 ([1, 1] from 1024): copy,
- *           points and an optional contact strip in 10 (673 at 1470), top-aligned, the full
- *           EnquiryForm filling 7 (471) to the column edge, on paper; with `texture`, at
- *           `density="open"`, the `closing` equaliser rising in the copy column's foot. No proof.
- *   open    the close that asks for a CLICK — a centred column: h1 heading (display until home round 5), lede, a centred
- *           3-up row of points, the actions on the axis, at `density="open"`. With proof, [3, 2]
- *           left-aligned and the proof beside.
+ *   split   L, the close that asks for an ENQUIRY — ALWAYS on a blue (default) or ink island,
+ *           the form on a paper panel inside it (owner, 29 Oct 2026): `islandArrangement`
+ *           `beside` [5, 7], `above` a head row over the panel, or `halves` 1:1. With or
+ *           without a drawing (`art`). No proof.
+ *   open    the close that asks for a CLICK — ALWAYS an ink island with the moving field on it
+ *           (owner, 29 Oct 2026): a centred column, h1 heading, lede, a centred 3-up row of
+ *           points, the actions on the axis. With proof, [3, 2] left-aligned and the proof beside.
  *   offer   K, which INTERRUPTS a page mid-scroll. Sets `density="tight"` itself. Three shapes:
  *             with `media`   [7, 5]: H-full, ≤ 3 one-line points (`line`) and the actions in 7, a quiet 4:5
  *                            photograph in 5 (`media.side` flips it). The copy column is centred on
@@ -748,7 +722,6 @@ const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
  *                            under both was removed (owner, 9 Oct 2026) — points stay with the copy.
  *             without        [1, 2]: head and actions in the 381 head track (H-beside-actions), the
  *                            points in the 763 body track.
- *             with a form    stacked: the lede, the form, then the points as a strip.
  *
  * The heading's SCALE follows the job (fix round 1): the offer is h2, the split close h1, the
  * centred open close display. At h2 the page's last ask weighed what a mid-page head did. The
@@ -762,20 +735,22 @@ const PORTRAIT_FRAMES = [4 / 5, 0.62, 4 / 3] as const;
  * A server component in effect: `useId` is the only hook, there is no state, no effect, no ref and
  * no DOM handler.
  */
-/** The closes' ground (owner, 7 Oct 2026): see `surface`. */
-const CLOSE_SURFACE: SectionSurface = 'tint';
+
+/** A form's island when the caller names none: brandeis (owner, 29 Oct 2026). */
+const FORM_ISLAND: CtaFormIsland = 'blue';
+
+/** The open close's island, always (owner, 29 Oct 2026). */
+const OPEN_ISLAND: CtaFormIsland = 'ink';
 
 /**
- * The split close's form panel: the surface one step off the band's ground, so the panel is the
- * band's raised, bright object (home round 3). Paper on the tint close, tint on a paper band, and
- * paper on ink or blue (never a blue panel: blue is never a fill for a card-like box).
+ * A close's island on its band. A close's island is blue or ink, never paper or tint (owner,
+ * 29 Oct 2026), so where the band already IS that ground — no edge to read by — it takes the other
+ * of the two, rather than `islandSurfaceOn`'s light fallback, which would set a form or the field on
+ * a paper box.
  */
-const PANEL_SURFACE: Record<SectionSurface, SectionSurface> = {
-  paper: 'tint',
-  tint: 'paper',
-  ink: 'paper',
-  blue: 'paper',
-};
+function closeIslandOn(band: SectionSurface, requested: CtaFormIsland): CtaFormIsland {
+  return band === requested ? (requested === 'blue' ? 'ink' : 'blue') : requested;
+}
 
 export function CtaSection(props: CtaSectionProps) {
   /* The heading owns the region's name. `useId` rather than a caller-supplied id, because two
@@ -802,14 +777,22 @@ export function CtaSection(props: CtaSectionProps) {
   if (props.arrangement === 'open') {
     /* `present`, not `!== undefined`, so a `proof={false}` reserves nothing (§ 12 row 6). */
     const hasProof = present(props.proof);
-    /* The island variant: the band takes the other light ground unless told, and an island equal
-       to its band is refused (`islandSurfaceOn`). Without an island, the close's own tint. */
-    const band: SectionSurface =
-      props.surface ?? (props.island ? ISLAND_BAND[props.island] : CLOSE_SURFACE);
-    const islandSurface = props.island ? islandSurfaceOn(band, props.island) : undefined;
-    const field = (content: ReactNode) =>
-      islandSurface ? <Island surface={islandSurface}>{content}</Island> : content;
-    const arrangement = islandSurface ? 'open-island' : 'open';
+    /* ALWAYS an ink island (owner, 29 Oct 2026: "for CTA bands like this, I'd like to use the
+       island variant … in ink with the text and button as is and the texture on the island";
+       decisions/2026-10-29-cta-band-is-an-ink-island). The band takes paper unless told; the
+       island's ground is ink on any band but an ink one (`closeIslandOn`). The moving field
+       (`TextureFlow`) runs across the island, still and quieter behind the lede alone
+       (`data-texture-calm` on a box the lede's own width, so the field keeps its strength across
+       the rest of the island), as on the enquiry island. */
+    const band: SectionSurface = props.surface ?? ISLAND_BAND[OPEN_ISLAND];
+    const islandSurface = closeIslandOn(band, OPEN_ISLAND);
+    const field = (content: ReactNode) => (
+      <Island surface={islandSurface}>
+        <TextureFlow />
+        {content}
+      </Island>
+    );
+    const arrangement = 'open-island';
 
     /* ── Open with proof ─────────────────────────────────────────────────────────────────────
        [3, 2]: the lede (h1), a ruled 3-up row of points and the actions in 3, the proof beside in
@@ -831,7 +814,9 @@ export function CtaSection(props: CtaSectionProps) {
               align="start"
             >
               <Layout rowGap="stack">
-                {lede({ scale: 'close' })}
+                <Layout justifyItems="start">
+                  <div data-texture-calm>{lede({ scale: 'close' })}</div>
+                </Layout>
                 <CtaPoints shape="row" markers={markers} points={points} />
                 <CtaActions actions={props.actions} kind="ask" />
               </Layout>
@@ -861,7 +846,9 @@ export function CtaSection(props: CtaSectionProps) {
         {field(
           <div className={styles.centred}>
             <Layout rowGap="stack">
-              {lede({ scale: 'open', centred: true })}
+              <Layout justifyItems="center">
+                <div data-texture-calm>{lede({ scale: 'open', centred: true })}</div>
+              </Layout>
               {/* The points take the middle 4 of [1, 4, 1] — about 8/12, 784 at 1470 — so the row
                 stays inside the centred column's silhouette rather than spreading the full 1240
                 (final fix round: at full width it read as a three-feature strip under a narrow
@@ -880,8 +867,7 @@ export function CtaSection(props: CtaSectionProps) {
   }
 
   if (props.arrangement === 'offer') {
-    const hasForm = 'form' in props && present(props.form);
-    const actions = 'actions' in props && props.actions ? props.actions : [];
+    const actions = props.actions;
     const media = 'media' in props ? props.media : undefined;
 
     const photoFirst = media?.phone === 'before';
@@ -900,7 +886,7 @@ export function CtaSection(props: CtaSectionProps) {
        to the list it closes. The photo FILLS a frame whose ratio is a floor (`.photoFrame`): where
        the copy is taller than a 4:5 photo — 1024 to 1279, where the 7 track is ~500 — the frame
        stretches with it, so the photo never ends short of the copy. */
-    if (media && !hasForm) {
+    if (media) {
       /* 4:5 beside the copy, 4:3 against it below 1024: a 4:5 at the 326 phone column would be 408
          tall under a band that has already made its ask. `sizes` accounts for the cover crop
          (`coverSizes`), or a landscape master is fetched too short for the frame. */
@@ -940,40 +926,12 @@ export function CtaSection(props: CtaSectionProps) {
       );
     }
 
-    /* ── K without a photograph, asking with actions ─────────────────────────────────────────
+    /* ── K without a photograph ──────────────────────────────────────────────────────────────
        [1, 2] at `section` from 1440: the head and its actions in the 381 head track
        (H-beside-actions, the lead at body-lg), the points in the 763 body track (§ 1.4 "K without
        a photo", 411). [5, 7] from 1024 to 1439: at 1024 a third of the column is ~290 and the h2
        ran to four lines, past H-beside-actions' three (fix round 1); 5 of 12 holds it to three.
        With no points there is no body track to fill, and the band is the head alone, one track. */
-    if (!hasForm) {
-      return (
-        <Section
-          surface={props.surface}
-          id={props.id}
-          data-band={props['data-band']}
-          aria-labelledby={headingId}
-          data-arrangement="offer"
-        >
-          <Layout
-            columns={hasPoints ? { lg: [5, 7], xl: [1, 2] } : undefined}
-            colGap={hasPoints ? 'section' : undefined}
-            rowGap={hasPoints ? 'stack' : undefined}
-            align="start"
-          >
-            <Layout rowGap="stack">
-              {lede({ leadRole: hasPoints ? 'body' : 'lead' })}
-              {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
-            </Layout>
-            <CtaPoints shape="rows" markers={markers} points={points} />
-          </Layout>
-        </Section>
-      );
-    }
-
-    /* ── The offer with a form ───────────────────────────────────────────────────────────────
-       Stacked: the lede, the form, then the points as a 2- and 3-up strip. The compact-form
-       variation of this shape is composed in cmp-form's specimen. */
     return (
       <Section
         surface={props.surface}
@@ -982,10 +940,17 @@ export function CtaSection(props: CtaSectionProps) {
         aria-labelledby={headingId}
         data-arrangement="offer"
       >
-        <Layout rowGap="stack">
-          {lede()}
-          {hasForm ? <div>{props.form}</div> : null}
-          <CtaPoints shape="grid" markers={markers} points={points} />
+        <Layout
+          columns={hasPoints ? { lg: [5, 7], xl: [1, 2] } : undefined}
+          colGap={hasPoints ? 'section' : undefined}
+          rowGap={hasPoints ? 'stack' : undefined}
+          align="start"
+        >
+          <Layout rowGap="stack">
+            {lede({ leadRole: hasPoints ? 'body' : 'lead' })}
+            {actions.length > 0 ? <CtaActions actions={actions} kind="link" /> : null}
+          </Layout>
+          <CtaPoints shape="rows" markers={markers} points={points} />
         </Layout>
       </Section>
     );
@@ -1016,7 +981,9 @@ export function CtaSection(props: CtaSectionProps) {
      No proof row: see `CtaSplitProps.proof`. */
   const contact = props.contact ?? [];
   const hasContact = contact.some((cell) => cell.label.trim() && cell.value.trim());
-  const hasForm = isValidElement(props.form);
+  /* The score at its own width: a Cluster row, so the pill never stretches to the column. */
+  const ratingRow =
+    'rating' in props && present(props.rating) ? <Cluster>{props.rating}</Cluster> : null;
 
   /* ── The island close (owner, 16 Oct 2026) ─────────────────────────────────────────────────────
      The copy and the form on a blue or ink island, the form on a paper panel inside it. [5, 7] at
@@ -1024,9 +991,9 @@ export function CtaSection(props: CtaSectionProps) {
      The drawing, heading and lede are ONE group, a `block` apart, centred against the form: the
      form is usually the taller, and the group never spreads to fill it (owner: "too much space
      between the illustration and the copy"). Below 1024 it stacks: the group, then the form. */
-  if (props.island && hasForm) {
-    const band: SectionSurface = props.surface ?? ISLAND_BAND[props.island];
-    const islandSurface = islandSurfaceOn(band, props.island);
+  const requested: CtaFormIsland = props.island ?? FORM_ISLAND;
+    const band: SectionSurface = props.surface ?? ISLAND_BAND[requested];
+    const islandSurface = closeIslandOn(band, requested);
     const panel = (
       <div className={styles.islandPanel} data-surface="paper">
         {props.form}
@@ -1069,6 +1036,7 @@ export function CtaSection(props: CtaSectionProps) {
                       {lede({ scale: 'halves' })}
                       <CtaPoints shape="stack" markers={markers} points={points} />
                       {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+                      {ratingRow}
                     </Layout>
                   </div>
                 </Layout>
@@ -1106,6 +1074,7 @@ export function CtaSection(props: CtaSectionProps) {
                   {lede({ scale: 'offer' })}
                   <CtaPoints shape="stack" markers={markers} points={points} />
                   {hasContact ? <CtaContactStrip contact={contact} besideForm={false} /> : null}
+                  {ratingRow}
                 </Layout>
               </Layout>
               {panel}
@@ -1132,42 +1101,11 @@ export function CtaSection(props: CtaSectionProps) {
               {lede({ scale: 'offer' })}
               <CtaPoints shape="stack" markers={markers} points={points} />
               {hasContact ? <CtaContactStrip contact={contact} besideForm /> : null}
+              {ratingRow}
             </Layout>
             {panel}
           </Layout>
         </Island>
       </Section>
     );
-  }
-
-  return (
-    <Section
-      surface={props.surface ?? CLOSE_SURFACE}
-      id={props.id}
-      data-band={props['data-band']}
-      aria-labelledby={headingId}
-      data-arrangement="split"
-    >
-      <Layout
-        columns={hasForm ? { base: 1, lg: [5, 7] } : undefined}
-        colGap={hasForm ? 'column' : undefined}
-        rowGap="stack"
-        align={hasForm ? 'center' : 'start'}
-      >
-        <Layout rowGap="stack">
-          {lede({ scale: hasForm ? 'offer' : 'close' })}
-          <CtaPoints shape="stack" markers={markers} points={points} />
-          {hasContact ? <CtaContactStrip contact={contact} besideForm={hasForm} /> : null}
-        </Layout>
-        {hasForm ? (
-          <div
-            className={styles.formPanel}
-            data-surface={PANEL_SURFACE[props.surface ?? CLOSE_SURFACE]}
-          >
-            {props.form}
-          </div>
-        ) : null}
-      </Layout>
-    </Section>
-  );
 }

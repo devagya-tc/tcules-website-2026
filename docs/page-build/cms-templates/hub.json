@@ -1,0 +1,366 @@
+{
+  "template": "hub",
+  "route": "/services",
+  "slug": "services",
+  "name": "Services",
+  "pageType": "service",
+  "seo": {
+    "title": "UI/UX Design Services & Software Development | Tcules",
+    "description": "UI/UX design services and software development for SaaS: new products taken from idea to launch-ready software, and established ones made better.",
+    "canonical": "https://www.tcules.com/services",
+    "robots": "index,follow",
+    "ogImageAlt": "IMAGE_ASSET_REQUIRED"
+  },
+  "social": {
+    "og_title": "UI/UX Design Services & Software Development | Tcules",
+    "og_description": "UI/UX design services and software development for SaaS: new products taken from idea to launch-ready software, and established ones made better.",
+    "og_image": "IMAGE_ASSET_REQUIRED",
+    "og_image_alt": "IMAGE_ASSET_REQUIRED",
+    "og_type": "website",
+    "twitter_card": "summary_large_image"
+  },
+  "breadcrumb": [
+    {
+      "name": "Home",
+      "url": "/"
+    },
+    {
+      "name": "Services",
+      "url": "/services"
+    }
+  ],
+  "searchContext": {
+    "primaryIntent": "Explore Product Design and related software product services",
+    "primaryBuyerQuestion": "What work can Tcules own for my product, and where should we start?",
+    "supportingQuestions": [
+      "Do we need to know which service we want?",
+      "Can you take a new SaaS product from idea to launch?",
+      "Can we start with an audit or one workflow?"
+    ],
+    "primaryQuery": "UI/UX design and development services",
+    "secondaryQueries": [
+      "UI/UX design services",
+      "design and development for enterprise software",
+      "end-to-end product development services",
+      "should we hire one studio for design and development or two suppliers",
+      "which design service do we need",
+      "can you take a SaaS product from idea to launch",
+      "can we start with an audit or one workflow",
+      "UI UX design and development cost"
+    ],
+    "keyEntities": []
+  },
+  "structuredData": {
+    "types": [
+      "CollectionPage",
+      "Service",
+      "BreadcrumbList",
+      "FAQPage"
+    ]
+  },
+  "release": {
+    "contentState": "STUDIO_SPINE_HUB_2026-10-26",
+    "siteReleaseState": "SITE_RELEASE_HOLD"
+  },
+  "conversion": {
+    "form": "project_enquiry",
+    "anchor": "enquiry",
+    "visibleFields": [
+      "Email",
+      "What are you working on?",
+      "Product or company URL"
+    ],
+    "optionalFields": [
+      "Product or company URL"
+    ],
+    "submitLabel": "Send enquiry",
+    "hiddenContext": [
+      "origin_route",
+      "placement",
+      "family",
+      "service_or_audit",
+      "referrer",
+      "campaign"
+    ],
+    "onSuccess": {
+      "heading": "Your enquiry has reached us.",
+      "body": "We'll reply within one business day.",
+      "retainEnteredData": true
+    },
+    "processor": "cms_record_and_notify",
+    "schedulingLabel": null
+  },
+  "hero": {
+    "eyebrow": "Services",
+    "title": "UI/UX design services and software development for new and established products",
+    "lede": [
+      "Design and engineering are for the places your product is judged: the people who use it all day, the sales demo, the sprint where engineers build it and the renewal.",
+      "Tcules offers UI/UX design services and software development for complex software, with a particular focus on SaaS, from a founder's first idea to products customers have used for years.",
+      "Product Design leads every project. We join at the idea stage, inside your product team, or the day a working prototype has to become software customers rely on."
+    ],
+    "actions": [
+      {
+        "label": "Describe your product, and we'll suggest the mix",
+        "href": "#enquiry"
+      }
+    ],
+    "proofLines": [
+      "Selected work: [ConnectX](/case-studies/ai-native-building-energy-product-connectx) · [Eden AI](/case-studies/eden-ai-workflow-builder-search-redesign) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation)"
+    ],
+    "studioFacts": true,
+    "media": null
+  },
+  "sections": [
+    {
+      "block": "Client recognition",
+      "id": "client-recognition",
+      "heading": "Some of the teams we've worked with",
+      "clients": [
+        "Doodle",
+        "Dealpath",
+        "Benchmark Gensuite",
+        "Eden AI",
+        "ConnectX",
+        "JoVE",
+        "Ringier Media Switzerland"
+      ]
+    },
+    {
+      "block": "Routes",
+      "id": "service-guide",
+      "heading": "Which design or development service do you need?",
+      "intro": "Seven services and our audits, each with its own page. Most projects draw on two or three of them.",
+      "rowHeader": "Service",
+      "columns": [
+        "Best for",
+        "What you come away with"
+      ],
+      "rows": [
+        {
+          "page": "/services/product-design",
+          "label": "Product Design",
+          "cells": [
+            "Working out what a product should do and how it should work, at any stage",
+            "Research, workflows, interface design and tested prototypes"
+          ]
+        },
+        {
+          "page": "/services/new-product-design-first-release",
+          "label": "New Product Design & First Release",
+          "cells": [
+            "Turning an idea, a concept or an AI-built prototype into an MVP",
+            "A first release customers want to use, taken through to launch if you choose"
+          ]
+        },
+        {
+          "page": "/services/product-modernisation",
+          "label": "Product Modernisation",
+          "cells": [
+            "Software customers rely on daily, whose screens and code show their age",
+            "A product changed part by part while customers keep working, with their habits kept"
+          ]
+        },
+        {
+          "page": "/services/design-systems",
+          "label": "Design Systems",
+          "cells": [
+            "Teams whose buttons, spacing, Figma files and code have drifted apart",
+            "One set of components and rules in Figma and in code, so design and code match"
+          ]
+        },
+        {
+          "page": "/services/ai-product-ux",
+          "label": "AI Product UX",
+          "cells": [
+            "Adding AI that answers, drafts, checks or acts for your users",
+            "What the AI does, and how people follow, steer, check and correct it"
+          ]
+        },
+        {
+          "page": "/services/design-engineering",
+          "label": "Design Engineering",
+          "cells": [
+            "Trying risky interactions in code before committing to them",
+            "Working prototypes, and interface code that keeps to the design from first prototype to production"
+          ]
+        },
+        {
+          "page": "/services/software-development",
+          "label": "Software Development",
+          "cells": [
+            "Products that need building as well as designing",
+            "Frontend, backend, integrations, testing and release, with designers alongside until release"
+          ]
+        },
+        {
+          "page": "/audits",
+          "label": "Audits & Assessments",
+          "cells": [
+            "Teams that agree something is wrong and disagree on what",
+            "The cause found and the fixes ranked, before you fund the work"
+          ]
+        }
+      ],
+      "after": "Product Design can also be hired in parts: [user research](/services/product-design/ux-research), [workflows and structure](/services/product-design/information-architecture-workflow-design), [interface design](/services/product-design/interaction-ui-design), [prototypes and usability tests](/services/product-design/prototyping-usability-testing) and [data visualisation](/services/product-design/data-visualisation).\n\nSoftware Development covers web apps, major features and care of a live product, plus [AI Product Engineering](/services/software-development/ai-product-engineering) and [Mobile App Development](/services/software-development/mobile-app-development).\n\nA new AI product often brings Product Design, AI Product UX and Software Development together."
+    },
+    {
+      "block": "Selected work",
+      "id": "selected-work",
+      "heading": "Selected design and development work",
+      "intro": "Three products, each drawing on a different mix of our services.",
+      "cases": [
+        {
+          "case": "ai-native-building-energy-product-connectx",
+          "copySlug": null,
+          "heading": "ConnectX: an AI energy product taken from definition to a live module",
+          "body": "We defined this building-energy product around eight scenarios drawn from the questions its users ask, then proved it in a coded demo on sample data. We then carried the demo into a production-ready module that went live in late 2025.\n\n[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)",
+          "linkLabel": null,
+          "media": {
+            "id": "services_connectx",
+            "role": "demonstrate",
+            "card": "connectx",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1786970109/Section_4_Image_7ae363fefe.webp",
+            "altIntent": "Coded ConnectX workspace demonstrating an AI-assisted building-energy scenario",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media (connectx_workspace)"
+          }
+        },
+        {
+          "case": "unifying-workflow-creation-through-intelligent-search",
+          "copySlug": null,
+          "heading": "Eden AI: one search box, with AI help kept separate",
+          "body": "Developers on Eden AI's platform can begin a workflow three ways: from a template, from scratch or with the AI's help. Our redesign brought all three into one search box, made AI help a mode you enter on purpose, and gave Eden's own developers specs to build from.\n\n[Read the Eden AI case](/case-studies/eden-ai-workflow-builder-search-redesign)",
+          "linkLabel": null,
+          "media": {
+            "id": "services_eden",
+            "role": "demonstrate",
+            "card": "eden-ai",
+            "assetUri": "https://res.cloudinary.com/dbay1gb0s/image/upload/v1773124788/Eden_AI_2_f04afef6ad.webp",
+            "altIntent": "Eden AI workflow builder showing unified search and AI-assisted creation",
+            "status": "BOUND_EXISTING_PUBLIC_ASSET",
+            "source": "current public Tcules case media (eden_unified_search)"
+          }
+        },
+        {
+          "case": "boosting-web-to-print-sales-and-efficiency-by-modernising-legacy-erp-ux",
+          "copySlug": null,
+          "heading": "Gold Image Printing: a print store and its production system redesigned together",
+          "body": "We watched production staff use the existing system, then redesigned the web-to-print store and the internal ERP on a single component set and style guide. The design gives each order one shape from checkout through artwork, scheduling and fulfilment, and we worked with the client's technical team on implementation.\n\n[Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)",
+          "linkLabel": null,
+          "media": {
+            "id": "services_gold_image",
+            "role": "demonstrate",
+            "card": "gold-image-printing",
+            "altIntent": "Gold Image Printing store and production screens built on one component set",
+            "status": "IMAGE_ASSET_REQUIRED",
+            "source": "Gold Image Printing case has no bound screen; pull one from the live case media"
+          }
+        }
+      ]
+    },
+    {
+      "block": "Testimonials",
+      "id": "testimonials",
+      "heading": "What clients say",
+      "testimonials": [
+        "DRAFT-VOVISTO-GOMES",
+        "DRAFT-EDENAI-SPECS",
+        "DRAFT-CURAMCARE-APPS",
+        "FP-GOLDIMAGE-NAVIGATION"
+      ],
+      "showPlatformRating": true
+    },
+    {
+      "block": "How we work together",
+      "id": "how-we-work-together",
+      "heading": "How we work together",
+      "intro": "When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.",
+      "shared": "how-we-work-together:default"
+    },
+    {
+      "block": "Why Tcules",
+      "id": "why-tcules",
+      "heading": "Why teams choose Tcules",
+      "shared": "why-tcules:default",
+      "reasons": [
+        {
+          "reason": 1,
+          "evidence": "Before we shaped [Auxentios'](/case-studies/auxentios-cpq-product-mvp-design) quoting MVP, eight interviews mapped what each of six specialist roles adds to a quotation, and the product structure followed that map."
+        },
+        {
+          "reason": 4,
+          "evidence": "For [The Wandering Raven](/case-studies/wandering-raven-edtech-moodle-experience), we designed a creative-writing world for young learners, then set up its Moodle plugins and custom theme ourselves, so the design holds together where learners use it."
+        },
+        {
+          "reason": 6,
+          "evidence": "Primelis brought us in three years ago and has kept us on as an ongoing partnership; we have designed every one of its products since."
+        }
+      ]
+    },
+    {
+      "block": "Industries",
+      "id": "industries",
+      "heading": "Industries we know well",
+      "expertise": [
+        "b2b-saas-workflow-software",
+        "data-analytics-decision-products",
+        "proptech-contech-field-operations",
+        "climatetech-energy",
+        "ai-products-developer-tools",
+        "content-knowledge-discovery-platforms",
+        "martech-salestech",
+        "commerce-transactional-products",
+        "edtech-learning",
+        "fintech",
+        "healthtech",
+        "marketplaces-multi-sided-platforms"
+      ]
+    },
+    {
+      "block": "FAQ",
+      "id": "faq",
+      "heading": "Questions about choosing UI/UX design and development services",
+      "items": [
+        {
+          "question": "Do we need to know which service we want?",
+          "answer": "No. Tcules recommends the service, or mix of services, once you describe the product, where it is heading and what is hard. A few lines will do, and you don't need our service names."
+        },
+        {
+          "question": "Can you take a new SaaS product from idea to launch?",
+          "answer": "Yes. Our end-to-end product development services take new SaaS products from first definition to a launch-ready first release, as [New Product Design & First Release](/services/new-product-design-first-release) explains. Already have a working prototype? A [Prototype Readiness Review](/audits/prototype-readiness-review) shows what it needs before customers arrive."
+        },
+        {
+          "question": "Can we start with an audit or one workflow?",
+          "answer": "Yes. Tcules treats one workflow, a feature or a focused audit as a strong first step. It runs as a pilot project, so you see how we think about your product before planning anything bigger. [How pilots work](/how-we-work#engagement-shapes)"
+        },
+        {
+          "question": "What is the difference between Product Design and Design Engineering?",
+          "answer": "Product Design works out what the product does and how it works, through research, workflows and interface design. Design Engineering takes that work into code, so a risky interaction can be tried in a running product and the production interface keeps to the design. The two often run side by side on one project."
+        },
+        {
+          "question": "Design Systems or Product Modernisation: which do we need?",
+          "answer": "Choose Design Systems when the trouble is inconsistency: the same button built five ways, or Figma and code drifting apart. Choose Product Modernisation when workflows and technology have aged and need changing in stages. A modernisation can start from a shared component layer, as Benchmark Gensuite's did."
+        },
+        {
+          "question": "Should we hire one studio for design and development, or two suppliers?",
+          "answer": "Separate suppliers suit a finished design that only needs building, but gaps can open before release. Our design with your engineers suits a strong in-house team, as long as someone answers the product questions that land on engineers mid-build; at [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate), its own team owned implementation.\n\nOne studio suits new products and designs still moving once code starts, with the code we touch agreed early."
+        },
+        {
+          "question": "How much do UI/UX design and development services cost?",
+          "answer": "The cost depends on what is designed and built, and how much of it. Each engagement gets its price before any work begins, based on the scope you agree with us. [How pricing works](/how-we-work#engagement-shapes)"
+        }
+      ]
+    },
+    {
+      "block": "Enquiry",
+      "id": "enquiry",
+      "heading": "Tell us the problem, we'll suggest the mix",
+      "intro": "Not sure which service you need? Skip the menu. Describe what you're creating or changing, and we'll work out with you where to start.",
+      "form": "conversion"
+    }
+  ],
+  "_example": {
+    "source": "_pages/_pages/services.md",
+    "note": "Generated from the copy for Mihir: field names follow src/lib/corpus-types.ts where it has them; rich text is Markdown with inline marks and links kept. Section order IS band_order."
+  }
+}

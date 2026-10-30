@@ -241,6 +241,18 @@
   grid-column: 1 / -1;
 }
 
+/* A horizontal media item takes a whole row (owner, 29 Oct 2026; decisions/2026-10-29-media-rows-
+   take-a-whole-row). An item whose picture sits BESIDE its words — BlockCard `horizontal`, a ListCard
+   row with a thumbnail, a Teaser row or `beside` with a picture — says so with `data-media-row`, and
+   whatever the tracks, it spans all of them: two such items side by side (the /case-studies "Best
+   for" rows, two columns of thumbnail rows) read as a cramped double ledger. The alternative is the
+   vertical card in the grid, which is the caller's choice. The span is written here, as lead's is:
+   the item declares what it is, the container places it. Not in a scroll row, which has no explicit
+   grid to span. A direct child only: compose such rows straight into the list's own Layout. */
+.layout:not(.scroll-always):not(.scroll-until-md) > [data-media-row] {
+  grid-column: 1 / -1;
+}
+
 /* lead="tall" — from lg, the first child takes the first track and spans every row; the others fill
    the track(s) beside it, one per row. The row count is the child count less one, read from the DOM
    like pin-last's, so fragments and conditional children count as what renders. Below lg nothing is

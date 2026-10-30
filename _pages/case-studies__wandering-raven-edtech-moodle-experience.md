@@ -4,13 +4,13 @@ slug: wandering-raven-edtech-moodle-experience
 page_name: Carrying a creative-learning experience into Moodle
 page_type: case_study
 seo:
-  title: 'The Wandering Raven: a learning world in Moodle | Tcules'
-  description: Tcules connected content structure, a character-led identity and Moodle implementation for The Wandering Raven’s creative-writing experience.
+  title: 'The Wandering Raven Moodle EdTech case study | Tcules'
+  description: 'The Wandering Raven Moodle EdTech case study: content structure, a character-led identity and a custom Moodle theme for a creative-writing learning world.'
   canonical: https://www.tcules.com/case-studies/wandering-raven-edtech-moodle-experience
   robots: index,follow
 social:
-  og_title: 'The Wandering Raven: a learning world in Moodle | Tcules'
-  og_description: Tcules connected content structure, a character-led identity and Moodle implementation for The Wandering Raven’s creative-writing experience.
+  og_title: 'The Wandering Raven Moodle EdTech case study | Tcules'
+  og_description: 'The Wandering Raven Moodle EdTech case study: content structure, a character-led identity and a custom Moodle theme for a creative-writing learning world.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,18 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'The Wandering Raven: a learning world in Moodle | Tcules'
-  twitter_description: Tcules connected content structure, a character-led identity and Moodle implementation for The Wandering Raven’s creative-writing experience.
+  twitter_title: 'The Wandering Raven Moodle EdTech case study | Tcules'
+  twitter_description: 'The Wandering Raven Moodle EdTech case study: content structure, a character-led identity and a custom Moodle theme for a creative-writing learning world.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'The Wandering Raven Moodle EdTech'
+  secondary_queries:
+  - 'The Wandering Raven Moodle EdTech case study'
+  - 'Moodle learning experience case study'
+  - 'creative writing EdTech case study'
+  - 'Moodle implementation design'
+  - 'character-led learning design'
+  - 'course content structure in Moodle'
   primary_intent: Moodle learning product implementation case study
   primary_buyer_question: How did Tcules carry The Wandering Raven’s learning experience into Moodle?
   key_entities:
@@ -30,7 +38,7 @@ search_context:
   - learning experience
   - information architecture
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +62,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +73,8 @@ render:
   - moodle-was-part-of-the-design-responsibility
   - what-this-case-establishes
   - relevance-to-another-learning-product
-  - delivery-impact
+  - faq
+  - testimonials
   - related
   - enquiry
 page_composition:
@@ -84,12 +93,16 @@ page_composition:
       moodle-was-part-of-the-design-responsibility: argument_thesis
       what-this-case-establishes: argument_thesis
       relevance-to-another-learning-product: argument_thesis
-      delivery-impact: argument_thesis
+      faq: faq
+      testimonials: testimonial_proof
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
+  testimonial_ids:
+  - QB-13
+  - FP-WANDERING-PICTURE
+  - FP-WANDERING-PRODUCT
   commercial_system:
-    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
   visual_requirements:
@@ -104,10 +117,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#wandering-raven
 release:
@@ -154,11 +168,11 @@ content_governance:
 
 *Case study · The Wandering Raven*
 
-# A creative-writing world that works inside Moodle
+# The Wandering Raven: a Moodle EdTech world for young creative writers
 
-The Wandering Raven needed its creative-writing experience for learners aged eight to eighteen to work coherently across content, navigation, identity and Moodle. Tcules researched educator and learner contexts, revised the information architecture, developed a character-led visual world, and implemented selected Moodle plugins, configuration and custom theming so the learning experience survived implementation.
+The Wandering Raven needed its creative-writing experience for learners aged eight to eighteen to hold together across content, navigation, identity and Moodle.
 
-Tcules carried the experience into Moodle so the character of the learning product survived implementation.
+Tcules researched how educators and learners work and revised the information architecture. We developed a character-led visual world, then set up selected Moodle plugins, configuration and custom theming, so the world designed for young writers is the one they meet on Moodle.
 
 ## At a glance {#case-context}
 
@@ -167,64 +181,90 @@ Tcules carried the experience into Moodle so the character of the learning produ
 | Our role | Research, an experience audit, information architecture, character-led visual design and hybrid wireframes, plus Moodle plugin set-up and a custom theme. |
 | The key question | How can the learning world hold together inside Moodle, so progress, content, community and identity feel like one place? |
 | What we delivered | A recognisable learning world carried through content structure, visual identity, Moodle configuration and theming. |
+| Ways to take part | Writing prompts, exercises, peer feedback, forums and live sessions, with progress indicators and badges. |
 
 Related Tcules services: [Product Design](/services/product-design) and [Frontend Development](/services/software-development/frontend-development).
 
-## What did the learning product need to support beyond presenting content? {#the-product-had-to-support-progress-not-only-pre}
+## Showing each young writer what to do next {#the-product-had-to-support-progress-not-only-pre}
+
 Learning content becomes a product experience through sequence, feedback, participation and a learner's understanding of what to do next. The existing experience had problems with information organisation, mobile use, interface consistency and community participation.
 
 A learner needed to find an activity, understand what to do and see how to take part. Those everyday steps gave the redesign its structure.
 
-## Information architecture and identity served the same learning experience {#information-architecture-and-identity-served-the}
+## Course content structure and character-led learning design {#information-architecture-and-identity-served-the}
 
-Tcules reorganised content so learners could identify their current activity and the next step. The visual direction used unusual creatures and characters to give the platform a recognisable world. Those characters were not decoration added after the product work. They helped the client create continuity across prompts, exercises and community participation.
+Tcules reorganised content so learners could identify their current activity and the next step. The visual direction used unusual creatures and characters to give the platform a recognisable world. The characters belonged to the product work itself, helping the client create continuity across prompts, exercises and community participation.
 
-Hybrid wireframes allowed product structure and visual direction to be reviewed together within time and budget constraints. The client remained closely involved while the experience took shape.
+Hybrid wireframes let the client review product structure and visual direction together. The client stayed closely involved as the experience took shape.
 
-## Moodle was part of the design responsibility {#moodle-was-part-of-the-design-responsibility}
+## Moodle implementation design: plugins, configuration and a custom theme {#moodle-was-part-of-the-design-responsibility}
 
-Tcules installed and configured selected plugins and created a custom theme so the Moodle experience fit the wider product direction. This reduced a hand-off between interface design and platform implementation. The client could focus on course content while Tcules handled the configuration and theming work.
+Tcules installed and configured selected plugins and created a custom theme, so the Moodle experience fit the wider product direction. Design and platform work stayed with one team, which removed a hand-off between them and left the client free to put its energy into the courses.
 
-Writing prompts, exercises, peer feedback, forums and live sessions gave learners different ways to participate. Progress indicators and badges helped make that activity visible within the same experience.
+Learners had different ways to take part:
 
-> “Their team takes the full picture into account when coming up with designs.”
-> Trishanya Raju, Founder, The Wandering Raven
+- writing prompts
+- exercises
+- peer feedback
+- forums
+- live sessions
 
-## The learning experience reached the platform {#what-this-case-establishes}
+Progress indicators and badges helped make that activity visible within the same experience.
+
+## What The Wandering Raven gained: one learning world on Moodle {#what-this-case-establishes}
 
 The Wandering Raven gained a recognisable learning environment across its content structure, visual identity and Moodle experience. Tcules handled the configuration and custom theme as well as the design, leaving the client free to concentrate on the courses.
 
-The creatures, prompts and participation features belonged to one product world, with the platform work needed to make that world usable.
+The creatures, prompts and participation features belonged to one product world, with the platform work needed to make that world usable. A platform built for running courses became a place with its own characters and its own sense of progress.
 
-## Relevance to another learning product {#relevance-to-another-learning-product}
+## For other learning products: measure learning apart from activity {#relevance-to-another-learning-product}
 
-A learning platform should distinguish participation signals from learning evidence. Completion, comments or time spent can indicate activity without proving understanding. A productive engagement begins by defining:
+Keep signs of activity, such as comments and completions, apart from signs of learning. Agree up front what would justify saying learners improved.
 
-- what the learner is trying to become able to do;
-- what sequence and feedback support that change;
-- what participation contributes;
-- what the platform can implement reliably; and
-- what evidence would justify a learning claim.
+Tcules' wider work on learning products sits under [EdTech and learning](/expertise/edtech-learning).
 
-Tcules' wider work on learning products, including AI-assisted practice and educator oversight, is described under [EdTech and learning](/expertise/edtech-learning).
+## Questions about The Wandering Raven on Moodle {#faq}
 
-## What reached the learning platform {#delivery-impact}
+### What did Tcules do for The Wandering Raven?
 
-| Impact dimension | What changed |
-|---|---|
-| Experience continuity | Content structure, navigation, visual identity and the Moodle experience were designed as one learning environment. |
-| Design-to-build continuity | Tcules carried selected plugins, configuration and custom theming into Moodle instead of handing the platform layer back as a separate problem. |
-| Client leverage | The implemented platform work allowed the client to concentrate on the course content while the product experience was carried through the learning environment. |
+Tcules researched how educators and learners work, audited the existing experience and revised the information architecture. We then developed a character-led visual world and hybrid wireframes, installed and configured selected Moodle plugins, and created a custom theme.
 
-## Related learning-product work {#related}
+### Can a creative learning experience work inside Moodle?
 
-Two other cases where the work had to fit inside a platform somebody else owned.
+It can, when the platform work is part of the design job. For The Wandering Raven, Tcules handled plugin set-up, configuration and a custom theme, so the creatures, prompts and participation features held together as one world on Moodle.
+
+### How did learners take part?
+
+Through writing prompts, exercises, peer feedback, forums and live sessions. Progress indicators and badges made that activity visible, and content was reorganised so each learner could identify their current activity and the next step.
+
+### Who was The Wandering Raven designed for?
+
+Learners aged eight to eighteen taking part in a creative-writing experience, partly run on Moodle. Tcules researched how educators and learners work before revising the structure and building the visual world. Related learning-product work sits under [EdTech and learning](/expertise/edtech-learning).
+
+## In The Wandering Raven's words {#testimonials}
+
+> “Tcules looked at the whole picture, from our students and teachers to how Moodle works, before they designed anything.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
+
+> “Their team takes the full picture into account when coming up with designs.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
+
+> “The finished product is intuitive and user-friendly. The site's unique look and feel is also noteworthy.”  
+> **Trishanya Raju, Founder, The Wandering Raven**
+
+## More case studies on Moodle, Magento and Shopify {#related}
+
+Both had to fit a platform somebody else owned.
 
 [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
 
-[Read the OctiFi case](/case-studies/octifi-mobile-lending-product-design)
+[Read The Chain Hut case](/case-studies/ux-ui-design-and-development-for-magento-of-a-silver-chain-store)
 
 [See Product Design](/services/product-design)
+
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us what the experience has to carry {#enquiry}
 

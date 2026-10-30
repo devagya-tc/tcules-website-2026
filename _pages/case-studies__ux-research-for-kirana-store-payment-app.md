@@ -4,13 +4,13 @@ slug: ux-research-for-kirana-store-payment-app
 page_name: Researching a merchant-payment concept before product commitment
 page_type: case_study
 seo:
-  title: Twenty interviews before a payment-product build | Tcules
-  description: Tcules combined twenty intended-user interviews with category and stakeholder research to shape a merchant-payment concept and its UX strategy.
+  title: 'Merchant payment app UX research case study | Tcules'
+  description: 'Merchant payment app UX research case study: twenty interviews and category research shaped a kirana-store payment concept and UX strategy before development.'
   canonical: https://www.tcules.com/case-studies/ux-research-for-kirana-store-payment-app
   robots: index,follow
 social:
-  og_title: Twenty interviews before a payment-product build | Tcules
-  og_description: Tcules combined twenty intended-user interviews with category and stakeholder research to shape a merchant-payment concept and its UX strategy.
+  og_title: 'Merchant payment app UX research case study | Tcules'
+  og_description: 'Merchant payment app UX research case study: twenty interviews and category research shaped a kirana-store payment concept and UX strategy before development.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,19 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Twenty interviews before a payment-product build | Tcules
-  twitter_description: Tcules combined twenty intended-user interviews with category and stakeholder research to shape a merchant-payment concept and its UX strategy.
+  twitter_title: 'Merchant payment app UX research case study | Tcules'
+  twitter_description: 'Merchant payment app UX research case study: twenty interviews and category research shaped a kirana-store payment concept and UX strategy before development.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'merchant payment app UX research'
+  secondary_queries:
+  - 'merchant payment app UX research case study'
+  - 'kirana store payment app UX research'
+  - 'merchant interviews case study'
+  - 'payment product discovery research'
+  - 'UX research before building'
+  - 'twenty user interviews'
+  - 'shaping a payment concept with research'
   primary_intent: merchant payment UX research case study
   primary_buyer_question: How did Tcules’ merchant research inform a payment concept before development?
   key_entities:
@@ -30,7 +39,7 @@ search_context:
   - qualitative interviews
   - product concept
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +63,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +74,7 @@ render:
   - the-outcome-was-evidence-for-prioritisation
   - what-this-case-establishes
   - use-this-when-the-team-must-name-the-decision-fi
-  - delivery-impact
+  - faq
   - related
   - enquiry
 page_composition:
@@ -85,7 +94,7 @@ page_composition:
       the-outcome-was-evidence-for-prioritisation: argument_thesis
       what-this-case-establishes: argument_thesis
       use-this-when-the-team-must-name-the-decision-fi: comparison_decision
-      delivery-impact: argument_thesis
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
@@ -105,10 +114,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#kirana-payment-research
 release:
@@ -153,13 +163,17 @@ content_governance:
 
 *Case study · Merchant payments research*
 
-# Twenty merchant interviews before committing to a payment product
+# Merchant payment app UX research: twenty interviews before any development
 
-A client considering a payment product for kirana-store users needed evidence before committing to development. Tcules combined stakeholder interviews, competitor analysis, app-store and social research with twenty qualitative interviews matching the intended personas, then synthesised the findings into product priorities, concept material and a UX strategy for the next investment decision.
+A client considering a payment product for kirana-store owners, who run India's neighbourhood grocery shops, needed solid research before committing to development.
+
+Tcules combined stakeholder interviews, competitor analysis, and app-store and social research with twenty qualitative interviews matching the intended personas. We then turned the findings into product priorities, concept material and a UX strategy to inform the next round of investment.
+
+Twenty merchants shaped the concept before anyone committed to code.
 
 ## At a glance {#case-context}
 
-| Product | A payment app concept for kirana store owners, India's neighbourhood grocery shops. The client's name is withheld. |
+| Product | A payment app concept for kirana store owners, India's neighbourhood grocery shops. |
 |---|---|
 | Our role | Research and product direction before development: stakeholder interviews, competitor analysis, app-store and social research, and twenty interviews with people matching the intended users. |
 | The key question | Which merchant payment problems deserved investment before any development began? |
@@ -167,61 +181,81 @@ A client considering a payment product for kirana-store users needed evidence be
 
 Related Tcules services: [UX Research](/services/product-design/ux-research) and [Product Design](/services/product-design).
 
-## What evidence did Tcules combine before the payment-product decision? {#the-research-combined-different-kinds-of-evidenc}
-Stakeholder conversations clarified the proposed business and product direction. Competitor analysis and public reviews helped the team identify category expectations and recurring complaints. Social and app-store material provided language and issues worth investigating, but did not substitute for speaking with intended users.
+## Kirana store payment app UX research, ending with twenty user interviews {#the-research-combined-different-kinds-of-evidenc}
 
-Twenty interviews brought the intended users’ payment habits, concerns and expectations into the decision. The team could compare the concept with the way merchants described their work, then investigate patterns across the interviews.
+Before any development, the research drew on four kinds of source:
 
-## Research was organised around a product decision {#research-was-organised-around-a-product-decision}
+- Stakeholder conversations clarified the proposed business and product direction.
+- Competitor analysis and public reviews showed category expectations and recurring complaints.
+- Social and app-store material supplied language and issues worth investigating.
+- Speaking with intended users came next.
 
-The research brief needed more than a list of requested features. Tcules synthesised the research into product and marketing priorities, helping the client decide which problems deserved a place in the concept and what needed further investigation.
+Twenty interviews brought the intended users’ payment habits, concerns and expectations into the client's thinking. The team could compare the concept with the way merchants described their work, then look for patterns across the interviews.
 
-## Findings the client could prioritise from {#the-outcome-was-evidence-for-prioritisation}
+## Shaping a payment concept with research the client could act on {#research-was-organised-around-a-product-decision}
 
-The research gave the client a stronger basis for choosing what to build: a concept and UX strategy informed by intended users, category research and the business context. Product and marketing could work from the same findings.
+Tcules synthesised the research into product and marketing priorities. That helped the client choose which problems deserved a place in the concept and what needed further investigation.
+
+## Payment product discovery research that product and marketing shared {#the-outcome-was-evidence-for-prioritisation}
+
+The research gave the client a stronger basis for choosing what to build. The concept and UX strategy were informed by intended users, category research and the business behind it. Product and marketing could work from the same findings.
 
 The research raised the hard questions while changing direction was still cheap.
 
-## A clearer brief for the next investment {#what-this-case-establishes}
+## What the client received before any development {#what-this-case-establishes}
 
-The engagement brought together:
+In short:
 
-- multiple sources informed the research plan;
-- twenty qualitative interviews examined intended-user behaviour and perception;
-- findings were synthesised into product and marketing direction; and
-- the work ended before development began.
+- several sources informed the research plan
+- twenty qualitative interviews examined intended-user behaviour and perception
+- findings were synthesised into product and marketing direction
+- all of it arrived before development, when changing direction cost least
 
-The research outputs gave the client a way to assess the opportunity before funding application development.
+The research gave the client a way to assess the opportunity before funding application development.
 
-## Use this when the team must name the decision first {#use-this-when-the-team-must-name-the-decision-fi}
+## UX research before building: five questions to answer first {#use-this-when-the-team-must-name-the-decision-fi}
 
-Research is most useful when the team knows which decision it must make. Before a prototype or build, define:
+Research is most useful when the team knows which choice it must make. Before a prototype or build, define:
 
 1. Which assumption could make the product direction wrong?
-2. Which evidence source can examine that assumption?
-3. What would change the team's decision?
+2. Which source can examine that assumption?
+3. What would change the team's mind?
 4. Which result requires a prototype, and which requires real operation?
 5. What remains outside the research team's authority?
 
-A Tcules [UX research](/services/product-design/ux-research) engagement starts from the choice you need to make, then gathers what will settle it. Domain context for payment and lending products sits under [FinTech and InsurTech](/expertise/fintech-insurtech).
+Tcules' [UX research](/services/product-design/ux-research) starts from the choice you need to make, then gathers what will answer it. Our wider work on payment and lending products sits under [FinTech](/expertise/fintech).
 
-## What the research changed for the next investment {#delivery-impact}
+## Questions about the merchant payments research {#faq}
 
-| Impact dimension | What changed |
-|---|---|
-| Evidence before build | Twenty qualitative interviews were combined with stakeholder, competitor, app-store and social research before the client committed to application development. |
-| Decision clarity | Research synthesis turned behavioural evidence into product priorities, concept material and a UX strategy for the next investment decision. |
-| Cross-functional alignment | Product and marketing received a shared evidence base for discussing which problems and assumptions deserved further investment. |
+### How did Tcules research a merchant payment concept?
 
-## Related research work {#related}
+Tcules combined stakeholder interviews, competitor analysis, and app-store and social research with twenty qualitative interviews matching the intended personas. The findings became product and marketing priorities, concept material and a UX strategy, all before any development began.
 
-Two other cases where evidence came before the product commitment.
+### What did the twenty interviews give the client?
 
-[Read the OctiFi case](/case-studies/octifi-mobile-lending-product-design)
+They brought the intended users' payment habits, concerns and expectations into the client's thinking. The team compared the concept with the way merchants described their work, then looked for patterns across the interviews, alongside stakeholder, competitor and app-store research.
+
+### Who was the payment app for?
+
+Kirana store owners, who run India's neighbourhood grocery shops. The research, concept material and UX strategy were shaped by how those merchants described their own work, alongside stakeholder and competitor research.
+
+### What did the client receive?
+
+Research findings, concept material and a UX strategy that product and marketing could prioritise from. It all arrived before development, so the client could assess the opportunity before funding the app's build. Related payment and lending work sits under [FinTech](/expertise/fintech).
+
+## More case studies where research came before the build {#related}
+
+In these two as well, research came before the product commitment.
+
+[Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
 
 [Read the Doodle case](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling)
 
 [See UX Research](/services/product-design/ux-research)
+
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
 ## Tell us what you need to know before committing {#enquiry}
 

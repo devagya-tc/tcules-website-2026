@@ -45,7 +45,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: var(--btn-height-md);
+  /* The size's height is a FLOOR, not a fixed box (29 Oct 2026): a label longer than its container
+     (the 26 Oct copy's hero asks, "Describe your product, and we'll suggest the mix", ran 89px past a
+     390 viewport) wraps to a second line and the box grows, where `nowrap` pushed it off the page. A
+     one-line label renders exactly as before: its line plus the padding sits inside the floor.
+     `flex-shrink: 0` keeps the old behaviour beside siblings (a button never squeezes to make room);
+     only a container narrower than the whole label makes it wrap. */
+  min-block-size: var(--btn-height-md);
+  max-inline-size: 100%;
+  flex-shrink: 0;
+  padding-block: var(--btn-padding-y);
   padding-inline: var(--btn-padding-x);
   gap: var(--btn-gap);
   border: 0;
@@ -55,7 +64,7 @@
   letter-spacing: var(--btn-text-tracking);
   text-transform: var(--text-mono-case);
   text-decoration: none;
-  white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   box-shadow: var(--btn-shadow);
   /* Colour only — the one thing in this system that transitions. There is no elevation to
@@ -87,7 +96,7 @@
    not restated — the `font` shorthand does not reset it, so all three sizes track alike from the
    base rule, which is what --btn-text-tracking asserts by being a single value. */
 .sm {
-  height: var(--btn-height-sm);
+  min-block-size: var(--btn-height-sm);
   font: var(--btn-text-sm);
 }
 
@@ -97,7 +106,7 @@
 }
 
 .lg {
-  height: var(--btn-height-lg);
+  min-block-size: var(--btn-height-lg);
   font: var(--btn-text-lg);
 }
 
@@ -131,7 +140,7 @@
 .link {
   /* A bare link has no box and no fixed height, so it may wrap: a 44-character label ("How AI-native
      Product Design works at Tcules") held on one line ran 54px past a 390 viewport. A boxed button
-     keeps `nowrap`, because its height is fixed.
+     wraps too (29 Oct 2026), its height a floor that grows by a line (see `.button`).
 
      A wrapping link FLOWS rather than flexes. In a flex row a wrapped label is a block as wide as
      the space it was given, so the arrow after it was pushed to the far edge of the column, a
@@ -143,6 +152,8 @@
   white-space: normal;
   text-align: start;
   height: auto;
+  min-block-size: 0;
+  padding-block: 0;
   padding-inline: 0;
   border-radius: var(--btn-radius-bare);
 }
@@ -188,6 +199,22 @@
 .link .label {
   display: inline;
   margin-inline: 0;
+}
+
+/* Inline, not the box's inline-block: an atomic label is one unbreakable piece, so a long one wrapped
+   as a block as wide as the line and the glyph fell to the next line after it. */
+.link .labelInk {
+  display: inline;
+}
+
+/* A link whose label ends on the trailing glyph's line: nowrap on the link, normal again on
+   `.labelHead`, so only the last word and the glyph never part (Button.tsx GluedLabel). */
+.glued {
+  white-space: nowrap;
+}
+
+.labelHead {
+  white-space: normal;
 }
 
 .labelInk {
@@ -306,29 +333,39 @@
    stays the size's height and the glyph stays centred — and it is the whole difference from a
    ghost icon at rest, which is a bare glyph.
 
-   Hover and focus FILL the circle and take the rule with them, so the filled control is one disc
-   rather than a disc inside a ring. Pressed deepens the fill one step. The glyph moves ONCE, onto
-   the fill, and pressed reads that same -fg-hover: a pressed token whose value equals hover on
-   every surface would be a state that does not move (button.css header), so there is none. */
+   It is the SECONDARY control (owner, 29 Oct 2026; decisions/2026-10-29-outline-hover-is-secondary):
+   hover and focus never fill it, because a blue disc or box is the solid's state and the outline
+   then competes with the page's one main action. Hover firms the line one step and the label takes
+   the link's step, both colour, on the button's one transition; nothing fades. Press is the only
+   ground it ever takes, a ghost's pale tint, with the line one step firmer again. The label does
+   not move a second time on press, so pressed reads -fg-hover: a pressed fg equal to hover on every
+   surface would be a state that does not move (button.css header), so there is none. */
 .outline {
   border: var(--btn-outline-rule-width) solid var(--btn-outline-primary-rule);
   border-radius: var(--btn-radius-round);
 }
 
+/* Labelled (owner, 29 Oct 2026): the first of an in-band pair. The button's own radius, not the
+   stepper's circle, so it reads as the solid's shape drawn in line, and its trailing glyph keeps a
+   labelled button's size. */
+.outline:not(.iconOnly) {
+  border-radius: var(--btn-radius);
+}
+
 /* The stepper's glyph steps up a size from a labelled button's (--btn-outline-icon-size-*): the
    arrow is the whole control. After the size rules, so it wins at md by source order and at sm
    and lg by the extra class. */
-.outline > svg {
+.outline.iconOnly > svg {
   width: var(--btn-outline-icon-size-md);
   height: var(--btn-outline-icon-size-md);
 }
 
-.outline.sm > svg {
+.outline.iconOnly.sm > svg {
   width: var(--btn-outline-icon-size-sm);
   height: var(--btn-outline-icon-size-sm);
 }
 
-.outline.lg > svg {
+.outline.iconOnly.lg > svg {
   width: var(--btn-outline-icon-size-lg);
   height: var(--btn-outline-icon-size-lg);
 }
@@ -339,15 +376,14 @@
 
 .outline.primary.live:hover,
 .outline.primary.live:focus-visible {
-  background: var(--btn-outline-primary-bg-hover);
-  border-color: var(--btn-outline-primary-bg-hover);
+  border-color: var(--btn-outline-primary-rule-hover);
   color: var(--btn-outline-primary-fg-hover);
 }
 
 .outline.primary.live:active,
 .outline.primary.live.active {
   background: var(--btn-outline-primary-bg-pressed);
-  border-color: var(--btn-outline-primary-bg-pressed);
+  border-color: var(--btn-outline-primary-rule-pressed);
   color: var(--btn-outline-primary-fg-hover);
 }
 

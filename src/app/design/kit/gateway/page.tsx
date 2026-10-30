@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 
 import { Layout, Section } from '@/components';
-import { ContentSection, Gateway } from '@/patterns';
+import { ContentSection, Gateway, GatewayPaths } from '@/patterns';
 import { getCorpusPage, getProposedEyebrows } from '@/content';
 import { ROUTES } from '@/lib/routes';
-import { gatewayBoardItems, gatewayItems } from '@/templates';
+import { gatewayBoardItems, gatewayItems, gatewayPaths } from '@/templates';
 
 import { Specimen } from '../../_specimen/Specimen';
 import t from '../../_specimen/typeroles.module.css';
@@ -34,6 +34,7 @@ export default async function KitGatewayPage() {
   if (!band) notFound();
   const items = gatewayItems(band);
   const board = gatewayBoardItems(band);
+  const paths = gatewayPaths(band);
   const eyebrow = (await getProposedEyebrows(ROUTES.home))[band.id];
   const heading = band.headingText;
 
@@ -53,6 +54,15 @@ export default async function KitGatewayPage() {
           </Layout>
         </Layout>
       </Section>
+
+      <Variation
+        id="paths"
+        title="G.P · Two paths, service rows — home (owner, 29 Oct 2026)"
+        note="GatewayPaths, home’s band since the 26 Oct copy: two EQUAL paths side by side from 1024 (64 apart), stacked below. Each reads down: its own SituationFigure in a 180 box (both titles on one line), the title (h3, serif), its paragraphs, then its services as compact service rows, one per line, 16 apart: the service’s own flat Sketch scene on its 112 plate, the action’s authored words (h6), an arrow; the whole row is the link. No container, no button. Two rows against three makes one column a row longer. Hover a row: its arrow moves 4 (transform only). Point anywhere on a path: its drawing plays rest → end. The Prototype Readiness Review has no scene of its own yet, so its row shows the empty plate."
+      />
+      <ContentSection heading={heading} headingId="gw-paths" eyebrow={eyebrow} align="center">
+        <GatewayPaths paths={paths} />
+      </ContentSection>
 
       <Variation
         id="board"

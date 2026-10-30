@@ -316,7 +316,6 @@ export function StudioPage({ content: c, trail, images, caseHrefs }: StudioPageP
       <CtaSection
         id="work-with-tcules"
         arrangement="open"
-        surface="tint"
         heading={c.cta.heading}
         body={[c.cta.body]}
         actions={[c.cta.action]}

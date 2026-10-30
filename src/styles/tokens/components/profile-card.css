@@ -3,7 +3,7 @@
    them (about, 12 Oct 2026). The panel is TestimonialCard's: the quiet ground, the 8 radius, no edge.
 
    Naming: --pfc-{part}-{role}
-     parts  ground · portrait · name · role · bio · rule · follow
+     parts  ground · portrait · initials · name · role · bio · rule · follow
      roles  ink · text · tracking · size · radius · width
 
    No state tokens: the panel does not respond to a pointer; its link is a Button.
@@ -15,6 +15,10 @@
   /* The portrait leads the panel, a step larger than a testimonial's 48 avatar: a component size. */
   --pfc-portrait-size: var(--space-80);
   --pfc-portrait-radius: var(--radius-8);
+  /* No portrait yet: the person's initials hold the portrait's square (review 29 Oct: a labelled
+     placeholder panel at 80px read as a broken image). */
+  --pfc-initials-text: var(--text-h3);
+  --pfc-initials-tracking: var(--text-h3-tracking);
   /* The name at the card-title step; the position in the mono label voice under it. */
   --pfc-name-text: var(--text-h4);
   --pfc-name-tracking: var(--text-h4-tracking);
@@ -32,6 +36,8 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-700); /* 7.27:1 on paper-deep */
   --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-initials-ground: var(--color-neutral-200);
+  --pfc-initials-ink: var(--color-neutral-700);
   --pfc-rule: var(--color-neutral-300); /* decoration */
 }
 
@@ -41,6 +47,8 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-600); /* 4.92:1 on paper */
   --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-initials-ground: var(--color-neutral-100);
+  --pfc-initials-ink: var(--color-neutral-700);
   --pfc-rule: var(--color-neutral-200); /* decoration */
 }
 
@@ -50,6 +58,8 @@
   --pfc-name-ink: var(--color-white);
   --pfc-role-ink: var(--color-neutral-400);
   --pfc-bio-ink: var(--color-neutral-200);
+  --pfc-initials-ground: var(--color-neutral-800);
+  --pfc-initials-ink: var(--color-neutral-200);
   --pfc-rule: var(--color-neutral-700); /* decoration */
 }
 
@@ -59,5 +69,7 @@
   --pfc-name-ink: var(--color-neutral-900);
   --pfc-role-ink: var(--color-neutral-600);
   --pfc-bio-ink: var(--color-neutral-800);
+  --pfc-initials-ground: var(--color-neutral-100);
+  --pfc-initials-ink: var(--color-neutral-700);
   --pfc-rule: var(--color-neutral-200); /* decoration */
 }

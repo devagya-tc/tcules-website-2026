@@ -4,13 +4,13 @@ slug: information-architecture-workflow-design
 page_name: Information Architecture & Workflow Design
 page_type: service
 seo:
-  title: Workflow Design & Information Architecture for SaaS | Tcules
-  description: 'Workflow design and information architecture for complex software: records, roles, statuses and navigation that match how work moves through your team.'
+  title: 'Software Workflow Design & Information Architecture | Tcules'
+  description: 'Software workflow design and information architecture for SaaS: records, roles, statuses and navigation that match how work moves between your people.'
   canonical: https://www.tcules.com/services/product-design/information-architecture-workflow-design
   robots: index,follow
 social:
-  og_title: Workflow Design & Information Architecture for SaaS | Tcules
-  og_description: 'Workflow design and information architecture for complex software: records, roles, statuses and navigation that match how work moves through your team.'
+  og_title: 'Software Workflow Design & Information Architecture | Tcules'
+  og_description: 'Software workflow design and information architecture for SaaS: records, roles, statuses and navigation that match how work moves between your people.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: Workflow Design & Information Architecture for SaaS | Tcules
-  twitter_description: 'Workflow design and information architecture for complex software: records, roles, statuses and navigation that match how work moves through your team.'
+  twitter_title: 'Software Workflow Design & Information Architecture | Tcules'
+  twitter_description: 'Software workflow design and information architecture for SaaS: records, roles, statuses and navigation that match how work moves between your people.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: information architecture and workflow design for SaaS and operational software
@@ -28,7 +28,19 @@ search_context:
   - Is information architecture just a sitemap?
   - How do roles and permissions change the design?
   - Should we start here or with research?
-  primary_query: workflow design
+  primary_query: software workflow design
+  secondary_queries:
+  - workflow design
+  - information architecture services
+  - information architecture for SaaS
+  - UX workflow design
+  - workflow design for SaaS
+  - B2B workflow design
+  - multi-role workflow design
+  - object-oriented UX
+  - roles and permissions UX
+  - approval workflow design pattern
+  - is information architecture just a sitemap
 navigation:
   breadcrumb:
   - name: Home
@@ -58,11 +70,14 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - structure
-  - workflows
-  - proof
+  - what-you-get
+  - selected-work
+  - hand-offs
+  - routes
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -70,26 +85,49 @@ page_composition:
   media_bindings:
   - id: ia_workflow_dealpath
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
-    alt_intent: Dealpath workflow redesign that checks for an existing deal before creating a new record.
+    alt_intent: Dealpath workflow redesign that searches existing deals before a new deal record is created.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ia_workflow_gt_tools_header
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png
+    alt_intent: GT Tools Shopify store navigation as implemented, grouping automotive-glass equipment for buyers who know the part and buyers still comparing.
+    source: current public Tcules case media
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: ia_workflow_scissors_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
   testimonial_ids:
-  - FP-OCTIFI-REASONING
+  - CL-AUX-COMPLEXITY
+  - FP-GOLDIMAGE-NAVIGATION
+  - DRAFT-PRIMELIS-TEAM
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
     - Scissors
-    - Auxentios
     - Dealpath
     - GT Tools
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
@@ -119,93 +157,157 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-design__information-architecture-workflow-design.md
 ---
 
-*Workflow design & information architecture*
+*Product Design · Workflow design and information architecture*
 
-# Workflows break where work changes hands
+# Software workflow design for products where work changes hands
 
-For SaaS and enterprise software, we design the hand-offs, approvals, waits and rejections, so each role sees the same record with the right details and actions.
+Workflow design is for the hand-offs your customers live in: a quote passing from sales to pricing, an approval waiting on a manager, and the support ticket asking who has it now. Tcules provides software workflow design and information architecture for SaaS and enterprise products whose records several roles share.
 
-[Start a conversation](#enquiry)
+*Selected work: [Scissors](/case-studies/scissors-staffing-software-object-oriented-ux) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [GT Tools](/case-studies/gt-tools-shopify-product-discovery)*
 
-*Selected work: Scissors · Auxentios · Dealpath · GT Tools*
+[Show us where work goes missing](#enquiry)
 
-## Signs the structure is the problem {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Every new feature gets its own menu item."** The navigation keeps growing and finding anything gets harder.
+## What you get from workflow design and information architecture {#what-you-get}
 
-**"The same customer lives in four places."** Nobody decided which record is the real one.
+We design the structure under your screens: what the product tracks, who can act on it and how work moves between people. It is one part of our [Product Design](/services/product-design) work.
 
-**"Sales calls it an account. Support calls it a project."** Teams use different names for the same thing.
+**What you receive**
 
-**"People finish the job in a spreadsheet."** The product loses track of work when it passes to someone else.
+- **A map of your records.** What the product tracks and how those things connect, such as clients, jobs and candidates, or listings and deals.
 
-## Four questions to answer before designing screens {#structure}
+- **Roles and permissions.** Who can see, create, change or approve each record, worked out role by role.
+
+- **Statuses and rules.** What "draft", "blocked" or "approved" means, what can happen next, and the conditions and exceptions that decide it.
+
+- **Every hand-off designed.** Who is told, what they see and what they can do next, including whoever picks the work up again days later.
+
+- **Navigation.** Menus grouped around the records people track and the work each role does most.
+
+- **Clickable prototypes** of the structure and key flows, tried by people from each role.
+
+- **The reasoning, written down,** so your team can question every choice.
+
+**Who does the work.** The model is drawn by a senior product designer who leads the project, and an account lead looks after plans and timings. A researcher joins when nobody yet knows how the work really runs.
+
+**What we need from you.** Time with people from each role doing real tasks, including the moments the work leaves your product for a spreadsheet or a chat, and someone who can agree the rules with us.
+
+**Where our part stops.** Our part is the structure and the prototypes. The look and behaviour of each screen is [Interaction & UI Design](/services/product-design/interaction-ui-design), and your engineers build, unless you bring in our design engineers or developers.
+
+## Selected workflow design work {#selected-work}
+
+Three structures, from staffing software with users still to come to an established deal pipeline and a specialist store.
+
+### Scissors: one model under four staffing workflows
+
+Scissors needed onboarding, shortlisting, talent pools and job creation redesigned. We first modelled what they share: a client lasting across jobs, a candidate on several shortlists, a reusable talent pool. In the redesign, details entered once at onboarding carry into every job and candidate message. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+
+### Dealpath: a listing and a deal treated as different records
+
+Dealpath's Add to pipeline action opened a new deal for every listing, even one the team already tracked. Our redesign searches existing deals first and keeps "create new" as the fallback. Dealpath's own team owned implementation. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+### GT Tools: one catalogue for two kinds of buyer
+
+Some buyers of GT Tools' automotive-glass equipment know the part number, and others are still comparing. We reworked navigation, search and category pages so both reach a suitable product, then developed the store on Shopify. [Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+
+## Multi-role workflow design: hand-offs, approvals and waits {#hand-offs}
+
+A quote might start with sales, pass to a pricing expert, wait for the customer, then come back for approval. Each person opens the same record and needs different details and different actions. Before any screen, we answer four questions for every workflow.
 
 | Part | The question we answer |
 |---|---|
-| **Records** | What does the product keep track of, and how are those things connected? |
+| **Records** | What does the product track, and how are those things connected? |
 | **People** | Who can see, create, change or approve each one? |
-| **Status** | What does "draft", "blocked" or "approved" mean, and what can happen next? |
+| **Status** | What does each status mean, and what can happen next? |
 | **Rules** | Which conditions and exceptions decide whether work moves forward? |
 
-Navigation, forms and dashboards come out of those answers, and the screens become simpler to design and build.
+Navigation, forms and dashboards come out of the answers, so screens stop contradicting each other. The hand-off gets as much care as the screens either side of it: a clear status, the right details for the next role and what changed while someone was away.
 
-## Work that moves between people {#workflows}
+Example: for [Auxentios](/case-studies/auxentios-cpq-product-mvp-design), sales representatives, sales managers and product, pricing, solution and maintenance experts all add to one quote. The quoting workflow we designed gives each role clear hand-offs and exits, in place of one fixed sequence.
 
-A quote might start with sales, pass to a pricing expert, wait for the customer, then return for approval. Each person needs the same record with different details and different actions. We design the hand-offs, the waits, the rejections and the moment someone picks the work up again days later.
+## Workflow design, research or a redesign: which do you need? {#routes}
 
-Depending on the job, you get a map of your records, a table of who can do what, task flows, status diagrams, a navigation structure and clickable prototypes.
+Structure problems look like screen problems from the outside. Choose by where the trouble shows today.
 
-## Untangling roles, records and catalogues {#proof}
+| Service | What it covers | Best for |
+|---|---|---|
+| **Workflow design and information architecture** | Records, roles, statuses, navigation and the steps of each task | Products where work passes between people, or where the menu keeps growing |
+| **[UX Research](/services/product-design/ux-research)** | How people do the work today, observed and in their own words | Teams still learning how the work actually runs |
+| **[Interaction & UI Design](/services/product-design/interaction-ui-design)** | How each screen behaves, looks and reads | Products whose structure holds but whose screens confuse people |
+| **[SaaS Product Redesign](/services/product-modernisation/product-redesign)** | A focused change to a live product customers already rely on | Established software where continuity matters as much as the change |
+| **[UX & Product Audit](/audits/ux-product-audit)** | A diagnosis of the live product before anything is redesigned | Teams who know something is wrong but not where |
 
-### Scissors: enter a candidate once, use them everywhere
+## What clients say {#testimonials}
 
-In Scissors' staffing software, the same clients, candidates and jobs come up placement after placement. We linked them properly, then redesigned onboarding, shortlisting, talent pools and job creation around those links. In the redesign, adding a candidate to a shortlist leaves their details untouched everywhere else.
+> “We were impressed with their lead designer and team because they understood our complex concepts.”  
+> **Ashok Mohanty, Founder, Auxentios**
 
-[Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+> “We’ve had positive feedback from staff and clients. A lot of people comment on how easy our site is to navigate.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-### Auxentios: six roles, one quote
+> “For three years Tcules has designed every one of our products. They work like part of our product team, improving them continuously and helping us shape AI features our customers can check and trust.”  
+> **Clément Contamine, CPO, Primelis**
 
-Sales representatives, sales managers and product, pricing, solution and maintenance experts all contribute to an industrial quote. We mapped who adds what and where work changes hands. The quoting workflow we designed gives each role clear hand-offs and exits, instead of forcing everyone through one fixed sequence.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-[Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+## How we work together {#how-we-work-together}
 
-### Dealpath: a listing and a deal are different things
+For workflow design, a good first piece of work is one workflow that passes between several roles, such as a quote or onboarding, mapped and prototyped.
 
-Dealpath's "Add to pipeline" action treated every property listing as a brand-new deal. We redesigned the flow to search existing deals first, with "create new" as the fallback, so people can attach a listing to a deal they already track instead of creating a duplicate. Dealpath's own team owned implementation.
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
 
-[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
 
-### GT Tools: one catalogue, two kinds of buyer
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
 
-Some buyers of GT Tools' specialist automotive-glass equipment know the part number. Others are still comparing. We reworked navigation, search and category pages so both reach the right product, then developed the new store on Shopify.
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
 
-[Read the GT Tools case](/case-studies/gt-tools-shopify-product-discovery)
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
 
-## Why teams choose Tcules for this work {#why-tcules}
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
 
-**We map the work first.** Records, roles and rules are settled early, so screens stop contradicting each other.
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
 
-**You can see the reasoning behind every flow.** Each choice is written down, so your team can question it.
+## Why teams choose Tcules {#why-tcules}
 
-> “They deliberate sufficiently and outline clear thought processes in the flows.”  
-> **Amin Nordin, Head of Growth, OctiFi**
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
 
-## Frequently asked questions {#faq}
+- **We work out what the product has to know before we draw it.** For [Doodle](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling), one interview showed that availability depended on a meeting's priority, so priority joined the product model before the scheduling interface was designed.
+
+- **We know what to leave alone in a product people rely on.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), long-time customers' habits were treated as a constraint, and the redesigned scope selector gave familiar work a clearer structure.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we set out which data, modules and twin view each of eight scenarios brings up, then tested that structure in a coded demo on sample data.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [EdTech](/expertise/edtech-learning)
+
+## Questions about workflow design and information architecture {#faq}
+
+### How do you design navigation for complex software?
+
+We group navigation around the records people track, such as clients, jobs or deals, and the work each role does most. The same record is then reachable from every workflow that uses it, and each role sees its own starting point.
 
 ### Is information architecture just a sitemap?
 
-For a website, largely. For software it also covers the records, roles and statuses behind the screens. Navigation is the part users see.
+On a website, mostly. In software, information architecture also covers the records, roles and statuses behind the screens, and Tcules designs those first. Navigation is the part of it users see.
 
-### How do roles and permissions change the design?
+### How do roles and permissions change a product design?
 
-They decide which actions each person sees, who approves what, and what the screen says when someone can't go further. We design those moments on purpose instead of leaving them to defaults.
+Roles and permissions decide which actions each person sees, who approves what, and what the screen says when someone can't go further. We design those moments on purpose, with a message written for that role in place of a default.
 
-### Should we start here or with research?
+### How do you design an approval workflow?
 
-If you don't yet know how people do the work, start with [UX Research](/services/product-design/ux-research). If the structure is sound and the screens are the problem, go to [Interaction & UI Design](/services/product-design/interaction-ui-design).
+Start with who can approve what, under which conditions, and what happens when someone says no. We design the request, the wait, the answer and the return path, including changes made after approval. The rules live in one place, so every screen applies them the same way.
 
-## Where does work go missing between people? {#enquiry}
+### What is object-oriented UX, and when does it help?
+
+Object-oriented UX designs around the things a product keeps track of, such as clients, candidates and jobs, before the screens that act on them. It helps most when the same records recur across many workflows and roles, as the [Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux) shows.
+
+## Tell us where work goes missing between people {#enquiry}
 
 Name the roles involved, the records they pass along and the step where someone always asks ‘who has this now?’
 

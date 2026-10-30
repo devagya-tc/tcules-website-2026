@@ -13,6 +13,8 @@ export const CORPUS_ASSET_SIZES: Readonly<
     { width: 2872, height: 1920 },
   'https://res.cloudinary.com/dbay1gb0s/image/upload/v1766140003/661397a8a95f59c73e56736f_tch_user_1_20e2af9ff8.webp':
     { width: 2872, height: 1800 },
+  'https://res.cloudinary.com/dbay1gb0s/image/upload/v1766140498/660bd75ce27b3355165af8d8_1_7_59f1667d2c.webp':
+    { width: 4320, height: 2075 },
   'https://res.cloudinary.com/dbay1gb0s/image/upload/v1766141312/6613c9478a5637f46c429843_rtf_image1_232bdfc9bb.png':
     { width: 2872, height: 1281 },
   'https://res.cloudinary.com/dbay1gb0s/image/upload/v1769152986/case_study_cover_the_chain_hut_3fe5ac0c4a.png':

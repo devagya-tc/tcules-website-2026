@@ -9,6 +9,7 @@ import {
   PageHero,
   type BreadcrumbItem,
   type HeroAction,
+  type HeroStat,
 } from '@/patterns';
 
 import { FinderForm, FinderLinks } from './Finder';
@@ -23,15 +24,18 @@ import styles from './ListingIndex.module.css';
    insights compositions (insights.tsx) and the case groups (cases.tsx) are two answers to "what goes
    in a section", built beside it in this folder. */
 
-/** The listing's opening: the title alone, the lede and the record beside it (PageHero `masthead`). */
+/** The listing's opening: the title alone, the lede and its figures beside it (PageHero `masthead`). */
 export type ListingHero = {
   title: string;
   /** The opening paragraphs, beside the title's last baseline from 1024. */
   lede?: readonly string[];
   /** The line above the title, as authored. */
   eyebrow?: string;
-  /** One mono line under the lede: how many there are and how fresh ("42 published · Latest …"). */
-  record?: readonly string[];
+  /**
+   * The record as figures under the lede (PageHero `stats`): the number large, what it counts small.
+   * Never a mono line of facts (owner, 29 Oct 2026; decisions/2026-10-29-studio-record-is-figures).
+   */
+  stats?: readonly HeroStat[];
 };
 
 /**
@@ -91,7 +95,7 @@ export type ListingOffer = {
 };
 
 /**
- * The page's close: the copy and the ask on tint before the ink footer. The form is composed by the
+ * The page's close: the copy and the ask on an island before the ink footer. The form is composed by the
  * caller and handed over (a template's slot, as every corpus close takes it); a close with only an
  * action takes the open arrangement; a close with neither is not rendered.
  */
@@ -108,7 +112,8 @@ export type ListingClosing = {
    * that we have"): the art, heading and lede beside the form on a blue or ink island on a paper band,
    * in home's halves with the moving field across it (owner, 28 Oct 2026: "the one with the moving
    * texture is preferred").
-   * Taken only with a `form`.
+   * Taken only with a `form`, and a form is ALWAYS on it (owner, 29 Oct 2026;
+   * decisions/2026-10-29-forms-only-on-the-island): absent, the island is blue with no drawing.
    */
   island?: { surface: 'blue' | 'ink'; art?: ReactElement };
 };
@@ -130,6 +135,23 @@ export type ListingIndexProps = {
   empty: string;
   offer?: ListingOffer;
   closing?: ListingClosing;
+  /**
+   * The page's own bands around the listing, composed by the caller (component-map C13): what a
+   * listing's copy authors besides its list — the client wall under the opening, the proof wall and
+   * the FAQ after it. Placed, never shaped, here: each arrives a whole band (its Section, its ground),
+   * so the template learns no listing's words. The caller keeps two tints from touching.
+   */
+  bands?: ListingBands;
+};
+
+/** Where a listing's own bands sit: under the opening, after the list, after the close. */
+export type ListingBands = {
+  /** Between the opening and the list (a client wall). */
+  afterHero?: ReactNode;
+  /** Between the list (and any offer) and the close (a proof wall, an FAQ before a link-only close). */
+  afterListing?: ReactNode;
+  /** After the close (the FAQ, where the enquiry form comes before it: `formBeforeFaq`). */
+  afterClose?: ReactNode;
 };
 
 /** The finder's content column: where a change of picks brings a reader scrolled past it back to. */
@@ -143,7 +165,7 @@ const FOLD_EXEMPT =
  * ListingIndex — the listing page type: the insights hub and the case-study index, after
  * claude.com/resources (owner, 16 Oct 2026; one structure, 22 Oct 2026).
  *
- *   A  hero     the trail, the title, the lede and record beside it (`masthead`), the texture
+ *   A  hero     the trail, the title, the lede and figures beside it (`masthead`), the texture
  *   B  listing  the rail beside the column: a switch of curated VIEWS (each a run of sections, every
  *               section a one-line head over its pieces, a `section` apart; every view is in the HTML,
  *               the switch shows one and holds it in `?view=`), or the FINDER — the filters in the
@@ -151,6 +173,9 @@ const FOLD_EXEMPT =
  *               (2026-10-29-insights-hub-is-the-finder)
  *   C  offer    another offer, on tint — only with its picture
  *   D  close    the ask: the copy and the form (the island close where the caller asks for one)
+ *
+ * The listing's own bands (`bands`: a client wall, a proof wall, an FAQ) sit after A, after B/C and
+ * after D, in the copy's order.
  */
 export function ListingIndex({
   breadcrumbs,
@@ -163,6 +188,7 @@ export function ListingIndex({
   empty,
   offer,
   closing,
+  bands,
 }: ListingIndexProps) {
   const lede = (hero.lede ?? []).filter((paragraph) => paragraph.trim());
   const shown = views
@@ -245,11 +271,13 @@ export function ListingIndex({
         eyebrow={hero.eyebrow}
         title={hero.title}
         body={lede.length > 0 ? (lede as [string, ...string[]]) : undefined}
-        record={hero.record}
+        stats={hero.stats}
         arrangement="masthead"
         texture
         surface="paper"
       />
+
+      {bands?.afterHero}
 
       {/* The fold rule's one exception on a listing: the list is the page's whole content, grows with
           the CMS and is read by scrolling, so no height could hold it. fold:check reports it with this
@@ -269,27 +297,19 @@ export function ListingIndex({
         />
       ) : null}
 
+      {bands?.afterListing}
+
       {/* The close is an ask, so it renders only WITH its ask: the form beside the copy, else the
-          action under it. With the offer on tint above, it drops to paper: never two tints adjacent.
+          action under it, the open close an ink island on paper (decisions/2026-10-29-cta-band-is-an-ink-island).
           A conversation glyph is the eye's entry into it, as every corpus close has. */}
-      {closing?.form && closing.island ? (
+      {closing?.form ? (
         <CtaSection
           id={closing.id}
-          island={closing.island.surface}
+          island={closing.island?.surface ?? 'blue'}
           islandArrangement="halves"
           islandTexture="flow"
-          art={closing.island.art}
+          art={closing.island?.art}
           eyebrow={closing.eyebrow || undefined}
-          heading={closing.heading}
-          body={closing.body?.trim() ? [closing.body] : undefined}
-          form={closing.form}
-        />
-      ) : closing?.form ? (
-        <CtaSection
-          id={closing.id}
-          surface={offer?.image ? 'paper' : 'tint'}
-          eyebrow={closing.eyebrow || undefined}
-          mark={<Icon name="chat-round-dots" size="xl" />}
           heading={closing.heading}
           body={closing.body?.trim() ? [closing.body] : undefined}
           form={closing.form}
@@ -298,7 +318,6 @@ export function ListingIndex({
         <CtaSection
           id={closing.id}
           arrangement="open"
-          surface={offer?.image ? 'paper' : 'tint'}
           eyebrow={closing.eyebrow || undefined}
           mark={<Icon name="chat-round-dots" size="xl" />}
           heading={closing.heading}
@@ -306,6 +325,8 @@ export function ListingIndex({
           actions={[closing.action]}
         />
       ) : null}
+
+      {bands?.afterClose}
     </>
   );
 }
@@ -321,7 +342,9 @@ function ListingSectionView({ section }: { section: ListingSection }) {
   return (
     <section id={section.id} aria-labelledby={headingId} className={styles.section}>
       <Layout rowGap="stack">
-        <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="baseline">
+        {/* The link at the heading's end, vertically centred on it, as every head's end action
+            (owner, 29 Oct 2026; decisions/2026-10-29-head-end-action-centred-on-heading). */}
+        <Layout columns={{ base: [1, 'auto'] }} colGap="block" align="center">
           <h2 id={headingId} className={styles.sectionTitle}>
             {section.heading}
           </h2>

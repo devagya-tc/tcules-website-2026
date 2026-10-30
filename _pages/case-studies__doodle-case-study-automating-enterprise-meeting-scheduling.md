@@ -4,13 +4,13 @@ slug: doodle-case-study-automating-enterprise-meeting-scheduling
 page_name: Designing enterprise scheduling around confidence
 page_type: case_study
 seo:
-  title: 'Doodle: designing enterprise meeting scheduling | Tcules'
-  description: Tcules used research and object modelling to define priority, tentative availability and a bookability interface for Doodle's enterprise scheduling direction.
+  title: 'Doodle enterprise scheduling UX case study | Tcules'
+  description: 'Doodle enterprise scheduling UX case study: how research and object modelling linked meeting priority and tentative availability to a bookability score.'
   canonical: https://www.tcules.com/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling
   robots: index,follow
 social:
-  og_title: 'Doodle: designing enterprise meeting scheduling | Tcules'
-  og_description: Tcules used research and object modelling to define priority, tentative availability and a bookability interface for Doodle's enterprise scheduling direction.
+  og_title: 'Doodle enterprise scheduling UX case study | Tcules'
+  og_description: 'Doodle enterprise scheduling UX case study: how research and object modelling linked meeting priority and tentative availability to a bookability score.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,18 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Doodle: designing enterprise meeting scheduling | Tcules'
-  twitter_description: Tcules used research and object modelling to define priority, tentative availability and a bookability interface for Doodle's enterprise scheduling direction.
+  twitter_title: 'Doodle enterprise scheduling UX case study | Tcules'
+  twitter_description: 'Doodle enterprise scheduling UX case study: how research and object modelling linked meeting priority and tentative availability to a bookability score.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'Doodle enterprise scheduling UX'
+  secondary_queries:
+  - 'Doodle enterprise scheduling UX case study'
+  - 'object modelling in UX'
+  - 'availability and priority design'
+  - 'bookability interface'
+  - 'enterprise meeting scheduling UX'
+  - 'Doodle case study'
   primary_intent: enterprise scheduling workflow case study
   primary_buyer_question: How do you make availability and priority visible in enterprise scheduling?
   key_entities:
@@ -30,7 +38,7 @@ search_context:
   - meeting priority
   - tentative availability
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +62,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +73,8 @@ render:
   - the-interface-had-to-fit-a-product-that-already-
   - what-this-case-establishes
   - use-this-when-automation-outruns-the-criteria-be
-  - delivery-impact
+  - testimonials
+  - faq
   - related
   - enquiry
 page_composition:
@@ -96,21 +105,26 @@ page_composition:
       the-interface-had-to-fit-a-product-that-already-: argument_thesis
       what-this-case-establishes: argument_thesis
       use-this-when-automation-outruns-the-criteria-be: argument_thesis
-      delivery-impact: argument_thesis
+      testimonials: testimonial_proof
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
+  testimonial_ids:
+  - QB-04
+  - QB-09
+  - SSOT-DOODLE-FULL
   commercial_system:
-    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
 structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#doodle
 release:
@@ -155,45 +169,51 @@ content_governance:
 
 *Case study · Doodle*
 
-# A free calendar slot is not the same as a dependable meeting
+# Doodle enterprise scheduling UX: finding meeting times people will keep
 
-Doodle was exploring enterprise scheduling where an empty calendar slot did not necessarily mean a dependable meeting. Tcules used research and product modelling to connect meeting type, priority and tentative availability to a bookability interface, giving the MVP a clearer basis for comparing possible times before Doodle owned the scheduling engine and integrations.
+Doodle was exploring enterprise scheduling, where people needed to know whether an empty calendar slot would hold as a meeting.
+
+Tcules used research and product modelling to link meeting type, priority and tentative availability to a bookability interface. Organisers could compare possible times by how likely each one was to hold, which turned a calendar search into a recommendation people can reason about.
 
 Research changed what the product needed to know before it could suggest a dependable time.
 
-## At a glance {#case-context}
+## The Doodle work at a glance {#case-context}
 
 | Product | Doodle's enterprise meeting-scheduling product, for people who arrange meetings across companies. |
 |---|---|
 | Our role | Research, product modelling, interface design and new components for Doodle's design system. |
 | The key question | When is a free slot a time people will really keep, once you weigh up the type of meeting, its priority and everyone's tentative plans? |
 | What we delivered | An MVP direction that links meeting priority and tentative availability to a bookability score in the interface. |
+| Research | A review of Doodle's existing research and concepts, a study of competitor patterns, a research questionnaire for stakeholders and meeting coordinators, and interviews. |
+| What Doodle kept | Ownership of the scheduling engine and calendar integrations. |
 
 Related Tcules services: [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design) and [Design Systems](/services/design-systems).
 
-## What was missing from the scheduling model? {#the-brief-contained-an-undefined-variable}
-The initial problem could be described as automation: bring together availability and propose viable times for enterprise meetings. But automation only works when the product knows what it is optimising.
+## How object modelling and one interview revealed the missing variable: meeting priority {#the-brief-contained-an-undefined-variable}
 
-Tcules reviewed Doodle's existing research and product concepts, studied competitor patterns and prepared a research questionnaire for stakeholders and people who coordinated meetings across organisational boundaries. Tcules diagrammed the objects in play during discovery: participants, organisations, meeting types, time, calendars and scheduling conditions.
+The starting problem looked like automation: bring availability together and propose viable times for enterprise meetings. Automation works when the product knows what it is optimising for.
 
-One interview surfaced the variable the current model did not represent. A participant's availability was affected by the importance of the meeting. Someone might appear unavailable for a routine conversation and still make time for a review, approval or customer commitment that carried greater priority.
+Tcules reviewed Doodle's existing research and product concepts and studied competitor patterns. We prepared a research questionnaire for stakeholders and for people who coordinated meetings across organisations. During discovery, we diagrammed the objects in play: participants, organisations, meeting types, time, calendars and scheduling conditions.
 
-The priority finding changed the product question. It was no longer only, “When is everyone free?” It became, “Given the type and priority of this meeting, how dependable is this time?”
+One interview surfaced a variable the current model had missed. A participant's availability depended on how important the meeting was. Someone might appear unavailable for a routine conversation and still make time for a review, approval or customer commitment that carried greater priority.
 
-## How could meeting priority change bookability? {#priority-became-part-of-the-scheduling-model}
-Tcules developed a framework through which an organisation could identify meeting types and express their relative priority. Tentative weekly schedules added another layer: the system could distinguish established commitments from availability that was more provisional.
+The priority finding changed the product question from “When is everyone free?” to “Given the type and priority of this meeting, how dependable is this time?”
 
-The interface direction brought those inputs together in a bookability score. The score was not a promise that a meeting would happen. It was a way to communicate the confidence available from the product's current information and help the organiser compare possible conditions.
+## Meeting priority and tentative availability, combined in a bookability score {#priority-became-part-of-the-scheduling-model}
 
-The distinction between a score and certainty matters in enterprise workflow products. A number can create false authority when the interface does not reveal what it represents. Here, the useful product work was to connect the score to meeting type, priority and tentative availability, so the organiser could read it as decision support rather than certainty.
+Tcules developed a framework for an organisation to identify meeting types and express their relative priority. Tentative weekly schedules added a second layer, so the system could tell firm commitments from provisional availability.
 
-## The interface had to fit a product that already existed {#the-interface-had-to-fit-a-product-that-already-}
+The interface direction brought those inputs together in a bookability score. The score was an estimate of how confident the product could be from its current information. It helped the organiser compare possible times.
 
-After the information structure was defined, Tcules explored interface concepts and developed the selected direction. Standard interactions could use existing Doodle components. The calendar and bookability work required additional components organised to remain consistent with the product system.
+A score is not certainty, and in enterprise workflow products the gap matters. A number carries false authority when the interface hides what it stands for. So the product work tied the score to meeting type, priority and tentative availability. The organiser could then read it as a guide to weigh.
 
-The new scheduling direction could take shape within Doodle's existing product language. Doodle owned the scheduling engine and calendar integrations; our work made the new product model visible and usable at the interface.
+## Bookability interface: Doodle's existing components, plus new calendar ones {#the-interface-had-to-fit-a-product-that-already-}
 
-## Research changed what the product needed to know {#what-this-case-establishes}
+Once the information structure was defined, Tcules explored interface concepts and developed the chosen direction. Standard interactions could use existing Doodle components. The calendar and bookability work needed new components, organised to stay consistent with the product system.
+
+The new scheduling direction took shape inside Doodle's existing product language, so it reads as part of Doodle. Doodle kept the scheduling engine and calendar integrations in-house, and Tcules gave the new model its form in the interface.
+
+## Enterprise meeting scheduling UX: from free slots to dependable times {#what-this-case-establishes}
 
 The work moved the MVP from finding an empty slot to helping an organiser judge whether a meeting could hold.
 
@@ -203,27 +223,50 @@ The work moved the MVP from finding an empty slot to helping an organiser judge 
 | What does the calendar show? | What do meeting type, priority and tentative commitments tell us? |
 | Which times can we offer? | How can the organiser compare the confidence behind those options? |
 
-Resolving the product model early lets the interface support the decision people are actually making.
+Defining the product model first lets the interface support the choice people are actually making.
 
-## Use this when automation outruns the criteria beneath it {#use-this-when-automation-outruns-the-criteria-be}
+## Before automating a choice, name what the product must know {#use-this-when-automation-outruns-the-criteria-be}
 
-The case is relevant when a workflow appears ready for automation but the criteria beneath the decision are still implicit. In scheduling, the missing variable was priority. In another product it might be authority, risk, evidence quality, capacity or exception state.
+This applies when a workflow looks ready for automation but the criteria behind the choice are still implicit. In scheduling, the missing variable was priority. In another product it might be authority, risk, data quality, capacity or exceptions.
 
-The productive first move is not to generate more interface options. It is to identify the objects and variables the product must understand before it can make a responsible recommendation.
+Start by naming the objects and variables the product must understand before it can make a responsible recommendation. More interface options can wait.
 
-Finding the objects and variables a product must understand before it can act is described under [information architecture and workflow design](/services/product-design/information-architecture-workflow-design).
+We expect this to matter more as AI assistants and agents start booking time on people's behalf. They can act well only on criteria a product has named, and Doodle's MVP names them: meeting type, priority and tentative availability.
 
-## What changed once the scheduling model changed {#delivery-impact}
+Tcules' [information architecture and workflow design](/services/product-design/information-architecture-workflow-design) work finds those objects and variables before the interface is drawn.
 
-| Impact dimension | What changed |
-|---|---|
-| Decision clarity | Meeting priority and tentative availability became explicit product variables instead of remaining assumptions behind an availability calculation. |
-| Build readiness | The product model was carried into a bookability interface, giving the MVP a clearer specification before scheduling-engine and integration work. |
-| System continuity | Existing Doodle components could be reused for standard interactions while new calendar and bookability patterns were added only where the model required them. |
+## What Doodle says about the research and the MVP {#testimonials}
 
-## Related product-model work {#related}
+> “Their research changed how we thought about scheduling across companies. The MVP was clearer because of it, and so was our roadmap.”  
+> **Stephanie Leue, Doodle**
 
-Two other cases where the modelling had to come before the interface.
+> “Tcules reused our existing components wherever they could, and designed new ones only for the calendar and scheduling work our system didn't cover yet. Everything they added was organised to fit the system we already had.”  
+> **Stephanie Leue, Doodle**
+
+> “Impressed with the design team's efficiency. Not a rush job, but constant iteration with our feedback. Collaborative approach led to a clear, well-defined MVP. Early users are happy, so are we!”  
+> **Stephanie Leue, Doodle**
+
+## Doodle case study FAQs {#faq}
+
+### What did Tcules design for Doodle?
+
+Tcules designed the direction for Doodle's enterprise meeting-scheduling MVP. Research and product modelling linked meeting type, priority and tentative availability to a bookability score in the interface, with new calendar components for Doodle's design system.
+
+### How do you design enterprise meeting scheduling around confidence?
+
+Give the organiser an estimate of how dependable each time is, and show what that estimate rests on. Doodle's bookability score combined meeting type, priority and tentative weekly schedules. Tying the score to those inputs let organisers read it as a guide to weigh when comparing possible times.
+
+### How did object modelling shape the Doodle MVP?
+
+During discovery, Tcules diagrammed the objects in play: participants, organisations, meeting types, time, calendars and scheduling conditions. One interview then showed that availability depended on how important a meeting was. Priority joined the model, and the product question moved from who is free to how dependable a time is.
+
+### Who owned the scheduling engine and calendar integrations?
+
+Doodle did. Tcules made the new product model visible and usable in the interface. Standard interactions used existing Doodle components, and new components were designed only for the calendar and bookability work, organised to stay consistent with the product system.
+
+## Other products where the model came before the screens {#related}
+
+Here too, the model had to come before the interface.
 
 [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -231,6 +274,10 @@ Two other cases where the modelling had to come before the interface.
 
 [See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
 
-## Tell us what the product is really scheduling {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-Describe the workflow, the records it moves and the decision people keep having to make twice.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us which choice your product is trying to automate {#enquiry}
+
+Describe the workflow, the records it moves and the call people keep having to make twice.

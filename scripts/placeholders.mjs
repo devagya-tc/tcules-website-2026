@@ -129,16 +129,22 @@ function svgFor({ width, height, kind, shows }) {
   const budget = Math.max(24, Math.floor(box / (body * 0.52)));
   /* The first sentence of the brief, without markup: the panel says what the slot is for, and the
      full brief lives in the register. */
-  const brief = shows
-    /* A parenthetical that names a frontmatter key ("(frontmatter healthtech_asset; …)") is for the
+  /* The register's FALLBACK row documents itself for the register's reader; its sentence is a note to
+     developers and never a visitor's label, so its panel draws the head alone (review 29 Oct). */
+  const brief = /^FALLBACK\b/.test(shows)
+    ? ''
+    : shows
+        /* A parenthetical that names a frontmatter key ("(frontmatter healthtech_asset; …)") is for the
        register's reader, not for the panel's. */
-    .replace(/\s*\([^)]*_[^)]*\)/g, '')
-    .replace(/`/g, '')
-    .split(/(?<=\.)\s/)[0];
-  const lines = wrap(brief, budget).slice(0, 7);
+        .replace(/\s*\([^)]*_[^)]*\)/g, '')
+        .replace(/`/g, '')
+        .split(/(?<=\.)\s/)[0];
+  const lines = brief ? wrap(brief, budget).slice(0, 7) : [];
   const head = `Image to come · ${kind}`;
   /* The label block's height: the head's line, the gap to the brief, then the brief's lines. */
-  const block = small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1);
+  const block = lines.length
+    ? small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1)
+    : small;
   const top = Math.round((height - block) / 2);
   /* Neutral and unbranded on purpose: a placeholder must never be mistaken for a finished asset. */
   const tspans = lines

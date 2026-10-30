@@ -707,6 +707,24 @@ export default async function PageHeroSpecimenPage() {
         />
       </div>
 
+      {/* ── 2c · A long title read across the split ──────────────────────────────── */}
+      <div>
+        <PageHero
+          title="UI/UX design services and software development for new and established products"
+          titleAcross
+          body={paragraphs(2)}
+          arrangement="beside"
+          media={{
+            type: 'image',
+            image: getKitPhoto('studio-pair-at-monitor', { alt: '' }),
+          }}
+        />
+        <Note
+          title="2c · titleAcross — a long title over the beside split"
+          note="A title that would set five or more display lines in half the column (CorpusHero's estimate) reads across it at display, and the lead, actions and figures sit beside the media under it (review 29 Oct, /services)."
+        />
+      </div>
+
       {/* ── 3 · The paragraph ladder ───────────────────────────────────────────── */}
       {([1, 2, 3, 4, 5, 6, 12] as const).map((count) => (
         <div key={count}>
@@ -954,7 +972,11 @@ export default async function PageHeroSpecimenPage() {
 
       {/* ── 9b · masthead · a listing's opening ─────────────────────────────────── */}
       <PageHero
-        trail={heroTrail(TRAIL, 'Insights from building products at the edge of design', crumbs)}
+        trail={heroTrail(
+          TRAIL,
+          'Insights from building products at the edge of design',
+          crumbs,
+        )}
         title="Insights from building products at the edge of design"
         body={[PARAS[0]]}
         arrangement="masthead"
@@ -962,20 +984,24 @@ export default async function PageHeroSpecimenPage() {
       />
       <Note
         title="9b · masthead — a listing's opening, the lede on the title's last baseline"
-        note="The title alone in two thirds from 1024, the lede (and a record) in the third, both halves on the title's last baseline: the band's end half, where the texture runs, carries the words that frame it, and the band is a title's height, so the list under it starts inside the first screen. Below 1024 it renders exactly as stacked."
+        note="The title alone in two thirds from 1024, the lede (and its figures) in the third, both halves on the title's last baseline: the band's end half, where the texture runs, carries the words that frame it, and the band is a title's height, so the list under it starts inside the first screen. Below 1024 it renders exactly as stacked."
       />
       <PageHero
         trail={heroTrail(TRAIL, 'Articles', crumbs)}
         title="Articles"
         titleSize="mark"
         body={['Essays and field notes from building complex products.']}
-        record={['42 published', 'Latest 15 Oct 2026']}
+        stats={[
+          { value: '2017', label: 'Founded' },
+          { value: '90+', label: 'Projects' },
+          { value: '19', label: 'Countries with clients' },
+        ]}
         arrangement="masthead"
         texture
       />
       <Note
-        title="9b · masthead · mark title + record — a format page"
-        note="One word at the mark scale, the lede and its record (one mono line, the facts joined by a middle dot, no pixels) on its baseline across the texture."
+        title="9b · masthead · mark title + figures — a listing's record"
+        note="One word at the mark scale, the lede on its baseline across the texture, and the record as figures a stack under it: the number large, what it counts small (owner, 29 Oct 2026: a record is shown as stats, never as a mono line of facts; the case-study listing's studio record)."
       />
 
       {/* ── 10 · Every edge case from §12 ───────────────────────────────────────── */}

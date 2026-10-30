@@ -29,6 +29,20 @@
   background: var(--ofs-mark-ink);
 }
 
+.lead {
+  font: var(--ofs-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ofs-lead-ink);
+  max-inline-size: var(--ofs-lead-measure);
+}
+
+.listLabel {
+  font: var(--ofs-label-text);
+  letter-spacing: var(--ofs-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--ofs-label-ink);
+}
+
 .title {
   font: var(--ofs-title-text);
   letter-spacing: var(--ofs-title-tracking);
@@ -56,3 +70,24 @@
 
 /* The ratio holds at every width: the frame never stretches to the set's height (owner, 11 Oct
    2026 — a stretched image is a crop nobody chose). */
+
+/* A promise whose title is a link (`href`, component-map C7): the title's own ink, underlined on the
+   accent mark's ink so it reads as a way on; the pointer takes the link ink. No transition: the
+   title does not move, it only says it is a link. */
+.titleLink {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--ofs-rule-width);
+  text-decoration-color: var(--ofs-title-link-rule);
+  text-underline-offset: var(--ofs-title-link-offset);
+}
+
+.titleLink:hover {
+  color: var(--ofs-title-ink-hover);
+  text-decoration-color: currentColor;
+}
+
+.titleLink:focus-visible {
+  outline: var(--ofs-ring-width) solid var(--ofs-ring-ink);
+  outline-offset: var(--ofs-ring-offset);
+}

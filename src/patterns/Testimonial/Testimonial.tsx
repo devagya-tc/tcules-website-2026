@@ -275,7 +275,12 @@ export type TestimonialWallProps = {
  * share a column instead of leaving a ragged row of holes.
  */
 export function TestimonialWall({ items, columns, stagger = false }: TestimonialWallProps) {
-  const accepted = items.filter(valid);
+  const valids = items.filter(valid);
+  /* A wall carries portraits on every card or on none: three of six with faces read as unevenly
+     finished (review 29 Oct, home). Until the last portrait lands, the wall shows none. */
+  const accepted = valids.every((item) => item.avatar)
+    ? valids
+    : valids.map((item) => (item.avatar ? { ...item, avatar: undefined } : item));
   if (accepted.length === 0) {
     warn('wall has no valid testimonials; rendering nothing.');
     return null;

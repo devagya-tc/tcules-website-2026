@@ -4,13 +4,13 @@ slug: ai-quality-control-expert-review-buildtwin
 page_name: 'BuildTwin: designing AI quality control an engineer can challenge'
 page_type: case_study
 seo:
-  title: 'BuildTwin: AI checks an engineer can challenge | Tcules'
-  description: Tcules designed BuildTwin AI quality-control review around engineer evidence, manual checks, correction, status and issue escalation for expert review.
+  title: 'BuildTwin AI quality control UX case study | Tcules'
+  description: 'BuildTwin AI quality control UX case study: a review workspace where engineers trace each AI check to its source and overrule it with a reason.'
   canonical: https://www.tcules.com/case-studies/ai-quality-control-expert-review-buildtwin
   robots: index,follow
 social:
-  og_title: 'BuildTwin: AI checks an engineer can challenge | Tcules'
-  og_description: Tcules designed BuildTwin AI quality-control review around engineer evidence, manual checks, correction, status and issue escalation for expert review.
+  og_title: 'BuildTwin AI quality control UX case study | Tcules'
+  og_description: 'BuildTwin AI quality control UX case study: a review workspace where engineers trace each AI check to its source and overrule it with a reason.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,18 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'BuildTwin: AI checks an engineer can challenge | Tcules'
-  twitter_description: Tcules designed BuildTwin AI quality-control review around engineer evidence, manual checks, correction, status and issue escalation for expert review.
+  twitter_title: 'BuildTwin AI quality control UX case study | Tcules'
+  twitter_description: 'BuildTwin AI quality control UX case study: a review workspace where engineers trace each AI check to its source and overrule it with a reason.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'BuildTwin AI quality control UX'
+  secondary_queries:
+  - 'BuildTwin AI quality control UX case study'
+  - 'engineer review of AI checks'
+  - 'AI evidence and correction design'
+  - 'AI issue tracking UX'
+  - 'construction AI UX case study'
+  - 'AI quality control review design'
   primary_intent: BuildTwin AI quality-control case study
   primary_buyer_question: How should an AI quality-control product preserve expert challenge?
   key_entities:
@@ -30,7 +38,7 @@ search_context:
   - engineer review
   - issue escalation
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +62,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -66,7 +74,7 @@ render:
   - an-override-had-to-remain-part-of-the-record
   - what-the-work-establishes
   - the-decision-another-accountable-ai-product-can-
-  - delivery-impact
+  - faq
   - related
   - enquiry
 page_composition:
@@ -98,7 +106,7 @@ page_composition:
       an-override-had-to-remain-part-of-the-record: argument_thesis
       what-the-work-establishes: argument_thesis
       the-decision-another-accountable-ai-product-can-: comparison_decision
-      delivery-impact: argument_thesis
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   commercial_system:
@@ -109,10 +117,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#buildtwin
 release:
@@ -158,93 +167,128 @@ content_governance:
 
 *Case study · BuildTwin*
 
-# AI checks an engineer can challenge
+# BuildTwin AI quality control UX: engineers trace and overrule each check
 
-BuildTwin was adding AI quality control to structural-engineering drawings, where a quality engineer still had to inspect and defend each judgement before approval. Tcules redesigned the review model and interface so AI checks could carry evidence, missing-input states, issue creation, override reasons and an accountable path from model output to human decision.
+BuildTwin uses AI to check structural-engineering drawings, but a quality engineer still signs off each one and has to defend the call. Tcules redesigned the review so every AI check showed its source and said when information was missing. The engineer could overrule a check, with a reason that stayed on the record.
 
-The earlier review surface could show status, but it did not yet provide the evidence an accountable reviewer needed to decide whether that status deserved trust.
+The earlier review screen showed status. An accountable reviewer also needed to see what lay behind that status before trusting it.
 
-Tcules turned the result list into a review workspace. Engineers could follow a check back to its evidence, supply missing information, challenge a conclusion and leave a reason that stayed in the record.
+Tcules turned the result list into a review workspace. From it, engineers could follow a check back to its source, supply missing information, challenge a conclusion and raise an issue against it.
 
-## At a glance {#case-context}
+## The BuildTwin project in brief {#case-context}
 
 | Product | BuildTwin, structural-engineering software that uses AI to check drawings for detailers, quality engineers and approvers. |
 |---|---|
 | Our role | Design of the AI review model and the review interface. |
 | The key question | How can a quality engineer inspect, question and overrule an AI check, and leave a record of why, before a drawing is approved? |
 | What we delivered | A review workspace where every check links to its source, with issue creation, override reasons and a continuous review feed. |
+| Roles mapped | The detailer who prepares a drawing, the quality engineer who reviews it and the approver who moves it forward. |
+| What the reviewer can do | Add missing information, inspect a result, change its status with a reason and raise an issue against the observation. |
 
 Related Tcules services: [AI Product UX](/services/ai-product-ux) and [Interaction and UI Design](/services/product-design/interaction-ui-design).
 
-## What changed when AI became part of the quality-control workflow? {#ai-introduced-a-stage-the-original-workflow-did-}
-Tcules mapped three roles: the detailer who prepared the drawing, the quality engineer who reviewed it and the approver who moved it forward. The AI review step introduced an additional responsibility inside that sequence. Before the quality engineer could act on a result, they had to review the system's work.
+## Engineer review of AI checks: the new step in the workflow {#ai-introduced-a-stage-the-original-workflow-did-}
 
-Review by an expert changed the brief. The interface was no longer a checklist showing that a test had run. It was a review environment in which an expert could answer four questions:
+Tcules mapped three roles:
+
+- the detailer, who prepared the drawing
+- the quality engineer, who reviewed it
+- the approver, who moved it forward
+
+The AI review step added a responsibility inside that sequence. Before acting on a result, the quality engineer had to review the system's work.
+
+That changed the brief. The interface had to grow from a checklist showing that a test had run into a review workspace where an expert could answer four questions:
 
 1. What did the system inspect?
-2. What evidence supports the observation?
+2. Which source supports the observation?
 3. Is any required information missing?
 4. What can I do when my judgement differs?
 
 The stakeholder described the adoption risk directly: “we need to also to train the user to trust the system, but in the beginning, they won't trust it.”
 
-The product could not solve that risk by sounding more certain. It had to make confidence reviewable.
+The product had to answer that risk by making confidence reviewable.
 
-## Each result became an evidence record {#each-result-became-an-evidence-record}
+## Every AI check linked to its drawing, source and conclusion {#each-result-became-an-evidence-record}
 
 The review model connected a result to its drawing reference, source document, observation and conclusion. When a check could not run because information was missing, the interface identified what the reviewer needed to provide before trying again.
 
-The distinction between status and supporting evidence is important in consequential software. A pass or fail state compresses a conclusion. It does not show whether the system inspected the right source, applied the right condition or encountered an exception. BuildTwin needed both levels: a status for navigation and the evidence required for judgement.
+A status and the facts behind it are different things, and in high-stakes software the gap matters. A pass or fail compresses a conclusion.
 
-## A continuous feed made review the default {#a-continuous-feed-made-review-the-default}
+The reviewer also needs to see whether the system inspected the right source, applied the right condition or hit an exception. BuildTwin needed both levels: a status for navigation and the detail for judgement.
 
-Accordions kept the first concept compact. They also hid evidence behind repeated clicks and made the reviewer reconstruct a check while moving between collapsed states.
+## Why a continuous review feed replaced folding sections {#a-continuous-feed-made-review-the-default}
+
+Accordions (sections that fold open and shut) kept the first concept compact. They also hid detail behind repeated clicks and made the reviewer rebuild a check while moving between collapsed sections.
 
 The stakeholder's reaction was practical: “I don't want user to, let's say, I don't like this clicking.”
 
-The selected direction used a continuous review feed. Search and filters could still help someone locate a check, but the observation, source, status and conclusion remained in the reading path. The finished view got longer, and every added line was something the engineer needed before signing off.
+The chosen direction used a continuous review feed. Search and filters could still help someone locate a check, and the observation, source, status and conclusion stayed in the reading path. The finished view got longer, and every added line was something the engineer needed before signing off.
 
-Expert products need a different test for density. Density is not automatically clutter. Information becomes clutter when it does not help the person decide, verify or act.
+Expert products need a different test for density. Information earns its place when it helps the person judge, verify or act. Anything else is clutter.
 
-## What did an engineer need when an AI check was wrong? {#an-override-had-to-remain-part-of-the-record}
-The reviewer could add missing information, inspect a result, change its status and raise an issue against the observation that produced it. A correction required both the new state and a reason.
+## When the AI is wrong: overrule the check, give a reason, raise an issue {#an-override-had-to-remain-part-of-the-record}
 
-Keeping the override and the original result visible protected two forms of accountability. The engineer retained authority where professional judgement belonged. The system retained a visible record of what it originally returned and why a person disagreed.
+The reviewer could:
 
-Silent replacement would have made the interface feel simpler while erasing evidence useful to the approver, the product team and later evaluation. The designed flow treated disagreement as product data.
+- add missing information
+- inspect a result
+- change its status
+- raise an issue against the observation that produced it
 
-## From results to a review workspace {#what-the-work-establishes}
+A correction required both the new status and a reason.
+
+Keeping the override and the original result visible protected two forms of accountability. The engineer kept authority where professional judgement belonged. The system kept a visible record of what it originally returned and why a person disagreed.
+
+Silent replacement would have made the interface feel simpler, but it would have erased a record useful to the approver, the product team and later evaluation. The design treated disagreement as product data.
+
+## What BuildTwin received: a complete review path around every AI check {#what-the-work-establishes}
 
 The design gave BuildTwin a complete review path around its AI checks. A result could be inspected, a blocked check could be completed, and a disagreement could become an issue with a visible history.
 
-The engineer’s judgement became part of the product, with the evidence and controls needed to exercise it.
+The engineer’s judgement became part of the product, with the information and controls needed to exercise it.
 
-## The decision another accountable AI product can reuse {#the-decision-another-accountable-ai-product-can-}
+That opens up more than a better review screen. Every override, with its reason, records where the AI and an expert disagreed, which is the material BuildTwin's product team needs to improve the checks. The stakeholder expected engineers to distrust the system at first. The design gives that trust a way to grow, one inspectable check at a time.
 
-For AI used in engineering, healthcare, finance, compliance or other high-consequence work, “human in the loop” is not enough. The product must give that human the evidence, authority and recovery path needed to perform the role.
+## What a human review step for AI needs in practice {#the-decision-another-accountable-ai-product-can-}
+
+In engineering, healthcare, finance, compliance and other high-consequence work, a “human in the loop” is only the start. The product has to give that person the information, authority and recovery path the role demands.
 
 Before arranging the interface around model output, define what the accountable person must inspect, correct, explain and escalate.
 
-The evidence, correction and escalation design described here is the substance of Tcules' [trust, control and recovery](/services/ai-product-ux/trust-control-recovery) work. The construction and field side of the domain is covered under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
+Designing for sources, correction and escalation is the core of Tcules' [trust, control and recovery](/services/ai-product-ux/trust-control-recovery) work. The construction and field side of the domain sits under [PropTech, ConTech and field operations](/expertise/proptech-contech-field-operations).
 
-## What expert review needed from the interface {#delivery-impact}
+## Questions about the BuildTwin AI quality control design {#faq}
 
-| Impact dimension | What changed |
-|---|---|
-| Reviewability | AI checks became evidence records with source context, missing-input states and a path for expert judgement. |
-| Exception handling | A blocked check could request what was missing, and a disagreement could become an issue rather than disappearing into an override. |
-| Accountability | Override reasons and the original AI result could remain visible together, keeping the engineer’s judgement in the product record. |
+### What did Tcules design for BuildTwin?
 
-## Related AI review work {#related}
+Tcules designed the AI review model and the review interface for BuildTwin, structural-engineering software that uses AI to check drawings. Every check links to its source, and the reviewer can add missing information, change a status with a reason or raise an issue. A continuous review feed keeps all of it in one reading path.
 
-Two other cases where someone had to be able to disagree with the model.
+### How do you design AI checks an engineer can challenge?
+
+Start from what the accountable person must inspect, correct, explain and escalate, then arrange the interface around that. For BuildTwin, each result connected to its drawing reference, source document, observation and conclusion. A correction needed both a new status and a reason, and the original result stayed visible beside it.
+
+### Why keep the original AI result after an engineer overrules it?
+
+The record shows what the system returned and why a person disagreed. That history is useful to the approver, the product team and later evaluation of the AI. Silent replacement would have looked simpler and erased it.
+
+### Who uses the AI review step in BuildTwin?
+
+Three roles meet it. Detailers prepare drawings, quality engineers review them along with the AI's checks, and approvers move them forward. The quality engineer signs off each drawing and has to defend the call, so the design gave that role the information and controls to do it.
+
+## More AI case studies where people can overrule the model {#related}
+
+In both, a person can reject or rewrite what the model produced, and the record shows it.
 
 [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
 
-[Read the ConnectX case](/case-studies/ai-native-building-energy-product-connectx)
+[Read the Novus Insights case](/case-studies/novus-insights-ai-survey-product-design)
 
 [See Trust, Control and Recovery](/services/ai-product-ux/trust-control-recovery)
 
-## Tell us where the AI output has to be trusted {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us who has to check your product's AI output {#enquiry}
 
 Describe the output, who has to act on it and what would make that person confident enough to challenge it.

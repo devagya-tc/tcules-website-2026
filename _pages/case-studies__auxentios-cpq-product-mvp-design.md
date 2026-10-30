@@ -4,13 +4,13 @@ slug: auxentios-cpq-product-mvp-design
 page_name: Modelling an industrial CPQ product across six specialist roles
 page_type: case_study
 seo:
-  title: 'Auxentios: six specialist roles, one CPQ product | Tcules'
-  description: Eight interviews informed a shared quotation workflow and component system for Auxentios' industrial CPQ MVP, designed by Tcules across six specialist roles.
+  title: 'Auxentios CPQ product design case study: six roles | Tcules'
+  description: 'Auxentios CPQ product design case study: eight interviews, six specialist roles, and one shared quotation workflow and component system for an industrial MVP.'
   canonical: https://www.tcules.com/case-studies/auxentios-cpq-product-mvp-design
   robots: index,follow
 social:
-  og_title: 'Auxentios: six specialist roles, one CPQ product | Tcules'
-  og_description: Eight interviews informed a shared quotation workflow and component system for Auxentios' industrial CPQ MVP, designed by Tcules across six specialist roles.
+  og_title: 'Auxentios CPQ product design case study: six roles | Tcules'
+  og_description: 'Auxentios CPQ product design case study: eight interviews, six specialist roles, and one shared quotation workflow and component system for an industrial MVP.'
   og_image: https://www.tcules.com/assets/og/case-studies.png
   og_image_alt: Tcules social card headed Selected work, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,10 +18,19 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Auxentios: six specialist roles, one CPQ product | Tcules'
-  twitter_description: Eight interviews informed a shared quotation workflow and component system for Auxentios' industrial CPQ MVP, designed by Tcules across six specialist roles.
+  twitter_title: 'Auxentios CPQ product design case study: six roles | Tcules'
+  twitter_description: 'Auxentios CPQ product design case study: eight interviews, six specialist roles, and one shared quotation workflow and component system for an industrial MVP.'
   twitter_image: https://www.tcules.com/assets/og/case-studies.png
 search_context:
+  primary_query: 'Auxentios CPQ product design'
+  secondary_queries:
+  - 'Auxentios CPQ product design case study'
+  - 'multi-role quoting software design'
+  - 'specialist interviews for an MVP'
+  - 'CPQ component system'
+  - 'industrial CPQ MVP design'
+  - 'quotation workflow design'
+  - 'CPQ UX case study'
   primary_intent: industrial CPQ product design case study
   primary_buyer_question: How did Tcules connect six specialist roles in Auxentios’ quotation product?
   key_entities:
@@ -30,7 +39,7 @@ search_context:
   - industrial software
   - MVP design
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -54,7 +63,7 @@ conversion:
   hidden_context: origin_route, placement, case, referrer, campaign
   on_success:
     heading: Your enquiry has reached us
-    body: A practitioner will read your enquiry and reply within one business day. They can discuss the product work with you.
+    body: We'll reply within one business day.
     retain_entered_data: true
   processor: cms_record_and_notify
 render:
@@ -65,7 +74,8 @@ render:
   - the-interface-system-followed-the-product-model
   - responsibility-and-result-boundary
   - use-this-when-one-workflow-crosses-roles-with-di
-  - delivery-impact
+  - testimonials
+  - faq
   - related
   - enquiry
 page_composition:
@@ -84,12 +94,16 @@ page_composition:
       the-interface-system-followed-the-product-model: argument_thesis
       responsibility-and-result-boundary: argument_thesis
       use-this-when-one-workflow-crosses-roles-with-di: argument_thesis
-      delivery-impact: argument_thesis
+      testimonials: testimonial_proof
+      faq: faq
       related: argument_thesis
       enquiry: enquiry
   media_bindings: []
+  testimonial_ids:
+  - FP-AUXENTIOS-RESEARCH
+  - UW-ERP-VALIDATION
+  - CL-AUX-COMPLEXITY
   commercial_system:
-    testimonial_ids: []
     version: commercial-v11
     composition_rule: semantic_jobs_and_evidence_not_fixed_counts
   visual_requirements:
@@ -104,10 +118,11 @@ structured_data:
   types:
   - WebPage
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
 case_impact:
-  public_section: delivery-impact
+  public_section: null
   evidence_level: evidence_bounded_operational_impact
   measurement_program_ref: _system/case-study-evidence-programme.yaml#auxentios
 release:
@@ -155,82 +170,110 @@ content_governance:
 
 *Case study · Auxentios*
 
-# Six specialists, one quotation to get right
+# Auxentios CPQ product design: six specialist roles, one quotation workflow
 
-Auxentios was defining an industrial CPQ product for quotations that crossed sales, product, solution, pricing and maintenance roles. Tcules used domain research, stakeholder work and eight qualitative interviews to model the responsibilities behind a quotation, then shaped the MVP product structure and component-led interface system around that operating model.
+Auxentios was defining an industrial product for configuring, pricing and quoting. Each quotation passed through six specialist roles, across sales, product, solution, pricing and maintenance.
 
-The design brought those specialist contributions into one shared quotation workflow that Auxentios could take into development.
+Tcules used domain research, stakeholder work and eight qualitative interviews to map who does what on a quotation. We then shaped the MVP product structure and a reusable interface system around that map.
 
-## At a glance {#case-context}
+Auxentios came away with one shared quotation workflow, ready to take into development, where six specialist roles work on the same quote without a fixed sequence, and an interface system built to carry a product planned for more than 200 screens.
+
+## At a glance: the Auxentios CPQ MVP {#case-context}
 
 | Product | Auxentios, an industrial CPQ (configure, price, quote) product used by sales, product, solution, pricing and maintenance specialists. |
 |---|---|
 | Our role | Domain research, stakeholder work, eight interviews, MVP product design and a reusable component system for the interface. |
 | The key question | How can six specialist roles work on one quotation without being forced through a fixed sequence? |
 | What we delivered | A shared quotation workflow, the MVP product structure and a reusable interface system for Auxentios to take into development. |
+| Roles designed for | Sales representative, sales manager, product expert, pricing expert, solution expert and maintenance expert. |
+| Research outputs | A research synthesis, personas, empathy maps, assumption maps and experience maps. |
+| Planned scale | The product was expected to need more than 200 screens, so the interface system had to carry them. |
 
 Related Tcules services: [Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design) and [Design Systems](/services/design-systems).
 
-## What did the quotation workflow have to connect? {#the-product-crossed-tools-before-it-crossed-scre}
-Early research examined how industrial organisations configured products, developed solutions and prepared quotations. Existing work moved between CRM records, internal communication, product knowledge, pricing, service contracts and customer revisions.
+## Multi-role quoting software design: six roles, one quotation {#the-product-crossed-tools-before-it-crossed-scre}
+
+Early research looked at how industrial organisations configured products, developed solutions and prepared quotations. The work moved between CRM records, internal communication, product knowledge, pricing, service contracts and customer revisions.
 
 The interviews included people in six roles:
 
-- sales representative;
-- sales manager;
-- product expert;
-- pricing expert;
-- solution expert; and
-- maintenance expert.
+- sales representative
+- sales manager
+- product expert
+- pricing expert
+- solution expert
+- maintenance expert
 
-The importance of those roles was not demographic. Each one carried different knowledge and authority into the same quotation. A sales representative needed progress and customer context. A pricing expert needed commercial rules. A product or solution expert needed configuration detail. Maintenance work could alter the offer after the initial product decision.
+Each role carried different knowledge and authority into the same quotation. A sales representative needed progress and the customer's history. A pricing expert needed commercial rules. A product or solution expert needed configuration detail. Maintenance work could change the offer after the first product choice.
 
-Treating them as one generic enterprise user would have hidden the work the product needed to coordinate.
+Treating them as one generic user would have hidden the work the product had to coordinate.
 
-> “We were impressed with their lead designer and team because they understood our complex concepts.”
-> Ashok Mohanty, Founder, Auxentios
+## Specialist interviews for an MVP: mapping who does what on a quote {#research-became-a-responsibility-map}
 
-## Research became a responsibility map {#research-became-a-responsibility-map}
+Tcules combined domain research, stakeholder conversations and eight interviews. From them came a research synthesis, personas, empathy maps, assumption maps and experience maps.
 
-Tcules combined domain research, stakeholder conversations and eight interviews into research synthesis, personas, empathy mapping, assumption mapping and experience maps. The useful output was not the number of methods. It was a clearer account of who contributed what to a quotation, where information changed, and where a person needed an exit or hand-off rather than a forced linear sequence.
+The research produced a clear map of who contributes what to a quotation. It showed where information changed, and where someone needed to step out or hand over partway through.
 
-## The interface system followed the product model {#the-interface-system-followed-the-product-model}
+## CPQ component system: designed after the roles were mapped {#the-interface-system-followed-the-product-model}
 
-The product was expected to need more than 200 screens. Designing each one independently would have left the team maintaining hundreds of separate decisions. Tcules first worked through core experiences, then mapped use cases to screens and extracted repeated interface needs into components.
+The product was expected to need more than 200 screens. Designing each one independently would have left the team maintaining hundreds of separate design choices. Tcules first worked through core experiences, then mapped use cases to screens and extracted repeated interface needs into components.
 
-The delivered design-system work included components and variants, design tokens, guidelines and layout rules. Key screens demonstrated how the system should be applied, while documented layout logic was intended to help product and engineering teams create further screens consistently.
+The design-system work included components and variants, design tokens (the shared style values), guidelines and layout rules. Key screens showed how to apply the system. With the documented layout logic, product and engineering teams can create further screens on the same rules.
 
-The sequence matters. A component library created before the role and quotation model would have standardised visual fragments while leaving the product logic unresolved. Here, the shared system followed the work people needed to complete.
+The order mattered. A component library built before the role and quotation model would have standardised visual fragments and left the product logic open. Here, the shared system followed the work people had to do.
 
-## A product model the team could build on {#responsibility-and-result-boundary}
+## Industrial CPQ MVP design: what Auxentios received for development {#responsibility-and-result-boundary}
 
-Auxentios received a connected model of the quotation process, core MVP experiences and an interface system for extending them. Roles, hand-offs and repeated screen patterns had been worked through together, giving engineering a clearer starting point for the build.
+Auxentios received a connected model of the quotation process, core MVP experiences and an interface system for extending them. Roles, hand-offs and repeated screen patterns were worked through together, ready for engineering to build from.
 
-## Use this when one workflow crosses roles with different authority {#use-this-when-one-workflow-crosses-roles-with-di}
+For a new product, that order is what lets the first release grow without being redrawn. It is how Tcules approaches an MVP: find the structure under the screens first, then design the screens on it.
 
-The case is useful when one workflow crosses roles with different expertise and authority. The initial design question should not be, “How many dashboards do we need?” It should be:
+## Quotation workflow design: five questions for work that crosses roles {#use-this-when-one-workflow-crosses-roles-with-di}
 
-1. What shared object are these roles changing?
-2. What evidence can each role see and contribute?
-3. Who decides, approves or returns the work?
-4. Which states and exceptions must survive a hand-off?
-5. Which interface rules can become reusable without erasing role-specific work?
+These questions apply when one workflow crosses roles with different expertise and authority. Ask them before asking how many dashboards you need:
 
-The resulting product model became the foundation for both the experience and the system used to build it.
+- What shared object are these roles changing?
+- What information can each role see and contribute?
+- Who makes the call, approves or returns the work?
+- Which statuses and exceptions must survive a hand-off?
+- Which interface rules can become reusable while keeping role-specific work intact?
 
-Modelling roles, records and hand-offs before drawing screens is the core of [information architecture and workflow design](/services/product-design/information-architecture-workflow-design), and Tcules applies the same discipline across [B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software).
+The resulting product model became the foundation for both the experience and the interface system.
 
-## What the MVP could now express {#delivery-impact}
+Mapping roles, records and hand-offs before drawing screens is the core of [information architecture and workflow design](/services/product-design/information-architecture-workflow-design). Tcules applies the same discipline across [B2B SaaS and workflow software](/expertise/b2b-saas-workflow-software).
 
-| Impact dimension | What changed |
-|---|---|
-| Scope clarity | Eight qualitative interviews across six specialist roles turned quotation work into an explicit responsibility model for the MVP. |
-| Engineering readiness | Core product experiences and a component-led interface system gave development a connected starting point rather than a set of independent screens. |
-| Reuse | Repeated interface decisions could be resolved through a shared system as the product grew towards the more than 200 screens planned for it. |
+## What Auxentios' founder says about the work {#testimonials}
 
-## Related workflow and product-model work {#related}
+> “The workflow between our teams was seamless. I found the team at Tcules to be knowledgeable, friendly and research oriented.”  
+> **Ashok Mohanty, Founder, Auxentios**
 
-Two other cases where the product had to be modelled around what it really keeps track of.
+> “Our aim was to build a consumer-grade UI / UX for our enterprise application. They helped us design what we were looking for. We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
+> **Ashok Mohanty, Founder, Auxentios**
+
+> “We were impressed with their lead designer and team because they understood our complex concepts.”  
+> **Ashok Mohanty, Founder, Auxentios**
+
+## Questions about the Auxentios CPQ MVP {#faq}
+
+### What did Tcules design for Auxentios?
+
+Tcules designed the MVP for Auxentios, an industrial configure, price and quote product. The work covered domain research, stakeholder work, eight interviews, the MVP product structure and a reusable interface system. The result was one shared quotation workflow that Auxentios could take into development.
+
+### How do you design quoting software for several specialist roles?
+
+Map who contributes what to a quotation before drawing screens. For Auxentios, that meant six roles across sales, product, solution, pricing and maintenance, each with different knowledge and authority. The map showed where information changed and where work was handed over, and the interface system followed it.
+
+### Why design the CPQ component system after the role map?
+
+A component library built before the role and quotation model would have standardised visual fragments and left the product logic open. Tcules first worked through core experiences and mapped use cases to screens. Repeated interface needs then became components, variants, design tokens and layout rules.
+
+### What did Auxentios take into development?
+
+Auxentios received a connected model of the quotation process, the core MVP experiences and an interface system for extending them. Roles, hand-offs and repeated screen patterns had been worked through together. That gave engineering a clearer starting point for the build.
+
+## Other products designed around the records they track {#related}
+
+Each was shaped around what the product keeps track of.
 
 [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
 
@@ -238,6 +281,10 @@ Two other cases where the product had to be modelled around what it really keeps
 
 [See Information Architecture and Workflow Design](/services/product-design/information-architecture-workflow-design)
 
-## Tell us which roles the product has to serve {#enquiry}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-Describe the roles involved, what each one decides and where the current product makes them guess.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## Tell us which specialist roles your product has to serve {#enquiry}
+
+Describe the roles involved, what each one signs off and where the current product makes them guess.

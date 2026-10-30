@@ -4,13 +4,13 @@ slug: coded-prototype
 page_name: Coded Prototype
 page_type: defined_term
 seo:
-  title: What is a coded prototype? Meaning and example | Tcules
-  description: A coded prototype is a working piece of software built to test a product idea when a clickable mock-up cannot show how it will really behave.
+  title: 'What is a coded prototype? Meaning and examples | Tcules'
+  description: 'What is a coded prototype? Working software built early to answer a product question a design file cannot. How it compares with Figma and production code.'
   canonical: https://www.tcules.com/glossary/coded-prototype
   robots: index,follow
 social:
-  og_title: What is a coded prototype? Meaning and example | Tcules
-  og_description: A coded prototype is a working piece of software built to test a product idea when a clickable mock-up cannot show how it will really behave.
+  og_title: 'What is a coded prototype? Meaning and examples | Tcules'
+  og_description: 'What is a coded prototype? Working software built early to answer a product question a design file cannot. How it compares with Figma and production code.'
   og_image: https://www.tcules.com/assets/og/glossary.png
   og_image_alt: Tcules social card headed Glossary, on a white background with the Tcules wordmark.
   og_type: website
@@ -18,16 +18,23 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: What is a coded prototype? Meaning and example | Tcules
-  twitter_description: A coded prototype is a working piece of software built to test a product idea when a clickable mock-up cannot show how it will really behave.
+  twitter_title: 'What is a coded prototype? Meaning and examples | Tcules'
+  twitter_description: 'What is a coded prototype? Working software built early to answer a product question a design file cannot. How it compares with Figma and production code.'
   twitter_image: https://www.tcules.com/assets/og/glossary.png
 search_context:
   primary_intent: what is coded prototype
   primary_buyer_question: What is a coded prototype?
+  primary_query: 'what is a coded prototype'
+  secondary_queries:
+  - 'coded prototype'
+  - 'coded prototype vs Figma prototype'
+  - 'coded prototype meaning'
+  - 'coded prototype examples'
+  - 'benefits of a coded prototype'
   key_entities:
   - Coded Prototype
   buyer_question_evidence:
-    status: NO_V7_QUESTION_EVIDENCE; DO_NOT_ADD_FAQ_WITHOUT_RESEARCH
+    status: PHRASE_MAP_V2_23_OCT
 navigation:
   breadcrumb:
   - name: Home
@@ -39,13 +46,17 @@ navigation:
 render:
   band_order:
   - practice
+  - figma-comparison
   - comparison
+  - related-terms
+  - faq
   - next
 structured_data:
   types:
   - WebPage
   - DefinedTerm
   - BreadcrumbList
+  - FAQPage
   organization_ref: https://www.tcules.com/#organization
   page_creator_ref: https://www.tcules.com/#organization
   defined_term_set_ref: https://www.tcules.com/glossary#glossary
@@ -78,7 +89,10 @@ page_composition:
   editorial_review:
     section_components:
       practice: artefact_proof
+      figma-comparison: comparison_decision
       comparison: artefact_proof
+      related-terms: related_link
+      faq: faq
       next: artefact_proof
   media_bindings: []
   commercial_system:
@@ -91,36 +105,74 @@ page_composition:
 
 *Glossary · Coded Prototype*
 
-# Coded prototype
+# What is a coded prototype? Meaning, examples and benefits
 
-A coded prototype is a bounded software representation built when code is necessary to test a product assumption about interaction, data, AI behaviour, responsiveness, accessibility or feasibility. When it matters: Teams reach for one when a design file cannot answer the question at hand: streaming behaviour, real data volumes, responsive hierarchy or assistive-technology interaction.
+A coded prototype is working software, built early and quickly, to answer a product question that a design file cannot. Some risks only appear when the product runs. Examples are real amounts of data, AI answers that appear word by word, screens that resize and how a screen reader handles an interaction.
 
 The boundary of what was simulated matters as much as what was shown.
 
-A team might need real code to test streaming states and responsive hierarchy that static frames cannot establish. The data source may be real while identity and failure responses are simulated. Recording that boundary tells reviewers what decision the prototype can support.
+A team might need real code to see how an AI answer appears word by word, or how a layout reshapes on a phone. The data could be real while sign-in and error responses are pretend. Writing that down tells reviewers which choices the prototype can support.
 
-A coded prototype is not automatically production software. [Prototype hardening](/glossary/prototype-hardening) is the separate decision and work required before operational use. [Design engineering](/glossary/design-engineering) connects the product decision to coded behaviour.
+Turning a coded prototype into production software is a separate step. [Prototype hardening](/glossary/prototype-hardening) is the engineering needed before real users rely on it. [Design engineering](/glossary/design-engineering) links the product choice to the behaviour in code.
 
-See [Coded Prototyping](/services/design-engineering/coded-prototyping) for the service boundary. The ConnectX example below shows what a coded demonstration can establish.
+See [Coded Prototyping](/services/design-engineering/coded-prototyping) for what Tcules offers. The examples below show what a coded demonstration can establish.
 
-## How is a coded prototype used in practice? {#practice}
+## Coded prototype examples: Benchmark Gensuite and ConnectX {#practice}
 
-A coded prototype is useful when the uncertainty depends on behaviour that static screens cannot represent well. In [ConnectX](/case-studies/ai-native-building-energy-product-connectx), Tcules used a coded workspace demonstration to make an AI-native product direction concrete enough to review before live integration. The demonstration was later taken through to a production-ready module, live since late 2025. In [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), coded prototypes helped review interaction behaviour and feasibility before wider implementation.
+A coded prototype earns its place when the uncertainty is about behaviour that static screens show poorly. For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), Tcules used a coded workspace demonstration to make an AI-native product direction concrete enough to review before live integration.
 
-The prototype should therefore state what it is testing and what it is simulating. Code alone does not make the artefact production software.
+For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), coded prototypes of shared interface patterns and a three-view scope selector let the team review interaction behaviour and feasibility before wider build. An engineering reviewer raised a build question while the team could still act on it.
 
-## How does a coded prototype differ from production frontend? {#comparison}
+A good prototype states what it tests and what it simulates, because running code can look more finished than it is.
 
-The table separates code written to answer a product question from code accepted for a live release.
+## Coded prototype vs Figma prototype: what each can show {#figma-comparison}
 
-| Coded prototype | Production frontend |
-|---|---|
-| Optimised to test a defined uncertainty | Optimised to support the released product under real conditions |
-| May use simulated data, services or simplified states | Must handle agreed data, permissions, failure, accessibility and operational constraints |
-| Can be discarded after the decision | Becomes part of a maintained software system |
+A Figma prototype links design frames with clicks and transitions. A coded prototype runs as software, so it can respond to real data, typing, resizing and assistive technology. Each suits a different question.
 
-## Why coded prototype matters in product work {#next}
+| | Figma prototype | Coded prototype |
+|---|---|---|
+| Best for | Flow, layout, wording and early reactions | Behaviour that depends on data, timing, input or the device |
+| Runs as | Linked design frames | Software in a browser or on a device |
+| Data | Sample content placed by the designer | Real or realistic data, in realistic amounts |
+| Input | Clicks, hover, drag and key triggers between frames | Real typing, keyboard navigation, resizing and screen readers |
+| Effort to change | Quick to rework | More effort, so it is aimed at one question |
 
-Some product questions can only be answered in running code.
+The benefits of a coded prototype follow from that table. Engineers can try the design in the browser. Problems with data, input or feasibility surface while there is still time to change course. Reviewers judge behaviour they can use, which a picture of it can only suggest.
+
+## Coded prototype vs production code: what changes before release {#comparison}
+
+A coded prototype is built to test one question, often with sample data or stand-in services. What has to change before release is set out under [prototype hardening](/glossary/prototype-hardening).
+
+## Terms related to coded prototypes {#related-terms}
+
+[Prototype hardening](/glossary/prototype-hardening): the engineering that replaces a demo's shortcuts, such as pretend sign-in or sample data, with the real thing before customers arrive.
+
+[Design engineering](/glossary/design-engineering): exploring, refining and building product experiences directly in code, from early prototype to production.
+
+[Design to code](/glossary/design-to-code): turning designs into working software and keeping the two in step, from behaviour and content to accessibility.
+
+## Coded prototype FAQs {#faq}
+
+### How is a coded prototype different from a Figma prototype?
+
+A Figma prototype links design frames, which suits flow, layout and wording. A coded prototype is working software, so it can show real data volumes, streaming AI answers, resizing and keyboard or screen reader use. Teams often use both, each for the question it answers best.
+
+### When should a team build a coded prototype?
+
+Build one when the open question is about behaviour a design file shows poorly. Examples are large amounts of data, an AI answer that arrives word by word, or drag and drop. If the question is about flow or wording, a design prototype is usually enough.
+
+### Is a coded prototype production code?
+
+Usually it is a test piece, built to answer one question with sample data, stand-in services or simplified states. Some of its code can carry forward, but it needs [prototype hardening](/glossary/prototype-hardening) before real users rely on it.
+
+### What are the benefits of a coded prototype?
+
+It lets people use the behaviour instead of imagining it, and lets engineers judge feasibility in the browser. Problems with data, input or performance show up early, when changing course still costs little.
+
+## When to build a coded prototype {#next}
+
+Some product questions can only be answered in running code. Build one when the doubt is about behaviour: how much data a screen must hold, how an AI answer arrives or how a keyboard user moves through a task. Questions about flow, layout or wording are usually cheaper to answer in a design file.
+
+That line is moving. AI tools now turn a sketch or a sentence into running code, so teams reach a coded prototype earlier than they used to. The skill shifts to choosing the question it should answer and reading what it shows.
 
 [See Coded Prototyping](/services/design-engineering/coded-prototyping)

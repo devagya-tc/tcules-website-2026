@@ -4,13 +4,13 @@ slug: product-redesign
 page_name: Product Redesign
 page_type: service
 seo:
-  title: SaaS Product Redesign for Established Software | Tcules
-  description: 'SaaS product redesign and UX revamp for established software: clearer workflows and screens, planned so experienced customers keep the habits that work.'
+  title: 'SaaS Product Redesign That Keeps Long-Time Users | Tcules'
+  description: 'SaaS product redesign for established software: clearer workflows and screens, planned so experienced customers keep the habits that still work for them.'
   canonical: https://www.tcules.com/services/product-modernisation/product-redesign
   robots: index,follow
 social:
-  og_title: SaaS Product Redesign for Established Software | Tcules
-  og_description: 'SaaS product redesign and UX revamp for established software: clearer workflows and screens, planned so experienced customers keep the habits that work.'
+  og_title: 'SaaS Product Redesign That Keeps Long-Time Users | Tcules'
+  og_description: 'SaaS product redesign for established software: clearer workflows and screens, planned so experienced customers keep the habits that still work for them.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Dealpath workflow redesign that searches existing deals before creating a new record.
   og_type: website
@@ -18,8 +18,8 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: SaaS Product Redesign for Established Software | Tcules
-  twitter_description: 'SaaS product redesign and UX revamp for established software: clearer workflows and screens, planned so experienced customers keep the habits that work.'
+  twitter_title: 'SaaS Product Redesign That Keeps Long-Time Users | Tcules'
+  twitter_description: 'SaaS product redesign for established software: clearer workflows and screens, planned so experienced customers keep the habits that still work for them.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: product redesign services for established SaaS and software
@@ -27,9 +27,21 @@ search_context:
   supporting_questions:
   - Do we need to redesign the whole product?
   - Is a redesign the same as a visual refresh?
-  - What do you need from us to start?
+  - What does a redesign need from us to begin?
   - When does a redesign become modernisation?
   primary_query: SaaS product redesign
+  secondary_queries:
+  - SaaS redesign
+  - product redesign services
+  - SaaS UI redesign
+  - web app redesign
+  - B2B SaaS redesign
+  - UI UX redesign services
+  - redesign without losing users
+  - redesign vs visual refresh
+  - how long does a SaaS redesign take
+  - SaaS redesign cost
+  - when a redesign becomes modernisation
 navigation:
   breadcrumb:
   - name: Home
@@ -59,11 +71,14 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
+  - what-you-get
+  - selected-work
   - continuity
-  - deliverables
-  - proof
+  - compare
+  - testimonials
+  - how-we-work-together
   - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
@@ -71,26 +86,50 @@ page_composition:
   media_bindings:
   - id: product_redesign_dealpath
     role: demonstrate
-    supports_section: example
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
     alt_intent: Dealpath workflow redesign that checks for an existing deal before creating a new record.
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: product_redesign_ryzeo_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
+  - id: product_redesign_omny_card
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: null
+    status: SCREEN_REQUIRED
   testimonial_ids:
-  - UW-RAZEO-METHOD
+  - DRAFT-RYZEO-REPORTS
+  - DRAFT-GOLD-IMAGE-EASIER-SITE
+  - FP-EDEN-USERS
+  - DRAFT-CURAMCARE-ONEILL
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
     - Dealpath
     - Ryzeo
+    - Omny AI
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -118,27 +157,61 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__product-modernisation__product-redesign.md
 ---
 
-*SaaS product redesign*
+*Product Modernisation · Product redesign*
 
-# Long-time users will tell you what you broke
+# SaaS product redesign that keeps what long-time users rely on
 
-So we start with them. We list what customers rely on and what slows them down, then redesign only what is worth relearning.
+A SaaS product redesign is for two audiences at once: the prospect judging the product in a demo, and the long-time customer who built a working day around it. Tcules provides SaaS product redesign for established B2B software, starting with what long-time users rely on and changing the rest a workflow at a time.
 
-[Start a conversation](#enquiry)
+*Selected work: [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Omny AI](/case-studies/omny-ai-suggestion-trust-redesign)*
 
-*Selected work: Dealpath · Ryzeo*
+[Show us the part customers complain about](#enquiry)
 
-## Signs it's time for a redesign {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"We refreshed the UI and the work got no easier."** Prettier screens, same tangled steps.
+## What you get from our product redesign services {#what-you-get}
 
-**"New customers struggle, and old customers use shortcuts nobody documented."** Onboarding and expert use pull in different directions.
+Every change comes with a reason, and with a plan for how existing customers will meet it. Redesign is one part of our [Product Modernisation](/services/product-modernisation) work.
 
-**"Three modules, three ways to filter a list."** Patterns multiplied as the product grew.
+**What you receive**
 
-**"We can't afford a rewrite."** The technology still works; the experience is what has aged.
+- **A record of what customers rely on.** Every habit we find, sorted into the four groups below, each with a reason.
 
-## Know what customers rely on before you change it {#continuity}
+- **Research and diagnosis.** Interviews, analytics, support history and a review of the live product.
+
+- **Structure and workflows.** Navigation, records and the steps people take, redesigned where they cause friction.
+
+- **Screens in every state.** Including what people see while a screen loads, when it is empty and when something fails, at the screen sizes your customers use.
+
+- **Shared components.** Patterns your design system can reuse, so the redesign stays consistent as it spreads.
+
+- **A rollout plan.** Which workflow goes first, how the old and new versions coexist, and what customers are told.
+
+- **Specifications, or the build.** Specs your developers build from, or our [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) teams take it into code, with designers checking the build against the design.
+
+**Who does the work.** The redesign is led by a senior product designer who draws every changed screen, while an account lead plans the stages with you. Design engineers and developers join if we also build it.
+
+**What we need from you.** Access to the live product, the analytics and support history you have, and time with new and long-time customers to watch and test with.
+
+**Where our part stops.** The product calls stay with you, including what ships and when. Our part ends at specifications your engineers build from, unless we build it too.
+
+## Selected SaaS product redesign work {#selected-work}
+
+Three redesigns of established products: a deal pipeline, a reporting product and an AI writing tool.
+
+### Dealpath: every piece of property data kept, in a clearer order
+
+Dealpath's listing card held all an acquisitions team needs, in one flat order. We kept it all, in three zones: image, source and status; the property and its highlights; the core values. Of its four actions, Add to pipeline is the one we redesigned, to look for an existing deal first. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+### Ryzeo: reports first, with shared rules for what follows
+
+Research made reporting the first job in Ryzeo's marketing-automation product, where patterns had become inconsistent. We redesigned the reports and documented components and rules for filters, states and data, so later redesign work follows the same logic. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+### Omny AI: suggestions kept apart until someone chooses them
+
+Omny AI, acquired by Primelis, writes product benefits and use cases for Amazon sellers. In our redesign the listing area starts empty, and AI suggestions wait beside it until a person adds one on purpose. Purple and blue show who wrote each line. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+
+## Redesign without losing users: what to keep and what to change {#continuity}
 
 Every established product holds habits worth keeping. Before redesigning, we list what customers depend on and what each change would cost them.
 
@@ -149,68 +222,95 @@ Every established product holds habits worth keeping. Before redesigning, we lis
 | **Worth relearning** | A new path that removes steps or prevents a common mistake |
 | **Needs a transition plan** | Saved views, settings and routines that must survive the change |
 
-Each change gets a reason and a plan for how existing users will meet it. We also test changes with people who already know the product. New users tell you whether it's clear. Long-time users tell you what you broke.
+If a screen already works, we say so, and the budget goes where customers will feel it. One workflow is redesigned first, the one causing most friction, so the new patterns are proved before they spread.
 
-## What a redesign covers {#deliverables}
+We test each change with people who already know the product. New users show whether it is clear. Long-time users show what it would cost them, including [the small regressions that cost confidence even when every task completes](/insights/articles/silent-ui-regression-debt).
 
-**Research and diagnosis.** Interviews, analytics, support history and a review of the live product.
+Then old and new versions run side by side while customers move across, with a note on what changed.
 
-**Structure and workflows.** Navigation, records and flows, redesigned where they cause friction. More on [Information Architecture & Workflow Design](/services/product-design/information-architecture-workflow-design).
+## Redesign, visual refresh or modernisation: which do you need? {#compare}
 
-**Screens.** Every screen, including what people see while it loads, when it is empty and when something fails, on any screen size and designed to be accessible.
+| Option | What changes | Best for |
+|---|---|---|
+| **Visual refresh** | Colours, type and spacing; the steps stay the same | Products whose workflows still work and only look dated |
+| **SaaS product redesign** | Structure, steps, wording and what screens show when something fails | Products where the work itself has become harder |
+| **[UX & Product Audit](/audits/ux-product-audit)** | Nothing yet; you get a ranked list of where users get stuck | Teams unsure which parts to redesign first |
+| **[Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation)** | The old system, replaced in stages | Products whose technology stops the redesign you need |
+| **[Replatforming Product Design](/services/product-modernisation/replatforming-product-design)** | What customers keep, lose and relearn when the platform changes | Products moving to a new platform anyway |
 
-**Shared components.** Patterns your design system can reuse, so the redesign stays consistent as it spreads.
+## What clients say {#testimonials}
 
-**Rollout plan.** Which workflow goes first, how the old and new versions coexist, and what customers are told.
-
-**Help with the build.** Specifications your developers can build from, or our [Design Engineering](/services/design-engineering) and [Software Development](/services/software-development) teams take it into code.
-
-## Familiar to old users, clearer for new ones {#proof}
-
-### Dealpath: every field kept, the order changed
-
-Dealpath's listing card held all the property data an acquisitions team needs, in one flat reading order. We kept every field and grouped them into three zones: image, source and status first, then the property and what sets it apart, then the core values for comparison.
-
-Then we changed the pipeline action to check for an existing deal first, and left "mark as comparable" and "pass" largely as users knew them.
-
-[Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
-
-### Ryzeo: reports first, then one set of rules for everything after
-
-Ryzeo's customers wanted more useful reports, and the wider product had drifted into inconsistent patterns. Research made reporting the first job.
-
-Alongside the new reports, we wrote down one set of rules for how filters, reports and tables look and behave. Later work on navigation and other areas followed the same rules instead of inventing new ones.
-
-> “We had a very old web application that looked out of date, so we wanted to update it. We’re impressed by how good they were at documenting their research and creating the user interaction flow. They were highly methodical and process-driven as well. We also appreciated that their team was willing to interview a lot of users for us.”  
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
 > **Russell Miler, COO, Ryzeo**
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+> “Our staff and our customers have both told us how much easier the new site is to use. People often mention how simple it is to find their way around.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-## Why teams choose Tcules for a redesign {#why-tcules}
+> “Our users gave us great feedback about the new design, and they came forward and told us without us asking for it.”  
+> **Samy Melaine, Founder & CPTO, Eden AI**
 
-**We tell you what to leave alone.** If a screen already works, we say so, and the budget goes where customers feel it.
+> “Tcules started by asking our families and carers what got in their way, turned it into a clear product plan, then redesigned our web platform and both apps. Their developers built the frontend from those designs, so nothing got lost in the handover.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
 
-**Designers alongside the build.** Our designers and engineers work together, checking what is built against the design as it happens.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## Frequently asked questions {#faq}
+## How we work together {#how-we-work-together}
+
+For a redesign, a good first piece of work is the workflow causing most friction, redesigned and tested with people who already know the product.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We know what to leave alone in a product people rely on.** For [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation), we treated long-time customers' habits as a limit on change and checked the redesigned scope selector against them in coded prototypes.
+
+- **We prove the hard parts in code while they can still change.** For [ConnectX](/case-studies/ai-native-building-energy-product-connectx), we tried the AI workspace as a coded demo on sample data while its direction could still change, then took it to a production-ready module.
+
+- **Senior people do the work, and clients keep us for years.** Primelis has worked with us for three years, and we design each of its products and keep improving them like part of its product team.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [AI products](/expertise/ai-products-developer-tools) · [Content platforms](/expertise/content-knowledge-discovery-platforms) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products) · [HealthTech](/expertise/healthtech) · [Marketplaces](/expertise/marketplaces-multi-sided-platforms)
+
+## SaaS product redesign FAQs {#faq}
 
 ### Do we need to redesign the whole product?
 
-Rarely. One high-friction workflow or product area is often the best place to start, and the rest can follow the same patterns.
+Rarely. One high-friction workflow or product area is often the best place to start, and the rest of the product can follow the same patterns once it works. That first area suits a pilot at a fixed price. [How pilots work](/how-we-work#engagement-shapes)
 
 ### Is a redesign the same as a visual refresh?
 
-A refresh changes colours, type and spacing. A redesign also changes how the work flows: the structure, the steps, the states and the wording.
+A visual refresh changes colours, type and spacing. A redesign by Tcules also changes how the work flows: the structure, the steps, the wording and what screens show when something goes wrong.
 
-### What do you need from us to start?
+### How long does a SaaS redesign take?
 
-Access to the live product, any analytics and support history you have, and time with a few customers who know the product well.
+A sensible first stage is one workflow, redesigned and tested, on dates we set with you before work starts. The rest of the product follows in stages, so the total depends on how many workflows are in scope.
+
+### What does a SaaS redesign cost?
+
+The cost follows the scope: how many workflows, how many screen sizes and whether we also build it. Tcules prices the redesign up front, once you have agreed what is in it. [How pricing works](/how-we-work#engagement-shapes)
 
 ### When does a redesign become modernisation?
 
-When the technology underneath stops the product doing what it needs to do. Then [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation) or [Replatforming Product Design](/services/product-modernisation/replatforming-product-design) is the better fit.
+It becomes modernisation when the technology underneath stops the product doing what it needs to do. Then [Legacy Software Modernisation](/services/product-modernisation/legacy-software-modernisation) or [Replatforming Product Design](/services/product-modernisation/replatforming-product-design) is the better fit.
 
-## Point us at the part customers complain about {#enquiry}
+## Show us the part of your product customers complain about {#enquiry}
 
 Share a link, the customers who feel it most and the tasks they used to find easy.
 

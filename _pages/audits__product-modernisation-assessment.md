@@ -4,13 +4,13 @@ slug: product-modernisation-assessment
 page_name: Product Modernisation Assessment
 page_type: assessment
 seo:
-  title: 'Modernisation Assessment: Redesign or Rebuild? | Tcules'
-  description: 'Application modernisation assessment for established software: decide, part by part, whether to repair, redesign, replatform or rebuild, and in what order.'
+  title: 'Application Modernisation Assessment, Area by Area | Tcules'
+  description: 'Application modernisation assessment for established software: decide, part by part, whether to keep, simplify, redesign, move or rebuild, and in what order.'
   canonical: https://www.tcules.com/audits/product-modernisation-assessment
   robots: index,follow
 social:
-  og_title: 'Modernisation Assessment: Redesign or Rebuild? | Tcules'
-  og_description: 'Application modernisation assessment for established software: decide, part by part, whether to repair, redesign, replatform or rebuild, and in what order.'
+  og_title: 'Application Modernisation Assessment, Area by Area | Tcules'
+  og_description: 'Application modernisation assessment for established software: decide, part by part, whether to keep, simplify, redesign, move or rebuild, and in what order.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: IMAGE_ASSET_REQUIRED
   og_type: website
@@ -18,18 +18,33 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Modernisation Assessment: Redesign or Rebuild? | Tcules'
-  twitter_description: 'Application modernisation assessment for established software: decide, part by part, whether to repair, redesign, replatform or rebuild, and in what order.'
+  twitter_title: 'Application Modernisation Assessment, Area by Area | Tcules'
+  twitter_description: 'Application modernisation assessment for established software: decide, part by part, whether to keep, simplify, redesign, move or rebuild, and in what order.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: application modernisation option assessment
   primary_buyer_question: Should we repair, redesign, modernise, replatform or selectively rebuild, and in what order?
   supporting_questions:
+  - Should we redesign, modernise or rebuild our legacy software?
   - Will you recommend a rebuild?
   - Can we modernise in stages?
+  - Is there an application modernisation assessment template we can use first?
   - Will the assessment tell us what the work will cost?
-  - What happens after the assessment?
+  - How is the assessment itself priced?
+  - What happens after a modernisation assessment?
   primary_query: application modernisation assessment
+  secondary_queries:
+  - application modernisation assessment services
+  - should we rebuild our software
+  - legacy application assessment
+  - software modernisation assessment
+  - modernisation roadmap
+  - redesign or rebuild assessment
+  - legacy modernisation assessment
+  - can we modernise in stages
+  - application modernisation assessment template
+  - modernisation assessment cost
+  - what happens after a modernisation assessment
 navigation:
   breadcrumb:
   - name: Home
@@ -57,32 +72,48 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - bundled
-  - coverage
   - deliverables
-  - proof
-  - when
+  - method
+  - compare
+  - selected-work
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
-  visual_plan: repair_redesign_progressive_modernisation_replatform_selective_rebuild
+  family_order: audit (BLUEPRINT.md 4); studio spine S1 to S8 from SPINE.md
+  visual_plan: opening_then_what_you_get_ending_in_a_sample_area_map_then_four_jobs_pulled_apart_and_the_five_answers_then_three_pieces_of_modernisation_work
   media_bindings:
   - id: modern_assessment_benchmark
     role: demonstrate
-    supports_section: proof
+    supports_section: selected-work
     asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
-    alt_intent: Benchmark Gensuite redesigned scope navigation inside an established enterprise product.
+    source: current public Tcules case media (case binding benchmark_scope_selector)
+    alt_intent: Benchmark Gensuite's redesigned scope selector inside an established enterprise suite, with Browse, Recents and Favourites, and Nearby.
+    status: BOUND_EXISTING_PUBLIC_ASSET
+  - id: modern_assessment_dealpath
+    role: demonstrate
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1787139518/section_3_ffd1c5cb2a.webp
+    source: current public Tcules case media (case binding dealpath_workflow)
+    alt_intent: Dealpath's redesigned Add to pipeline flow, the one listing action that changed while three were kept.
     status: BOUND_EXISTING_PUBLIC_ASSET
   testimonial_ids:
   - DRAFT-RYZEO-REPORTS
+  - FP-GOLDIMAGE-NAVIGATION
+  - DRAFT-VOVISTO-GOMES
+  - CL-KNOVOS-CANDOUR
+  testimonial_status: SIGNED
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: after_hero
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
   client_recognition:
     component_type: client_recognition
@@ -90,6 +121,7 @@ page_composition:
     clients:
     - Benchmark Gensuite
     - Ryzeo
+    - Dealpath
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -121,103 +153,191 @@ method_governance:
 
 *Product Modernisation Assessment*
 
-# A modernisation plan for each part of your product
+# Application modernisation assessment before you commit to a rebuild
 
-An application modernisation assessment for established software. We review your product area by area and recommend what should change, what must survive and in what order, before the budget is committed.
+An application modernisation assessment is for the meeting where product wants a redesign, engineering wants a new platform and the customers who renew every year need Monday's work to carry on. Tcules reviews established software area by area and recommends what to keep, what to change and in what order.
 
-[Start a conversation](#enquiry)
+*Selected work: [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation) · [Ryzeo](/case-studies/ryzeo-marketing-automation-ux-revamp) · [Dealpath](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)*
 
-*Selected work: Benchmark Gensuite · Ryzeo*
+[Tell us which change is on the table](#enquiry)
 
-## When the team disagrees on what the product needs {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Product wants a redesign. Engineering wants a new platform."** Both have a case, and both are expensive.
+## What you get: a recommendation for every area of the product {#deliverables}
 
-**"Customers depend on the workflows we most want to simplify."** Changing them could cost more goodwill than it saves.
+The assessment starts with one workflow, such as running a report or setting up an account. In roughly two days we recommend what to do with it and name what must survive, and the price is fixed before work begins.
 
-**"Parts of it work well. Other parts fight every change."** One answer for the whole product feels wrong.
+**What you receive**
 
-**"Everything old has been bundled into one big programme."** Interface problems and technical debt are being priced as a single project.
-
-## Four changes that often arrive as one {#bundled}
-
-Modernisation plans tend to bundle four different pieces of work. Pulling them apart is often the most useful thing an assessment does.
-
-**A technology upgrade.** New foundations underneath. Customers should barely notice.
-
-**A visual refresh.** The product looks current. Workflows stay as they are.
-
-**A change to how the product works.** Workflows, navigation and structure change, so customers relearn something.
-
-**A design system programme.** Shared components and rules, so later changes stay consistent.
-
-Each has its own cost, its own risk and its own people who must agree to it. Choosing only the ones your product needs protects the habits customers have already learned.
-
-## What we look at {#coverage}
-
-For each area of the product:
-
-- how customers use it today, and which habits they rely on
-- the rules, records, roles and integrations it carries
-- your support history, analytics and existing research
-- the technical limits your engineers are working against
-- what moving would cost customers: relearning, data to migrate, old and new running side by side
-
-Our engineers review the technical side with yours, so recommendations hold up in code as well as on screen.
-
-## What you receive {#deliverables}
-
-A map of the product with a recommended route for each area, from leaving it alone to rebuilding it. Alongside the map:
+- **A map of the product,** split into areas that could change on their own, each with one of five recommendations, from keeping it as it is to rebuilding or retiring it.
 
 - **What must survive,** such as workflows customers know by heart.
+
 - **The order of work,** including which changes depend on others.
+
 - **The open questions,** and how to answer them before you commit.
 
-## How we have helped teams choose {#proof}
+- **Which areas are ready for AI.** Where AI features or agents are on your roadmap, the map marks which areas already have the clean records, clear permissions and safe actions they need.
 
-### Benchmark Gensuite: improve the suite without breaking habits
+Here is a short extract from an area map.
 
-Benchmark was moving its environment, health and safety suite to a newer frontend framework, and long-time users had efficient habits worth keeping. We began with the shared components every application depends on, then tested them in one high-use feature as a coded prototype. That separated visual improvements from changes to how the interaction works.
+*Illustration, not client work*
 
-[Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+A fleet maintenance product has served depot managers and mechanics for over a decade. Sales says it demos as old. The largest customers have asked that nobody touch their work orders.
 
-### Ryzeo: picking the first thing to change
+| Area | How customers use it today | Recommendation | What must survive |
+|---|---|---|---|
+| Work orders | Mechanics open them all day, mostly by keyboard | Keep | Every shortcut and the order of the fields |
+| Weekly planning | Managers export to spreadsheets to plan the week | Redesign | The printed weekly view managers pin up |
+| Reports | Built on a reporting library that is no longer supported | Move to a new platform | Every figure, matched before the switch |
+| Parts ordering | Repeats a supplier portal most customers now use | Retire | Past orders, still readable |
+| Settings | Grown into pages of options | Simplify | Permissions exactly as customers set them |
 
-Ryzeo's marketing automation platform had more valid problems than one redesign could hold. We reviewed the product, talked to stakeholders and users, studied competitors and read the analytics. Together they put reporting first, with a shared set of components to carry later improvements.
+Reports move first, because the old library holds back every other change, and old and new run side by side until the figures match. Weekly planning follows. The open question for the client: whether the largest customers will take a new planning view in their renewal year.
 
-<!-- awaiting client sign-off -->
+**Who does the work.** A senior designer runs the assessment and is your main contact. One of our engineers works alongside for the technical review.
+
+**What we need from you.** Your analytics and support history, conversations with people who use the product, and time with your engineers on code limits, integrations and data.
+
+**Where our part stops.** The assessment is a recommendation. Which way to go, and when, is your call, and the cost of the work itself is scoped once you have chosen.
+
+## How the software modernisation assessment runs {#method}
+
+Modernisation plans tend to bundle four jobs, each with its own cost, its own risk and its own people who must agree. We pull them apart first.
+
+- **A technology upgrade.** New foundations underneath, which customers should barely notice.
+
+- **A visual refresh.** The product looks current, and workflows stay as they are.
+
+- **A change to how the product works.** Workflows, navigation and structure change, so customers relearn something.
+
+- **A design system programme.** Shared components and rules, so later changes stay consistent.
+
+We drew this split from modernising Benchmark Gensuite's suite, where telling visual improvements apart from interaction changes set the order of work. Then the legacy application assessment itself:
+
+1. **Map the product into areas.** We split it into parts that could change on their own, such as reporting, account setup or billing.
+
+2. **Learn what customers rely on.** Analytics, support history, existing research and conversations with users show which habits and workflows have to survive.
+
+3. **Review the technical side with your engineers.** One of our engineers works through code limits, integrations and data with yours, and the rules, records, permissions and audit trails each area carries.
+
+4. **Recommend one of five answers for each area.** We weigh what each area does against what changing it would cost customers: relearning, data to migrate, and old and new running side by side.
+
+5. **Set the order of work.** We sequence by dependency and risk, and name the open questions to answer before you commit.
+
+## Redesign or rebuild? The five answers an area can get {#compare}
+
+Every area gets one of five answers. The table shows what each changes for customers and when it fits.
+
+| Answer | What changes for customers | Best for |
+|---|---|---|
+| **Keep** | Nothing | Areas that work and that customers know well |
+| **Simplify** | Fewer steps and clearer screens, with the workflow kept | Areas that work but have collected clutter |
+| **[Redesign](/services/product-modernisation/product-redesign)** | How the workflow runs, its navigation and its structure | Areas where the workflow itself causes the trouble |
+| **[Move to a new platform](/services/product-modernisation/replatforming-product-design)** | Little, if the move is well planned, while the foundations change underneath | Areas where old technology blocks change and the design still works |
+| **[Rebuild or retire](/services/product-modernisation/legacy-software-modernisation)** | Most of that area, replaced in planned stages, or switched off | Areas that fight every change, or no longer do a useful job |
+
+If you only need to know where users struggle, a [UX & Product Audit](/audits/ux-product-audit) is more focused.
+
+## Selected modernisation work {#selected-work}
+
+Three established products where the work began by deciding what to keep, what to change and what to change first.
+
+### Benchmark Gensuite: improve the suite, keep the habits
+
+Benchmark was moving its environment, health, safety and sustainability suite to a newer framework, and long-time users had efficient habits worth keeping. We started with the shared components every application depends on, then tested them in one high-use feature, the scope selector, as a coded prototype. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+### Ryzeo: the first target, chosen by consequence
+
+Ryzeo's roadmap held more valid problems than one team could tackle at once. Research picked the first target by what it would change for customers and what depended on it: reporting, with shared rules the rest of the product could follow. [Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+
+### Dealpath: one action changed, three kept
+
+In Dealpath's deal-management software, research pointed to one listing action out of four. Our redesign changed Add to pipeline alone, and the comparable and pass actions stayed largely as users knew them. [Read the Dealpath case](/case-studies/enterprise-workflow-redesign-dealpath-real-estate)
+
+## What clients say {#testimonials}
+
 > “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
 > **Russell Miler, COO, Ryzeo**
 
-[Read the Ryzeo case](/case-studies/ryzeo-marketing-automation-ux-revamp)
+> “We’ve had positive feedback from staff and clients. A lot of people comment on how easy our site is to navigate.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-## When an assessment is worth it {#when}
+> “Tcules has been with us since the first concept, and they still look after the platform as it grows. When something needs changing, they already know why it was built that way.”  
+> **Aldrin Gomes, Director, Vovisto**
 
-When the debate is about the route, and the cost of picking the wrong one is high. If you only need to know where users struggle, a [UX & Product Audit](/audits/ux-product-audit) is the more focused choice.
+> “Tcules told us what was really wrong, including the things we didn't want to hear, and then fixed them with us.”  
+> **Akshay Vyas, Creative Head, Knovos**
 
-Want to frame the options first? The [Audit, Redesign, Modernise or Rebuild worksheet](/tools/audit-redesign-modernise-rebuild) compares them for one part of your product.
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
 
-## Frequently asked questions {#faq}
+## How we work together {#how-we-work-together}
+
+After the assessment, your team can take the plan forward alone, or our designers and engineers can modernise the first area with you through [Product Modernisation](/services/product-modernisation).
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We tell you what is really wrong.** At Omny AI, a trust problem traced back to one default that filled the content area before anyone chose, so our redesign made each suggestion a deliberate click. [Read the Omny AI case](/case-studies/omny-ai-suggestion-trust-redesign)
+
+- **We work out what the product has to know before we draw it.** Before changing four of Scissors' staffing workflows, from onboarding to job creation, we mapped how clients, candidates, jobs and talent pools relate to one another. [Read the Scissors case](/case-studies/scissors-staffing-software-object-oriented-ux)
+
+- **We know what to leave alone in a product people rely on.** At Gold Image Printing, we watched staff work in the existing production system before proposing changes, and designed the store and that system together to fit what the business already runs. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [PropTech and ConTech](/expertise/proptech-contech-field-operations) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech)
+
+## Questions about an application modernisation assessment {#faq}
+
+### Should we redesign, modernise or rebuild our legacy software?
+
+Usually a mix, chosen area by area. Many products need a redesign in one place, a new platform under another and no change at all in a third. The assessment gives each area its own answer, so the whole product never has to take one.
 
 ### Will you recommend a rebuild?
 
-Only where a part of the product needs one. A repair or a focused redesign of a few workflows often does more good, with less disruption to customers.
+Where a part needs one, yes, and the assessment says so plainly. Elsewhere, keeping a part, simplifying it or redesigning a few workflows often does more good, with less disruption to customers.
 
 ### Can we modernise in stages?
 
-Usually, yes. We look for safe boundaries where one area can change while the rest keeps running, and plan how customers move between old and new parts.
+In most products, yes. Tcules looks for safe boundaries where one area can change while the rest keeps running, and plans how customers move between old and new parts. Improvements then arrive area by area, with no single big launch to wait for.
+
+### Is there an application modernisation assessment template we can use first?
+
+Yes. The free [Audit, Redesign, Modernise or Rebuild worksheet](/tools/audit-redesign-modernise-rebuild) compares the options for one part of your product. It frames the question before an assessment looks at every area with your engineers.
 
 ### Will the assessment tell us what the work will cost?
 
-It gives you the route and the order of work, which is what a reliable estimate needs. We scope cost and timeline once you have chosen the route.
+A Tcules assessment gives you the recommendation and the order of work, which is what a reliable estimate needs. We then scope cost and timeline once you have chosen which way to go.
 
-### What happens after the assessment?
+### How is the assessment itself priced?
 
-You choose the route. We can carry it out through [Product Modernisation](/services/product-modernisation), with designers and engineers working together, or hand the plan to your own team.
+At a fixed price, agreed before work begins. One workflow is the smallest scope. Each further workflow or area adds time, and a full product assessment is priced by how many areas it takes in, agreed with the dates. [How We Work](/how-we-work) explains how we price each kind of work.
+
+### What happens after a modernisation assessment?
+
+You choose the route, area by area, and the order of work shows where to begin. [Product Modernisation](/services/product-modernisation) can carry out the first area with designers and engineers working together, or your own team can take the plan from there.
 
 ## Tell us what your product has to do next {#enquiry}
 
-Share the product, what's driving the change and any routes already on the table.
+Share the product, what's driving the change and any options already on the table.
 
 **Enquiry form**
 

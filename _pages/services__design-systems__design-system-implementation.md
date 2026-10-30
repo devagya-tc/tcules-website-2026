@@ -4,13 +4,13 @@ slug: design-system-implementation
 page_name: Design System Implementation
 page_type: service
 seo:
-  title: 'Design System Implementation: Figma, Code & Docs | Tcules'
-  description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on real screens before your teams rely on them.'
+  title: 'Design System Implementation in Figma and Code | Tcules'
+  description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on a real part of your product before teams rely on them.'
   canonical: https://www.tcules.com/services/design-systems/design-system-implementation
   robots: index,follow
 social:
-  og_title: 'Design System Implementation: Figma, Code & Docs | Tcules'
-  og_description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on real screens before your teams rely on them.'
+  og_title: 'Design System Implementation in Figma and Code | Tcules'
+  og_description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on a real part of your product before teams rely on them.'
   og_image: IMAGE_ASSET_REQUIRED
   og_image_alt: Benchmark Gensuite coded prototype showing shared interface behaviour tested in the browser.
   og_type: website
@@ -18,18 +18,31 @@ social:
   og_site_name: Tcules
   og_locale: en_GB
   twitter_card: summary_large_image
-  twitter_title: 'Design System Implementation: Figma, Code & Docs | Tcules'
-  twitter_description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on real screens before your teams rely on them.'
+  twitter_title: 'Design System Implementation in Figma and Code | Tcules'
+  twitter_description: 'Design system implementation in Figma and code: tokens, components, documentation and releases, tested on a real part of your product before teams rely on them.'
   twitter_image: IMAGE_ASSET_REQUIRED
 search_context:
   primary_intent: Design System implementation across Figma and code
   primary_buyer_question: How do accepted shared product decisions become a system teams can actually design and build from?
   supporting_questions:
   - What should the first release include?
-  - How should design tokens be structured?
+  - How should design tokens (colours, type, spacing) be organised?
   - Do we need Storybook?
   - What does our team own afterwards?
   primary_query: design system implementation
+  secondary_queries:
+  - design system implementation services
+  - build a design system in Figma and code
+  - component library development
+  - UI component library for SaaS
+  - React component library
+  - design tokens
+  - design system documentation
+  - design system migration
+  - design system first release
+  - how long does it take to build a design system
+  - do we need Storybook
+  - what our team owns after implementation
 navigation:
   breadcrumb:
   - name: Home
@@ -59,43 +72,55 @@ conversion:
   processor: cms_record_and_notify
 render:
   band_order:
-  - recognition
-  - deliverables
-  - product-test
-  - proof
+  - what-you-get
+  - selected-work
+  - one-component
+  - which-service
+  - testimonials
+  - how-we-work-together
+  - why-tcules
+  - industries
   - faq
   - enquiry
 page_composition:
   visual_plan: system_contract_meaning_design_code_documentation_release
   media_bindings:
-  - id: design_system_implementation_benchmark
+  - id: ds_implementation_benchmark_scope_selector
     role: demonstrate
-    supports_section: proof
-    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1785918561/benchmark_07_attachments_prototype_08aedb3f85.png
-    alt_intent: Benchmark Gensuite coded prototype showing shared interface behaviour tested in the browser.
+    supports_section: selected-work
+    asset_uri: https://res.cloudinary.com/dbay1gb0s/image/upload/v1786014613/Redesigned_SS_Nav_7427598ce2.png
+    alt_intent: 'Benchmark Gensuite''s redesigned scope selector, prototyped in code with the suite''s shared components, with three views: Browse, Recents and Favourites, and Nearby, each with its own search boundary.'
+    source: current public Tcules case media
     status: BOUND_EXISTING_PUBLIC_ASSET
-  - id: design_system_implementation_matter
-    role: inspect
-    supports_section: proof
-    asset_uri: /matter-design-system
-    alt_intent: Matter, Tcules' public Design System reference.
-    status: INTERNAL_WORKING_ARTIFACT
   testimonial_ids:
-  - UW-ERP-VALIDATION
+  - DRAFT-AUXENTIOS-SCREENS-26OCT
+  - DRAFT-GOLDIMAGE-COMPONENTS
+  - DRAFT-RYZEO-REPORTS
+  - DRAFT-CURAMCARE-APPS
   institutional_trust:
     component_type: institutional_fact_row
     facts:
     - founded_2017
     - projects_90plus
     - client_countries_19
-    placement: compact_hero_followup
+    - studio_ahmedabad
+    placement: studio_signature_after_proof
     claim_policy: Resolve against canonical company facts and reconfirm at publication.
+  independent_reputation:
+    component_type: linked_review_marker
+    source: https://clutch.co/profile/tcules-saas-product-design-studio
+    snapshot_date: '2026-10-08'
+    rating: 4.8
+    displayed_reviews: 13
+    placement: studio_signature_after_proof
+    publication_gate: REVERIFY_LIVE_RATING_AND_COUNTS
   client_recognition:
     component_type: client_recognition
     placement: hero_followup_or_contextual_proof
     clients:
-    - Benchmark Gensuite
     - Auxentios
+    - Gold Image Printing
+    - Benchmark Gensuite
     asset_policy: Approved logo rights required; otherwise render accurate client names as text. Relationship does not imply endorsement or identical engagement scope.
 structured_data:
   types:
@@ -106,7 +131,7 @@ structured_data:
   organization_ref: https://www.tcules.com/#organization
   service_provider_ref: https://www.tcules.com/#organization
 release:
-  content_state: BATCH4_DRAFT_2026-10-08
+  content_state: STUDIO_SPINE_ROLLOUT_2026-10-26
   site_release_state: SITE_RELEASE_HOLD
   composition: STATIC_PREVIEW_UNVERIFIED
   production: NOT_PRODUCTION_VERIFIED
@@ -123,72 +148,154 @@ content_governance:
   source_body: Tcules_Phase10_Canonical_Assembly_and_Publication_Gates_2026-10-08/assembled_authored_74/services__design-systems__design-system-implementation.md
 ---
 
-*For SaaS and software teams*
+*Design Systems · Implementation*
 
-# Design system implementation in Figma and code
+# Design system implementation in Figma and code, proved on your real screens
 
-Tokens, Figma components, coded components and documentation built as one system, then tried on a real part of your product before you sign off version one.
+Design system implementation is for everyday feature work: a designer building from existing parts, an engineer importing them under the same names, and a release that reads as one product. Tcules provides design system implementation for SaaS teams: tokens, components, documentation and releases, tried on your real screens.
 
-[Start a conversation](#enquiry)
+*Selected work: [Auxentios](/case-studies/auxentios-cpq-product-mvp-design) · [Gold Image Printing](/case-studies/gold-image-printing-web-to-print-erp-modernisation) · [Benchmark Gensuite](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)*
 
-*Selected work: Benchmark Gensuite · Auxentios*
+[Show us what you have in Figma and code](#enquiry)
 
-## When the library and the product drift apart {#recognition}
+**Founded 2017 · More than 90 projects · Clients in 19 countries · Studio in Ahmedabad, India**
 
-**"Design has a library. Engineering doesn't."** The product still runs on local components and hard-coded styles.
+## What you get from our design system implementation services {#what-you-get}
 
-**"Engineering has components, but designers can't see what they do."** Options and states are buried in the code.
+Version one of your system, built in Figma and in code at the same time, and finished only when a real part of your product runs on it. Most of the work is component library development, starting with the parts your screens use most.
 
-**"The library looks complete. The product doesn't."** Components cover the default state and fall over on real data.
+**What you receive**
 
-**"We're replatforming at the same time."** Old and new screens have to live side by side while the system settles.
+- **Design tokens named by meaning.** Raw colour, type and spacing values sit underneath, and names such as "danger" or "link" sit on top, the same in Figma and in code. A brand or theme can then change values without changing meanings. Done when designers and developers use one name for one thing.
 
-## What we build {#deliverables}
+- **Components in both places.** The families your products use most, each with its loading, empty, error and disabled versions, in Figma and as a React component library, or in the framework your frontend already uses. Done when a real screen is built from them with nothing rewritten or copied.
 
-| Layer | What we deliver | How you know it's done |
-|---|---|---|
-| Foundations | Colour, type and spacing tokens named for what they mean, such as "danger" or "selected" | Designers and developers use the same name for the same thing |
-| Components | Figma and coded components with the states real screens need: loading, empty, error, disabled, responsive | A real screen can be built without detaching or rewriting a component |
-| Documentation | When to use each component, what can vary, and worked examples | A new team member picks the right component without asking |
-| Releases | Versioning, release notes and a way to move products onto new versions | Teams know what changed and what they need to do |
-| First product use | The system applied in an agreed area of your product | That area works with the system in place |
+- **Documentation.** When to use each component, what can vary and a worked example, in Storybook or the tool your team already reads. Written so people, and the AI coding tools they use, reach for the right part. Done when a new team member picks the right component without asking.
 
-We work inside your team's tools and routines, so the system is built with the people who will maintain it.
+- **Versioning and releases.** Release notes and a guide for moving each product onto a new version. Done when teams know what changed and what they need to do.
 
-## Components tested on real product screens {#product-test}
+- **The system on a real area of your product.** An agreed area rebuilt from the system, with real records and real screen sizes, before you sign off version one. Done when that area works with the system in place.
+
+**Who does the work.** Design engineers build the coded components inside your codebase, alongside a senior product designer who leads the system and designs its parts. Both work in your team's tools and routines, beside the people who will maintain the system, and an account lead keeps it on track.
+
+**What we need from you.** Agreed scope and owners, access to your Figma files and codebase, a real product area to try the system on, and time with the designers and developers who will run it afterwards.
+
+**Where our part stops.** Your team owns the Figma library, the code, the documentation and the release rules once they are handed over. If scope and owners are still open, start with [Design System Strategy](/services/design-systems/design-system-strategy); to keep the system in use afterwards, see [Governance & Adoption](/services/design-systems/governance-adoption).
+
+## Selected design system implementation work {#selected-work}
+
+Three component libraries, each tried on the screens it had to carry.
+
+### Auxentios: components for a product planned to run past 200 screens
+
+Auxentios' quoting product was planned for more than 200 screens. We designed the core screens first and drew the system out of what repeated: components and variants, design tokens and layout rules. The documented layout logic lets Auxentios' own product and engineering teams design further screens on the same rules. [Read the Auxentios case](/case-studies/auxentios-cpq-product-mvp-design)
+
+### Gold Image Printing: one set of parts for store and production
+
+We designed the components first, then used them to redesign real order screens across the web-to-print store and the internal system production staff use. Gold Image Printing's technical group handled implementation with us alongside, so the parts suit the systems already in place. [Read the Gold Image Printing case](/case-studies/gold-image-printing-web-to-print-erp-modernisation)
+
+### Benchmark Gensuite: shared components tested on the control every application uses
+
+We tested the suite's shared components on its scope selector, the control that sets which part of the organisation people see. Coded prototypes let Benchmark's engineers inspect that behaviour before wider implementation, and they set the component direction for the suite's move to Bootstrap 5.3. [Read the Benchmark Gensuite case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+
+## One component, finished in every layer {#one-component}
 
 A component can pass every check on its own and still fail in the product. A data table looks fine with ten tidy rows. Give it real records, long names, bulk actions and a narrow screen, and the gaps appear.
 
-So we use the system to build a real part of your product before the first release is signed off. What we learn goes back into the system. A missing state gets added, an awkward option gets simpler, and a genuine one-off stays with the product that needs it.
+So before version one is signed off, we build an agreed area of your product from the system. What we learn goes back in: a missing case is added, an awkward option gets simpler, and a genuine one-off stays with the product that needs it.
 
-## Components proved on real screens {#proof}
+This is what one component looks like when it ships in version one.
 
-**Benchmark Gensuite.** We tested the shared components on the scope selector, the control every application in the suite uses to set which part of the organisation someone is working in. Working coded prototypes let Benchmark's engineers inspect that behaviour before wider implementation. [Read the case](/case-studies/benchmark-gensuite-enterprise-suite-modernisation)
+*Illustration, not client work*
 
-**Auxentios.** Alongside design components, variants and tokens, we designed key screens that showed how the system should be applied. We also documented layout rules so Auxentios' product and engineering teams could design further screens consistently. [Read the case](/case-studies/auxentios-cpq-product-mvp-design)
+A text field in a SaaS product's first design system release.
 
-> “Our aim was to build a consumer-grade UI / UX for our enterprise application. They helped us design what we were looking for. We validated their work with our users working in big enterprise software companies. Everyone liked the UX.”  
+| Layer | What it holds |
+|---|---|
+| Tokens | Border, text and error colours by meaning ("border-default", "text-danger"), never raw values |
+| Figma | Default, focused, filled, disabled, read-only and error versions; label, hint and character count as options |
+| Code | The same options as the coded component accepts, under the same names |
+| Behaviour | Visible focus, the error message tied to its field and read out by screen readers, a counter that warns before the limit |
+| Documentation | When to use a text area instead, how error messages are worded, one worked example on a real form |
+| Release | Version number, what changed, and what each product has to do to move across |
+
+## Implementation, strategy or alignment: which do you need? {#which-service}
+
+| Your starting point | Service | Best for |
+|---|---|---|
+| Scope and owners agreed; the system needs building | **Design System Implementation** | Teams moving from one-off components to a shared UI component library for SaaS screens, in Figma and code |
+| Teams still disagree on what the system covers | **[Design System Strategy](/services/design-systems/design-system-strategy)** | Several products or teams that need a plan before a build |
+| A Figma library and coded components both exist, and disagree | **[Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment)** | Making the two sides match, one component family at a time |
+| One difficult component, such as a data table or an editor | **[Frontend Design Systems](/services/design-engineering/frontend-design-systems)** | A single component that keeps breaking in one product |
+| A system exists and teams avoid it | **[Design System Audit](/audits/design-system-audit)** | Finding out why before anything is rebuilt |
+
+## What clients say {#testimonials}
+
+> “Our product was expected to need more than 200 screens. Tcules designed the core ones first, then turned what kept repeating into components, design tokens and layout rules, so our product and engineering teams could design the rest the same way.”  
 > **Ashok Mohanty, Founder, Auxentios**
 
-If your Figma library and coded components already exist but disagree, [Figma & Storybook Alignment](/services/design-systems/figma-storybook-alignment) is the narrower job.
+> “Tcules designed one set of components and one style guide for both our ordering site and our production system. They worked with our technical team, so the design fitted the systems we already run.”  
+> **David Aghaei, Senior Partner, Gold Image Printing**
 
-## Frequently asked questions {#faq}
+> “Our customers wanted reports that answered their own questions. Tcules researched how they used our reporting, redesigned it and gave us shared rules for filters, states and data, so new work can follow the same logic.”  
+> **Russell Miler, COO, Ryzeo**
+
+> “Our clients and our carers each have their own app, with our web platform between them. Tcules redesigned all three together, and their developers coded the frontend for each one.”  
+> **Jody O'Neill, CEO & Co-founder, CuramCare**
+
+**4.8 on Clutch** from 13 reviews. [Read the reviews](https://clutch.co/profile/tcules-saas-product-design-studio)
+
+## How we work together {#how-we-work-together}
+
+For design system implementation, a good first piece of work is your most-used component family, built in Figma and in code and tried on one real screen.
+
+Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.
+
+**A focused engagement.** One flow, one hard question or an audit, at a fixed price agreed before we start.
+
+**A defined project.** A first release, a redesign or a design system, with the scope and the price agreed before we begin.
+
+**An ongoing partnership.** A senior designer joins your team, with specialists as the work needs them.
+
+We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.
+
+Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.
+
+[How we work together](/how-we-work) · [Tell us what you're working on](#enquiry)
+
+## Why teams choose Tcules {#why-tcules}
+
+Product designers, design engineers and developers work side by side in one studio in Ahmedabad, India, so the people who design your product sit with the people who can build it.
+
+- **We know what to leave alone in a product people rely on.** [Doodle's](/case-studies/doodle-case-study-automating-enterprise-meeting-scheduling) scheduling MVP reused the components already in its design system for standard interactions, and we added new ones only where the calendar and bookability work needed them.
+
+- **We prove the hard parts in code while they can still change.** [ConnectX's](/case-studies/ai-native-building-energy-product-connectx) adaptive workspace ran first as a coded demo on sample data, so its modules could be reviewed together before we took it to a production-ready module.
+
+- **Senior people do the work, and clients keep us for years.** Primelis has kept us on for three years, in which time we have designed every one of its products and kept improving them.
+
+[Why teams choose Tcules](/why-tcules) · [Meet the studio](/about)
+
+## Industries we know well {#industries}
+
+[B2B SaaS](/expertise/b2b-saas-workflow-software) · [Data and analytics](/expertise/data-analytics-decision-products) · [ClimateTech](/expertise/climatetech-energy) · [MarTech](/expertise/martech-salestech) · [Commerce](/expertise/commerce-transactional-products)
+
+## Design system implementation FAQs {#faq}
 
 ### What should the first release include?
 
-Enough to build real screens: foundations, the component families your products use most, their key states, usage guidance and a release process. The rest of the inventory can follow once teams are using it.
-
-### How should design tokens be structured?
-
-In two layers. Raw values, such as a specific blue, sit underneath. Names that describe meaning, such as "link" or "danger", sit on top. Themes and brands can then change values without changing meaning.
+Enough to build real screens: foundations, the component families your products use most, their key states, usage guidance and a release process. Workflow software usually needs tables, forms and records first; data products need charts, filters and their loading, empty and failed states. The rest can follow once teams are using it.
 
 ### Do we need Storybook?
 
-No, though it usually helps. Storybook shows each coded component in all its states and makes testing easier. If your team documents components another way, we build for that.
+Storybook is optional, and it helps. It shows each coded component in all its states and makes testing easier. If your team documents components another way, Tcules builds for that.
 
-### What does our team own afterwards?
+### How long does it take to build a design system?
 
-Everything: the Figma library, the code, the documentation and the release rules. The system should run without us. If you want ongoing help, we agree that separately.
+We agree the first release's timeline with you before work starts. Foundations come together early; components and their states take most of the time. How much already exists in Figma and code also sets the length.
+
+### Can you move our existing product onto the new system?
+
+Yes. We plan the design system migration product by product, starting with the screens that change most often, so old and new screens can live side by side while the system beds in. Your engineers can follow the migration guide, or our developers can move agreed areas for you.
 
 ## Tell us which product needs the system first {#enquiry}
 

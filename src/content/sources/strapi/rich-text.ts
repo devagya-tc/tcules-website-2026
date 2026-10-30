@@ -125,3 +125,21 @@ export function richTextToPlainText(value: unknown): string {
   if (!Array.isArray(value)) return '';
   return plainTextFromNodes(value.filter(isRecord));
 }
+
+/**
+ * A heading as the CMS authors it, as the words to render. The previous site broke a display
+ * heading in two at a " , " (a comma with a space BEFORE it): "Join , Future Interfaces Lab" is
+ * "Join" over "Future Interfaces Lab", and "Future , Interfaces Lab by Tcules" the same. A comma
+ * after a space is never punctuation in English, so the marker is told apart from a real comma
+ * ("Design, built") by the space before it, and becomes the one space it stood for. Read here, at
+ * the Strapi seam, so no page learns the old site's markup (owner, 29 Oct 2026: the copy's words
+ * must render exactly).
+ */
+export function cmsHeadingText(candidate: string | null | undefined): string {
+  return typeof candidate === 'string'
+    ? candidate
+        .replace(/\s+,\s*/gu, ' ')
+        .replace(/\s{2,}/gu, ' ')
+        .trim()
+    : '';
+}
