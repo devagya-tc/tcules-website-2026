@@ -147,7 +147,31 @@ export type L1SpecialistScene =
   | 'specialist-mobile'
   | 'specialist-prototype-review';
 
-export type L1SceneName = L1BandScene | L1OutcomeScene | L1SpecialistScene;
+/**
+ * L1 TERM scenes (owner, 30 Oct 2026, round 6; decisions/2026-10-30-what-you-get-titled-terms-four-parts):
+ * the two terms of "What you get" that are drawn, one pair per service line. `needs-*` is the
+ * handover, read left to right "you to us": the client's inputs on their panel, routed into our
+ * frame, the decisive one lit. `stops-*` is the boundary, read "us to you": our last piece left of a
+ * dashed line with the lit check, what stays theirs on their panel. Each is drawn from its page's
+ * own words, never borrowed from How we work together's scopes.
+ */
+export type L1TermScene =
+  | 'needs-product-design'
+  | 'needs-ai-product-ux'
+  | 'needs-design-engineering'
+  | 'needs-design-systems'
+  | 'needs-new-product'
+  | 'needs-product-modernisation'
+  | 'needs-software-development'
+  | 'stops-product-design'
+  | 'stops-ai-product-ux'
+  | 'stops-design-engineering'
+  | 'stops-design-systems'
+  | 'stops-new-product'
+  | 'stops-product-modernisation'
+  | 'stops-software-development';
+
+export type L1SceneName = L1BandScene | L1OutcomeScene | L1SpecialistScene | L1TermScene;
 
 export type SketchName =
   | ServiceSceneName

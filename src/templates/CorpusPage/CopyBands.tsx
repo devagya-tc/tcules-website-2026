@@ -1,6 +1,16 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Cluster, Icon, type IconName, Layout, Media, Prose, Sketch } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  type IconName,
+  Layout,
+  Media,
+  type MediaImage,
+  Prose,
+  Sketch,
+} from '@/components';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
@@ -12,12 +22,14 @@ import {
   CtaSection,
   DataTable,
   ListCard,
+  OfferParts,
   OfferSheet,
   ReadDown,
   Steps,
   Teaser,
   type BentoItem,
   type BlockCardSetItem,
+  type OfferPart,
   type OfferSheetItem,
   type ReadDownRow,
   type Step,
@@ -34,7 +46,7 @@ import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
-import { serviceSceneFor, type SketchName } from '@/lib/sketches';
+import { offerSceneKey, serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
@@ -479,6 +491,25 @@ export function sheetParts(band: CorpusBand): SheetParts {
 const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
 
 /**
+ * A band's terms ("**Who does the work.** …") are the labelled claims after its items; every other
+ * block is the note. Shared by the sheet's foot and the four-part band.
+ */
+function bandTerms(rest: readonly CorpusBlock[]): {
+  terms: { title: string; body?: string; bodyHtml?: string }[];
+  noteBlocks: CorpusBlock[];
+} {
+  const isTerm = (block: CorpusBlock) => {
+    const lead = leadOf(block);
+    return lead !== null && !isBareLabel(block) && linkIn(lead.label) === undefined;
+  };
+  const terms = rest.flatMap((block) => {
+    const lead = isTerm(block) ? leadOf(block) : null;
+    return lead ? [{ title: labelTitle(lead.label), ...bodyFields(trimStart(lead.body)) }] : [];
+  });
+  return { terms, noteBlocks: rest.filter((block) => !isTerm(block)) };
+}
+
+/**
  * A sheet band (`outcomes`, `catalog`): the promises as ONE OfferSheet, its lead, its list label, and
  * what follows as the note (the terms as tiles, a closing paragraph, the band's links). Seven or eight
  * promises, which the sheet is not built for, read down in two columns instead (component-map Q16).
@@ -500,16 +531,7 @@ export function SheetBand({
   const rest = [...parts.intro, ...parts.after];
   const combined =
     rest.length > 0 ? <BandBody blocks={rest} labelledBy={head(band).headingId} /> : undefined;
-  /* The band's terms ("**Who does the work.** …") are its foot; every other block is the note. */
-  const isTerm = (block: CorpusBlock) => {
-    const lead = leadOf(block);
-    return lead !== null && !isBareLabel(block) && linkIn(lead.label) === undefined;
-  };
-  const terms = rest.flatMap((block) => {
-    const lead = isTerm(block) ? leadOf(block) : null;
-    return lead ? [{ title: labelTitle(lead.label), ...bodyFields(trimStart(lead.body)) }] : [];
-  });
-  const noteBlocks = rest.filter((block) => !isTerm(block));
+  const { terms, noteBlocks } = bandTerms(rest);
   const note =
     noteBlocks.length > 0 ? (
       <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
@@ -535,6 +557,77 @@ export function SheetBand({
       across={acrossFor(items.length)}
       note={note}
       terms={terms.length > 0 ? terms : undefined}
+    />
+  );
+}
+
+/** The three terms the four-part band knows, by key, and the visual each takes. */
+const TERM_KEYS = ['who does the work', 'what we need from you', 'where our part stops'] as const;
+
+/**
+ * "What you get" in four parts (owner, 30 Oct 2026, round 6;
+ * decisions/2026-10-30-what-you-get-titled-terms-four-parts): the drawn deliverables, then the band's
+ * three terms as peers, each led by its visual (the studio photograph, then one needs and one stops
+ * drawing). Renders OfferParts only when every piece exists; otherwise the sheet stands unchanged,
+ * and in development the warning names each unmet piece, so a stale scene key cannot fall back silently.
+ */
+export function WhatYouGetBand({
+  band,
+  scenes,
+  studio,
+}: {
+  band: CorpusBand;
+  scenes: (key: string) => SketchName | undefined;
+  studio?: MediaImage;
+}) {
+  const parts = sheetParts(band);
+  const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
+  const unmet: string[] = [];
+  if (!parts.listLabel) unmet.push('no "What you receive" label');
+  const deliverables = parts.items.flatMap((item) => {
+    const scene = item.title ? scenes(item.title) : undefined;
+    if (!item.title || !scene) {
+      unmet.push(`deliverable "${item.title ?? item.id ?? ''}" has no scene`);
+      return [];
+    }
+    return [{ ...item, title: item.title, scene }];
+  });
+  const peers = terms.flatMap((term): OfferPart[] => {
+    const key = offerSceneKey(term.title);
+    const title = term.title.replace(/[.:]\s*$/, '');
+    if (key === 'who does the work') {
+      if (!studio) unmet.push('no studio photograph');
+      return studio ? [{ ...term, title, visual: { kind: 'photo' as const, image: studio } }] : [];
+    }
+    if (key === 'what we need from you' || key === 'where our part stops') {
+      const scene = scenes(term.title);
+      if (!scene) unmet.push(`term "${term.title}" has no drawing`);
+      return scene ? [{ ...term, title, visual: { kind: 'drawing' as const, scene } }] : [];
+    }
+    unmet.push(`unknown term "${term.title}"`);
+    return [];
+  });
+  if (peers.length !== terms.length || !TERM_KEYS.every((k) => terms.some((t) => offerSceneKey(t.title) === k))) {
+    unmet.push('the three terms are not all present and resolved');
+  }
+  if (unmet.length > 0 || deliverables.length !== parts.items.length) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`WhatYouGetBand "${band.id}": the sheet stands; ${[...new Set(unmet)].join('; ')}.`);
+    }
+    return <SheetBand band={band} scenes={scenes} />;
+  }
+  return (
+    <OfferParts
+      {...head(band)}
+      lead={parts.lead}
+      deliverablesTitle={parts.listLabel ?? ''}
+      deliverables={deliverables}
+      parts={peers}
+      note={
+        noteBlocks.length > 0 ? (
+          <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
+        ) : undefined
+      }
     />
   );
 }
