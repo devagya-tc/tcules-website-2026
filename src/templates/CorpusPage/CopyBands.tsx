@@ -84,20 +84,21 @@ const isBareLabel = (block: CorpusBlock): boolean => {
 /* ── Links ───────────────────────────────────────────────────────────────────── */
 
 /**
- * A band's closing links as its actions: one link is a CtaRow; two or more STACK as link buttons
- * (owner, 7 Oct 2026: link buttons never sit side by side; a CtaRow holds one action).
+ * A band's closing links as its actions: one link is a CtaRow; two are CtaRow's PAIR, an outlined
+ * button then the link in one row (owner, 30 Oct 2026: two actions side by side are never two
+ * identical links; decisions/2026-10-30-two-actions-outline-then-link); three or more stack as a
+ * list of links.
  */
 export function LinkActions({
   links,
   rule = false,
-  pair = false,
+  pair = true,
 }: {
   links: readonly CorpusLink[];
   rule?: boolean;
   /**
-   * Two links as one row with a hierarchy, the first an outlined button and the second the link
-   * (CtaRow's pair): a Banner's two actions (owner, 29 Oct 2026;
-   * decisions/2026-10-29-banner-two-actions-one-row). Off, two or more links stack as links.
+   * Default true. Two links as one row with a hierarchy (CtaRow's pair). False only to force a
+   * stacked list of two links — no current caller needs it.
    */
   pair?: boolean;
 }): ReactNode {

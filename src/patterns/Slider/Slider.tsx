@@ -7,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -234,6 +235,13 @@ export function Slider({
     atEnd: false,
     active: 0,
   });
+  /* Where the row is HEADING: set the moment an advance or a bar press starts a scroll, cleared once
+     it arrives or the scroll settles. The stepper shows this rather than the scroll position, which
+     only reaches the next slide at the move's midpoint: until then the old bar stayed current while
+     the clock restarted, and refilled before it switched (owner, 30 Oct 2026). On an advance the old
+     bar now stays empty and the next is full from the first frame of the move, and a wrap or a jump
+     never lights the bars it passes. */
+  const [heading, setHeading] = useState<number | null>(null);
   /* The rotation. `choice` is the reader's own press on the rotation control, and wins; until they
      press it, the default is to rotate unless they prefer reduced motion. `held` is the pointer or
      focus resting inside — a pause that lifts by itself. */
@@ -294,10 +302,13 @@ export function Slider({
           ? p
           : { ready: true, atStart, atEnd, active },
       );
+      /* Arrived: the scroll position has caught up with where the row was heading. */
+      setHeading((h) => (h === active ? null : h));
     };
 
     const speak = () => {
       settle = 0;
+      setHeading(null); // the scroll has settled wherever it is; the position is the truth again
       if (!announce.current) return;
       announce.current = false;
       const visible = inView();
@@ -396,33 +407,40 @@ export function Slider({
     row.scrollBy({ left: direction * step * rtl });
   }, []);
 
-  /* A step pressed: straight to that slide. Its start edge, less the first slide's, is the scroll
-     position that shows it — exact at every width, and snapping agrees. */
-  const goTo = useCallback((index: number) => {
+  /* The scroll that shows slide `index`: its start edge less the first slide's, exact at every width,
+     and snapping agrees. False when the row is already there, so nothing scrolls. */
+  const scrollToSlide = useCallback((index: number) => {
     const row = rowRef.current;
     const target = row?.children[index] as HTMLElement | undefined;
     const first = row?.children[0] as HTMLElement | undefined;
-    if (!row || !target || !first) return;
+    if (!row || !target || !first) return false;
+    const left = Math.abs(target.offsetLeft - first.offsetLeft);
+    if (Math.abs(Math.abs(row.scrollLeft) - left) <= EDGE) return false;
     const rtl = getComputedStyle(row).direction === 'rtl' ? -1 : 1;
-    announce.current = true;
-    row.scrollTo({ left: Math.abs(target.offsetLeft - first.offsetLeft) * rtl });
+    row.scrollTo({ left: left * rtl });
+    return true;
   }, []);
 
-  /* The rotation's own advance: one slide on, or from the last back to the first. Silent — it sets
-     no announcement, because nothing the reader did caused it. */
-  const advance = useCallback(() => {
-    const row = rowRef.current;
-    if (!row) return;
-    const max = row.scrollWidth - row.clientWidth;
-    if (Math.abs(row.scrollLeft) >= max - EDGE) {
-      row.scrollTo({ left: 0 });
-      return;
-    }
-    const [a, b] = Array.from(row.children) as HTMLElement[];
-    const step = a && b ? Math.abs(b.offsetLeft - a.offsetLeft) : row.clientWidth;
-    const rtl = getComputedStyle(row).direction === 'rtl' ? -1 : 1;
-    row.scrollBy({ left: step * rtl });
-  }, []);
+  /* A step pressed: straight to that slide, its bar current from the press. */
+  const goTo = useCallback(
+    (index: number) => {
+      announce.current = true;
+      if (scrollToSlide(index)) setHeading(index);
+    },
+    [scrollToSlide],
+  );
+
+  /* The rotation's own advance from slide `from`: one on, or from the last back to the first. Silent:
+     it sets no announcement, because nothing the reader did caused it. Always heads, so the clock
+     (keyed on the current slide) always restarts. */
+  const advance = useCallback(
+    (from: number) => {
+      const next = from + 1 < count ? from + 1 : 0;
+      scrollToSlide(next);
+      setHeading(next);
+    },
+    [count, scrollToSlide],
+  );
 
   if (autoplay && perView !== 1 && process.env.NODE_ENV !== 'production') {
     console.warn(
@@ -431,6 +449,8 @@ export function Slider({
   }
 
   const { ready, atStart, atEnd, active } = position;
+  /* The stepper's current slide: where the row is heading, else where it is. */
+  const current = heading ?? active;
 
   /* The hold: a mouse resting on the SLIDES, or focus inside them — the thing being read. Not the
      control row: a press on Play would otherwise hold the rotation it had just started, under the
@@ -459,11 +479,11 @@ export function Slider({
     };
   }, [rotates]);
 
-  /* A new slide starts its hold from nothing, whoever moved it there. */
-  useEffect(() => {
+  /* A new current slide starts its hold full, before paint. */
+  useLayoutEffect(() => {
     elapsed.current = 0;
     rootRef.current?.style.setProperty('--slider-step-progress', '0');
-  }, [active]);
+  }, [current]);
 
   /* The clock: frames, not a timer, so a hold is exact across a pause and the step's fill is the
      clock itself rather than an animation that has to be kept in step with one. It runs only while
@@ -479,14 +499,16 @@ export function Slider({
       const progress = Math.min(1, elapsed.current / interval);
       rootRef.current?.style.setProperty('--slider-step-progress', String(progress));
       if (progress >= 1) {
-        elapsed.current = 0;
-        advance();
+        /* Empty: hand over and stop. The bar stays empty until `current` moves, which resets the hold
+           and restarts this clock, so no frame counts on while the old bar is still current. */
+        advance(current);
+        return;
       }
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [playing, ready, held, interval, advance]);
+  }, [playing, ready, held, interval, advance, current]);
   const control = (direction: 1 | -1) => {
     const blocked = direction === -1 ? atStart : atEnd;
     return (
@@ -556,7 +578,7 @@ export function Slider({
             type="button"
             className={styles.step}
             aria-label={`Show ${slideName} ${index + 1} of ${count}`}
-            aria-current={index === active ? 'true' : undefined}
+            aria-current={index === current ? 'true' : undefined}
             aria-controls={rowId}
             disabled={!ready}
             onFocus={(event) => {

@@ -1,7 +1,7 @@
 ---
 title: "The outlined button reads as secondary: its hover firms the line, it never fills"
 date: 2026-10-29
-status: active
+status: superseded
 area: [components, motion, colour]
 source: "Owner (Devagya), 29 Oct 2026, on the site rebuilt from the 26 Oct copy (Button `emphasis=\"outline\"`, home `people` banner)"
 supersedes: []
