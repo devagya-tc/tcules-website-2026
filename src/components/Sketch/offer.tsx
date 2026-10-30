@@ -501,6 +501,28 @@ function SpecialistAudit() {
   );
 }
 
+/** Prototype Readiness Review: the prototype's one core workflow taken past the happy path; the steps
+ *  the demo proved are ticked, the moment it skipped is found (the gap map's first line). */
+function SpecialistReadiness() {
+  return (
+    <>
+      <Rect x={30} y={30} w={110} h={120} rx={8} className={styles.trailFrame} />
+      <Copy x={44} y={50} w={48} quiet />
+      <Copy x={44} y={62} w={70} />
+      <Rect x={44} y={112} w={56} h={18} rx={9} className={styles.tile} />
+      <Cursor x={88} y={122} />
+      <Hop x1={140} x2={176} y={90} />
+      <Rect x={176} y={30} w={114} h={120} rx={8} className={styles.frame} />
+      <Glyph name="check-circle" cx={192} cy={56} size={12} className={styles.glyph} />
+      <Copy x={204} y={56} w={56} />
+      <Glyph name="check-circle" cx={192} cy={84} size={12} className={styles.glyph} />
+      <Copy x={204} y={84} w={44} />
+      <Hatched x={186} y={104} w={70} h={20} />
+      <Focus x={272} y={114} glyph="danger-triangle" size={12} />
+    </>
+  );
+}
+
 /* ── A worked example: Dealpath ──────────────────────────────────────────────────
    Drawn on a 400 × 220 board and set into the 320 × 180 plate at 0.82, so the listing card, its
    "Add to pipeline" action and the pipeline column read at the plate's size. The two drawings share
@@ -621,6 +643,7 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-prototype': SpecialistPrototype,
   'specialist-new-product': SpecialistNewProduct,
   'specialist-audit': SpecialistAudit,
+  'specialist-readiness': SpecialistReadiness,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -636,4 +659,5 @@ export const OFFER_DRAWN: Partial<
   'specialist-prototype': [26, 30, 280, 116],
   'specialist-new-product': [26, 26, 268, 128],
   'specialist-audit': [26, 26, 228, 128],
+  'specialist-readiness': [26, 26, 294, 154],
 };

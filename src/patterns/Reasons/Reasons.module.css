@@ -112,46 +112,55 @@
   overflow: hidden;
 }
 
-/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home) ─────────
-   The full width of the track. From 1024, where the reasons stand side by side, one box height for
-   the set (--rsn-proof-height), so the three titles sit on one line and the row reads level: a Layout
-   fills the box and its content centres in it. Below 1024 the reasons are one column, so each proof
-   is its own height and no reason carries air another needed. Sizing, not arrangement. */
+/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home; one plate, 30 Oct) ─────
+   One plate of one size per reason, at every width: the visual slot, never a container for the words.
+   The title sits a `block` under its hard bottom edge, so proof, title and sentence read as one unit.
+   Marks and figures centre in it (a Layout fills it); the cover fills it from the top. */
 .proof {
   inline-size: 100%;
+  block-size: var(--rsn-proof-height);
+  background: var(--rsn-plate-ground);
+  border-radius: var(--rsn-plate-radius);
+  overflow: hidden;
 }
 
-@media (min-width: 1024px) {
-  .proof {
-    block-size: var(--rsn-proof-height);
-  }
+.proofInset {
+  padding: var(--gap-block);
 }
 
 .proofFill {
   block-size: 100%;
 }
 
-/* The case's own cover: 16:9 at a set height (what the box leaves over its figure), never wider than
-   the track; the image fills it with Media's anchored crop. Its corners are the photograph radius.
-   Sized from its height, so it starts on the track's edge with the words under it. */
+/* The case's own cover fills the plate above its caption strip; Media crops it anchored. */
 .cover {
   position: relative;
-  justify-self: start;
-  inline-size: auto;
-  block-size: var(--rsn-cover-height);
-  aspect-ratio: 16 / 9;
-  max-inline-size: 100%;
-  border-radius: var(--rsn-cover-radius);
   overflow: hidden;
   background: var(--rsn-cover-ground);
 }
 
-/* The fact, large and in the accent, the way a figure is (numerals are a foreground mark). */
-.proofValue {
-  font: var(--rsn-proof-value-text);
-  letter-spacing: var(--rsn-proof-value-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--rsn-proof-value-ink);
+.caption {
+  padding: var(--gap-text) var(--gap-block);
+}
+
+/* The live dot: the only accent in the plates. */
+.status {
+  display: block;
+  inline-size: var(--rsn-status-size);
+  block-size: var(--rsn-status-size);
+  border-radius: var(--radius-full);
+  background: var(--rsn-status-ink);
+}
+
+.captionValue {
+  font: var(--rsn-proof-label-text);
+  letter-spacing: var(--rsn-proof-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-title-ink);
+}
+
+.entry {
+  text-align: center;
 }
 
 /* Whose it is: the mono label voice, uppercase in presentation only. */

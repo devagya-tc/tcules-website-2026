@@ -72,6 +72,7 @@ export type OfferSceneName =
   | 'specialist-prototype'
   | 'specialist-new-product'
   | 'specialist-audit'
+  | 'specialist-readiness'
   | 'case-dealpath-problem'
   | 'case-dealpath-did';
 
@@ -106,6 +107,7 @@ const SPECIALIST_BY_ROUTE: Readonly<Record<string, OfferSceneName>> = {
   '/services/product-design/data-visualisation': 'specialist-dataviz',
   '/services/product-design/prototyping-usability-testing': 'specialist-prototype',
   '/audits/ux-product-audit': 'specialist-audit',
+  '/audits/prototype-readiness-review': 'specialist-readiness',
 };
 
 /**

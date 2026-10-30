@@ -74,9 +74,9 @@
      action is the row's words, a step under the path's body only in weight, never a button label. The
      arrow is a lg button glyph's size, 8 after the last word (a side bearing), and moves 4 toward its destination on hover — an optical nudge
      from the space ramp, not a layout distance (gap rule 1). */
-  --gwy-service-art-width: 112px;
-  --gwy-service-label-text: var(--text-h6);
-  --gwy-service-label-tracking: var(--text-h6-tracking);
+  --gwy-service-art-width: 128px;
+  --gwy-service-label-text: var(--text-h5);
+  --gwy-service-label-tracking: var(--text-h5-tracking);
   --gwy-service-arrow-size: var(--icon-size-24);
   --gwy-service-arrow-shift: var(--space-4);
   --gwy-service-arrow-inset: var(--space-8);
