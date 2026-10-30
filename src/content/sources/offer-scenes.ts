@@ -128,11 +128,6 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         Guidance: 'status-guidance',
       }),
       'how-it-runs': by({ figure: 'design-systems' }),
-      /* A hard part whose example is not a case (Matter, our own published system) has no cover of
-         its own, so it is drawn from its problem (30 Oct 2026, round 5 critic). */
-      'hard-parts': by({
-        'Rules that people and AI coding tools can follow.': 'hard-ai-rules',
-      }),
     },
     stories: {},
   },

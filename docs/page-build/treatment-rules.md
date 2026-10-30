@@ -14,7 +14,7 @@ arrangement holds it → what it must never do.**
 | The content is… | Its visual is… | Never | Rulings |
 |---|---|---|---|
 | **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures, why-tcules on every page (30 Oct) |
-| **A problem with its named example** (hard parts) | the cited case's own cover beside the problem, one row each | a band-level image about one item; a ruled text 2×2 | hard-parts-example-is-the-proof (30 Oct) |
+| **A problem with its named example** (hard parts) | one row per claim: its isometric illustration on the end track facing the words (above them below 1024), the example as a citation under the words | a case cover; a band-level image about one item; a ruled text 2×2 | claim-visual-depicts-the-claim (30 Oct, round 6; supersedes hard-parts-case-row) |
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
@@ -58,7 +58,7 @@ arrangement holds it → what it must never do.**
 - **A table of peer items** (levels, places, options) renders as drawn items, one drawing per row; a table read across rows stays a table. Router tables never drop a column.
 - **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
 - **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
-- **A cited case's picture is the case's own cover**, never a page binding matched by client name.
+- **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
 
 ## 3 · How to use it on a section nobody has designed
@@ -72,9 +72,9 @@ arrangement holds it → what it must never do.**
 
 The four sections the owner marked on /services/product-design were redesigned in round 5 and their
 rulings generalised into the tables above, so every service page maps the same way:
-1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE.
+1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE; REDONE in round 6 (an isometric illustration of each claim, the example a citation).
 2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
-3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE.
+3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE; REDONE in round 6 (one isometric illustration per reason, band scale, case links stay in the text; an undrawn reason takes the labelled slot).
 4. **What you get**: four parts (OfferParts), round 6.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
@@ -104,6 +104,10 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 | **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
 | **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
 | **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |
+
+4. **A band's illustration set is drawn as one set** (proposed): each drawing start-aligned in the shared box so it
+   lands on its text column; a route over the blue plane in one opaque colour; one light base plate with the blue
+   slab as its centrepiece; no unexplained frame or stray mark. 2026-10-30-illustration-set-craft.
 
 The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a
 citation; only a band whose subject is the evidence (home's proof band, selected work) shows covers.

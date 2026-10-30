@@ -10,6 +10,8 @@
    --cpg-ink-muted   the proof line: the quiet line under a hero's lede, body-sm in the muted ink.
    --cpg-ink-label   the legend's two header words, in the eyebrow voice (mono, uppercase in
                      presentation only).
+   --cpg-citation-ink a hard-parts claim's citation link: the case's own title, in the strongest ink of
+                     the ground, so it reads as the claim's source and not as body.
    --cpg-mark        the legend's arrow between them: the blue accent (visual-direction § 4), a
                      graphic mark that holds 3:1 on every ground. Never a ground.
 
@@ -24,14 +26,33 @@
 
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
-  --cpg-cover-ratio: 16 / 9; /* a cited case's cover box */
+  --cpg-claim-figure-height: 320px; /* a hard-parts claim's drawing box: a component size */
+  /* the box's ratio, the labelled slot's 6:5 (the drawings, about 1.12, sit inside it, contained and
+     start-anchored; an illustration draws no edge, so only the slot's own hairline shows the box) */
+  --cpg-claim-figure-ratio: 6 / 5;
+  --cpg-citation-text: var(--text-label); /* sans semibold 14 */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
+}
+
+/* The claim drawing steps down with the viewport: 240 below 1024, 200 below 768. Component sizes,
+   not distances. */
+@media (max-width: 1023px) {
+  :root {
+    --cpg-claim-figure-height: 240px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --cpg-claim-figure-height: 200px;
+  }
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────── */
 :root,
 [data-surface='paper'] {
   --cpg-ink-muted: var(--color-neutral-600); /* 4.92:1 */
+  --cpg-citation-ink: var(--color-neutral-900); /* 14.62:1 */
   --cpg-ink-label: var(--color-neutral-700); /* 8.14:1 */
   --cpg-mark: var(--color-brandeis-500); /* 6.17:1 */
   --cpg-panel-ground: var(--color-neutral-50);
@@ -40,6 +61,7 @@
 
 [data-surface='tint'] {
   --cpg-ink-muted: var(--color-neutral-700); /* 7.27:1 */
+  --cpg-citation-ink: var(--color-neutral-900); /* 13.06:1 */
   --cpg-ink-label: var(--color-neutral-800); /* 10.54:1 */
   --cpg-mark: var(--color-brandeis-500); /* 5.51:1 */
   --cpg-panel-ground: var(--color-paper);
@@ -48,6 +70,7 @@
 
 [data-surface='ink'] {
   --cpg-ink-muted: var(--color-neutral-400); /* 8.05:1 */
+  --cpg-citation-ink: var(--color-white); /* 17.3:1 */
   --cpg-ink-label: var(--color-neutral-300); /* 11.07:1 */
   --cpg-mark: var(--color-brandeis-300); /* 7.32:1 — 500 is 2.77:1 here */
   --cpg-panel-ground: var(--color-neutral-900);
@@ -56,6 +79,7 @@
 
 [data-surface='blue'] {
   --cpg-ink-muted: var(--color-brandeis-100); /* 4.91:1 */
+  --cpg-citation-ink: var(--color-white); /* 6.23:1 */
   --cpg-ink-label: var(--color-brandeis-50); /* 5.57:1 */
   --cpg-mark: var(--color-white); /* 6.23:1 */
   --cpg-panel-ground: var(--color-brandeis-600);

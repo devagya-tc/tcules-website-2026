@@ -17,6 +17,8 @@
  *   `<route>#<band>`                  a band's own slot ("/services/product-design#starting-points")
  *   `<route>#<band>:<qualifier>`      a band with two slots ("/expertise/healthtech#proof:curamcare")
  *   `case-cover:<slug>`               a case's cover, ONE asset for every page that cites the case
+ *   `illustration:<slug>`             a claim or reason's illustration slot, by its title; `illustration:pending`
+ *                                     is the fallback for a title with no row of its own
  * Icon rows (client logo marks) are not drawn: a client without its SVG renders as a typeset
  * wordmark in the logo grid (LogoGrid, G1).
  */
@@ -69,13 +71,16 @@ for (const [page, bandCell, kindCell, shows, ratioCell] of rows) {
   const width = Math.round(rw * k);
   const height = Math.round(rh * k);
 
-  const cover = /^case cover:\s*(.+)$/i.exec(bandCell);
+  const cover = /^(case cover|illustration):\s*(.+)$/i.exec(bandCell);
   const entries = [];
   if (cover) {
-    const name = cover[1].trim();
+    /* A case's cover, or a claim or reason's illustration slot keyed by its title as authored: both
+       are ONE asset for every page that carries them, so the key carries no route. */
+    const name = cover[2].trim();
+    const prefix = /^illustration$/i.test(cover[1]) ? 'illustration' : 'case-cover';
     entries.push({
-      key: `case-cover:${slug(name)}`,
-      file: `case-cover--${slug(name)}`,
+      key: `${prefix}:${slug(name)}`,
+      file: `${prefix}--${slug(name)}`,
       label: name,
     });
   } else {

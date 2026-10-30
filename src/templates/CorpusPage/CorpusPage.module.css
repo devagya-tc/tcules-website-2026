@@ -106,10 +106,59 @@
   max-inline-size: var(--measure-lead);
 }
 
-/* The cited case's own cover, a 16:9 box Media fills (edge="placement" draws its rule). */
-.hardCover {
-  aspect-ratio: var(--cpg-cover-ratio);
-  inline-size: 100%;
+/* A claim's illustration (ChallengesBand): a fixed-height box Media contains the drawing in, anchored at
+   its start so it faces its words. From 1024 it takes the row's end track, the same explicit placement
+   as Reasons' `.headAction`; below it, DOM order puts the drawing above its claim. No plate, no
+   hairline: an illustration is never boxed (ch05 §4a). */
+/* The box is the figure's own ratio at the row's height, never the track's width, so the slot's
+   hairline (Media .capture) wraps the slot itself and no empty strip beside it; as Reasons .figure.
+   The inline size is stated, not auto: the row's Layout stretches its items, and a stretched auto
+   width beats the aspect ratio. */
+.claimFigure {
+  block-size: var(--cpg-claim-figure-height);
+  inline-size: calc(var(--cpg-claim-figure-height) * var(--cpg-claim-figure-ratio));
+  aspect-ratio: var(--cpg-claim-figure-ratio);
+  max-inline-size: 100%;
+}
+
+@media (min-width: 1024px) {
+  .claimFigure {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* A claim's citation: the case's own title as the one link, an arrow that moves under the pointer. */
+.citation {
+  font: var(--cpg-citation-text);
+  color: var(--cpg-citation-ink);
+  text-decoration: none;
+}
+
+.citation:hover,
+.citation:focus-visible {
+  text-decoration: underline;
+}
+
+/* The title's last word and its arrow, kept on one line. */
+.citationTail {
+  white-space: nowrap;
+}
+
+/* Inline in running text, so inline-block: a transform does not apply to an inline box. Its inset
+   before the glyph is the word-to-arrow join (the gap-scale's tight step), the one distance a
+   Cluster gave it before; a Cluster cannot keep the arrow on the title's last line. */
+.citationArrow {
+  display: inline-block;
+  vertical-align: middle;
+  padding-inline-start: var(--gap-tight);
+  color: var(--cpg-mark);
+  transition: transform var(--duration-slow) var(--easing-ease);
+}
+
+.citation:hover .citationArrow,
+.citation:focus-visible .citationArrow {
+  transform: translateX(var(--space-4)); /* a motion offset, optical */
 }
 
 /* A ledger row (DrawnTableBand `ledger`): the row is the link's target when its title links, so the

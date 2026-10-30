@@ -4,7 +4,7 @@ import { Button, Icon, Layout, Section, type MediaImage } from '@/components';
 import { getCaseRefs, getCorpusPage, getReasonFigure } from '@/content';
 import { caseRoutesIn } from '@/lib/corpus-cases';
 import { inlineToText } from '@/lib/inline';
-import { placeholderCover } from '@/lib/placeholders';
+import { placeholderCover, placeholderIllustration } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
 import { CtaRow, Reasons, type ReasonsItem } from '@/patterns';
 import { whyTcules } from '@/templates';
@@ -197,9 +197,15 @@ const drawn = (
   ground: 'paper' | 'paper-deep' = 'paper',
 ): ReasonsItem[] =>
   rows.map(([title, body]) => {
+    /* A reason with no drawing of its own takes the labelled illustration slot, as the offer band does. */
     const found = getReasonFigure(title, ground);
-    if (!found) throw new Error(`No reason figure for "${title}"`);
-    return { title, body, figure: { ...found, alt: '', kind: 'illustration' } };
+    return {
+      title,
+      body,
+      figure: found
+        ? { ...found, alt: '', kind: 'illustration' }
+        : { ...placeholderIllustration(title), alt: '' },
+    };
   });
 
 const WHY_LINKS = (
@@ -507,26 +513,28 @@ export default async function ReasonsSpecimen() {
 
       <Variation
         id="offer-copy"
-        title="13 · An offer page's three, drawn (FinTech: 1, 6, 4)"
-        note="Each of the seven reasons the offer pages draw from has its own drawing (offer set, one world box): this is FinTech's selection."
+        title="13 · Offer page · three reasons · figureSize lg (product design)"
+        note="The offer pages' Why Tcules at band scale (owner, 30 Oct 2026, round 6): one isometric illustration per reason, 256 tall (200 below 768), start-aligned with its title, no plate and no figure panel. Product design's three: the screen standing on what the product knows, the hard part proved in code across the seam from the open design, the same senior seat staying year on year. The case links stay in the text."
       />
       <Reasons
         heading="Why teams choose Tcules"
         headingId="rsn-offer-copy"
-        items={drawn([COPY_REASONS[0]!, COPY_REASONS[5]!, COPY_REASONS[3]!])}
+        figureSize="lg"
+        items={drawn([COPY_REASONS[0]!, COPY_REASONS[2]!, COPY_REASONS[5]!])}
         action={WHY_LINKS}
       />
 
       <Variation
-        id="offer-rest"
-        title="14 · The other four offer reasons (2, 3, 5, 7), open, on tint"
-        note="So all seven offer drawings are in view: the part replaced in a product kept as it is; the hard part built in code across the seam from the open design; the AI answer held at a person's station before it counts; the problems on the screen traced down to one cause. Paper-deep exports on tint."
+        id="offer-slot"
+        title="14 · Offer page · three reasons · one is the labelled slot, on tint"
+        note="A reason whose illustration is not drawn yet takes the labelled register placeholder in the same box (the four offer reasons not drawn this round: leave alone, into software, AI checked, what is wrong). One slot per reason, never an older drawing at another scale. The drawn two are the paper-deep exports on tint; the slot draws its own hairline and radius."
       />
       <Reasons
         heading="Why teams choose Tcules"
-        headingId="rsn-offer-rest"
+        headingId="rsn-offer-slot"
+        figureSize="lg"
         items={drawn(
-          [COPY_REASONS[1]!, COPY_REASONS[2]!, COPY_REASONS[4]!, COPY_REASONS[6]!],
+          [COPY_REASONS[0]!, COPY_REASONS[1]!, COPY_REASONS[2]!],
           'paper-deep',
         )}
         surface="tint"

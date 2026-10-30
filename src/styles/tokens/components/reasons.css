@@ -16,6 +16,8 @@
 /* ── Geometry · identical on every surface ─────────────────────────────────────
    --rsn-figure-height  a component SIZE: the drawing's box height where it heads its words. 140
                         keeps two rows of four (a 2×2) inside the fold at 1440.
+   --rsn-figure-height-lg  a component SIZE: the band-scale box (offer pages, `figureSize="lg"`); 256
+                        matches the retired proof plate, so the row keeps its height; 200 below 768.
    --rsn-figure-ratio   the box's ratio, 6:5, the widest of the set (1.2): the box is as wide as the
                         widest drawing, so every drawing starts at its track's edge; a narrower one
                         centres in it by a few pixels.
@@ -33,6 +35,7 @@
   --rsn-eyebrow-text: var(--text-eyebrow);
   --rsn-eyebrow-tracking: var(--text-eyebrow-tracking);
   --rsn-figure-height: 140px;
+  --rsn-figure-height-lg: 256px;
   --rsn-figure-ratio: 6 / 5;
   --rsn-rule-width: var(--border-width-hairline);
   /* The `boxed` frame's corners: the photograph radius, LogoGrid's (owner, 16 Oct 2026: "use the
@@ -57,6 +60,7 @@
 @media (max-width: 767px) {
   :root {
     --rsn-figure-height: 112px;
+    --rsn-figure-height-lg: 200px;
   }
 }
 

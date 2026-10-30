@@ -59,6 +59,30 @@ export function placeholderCover(slug: string): PlaceholderImage {
   return record(`case-cover:${slug}`);
 }
 
+const slugOf = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[`']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+/**
+ * The labelled slot for a claim or reason whose isometric illustration is not drawn yet, keyed by its
+ * title as authored (decisions/2026-10-30-undrawn-illustration-slot). A title with no row takes the
+ * `illustration:pending` row, which draws the head alone, then the register's fallback; each warns in
+ * development. The slug is scripts/placeholders.mjs's.
+ */
+export function placeholderIllustration(title: string): PlaceholderImage {
+  const own = `illustration:${slugOf(title)}`;
+  const key = own in PLACEHOLDER_SLOTS ? own : 'illustration:pending';
+  if (key !== own && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      `No illustration slot for "${title}": showing "${key}". Add a row to docs/image-register.md (page \`/_illustrations\`) to label it.`,
+    );
+  }
+  return record(key);
+}
+
 /** Whether a slot has a register row (a page that can fall back to a bound asset asks first). */
 export function hasPlaceholder(route: string, band: string, qualifier?: string): boolean {
   return `${route}#${band}${qualifier ? `:${qualifier}` : ''}` in PLACEHOLDER_SLOTS;

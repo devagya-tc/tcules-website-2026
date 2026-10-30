@@ -7,10 +7,11 @@ import { offerSceneKey } from '../../lib/sketches.ts';
  * reason's own claim (its message line is filed here with it), each exported on paper and paper-deep.
  *
  * Two sets, each drawn in one world box so a band's three sit at one scale:
- *   offer  the seven reasons the offer pages draw from (`why_tcules_reasons`, 1–7, three per page)
+ *   offer  the three offer reasons drawn so far (`why_tcules_reasons`); the other four take the slot
  *   home   home's own three (`/` why-tcules)
  *
- * A title with no row is drawn by nothing, and a Reasons band draws only when every item has one.
+ * A title with no row takes the labelled illustration slot (src/lib/placeholders.ts), so a band never
+ * mixes two scales.
  * The sizes are the exported SVGs'; `npm run illustrations:reasons -- --check` fails if they drift.
  */
 export type ReasonFigureRef = {
@@ -23,38 +24,25 @@ export type ReasonFigureRef = {
 
 /** Each set's exported size (one shared viewBox per set). */
 export const REASON_FIGURE_SIZE = {
-  offer: { width: 416, height: 354 },
+  offer: { width: 458, height: 402 },
   home: { width: 352, height: 349 },
 } as const;
 
 const OFFER: Record<string, Omit<ReasonFigureRef, 'set'>> = {
   'We work out what the product has to know before we draw it.': {
-    name: 'model-first',
-    message: 'The screen is built on what the product knows, worked out first.',
-  },
-  'We know what to leave alone in a product people rely on.': {
-    name: 'leave-alone',
-    message: 'Almost all of a working product is kept as it is; one part is lifted out and replaced.',
+    name: 'known-before-drawn',
+    message:
+      'What the product has to know is worked out and solid first; the screen above it is still a dashed outline.',
   },
   'We prove the hard parts in code while they can still change.': {
-    name: 'hard-parts-in-code',
-    message: 'The hardest part is built and working in code while the design around it is still open.',
-  },
-  'One studio can take it into working software, with the designers staying in the build.': {
-    name: 'into-software',
-    message: "The design carries on into the software, and the designer's place stands in the build.",
-  },
-  'We design AI that people can check and correct.': {
-    name: 'ai-checked',
-    message: "An AI answer stops at a person's station to be checked before it counts.",
+    name: 'proved-in-code',
+    message:
+      'In a board whose design is still open, the one hard interaction, dragging a card to another column, already works in code.',
   },
   'Senior people do the work, and clients keep us for years.': {
-    name: 'senior-years',
-    message: 'The same senior seat stays on the product year after year.',
-  },
-  'We tell you what is really wrong.': {
-    name: 'what-is-wrong',
-    message: 'The problems on the screen trace down to one cause beneath them.',
+    name: 'same-seat-years',
+    message:
+      'The same senior seat stands beside each product the client has launched, year after year.',
   },
 };
 

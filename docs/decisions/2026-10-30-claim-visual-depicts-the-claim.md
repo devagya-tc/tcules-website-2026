@@ -4,7 +4,7 @@ date: 2026-10-30
 status: active
 area: [illustration, proof]
 source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the L1 service pages"
-supersedes: []
+supersedes: [2026-10-30-hard-parts-case-row]
 dbf: []
 dbf_status: none
 enforced_by: review
@@ -20,3 +20,7 @@ cover"); the covers had nothing to do with the titles and broke the image hairli
 **Why.** The band makes four claims and supports them with examples; the reader needs the claim pictured and the proof named.
 
 **How to apply.** Draw each claim (isometric, per flat-for-items-illustration-for-ideas); under its text, the example's client mark, case name and link. No cover.
+
+**Arrangement (kept from the entry it supersedes).** One row per claim, its words on the start track and
+its illustration on the end track ([3,2] at section 96, rows 64 apart), facing the words and above them
+below 1024. No hairlines, no plate, no band-level image. The drawing is never boxed (ch05 §4a).

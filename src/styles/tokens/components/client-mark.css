@@ -55,6 +55,10 @@
 --cmark-target-side-m:44px;
 --cmark-height-max-m:32px;
 --cmark-width-max-m:188px;
+/* component sizes: a mark in a citation line; one value at every width */
+--cmark-target-side-sm:40px;
+--cmark-height-max-sm:24px;
+--cmark-width-max-sm:120px;
 /* Forced colours (Windows High Contrast) — surface-independent, because in that mode the
    user's palette replaces every ground. CanvasText is a system colour KEYWORD, not a palette
    value: the one colour correct there by definition, since the user chose it. Read only
