@@ -134,11 +134,23 @@
 --hero-key-text:var(--text-micro);
 --hero-key-tracking:var(--text-micro-tracking);
 /* The byline (owner, 11 Oct 2026: "design this better"). A value reads at body size, a step up from
-   its mono key, and a credited name carries a weight step so the person leads the strip; what they
-   do sits under the name a size down. A hairline above the strip parts the record from the lede. */
+   its mono key, and a credited name carries a weight step so the person leads the strip. What they
+   do is not in the strip: it sits after the content, in Contributors (byline board G, 30 Oct 2026).
+   A hairline above the strip parts the record from the lede. */
 --hero-value-text:var(--text-body);
 --hero-name-weight:var(--font-weight-medium);
---hero-detail-text:var(--text-body-sm);
+/* A credited person's portrait (owner, 30 Oct 2026: byline board G). A component SIZE, read from the
+   space ramp under the same stated exception as --hero-numeral-size: no size ladder holds 32. The
+   overlap is how far each portrait after the first tucks under the one before it, so two or three
+   authors read as one group; the ring is the ground drawn round each so the edges stay legible. */
+--hero-avatar-size:var(--space-32);
+--hero-avatar-overlap:var(--space-8);
+--hero-avatar-ring-width:var(--border-width-2);
+--hero-avatar-text:var(--text-micro);
+--hero-avatar-tracking:var(--text-micro-tracking);
+/* The visually hidden key (an article's "Written by"): the one-pixel box screen readers still read.
+   A size, not a distance; the ramp's 1 under the same stated exception, as ListCard's hidden size. */
+--hero-hidden-size:var(--space-1);
 --hero-byline-rule-width:var(--border-width-hairline);
 
 /* The three measures, one per question. The title takes --measure-display, 26ch, since 29 Sep
@@ -251,7 +263,9 @@
    box, and the title, lead, body, labels and byline stay on the neutral ramp. */
 :root,[data-surface="paper"]{
 --hero-name-ink:var(--color-neutral-900);     /* 14.62:1 */
---hero-detail-ink:var(--color-neutral-700);   /*  8.14:1 */
+--hero-avatar-ring:var(--color-paper);          /* the ground, so overlapping portraits part */
+--hero-avatar-edge:var(--color-neutral-300);    /* decoration: the initials disc's outline */
+--hero-avatar-initials-ink:var(--color-neutral-700); /*  8.14:1 */
 --hero-byline-rule-ink:var(--color-neutral-300); /* decoration */
 
 --hero-title-ink:var(--color-neutral-900);    /* 14.62:1 */
@@ -288,7 +302,9 @@
    will want to lighten; the number is here so that decision has to argue with it. */
 [data-surface="tint"]{
 --hero-name-ink:var(--color-neutral-900);     /* 13.06:1 */
---hero-detail-ink:var(--color-neutral-700);   /*  7.27:1 */
+--hero-avatar-ring:var(--color-paper-deep);
+--hero-avatar-edge:var(--color-neutral-400);    /* decoration */
+--hero-avatar-initials-ink:var(--color-neutral-700); /*  7.27:1 */
 --hero-byline-rule-ink:var(--color-neutral-400); /* decoration */
 
 --hero-title-ink:var(--color-neutral-900);    /* 13.06:1 — §6 of the spec rounds this to 13.05 */
@@ -323,7 +339,9 @@
    does not shimmer. */
 [data-surface="ink"]{
 --hero-name-ink:var(--color-white);           /* 17.26:1 */
---hero-detail-ink:var(--color-neutral-300);   /* 11.07:1 */
+--hero-avatar-ring:var(--color-neutral-950);
+--hero-avatar-edge:var(--color-neutral-700);    /* decoration */
+--hero-avatar-initials-ink:var(--color-neutral-300); /* 11.07:1 */
 --hero-byline-rule-ink:var(--color-neutral-700); /* decoration */
 
 --hero-title-ink:var(--color-white);          /* 17.26:1 */
@@ -362,7 +380,9 @@
    this is what that costs. */
 [data-surface="blue"]{
 --hero-name-ink:var(--color-white);
---hero-detail-ink:var(--color-brandeis-50);
+--hero-avatar-ring:var(--color-brandeis-500);
+--hero-avatar-edge:var(--color-brandeis-300);   /* decoration */
+--hero-avatar-initials-ink:var(--color-brandeis-50);
 --hero-byline-rule-ink:var(--color-brandeis-300); /* decoration */
 
 --hero-title-ink:var(--color-white);          /*  6.23:1 */

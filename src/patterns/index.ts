@@ -274,6 +274,7 @@ export { PageHero } from './PageHero';
 export type {
   PageHeroProps,
   HeroCredit,
+  HeroPerson,
   HeroCreditRole,
   HeroDates,
   HeroFact,
@@ -400,6 +401,9 @@ export { TracePlates, type TracePlatesProps, type TraceScene, type TraceStage } 
 
 /* ProfileCard — a person (portrait, name, position, bio, LinkedIn) and the follow banner (about, 12 Oct 2026). */
 export { ProfileCard, ProfileFollow, type ProfileCardProps, type ProfileFollowProps, type ProfileLink } from './ProfileCard';
+
+/* Contributors — the people behind a piece, after its content (byline board G, 30 Oct 2026). */
+export { Contributors, type Contributor, type ContributorLink, type ContributorsProps } from './Contributors';
 
 /* IndexRail — a curated listing page's rail beside its content: a BY TYPE / BY TOPIC switch that
    changes the whole view (held in the URL), or a picker of sibling pages (insights, 16 Oct 2026). */

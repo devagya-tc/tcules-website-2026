@@ -19,6 +19,7 @@ import {
   type SectionSurface,
 } from '@/components';
 import { cx } from '@/lib/cx';
+import { initialsOf, PORTRAIT_FOCUS } from '@/lib/initials';
 import {
   FULL_COLUMN,
   HERO_BESIDE,
@@ -44,19 +45,27 @@ import styles from './PageHero.module.css';
 export type HeroCreditRole = 'author' | 'host' | 'guest' | 'reviewer';
 
 /**
+ * One credited person. `href` is their page (an author page, from `@/lib/routes`); absent, the name
+ * is plain text. `portrait` is their photograph, cropped round at 32; a person without one shows
+ * their initials in an outlined disc when anyone else in the same group has a portrait, so a
+ * group's faces never stop half way. What they DO is not here: the byline carries faces and names
+ * only, and who each person is belongs to the page's end (owner, 30 Oct 2026: byline board G).
+ */
+export type HeroPerson = { name: string; href?: string; portrait?: MediaImage };
+
+/**
  * One credit group — one label, one or more people, one <dd>.
  *
  * `people` is a non-empty tuple, so `{ role: 'guest', people: [] }` does not compile. That
  * matters: it would have rendered a "With" label above nothing.
  *
  * One group per role rather than one per person is what keeps the label from being repeated
- * three times for a podcast with three guests — the names are joined into a single value.
+ * three times for a podcast with three guests — the portraits overlap and the names are joined
+ * into a single value.
  */
 export type HeroCredit = {
   role: HeroCreditRole;
-  people: readonly [string, ...string[]];
-  /** Who they are, as authored ("COO, Tcules"), set under the names a size down. */
-  detail?: string;
+  people: readonly [HeroPerson, ...HeroPerson[]];
 };
 
 /**
@@ -523,6 +532,11 @@ const CREDIT_LABELS: Record<HeroCreditRole, string> = {
 /* "Updated" rather than "Modified": the byline is read by people, and one of those two words is
    what a person calls it. Both labels live here for the same reason the credit labels do. */
 const PUBLISHED_LABEL = 'Published';
+
+/* The roles whose key is read but not seen. A face and a name under an article's title already say
+   who wrote it, so "Written by" is announced to a screen reader and hidden on screen; a host and a
+   guest are not self-evident, so theirs stay (owner, 30 Oct 2026: byline board G). */
+const SILENT_ROLES: ReadonlySet<HeroCreditRole> = new Set(['author']);
 const MODIFIED_LABEL = 'Updated';
 const READING_LABEL = 'Reading time';
 
@@ -550,15 +564,54 @@ const formatDate = (iso: string) => {
 /* One name alone; two joined with "and"; three or more comma-separated with "and" before the
    last. Written out rather than taken from Intl.ListFormat, because this is a fixed English
    label decision the spec makes once and locale data is free to disagree with it. */
-const joinPeople = (people: readonly string[]) =>
-  people.length <= 2
-    ? people.join(' and ')
-    : `${people.slice(0, -1).join(', ')} and ${people[people.length - 1]}`;
+const separatorAt = (index: number, count: number) =>
+  index === 0 ? '' : index === count - 1 ? ' and ' : ', ';
+
+/* A credit group's value: the portraits overlapping, then the names, each linked where it has a
+   page. The portraits are decoration (alt=""), because the names beside them say who they are. */
+function CreditValue({ people }: { people: readonly HeroPerson[] }) {
+  const names = people.map((person, index) => (
+    <span key={`${person.name}-${index}`}>
+      {separatorAt(index, people.length)}
+      {person.href ? (
+        <a href={person.href} className={styles.name}>
+          {person.name}
+        </a>
+      ) : (
+        <span className={styles.name}>{person.name}</span>
+      )}
+    </span>
+  ));
+  if (!people.some((person) => person.portrait)) return <>{names}</>;
+  return (
+    <Cluster nowrap colGap="tight" align="center">
+      <span className={styles.avatars} aria-hidden="true">
+        {people.map((person, index) =>
+          person.portrait ? (
+            <span key={`${person.name}-${index}`} className={styles.avatar}>
+              <Media
+                image={{ ...person.portrait, alt: '', focus: person.portrait.focus ?? PORTRAIT_FOCUS }}
+                fit="fill"
+                edge="placement"
+                sizes="32px"
+              />
+            </span>
+          ) : (
+            <span key={`${person.name}-${index}`} className={cx(styles.avatar, styles.initials)}>
+              {initialsOf(person.name)}
+            </span>
+          ),
+        )}
+      </span>
+      <span>{names}</span>
+    </Cluster>
+  );
+}
 
 /* A rendered byline row: one <dt>, one <dd>. Credits and dates become the same shape here so
    the <dl> maps once — the two are different content but identical structure, and a second map
    would be a second chance for the key/value markup to drift. */
-type BylinePair = { id: string; label: string; value: ReactNode };
+type BylinePair = { id: string; label: string; value: ReactNode; silent?: boolean };
 
 /**
  * PageHero — the opening block of a page, built to docs/specs/PageHero.md.
@@ -649,12 +702,8 @@ export function PageHero({
        the key. These rows never reorder: they are frontmatter in array order. */
       id: `${credit.role}-${index}`,
       label: CREDIT_LABELS[credit.role],
-      value: (
-        <>
-          <span className={styles.name}>{joinPeople(credit.people)}</span>
-          {credit.detail ? <span className={styles.detail}>{credit.detail}</span> : null}
-        </>
-      ),
+      silent: SILENT_ROLES.has(credit.role),
+      value: <CreditValue people={credit.people} />,
     })),
   );
 
@@ -677,6 +726,10 @@ export function PageHero({
   }
 
   if (readingTime) pairs.push({ id: 'reading', label: READING_LABEL, value: readingTime });
+
+  /* Any credited portrait sets every value in the strip to the portrait's height (board G), so the
+     keys share one top line and the dates sit level with the names beside the faces. */
+  const hasPortraits = credits.some((credit) => credit.people.some((person) => person.portrait));
 
   /* Widened from the tuple union to iterate. The union is what makes a third action a compile
      error at the call site; `.map` over a union of three tuple types is not callable, and this
@@ -836,7 +889,7 @@ export function PageHero({
      six-fold difference, so each pair reads as one unit — no rule, no dot, no separator. */
   const pairItems = pairs.map((pair) => (
     <Layout key={pair.id} rowGap="inline">
-      <dt className={styles.key}>{pair.label}</dt>
+      <dt className={pair.silent ? styles.silentKey : styles.key}>{pair.label}</dt>
       <dd className={styles.value}>{pair.value}</dd>
     </Layout>
   ));
@@ -852,7 +905,16 @@ export function PageHero({
         {pairItems}
       </Layout>
     ) : (
-      <Cluster as="dl" colGap="stack" rowGap="block" align="start" className={styles.byline}>
+      <Cluster
+        as="dl"
+        colGap="stack"
+        rowGap="block"
+        /* With portraits every value is one height, so aligning the ends lines up the values whether
+           or not a key shows: an article's hidden "Written by" leaves its names level with the
+           dates (board G), and a podcast's keys still share one line above. */
+        align={hasPortraits ? 'end' : 'start'}
+        className={cx(styles.byline, hasPortraits && styles.withPortraits)}
+      >
         {pairItems}
       </Cluster>
     );

@@ -1,0 +1,68 @@
+/* ══ Component layer — Contributors ════════════════════════════════════════════
+   Tier 2. The people behind a piece, after its content: "About the author", "About the authors",
+   "In this episode" (owner, 30 Oct 2026: byline board G). The byline under the title carries faces
+   and names; who each person is lives here, so the page is not front-loaded with supporting content.
+   Naming: --ctb-{part}-{role}
+     parts  label · rule · portrait · initials · name · role
+     roles  ink · text · tracking · size · radius · width · edge
+   No state tokens: nothing here responds to a pointer but the links, which are Buttons.
+   Every surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* The section's label: the mono micro voice, as the hero's byline keys. */
+  --ctb-label-text: var(--text-micro);
+  --ctb-label-tracking: var(--text-micro-tracking);
+  --ctb-rule-width: var(--border-width-hairline);
+  /* The portrait: a component SIZE at the house photograph corner, read from the space ramp under
+     the stated exception PageHero argues for its 32 (CLAUDE.md, gap scale rule 1): no size ladder
+     holds 64, and it is the hero's portrait doubled so the end section reads as the fuller account. */
+  --ctb-portrait-size: var(--space-64);
+  --ctb-portrait-radius: var(--radius-8);
+  --ctb-initials-text: var(--text-ui);
+  --ctb-initials-tracking: var(--text-ui-tracking);
+  --ctb-name-text: var(--text-h5);
+  --ctb-name-tracking: var(--text-h5-tracking);
+  --ctb-role-text: var(--text-body-sm);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --ctb-label-ink: var(--color-neutral-600);
+  --ctb-rule-ink: var(--color-neutral-300); /* decoration */
+  --ctb-initials-edge: var(--color-neutral-300); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-700);
+  --ctb-name-ink: var(--color-neutral-900);
+  --ctb-role-ink: var(--color-neutral-700);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --ctb-label-ink: var(--color-neutral-600);
+  --ctb-rule-ink: var(--color-neutral-400); /* decoration */
+  --ctb-initials-edge: var(--color-neutral-400); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-700);
+  --ctb-name-ink: var(--color-neutral-900);
+  --ctb-role-ink: var(--color-neutral-700);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --ctb-label-ink: var(--color-neutral-400);
+  --ctb-rule-ink: var(--color-neutral-700); /* decoration */
+  --ctb-initials-edge: var(--color-neutral-700); /* decoration */
+  --ctb-initials-ink: var(--color-neutral-300);
+  --ctb-name-ink: var(--color-white);
+  --ctb-role-ink: var(--color-neutral-300);
+}
+
+/* ── Surface: blue ── declared for self-containment ─────────────────────────────── */
+[data-surface='blue'] {
+  --ctb-label-ink: var(--color-brandeis-100);
+  --ctb-rule-ink: var(--color-brandeis-300); /* decoration */
+  --ctb-initials-edge: var(--color-brandeis-300); /* decoration */
+  --ctb-initials-ink: var(--color-brandeis-50);
+  --ctb-name-ink: var(--color-white);
+  --ctb-role-ink: var(--color-brandeis-50);
+}

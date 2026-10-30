@@ -21,10 +21,16 @@ import {
 import { getNavigation } from '@/content';
 import { ILLUSTRATION_LEGENDS } from '@/lib/illustration-legends';
 import { getKitPhoto } from '@/lib/photos';
+import { placeholderImage } from '@/lib/placeholders';
 import { ROUTES, glossaryPath, servicePath } from '@/lib/routes';
 import { heroTrail, type Trail } from '@/lib/trail';
 
 import { specimenStyles as s } from '../_specimen/Specimen';
+
+/* Two portraits for the credited people (byline board G): the leadership placeholders, so the specimen
+   shows the overlap without a real photograph. */
+const ALICE = { name: 'Alice Chen', href: '#', portrait: placeholderImage('/about', 'leadership', 'jatin-leuva') };
+const BEN = { name: 'Ben Ndlovu', href: '#', portrait: placeholderImage('/about', 'leadership', 'rakesh-chitroda') };
 
 /**
  * PageHero specimen — one variant, one size, SLOT PRESENCE, and (blocks 16–20) the two
@@ -468,7 +474,7 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
     title: '+ credits and dates — the article hero, 15 routes',
     note: 'The byline appears as a <dl>, 48 below the copy. Each pair is a key over its value at 4px, and pair-to-pair is 24 — a six-fold difference, which is why the row needs no rule, no dot and no separator character.',
     props: {
-      credits: [{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }],
+      credits: [{ role: 'author', people: [ALICE, BEN] }],
       dates: { published: '2026-03-03', modified: '2026-06-12' },
     },
   },
@@ -479,8 +485,8 @@ const LADDER: readonly { key: string; title: string; note: string; props: HeroSl
     props: {
       eyebrow: EYEBROW,
       credits: [
-        { role: 'host', people: ['Alice Chen'] },
-        { role: 'guest', people: ['Ben Ndlovu', 'Cara Whitfield'] },
+        { role: 'host', people: [ALICE] },
+        { role: 'guest', people: [BEN, { name: 'Cara Whitfield' }] },
       ],
       dates: { published: '2026-03-03' },
     },
@@ -497,46 +503,46 @@ const CREDIT_SHAPES: readonly {
   {
     key: 'one-author',
     title: 'One author',
-    note: 'One group, one name, no join.',
-    credits: [{ role: 'author', people: ['Alice Chen'] }],
+    note: 'One group, one portrait, one linked name. "Written by" is read to a screen reader and hidden on screen: the face and the name already say it (board G).',
+    credits: [{ role: 'author', people: [ALICE] }],
   },
   {
     key: 'two-authors',
     title: 'Two authors',
-    note: 'Joined with "and" and no comma. One <dd> for the group, not one per person — which is what stops the label being repeated.',
-    credits: [{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }],
+    note: 'The portraits overlap and the names join with "and". One <dd> for the group, not one per person.',
+    credits: [{ role: 'author', people: [ALICE, BEN] }],
   },
   {
     key: 'host-guest',
     title: 'Host and one guest',
     note: 'Two groups, two labels: "Hosted by" and "With". The labels come from the role and never change with the count.',
     credits: [
-      { role: 'host', people: ['Alice Chen'] },
-      { role: 'guest', people: ['Ben Ndlovu'] },
+      { role: 'host', people: [ALICE] },
+      { role: 'guest', people: [BEN] },
     ],
   },
   {
     key: 'host-guests',
     title: 'Host and three guests',
-    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. "With" appears once, not three times.',
+    note: 'Three or more names are comma-separated with "and" before the last, in one <dd>. A guest without a portrait shows initials in an outlined disc beside those who have one; a group with no portraits at all is names only.',
     credits: [
-      { role: 'host', people: ['Alice Chen'] },
-      { role: 'guest', people: ['Ben Ndlovu', 'Cara Whitfield', 'Dev Anand'] },
+      { role: 'host', people: [ALICE] },
+      { role: 'guest', people: [BEN, { name: 'Cara Whitfield' }, { name: 'Dev Anand' }] },
     ],
   },
   {
     key: 'author-detail',
-    title: 'Author with who they are, and a reading time',
-    note: 'The full article byline (owner, 11 Oct 2026): the name leads at a weight step, `detail` sits under it a size down, then the dates and `readingTime`, under one hairline that parts the record from the lede.',
-    credits: [{ role: 'author', people: ['Rakesh Chitroda'], detail: 'COO, Tcules' }],
+    title: 'Author without a portrait, and a reading time',
+    note: 'No portrait in the group, so no disc: the name alone, then the dates and `readingTime`. Who they are sits after the content, in Contributors (board G).',
+    credits: [{ role: 'author', people: [{ name: 'Rakesh Chitroda' }] }],
   },
   {
     key: 'author-reviewer',
     title: 'Author and reviewer — the shape that exists in the type and on no page',
     note: 'Shown so that its absence on all 15 long-read routes is visibly a choice rather than an oversight. `reviewer` is a role inside credits, so an absent reviewer is an absent group: no label, no value, no space. A separate reviewer prop would be a "Reviewed by" hole waiting for somebody to pass an empty array.',
     credits: [
-      { role: 'author', people: ['Alice Chen'] },
-      { role: 'reviewer', people: ['Ben Ndlovu'] },
+      { role: 'author', people: [{ name: 'Alice Chen' }] },
+      { role: 'reviewer', people: [{ name: 'Ben Ndlovu' }] },
     ],
   },
 ];
@@ -744,7 +750,7 @@ export default async function PageHeroSpecimenPage() {
           <PageHero
             title={SHORT_TITLE}
             body={paragraphs(1)}
-            credits={[{ role: 'author', people: ['Alice Chen'] }]}
+            credits={[{ role: 'author', people: [{ name: 'Alice Chen' }] }]}
             dates={shape.dates}
           />
           <Note title={`5 · ${shape.title}`} note={shape.note} />
@@ -824,7 +830,7 @@ export default async function PageHeroSpecimenPage() {
             title={TITLE}
             body={paragraphs(3)}
             eyebrow={EYEBROW}
-            credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+            credits={[{ role: 'author', people: [ALICE, BEN] }]}
             dates={{ published: '2026-03-03', modified: '2026-06-12' }}
             actions={TWO_ACTIONS}
           />
@@ -1007,7 +1013,7 @@ export default async function PageHeroSpecimenPage() {
         title={TITLE}
         body={paragraphs(2)}
         eyebrow={EYEBROW}
-        credits={[{ role: 'author', people: ['Alice Chen'] }]}
+        credits={[{ role: 'author', people: [{ name: 'Alice Chen' }] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
         actions={TWO_ACTIONS}
       >
@@ -1140,7 +1146,7 @@ export default async function PageHeroSpecimenPage() {
         title={TITLE}
         body={paragraphs(2)}
         eyebrow={EYEBROW}
-        credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+        credits={[{ role: 'author', people: [ALICE, BEN] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
         actions={TWO_ACTIONS}
         media={MEDIA_WIDE}
@@ -1306,7 +1312,7 @@ export default async function PageHeroSpecimenPage() {
         title={TITLE}
         body={paragraphs(3)}
         eyebrow={EYEBROW}
-        credits={[{ role: 'author', people: ['Alice Chen', 'Ben Ndlovu'] }]}
+        credits={[{ role: 'author', people: [ALICE, BEN] }]}
         dates={{ published: '2026-03-03', modified: '2026-06-12' }}
         actions={TWO_ACTIONS}
         media={asHero(CUT_OUT)}
@@ -1366,7 +1372,7 @@ export default async function PageHeroSpecimenPage() {
             title={TITLE}
             body={[CU_SUPPORT_MAX]}
             eyebrow={EYEBROW}
-            credits={[{ role: 'author', people: ['Alice Chen'] }]}
+            credits={[{ role: 'author', people: [{ name: 'Alice Chen' }] }]}
             dates={{ published: '2026-03-03' }}
             actions={TWO_ACTIONS}
             media={asHero(CAPTURE)}
