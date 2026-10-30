@@ -38,6 +38,7 @@ export function CorpusBandView({
         part: 'whole',
         surface: surface ?? (kind === 'quotes' || kind === 'voice' ? 'tint' : 'paper'),
         visual: false,
+        register: 'none',
       }}
       ctx={{ page, caseRefs, shared: {}, ratings, avatars }}
     />

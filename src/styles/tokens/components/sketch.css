@@ -3,7 +3,7 @@
    plate language EngagementOptions and TracePlates set: dot field, quiet frames, one blue subject.
 
    Naming: --skt-{part}-{role}
-     parts  plate · field · frame · quiet · copy · line · accent · region · region-copy · dash · soft · chip · lift · handle · glide
+     parts  plate · field · frame · quiet · copy · line · accent · region · region-copy · dash · soft · chip · lift · handle · glide · move
      roles  ground · ink · fill · width · radius · under · duration · easing
 
    No state tokens. A sketch is decorative; a STORY sketch has a rest and a solved state (its link
@@ -43,6 +43,15 @@
      Sketch.module.css. None by default. */
   --skt-glide-x: 0px;
   --skt-glide-y: 0px;
+  /* A live scene's `Move`: its offsets (drawing units), scale, turn and origin (a point of the drawing),
+     set per part by the component. Identity by default. */
+  --skt-move-x: 0;
+  --skt-move-y: 0;
+  --skt-move-sx: 1;
+  --skt-move-sy: 1;
+  --skt-move-turn: 0deg;
+  --skt-move-ox: 0;
+  --skt-move-oy: 0;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

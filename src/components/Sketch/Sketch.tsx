@@ -51,13 +51,14 @@ export type SketchProps = {
    */
   frame?: 'plate' | 'bare';
   /**
-   * Let a scene with a STORY (./stories) move: the problem at rest and solved when the link it sits in
-   * is hovered or focused (owner, 25 Oct 2026, home What we do). Bare frame only, because the moving
-   * route assumes its scale. Without it, a story scene is drawn still, held solved, as every plate
-   * draws it: a cover or a card image does not move (owner, 25 Oct 2026).
+   * Let a scene move when the link it sits in is hovered or focused (bare frame only, because the
+   * moving route assumes its scale). A STORY scene (./stories) tells its story, the problem at rest and
+   * solved (owner, 25 Oct 2026, home What we do); every other tile scene makes its one `Move`/`GrowIn`
+   * move (decisions/2026-10-30-service-tile-drawing-moves-on-hover). Without it a scene is drawn still,
+   * as every plate draws it: a cover or a card image does not move.
    */
   story?: boolean;
-  /** A story drawing held in its solved state, for a specimen showing both. */
+  /** A story drawing held in its solved state, or a live scene in its moved one, for a specimen showing both. */
   end?: boolean;
 };
 
@@ -87,8 +88,10 @@ const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number
 export function Sketch({ name, frame = 'plate', story = false, end = false }: SketchProps) {
   const bare = frame === 'bare';
   const storyDrawing = name ? STORY[name] : undefined;
-  /* A story scene moves only where it is asked to, in the bare frame; anywhere else it is held solved. */
-  const moving = storyDrawing !== undefined && story && bare;
+  /* Any scene moves where it is asked to, in the bare frame; anywhere else it is held at rest (a story
+     scene solved, every other scene as drawn: its Move parts at rest, its GrowIn parts present). */
+  const live = story && bare;
+  const moving = storyDrawing !== undefined && live;
   const Still = name
     ? (STILL[name] ??
       (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
@@ -115,6 +118,8 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
         bare && styles.bare,
         storyDrawing !== undefined && !moving && styles.still,
         storyDrawing !== undefined && (end || !moving) && styles.end,
+        live && styles.live,
+        end && styles.solved,
       )}
       viewBox={`${x} ${y} ${w} ${h}`}
       width={bare ? w : undefined}

@@ -73,6 +73,7 @@ export type OfferSceneName =
   | 'specialist-new-product'
   | 'specialist-audit'
   | 'specialist-readiness'
+  | 'offer-route'
   | 'case-dealpath-problem'
   | 'case-dealpath-did';
 

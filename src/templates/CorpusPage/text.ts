@@ -121,6 +121,13 @@ export function hasLink(runs: readonly InlineRun[]): boolean {
   );
 }
 
+/** Every link in runs, in reading order (links nested in bold or italic included). */
+export function linksIn(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }>[] {
+  return runs.flatMap((run) =>
+    run.type === 'link' ? [run] : 'children' in run ? linksIn(run.children) : [],
+  );
+}
+
 /** Plain text of runs. */
 export const plain = inlineToText;
 

@@ -7,7 +7,7 @@ source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the 
 supersedes: []
 dbf: []
 dbf_status: none
-enforced_by: review
+enforced_by: "development warning (plan.ts registerOf, beside the text-heavy check)"
 ---
 
 The registers are: flat graphics, isometric illustration, IRL photograph, proof (case covers, client marks)

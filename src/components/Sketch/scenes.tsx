@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { glyphs, type IconName } from '@/lib/icon-glyphs';
 
@@ -83,6 +83,56 @@ export function Focus({ x, y, glyph, size }: { x: number; y: number; glyph: Icon
   );
 }
 
+/**
+ * One transform-only move, made when the link the drawing sits in is hovered or focused (live scenes
+ * only). x/y in drawing units; s, sx, sy scale; turn in degrees; (ox, oy) the origin in drawing units.
+ */
+export function Move({
+  x = 0,
+  y = 0,
+  s,
+  sx = s ?? 1,
+  sy = s ?? 1,
+  turn = 0,
+  ox = 0,
+  oy = 0,
+  children,
+}: {
+  x?: number;
+  y?: number;
+  s?: number;
+  sx?: number;
+  sy?: number;
+  turn?: number;
+  ox?: number;
+  oy?: number;
+  children: ReactNode;
+}) {
+  return (
+    <g
+      className={styles.move}
+      style={
+        {
+          '--skt-move-x': x,
+          '--skt-move-y': y,
+          '--skt-move-sx': sx,
+          '--skt-move-sy': sy,
+          '--skt-move-turn': `${turn}deg`,
+          '--skt-move-ox': ox,
+          '--skt-move-oy': oy,
+        } as CSSProperties
+      }
+    >
+      {children}
+    </g>
+  );
+}
+
+/** A part that arrives on hover: absent at rest in a live scene, there in every still one (plates never change). */
+export function GrowIn({ children }: { children: ReactNode }) {
+  return <g className={styles.growIn}>{children}</g>;
+}
+
 /* The lens over the code: centre, radius, and its handle at 135°, from the rim outwards. */
 const LENS = { x: 154, y: 88, r: 26 } as const;
 const HANDLE = 'M134.9,107.1 L118.6,123.4';
@@ -99,8 +149,11 @@ function NewProduct() {
       <Hatched x={150} y={50} w={60} h={20} />
       <Hatched x={150} y={110} w={60} h={20} />
       <path className={styles.line} d="M130,90 L258,90" />
-      <circle className={styles.node} cx="130" cy="90" r="2.5" />
       <circle className={styles.nodeOpen} cx="230" cy="90" r="3" />
+      {/* The release travels to its milestone (lands on 230,90). */}
+      <Move x={100}>
+        <circle className={styles.node} cx="130" cy="90" r="2.5" />
+      </Move>
       <Focus x={270} y={90} glyph="flag" size={12} />
     </>
   );
