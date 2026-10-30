@@ -24,5 +24,8 @@ the floor plates the back stroke also scaled with the matrix, so it was thinner 
 - Only the visible part of the back outline is drawn, as one stroke with the two silhouette edges, above the
   stacked fills. The fills covered the inner half of the old back stroke, which is part of why it read thin.
 - The front outline is drawn after the face's own content, such as a header band, so it sits on top.
+- Every part of the outline (front, back, silhouettes, crease) is `non-scaling-stroke` at one on-screen width. A
+  scaling stroke on a skewed plate drew heavier on some sides than others (third round, 30 Oct: "varying stroke
+  weights on the plates").
 `scripts/illustrations/polish.mjs` does it for any stacked slab. If promoted, it belongs to ch05 §4a's
 Line weight row.

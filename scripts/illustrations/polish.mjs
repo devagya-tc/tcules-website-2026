@@ -135,7 +135,11 @@ const result = await p.evaluate((cfg) => {
     const s2f = Pm(mf, arcPt(F, CORNERS[endSil.i], endSil.t));
     const outline = [s1f, ...backPts, s2f];
 
-    const screenW = fNS ? fW : fW * Math.sqrt(Math.abs(det));
+    // one on-screen width for every part of the outline. A scaling front stroke is skewed by the plate's matrix,
+    // so it drew heavier on some sides than others: it becomes non-scaling at its average on-screen width.
+    const rootK = Math.sqrt(Math.abs(root.getScreenCTM().a * root.getScreenCTM().d - root.getScreenCTM().b * root.getScreenCTM().c));
+    const ctm = rf.el.getScreenCTM();
+    const screenW = fNS ? fW : (fW * Math.sqrt(Math.abs(ctm.a * ctm.d - ctm.b * ctm.c))) / rootK;
     const make = (dd, tag) => {
       const pth = document.createElementNS(NS, 'path');
       pth.setAttribute('d', dd);
@@ -157,7 +161,7 @@ const result = await p.evaluate((cfg) => {
     // the front outline, drawn after the face's own content so nothing sits on it
     const ring = rf.el.cloneNode(false);
     ring.removeAttribute('fill'); ring.removeAttribute('fill-opacity');
-    strokeLike(ring, rf.el, fW, fNS);
+    strokeLike(ring, rf.el, screenW.toFixed(2), true);
     ring.dataset.polish = 'front-outline';
     rf.el.parentNode.appendChild(ring);
     rf.el.removeAttribute('stroke');
