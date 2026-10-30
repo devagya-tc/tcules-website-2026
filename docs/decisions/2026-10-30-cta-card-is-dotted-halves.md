@@ -1,7 +1,7 @@
 ---
 title: "The tile set's CTA card is a dotted outline, one half per question"
 date: 2026-10-30
-status: active
+status: superseded
 area: [cards, layout]
 source: "Owner, 30 Oct 2026, product design review (mockups: https://claude.ai/artifact/6utQc5E3PUiZdZB9N5HiRd)"
 supersedes: []

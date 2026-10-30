@@ -2,10 +2,24 @@ import { ILLUSTRATION_LEGENDS } from './illustration-legends';
 import { ROUTES, servicePath } from './routes';
 
 /**
- * The hero illustrations, by route: the approved isometric heroes (owner, 30 Oct 2026), each 820 × 820
- * in `public/illustrations/heroes/`. A route here takes its drawing whole (an illustration is never
+ * The hero illustrations, by route: the approved isometric heroes (owner, 30 Oct 2026), each 820 wide
+ * in `public/illustrations/heroes/`, its viewBox trimmed to the drawing (16 above and below) so no hero
+ * carries a band of empty floor. A route here takes its drawing whole (an illustration is never
  * cropped); every other page's hero is a bound asset or a labelled placeholder.
  */
+/** Each trimmed drawing's height in its 820-wide viewBox. */
+const HERO_HEIGHTS: Readonly<Record<string, number>> = {
+  audits: 627,
+  expertise: 464,
+  'services-ai-product-ux': 466,
+  'services-design-engineering': 597,
+  'services-design-systems': 535,
+  'services-new-product-design-first-release': 519,
+  'services-product-design': 563,
+  'services-product-modernisation': 518,
+  'services-software-development': 693,
+};
+
 const HERO_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   [servicePath('product-design')]: 'services-product-design',
   [servicePath('product-modernisation')]: 'services-product-modernisation',
@@ -36,7 +50,7 @@ export function serviceIllustration(route: string): ServiceIllustration | undefi
   return {
     src,
     width: 820,
-    height: 820,
+    height: HERO_HEIGHTS[file] ?? 820,
     alt: '',
     kind: 'illustration',
     cut: ILLUSTRATION_LEGENDS[src],

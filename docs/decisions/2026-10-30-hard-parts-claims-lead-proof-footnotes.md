@@ -1,7 +1,7 @@
 ---
 title: "Hard parts: the claim leads; its example is a compact case link"
 date: 2026-10-30
-status: active
+status: superseded
 area: [proof, layout]
 source: "Owner, 30 Oct 2026, product design review (mockups: https://claude.ai/artifact/6utQc5E3PUiZdZB9N5HiRd)"
 supersedes: []

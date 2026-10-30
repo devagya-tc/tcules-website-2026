@@ -122,3 +122,10 @@ citation; only a band whose subject is the evidence (home's proof band, selected
 - **How we work together:** shared terms a plain text row, no rail (engagement-terms-plain-row).
 - **Industries:** the standard 3-column card grid (industries-are-a-card-grid).
 
+## 8 · Owner, 30 Oct evening
+
+- **Hard parts:** three columns, drawing | claim | example as authored; no logo, citation, card or cover (hard-parts-three-columns-as-authored).
+- **Tile set CTA:** one dotted card per question (cta-card-per-question).
+- **Heroes:** the seven L1 service pages, /expertise and /audits carry the owner-approved isometric heroes from the illustration canvas (public/illustrations/heroes/, text flattened to paths, viewBox trimmed to the drawing).
+- **Standing lesson:** render the copy as authored with existing components; change the arrangement before adding parts; use the full width.
+
