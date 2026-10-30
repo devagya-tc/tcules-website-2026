@@ -16,3 +16,7 @@ and where it stops one simple drawing each. One pattern, used identically on eve
 
 **The mistake it prevents.** Treating the deliverables as the subject and the other three as small print under it.
 The arrangement of the four parts is the owner's to approve when built.
+
+**Why.** The section answers four questions a buyer asks before signing; each deserves equal weight.
+
+**How to apply.** One pattern for the band on every service page, fed by each page's copy; the owner approves its arrangement before this leaves proposed.

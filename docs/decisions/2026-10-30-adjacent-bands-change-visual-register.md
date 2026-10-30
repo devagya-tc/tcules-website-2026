@@ -20,3 +20,5 @@ one idea.
 photo) → hard parts (illustrations) → services (flat tiles) → testimonials (quotes) → How we work together
 (flat) → Why Tcules (illustrations) → industries (photos) → enquiry island. The page plan warns in development
 on an adjacent pair, as it does for text-heavy pairs.
+
+**The mistake it prevents.** A page where four bands in a row draw in flat graphics, each correct alone.

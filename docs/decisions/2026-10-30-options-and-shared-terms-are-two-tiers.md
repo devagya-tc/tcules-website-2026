@@ -15,3 +15,7 @@ The terms must read as a base shared by all three (one tier under the whole set)
 options' grid.
 
 **The mistake it prevents.** Round 5 put the two terms on the options' own tracks, so the band read as five items.
+
+**Why.** The two terms are not options; set on the same grid they compete with the three things a client chooses between.
+
+**How to apply.** EngagementOptions renders the options as the set and the terms as one tier spanning the whole set beneath it, visibly shared by all three.

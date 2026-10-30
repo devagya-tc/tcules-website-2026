@@ -16,3 +16,7 @@ text. A phrase in the copy ("three years") is never lifted into a figure card.
 **The mistake it prevents.** Round 5 gave the reasons case covers unrelated to their titles and turned
 "Primelis has worked with us for three years" into a "3 YEARS · PRIMELIS" stat panel, which the owner called
 horrible and wrong.
+
+**Why.** A reason is an abstract claim (treatment-rules § 1); covers chosen by the case each reason cites did not depict the reason.
+
+**How to apply.** Reasons on offer pages take one isometric illustration per reason (house style, ch05 § 4); a page without its art yet takes a labelled illustration slot.

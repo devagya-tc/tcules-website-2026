@@ -16,3 +16,7 @@ claim: it shows the client, not the point.
 
 **The mistake it prevents.** Round 5 put each cited case's cover above the claim ("evidence → the case's
 cover"); the covers had nothing to do with the titles and broke the image hairline rule besides.
+
+**Why.** The band makes four claims and supports them with examples; the reader needs the claim pictured and the proof named.
+
+**How to apply.** Draw each claim (isometric, per flat-for-items-illustration-for-ideas); under its text, the example's client mark, case name and link. No cover.

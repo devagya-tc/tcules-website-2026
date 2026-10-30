@@ -13,3 +13,9 @@ enforced_by: review
 Every service tile (texture + flat drawing) has a hover interaction in its drawing: a move on transform only
 (hover-is-a-move), rest to end state and back on one curve. Every tile drawing is checked at zoom for polish:
 no stray marks (the UX Research mic), highlights sized to what they highlight (the Data Visualisation bar).
+
+**Why.** The tile is a link; its drawing is the thing that should answer the pointer.
+
+**The mistake it prevents.** Static drawings on some tiles and moving ones on others, and unchecked drawing details.
+
+**How to apply.** ServiceTile's drawing gets one transform-only hover move per scene; check every scene at zoom.
