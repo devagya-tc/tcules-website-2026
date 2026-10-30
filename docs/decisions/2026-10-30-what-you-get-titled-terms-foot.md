@@ -16,8 +16,9 @@ brief", "A model", "Interaction & Visual Design", "Prototypes", "Ready to build"
 titles with its own opening while its whole sentence stays as the body. No mono "What you receive"
 label sits over the set: the h2 and the lead name it.
 
-The band's terms (who does the work, what we need, where our part stops) sit in its FOOT: one hairline
-across the full content column under the whole set, then the terms side by side, unruled, at h5.
+The band's terms (who does the work, what we need, where our part stops) belong to the whole section, not
+to the grid above them. HOW they are arranged is not ruled: the owner is still changing it (30 Oct), so
+the build's current foot is provisional and nothing here fixes its shape.
 
 **Why.** Untitled drawn cards "read off". The terms, on the set's own three tracks and gap with per-item
 hairlines, read as attached to the cards just above them rather than as conditions of the whole band.

@@ -42,7 +42,7 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **A band's closing terms** (who does the work / what we need / where our part stops) are the band's FOOT: a section beat (96) under the whole set, no hairline, one term per row with its title in the set's first track and its words across the other two, a role smaller than the items. Never side by side on the set's own tracks, where they read as one more row (2026-10-30-what-you-get-titled-terms-foot; round 5 critic, 30 Oct).
+- **A band's closing terms** (who does the work / what we need / where our part stops) belong to the whole band, never read as one more row of the set. PROVISIONAL arrangement (owner iterating, 30 Oct; not a ruling): the band's FOOT, a section beat (96) under the whole set, no hairline, one term per row with its title in the set's first track and its words across the other two, a role smaller than the items. Never side by side on the set's own tracks, where they read as one more row (2026-10-30-what-you-get-titled-terms-foot; round 5 critic, 30 Oct).
 - **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
@@ -78,3 +78,10 @@ rulings generalised into the tables above, so every service page maps the same w
 4. **What you get**: titled drawn deliverables, terms as the band's foot, the onward cell. DONE.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
+
+## 5 · Owner answers, 30 Oct (round 5)
+
+- Deliverable titles on the other service pages are kept (short bold lead + the rest of the sentence).
+- The "Why teams choose Tcules" outline button stays and /why-tcules gets built, after the service-page set is improved.
+- Service pages keep both asks: the ink "Tell us what you're working on" island and the closing enquiry form (2026-10-30-service-pages-keep-both-asks).
+- What you get foot: keep the current build for now; no ruling, the owner will change it further.
