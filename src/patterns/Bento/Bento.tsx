@@ -102,7 +102,7 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
 }
 
 /** The CTA card's content: each route a question over its answer, its actions at the foot. */
-function CtaCard({ cta }: { cta: BentoCta }) {
+function CtaCard({ cta, span }: { cta: BentoCta; span: number }) {
   const { routes } = cta;
   let n = 0;
   if (process.env.NODE_ENV !== 'production' && !routes.some((r) => r.actions.length > 0)) {
@@ -145,31 +145,34 @@ function CtaCard({ cta }: { cta: BentoCta }) {
   );
   const [only] = routes;
   if (routes.length === 1 && only) {
-    /* One route: its head beside its body and actions, a split (section 96); stacked below 1024. */
-    const head = only.question ? (
-      <p className={styles.ctaTitle}>{only.question}</p>
-    ) : only.answer ? (
-      <p className={styles.ctaTitle}>{only.answer}</p>
-    ) : null;
+    /* One route, stacked as a two-route card is: its words in a `tight` group, the actions a `block`
+       below at the foot. A card of three tracks or more has room for a small route drawing beside
+       them, so it is designed rather than padded (from 1024; the drawing is hidden below). */
+    const stacked = (
+      <Layout className={styles.fill} rowGap="block" pinLast>
+        {words(only)}
+        {actions(only)}
+      </Layout>
+    );
+    if (span < 3) return stacked;
     return (
       <Layout
-        className={cx(styles.fill, styles.ctaOne)}
+        className={styles.fill}
         columns={{ base: 1, lg: [1, 1] }}
         colGap="section"
         rowGap="block"
       >
-        {head}
-        <Layout rowGap="block" className={styles.ctaEnd}>
-          {only.question && only.answer ? <p className={styles.ctaBody}>{only.answer}</p> : null}
-          {actions(only)}
-        </Layout>
+        {stacked}
+        <div className={styles.ctaArt}>
+          <Sketch name="offer-route" frame="bare" />
+        </div>
       </Layout>
     );
   }
   return (
     <Layout
       className={styles.fill}
-      columns={{ base: 1, lg: [1, 1] }}
+      columns={{ base: 1, md: [1, 1] }}
       colGap="gutter"
       rowGap="stack"
     >
@@ -187,10 +190,13 @@ function CtaCard({ cta }: { cta: BentoCta }) {
 function TileLink({
   item,
   wide,
+  wideMd = false,
   Title,
 }: {
   item: BentoItem;
   wide: boolean;
+  /** Wide from 768 to 1023 only (the odd last tile before a two-route card that takes the row). */
+  wideMd?: boolean;
   Title: 'h2' | 'h3' | 'h4';
 }) {
   const words = (
@@ -217,7 +223,13 @@ function TileLink({
           {art}
         </Layout>
       ) : (
-        <Layout className={styles.fill} rowGap="block" pinLast>
+        <Layout
+          className={styles.fill}
+          columns={wideMd ? { base: 1, md: [1, 1], lg: 1 } : undefined}
+          colGap={wideMd ? 'gutter' : undefined}
+          rowGap="block"
+          pinLast={wideMd ? 'lg' : true}
+        >
           {words}
           {art}
         </Layout>
@@ -373,6 +385,11 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
   const last = placed.at(-1);
   const used = last ? last.col + last.span : 0;
   const noteSpan = used === tracks ? tracks : tracks - used;
+  /* From 768 to 1023 (two tracks) a card of two or more routes takes the row, its routes side by side;
+     an odd last tile then takes the row above it, words beside drawing, so no hole is left. */
+  const ctaRoutes = cta?.routes.length ?? 0;
+  const oddMd = items.length % 2 === 1;
+  const lastMdWide = ctaRoutes >= 2 && oddMd;
 
   return (
     <Layout
@@ -383,23 +400,29 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: B
       colGap="gutter"
       rowGap="gutter"
     >
-      {placed.map(({ item, row, col, span }) => (
+      {placed.map(({ item, row, col, span }, index) => (
         <li
           key={item.id}
           className={cx(styles.cell, span === 2 && styles.wide)}
           data-row={row % 2 === 0 ? 'a' : 'b'}
           data-col={col}
+          data-md-wide={lastMdWide && index === placed.length - 1 ? 'true' : undefined}
         >
-          <TileLink item={item} wide={span === 2} Title={Title} />
+          <TileLink
+            item={item}
+            wide={span === 2}
+            wideMd={lastMdWide && index === placed.length - 1 && span !== 2}
+            Title={Title}
+          />
         </li>
       ))}
       {cta?.routes.length ? (
         <li
           className={styles.cta}
           data-span={noteSpan}
-          data-fill-md={items.length % 2 === 1 ? 'true' : undefined}
+          data-fill-md={oddMd && ctaRoutes < 2 ? 'true' : undefined}
         >
-          <CtaCard cta={cta} />
+          <CtaCard cta={cta} span={noteSpan} />
         </li>
       ) : note ? (
         <li className={styles.note} data-span={noteSpan}>

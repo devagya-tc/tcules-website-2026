@@ -208,7 +208,10 @@ export type LayoutProps = {
    *
    * Single-track only — on a multi-track grid the row count is not the child count.
    */
-  pinLast?: boolean;
+  pinLast?: boolean | 'lg';
+  /* `'lg'` pins from 1024 only (the same template, counted the same way): for a stack that is two
+     tracks of one row at md and one track from lg, where the template's flexible row would be an
+     empty row at md (Bento's odd last tile, wide below 1024). */
   /**
    * From lg (1024), each child spans this many rows of the grid and lays its OWN children on them (CSS
    * subgrid), so the parts of side-by-side items start on one line (home paths, 30 Oct 2026). Each
@@ -572,7 +575,7 @@ export function Layout({
         leads && (lead === 'tall' ? styles['lead-tall'] : styles.lead),
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
-        pinLast && styles['pin-last'],
+        pinLast === 'lg' ? styles['pin-last-lg'] : pinLast && styles['pin-last'],
         shareRows && styles[`share-rows-${shareRows}`],
         fillFirst && styles['fill-first'],
         fillLast && styles['fill-last'],

@@ -23,7 +23,7 @@ const SPECIALIST: readonly SketchName[] = [
   'specialist-audit',
   'specialist-readiness',
 ];
-/** Every non-story scene that can sit on a tile: each makes one move on hover (S.4). */
+/** Every non-story scene that can sit on a tile: each makes one move on hover (S.7). */
 const TILE: readonly SketchName[] = [
   'new-product',
   'specialist-research',
@@ -179,7 +179,7 @@ export default function SketchSpecimen() {
             </Layout>
           </Specimen>
           <Specimen
-            title={`S.4 · the tile drawings, rest and moved · ${surface}`}
+            title={`S.7 · the tile drawings, rest and moved · ${surface}`}
             note="Owner, 30 Oct 2026 (decisions/2026-10-30-service-tile-drawing-moves-on-hover): every tile drawing makes ONE transform-only move when its link is hovered or focused, on the tile's curve: a part moves (Move) or arrives (GrowIn). Left: at rest (hover it). Right: held moved. Bare frame, as the bento sets them; a plate never moves. Reduced motion holds rest."
           >
             <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">

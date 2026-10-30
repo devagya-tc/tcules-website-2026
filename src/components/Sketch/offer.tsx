@@ -385,13 +385,13 @@ function SpecialistResearch() {
           <Copy x={x + 8} y={y + 26} w={20} quiet />
         </g>
       ))}
-      {/* The one finding surfaces (gap to the note above stays 8). */}
-      <Move y={-8}>
-        <Rect x={244} y={98} w={46} h={46} className={styles.region} />
-        <path className={styles.regionCopy} d="M252,112 L278,112" />
-        <path className={styles.regionCopy} d="M252,124 L272,124" />
+      <Rect x={244} y={98} w={46} h={46} className={styles.region} />
+      <path className={styles.regionCopy} d="M252,112 L278,112" />
+      <path className={styles.regionCopy} d="M252,124 L272,124" />
+      {/* The one finding is seen. */}
+      <GrowIn>
         <Focus x={290} y={144} glyph="eye" size={12} />
-      </Move>
+      </GrowIn>
     </>
   );
 }
@@ -476,11 +476,11 @@ function SpecialistPrototype() {
       <Rect x={170} y={40} w={90} h={100} rx={8} className={styles.frame} />
       <Copy x={184} y={58} w={48} quiet />
       <Copy x={184} y={74} w={60} />
-      {/* The person steps up to try it (ends 6 from the frame). */}
-      <Move x={-8}>
-        <Glyph name="user" cx={284} cy={70} size={20} className={styles.glyph} />
-      </Move>
-      <Focus x={284} y={112} glyph="check-circle" size={12} />
+      <Glyph name="user" cx={284} cy={70} size={20} className={styles.glyph} />
+      {/* Tried, and it holds. */}
+      <GrowIn>
+        <Focus x={284} y={112} glyph="check-circle" size={12} />
+      </GrowIn>
       <Cursor x={70} y={116} />
     </>
   );
@@ -500,14 +500,14 @@ function SpecialistNewProduct() {
       <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
       <Glyph name="user" cx={188} cy={50} size={14} className={styles.glyph} />
       <Copy x={202} y={50} w={40} quiet />
-      <Rect x={180} y={66} w={100} h={36} rx={10} className={styles.halo} />
+      {/* The one job lights; what the release leaves out stays hatched. */}
+      <GrowIn>
+        <Rect x={180} y={66} w={100} h={36} rx={10} className={styles.halo} />
+      </GrowIn>
       <Rect x={186} y={72} w={88} h={24} className={styles.region} />
       <path className={styles.regionCopy} d="M196,84 L250,84" />
-      {/* What the release leaves out steps aside (stays 8 inside the frame). */}
-      <Move x={8}>
-        <Hatched x={186} y={112} w={88} h={14} />
-        <Hatched x={186} y={132} w={56} h={10} />
-      </Move>
+      <Hatched x={186} y={112} w={88} h={14} />
+      <Hatched x={186} y={132} w={56} h={10} />
     </>
   );
 }
@@ -658,6 +658,20 @@ function CaseDealpathDid() {
   );
 }
 
+/** A tile set's way onward (the Bento CTA card, drawn beside its words): one screen, and a route out of
+ *  it to the flag it leads to. */
+function OfferRoute() {
+  return (
+    <>
+      <Rect x={30} y={44} w={100} h={92} rx={8} className={styles.frame} />
+      <Copy x={44} y={62} w={40} quiet />
+      <Rect x={44} y={76} w={60} h={40} className={styles.tile} />
+      <Focus x={232} y={90} glyph="flag" size={12} />
+      <Hop x1={130} x2={214} y={90} />
+    </>
+  );
+}
+
 export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-explain': OutcomeExplain,
   'outcome-rules': OutcomeRules,
@@ -677,6 +691,7 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-new-product': SpecialistNewProduct,
   'specialist-audit': SpecialistAudit,
   'specialist-readiness': SpecialistReadiness,
+  'offer-route': OfferRoute,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -693,4 +708,5 @@ export const OFFER_DRAWN: Partial<
   'specialist-new-product': [26, 26, 268, 128],
   'specialist-audit': [26, 26, 228, 128],
   'specialist-readiness': [26, 26, 294, 154],
+  'offer-route': [26, 26, 268, 128],
 };

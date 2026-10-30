@@ -21,6 +21,26 @@
   }
 }
 
+/* The odd last tile before a two-route card (`data-md-wide`): from 768 to 1023, where the card takes
+   the row, it takes the row above it too, its words beside its drawing, so no hole and no stretched
+   tile is left. From 1024 it is a single tile again. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .cell[data-md-wide] {
+    grid-column: 1 / -1;
+  }
+
+  .cell[data-md-wide] .tile {
+    padding: var(--gap-gutter);
+  }
+
+  .cell[data-md-wide] .art {
+    --skt-scale: var(--bnt-art-scale-wide);
+
+    align-self: center;
+    justify-self: center;
+  }
+}
+
 /* The text cell (`note`): the band's closing words in the grid's last row. No hairline and no
    texture, so it never reads as a tile; its inset is the single tile's, so its first line starts
    where a tile's title would. From 1024 it takes the tracks the last row leaves (`data-span`);
@@ -104,15 +124,19 @@
   max-inline-size: var(--bnt-body-measure);
 }
 
-/* One route: the head beside its body is one row that takes the card's height, so the body and its
-   actions sit on the card's foot. */
-@media (min-width: 1024px) {
-  .ctaOne {
-    grid-template-rows: 1fr;
-  }
+/* The small route drawing a card of three tracks or more carries beside its words: from 1024 only, as
+   the card's own split needs the width, centred in its track at the tile drawings' scale. */
+.ctaArt {
+  --skt-scale: var(--bnt-art-scale-wide);
 
-  .ctaEnd {
-    align-self: end;
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ctaArt {
+    display: block;
+    align-self: center;
+    justify-self: center;
   }
 }
 
