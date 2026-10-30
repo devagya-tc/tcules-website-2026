@@ -96,7 +96,6 @@
 }
 
 .answer {
-  max-inline-size: var(--bnt-body-measure);
   color: var(--bnt-body-ink);
   font: var(--bnt-body-text);
   text-wrap: var(--text-running-wrap);
