@@ -19,13 +19,13 @@ import { GROUNDS } from './lib.mjs';
 import * as rulesUnwritten from './claims/rules-unwritten.mjs';
 import * as oneRecordManyRoles from './claims/one-record-many-roles.mjs';
 import * as orderReadsTheSame from './claims/order-reads-the-same.mjs';
-import * as everyStateCaredFor from './claims/every-state-cared-for.mjs';
+import * as screensForHours from './claims/screens-for-hours.mjs';
 
 const SET = {
   'rules-unwritten': rulesUnwritten,
   'one-record-many-roles': oneRecordManyRoles,
   'order-reads-the-same': orderReadsTheSame,
-  'every-state-cared-for': everyStateCaredFor,
+  'screens-for-hours': screensForHours,
 };
 
 const M = 24;

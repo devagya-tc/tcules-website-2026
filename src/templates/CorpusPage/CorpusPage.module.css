@@ -106,30 +106,33 @@
   max-inline-size: var(--measure-lead);
 }
 
-/* A claim's illustration (ChallengesBand): a fixed-height box Media contains the drawing in, anchored at
-   its start so it faces its words. From 1024 it takes the row's end track, the same explicit placement
-   as Reasons' `.headAction`; below it, DOM order puts the drawing above its claim. No plate, no
-   hairline: an illustration is never boxed (ch05 §4a). */
-/* The box is the figure's own ratio at the row's height, never the track's width, so the slot's
-   hairline (Media .capture) wraps the slot itself and no empty strip beside it; as Reasons .figure.
-   The inline size is stated, not auto: the row's Layout stretches its items, and a stretched auto
-   width beats the aspect ratio. */
+/* A claim's drawing (ChallengesBand): one width at every width, its height the asset's own ratio.
+   No plate, no hairline: an illustration is never boxed (ch05 §4a). */
 .claimFigure {
-  block-size: var(--cpg-claim-figure-height);
-  inline-size: calc(var(--cpg-claim-figure-height) * var(--cpg-claim-figure-ratio));
-  aspect-ratio: var(--cpg-claim-figure-ratio);
-  max-inline-size: 100%;
+  inline-size: var(--cpg-claim-figure-width);
 }
 
-@media (min-width: 1024px) {
-  .claimFigure {
-    grid-column: 2;
-    grid-row: 1;
-  }
+/* The words share one right edge at the lead measure; the band's right side stays air. */
+.claimWords {
+  max-inline-size: var(--measure-lead);
+}
+
+/* The example, as a footnote: small type in the muted ink. Its own link (Matter) takes the citation
+   ink and the base link underline. */
+.claimNote {
+  font: var(--text-body-sm);
+  color: var(--cpg-ink-muted);
+  text-wrap: var(--text-running-wrap);
+}
+
+.claimNote a {
+  color: var(--cpg-citation-ink);
 }
 
 /* A claim's citation: the case's own title as the one link, an arrow that moves under the pointer. */
 .citation {
+  display: block;
+  inline-size: fit-content;
   font: var(--cpg-citation-text);
   color: var(--cpg-citation-ink);
   text-decoration: none;

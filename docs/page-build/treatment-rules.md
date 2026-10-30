@@ -14,7 +14,7 @@ arrangement holds it → what it must never do.**
 | The content is… | Its visual is… | Never | Rulings |
 |---|---|---|---|
 | **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures, why-tcules on every page (30 Oct) |
-| **A problem with its named example** (hard parts) | one row per claim: its isometric illustration on the end track facing the words (above them below 1024), the example as a citation under the words | a case cover; a band-level image about one item; a ruled text 2×2 | claim-visual-depicts-the-claim (30 Oct, round 6; supersedes hard-parts-case-row) |
+| **A problem with its named example** (hard parts) | one row per claim: its isometric illustration at 168 at the start (above the words below 768), then title and text, the example as a footnote: client mark + case title as one link with an arrow, the sentence under it in small type with "Example:" dropped; no case page, sentence only | a case cover; a band-level image about one item; a ruled text 2×2 | hard-parts-claims-lead-proof-footnotes (30 Oct; builds on claim-visual-depicts-the-claim) |
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
@@ -97,7 +97,7 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 
 | The content is… | Its visual is… | Never | Rulings |
 |---|---|---|---|
-| **Claims backed by examples** (hard parts) | an illustration per claim; the example as a citation (client mark + case name + link) | the cited case's cover as the claim's picture | claim-visual-depicts-the-claim |
+| **Claims backed by examples** (hard parts) | one row per claim: its isometric illustration at 168 at the start (above the words below 768), then title and text, the example as a footnote: client mark + case title as one link with an arrow, the sentence under it in small type with "Example:" dropped; no case page, sentence only | the cited case's cover as the claim's picture | hard-parts-claims-lead-proof-footnotes |
 | **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
 | **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed), what-you-get-titled-terms-four-parts (proposed) |
 | **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set, sat on one rail the options drop onto | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers; shared-terms-sit-on-one-rail (proposed) |

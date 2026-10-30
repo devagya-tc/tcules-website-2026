@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1333" width="1600" height="1333" role="img" aria-label="Image to come · illustration">
 <rect width="1600" height="1333" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="1331" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="40 40"/>
-<text x="294" y="520" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="40" letter-spacing="4.0" fill="#4A5361">IMAGE TO COME · ILLUSTRATION</text>
-<text x="294" y="632" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="51" fill="#2B323D"><tspan x="294" dy="0">A design system in its second year,</tspan><tspan x="294" dy="74">still owned and still changing, with</tspan><tspan x="294" dy="74">teams drawing from it instead of</tspan><tspan x="294" dy="74">keeping local copies.</tspan></text>
+<rect x="1" y="1" width="1598" height="1331" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="67 67"/>
+<text x="114" y="339" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="67" letter-spacing="6.7" fill="#4A5361">IMAGE TO COME · ILLUSTRATION</text>
+<text x="114" y="537" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="90" fill="#2B323D"><tspan x="114" dy="0">A design system in its second</tspan><tspan x="114" dy="131">year, still owned and still</tspan><tspan x="114" dy="131">changing, with teams drawing</tspan><tspan x="114" dy="131">from it instead of keeping</tspan><tspan x="114" dy="131">local copies.</tspan></text>
 </svg>
