@@ -28,7 +28,6 @@ import {
   OfferSheet,
   ReadDown,
   Steps,
-  Teaser,
   type BentoItem,
   type BlockCardSetItem,
   type OfferPart,
@@ -1335,14 +1334,12 @@ function sectorLinks(band: CorpusBand): { href: string; title: string }[] {
   return out;
 }
 
-/** Counts the approved sector card set fills without a hole (three or four across). */
-const WHOLE_ROWS: Readonly<Record<number, 3 | 4>> = { 3: 3, 4: 4, 6: 3, 8: 4, 9: 3, 12: 4 };
-
 /**
- * The sectors a page knows. Where the count fills whole rows, home's approved sector cards (four or
- * three across, two on a phone, each its sector's photograph); otherwise S7 rows, each sector a row
- * with its photograph at the end, which hold any count without a hole (component-map § A, Q15). A
- * sentence of links (`P`) is the lead; a paragraph after the links is the footer.
+ * The sectors a page knows, on the standard card grid
+ * (decisions/2026-10-30-industries-are-a-card-grid): three across from 1024, two across below (phone
+ * pair, never a scroll row, so every sector stays visible); each card its sector's 16:9 photograph or
+ * placeholder and its name, the whole card a link. A sentence of links (`P`) is the lead; a paragraph
+ * after the links is the footer.
  */
 export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
   const links = sectorLinks(band);
@@ -1355,42 +1352,20 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
     const photo = HOME_SECTOR_PHOTOS[href];
     return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
   };
-  const across = WHOLE_ROWS[links.length];
-  if (across && !sentence) {
-    const cards: BlockCardSetItem[] = links.map((link) => ({
-      id: link.href,
-      title: link.title,
-      href: link.href,
-      media: { type: 'image', image: image(link.href, link.title) },
-    }));
-    return (
-      <ContentSection {...head(band)} data-band="C-image" footer={footer}>
-        <BlockCardSet items={cards} lead="none" across={across} cue="title" phone="pair" />
-      </ContentSection>
-    );
-  }
+  const cards: BlockCardSetItem[] = links.map((link) => ({
+    id: link.href,
+    title: link.title,
+    href: link.href,
+    media: { type: 'image', image: image(link.href, link.title) },
+  }));
   return (
     <ContentSection
       {...head(band)}
-      data-band="S7"
+      data-band="C-image"
       footer={footer}
       {...(sentence ? { lead: plain(sentence.runs) } : {})}
     >
-      <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
-        {links.map((link) => {
-          const img = image(link.href, link.title);
-          return (
-            <Teaser
-              key={link.href}
-              arrangement="row"
-              size="sm"
-              href={link.href}
-              title={link.title}
-              media={{ type: 'image', image: img }}
-            />
-          );
-        })}
-      </Layout>
+      <BlockCardSet items={cards} lead="none" across={3} cue="title" phone="pair" />
     </ContentSection>
   );
 }

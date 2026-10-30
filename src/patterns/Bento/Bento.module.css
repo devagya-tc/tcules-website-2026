@@ -71,23 +71,29 @@
   }
 }
 
-/* The CTA card (`cta`): a cell of its own kind. The tile's radius, its own ground at rest, no hairline,
-   no texture, no lift; a `block` inset on a phone, a `gutter` from 768. Placement as `.wide`/`.note`. */
+/* The CTA card (`cta`): a cell of its own kind. A dotted outline, no fill, the tile's radius, no
+   texture, no lift; a `block` inset (the single tile's, so its first line starts where a neighbouring title does), a `gutter` only where it spans a whole row with no neighbour (768-1023). Placement as `.wide`/`.note`. */
 .cta {
   min-inline-size: 0;
   padding: var(--gap-block);
   border-radius: var(--bnt-radius);
-  background-color: var(--bnt-cta-ground);
+  border: var(--bnt-cta-rule-width) dotted var(--bnt-cta-rule-ink);
 }
 
 @media (min-width: 768px) {
   .cta {
-    padding: var(--gap-gutter);
     grid-column: 1 / -1;
   }
 
   .cta[data-fill-md='true'] {
     grid-column: auto;
+  }
+}
+
+/* Spanning a whole row with no neighbour tile to line up with (768-1023), it takes the gutter. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cta:not([data-fill-md='true']) {
+    padding: var(--gap-gutter);
   }
 }
 
@@ -122,22 +128,6 @@
   font: var(--bnt-body-text);
   text-wrap: var(--text-running-wrap);
   max-inline-size: var(--bnt-body-measure);
-}
-
-/* The small route drawing a card of three tracks or more carries beside its words: from 1024 only, as
-   the card's own split needs the width, centred in its track at the tile drawings' scale. */
-.ctaArt {
-  --skt-scale: var(--bnt-art-scale-wide);
-
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .ctaArt {
-    display: block;
-    align-self: center;
-    justify-self: center;
-  }
 }
 
 .noteText {

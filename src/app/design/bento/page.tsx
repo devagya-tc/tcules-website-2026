@@ -459,7 +459,7 @@ export default function BentoSpecimen() {
       <Variation
         id="cta"
         title="2c · Seven peers on three tracks, a two-route CTA card in the last two cells"
-        note="`cta` (owner, 30 Oct 2026, decisions/2026-10-30-set-ends-in-a-cta-card): the band's closing routes as a mini call-to-action card in the grid's last row. A ground, no hairline, no texture, no lift, not itself a link. Each route a question over its sentence, its actions at the foot; the first action an outline button, every later one a link. From 768 on two tracks it fills the hole beside the seventh tile; on a phone it is the last item. Seven peers take three tracks (3 + 3 + 1), so the card has exactly two cells."
+        note="`cta` (decisions/2026-10-30-cta-card-is-dotted-halves): dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button. Seven peers take three tracks (3 + 3 + 1), so the card has exactly two cells, beside the seventh tile from 768."
       />
       <Section>
         <Bento
@@ -489,7 +489,7 @@ export default function BentoSpecimen() {
       <Variation
         id="cta-one"
         title="2d · Six on four tracks, a one-route card"
-        note="Six peers on four tracks leave two cells (4 + 2). One route: its question beside its sentence and action, a split (section 96), stacked below 1024."
+        note="Six peers on four tracks leave two cells (4 + 2). One route: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
       />
       <Section>
         <Bento
@@ -514,7 +514,7 @@ export default function BentoSpecimen() {
       <Variation
         id="cta-statement"
         title="2e · Five on four tracks, a statement card spanning three"
-        note="Five peers on four tracks leave three cells beside the fifth tile: filling a whole last row would leave a hole in the tile rows, so the card takes the whole rest of the last row. A closing statement with no question: its sentence takes the title role."
+        note="Five peers on four tracks leave three cells beside the fifth tile. A closing statement with no question: its sentence takes the title role, then its arrow links. dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
       />
       <Section>
         <Bento
@@ -540,7 +540,7 @@ export default function BentoSpecimen() {
       <Variation
         id="cta-three-actions"
         title="2f · Seven on three tracks, one route with three actions"
-        note="One question, both answer sentences, three actions: the first an outline button, the other two links, wrapping in one Cluster."
+        note="One question, both sentences, three arrow links wrapping in one Cluster: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
       />
       <Section>
         <Bento
@@ -551,13 +551,13 @@ export default function BentoSpecimen() {
               {
                 question: 'Have engineers ready to build?',
                 answer:
-                  'Product Design hands over a build-ready design. Design Engineering and Prototype Readiness Review take a prototype further.',
+                  'Product Design gives them designs for every state, and Design Engineering takes the hardest interfaces into code inside your product. If you already hold an early build, a Prototype Readiness Review shows how close it is to launch.',
                 actions: [
                   { label: 'Product Design', href: '/services/product-design' },
                   { label: 'Design Engineering', href: '/services/design-engineering' },
                   {
                     label: 'Prototype Readiness Review',
-                    href: '/services/software-development/prototype-readiness-review',
+                    href: '/audits/prototype-readiness-review',
                   },
                 ],
               },
@@ -568,7 +568,7 @@ export default function BentoSpecimen() {
       <Variation
         id="cta-row"
         title="2g · Three on three tracks, the card a whole row"
-        note="When the tiles fill their row, the card takes a whole row of its own below them."
+        note="When the tiles fill their row, the card takes a whole row below them: dotted outline, no fill; each route its question, its sentence, then its destinations as arrow links; two routes are two halves a column apart, stacked below 768; one route takes the same structure across the card; no drawing, no outline button."
       />
       <Section>
         <Bento
@@ -580,6 +580,36 @@ export default function BentoSpecimen() {
                 question: 'Want it built, not only designed?',
                 answer: 'Software Development carries the design on.',
                 actions: [{ label: 'Software Development', href: '/services/software-development' }],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-tint"
+        title="2h · The CTA card on tint"
+        note="the dotted outline's ink restated on tint (neutral-400)"
+      />
+      <Section surface="tint">
+        <Bento
+          tracks={3}
+          items={PD_SEVEN}
+          cta={{
+            routes: [
+              {
+                question: 'Want the riskiest screens tried in code, or the whole product built?',
+                answer: 'Design Engineering and Software Development carry the design on.',
+                actions: [
+                  { label: 'Design Engineering', href: '/services/design-engineering' },
+                  { label: 'Software Development', href: '/services/software-development' },
+                ],
+              },
+              {
+                question: 'Already have finished screens?',
+                answer: 'Design to Code takes them from there.',
+                actions: [
+                  { label: 'Design to Code', href: '/services/design-engineering/design-to-code' },
+                ],
               },
             ],
           }}

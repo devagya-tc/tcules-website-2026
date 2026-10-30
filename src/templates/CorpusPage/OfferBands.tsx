@@ -236,14 +236,6 @@ function scopeOf(title: string): EngagementScope | undefined {
   return undefined;
 }
 
-/** Which mark a closing engagement term draws, read from its own words; none fits → no drawing. */
-function termScopeOf(text: string): EngagementScope | undefined {
-  const words = text.toLowerCase();
-  if (/\bstop at designs\b|\binto code\b|\bbuild the product\b/.test(words)) return 'build';
-  if (/\bhours we share\b|\btime zones?\b|\bour studio is in\b/.test(words)) return 'overlap';
-  return undefined;
-}
-
 /**
  * Which plate a traced stage draws, read from the stage's own name (TracePlates draws only what the
  * name says). A thread with any stage none of these fit keeps Thread's beads.
@@ -494,7 +486,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     }
 
     /* How we work together / Ways to work with us — the head (heading, its own link as end action,
-       lead), the three options (primary, plated flat drawings), the two terms (one shared tier on a rail under the set, small marks). Its ask ("Tell us what you're working on") is its own band after it, an ink
+       lead), the three options (primary, plated flat drawings), the two terms (one plain text row at body size under the set, on its grid). Its ask ("Tell us what you're working on") is its own band after it, an ink
        island with the texture and one solid to the contact route (owner, 30 Oct 2026, round 5: "the 2
        buttons split up and down is horrible design… an island section with that title and a button to
        the contact page"). */
@@ -513,10 +505,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
               body: renderInline(row.body),
               scope: scopeOf(row.title),
             }))}
-            terms={terms.map((runs) => ({
-              body: renderInline(runs),
-              scope: termScopeOf(plain(runs)),
-            }))}
+            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
           {links[1] ? (
@@ -972,7 +961,8 @@ function routerBody(
 /**
  * 3 or 4 tracks so the last row leaves exactly two cells for the CTA card; else the count that fills its
  * rows (the card a whole row); else four, the card taking what the last row leaves
- * (decisions/2026-10-30-set-ends-in-a-cta-card).
+ * (decisions/2026-10-30-set-ends-in-a-cta-card). The card is a dotted outline whose every action is an
+ * arrow link (decisions/2026-10-30-cta-card-is-dotted-halves).
  */
 function ctaTracks(n: number): 3 | 4 {
   for (const t of [3, 4] as const) if (n % t !== 0 && t - (n % t) === 2) return t;
@@ -1043,7 +1033,8 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
     /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
        on every service page that closes its set with a way onward: questions each answered by links, or
        one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
-       every link becomes an action. A closing with no link stays below the set. */
+       every link becomes an arrow link in a dotted card, one half per question
+       (decisions/2026-10-30-cta-card-is-dotted-halves). A closing with no link stays below the set. */
     const routes =
       routesOf(closing) ??
       (closing.length > 0 && closing.every(hasLink)
