@@ -21,7 +21,7 @@
 /* The set's framing sentence (`lead`), at the system's lead role and measure. */
 .lead {
   font: var(--rsn-lead-text);
-  text-wrap: var(--text-running-wrap);
+  text-wrap: balance; /* the head's lead: even lines, never one word alone under a balanced heading */
   color: var(--rsn-lead-ink);
   max-inline-size: var(--rsn-lead-measure);
 }
@@ -39,6 +39,12 @@
   max-inline-size: var(--rsn-title-measure);
 }
 
+/* `beside`: the reasons read down a wide track, so the title steps up to h4 (one line at 7 of 12). */
+.titleBeside {
+  font: var(--rsn-title-beside-text);
+  letter-spacing: var(--rsn-title-beside-tracking);
+}
+
 .body {
   font: var(--rsn-body-text);
   text-wrap: var(--text-running-wrap);
@@ -52,6 +58,12 @@
 .figure {
   block-size: var(--rsn-figure-height);
   aspect-ratio: var(--rsn-figure-ratio);
+  max-inline-size: 100%; /* so a 6:5 box never overflows a 277 track at 1024 */
+}
+
+/* Band scale (offer pages): the box is taller; its width follows the ratio. */
+.figureLg {
+  block-size: var(--rsn-figure-height-lg);
 }
 
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────
@@ -112,18 +124,28 @@
   overflow: hidden;
 }
 
-/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home) ─────────
-   The full width of the track. From 1024, where the reasons stand side by side, one box height for
-   the set (--rsn-proof-height), so the three titles sit on one line and the row reads level: a Layout
-   fills the box and its content centres in it. Below 1024 the reasons are one column, so each proof
-   is its own height and no reason carries air another needed. Sizing, not arrangement. */
+/* ── proof: a reason's evidence as its visual (owner, 29 Oct 2026, home; one plate, 30 Oct) ─────
+   One plate of one size per reason, at every width: the visual slot, never a container for the words.
+   The title sits a `block` under its hard bottom edge, so proof, title and sentence read as one unit.
+   Marks and figures centre in it (a Layout fills it); the cover fills it from the top. */
 .proof {
   inline-size: 100%;
+  block-size: var(--rsn-proof-height);
+  background: var(--rsn-plate-ground);
+  border-radius: var(--rsn-plate-radius);
+  overflow: hidden;
 }
 
+.proofInset {
+  padding: var(--gap-block);
+}
+
+/* No cover in the set carries a figure: the box is the cover's own 16:9 at the track's width, and a
+   figure proof beside it centres in the same box. Below 1024 the cover fills the track as well. */
 @media (min-width: 1024px) {
-  .proof {
-    block-size: var(--rsn-proof-height);
+  .proofFlat {
+    block-size: auto;
+    aspect-ratio: 16 / 9;
   }
 }
 
@@ -131,27 +153,48 @@
   block-size: 100%;
 }
 
-/* The case's own cover: 16:9 at a set height (what the box leaves over its figure), never wider than
-   the track; the image fills it with Media's anchored crop. Its corners are the photograph radius.
-   Sized from its height, so it starts on the track's edge with the words under it. */
+/* The case's own cover fills the plate above its caption strip; Media crops it anchored. */
 .cover {
   position: relative;
-  justify-self: start;
-  inline-size: auto;
-  block-size: var(--rsn-cover-height);
-  aspect-ratio: 16 / 9;
-  max-inline-size: 100%;
-  border-radius: var(--rsn-cover-radius);
   overflow: hidden;
   background: var(--rsn-cover-ground);
 }
 
-/* The fact, large and in the accent, the way a figure is (numerals are a foreground mark). */
-.proofValue {
-  font: var(--rsn-proof-value-text);
-  letter-spacing: var(--rsn-proof-value-tracking);
-  text-wrap: var(--text-title-wrap);
-  color: var(--rsn-proof-value-ink);
+.caption {
+  padding: var(--gap-text) var(--gap-block);
+}
+
+/* The live dot: the only accent in the plates. */
+.status {
+  display: block;
+  inline-size: var(--rsn-status-size);
+  block-size: var(--rsn-status-size);
+  border-radius: var(--radius-full);
+  background: var(--rsn-status-ink);
+}
+
+.captionValue {
+  white-space: nowrap;
+  font: var(--rsn-proof-label-text);
+  letter-spacing: var(--rsn-proof-label-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-title-ink);
+}
+
+.captionLabel {
+  white-space: nowrap;
+}
+
+.entry {
+  text-align: center;
+}
+
+/* A single count's number ("3" of "3 years"): the stat role, large, in the title's ink. */
+.stat {
+  font: var(--rsn-proof-stat-text);
+  letter-spacing: var(--rsn-proof-stat-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-title-ink);
 }
 
 /* Whose it is: the mono label voice, uppercase in presentation only. */
@@ -167,6 +210,16 @@
 .wordmark {
   font: var(--text-wordmark);
   letter-spacing: var(--text-wordmark-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: balance; /* a long name holds two even lines, so the four marks keep one weight */
+  text-align: center;
   color: var(--rsn-wordmark-ink);
+}
+
+/* The head's action: after the lead in reading order; from 1024 it takes the heading row's end
+   track, centred on the heading (the lead then falls under the heading in its own track). */
+@media (min-width: 1024px) {
+  .headAction {
+    grid-row: 1;
+    grid-column: 2;
+  }
 }

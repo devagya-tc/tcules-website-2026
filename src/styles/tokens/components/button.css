@@ -41,8 +41,7 @@
    ── Outline (fdn-scroll, 6 Oct 2026) ────────────────────────────────────────────
    The icon-only stepper — a slider's previous / next. Blue at rest, glyph and rule,
    because the owner wants blue on arrows and small marks and visual-direction § 4.2
-   counts a slider's navigation Free. Hover fills with the surface's primary (rule and
-   all) and turns the glyph to its label colour; pressed deepens the fill. There is no
+   counts a slider's navigation Free. Hover and focus lay the ghost's pale tint under it (never the surface's blue: it is the secondary, decisions/2026-10-30-outline-hover-takes-a-pale-fill), the rule firms and the label takes the link's step; pressed deepens the tint one step. There is no
    -fg-pressed: the glyph moves once, onto the fill, and pressed reads -fg-hover.
    Unavailable, it keeps its circle in --btn-disabled-rule. Was --sld-control-* in the
    Slider's own layer until a fix round moved it here, so the next stepper inherits it.
@@ -146,7 +145,8 @@
   --btn-outline-primary-rule: var(--color-brandeis-300); /* decoration; the glyph names it */
   --btn-outline-primary-fg-hover: var(--color-brandeis-600); /* the link's own step */
   --btn-outline-primary-rule-hover: var(--color-brandeis-500); /* the line firms; never a fill */
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-50); /* press only: ghost's hover tint */
+  --btn-outline-primary-bg-hover: var(--color-brandeis-50); /* the ghost's hover tint; never the solid's blue */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-100); /* one step deeper */
   --btn-outline-primary-rule-pressed: var(--color-brandeis-600);
   --btn-disabled-rule: var(--color-neutral-300); /* the stepper's circle, off — still a circle */
   --btn-disabled-bg: var(--color-neutral-100);
@@ -190,7 +190,8 @@
   --btn-outline-primary-rule: var(--color-brandeis-300);
   --btn-outline-primary-fg-hover: var(--color-brandeis-600);
   --btn-outline-primary-rule-hover: var(--color-brandeis-500);
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-100); /* 50 vanishes on paper-deep */
+  --btn-outline-primary-bg-hover: var(--color-brandeis-100); /* 50 vanishes on paper-deep */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-200);
   --btn-outline-primary-rule-pressed: var(--color-brandeis-600);
   --btn-disabled-rule: var(--color-neutral-400); /* 300 all but vanished on paper-deep (fix round 2) */
   --btn-disabled-bg: var(--color-neutral-200);
@@ -200,10 +201,10 @@
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   Blue does not move: the solid primary keeps 500 with its white label and runs
-   600 / 700 exactly as on paper, so the primary action is the same object here. It is
-   restated rather than inherited, because inheriting it means an ink panel nested in a
-   blue section would pick up blue's INVERTED primary.
+   The solid primary inverts to paper with an ink label, exactly as on blue, and runs
+   neutral 200 / 300 (owner, 30 Oct 2026; decisions/2026-10-30-ink-solid-is-white): on a
+   dark island the white button is the action. It is restated rather than inherited, so
+   an ink panel nested in any other surface still declares every value.
 
    The neutrals reverse (ghost and link; there is no neutral solid). Two values are
    contrast floors rather than preferences — blue as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
@@ -211,11 +212,11 @@
    both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
    there is no tint left to see. link-neutral runs white → 300 → 200.            */
 [data-surface='ink'] {
-  --btn-solid-primary-bg: var(--color-brandeis-500);
-  --btn-solid-primary-bg-hover: var(--color-brandeis-600);
-  --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
-  --btn-solid-primary-bg-busy: var(--color-brandeis-700);
-  --btn-solid-primary-fg: var(--color-white);
+  --btn-solid-primary-bg: var(--color-paper);
+  --btn-solid-primary-bg-hover: var(--color-neutral-200);
+  --btn-solid-primary-bg-pressed: var(--color-neutral-300);
+  --btn-solid-primary-bg-busy: var(--color-neutral-300);
+  --btn-solid-primary-fg: var(--color-neutral-950);
   --btn-ghost-primary-fg: var(--color-brandeis-200);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-200);
   --btn-ghost-primary-bg-hover: var(--color-neutral-900);
@@ -240,7 +241,8 @@
   --btn-outline-primary-rule: var(--color-brandeis-400);
   --btn-outline-primary-fg-hover: var(--color-brandeis-100);
   --btn-outline-primary-rule-hover: var(--color-brandeis-200);
-  --btn-outline-primary-bg-pressed: var(--color-neutral-900); /* ghost's neutral step, never blue */
+  --btn-outline-primary-bg-hover: var(--color-neutral-900); /* ghost's neutral step, never blue */
+  --btn-outline-primary-bg-pressed: var(--color-neutral-800);
   --btn-outline-primary-rule-pressed: var(--color-brandeis-100);
   --btn-disabled-rule: var(--color-neutral-800);
   --btn-disabled-bg: var(--color-neutral-800);
@@ -290,7 +292,8 @@
   --btn-outline-primary-rule: var(--color-brandeis-200);
   --btn-outline-primary-fg-hover: var(--color-brandeis-50); /* 5.57:1, the link's step */
   --btn-outline-primary-rule-hover: var(--color-white);
-  --btn-outline-primary-bg-pressed: var(--color-brandeis-600); /* ghost's hover step */
+  --btn-outline-primary-bg-hover: var(--color-brandeis-600); /* ghost's hover step */
+  --btn-outline-primary-bg-pressed: var(--color-brandeis-700);
   --btn-outline-primary-rule-pressed: var(--color-white);
   --btn-disabled-rule: var(--color-brandeis-400);
   --btn-disabled-bg: var(--color-brandeis-600);

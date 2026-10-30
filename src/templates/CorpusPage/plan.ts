@@ -1,7 +1,7 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
 import { formBeforeFaq } from './order';
-import { boldLead, linkLead, plain } from './text';
+import { boldLead, exampleLink, linkLead, plain } from './text';
 
 /**
  * OfferPage's plan: for every band of a corpus page, WHAT SHAPE it is and, from the page's rhythm,
@@ -65,6 +65,13 @@ export type OfferKind =
 /** Which half of a split a unit is. `whole` is a band that did not split. */
 export type OfferPart = 'whole' | 'a' | 'b';
 
+/**
+ * The visual register a band is drawn in (decisions/2026-10-30-adjacent-bands-change-visual-register):
+ * adjacent bands never share one. `figures` is reserved: no offer kind renders figures yet (About's
+ * company record would).
+ */
+export type VisualRegister = 'flat' | 'isometric' | 'photo' | 'proof' | 'figures' | 'none';
+
 export type OfferUnit = {
   /** The unit's anchor: the band's id, and `<id>-2` for a split's second part (page-mapping § 3). */
   id: string;
@@ -83,6 +90,8 @@ export type OfferUnit = {
   variant?: 'B' | 'D';
   /** Visual (a photograph, artefact, drawing, boxed table, icon set) or text-heavy: page-mapping § 3. */
   visual: boolean;
+  /** The register the band is drawn in; adjacent bands change it (a development warning). */
+  register: VisualRegister;
 };
 
 /* ── Shape signatures ───────────────────────────────────────────────────────────── */
@@ -438,6 +447,49 @@ const VISUAL: ReadonlySet<OfferKind> = new Set([
   'directory',
 ]);
 
+/**
+ * The register a band is drawn in, from its kind, whether the page draws it (`drawn`, the scenes it was
+ * given) and whether a photograph is bound to it. Claims and reasons take isometric illustrations,
+ * items take flat drawings, proof is cases and records (decisions/2026-10-30-claim-visual-depicts-the-claim).
+ */
+export function registerOf(
+  kind: OfferKind,
+  band: CorpusBand,
+  page: CorpusPage,
+  drawn: ReadonlySet<string>,
+): VisualRegister {
+  const bound = page.composition.mediaBindings.some((m) => m.bound && m.supportsSection === band.id);
+  switch (kind) {
+    case 'cases':
+    case 'caseStories':
+    case 'record':
+    case 'recognition':
+      return 'proof';
+    case 'router':
+    case 'tiles':
+    case 'thread':
+      return 'flat';
+    case 'reasons':
+    case 'challenges':
+    case 'enquiry':
+      return 'isometric';
+    case 'industries':
+    case 'destinations':
+      return 'photo';
+    case 'deliverables':
+      return bound ? 'photo' : 'none';
+    case 'outcomes':
+    case 'catalog':
+    case 'symptoms':
+    case 'table':
+    case 'method':
+    case 'text':
+      return drawn.has(band.id) ? 'flat' : bound ? 'photo' : 'none';
+    default:
+      return 'none';
+  }
+}
+
 type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
   variant?: OfferUnit['variant'];
 };
@@ -449,7 +501,7 @@ type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
  */
 const PHOTOGRAPH_BANDS: ReadonlySet<string> = new Set(['ai-native-practice']);
 
-function drafts(page: CorpusPage): Draft[] {
+function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   const units: Draft[] = [];
   const unit = (
     band: CorpusBand,
@@ -462,15 +514,32 @@ function drafts(page: CorpusPage): Draft[] {
       band,
       kind,
       part,
-      /* A prose band or the hard parts with a photograph of their own read as visual. */
+      register: part === 'b' ? 'none' : registerOf(kind, band, page, drawn),
+      /* A prose band or the hard parts with a photograph of their own read as visual, and so do hard
+         parts that cite examples: each row is drawn with its case's cover (round 5, 30 Oct). */
       visual:
         kind === 'generic'
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            drawn.has(band.id) ||
+            band.blocks.some(
+              (block) =>
+                block.type === 'paragraph' &&
+                /^illustration, not client work$/i.test(plain(block.runs).trim()),
+            ) ||
             ((kind === 'challenges' || kind === 'text') &&
               page.composition.mediaBindings.some(
                 (m) => m.bound && m.supportsSection === band.id,
+              )) ||
+            (kind === 'challenges' &&
+              band.blocks.some((block) =>
+                block.type === 'paragraph'
+                  ? exampleLink(block.runs) !== undefined
+                  : block.type === 'item' &&
+                    block.blocks.some(
+                      (inner) => inner.type === 'paragraph' && exampleLink(inner.runs) !== undefined,
+                    ),
               )),
       ...extra,
     });
@@ -520,8 +589,12 @@ function drafts(page: CorpusPage): Draft[] {
 /**
  * The page's units, with surfaces, media sides and texture decided from the whole sequence.
  */
-export function planOffer(page: CorpusPage): OfferUnit[] {
-  const raw = drafts(page);
+export function planOffer(
+  page: CorpusPage,
+  drawn: ReadonlySet<string> = new Set(),
+  hero?: VisualRegister,
+): OfferUnit[] {
+  const raw = drafts(page, drawn);
   const planned: OfferUnit[] = [];
   /* The side the next media-carrying unit takes: the first is at the start, then they alternate. */
   let side: 'start' | 'end' = 'start';
@@ -580,6 +653,19 @@ export function planOffer(page: CorpusPage): OfferUnit[] {
         );
       }
     }
+    /* Adjacent bands change register (decisions/2026-10-30-adjacent-bands-change-visual-register). */
+    const run: { id: string; register: VisualRegister }[] = [
+      ...(hero ? [{ id: 'hero', register: hero }] : []),
+      ...planned,
+    ];
+    run.forEach((a, index) => {
+      const b = run[index + 1];
+      if (b && a.register === b.register && a.register !== 'none') {
+        console.warn(
+          `OfferPage ${page.route}: two adjacent bands share the ${a.register} register (${a.id}, ${b.id}); decisions/2026-10-30-adjacent-bands-change-visual-register.`,
+        );
+      }
+    });
     planned.forEach((unit, index) => {
       const next = planned[index + 1];
       if (

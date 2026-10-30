@@ -199,7 +199,7 @@ Buy the work as one programme, or start with the part that hurts most.
 
 - **Documentation in plain words:** each component's options and states, and when it belongs on a screen.
 
-- **A first release tried on a real part of your product** before you sign it off.
+- **A first release:** tried on a real part of your product before you sign it off.
 
 - **A route for change:** who owns the system, how teams contribute and raise exceptions, how releases go out, and how you will see whether teams use it.
 

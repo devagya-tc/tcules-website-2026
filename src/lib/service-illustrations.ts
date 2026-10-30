@@ -1,37 +1,62 @@
 import { ILLUSTRATION_LEGENDS } from './illustration-legends';
+import { ROUTES, servicePath } from './routes';
 
 /**
- * The service pages whose hero carries a finished drawing, by page slug.
+ * The hero drawings, by route.
  *
- * Six of Bhumika's finals, frozen by Jatin on 30 Oct 2026, then polished. The polish gave every slab one
- * outline weight and its corner edges, and made every line stop at the edge of what it reaches (source,
- * before/after and the pass: docs/illustrations/polish-2026-10-30/). The owner approved them for the pages
- * the same day: "use the updated drawings on the pages". They replace Product Design's earlier drawing and
- * its numbered phone cut. These drawings carry no labels, so the same file serves every width. Every other
- * page's hero is a bound asset or a labelled placeholder until its drawing lands
- * (docs/research/illustration-call-2026-10-30.md lists which are still open).
+ * Six are Bhumika's finals, frozen by Jatin on 30 Oct 2026 and then polished (one outline weight,
+ * corner edges, lines that stop at what they reach; docs/illustrations/polish-2026-10-30/), each cropped
+ * to its own bounds. The owner approved them for the pages the same day. Four more are the owner's
+ * approved canvas versions not yet through that polish (owner, 30 Oct 2026): Software Development, New
+ * Product Design & First Release, and the /expertise and /audits hubs, their text flattened to paths and
+ * their viewBox trimmed to the drawing. An illustration is never cropped; every other page's hero is a
+ * bound asset or a labelled placeholder.
  */
-const SERVICE_ILLUSTRATIONS: Readonly<
+const HERO_ILLUSTRATIONS: Readonly<
   Record<string, { src: string; width: number; height: number }>
 > = {
-  'product-design': { src: '/illustrations/heroes/product-design.svg', width: 786, height: 543 },
-  'product-modernisation': {
+  [servicePath('product-design')]: {
+    src: '/illustrations/heroes/product-design.svg',
+    width: 786,
+    height: 543,
+  },
+  [servicePath('product-modernisation')]: {
     src: '/illustrations/heroes/product-modernisation.svg',
     width: 700,
     height: 499,
   },
-  'design-engineering': {
+  [servicePath('design-engineering')]: {
     src: '/illustrations/heroes/design-engineering.svg',
     width: 772,
     height: 577,
   },
-  'design-systems': { src: '/illustrations/heroes/design-systems.svg', width: 802, height: 515 },
-  'ai-product-ux': { src: '/illustrations/heroes/ai-product-ux.svg', width: 792, height: 446 },
-  'ai-copilots-agents': {
+  [servicePath('design-systems')]: {
+    src: '/illustrations/heroes/design-systems.svg',
+    width: 802,
+    height: 515,
+  },
+  [servicePath('ai-product-ux')]: {
+    src: '/illustrations/heroes/ai-product-ux.svg',
+    width: 792,
+    height: 446,
+  },
+  [servicePath('ai-copilots-agents')]: {
     src: '/illustrations/heroes/ai-copilots-agents.svg',
     width: 788,
     height: 609,
   },
+  [servicePath('software-development')]: {
+    src: '/illustrations/heroes/services-software-development.svg',
+    width: 820,
+    height: 693,
+  },
+  [servicePath('new-product-design-first-release')]: {
+    src: '/illustrations/heroes/services-new-product-design-first-release.svg',
+    width: 820,
+    height: 519,
+  },
+  [ROUTES.expertise]: { src: '/illustrations/heroes/expertise.svg', width: 820, height: 464 },
+  [ROUTES.audits]: { src: '/illustrations/heroes/audits.svg', width: 820, height: 627 },
 };
 
 export type ServiceIllustration = {
@@ -43,8 +68,10 @@ export type ServiceIllustration = {
   cut: (typeof ILLUSTRATION_LEGENDS)[string] | undefined;
 };
 
-export function serviceIllustration(slug: string): ServiceIllustration | undefined {
-  const drawing = SERVICE_ILLUSTRATIONS[slug];
+/** The hero drawing for a route, or for a service slug (the fixture service template passes a slug). */
+export function serviceIllustration(routeOrSlug: string): ServiceIllustration | undefined {
+  const route = routeOrSlug.startsWith('/') ? routeOrSlug : servicePath(routeOrSlug);
+  const drawing = HERO_ILLUSTRATIONS[route];
   if (!drawing) return undefined;
   return { ...drawing, alt: '', kind: 'illustration', cut: ILLUSTRATION_LEGENDS[drawing.src] };
 }

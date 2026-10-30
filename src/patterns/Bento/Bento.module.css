@@ -51,6 +51,52 @@
   }
 }
 
+/* A CTA card (`cta`): a cell of its own kind, one per route. A dotted outline, no fill, the tile's
+   radius, no texture, no lift; a `block` inset (the single tile's, so its first line starts where a
+   neighbouring title does). One cell like a tile; the last card takes the tracks its row leaves
+   (`data-span-md` from 768, `data-span` from 1024). Placement as `.wide`/`.note`. */
+.cta {
+  min-inline-size: 0;
+  padding: var(--gap-block);
+  border-radius: var(--bnt-radius);
+  border: var(--bnt-cta-rule-width) dotted var(--bnt-cta-rule-ink);
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .cta[data-span-md='2'] {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cta[data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .cta[data-span='3'] {
+    grid-column: span 3;
+  }
+
+  .cta[data-span='4'] {
+    grid-column: span 4;
+  }
+}
+
+.ctaTitle {
+  color: var(--bnt-title-ink);
+  font: var(--bnt-title-text);
+  letter-spacing: var(--bnt-title-tracking);
+  text-wrap: balance;
+  max-inline-size: var(--bnt-body-measure);
+}
+
+.ctaBody {
+  color: var(--bnt-body-ink);
+  font: var(--bnt-body-text);
+  text-wrap: var(--text-running-wrap);
+  max-inline-size: var(--bnt-body-measure);
+}
+
 .noteText {
   max-inline-size: var(--bnt-body-measure);
   color: var(--bnt-body-ink);

@@ -190,7 +190,7 @@ In B2B SaaS development and beyond, we build a first release, a large new featur
 
 - **Every workflow designed before it is coded,** including its loading, empty and error screens, so engineers build an agreed answer.
 
-- **Tests and release checks agreed before the build,** so "ready" means the same thing to both teams.
+- **Tests and release checks:** agreed before the build, so "ready" means the same thing to both teams.
 
 - **Code, tests and notes in your repository,** written for the engineers who come after us.
 

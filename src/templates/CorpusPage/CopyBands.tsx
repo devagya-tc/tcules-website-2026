@@ -1,6 +1,15 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Icon, Layout, Media, Prose } from '@/components';
+import {
+  Button,
+  Cluster,
+  Icon,
+  type IconName,
+  Layout,
+  Media,
+  Prose,
+  Sketch,
+} from '@/components';
 import {
   Bento,
   BlockCardSet,
@@ -11,34 +20,37 @@ import {
   CtaSection,
   DataTable,
   ListCard,
+  OfferParts,
   OfferSheet,
   ReadDown,
   Steps,
-  Teaser,
   type BentoItem,
   type BlockCardSetItem,
+  type OfferPart,
   type OfferSheetItem,
   type ReadDownRow,
   type Step,
 } from '@/patterns';
 import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
-import { inlineToHtml, type InlineRun } from '@/lib/inline';
+import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderImage } from '@/lib/placeholders';
-import { serviceSceneFor } from '@/lib/sketches';
+import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
+import { MEDIA_SPLIT } from '@/lib/image-sizes';
+import { offerSceneKey, serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
-import { hasSlot, slotImage, slugOf } from './images';
+import styles from './CorpusPage.module.css';
+import { caseCover, hasSlot, slotImage, slugOf, type SlotImage } from './images';
 import { signature } from './plan';
 import {
   boldLead,
+  isExample,
   hasLink,
   labelTitle,
   leadOf,
   linkLead,
   plain,
-  sentenceLead,
   trimStart,
 } from './text';
 
@@ -84,20 +96,21 @@ const isBareLabel = (block: CorpusBlock): boolean => {
 /* ── Links ───────────────────────────────────────────────────────────────────── */
 
 /**
- * A band's closing links as its actions: one link is a CtaRow; two or more STACK as link buttons
- * (owner, 7 Oct 2026: link buttons never sit side by side; a CtaRow holds one action).
+ * A band's closing links as its actions: one link is a CtaRow; two are CtaRow's PAIR, an outlined
+ * button then the link in one row (owner, 30 Oct 2026: two actions side by side are never two
+ * identical links; decisions/2026-10-30-two-actions-outline-then-link); three or more stack as a
+ * list of links.
  */
 export function LinkActions({
   links,
   rule = false,
-  pair = false,
+  pair = true,
 }: {
   links: readonly CorpusLink[];
   rule?: boolean;
   /**
-   * Two links as one row with a hierarchy, the first an outlined button and the second the link
-   * (CtaRow's pair): a Banner's two actions (owner, 29 Oct 2026;
-   * decisions/2026-10-29-banner-two-actions-one-row). Off, two or more links stack as links.
+   * Default true. Two links as one row with a hierarchy (CtaRow's pair). False only to force a
+   * stacked list of two links — no current caller needs it.
    */
   pair?: boolean;
 }): ReactNode {
@@ -199,6 +212,56 @@ export function BandBody({
   );
 }
 
+/**
+ * A scenario: the paragraph "Illustration, not client work" (italic) and the paragraphs after it. The
+ * label stays as authored; the scenario's words go beside the drawing of its story.
+ */
+export function scenarioParts(blocks: readonly CorpusBlock[]): {
+  before: CorpusBlock[];
+  label?: string;
+  scenario: CorpusBlock[];
+} {
+  const at = blocks.findIndex(
+    (block) =>
+      block.type === 'paragraph' &&
+      /^illustration, not client work$/i.test(plain(block.runs).trim()),
+  );
+  if (at < 0) return { before: [...blocks], scenario: [] };
+  const found = blocks[at];
+  return {
+    before: blocks.slice(0, at),
+    label: found && found.type === 'paragraph' ? plain(found.runs).trim() : undefined,
+    scenario: blocks.slice(at + 1),
+  };
+}
+
+/** A scenario's label and words, with its drawing on the end side (copy beside a drawing is a split). */
+function ScenarioSplit({
+  label,
+  blocks,
+  scene,
+}: {
+  label: string;
+  blocks: CorpusBlock[];
+  scene?: SketchName;
+}) {
+  const words = (
+    <Layout rowGap="block">
+      <p className={styles.legend}>{label}</p>
+      <ContentSectionText>
+        <Prose html={proseHtml(blocks)} />
+      </ContentSectionText>
+    </Layout>
+  );
+  if (!scene) return words;
+  return (
+    <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+      {words}
+      <Sketch name={scene} />
+    </Layout>
+  );
+}
+
 function proseHtml(blocks: readonly CorpusBlock[]): string {
   return blocks
     .map((block) => {
@@ -266,15 +329,45 @@ const rowBody = (runs: readonly InlineRun[]) =>
 
 /* ── Sheets: what you get, a catalogue, argued items (C4, C7) ─────────────────── */
 
+/** The runs with the first letter of the first text run upper-cased. */
+function capitalFirst(runs: InlineRun[]): InlineRun[] {
+  const [first, ...rest] = runs;
+  return first?.type === 'text'
+    ? [
+        { type: 'text', text: first.text.charAt(0).toUpperCase() + first.text.slice(1) },
+        ...rest,
+      ]
+    : runs;
+}
+
 /**
  * One list item or claim as a promise. A bold lead is the title (a lead authored as a link keeps it,
  * C7); otherwise a colon inside the first seventy characters splits title from body; otherwise the
  * whole sentence is the title (component-map § A `what-you-get`).
  */
-function sheetItem(runs: readonly InlineRun[]): OfferSheetItem {
+function sheetItem(
+  runs: readonly InlineRun[],
+  opts?: { wholeSentence?: boolean },
+): OfferSheetItem {
   const lead = boldLead(runs);
   if (lead) {
     const link = linkIn(lead.label);
+    const labelText = inlineToText(lead.label).trim();
+    /* Titles on What you get, the sentence kept whole (owner, 30 Oct 2026): "**A tested brief:** what
+       goes in…" is a title over its remainder; a run-on lead ("**The build,** alongside…") titles
+       with its own opening and keeps the whole authored sentence as the body. */
+    if (labelText.endsWith(':')) {
+      return {
+        title: labelTitle(lead.label),
+        ...bodyFields(capitalFirst(trimStart(lead.body))),
+      };
+    }
+    if (opts?.wholeSentence && !link && !labelText.endsWith('.')) {
+      return {
+        title: labelText.replace(/,$/, '').trim(),
+        ...bodyFields([...lead.label, { type: 'text', text: ' ' }, ...trimStart(lead.body)]),
+      };
+    }
     const body = trimStart(lead.body);
     return {
       title: labelTitle(lead.label),
@@ -329,7 +422,8 @@ export function sheetParts(band: CorpusBand): SheetParts {
   let end = start;
   const at = blocks[start];
   if (at?.type === 'list') {
-    items = at.items.map(sheetItem);
+    const opts = { wholeSentence: band.id === 'what-you-get' };
+    items = at.items.map((runs) => sheetItem(runs, opts));
     /* A set is titled throughout or not at all (review 29 Oct): where any promise is authored with
        no lead of its own, every promise is a statement, its words whole in the body role. */
     if (items.some((item) => !item.title)) {
@@ -395,6 +489,25 @@ export function sheetParts(band: CorpusBand): SheetParts {
 const acrossFor = (count: number): 2 | 3 => (count === 2 || count === 4 ? 2 : 3);
 
 /**
+ * A band's terms ("**Who does the work.** …") are the labelled claims after its items; every other
+ * block is the note. Shared by the sheet's foot and the four-part band.
+ */
+function bandTerms(rest: readonly CorpusBlock[]): {
+  terms: { title: string; body?: string; bodyHtml?: string }[];
+  noteBlocks: CorpusBlock[];
+} {
+  const isTerm = (block: CorpusBlock) => {
+    const lead = leadOf(block);
+    return lead !== null && !isBareLabel(block) && linkIn(lead.label) === undefined;
+  };
+  const terms = rest.flatMap((block) => {
+    const lead = isTerm(block) ? leadOf(block) : null;
+    return lead ? [{ title: labelTitle(lead.label), ...bodyFields(trimStart(lead.body)) }] : [];
+  });
+  return { terms, noteBlocks: rest.filter((block) => !isTerm(block)) };
+}
+
+/**
  * A sheet band (`outcomes`, `catalog`): the promises as ONE OfferSheet, its lead, its list label, and
  * what follows as the note (the terms as tiles, a closing paragraph, the band's links). Seven or eight
  * promises, which the sheet is not built for, read down in two columns instead (component-map Q16).
@@ -413,9 +526,13 @@ export function SheetBand({
     const scene = scenes?.(key) ?? scenes?.(key.split(':')[0] ?? key);
     return scene ? { ...item, scene } : item;
   });
+  const rest = [...parts.intro, ...parts.after];
+  const combined =
+    rest.length > 0 ? <BandBody blocks={rest} labelledBy={head(band).headingId} /> : undefined;
+  const { terms, noteBlocks } = bandTerms(rest);
   const note =
-    parts.intro.length > 0 || parts.after.length > 0 ? (
-      <BandBody blocks={[...parts.intro, ...parts.after]} labelledBy={head(band).headingId} />
+    noteBlocks.length > 0 ? (
+      <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
     ) : undefined;
   if (items.length > 6) {
     const rows: ReadDownRow[] = items.map((item) => ({
@@ -423,9 +540,8 @@ export function SheetBand({
       ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : item.body ? { body: item.body } : {}),
     }));
     return (
-      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={note}>
+      <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
         <Layout rowGap="block">
-          {parts.listLabel ? <p>{parts.listLabel}</p> : null}
           <ReadDown rows={rows} columns={2} />
         </Layout>
       </ContentSection>
@@ -435,32 +551,125 @@ export function SheetBand({
     <OfferSheet
       {...head(band)}
       lead={parts.lead}
-      listLabel={parts.listLabel}
       items={items}
       across={acrossFor(items.length)}
       note={note}
+      terms={terms.length > 0 ? terms : undefined}
+    />
+  );
+}
+
+/** The three terms the four-part band knows, by key; each takes a drawing. */
+const TERM_KEYS = [
+  'who does the work',
+  'what we need from you',
+  'where our part stops',
+] as const;
+
+/**
+ * "What you get" in four parts (owner, 30 Oct 2026, round 7;
+ * decisions/2026-10-30-what-you-get-label-rows): the drawn deliverables, then the band's three terms
+ * as peers, each a flat drawing beside its words (one team, one needs and one stops drawing, never a
+ * photograph). Renders OfferParts only when every piece exists; otherwise the sheet stands unchanged,
+ * and in development the warning names each unmet piece, so a stale scene key cannot fall back silently.
+ */
+export function WhatYouGetBand({
+  band,
+  scenes,
+}: {
+  band: CorpusBand;
+  scenes: (key: string) => SketchName | undefined;
+}) {
+  const parts = sheetParts(band);
+  const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
+  const unmet: string[] = [];
+  if (!parts.listLabel) unmet.push('no "What you receive" label');
+  const deliverables = parts.items.flatMap((item) => {
+    const scene = item.title ? scenes(item.title) : undefined;
+    if (!item.title || !scene) {
+      unmet.push(`deliverable "${item.title ?? item.id ?? ''}" has no scene`);
+      return [];
+    }
+    return [{ ...item, title: item.title, scene }];
+  });
+  const peers = terms.flatMap((term): OfferPart[] => {
+    const key = offerSceneKey(term.title);
+    const title = term.title.replace(/[.:]\s*$/, '');
+    if (TERM_KEYS.some((k) => k === key)) {
+      const scene = scenes(term.title);
+      if (!scene) unmet.push(`term "${term.title}" has no drawing`);
+      return scene ? [{ ...term, title, scene }] : [];
+    }
+    unmet.push(`unknown term "${term.title}"`);
+    return [];
+  });
+  if (
+    peers.length !== terms.length ||
+    !TERM_KEYS.every((k) => terms.some((t) => offerSceneKey(t.title) === k))
+  ) {
+    unmet.push('the three terms are not all present and resolved');
+  }
+  if (unmet.length > 0 || deliverables.length !== parts.items.length) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `WhatYouGetBand "${band.id}": the sheet stands; ${[...new Set(unmet)].join('; ')}.`,
+      );
+    }
+    return <SheetBand band={band} scenes={scenes} />;
+  }
+  return (
+    <OfferParts
+      {...head(band)}
+      lead={parts.lead}
+      deliverablesTitle={parts.listLabel ?? ''}
+      deliverables={deliverables}
+      parts={peers}
+      note={
+        noteBlocks.length > 0 ? (
+          <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
+        ) : undefined
+      }
     />
   );
 }
 
 /* ── Hard parts (challenges) ─────────────────────────────────────────────────── */
 
-/**
- * The hard parts as a read-down: each problem (a bold label, or an `###` item) is a row's title and
- * its paragraphs, the "Example:" line included, its body. A band with its own photograph reads down
- * beside it; four or more without one read in two columns (component-map § A `hard-parts`).
- */
 /** An image across the content column (1240 cap, 32 gutters). */
 const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
-export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+/**
+ * The hard parts: each row a 168 drawing, the claim (title and body), and its "Example:" paragraph as
+ * authored, in three columns across the content width (owner, 30 Oct 2026). A band whose rows do not
+ * all carry an "Example:" reads down as before.
+ */
+export function ChallengesBand({
+  page,
+  band,
+  claimFigure,
+  ground = 'paper',
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  /** A claim's drawing by its title, exported on the band's ground; undefined takes the slot. */
+  claimFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
+  /** The ground the drawings are exported on: `paper-deep` on a tint band. */
+  ground?: 'paper' | 'paper-deep';
+}) {
   const blocks = content(band);
   const rows: ReadDownRow[] = [];
   const others: CorpusBlock[] = [];
   let leadText: string | undefined;
-  let open: { title: string; paras: string[] } | undefined;
+  const rowRuns: InlineRun[][][] = [];
+  let open: { title: string; paras: string[]; runs: InlineRun[][] } | undefined;
   const flush = () => {
-    if (open) rows.push({ title: open.title, bodyHtml: open.paras });
+    if (open) {
+      rows.push({ title: open.title, bodyHtml: open.paras });
+      rowRuns.push(open.runs);
+    }
     open = undefined;
   };
   blocks.forEach((block, index) => {
@@ -473,11 +682,19 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
           inner.type === 'paragraph' ? [inlineToHtml(inner.runs)] : [],
         ),
       });
+      rowRuns.push(
+        block.blocks.flatMap((inner) => (inner.type === 'paragraph' ? [inner.runs] : [])),
+      );
     } else if (lead && !isBareLabel(block)) {
       flush();
-      open = { title: labelTitle(lead.label), paras: [inlineToHtml(lead.body)] };
+      open = {
+        title: labelTitle(lead.label),
+        paras: [inlineToHtml(lead.body)],
+        runs: [lead.body],
+      };
     } else if (block.type === 'paragraph' && open) {
       open.paras.push(inlineToHtml(block.runs));
+      open.runs.push(block.runs);
     } else if (block.type === 'paragraph' && index === 0 && !hasLink(block.runs)) {
       leadText = plain(block.runs);
     } else {
@@ -486,6 +703,71 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
     }
   });
   flush();
+  /* The paragraph that opens "Example:" in each row, rendered exactly as authored. */
+  const exampleAt = rowRuns.map((paras) => paras.findIndex(isExample));
+  if (rows.length >= 2 && exampleAt.every((at) => at >= 0)) {
+    /* Each row across the content column: the 168 drawing; the claim's title and body; its example.
+       Drawing beside words is a split (copy beside an image: `section`); claim beside example is two
+       peer text columns of one row (`column`). Below 1024 the example drops under the body; below 768
+       all four stack: drawing, title, body, example. */
+    const proofSet = (
+      <Layout as="ul" rowGap="column">
+        {rows.map((row, i) => {
+          const at = exampleAt[i]!;
+          const drawn = claimFigure?.(row.title, ground);
+          const image = drawn
+            ? { ...drawn, alt: '', kind: 'illustration' as const }
+            : { ...placeholderIllustration(row.title), alt: '' };
+          const paras = row.bodyHtml ?? [];
+          const body = paras.filter((_, j) => j !== at);
+          return (
+            <li key={row.title}>
+              <Layout
+                columns={{ md: ['auto', 1] }}
+                colGap="section"
+                rowGap="block"
+                align="start"
+              >
+                <div className={styles.claimFigure}>
+                  <Media image={image} sizes="168px" />
+                </div>
+                <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="text" align="start">
+                  <Layout rowGap="block">
+                    <h3 className={styles.itemTitle}>{row.title}</h3>
+                    <Layout rowGap="text">
+                      {body.map((html, j) => (
+                        <p
+                          key={j}
+                          className={styles.hardBody}
+                          dangerouslySetInnerHTML={{ __html: html }}
+                        />
+                      ))}
+                    </Layout>
+                  </Layout>
+                  <p
+                    className={styles.hardBody}
+                    dangerouslySetInnerHTML={{ __html: paras[at] ?? '' }}
+                  />
+                </Layout>
+              </Layout>
+            </li>
+          );
+        })}
+      </Layout>
+    );
+    return (
+      <ContentSection {...head(band)} data-band="D-claims" lead={leadText}>
+        {others.length > 0 ? (
+          <Layout rowGap="stack">
+            <BandBody blocks={others} labelledBy={head(band).headingId} />
+            {proofSet}
+          </Layout>
+        ) : (
+          proofSet
+        )}
+      </ContentSection>
+    );
+  }
   const photo = hasSlot(page, band.id) ? slotImage(page, band.id) : undefined;
   /* ReadDown's photo form is built for exactly three rows (it warns otherwise) and crops the image to
      their height. Any other count takes the image across the column at its own ratio, the rows two up
@@ -522,8 +804,9 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
 const stepTitle = (label: readonly InlineRun[]) => labelTitle(label).replace(/^\d+\.\s*/, '');
 
 function stepOf(runs: readonly InlineRun[]): Step {
-  const found = boldLead(runs);
-  const lead = found ? sentenceLead(found) : null;
+  /* The bold run is the title as written (a trailing comma stays), the rest the body: no
+     sentence extension, so every step in a list is a short title over its body. */
+  const lead = boldLead(runs);
   if (lead) {
     const body = trimStart(lead.body);
     return {
@@ -538,7 +821,18 @@ function stepOf(runs: readonly InlineRun[]): Step {
  * A method: the ordered steps (a list, or a run of labelled claims) as Steps under the head; the
  * opening paragraph as the lead; everything else, a table included, in order around them.
  */
-export function MethodBand({ band }: { band: CorpusBand }) {
+export function MethodBand({
+  band,
+  scenario,
+  figure,
+  noteIcon,
+}: {
+  band: CorpusBand;
+  scenario?: SketchName;
+  figure?: { sketch: SketchName } | { image: SlotImage };
+  /** A glyph that heads the sentences after the steps, which then stand as callouts, not prose. */
+  noteIcon?: IconName;
+}) {
   const blocks = content(band);
   const [first] = blocks;
   const leadText =
@@ -560,7 +854,7 @@ export function MethodBand({ band }: { band: CorpusBand }) {
       !isBareLabel(rest[to] as CorpusBlock)
     ) {
       const lead = leadOf(rest[to] as CorpusBlock)!;
-      steps.push({ title: stepTitle(lead.label), ...rowBody(lead.body) });
+      steps.push({ title: stepTitle(lead.label), ...rowBody(trimStart(lead.body)) });
       to += 1;
     }
   } else if (listAt >= 0) {
@@ -589,16 +883,55 @@ export function MethodBand({ band }: { band: CorpusBand }) {
     );
   }
   const before = rest.slice(0, from);
-  const after = rest.slice(to);
+  const parts = scenarioParts(rest.slice(to));
+  const after = parts.before;
+  const stepsNode =
+    steps.length === 0 ? null : figure ? (
+      <Layout
+        columns={{ base: 1, lg: [1, 1] }}
+        colGap="section"
+        rowGap="stack"
+        align={'sketch' in figure ? 'center' : 'start'}
+      >
+        <Steps steps={steps} />
+        {'sketch' in figure ? (
+          <Sketch name={figure.sketch} />
+        ) : (
+          <Media image={figure.image} sizes={MEDIA_SPLIT} />
+        )}
+      </Layout>
+    ) : (
+      <Steps steps={steps} />
+    );
   return (
     <ContentSection {...head(band)} data-band="F" lead={leadText}>
       <Layout rowGap="stack">
         {before.length > 0 ? (
           <BandBody blocks={before} labelledBy={head(band).headingId} />
         ) : null}
-        {steps.length > 0 ? <Steps steps={steps} /> : null}
+        {stepsNode}
         {after.length > 0 ? (
-          <BandBody blocks={after} labelledBy={head(band).headingId} />
+          noteIcon ? (
+            <Layout rowGap="block">
+              {after.map((block, index) =>
+                block.type === 'paragraph' ? (
+                  <Callout
+                    key={index}
+                    tone="example"
+                    html={inlineToHtml(block.runs)}
+                    icon={<Icon name={noteIcon} size="xl" />}
+                  />
+                ) : (
+                  <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
+                ),
+              )}
+            </Layout>
+          ) : (
+            <BandBody blocks={after} labelledBy={head(band).headingId} />
+          )
+        ) : null}
+        {parts.label ? (
+          <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
         ) : null}
       </Layout>
     </ContentSection>
@@ -608,19 +941,234 @@ export function MethodBand({ band }: { band: CorpusBand }) {
 /* ── Tables (G11, G12, `compare`, `routes`) ──────────────────────────────────── */
 
 /** A comparison or record band: its opening paragraph as the lead, then every block in order. */
-export function TableBand({ band }: { band: CorpusBand }) {
+export function TableBand({
+  band,
+  scenario,
+  agreement,
+}: {
+  band: CorpusBand;
+  scenario?: SketchName;
+  /**
+   * The drawing of a two-column agreement table whose key column has no heading (what we agree before
+   * a build). Set, the table is read as the agreement: its one real heading as the legend, each key
+   * over its words, the drawing beside them, and the sentences after it as callouts with a mark.
+   */
+  agreement?: SketchName;
+}) {
   const blocks = content(band);
   const [first] = blocks;
   const leadText =
     first?.type === 'paragraph' && !leadOf(first) && !hasLink(first.runs)
       ? plain(first.runs)
       : undefined;
+  const parts = scenarioParts(leadText ? blocks.slice(1) : blocks);
+  const tableAt = parts.before.findIndex((block) => block.type === 'table');
+  const table = parts.before[tableAt];
+  const agreed =
+    agreement && table?.type === 'table' && table.header.length === 2 ? table : undefined;
+  const body = agreed ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before.slice(0, tableAt)} labelledBy={head(band).headingId} />
+      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <Layout rowGap="block">
+          <p className={styles.legend}>{plain(agreed.header[1] ?? [])}</p>
+          <Layout as="ul" rowGap="block">
+            {agreed.rows.map((row, index) => (
+              <li key={index}>
+                <Layout rowGap="inline">
+                  <h3 className={styles.itemTitle}>{plain(row[0] ?? [])}</h3>
+                  <p dangerouslySetInnerHTML={{ __html: inlineToHtml(row[1] ?? []) }} />
+                </Layout>
+              </li>
+            ))}
+          </Layout>
+        </Layout>
+        <Sketch name={agreement!} />
+      </Layout>
+      {parts.before
+        .slice(tableAt + 1)
+        .map((block, index) =>
+          block.type === 'paragraph' ? (
+            <Callout
+              key={index}
+              tone="example"
+              html={inlineToHtml(block.runs)}
+              icon={<Icon name="code-square" size="xl" />}
+            />
+          ) : (
+            <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
+          ),
+        )}
+      {parts.label ? (
+        <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+      ) : null}
+    </Layout>
+  ) : parts.label ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+      <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : (
+    <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+  );
   return (
     <ContentSection {...head(band)} data-band="E" lead={leadText}>
-      <BandBody
-        blocks={leadText ? blocks.slice(1) : blocks}
-        labelledBy={head(band).headingId}
-      />
+      {body}
+    </ContentSection>
+  );
+}
+
+/**
+ * A table whose rows are the peer items of one mechanism or a choice, each drawn: the drawing, the
+ * row's key as its title, what it says, and a third column as one labelled line. Not cards: no box,
+ * no ground, no hover. Where any row has no drawing the band is the plain table.
+ */
+export function DrawnTableBand({
+  page,
+  band,
+  sceneOf,
+  scenario,
+  arrangement = 'grid',
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  sceneOf: (key: string) => SketchName | undefined;
+  scenario?: SketchName;
+  /**
+   * `grid`: the items as drawn tiles side by side. `ledger`: one row per item, its drawing at the
+   * start, the row's words and its third column across, read left to right. For a table a reader
+   * compares across columns (a choice, a chain of checks), where a tile grid would repeat the shape
+   * of the band before it (round 5 critic, 30 Oct 2026).
+   */
+  arrangement?: 'grid' | 'ledger';
+}) {
+  const blocks = content(band);
+  const tableAt = blocks.findIndex((block) => block.type === 'table');
+  const table = blocks[tableAt];
+  if (!table || table.type !== 'table') return <TableBand band={band} scenario={scenario} />;
+  const items = table.rows.map((row) => {
+    const keyCell = row[0] ?? [];
+    const title = plain(keyCell).trim();
+    const link = linkIn(keyCell);
+    return {
+      title,
+      href: link?.href,
+      scene: sceneOf(title),
+      body: inlineToHtml(row[1] ?? []),
+      meta:
+        table.header.length >= 3
+          ? { label: plain(table.header[2] ?? []), html: inlineToHtml(row[2] ?? []) }
+          : undefined,
+    };
+  });
+  if (items.length === 0 || items.some((item) => !item.scene))
+    return <TableBand band={band} scenario={scenario} />;
+  const leading = blocks.slice(0, tableAt);
+  const only = leading.length === 1 ? leading[0] : undefined;
+  const leadText =
+    only && only.type === 'paragraph' && !hasLink(only.runs) ? plain(only.runs) : undefined;
+  const heading = plain(table.header[0] ?? []).trim();
+  const after = blocks.slice(tableAt + 1);
+  const n = items.length;
+  const ledger = (
+    <Layout as="ul" rowGap="stack">
+      {items.map((item) => (
+        <li key={item.title} className={styles.ledgerRow}>
+          <Layout
+            columns={{ base: 1, lg: [2, 3, 3] }}
+            colGap="gutter"
+            rowGap="block"
+            align="center"
+          >
+            <Sketch name={item.scene} />
+            <Layout rowGap="text">
+              <h3 className={styles.itemTitle}>
+                {item.href ? (
+                  <a href={item.href} className={styles.ledgerLink}>
+                    <Cluster colGap="tight" align="center" nowrap>
+                      <span>{item.title}</span>
+                      <Icon name="arrow-right" size="md" />
+                    </Cluster>
+                  </a>
+                ) : (
+                  item.title
+                )}
+              </h3>
+              <p dangerouslySetInnerHTML={{ __html: item.body }} />
+            </Layout>
+            {item.meta ? (
+              <Layout rowGap="inline">
+                <p className={styles.legend}>{item.meta.label}</p>
+                <p dangerouslySetInnerHTML={{ __html: item.meta.html }} />
+              </Layout>
+            ) : null}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  );
+  const set =
+    arrangement === 'ledger' ? (
+      ledger
+    ) : (
+      <Layout rowGap="block">
+        {table.header.length === 2 && heading ? (
+          <p className={styles.legend}>{heading}</p>
+        ) : null}
+        <Layout
+          as="ul"
+          columns={{ base: 1, md: 2, lg: n === 4 ? 4 : 3 }}
+          colGap="gutter"
+          rowGap="column"
+        >
+          {items.map((item) => (
+            <li key={item.title}>
+              <Layout rowGap="block">
+                <Sketch name={item.scene} />
+                <Layout rowGap="text">
+                  <h3 className={styles.itemTitle}>
+                    {item.href ? <a href={item.href}>{item.title}</a> : item.title}
+                  </h3>
+                  <p dangerouslySetInnerHTML={{ __html: item.body }} />
+                  {item.meta ? (
+                    <p className={styles.proofLine}>
+                      <span className={styles.legend}>{item.meta.label}</span>{' '}
+                      <span dangerouslySetInnerHTML={{ __html: item.meta.html }} />
+                    </p>
+                  ) : null}
+                </Layout>
+              </Layout>
+            </li>
+          ))}
+        </Layout>
+      </Layout>
+    );
+  const bound = page.composition.mediaBindings.some(
+    (b) => b.bound && b.supportsSection === band.id,
+  );
+  return (
+    <ContentSection {...head(band)} data-band="drawn-table" lead={leadText}>
+      <Layout rowGap="stack">
+        {leading.length > 0 && !leadText ? (
+          <BandBody blocks={leading} labelledBy={head(band).headingId} />
+        ) : null}
+        {set}
+        {after.length > 0 ? (
+          bound ? (
+            <Layout
+              columns={{ base: 1, lg: [1, 1] }}
+              colGap="section"
+              rowGap="stack"
+              align="center"
+            >
+              <BandBody blocks={after} />
+              <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
+            </Layout>
+          ) : (
+            <BandBody blocks={after} />
+          )
+        ) : null}
+      </Layout>
     </ContentSection>
   );
 }
@@ -770,14 +1318,12 @@ function sectorLinks(band: CorpusBand): { href: string; title: string }[] {
   return out;
 }
 
-/** Counts the approved sector card set fills without a hole (three or four across). */
-const WHOLE_ROWS: Readonly<Record<number, 3 | 4>> = { 3: 3, 4: 4, 6: 3, 8: 4, 9: 3, 12: 4 };
-
 /**
- * The sectors a page knows. Where the count fills whole rows, home's approved sector cards (four or
- * three across, two on a phone, each its sector's photograph); otherwise S7 rows, each sector a row
- * with its photograph at the end, which hold any count without a hole (component-map § A, Q15). A
- * sentence of links (`P`) is the lead; a paragraph after the links is the footer.
+ * The sectors a page knows, on the standard card grid
+ * (decisions/2026-10-30-industries-are-a-card-grid): three across from 1024, two across below (phone
+ * pair, never a scroll row, so every sector stays visible); each card its sector's 16:9 photograph or
+ * placeholder and its name, the whole card a link. A sentence of links (`P`) is the lead; a paragraph
+ * after the links is the footer.
  */
 export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
   const links = sectorLinks(band);
@@ -790,42 +1336,20 @@ export function IndustriesBand({ page, band }: { page: CorpusPage; band: CorpusB
     const photo = HOME_SECTOR_PHOTOS[href];
     return photo ? getKitPhoto(photo) : placeholderImage(page.route, band.id, slugOf(title));
   };
-  const across = WHOLE_ROWS[links.length];
-  if (across && !sentence) {
-    const cards: BlockCardSetItem[] = links.map((link) => ({
-      id: link.href,
-      title: link.title,
-      href: link.href,
-      media: { type: 'image', image: image(link.href, link.title) },
-    }));
-    return (
-      <ContentSection {...head(band)} data-band="C-image" footer={footer}>
-        <BlockCardSet items={cards} lead="none" across={across} cue="title" phone="pair" />
-      </ContentSection>
-    );
-  }
+  const cards: BlockCardSetItem[] = links.map((link) => ({
+    id: link.href,
+    title: link.title,
+    href: link.href,
+    media: { type: 'image', image: image(link.href, link.title) },
+  }));
   return (
     <ContentSection
       {...head(band)}
-      data-band="S7"
+      data-band="C-image"
       footer={footer}
       {...(sentence ? { lead: plain(sentence.runs) } : {})}
     >
-      <Layout as="ul" columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="none">
-        {links.map((link) => {
-          const img = image(link.href, link.title);
-          return (
-            <Teaser
-              key={link.href}
-              arrangement="row"
-              size="sm"
-              href={link.href}
-              title={link.title}
-              media={{ type: 'image', image: img }}
-            />
-          );
-        })}
-      </Layout>
+      <BlockCardSet items={cards} lead="none" across={3} cue="title" phone="pair" />
     </ContentSection>
   );
 }
@@ -987,15 +1511,25 @@ export function TextBand({
   page,
   band,
   side = 'start',
+  scenario,
 }: {
   page: CorpusPage;
   band: CorpusBand;
   side?: 'start' | 'end';
+  scenario?: SketchName;
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
   const body = blocks.filter((block) => block.type !== 'links');
-  const text = <BandBody blocks={body} />;
+  const parts = scenarioParts(body);
+  const text = parts.label ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before} />
+      <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : (
+    <BandBody blocks={body} />
+  );
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
     return (

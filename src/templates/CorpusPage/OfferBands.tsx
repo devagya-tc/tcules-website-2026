@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section } from '@/components';
+import { Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -9,6 +9,7 @@ import {
   ContentSection,
   ContentSectionText,
   CtaRow,
+  CtaSection,
   EngagementOptions,
   ListCard,
   OfferSheet,
@@ -19,12 +20,14 @@ import {
   Thread,
   TracePlates,
   VoiceLedger,
+  type BentoCta,
   type BlockCardSetItem,
   type EngagementScope,
   type TraceScene,
   type TraceStage,
 } from '@/patterns';
 import { caseStudyLink } from '@/lib/case-links';
+import { caseRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
@@ -34,10 +37,11 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { placeholderIllustration } from '@/lib/placeholders';
+import { ROUTES } from '@/lib/routes';
 import {
   offerSceneKey,
   serviceSceneFor,
-  type OfferSceneName,
   type OfferScenes,
   type SketchName,
 } from '@/lib/sketches';
@@ -58,12 +62,21 @@ import {
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { bindingNamed, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
+import {
+  bindingNamed,
+  caseCover,
+  coverFor,
+  hasSlot,
+  slotImage,
+  slugOf,
+  type SlotImage,
+} from './images';
 import {
   ChallengesBand,
   CloseBand,
   DestinationsBand,
   DirectoryBand,
+  DrawnTableBand,
   IndustriesBand,
   LinkActions,
   MethodBand,
@@ -72,6 +85,7 @@ import {
   SheetBand,
   TableBand,
   TextBand,
+  WhatYouGetBand,
   sheetParts,
 } from './CopyBands';
 import { DestinationGroupsBand, hasDestinationGroups } from './HubBands';
@@ -83,9 +97,11 @@ import {
   labelTitle,
   lastIndexWhere,
   leadOf,
+  linksIn,
   linkLead,
   plain,
   trimEnd,
+  trimStart,
 } from './text';
 
 /**
@@ -114,20 +130,25 @@ export type OfferContext = {
   /**
    * A Why Tcules reason's drawing by the reason's title as authored, exported on the band's ground
    * (component-map C1; the content seam's `getReasonFigure`). Undefined for a reason not drawn yet:
-   * the band draws only when every reason resolves.
+   * the band draws the labelled illustration slot in its place (src/lib/placeholders.ts).
    */
   reasonFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
+  /**
+   * A hard-parts claim's drawing by the claim's title as authored, exported on the band's ground
+   * (the content seam's `getClaimFigure`). Undefined for a claim not drawn yet: the band draws the
+   * labelled illustration slot in its place.
+   */
+  claimFigure?: (
     title: string,
     ground: 'paper' | 'paper-deep',
   ) => { src: string; width: number; height: number } | undefined;
 };
 
 /** The scene assigned to one item of a band, by the item's title (or a router item's href). */
-function sceneFor(
-  ctx: OfferContext,
-  band: CorpusBand,
-  key: string,
-): OfferSceneName | undefined {
+function sceneFor(ctx: OfferContext, band: CorpusBand, key: string): SketchName | undefined {
   return ctx.scenes?.items[band.id]?.[offerSceneKey(key)] ?? ctx.scenes?.items[band.id]?.[key];
 }
 
@@ -251,6 +272,16 @@ function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
     : undefined;
 }
 
+/**
+ * The tables read across their rows, which sit one under another with their drawing at the start
+ * (DrawnTableBand `ledger`): a chain of checks, a choice between services, a comparison. The bands
+ * before them ("What you get") are the tile grid, so these take the other shape (round 5 critic).
+ */
+const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 'compare']);
+
+/** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
+const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -290,10 +321,18 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        page-mapping § 23), each promise beside its own drawing where the page assigns one (owner,
        26 Oct 2026). The client's words that close the band in the corpus follow it as a band of their
        own (`voice`, plan.ts), so the offer stands alone: the quote as a third column, or a line under
-       the set, "reads as noise". */
+       the set, "reads as noise". "What you get" itself is FOUR PARTS (OfferParts; owner, 30 Oct 2026,
+       round 7; decisions/2026-10-30-what-you-get-label-rows): the deliverables, then who does the
+       work, what we need and where our part stops, each part's title in a label column, the last
+       three each led by its drawing. The sheet stands wherever a drawing is missing. */
     case 'outcomes':
-    case 'catalog':
-      return <SheetBand band={band} scenes={(title) => sceneFor(ctx, band, title)} />;
+    case 'catalog': {
+      const scenes = (title: string) => sceneFor(ctx, band, title);
+      if (band.id === 'what-you-get') {
+        return <WhatYouGetBand band={band} scenes={scenes} />;
+      }
+      return <SheetBand band={band} scenes={scenes} />;
+    }
 
     /* ── The 26 Oct copy's kinds (component-map § A, § B; CopyBands.tsx) ── */
     case 'quotes':
@@ -308,9 +347,33 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'industries':
       return <IndustriesBand page={page} band={band} />;
     case 'challenges':
-      return <ChallengesBand page={page} band={band} />;
-    case 'method':
-      return <MethodBand band={band} />;
+      return (
+        <ChallengesBand
+          page={page}
+          band={band}
+          claimFigure={ctx.claimFigure}
+          ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
+        />
+      );
+    case 'method': {
+      const figureScene = sceneFor(ctx, band, 'figure');
+      const bound = page.composition.mediaBindings.some(
+        (b) => b.bound && b.supportsSection === band.id,
+      );
+      const figure = figureScene
+        ? { sketch: figureScene }
+        : bound
+          ? { image: slotImage(page, band.id) }
+          : undefined;
+      return (
+        <MethodBand
+          band={band}
+          scenario={sceneFor(ctx, band, 'scenario')}
+          {...(figure ? { figure } : {})}
+          {...(METHOD_NOTE_ICON[band.id] ? { noteIcon: METHOD_NOTE_ICON[band.id] } : {})}
+        />
+      );
+    }
     case 'related':
       return <RelatedBand band={band} />;
     case 'recognition':
@@ -325,7 +388,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'directory':
       return <DirectoryBand page={page} band={band} />;
     case 'text':
-      return <TextBand page={page} band={band} side={unit.side} />;
+      return (
+        <TextBand
+          page={page}
+          band={band}
+          side={unit.side}
+          scenario={sceneFor(ctx, band, 'scenario')}
+        />
+      );
     case 'note':
       return <NoteBand band={band} />;
     case 'close':
@@ -413,34 +483,38 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       );
     }
 
-    /* How we work together / Ways to work with us — peers a reader chooses between (EngagementOptions,
-       owner 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head). The head is the heading and
-       the band's opening paragraphs as its lead (the page's own line, then the shared "Bring what you
-       have…"); each option is drawn in the FLAT grammar (Sketch `scope-*`), the drawing above its
-       name and words, so the band never reads as Why Tcules' isometric reasons beside it; the closing
-       paragraphs (what we stop at; where the studio is) are equal terms side by side under the
-       options; the band's own link is the head's end action and any other closes the band. */
+    /* How we work together / Ways to work with us — the head (heading, its own link as end action,
+       lead), the three options (primary, plated flat drawings), the two terms (one plain text row at body size under the set, on its grid). Its ask ("Tell us what you're working on") is its own band after it, an ink
+       island with the texture and one solid to the contact route (owner, 30 Oct 2026, round 5: "the 2
+       buttons split up and down is horrible design… an island section with that title and a button to
+       the contact page"). */
     case 'tiles': {
       const opening = leadingParagraphs(band);
       const terms = trailingParagraphs(band);
       const links = bandLinks(band);
       return (
-        <EngagementOptions
-          {...head(band)}
-          surface={unit.surface}
-          lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-          options={leads(band).map((row) => ({
-            title: row.title,
-            body: renderInline(row.body),
-            scope: scopeOf(row.title),
-          }))}
-          terms={terms.map((runs) => renderInline(runs))}
-          /* The band's own link ("How we work together") is the head's end action; any other link
-             ("Tell us what you're working on") closes the band (owner, 29 Oct 2026;
-             decisions/2026-10-29-how-we-work-together-link-in-head). */
-          action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
-          actions={links.length > 1 ? <LinkActions links={links.slice(1)} /> : undefined}
-        />
+        <Fragment>
+          <EngagementOptions
+            {...head(band)}
+            surface={unit.surface}
+            lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
+            options={leads(band).map((row) => ({
+              title: row.title,
+              body: renderInline(row.body),
+              scope: scopeOf(row.title),
+            }))}
+            terms={terms.map((runs) => ({ body: renderInline(runs) }))}
+            action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
+          />
+          {links[1] ? (
+            <CtaSection
+              data-band="L"
+              arrangement="open"
+              heading={links[1].labelText}
+              actions={[{ label: 'Start a project', href: ROUTES.contact }]}
+            />
+          ) : null}
+        </Fragment>
       );
     }
 
@@ -506,7 +580,23 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M15 — a comparison: a key column against rows, boxed. */
     case 'table':
-      return <TableBand band={band} />;
+      return ctx.scenes?.items[band.id] &&
+        !sceneFor(ctx, band, 'agree') &&
+        blocksOf(band, 'table').length > 0 ? (
+        <DrawnTableBand
+          page={page}
+          band={band}
+          sceneOf={(key) => sceneFor(ctx, band, key)}
+          scenario={sceneFor(ctx, band, 'scenario')}
+          arrangement={LEDGER_BANDS.has(band.id) ? 'ledger' : 'grid'}
+        />
+      ) : (
+        <TableBand
+          band={band}
+          scenario={sceneFor(ctx, band, 'scenario')}
+          agreement={sceneFor(ctx, band, 'agree')}
+        />
+      );
 
     /* What you receive: a list of deliverables, with the product shot beside it. */
     /* What you receive — the deliverables as ONE offer (OfferSheet, as "What you get" on the service
@@ -545,9 +635,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
       /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
-         closing links. Drawn as Reasons when every reason has its figure; until the figures are
-         drawn (component-map C1, 10 figures), ONE OfferSheet three across, which also differs from
-         the drawn engagements band beside it. */
+         closing links. One isometric illustration per reason, band scale (`figureSize="lg"`), never
+         a case cover or a figure panel (decisions/2026-10-30-reasons-take-illustrations): the case
+         links stay in the sentence. A reason not drawn yet takes the labelled illustration slot
+         (decisions/2026-10-30-undrawn-illustration-slot), so a band never mixes two scales. Head
+         above, drawing above (decisions/2026-10-29-set-reasons-head-above-drawing-above), and
+         isometric, so it never reads as How we work together's flat options beside it. */
       if (blocksOf(band, 'list').length > 0 || band.blocks.some((b) => b.type === 'item')) {
         const parts = sheetParts(band);
         /* The closing link row ("Why teams choose Tcules") follows the last `###` reason, so the
@@ -556,38 +649,31 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const links = parts.after.flatMap((block) =>
           block.type === 'links' ? block.links : [],
         );
-        const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
-        /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
-           reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
-           Isometric, so it never reads as How we work together's flat options beside it
-           (decisions/2026-10-29-how-we-work-together-link-in-head). */
+        const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
-        const drawn = parts.items.map((item) => ({
-          item,
-          figure: item.title ? ctx.reasonFigure?.(item.title, ground) : undefined,
-        }));
-        if (drawn.length > 0 && drawn.every(({ figure }) => figure)) {
+        const titled = parts.items.filter((item) => item.title);
+        if ([3, 4, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              figureSize="lg"
               lead={parts.lead}
               action={action}
-              items={drawn.flatMap(({ item, figure }) =>
-                figure && item.title
-                  ? [
-                      {
-                        title: item.title,
-                        body: item.bodyHtml ? (
-                          <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-                        ) : (
-                          (item.body ?? '')
-                        ),
-                        figure: { ...figure, alt: '', kind: 'illustration' as const },
-                      },
-                    ]
-                  : [],
-              )}
+              items={titled.map((item) => {
+                const drawn = ctx.reasonFigure?.(item.title!, ground);
+                return {
+                  title: item.title!,
+                  body: item.bodyHtml ? (
+                    <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                  ) : (
+                    (item.body ?? '')
+                  ),
+                  figure: drawn
+                    ? { ...drawn, alt: '', kind: 'illustration' as const }
+                    : { ...placeholderIllustration(item.title!), alt: '' },
+                };
+              })}
             />
           );
         }
@@ -816,6 +902,71 @@ function trailingAfterTable(band: CorpusBand): InlineRun[][] {
     .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
 }
 
+type Sentence = { runs: InlineRun[]; text: string };
+function sentencesOf(runs: readonly InlineRun[]): Sentence[] {
+  const out: Sentence[] = [];
+  let cur: InlineRun[] = [];
+  const flush = () => {
+    const text = plain(cur).trim();
+    if (text) out.push({ runs: trimEnd(trimStart(cur)), text });
+    cur = [];
+  };
+  for (const run of runs) {
+    if (run.type !== 'text') {
+      cur.push(run);
+      continue;
+    }
+    const parts = run.text.split(/(?<=[.?!])\s+/);
+    parts.forEach((part, i) => {
+      if (part) cur.push({ type: 'text', text: part });
+      if (i < parts.length - 1) flush();
+    });
+  }
+  flush();
+  return out;
+}
+
+/** A closing paragraph authored as questions each answered by where to go (the CTA card's routes): undefined when it is not. */
+function routesOf(
+  paragraphs: readonly InlineRun[][],
+): { question?: string; answer: InlineRun[] }[] | undefined {
+  const routes: { question: string; answer: InlineRun[] }[] = [];
+  for (const s of paragraphs.flatMap(sentencesOf)) {
+    if (s.text.endsWith('?')) routes.push({ question: s.text, answer: [] });
+    else {
+      const r = routes.at(-1);
+      if (!r) return undefined;
+      if (r.answer.length) r.answer.push({ type: 'text', text: ' ' });
+      r.answer.push(...s.runs);
+    }
+  }
+  return routes.length > 0 && routes.every((r) => r.answer.length > 0 && hasLink(r.answer))
+    ? routes
+    : undefined;
+}
+
+/** A router row's words: the second column, and a third ("Best for") as a sentence after it. */
+function routerBody(
+  table: Extract<CorpusBlock, { type: 'table' }>,
+  row: InlineRun[][],
+): string {
+  const second = plain(row[1] ?? []).replace(/\.$/, '');
+  return table.header.length >= 3
+    ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
+    : second;
+}
+
+/**
+ * 3 or 4 tracks for `cells` (the tiles plus one CTA card per question) so they fill whole rows; where
+ * neither does, the count whose last row is fuller, the last card taking what that row leaves
+ * (owner, 30 Oct 2026: one dotted card per question).
+ */
+function ctaTracks(cells: number): 3 | 4 {
+  if (cells % 3 === 0) return 3;
+  if (cells % 4 === 0) return 4;
+  return cells % 3 > cells % 4 ? 3 : 4;
+}
+
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
 function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
   /* Destinations come as link-led lines ("[UX Research](/…): find out…"), as a table whose key
@@ -830,7 +981,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             'children' in run ? run.children.filter((c) => c.type === 'link') : [],
           )[0];
         return link && link.type === 'link'
-          ? [{ href: link.href, title: plain(link.children), body: plain(row[1] ?? []) }]
+          ? [{ href: link.href, title: plain(link.children), body: routerBody(table, row) }]
           : [];
       })
     : band.blocks.flatMap((block) => {
@@ -875,23 +1026,38 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
   const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
   if (rows.length >= 3 && scenes.every(Boolean)) {
-    const four = rows.length === 7 || rows.length === 8 || rows.length === 4;
-    const note =
-      closing.length > 0 ? (
-        <>
-          {closing.map((runs, index) => (
-            <Fragment key={index}>
-              {index > 0 ? ' ' : null}
-              {renderInline(runs)}
-            </Fragment>
-          ))}
-        </>
-      ) : undefined;
-    const inCell = four && rows.length % 4 !== 0;
+    /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
+       on every service page that closes its set with a way onward: questions each answered by links, or
+       one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
+       every link becomes an arrow link in a dotted card, one card per question (owner, 30 Oct 2026). A closing with no link stays below the set. */
+    const routes =
+      routesOf(closing) ??
+      (closing.length > 0 && closing.every(hasLink)
+        ? [
+            {
+              answer: closing.flatMap((runs, index) =>
+                index > 0 ? [{ type: 'text', text: ' ' } as InlineRun, ...runs] : runs,
+              ),
+            },
+          ]
+        : undefined);
+    const n = rows.length;
+    const cta: BentoCta | undefined = routes
+      ? {
+          routes: routes.map((r) => ({
+            ...(r.question ? { question: r.question, answer: plain(r.answer).trim() } : {}),
+            ...(!r.question ? { answer: plain(r.answer).trim() } : {}),
+            actions: linksIn(r.answer).map((link) => ({
+              label: plain(link.children),
+              href: link.href,
+            })),
+          })),
+        }
+      : undefined;
     return wrap(
       <Bento
-        tracks={four ? 4 : 3}
-        note={inCell ? note : undefined}
+        tracks={cta ? ctaTracks(n + cta.routes.length) : n === 7 || n === 8 || n === 4 ? 4 : 3}
+        cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,
@@ -900,7 +1066,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           scene: scenes[index] as SketchName,
         }))}
       />,
-      inCell ? undefined : closingFooter,
+      routes ? undefined : closingFooter,
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));

@@ -37,13 +37,16 @@ export function OfferPage({
   avatars,
   scenes,
   reasonFigure,
+  claimFigure,
 }: OfferPageProps) {
-  const units = planOffer(page);
-  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure };
+  const drawing = serviceIllustration(page.route);
+  const units = planOffer(
+    page,
+    new Set(Object.keys(scenes?.items ?? {})),
+    drawing ? 'isometric' : 'photo',
+  );
+  const ctx: OfferContext = { page, caseRefs, shared, ratings, avatars, scenes, reasonFigure, claimFigure };
 
-  const drawing = page.route.startsWith('/services/')
-    ? serviceIllustration(page.slug)
-    : undefined;
   const heroBinding = page.composition.mediaBindings.find(
     (b) => b.bound && b.supportsSection === 'hero',
   );

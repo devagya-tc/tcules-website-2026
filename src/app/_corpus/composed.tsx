@@ -14,6 +14,7 @@ import { corpusMetadata } from '@/lib/corpus-metadata';
 import { ROUTES } from '@/lib/routes';
 import { OfferPage } from '@/templates';
 
+import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
 
 /**
@@ -66,6 +67,7 @@ export async function ComposedRoute({ route }: { route: string }) {
       avatars={avatars}
       scenes={scenes}
       reasonFigure={landedReasonFigure}
+      claimFigure={landedClaimFigure}
     />
   );
 }

@@ -76,7 +76,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The head is the heading and the band's opening paragraphs, stacked a text apart as its lead. The three options take three tracks from 768, each the flat scope drawing above its name and words. The closing paragraphs are equal terms side by side on their hairlines, a stack under the options. The band's own link (How we work together) is the head's end action, centred on the heading from 1024 with the lead under that row (owner, 29 Oct 2026); the other link closes the band, a stack under the terms."
+        note="Three options on three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are one plain text row at body size a column under the set: from 1024 on the options' grid (tracks 1 and 2, track 3 empty), stacked below; no plates, drawings, rail or nodes (owner, 30 Oct 2026, engagement-terms-plain-row). The ask is the next band, an ink island."
       />
       <EngagementOptions
         heading="How we work together"
@@ -87,8 +87,12 @@ export default function EngagementOptionsSpecimen() {
         ]}
         options={TOGETHER}
         terms={[
-          'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
-          'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+          {
+            body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
+          },
+          {
+            body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+          },
         ]}
         action={
           <CtaRow
@@ -96,10 +100,34 @@ export default function EngagementOptionsSpecimen() {
             actions={[{ label: 'How we work together', href: '#together' }]}
           />
         }
-        actions={
+      />
+
+      <Variation
+        id="together-tint"
+        title="0b · Shared terms on tint"
+        note="The same on tint, proving the term ink per surface."
+      />
+      <EngagementOptions
+        surface="tint"
+        heading="How we work together"
+        headingId="eop-together-tint"
+        lead={[
+          'When you are not sure which service fits, a good first piece of work is one workflow, one feature or a focused audit, run as a small pilot project.',
+          'Bring what you have: an idea, a prototype or a product with years behind it. Shaping the brief is part of the work, and our first conversation is about your product.',
+        ]}
+        options={TOGETHER}
+        terms={[
+          {
+            body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you. You keep the product calls, and once the work is paid for, what we make is yours.',
+          },
+          {
+            body: 'Our studio is in Ahmedabad, India, and most of our clients work in other countries. We agree the hours we share before each project starts, and you work directly with the people doing the work.',
+          },
+        ]}
+        action={
           <CtaRow
             rule={false}
-            actions={[{ label: "Tell us what you're working on", href: '#enquiry' }]}
+            actions={[{ label: 'How we work together', href: '#together' }]}
           />
         }
       />
@@ -114,6 +142,10 @@ export default function EngagementOptionsSpecimen() {
         headingId="eop-four"
         options={FOUR}
         note={NOTE}
+        terms={[
+          { body: 'We can stop at designs your engineers build, take the hardest parts into code, or build the product with you.' },
+          { body: 'Our studio is in Ahmedabad, India. We agree the hours we share before each project starts.' },
+        ]}
       />
 
       <Variation

@@ -340,6 +340,20 @@
 .pin-last > :last-child {
   align-self: end;
 }
+@media (min-width: 1024px) {
+  .pin-last-lg > :last-child {
+    align-self: end;
+  }
+  .pin-last-lg:has(> :last-child:nth-child(1)) {
+    grid-template-rows: 1fr;
+  }
+  .pin-last-lg:has(> :last-child:nth-child(2)) {
+    grid-template-rows: auto 1fr;
+  }
+  .pin-last-lg:has(> :last-child:nth-child(3)) {
+    grid-template-rows: repeat(2, auto) 1fr;
+  }
+}
 :is(.pin-last, .fill-last):has(> :last-child:nth-child(1)) {
   grid-template-rows: 1fr;
 }
@@ -675,4 +689,11 @@
   .scroll-always.peek-always {
     --layout-peek: calc(var(--layout-col-gap) + var(--lay-scroll-peek-wide));
   }
+}
+
+/* shareRows — from lg each child spans N rows and takes them as a subgrid, so siblings' parts align. */
+@media (min-width: 1024px) {
+  .share-rows-2 > * { grid-row: span 2; grid-template-rows: subgrid; }
+  .share-rows-3 > * { grid-row: span 3; grid-template-rows: subgrid; }
+  .share-rows-4 > * { grid-row: span 4; grid-template-rows: subgrid; }
 }

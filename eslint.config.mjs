@@ -127,7 +127,6 @@ const eslintConfig = defineConfig([
   globalIgnores([
     '.next/**',
     // A captured page's built chunks (see its README.md): minified output, not source.
-    'public/_frozen/**',
     'out/**',
     'build/**',
     'next-env.d.ts',

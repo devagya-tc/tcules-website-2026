@@ -16,6 +16,8 @@
 /* ── Geometry · identical on every surface ─────────────────────────────────────
    --rsn-figure-height  a component SIZE: the drawing's box height where it heads its words. 140
                         keeps two rows of four (a 2×2) inside the fold at 1440.
+   --rsn-figure-height-lg  a component SIZE: the band-scale box (offer pages, `figureSize="lg"`); 256
+                        matches the retired proof plate, so the row keeps its height; 200 below 768.
    --rsn-figure-ratio   the box's ratio, 6:5, the widest of the set (1.2): the box is as wide as the
                         widest drawing, so every drawing starts at its track's edge; a narrower one
                         centres in it by a few pixels.
@@ -27,12 +29,16 @@
      under h2 would be h4, which set "Senior people, start to finish" on three lines in a 206 track. */
   --rsn-title-text: var(--text-h5);
   --rsn-title-tracking: var(--text-h5-tracking);
+  /* `beside` reads the reasons down a 7-of-12 track, where h4 holds a claim on one line. */
+  --rsn-title-beside-text: var(--text-h4);
+  --rsn-title-beside-tracking: var(--text-h4-tracking);
   --rsn-title-measure: var(--measure-title);
   --rsn-body-text: var(--text-body-sm);
   --rsn-body-measure: var(--measure-lead);
   --rsn-eyebrow-text: var(--text-eyebrow);
   --rsn-eyebrow-tracking: var(--text-eyebrow-tracking);
   --rsn-figure-height: 140px;
+  --rsn-figure-height-lg: 256px;
   --rsn-figure-ratio: 6 / 5;
   --rsn-rule-width: var(--border-width-hairline);
   /* The `boxed` frame's corners: the photograph radius, LogoGrid's (owner, 16 Oct 2026: "use the
@@ -41,24 +47,23 @@
   /* The set's framing sentence (component-map C1): the lead role, its own measure. */
   --rsn-lead-text: var(--text-lead);
   --rsn-lead-measure: var(--measure-lead);
-  /* `proof` (owner, 29 Oct 2026, home): a reason's evidence as its visual. One box height for the
-     set, a component size: a 16:9 case cover at ~300 wide over its figure fills it, and the marks
-     and figures centre in it. The figure is the h5-lg role in the accent, its label the mono eyebrow
-     voice; the cover's corners are the photograph radius. */
-  --rsn-proof-height: 224px;
-  /* The cover's height inside it: the box less its figure (h5-lg over an eyebrow, 52) and the `text`
-     seam (16) between them. */
-  --rsn-cover-height: 156px;
-  --rsn-proof-value-text: var(--text-h5-lg);
-  --rsn-proof-value-tracking: var(--text-h5-lg-tracking);
+  /* `proof` (owner, 29 Oct 2026, home; one plate, 30 Oct): a reason's evidence as its visual on one
+     plate of one size, a component size at every width: fits a 16:9 cover at ~400 over its 48 caption
+     strip, and three name+tenure entries at the 1024 track of ~299. */
+  --rsn-proof-height: 256px;
+  --rsn-status-size: var(--space-8); /* a component size: the live dot */
   --rsn-proof-label-text: var(--text-eyebrow);
   --rsn-proof-label-tracking: var(--text-eyebrow-tracking);
-  --rsn-cover-radius: var(--radius-8);
+  --rsn-plate-radius: var(--radius-8);
+  /* A plate's single count ("3 years"): the figures treatment, the number at the large stat role. */
+  --rsn-proof-stat-text: var(--text-stat-xl);
+  --rsn-proof-stat-tracking: var(--text-stat-xl-tracking);
 }
 
 @media (max-width: 767px) {
   :root {
     --rsn-figure-height: 112px;
+    --rsn-figure-height-lg: 200px;
   }
 }
 
@@ -74,10 +79,11 @@
   --rsn-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --rsn-lead-ink: var(--color-neutral-700); /* 8.14:1 */
   --rsn-rule-ink: var(--color-neutral-200); /* decoration */
-  --rsn-proof-value-ink: var(--color-brandeis-500); /* 5.6:1 */
   --rsn-proof-label-ink: var(--color-neutral-600); /* 4.92:1 */
   --rsn-wordmark-ink: var(--color-neutral-600); /* the client marks' ink (ClientMark), 4.92:1 */
   --rsn-cover-ground: var(--color-paper-deep);
+  --rsn-plate-ground: var(--color-paper-deep);
+  --rsn-status-ink: var(--color-brandeis-500);
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -89,10 +95,11 @@
   --rsn-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-lead-ink: var(--color-neutral-800); /* 10.54:1 */
   --rsn-rule-ink: var(--color-neutral-300); /* decoration; 200 vanishes on the deeper ground */
-  --rsn-proof-value-ink: var(--color-brandeis-500); /* 5.51:1 */
   --rsn-proof-label-ink: var(--color-neutral-700); /* 7.27:1 */
   --rsn-wordmark-ink: var(--color-neutral-600); /* the client marks' ink, 4.39:1 */
   --rsn-cover-ground: var(--color-paper);
+  --rsn-plate-ground: var(--color-paper);
+  --rsn-status-ink: var(--color-brandeis-500);
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
@@ -104,10 +111,11 @@
   --rsn-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --rsn-lead-ink: var(--color-neutral-300); /* 11.07:1 */
   --rsn-rule-ink: var(--color-neutral-700); /* decoration */
-  --rsn-proof-value-ink: var(--color-brandeis-300); /* 7.32:1 */
   --rsn-proof-label-ink: var(--color-neutral-400); /* 8.05:1 */
   --rsn-wordmark-ink: var(--color-neutral-300); /* the client marks' ink, 11.07:1 */
   --rsn-cover-ground: var(--color-neutral-900);
+  --rsn-plate-ground: var(--color-neutral-900);
+  --rsn-status-ink: var(--color-brandeis-300);
 }
 
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
@@ -119,8 +127,9 @@
   --rsn-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --rsn-lead-ink: var(--color-brandeis-50); /* 5.57:1 */
   --rsn-rule-ink: var(--color-brandeis-400); /* decoration */
-  --rsn-proof-value-ink: var(--color-white); /* 6.23:1 */
   --rsn-proof-label-ink: var(--color-brandeis-100); /* 4.91:1 */
   --rsn-wordmark-ink: var(--color-brandeis-200); /* the client marks' ink, 3.78:1 */
   --rsn-cover-ground: var(--color-brandeis-600);
+  --rsn-plate-ground: var(--color-brandeis-600);
+  --rsn-status-ink: var(--color-white);
 }

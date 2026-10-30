@@ -186,15 +186,15 @@ Our digital product design services cover the thinking behind your product and e
 
 **What you receive**
 
-- A tested brief: what goes in, what waits and what stays out, checked against the people who use the product.
+- **A tested brief:** what goes in, what waits and what stays out, checked against the people who use the product.
 
-- A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.
+- **A model:** A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.
 
-- Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos.
+- **Interaction & Visual Design:** Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos.
 
-- Clickable or coded prototypes, tested with people who match your users.
+- **Prototypes:** Clickable or coded prototypes, tested with people who match your users.
 
-- Designs ready to build, and our review of what your engineers ship.
+- **Ready to build:** Designs ready to build, and our review of what your engineers ship.
 
 **Who does the work.** Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.
 

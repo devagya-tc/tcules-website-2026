@@ -158,7 +158,9 @@ for (const e of entries) {
       problems.push(
         `${DIR}/${target.file}  is superseded by ${e.id} but still says status: ${target.status}`,
       );
-    if (target.id >= e.id)
+    /* By DATE: ids are date-prefixed, and a ruling is often refined the day it is made (round 6
+       superseded a round 5 entry the same day), where the slug order says nothing about which came first. */
+    if (target.id.slice(0, 10) > e.id.slice(0, 10))
       problems.push(`${DIR}/${e.file}  supersedes \`${old}\`, which is not older`);
     if (replacedBy.has(old))
       problems.push(

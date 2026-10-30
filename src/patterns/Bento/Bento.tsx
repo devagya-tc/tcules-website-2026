@@ -30,6 +30,20 @@ export type BentoItem = {
   span?: 1 | 2;
 };
 
+export type BentoCtaAction = { label: string; href: string };
+
+/**
+ * One route out of the set: a question, the sentence that answers it (plain text, verbatim), its actions.
+ * A closing statement with no question is a route with no `question`: its sentence takes the title role.
+ */
+export type BentoCtaRoute = {
+  question?: string;
+  answer?: string;
+  actions: readonly BentoCtaAction[];
+};
+
+export type BentoCta = { routes: readonly BentoCtaRoute[] };
+
 export type BentoProps = {
   /** The tiles, in reading order. Built for six on two rows: two wide, four single. */
   items: readonly BentoItem[];
@@ -50,6 +64,14 @@ export type BentoProps = {
    * links included).
    */
   note?: ReactNode;
+  /**
+   * The band's closing routes as CTA cards after the tiles, ONE card per route, each a normal grid
+   * cell: a dotted outline and no fill, no texture, no lift, not itself a link. Every card is its
+   * question, its sentence, then its destinations as arrow links. The caller picks `tracks` so tiles
+   * plus cards fill whole rows where 3 or 4 can; where neither does, the last card takes every track
+   * its row leaves (owner, 30 Oct 2026).
+   */
+  cta?: BentoCta;
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -77,6 +99,48 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
     }
     return placed;
   });
+}
+
+/**
+ * One CTA card: one route, its question as the title, its sentence, then its destinations as arrow
+ * links pinned to the card's foot, so the links of cards sharing a row sit on one line. Every card has
+ * this one structure (owner, 30 Oct 2026: one dotted card per question).
+ */
+function CtaCard({ route }: { route: BentoCtaRoute }) {
+  if (process.env.NODE_ENV !== 'production' && route.actions.length === 0) {
+    console.warn('Bento: a CTA card has no action.');
+  }
+  return (
+    <Layout className={styles.fill} rowGap="block" pinLast={route.actions.length > 0}>
+      <Layout rowGap="tight">
+        {route.question ? (
+          <>
+            <p className={styles.ctaTitle}>{route.question}</p>
+            {route.answer ? <p className={styles.ctaBody}>{route.answer}</p> : null}
+          </>
+        ) : route.answer ? (
+          <p className={styles.ctaTitle}>{route.answer}</p>
+        ) : null}
+      </Layout>
+      {route.actions.length > 0 ? (
+        <Layout rowGap="tight">
+          {route.actions.map((action) => (
+            <Button
+              key={action.href}
+              as="a"
+              href={action.href}
+              emphasis="link"
+              tone="primary"
+              size="md"
+              icon={<Icon name="arrow-right" />}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </Layout>
+      ) : null}
+    </Layout>
+  );
 }
 
 /** One tile's link: its words and its drawing, stacked, or side by side when it is wide. */
@@ -193,12 +257,7 @@ export function ServiceTile({
   ) : null;
   const button = action?.trim() ? (
     <Cluster colGap="tight">
-      <Button
-        as="span"
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name="arrow-right" />}
-      >
+      <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
         {action}
       </Button>
     </Cluster>
@@ -251,10 +310,14 @@ export function ServiceTile({
  * tile to tile. Neutral at rest; on hover the tile's own texture turns blue, its hairline turns
  * light blue, it lifts and its title takes the accent.
  *
+ * Every tile's drawing moves on hover or focus: a story scene tells its story, any other makes its one
+ * `Move`/`GrowIn` move on the tile's own curve (decisions/2026-10-30-service-tile-drawing-moves-on-hover).
+ * The set may close on a CTA card (`cta`, decisions/2026-10-30-set-ends-in-a-cta-card).
+ *
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoProps) {
+export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
   if (
@@ -270,6 +333,13 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
   const last = placed.at(-1);
   const used = last ? last.col + last.span : 0;
   const noteSpan = used === tracks ? tracks : tracks - used;
+  /* The CTA cards follow the tiles one cell each; the LAST card takes every track its row leaves, so
+     the set ends on a full row (from 1024 on `tracks`, from 768 on two). */
+  const routes = cta?.routes ?? [];
+  const ctaAt = used % tracks;
+  const lgSpan = routes.length > 0 ? tracks - ((ctaAt + routes.length - 1) % tracks) : 1;
+  const mdCells = placed.reduce((sum, p) => sum + p.span, 0) + routes.length;
+  const mdSpan = mdCells % 2 === 1 ? 2 : 1;
 
   return (
     <Layout
@@ -280,7 +350,7 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
       colGap="gutter"
       rowGap="gutter"
     >
-      {placed.map(({ item, row, col, span }) => (
+      {placed.map(({ item, row, col, span }, index) => (
         <li
           key={item.id}
           className={cx(styles.cell, span === 2 && styles.wide)}
@@ -290,7 +360,21 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note }: BentoP
           <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
       ))}
-      {note ? (
+      {routes.length > 0 ? (
+        routes.map((route, i) => {
+          const isLast = i === routes.length - 1;
+          return (
+            <li
+              key={route.question ?? route.answer ?? i}
+              className={styles.cta}
+              data-span={isLast ? lgSpan : 1}
+              data-span-md={isLast ? mdSpan : 1}
+            >
+              <CtaCard route={route} />
+            </li>
+          );
+        })
+      ) : note ? (
         <li className={styles.note} data-span={noteSpan}>
           <p className={styles.noteText}>{note}</p>
         </li>

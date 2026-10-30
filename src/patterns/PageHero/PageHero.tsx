@@ -1269,7 +1269,11 @@ export function PageHero({
         mediaNode
       );
 
-    const copyColumn = centred ? withTrail(copyTrack) : copyTrack;
+    /* The trail is always the hero's first item (owner, 30 Oct 2026;
+       decisions/2026-10-30-breadcrumb-is-the-heros-first-item). It joins the copy column only when
+       the title is in that column too; with the title across the top, the trail goes above it. */
+    const trailInCopy = centred && !across;
+    const copyColumn = trailInCopy ? withTrail(copyTrack) : copyTrack;
     const content = (
       <Layout
         rowGap="stack"
@@ -1295,7 +1299,7 @@ export function PageHero({
     ) : (
       content
     );
-    top = centred ? headed : withTrail(headed);
+    top = trailInCopy ? headed : withTrail(headed);
   }
 
   return (

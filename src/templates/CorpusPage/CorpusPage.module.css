@@ -98,3 +98,39 @@
   max-inline-size: var(--measure-lead);
 }
 
+
+/* A hard part's sentences: body role at the lead measure; links take the base link style. */
+.hardBody {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  max-inline-size: var(--measure-lead);
+}
+
+/* A claim's drawing (ChallengesBand): one width at every width, its height the asset's own ratio.
+   No plate, no hairline: an illustration is never boxed (ch05 §4a). */
+.claimFigure {
+  inline-size: var(--cpg-claim-figure-width);
+}
+
+/* A ledger row (DrawnTableBand `ledger`): the row is the link's target when its title links, so the
+   whole row, not one underlined word, is the way in. The title keeps the heading's ink at rest and
+   takes the accent under the pointer or focus, as a title-cued card's does. */
+.ledgerRow {
+  position: relative;
+}
+
+.ledgerLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ledgerLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.ledgerLink:hover,
+.ledgerLink:focus-visible {
+  color: var(--cpg-mark);
+}

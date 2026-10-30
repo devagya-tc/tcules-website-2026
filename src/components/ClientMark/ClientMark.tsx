@@ -59,6 +59,11 @@ export type ClientMarkProps = {
    * the box-area sizing it had before densities. Clamped to 0.1–0.6, warned outside it.
    */
   density?: number;
+  /**
+   * `md` (default) is the set's size: a logo strip or client wall. `sm` is a mark in a citation
+   * line (a case's title beside it): the same ink rules at 24 tall at most, one value at every width.
+   */
+  size?: 'md' | 'sm';
   className?: string;
 };
 
@@ -101,6 +106,7 @@ export function ClientMark({
   height,
   correction = 0,
   density,
+  size = 'md',
   className,
 }: ClientMarkProps) {
   if (!src) {
@@ -158,6 +164,6 @@ export function ClientMark({
     /* role="img" + aria-label: the element has no content, so the label is its entire accessible
        text, and the role makes a screen reader announce it as an image ("Northwind, image")
        rather than skip an empty span. */
-    <span role="img" aria-label={name} className={cx(styles.mark, className)} style={vars} />
+    <span role="img" aria-label={name} className={cx(styles.mark, size === 'sm' && styles.sm, className)} style={vars} />
   );
 }

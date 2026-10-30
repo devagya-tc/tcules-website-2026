@@ -1,7 +1,7 @@
 ---
 title: "Home's Why Tcules reasons show their proof as the visual, not a drawing"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, components, illustration]
 source: "Owner (Devagya), 29 Oct 2026, home `why-tcules` (\"A product design partner for ambitious SaaS teams\") on the site rebuilt from the 26 Oct copy"
 supersedes: []

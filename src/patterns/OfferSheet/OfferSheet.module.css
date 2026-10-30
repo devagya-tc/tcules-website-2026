@@ -91,3 +91,26 @@
   outline: var(--ofs-ring-width) solid var(--ofs-ring-ink);
   outline-offset: var(--ofs-ring-offset);
 }
+
+/* The band's FOOT: a term's words, at the body role, kept to a reading measure beside its title. */
+.termBody {
+  color: var(--ofs-body-ink);
+  font: var(--ofs-body-text);
+  max-inline-size: var(--ofs-body-measure);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* From 1024 a term's words take the set's second and third tracks beside its title. */
+@media (min-width: 1024px) {
+  .termBody {
+    grid-column: span 2;
+  }
+}
+
+.termTitle {
+  color: var(--ofs-title-ink);
+  font: var(--ofs-term-title-text);
+  letter-spacing: var(--ofs-term-title-tracking);
+  max-inline-size: var(--ofs-title-measure);
+  text-wrap: balance;
+}

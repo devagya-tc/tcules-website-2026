@@ -79,6 +79,18 @@
   block-size: var(--rbadge-mark-size);
 }
 
+/* The small badge: text and marks one step down; geometry otherwise the badge's own. */
+.sm {
+  font: var(--rbadge-text-sm);
+  letter-spacing: var(--rbadge-tracking-sm);
+}
+
+.sm .star svg,
+.sm .mark svg {
+  inline-size: var(--rbadge-mark-size-sm);
+  block-size: var(--rbadge-mark-size-sm);
+}
+
 /* Tighter than the badge's own gap, so the mark and the name read as one lockup. */
 .lockup {
   display: inline-flex;

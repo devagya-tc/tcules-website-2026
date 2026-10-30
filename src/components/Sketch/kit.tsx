@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { CURSOR, Focus, Glyph, Hatched } from './scenes';
+import { CURSOR, Chip, Focus, Glyph, Hatched } from './scenes';
 import styles from './Sketch.module.css';
 import type { ScopeSceneName, TraceSceneName } from '@/lib/sketches';
 
@@ -36,16 +36,6 @@ function MiniScreen({ x, y }: { x: number; y: number }) {
       <rect className={styles.frame} x={x} y={y} width="60" height="60" rx="8" />
       <path className={styles.copyQuiet} d={`M${x + 12},${y + 14} L${x + 36},${y + 14}`} />
       <path className={styles.copy} d={`M${x + 12},${y + 26} L${x + 48},${y + 26}`} />
-    </>
-  );
-}
-
-/** A glyph in its chip, at a frame's top-left corner. */
-function Chip({ x, y, glyph }: { x: number; y: number; glyph: Parameters<typeof Glyph>[0]['name'] }) {
-  return (
-    <>
-      <rect className={styles.chip} x={x} y={y} width="16" height="16" rx="4" />
-      <Glyph name={glyph} cx={x + 8} cy={y + 8} size={10} className={styles.glyphAccent} />
     </>
   );
 }

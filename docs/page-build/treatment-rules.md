@@ -13,12 +13,14 @@ arrangement holds it → what it must never do.**
 
 | The content is… | Its visual is… | Never | Rulings |
 |---|---|---|---|
-| **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures |
+| **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures, why-tcules on every page (30 Oct) |
+| **A problem with its named example** (hard parts) | one row per claim: its isometric illustration at 168 at the start (above the words below 768), then title and text, the example as a footnote: client mark + case title as one link with an arrow, the sentence under it in small type with "Example:" dropped; no case page, sentence only | a case cover; a band-level image about one item; a ruled text 2×2 | hard-parts-claims-lead-proof-footnotes (30 Oct; builds on claim-visual-depicts-the-claim) |
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
-| **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar) | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
-| **An abstract claim** (a reason to choose us, on offer pages) | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
+| **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
+| **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
+| **A way onward** (questions answered by links to other services, closing a set) | the CTA card: 2 columns of the last row (3 or 4 tracks chosen so two cells remain; the rest of the row at five; a whole row when the tiles fill theirs), a ground, no hairline or texture, every question and link, the first action outline then links; a linked closing statement with no question takes the title role | a text cell dropped into the grid, a solid tile that reads as one more item, a dashed onward cell | 2026-10-30-set-ends-in-a-cta-card (supersedes onward-cell) |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
 | **An industry** | the sector photo (a client's user at a good moment) | a metaphor, a generic stock scene | sector photos ruling (26 Oct) |
@@ -40,8 +42,23 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **Orphaned paragraphs after a set** become equal terms side by side under it (What you get terms).
+- **What you get is four rows in a label column** (OfferParts; 2026-10-30-what-you-get-label-rows, proposed): the part's name in a label column from 1024 (over its content below), row 1 the drawn deliverables as a strip, rows 2–4 (who does the work, what we need, where our part stops) a compact 16:9 flat drawing beside the words. Every visual is flat (one-register-per-section). One body role (14). No numbers, hairlines or containers: rows are separated by Layout seams only. Never the terms as a text foot, a photograph among drawings, or more items on the deliverables' tracks. Until a page's drawings exist the old sheet stands.
+- **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set. Except on What you get, where it titles the first of the four parts.
 - **Never two text-heavy bands touching; never two tints touching.**
+- **An image about one item belongs to that item**, never above the whole set.
+- **The CTA card closes a tile set** (`Bento cta`): a cell of its own kind (the tile's radius, a ground, no hairline, no texture, no lift), two tracks of the last row, or every track it leaves, or a whole row when the tiles fill theirs; never a plain text cell.
+- **A countdown indicator shows where a carousel is heading**: the old bar stays empty, the next is full from the first frame; a wrap never lights the bars it passes.
+- **Outline hover lays the ghost's pale tint under it and firms the line**; press one tint deeper; never the blue solid fill.
+- **Two actions = different jobs?** A way deeper (head end action) and an ask (its own ink island band, one solid to ROUTES.contact, labelled 'Start a project') are separated, not paired. Check order: the island touches no island or tint, and sits two bands above the enquiry island.
+- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are ONE tier under the whole set: a stem rises from a port on one rail to each option's own text, the rail runs only between the outer stems and turns into them at a rounded corner, the terms under it, each led by its small mark (0.6, fixed slot, end-aligned beside its words from 768), never on the options' own tracks and never a bare hairline (2026-10-30-options-and-shared-terms-are-two-tiers; 2026-10-30-shared-terms-sit-on-one-rail, proposed).
+- **Mixed evidence in one set** sits on one plate of one size, the title under its edge; text that is not a number is never an accent figure (a tenure is a wordmark over a mono label); a missing asset shows the labelled placeholder.
+- **Peers with parts of different length share lines from 1024** (shareRows / subgrid).
+- **Service rows** carry service weight (plate 128, h5 label) and each draws its own service's scene; a service's drawing is registered once by route.
+- **A worked hypothetical** is a scenario: words beside one flat drawing of its own story, label in the mono legend voice.
+- **A table of peer items** (levels, places, options) renders as drawn items, one drawing per row; a table read across rows stays a table. Router tables never drop a column.
+- **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
+- **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
+- **A cited case's picture, on a case card, is the case's own cover**, never a page binding matched by client name. (A claim's example is a citation, not a picture: § 6.)
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
 
 ## 3 · How to use it on a section nobody has designed
@@ -51,14 +68,64 @@ arrangement holds it → what it must never do.**
 3. Arrange it with § 2. Squint: more than one idea down the page?
 4. If a review overturns a row here, update the row and the ruling together.
 
-## 4 · Open on /services/product-design (owner, 29 Oct; next pass, NOT in the PR)
+## 4 · The four PD sections, redesigned in round 5 (owner, 30 Oct)
 
-The owner will edit these sections on this branch to sharpen the mapping:
-1. **The hard parts of SaaS product design** (Doodle diagram above four labelled problems, each with an
-   "Example:" line, ruled 2×2).
-2. **How we work together** (flat engagement graphics, two closing terms, closing link).
-3. **Why teams choose Tcules** (three isometric reasons, two head links).
-4. **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
-   terms).
+The four sections the owner marked on /services/product-design were redesigned in round 5 and their
+rulings generalised into the tables above, so every service page maps the same way:
+1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE; REDONE in round 6 (an isometric illustration of each claim, the example a citation).
+2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
+3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE; REDONE in round 6 (one isometric illustration per reason, band scale, case links stay in the text; an undrawn reason takes the labelled slot).
+4. **What you get**: four label-column rows (OfferParts), round 7.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
+
+## 5 · Owner answers, 30 Oct (round 5)
+
+- Deliverable titles on the other service pages are kept (short bold lead + the rest of the sentence).
+- The "Why teams choose Tcules" outline button stays and /why-tcules gets built, after the service-page set is improved.
+- Service pages keep both asks: the ink "Tell us what you're working on" island and the closing enquiry form (2026-10-30-service-pages-keep-both-asks).
+- What you get foot: superseded by 2026-10-30-what-you-get-titled-terms-four-parts (four parts, round 6).
+
+## 6 · Balancing the visual registers (owner, 30 Oct; logged)
+
+1. **Scale decides first.** Flat graphics are item-scale (one per item, sets of 4+ concrete things: deliverables,
+   services, engagement options). Isometric illustrations are band-scale (one per band, or one each for 2–4 peer
+   claims). 2026-10-30-flat-for-items-illustration-for-ideas.
+2. **Neighbouring bands never share a register** (flat · isometric · IRL photo · proof · figures).
+   2026-10-30-adjacent-bands-change-visual-register.
+3. **Content still picks the register** (§ 1). Revised rows:
+
+| The content is… | Its visual is… | Never | Rulings |
+|---|---|---|---|
+| **Claims backed by examples** (hard parts) | one row per claim: its isometric illustration at 168 at the start (above the words below 768), then title and text, the example as a footnote: client mark + case title as one link with an arrow, the sentence under it in small type with "Example:" dropped; no case page, sentence only | the cited case's cover as the claim's picture | hard-parts-claims-lead-proof-footnotes |
+| **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
+| **What you get** (deliverables · who works · what we need · where it stops) | four rows in a label column: deliverables as a drawn strip; who does the work, what we need, where our part stops each a compact 16:9 flat drawing beside the words. All flat (one-register-per-section) | a photograph among drawings; terms as a foot | what-you-get-label-rows (proposed) |
+| **Options + terms that hold for all of them** | options as the subject; terms one plain text row at body size under the whole set, on its grid | the terms as items, a rail, plates or drawings | options-and-shared-terms-are-two-tiers; shared-terms-sit-on-one-rail (proposed); engagement-terms-plain-row |
+| **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row; dotted outline, no fill; one half per question; arrow links only (cta-card-is-dotted-halves) | the line placed as plain text in a cell | set-ends-in-a-cta-card |
+| **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
+| **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |
+
+4. **A band's illustration set is drawn as one set** (proposed): each drawing start-aligned in the shared box so it
+   lands on its text column; a route over the blue plane in one opaque colour; one light base plate with the blue
+   slab as its centrepiece; no unexplained frame or stray mark. 2026-10-30-illustration-set-craft.
+
+The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a
+citation; only a band whose subject is the evidence (home's proof band, selected work) shows covers.
+
+## 7 · Owner, 30 Oct afternoon (mockup review)
+
+- **One register per section** (one-register-per-section): What you get draws "Who does the work" flat, not as a photo.
+- **Flat graphics:** only frames on the plate; routes between frames allowed; draw the TITLE's idea (flat-graphics-sit-in-frames).
+- **Hard parts:** small illustration | claim; the example a compact case link + sentence under the claim; no cover, no card (hard-parts-claims-lead-proof-footnotes).
+- **What you get:** four rows, a label column; row 1 the five deliverables as a strip; rows 2–4 compact, a 16:9 visual beside the text (still proposed).
+- **CTA card:** dotted outline, one half per question, arrow links, no button (cta-card-is-dotted-halves).
+- **How we work together:** shared terms a plain text row, no rail (engagement-terms-plain-row).
+- **Industries:** the standard 3-column card grid (industries-are-a-card-grid).
+
+## 8 · Owner, 30 Oct evening
+
+- **Hard parts:** three columns, drawing | claim | example as authored; no logo, citation, card or cover (hard-parts-three-columns-as-authored).
+- **Tile set CTA:** one dotted card per question (cta-card-per-question).
+- **Heroes:** the seven L1 service pages, /expertise and /audits carry the owner-approved isometric heroes from the illustration canvas (public/illustrations/heroes/, text flattened to paths, viewBox trimmed to the drawing).
+- **Standing lesson:** render the copy as authored with existing components; change the arrangement before adding parts; use the full width.
+

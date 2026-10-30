@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react';
 
 import { Button, Icon, Layout, Section, type MediaImage } from '@/components';
-import { getCaseRefs, getCorpusPage, getReasonFigure } from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getCorpusPage, getReasonFigure } from '@/content';
 import { inlineToText } from '@/lib/inline';
-import { placeholderCover } from '@/lib/placeholders';
+import { placeholderCover, placeholderIllustration } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
-import { Reasons, type ReasonsItem } from '@/patterns';
+import { CtaRow, Reasons, type ReasonsItem } from '@/patterns';
 import { whyTcules } from '@/templates';
 
 import { Variation } from '../_specimen/Variation';
@@ -197,9 +196,15 @@ const drawn = (
   ground: 'paper' | 'paper-deep' = 'paper',
 ): ReasonsItem[] =>
   rows.map(([title, body]) => {
+    /* A reason with no drawing of its own takes the labelled illustration slot, as the offer band does. */
     const found = getReasonFigure(title, ground);
-    if (!found) throw new Error(`No reason figure for "${title}"`);
-    return { title, body, figure: { ...found, alt: '', kind: 'illustration' } };
+    return {
+      title,
+      body,
+      figure: found
+        ? { ...found, alt: '', kind: 'illustration' }
+        : { ...placeholderIllustration(title), alt: '' },
+    };
   });
 
 const WHY_LINKS = (
@@ -235,7 +240,10 @@ const PROOF_STRESS: ReasonsItem[] = [
     proof: {
       kind: 'cover',
       image: placeholderCover('gold-image-printing'),
-      figure: { value: 'Live in production since early 2026', label: 'A client with a long name' },
+      figure: {
+        value: 'Live in production since early 2026',
+        label: 'A client with a long name',
+      },
     },
   },
   {
@@ -251,11 +259,29 @@ const PROOF_STRESS: ReasonsItem[] = [
   },
 ];
 
+/** Offer pages: two case covers with no figure, one tenure as a figure. */
+const OFFER_PROOF: ReasonsItem[] = [
+  {
+    title: 'Products customers rely on',
+    body: 'A linked case shows its own cover and nothing under it.',
+    proof: { kind: 'cover', image: placeholderCover('gold-image-printing') },
+  },
+  {
+    title: 'AI that reached production',
+    body: 'A second linked case, the same box height.',
+    proof: { kind: 'cover', image: placeholderCover('gold-image-printing') },
+  },
+  {
+    title: 'Senior people do the work, and clients keep us for years',
+    body: 'A stated tenure shows as one figure.',
+    proof: { kind: 'figures', figures: [{ value: '3 years', label: 'Primelis' }] },
+  },
+];
+
 export default async function ReasonsSpecimen() {
   const home = await getCorpusPage(ROUTES.home);
   const band = home?.bands.find((b) => b.id === 'why-tcules');
-  const caseRefs = home ? await getCaseRefs(caseRoutesIn(home)) : {};
-  const proofs = home && band ? whyTcules(home, band, caseRefs) : undefined;
+  const words = band ? whyTcules(band) : undefined;
   const opening = band?.blocks.find((block) => block.type === 'paragraph');
   const lead = opening?.type === 'paragraph' ? inlineToText(opening.runs) : undefined;
   return (
@@ -270,8 +296,9 @@ export default async function ReasonsSpecimen() {
             four, set 2×2. Each reason is the drawing above, then its title, then its body, at
             the full width of its track, and the head always reads across the top (owner, 29 Oct
             2026). Two ways to hold the set without boxing a reason: open (the gap scale alone)
-            and boxed (the set in LogoGrid&rsquo;s rounded frame). Beside was retired on 29 Oct
-            2026.
+            and boxed (the set in LogoGrid&rsquo;s rounded frame). A third, beside, sets words
+            only: the head in a leading track and the reasons reading down beside it (owner, 30
+            Oct 2026).
           </p>
         </Layout>
       </Section>
@@ -488,45 +515,61 @@ export default async function ReasonsSpecimen() {
 
       <Variation
         id="offer-copy"
-        title="13 · An offer page's three, drawn (FinTech: 1, 6, 4)"
-        note="Each of the seven reasons the offer pages draw from has its own drawing (offer set, one world box): this is FinTech's selection."
+        title="13 · Offer page · three reasons · figureSize lg (product design)"
+        note="The offer pages' Why Tcules at band scale (owner, 30 Oct 2026, round 6): one isometric illustration per reason, 256 tall (200 below 768), start-aligned with its title, no plate and no figure panel. Product design's three: the screen standing on what the product knows, the hard part proved in code across the seam from the open design, the same senior seat staying year on year. The case links stay in the text."
       />
       <Reasons
         heading="Why teams choose Tcules"
         headingId="rsn-offer-copy"
-        items={drawn([COPY_REASONS[0]!, COPY_REASONS[5]!, COPY_REASONS[3]!])}
+        figureSize="lg"
+        items={drawn([COPY_REASONS[0]!, COPY_REASONS[2]!, COPY_REASONS[5]!])}
         action={WHY_LINKS}
       />
 
       <Variation
-        id="offer-rest"
-        title="14 · The other four offer reasons (2, 3, 5, 7), open, on tint"
-        note="So all seven offer drawings are in view: the part replaced in a product kept as it is; the hard part built in code across the seam from the open design; the AI answer held at a person's station before it counts; the problems on the screen traced down to one cause. Paper-deep exports on tint."
+        id="offer-slot"
+        title="14 · Offer page · three reasons · one is the labelled slot, on tint"
+        note="A reason whose illustration is not drawn yet takes the labelled register placeholder in the same box (the four offer reasons not drawn this round: leave alone, into software, AI checked, what is wrong). One slot per reason, never an older drawing at another scale. The drawn two are the paper-deep exports on tint; the slot draws its own hairline and radius."
       />
       <Reasons
         heading="Why teams choose Tcules"
-        headingId="rsn-offer-rest"
-        items={drawn(
-          [COPY_REASONS[1]!, COPY_REASONS[2]!, COPY_REASONS[4]!, COPY_REASONS[6]!],
-          'paper-deep',
-        )}
+        headingId="rsn-offer-slot"
+        figureSize="lg"
+        items={drawn([COPY_REASONS[0]!, COPY_REASONS[1]!, COPY_REASONS[2]!], 'paper-deep')}
         surface="tint"
       />
 
       <Variation
-        id="home-proof"
-        title="15 · Home's three reasons, each its proof (owner, 29 Oct 2026)"
-        note="Home's Why Tcules on the real words: the content is evidence, so each reason's visual is its proof, above its title. The four named clients as a mark cluster, two across (an approved mark, else the name typeset in the marks' ink, never an invented mark); the ConnectX case's own cover with “Live since late 2025” set as a figure; the three tenures as figures. From 1024 one box height (224) for the three, so the titles sit on one line; below 1024 each proof is its own height. No drawing, no hairline, no container. Offer pages keep the drawn reasons (13, 14)."
+        id="home-beside"
+        title="15 · Beside, words only: home's three reasons (owner, 30 Oct 2026)"
+        note="Home's Why Tcules on the real words. The heading, lead and link in the leading track (5 of 12 from 1024); the three claims read down the trailing one, title (h4) over its sentence with its own links, a stack (48) apart. A section (96) split. No drawing, no figure, no rule: the sentences already name the clients, the live case and the tenures. Below 1024 one column, the head above."
       />
-      {proofs && band ? (
+      {words && band ? (
         <Reasons
+          arrangement="beside"
           heading={band.headingText}
-          headingId="rsn-home-proof"
+          headingId="rsn-home-beside"
           lead={lead}
-          items={proofs}
+          items={words}
           action={WHY_LINKS}
         />
       ) : null}
+
+      <Variation
+        id="beside-stress"
+        title="15b · Beside under stress, on tint, with an eyebrow"
+        note="The longest copy in the set, four reasons and an eyebrow on tint: the head track holds a long heading and lead, the claims wrap to two lines."
+      />
+      <Reasons
+        arrangement="beside"
+        eyebrow="Why Tcules"
+        heading="A product design partner for ambitious SaaS teams building what comes next"
+        headingId="rsn-beside-stress"
+        lead="Tcules has delivered more than 90 projects for clients in 19 countries since 2017. Here is the evidence a product leader can check for themselves, one claim at a time."
+        items={items().map(({ title, body }) => ({ title, body }))}
+        action={WHY_LINKS}
+        surface="tint"
+      />
 
       <Variation
         id="proof-stress"
@@ -539,6 +582,26 @@ export default async function ReasonsSpecimen() {
         items={PROOF_STRESS}
         action={WHY_LINKS}
         surface="tint"
+      />
+
+      <Variation
+        id="offer-proof"
+        title="17 · Offer page: case covers without a figure, one tenure figure"
+        note="Offer pages' Why Tcules (owner, 30 Oct 2026): a reason that links a case shows the case's own cover with no figure under it; a stated tenure shows as one figure. One box height for the three. The two actions are one row: an outline button, then a link."
+      />
+      <Reasons
+        heading="Why teams choose Tcules"
+        headingId="rsn-offer-proof"
+        items={OFFER_PROOF}
+        action={
+          <CtaRow
+            rule={false}
+            actions={[
+              { label: 'Why teams choose Tcules', href: '#why-tcules' },
+              { label: 'Meet the studio', href: '#studio' },
+            ]}
+          />
+        }
       />
     </>
   );

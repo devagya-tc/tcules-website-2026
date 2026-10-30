@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { OfferSceneName } from '@/lib/sketches';
 
 import styles from './Sketch.module.css';
-import { CURSOR, Focus, Glyph, Hatched } from './scenes';
+import { CURSOR, Focus, GrowIn, Glyph, Hatched, Move } from './scenes';
 
 /**
  * The OFFER scenes: the drawings a service page's bands show beside what each item says (product-design
@@ -24,25 +24,36 @@ import { CURSOR, Focus, Glyph, Hatched } from './scenes';
  */
 
 /** The one arrowhead pointing right, tip at (x, y). */
-function ArrowRight({ x, y }: { x: number; y: number }) {
+export function ArrowRight({ x, y }: { x: number; y: number }) {
   return (
     <path className={styles.solid} d={`M${x},${y} L${x - 7},${y - 4} L${x - 7},${y + 4} Z`} />
   );
 }
 
-/** A route from a port at x1 to the arrowhead's tip at x2, on y. */
-function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
+/** The one arrowhead pointing left, tip at (x, y). */
+export function ArrowLeft({ x, y }: { x: number; y: number }) {
+  return <path className={styles.solid} d={`M${x},${y} L${x + 7},${y - 4} L${x + 7},${y + 4} Z`} />;
+}
+
+/** The one arrowhead pointing up, tip at (x, y). */
+export function ArrowUp({ x, y }: { x: number; y: number }) {
+  return <path className={styles.solid} d={`M${x},${y} L${x - 4},${y + 7} L${x + 4},${y + 7} Z`} />;
+}
+
+/** A route from a port at x1 to the arrowhead's tip at x2, on y; the head points the way it travels. */
+export function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
+  const left = x2 < x1;
   return (
     <>
-      <path className={styles.line} d={`M${x1},${y} L${x2 - 7},${y}`} />
-      <ArrowRight x={x2} y={y} />
+      <path className={styles.line} d={`M${x1},${y} L${left ? x2 + 7 : x2 - 7},${y}`} />
+      {left ? <ArrowLeft x={x2} y={y} /> : <ArrowRight x={x2} y={y} />}
       <circle className={styles.node} cx={x1} cy={y} r="2.5" />
     </>
   );
 }
 
 /** A line of copy from x, `w` long; `quiet` for the lighter ink. */
-function Copy({
+export function Copy({
   x,
   y,
   w,
@@ -58,7 +69,7 @@ function Copy({
   );
 }
 
-function Rect({
+export function Rect({
   x,
   y,
   w,
@@ -77,7 +88,7 @@ function Rect({
 }
 
 /** The floating cursor, tip at (x, y), its flat offset under it. */
-function Cursor({ x, y }: { x: number; y: number }) {
+export function Cursor({ x, y }: { x: number; y: number }) {
   return (
     <>
       <path
@@ -91,7 +102,7 @@ function Cursor({ x, y }: { x: number; y: number }) {
 }
 
 /** A switch, its knob at the end it is set to. */
-function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
+export function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
   return (
     <>
       <Rect x={x} y={y} w={24} h={12} rx={6} className={on ? styles.solid : styles.tile} />
@@ -111,7 +122,7 @@ function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
  * weight, set at 135° and tucked under the ring, and the two share one flat offset, as everything that
  * floats does.
  */
-function Lens({ x, y, r }: { x: number; y: number; r: number }) {
+export function Lens({ x, y, r }: { x: number; y: number; r: number }) {
   const handle = (dx: number, className: string | undefined) => (
     <rect
       className={className}
@@ -240,18 +251,20 @@ function OutcomeFinished() {
 function OutcomeBrief() {
   return (
     <>
-      <Glyph name="user" cx={40} cy={90} size={20} className={styles.glyph} />
-      <Hop x1={60} x2={100} y={90} />
-      <Rect x={100} y={30} w={72} h={120} rx={8} className={styles.frame} />
-      <Copy x={114} y={46} w={28} quiet />
-      <Rect x={114} y={58} w={44} h={14} className={styles.tile} />
-      <Rect x={114} y={80} w={44} h={14} className={styles.tile} />
-      <Focus x={136} y={124} glyph="check-circle" size={12} />
-      <Rect x={188} y={40} w={52} h={100} rx={8} className={styles.frameQuiet} />
-      <Glyph name="clock-circle" cx={214} cy={60} size={14} className={styles.glyphQuiet} />
-      <Rect x={198} y={80} w={32} h={12} className={styles.tile} />
-      <Rect x={198} y={100} w={32} h={12} className={styles.tile} />
-      <Hatched x={256} y={50} w={40} h={80} />
+      <Rect x={50} y={50} w={60} h={80} rx={8} className={styles.frameQuiet} />
+      <Glyph name="user" cx={80} cy={78} size={20} className={styles.glyph} />
+      <Copy x={64} y={108} w={32} quiet />
+      <Hop x1={110} x2={150} y={90} />
+      <Rect x={150} y={30} w={120} h={120} rx={8} className={styles.frame} />
+      <Copy x={166} y={48} w={40} quiet />
+      {[64, 84].map((y) => (
+        <g key={y}>
+          <Rect x={166} y={y - 5} w={10} h={10} rx={3} className={styles.solid} />
+          <Copy x={184} y={y} w={48} />
+        </g>
+      ))}
+      <Hatched x={166} y={98} w={66} h={12} />
+      <Focus x={248} y={128} glyph="check-circle" size={12} />
     </>
   );
 }
@@ -312,8 +325,9 @@ function SymptomTest() {
       <Rect x={46} y={114} w={48} h={20} rx={10} className={styles.tile} />
       <Cursor x={84} y={120} />
       <Hop x1={170} x2={210} y={90} />
-      <Glyph name="user" cx={230} cy={90} size={22} className={styles.glyph} />
-      <Focus x={270} y={90} glyph="check-circle" size={12} />
+      <Rect x={210} y={40} w={80} h={100} rx={8} className={styles.frame} />
+      <Glyph name="user" cx={250} cy={68} size={22} className={styles.glyph} />
+      <Focus x={250} y={112} glyph="check-circle" size={12} />
     </>
   );
 }
@@ -342,12 +356,11 @@ function SymptomMatch() {
       <Rect x={42} y={30} w={90} h={100} rx={8} className={styles.frameQuiet} />
       <Copy x={54} y={50} w={40} quiet />
       <Rect x={54} y={66} w={56} h={20} className={styles.tile} />
-      <Hop x1={140} x2={180} y={90} />
-      <Rect x={186} y={34} w={104} h={112} rx={12} className={styles.halo} />
+      <Hop x1={132} x2={192} y={90} />
       <Rect x={192} y={40} w={90} h={100} rx={8} className={styles.frame} />
       <Copy x={204} y={60} w={40} quiet />
       <Rect x={204} y={76} w={56} h={20} className={styles.region} />
-      <Focus x={268} y={128} glyph="check-circle" size={12} />
+      <Focus x={260} y={118} glyph="check-circle" size={12} />
     </>
   );
 }
@@ -356,26 +369,31 @@ function SymptomMatch() {
 
 function SpecialistResearch() {
   const notes: [number, number][] = [
-    [190, 40],
-    [244, 40],
-    [190, 94],
-    [244, 94],
+    [190, 36],
+    [244, 36],
+    [190, 98],
+    [244, 98],
   ];
   return (
     <>
       <Glyph name="user" cx={50} cy={90} size={28} className={styles.glyph} />
-      <Rect x={76} y={64} w={64} h={28} rx={12} className={styles.frame} />
-      <Copy x={88} y={78} w={40} quiet />
-      <Glyph name="microphone" cx={50} cy={128} size={16} className={styles.glyphQuiet} />
-      <Hop x1={150} x2={180} y={90} />
-      {notes.map(([x, y], i) => (
+      <Rect x={76} y={76} w={64} h={28} rx={12} className={styles.frame} />
+      <Copy x={88} y={90} w={40} quiet />
+      <Hop x1={140} x2={180} y={90} />
+      {notes.slice(0, 3).map(([x, y]) => (
         <g key={`${x}-${y}`}>
-          <Rect x={x} y={y} w={46} h={46} className={i === 3 ? styles.region : styles.tile} />
-          <Copy x={x + 8} y={y + 14} w={26} quiet={i !== 3} />
+          <Rect x={x} y={y} w={46} h={46} className={styles.tile} />
+          <Copy x={x + 8} y={y + 14} w={26} quiet />
           <Copy x={x + 8} y={y + 26} w={20} quiet />
         </g>
       ))}
-      <Focus x={290} y={140} glyph="eye" size={12} />
+      <Rect x={244} y={98} w={46} h={46} className={styles.region} />
+      <path className={styles.regionCopy} d="M252,112 L278,112" />
+      <path className={styles.regionCopy} d="M252,124 L272,124" />
+      {/* The one finding is seen. */}
+      <GrowIn>
+        <Focus x={290} y={144} glyph="eye" size={12} />
+      </GrowIn>
     </>
   );
 }
@@ -383,6 +401,10 @@ function SpecialistResearch() {
 function SpecialistIa() {
   return (
     <>
+      {/* The right place for the work lights: its halo first, so the route's head sits on it. */}
+      <GrowIn>
+        <Rect x={184} y={70} w={112} h={40} rx={10} className={styles.halo} />
+      </GrowIn>
       <Rect x={30} y={70} w={60} h={40} rx={8} className={styles.frame} />
       <Copy x={42} y={90} w={36} quiet />
       <path className={styles.line} d="M90,90 L183,90" />
@@ -394,7 +416,6 @@ function SpecialistIa() {
       <ArrowRight x={190} y={140} />
       <Rect x={190} y={26} w={100} h={28} className={styles.tile} />
       <Copy x={202} y={40} w={48} quiet />
-      <Rect x={184} y={70} w={112} h={40} rx={10} className={styles.halo} />
       <Rect x={190} y={76} w={100} h={28} className={styles.region} />
       <path className={styles.regionCopy} d="M202,90 L262,90" />
       <Rect x={190} y={126} w={100} h={28} className={styles.tile} />
@@ -411,9 +432,14 @@ function SpecialistUi() {
       <Copy x={60} y={68} w={120} />
       <Copy x={60} y={82} w={96} quiet />
       <Rect x={60} y={104} w={56} h={24} className={styles.tile} />
-      <Rect x={126} y={98} w={92} h={36} rx={12} className={styles.halo} />
-      <Rect x={132} y={104} w={80} h={24} className={styles.solid} />
-      <Cursor x={196} y={118} />
+      {/* One curve, two parts: the button is pressed, the cursor clicks (tip stays on it). */}
+      <Move s={0.96} ox={172} oy={116}>
+        <Rect x={126} y={98} w={92} h={36} rx={10} className={styles.halo} />
+        <Rect x={132} y={104} w={80} h={24} className={styles.solid} />
+      </Move>
+      <Move x={-4} y={-4}>
+        <Cursor x={196} y={118} />
+      </Move>
     </>
   );
 }
@@ -424,19 +450,20 @@ function SpecialistDataviz() {
     <>
       <Rect x={40} y={30} w={240} h={120} rx={8} className={styles.frame} />
       <Copy x={56} y={50} w={56} quiet />
+      {/* The halo is 6 clear of the lit bar on every side; the baseline runs over it. */}
+      <Move sy={86 / 70} ox={196} oy={136}>
+        <Rect x={180} y={66} w={32} h={70} rx={9} className={styles.halo} />
+      </Move>
       <path className={styles.rule} d="M60,130 L260,130" />
-      <Rect x={178} y={62} w={44} h={72} rx={8} className={styles.halo} />
-      {heights.map((h, i) => (
-        <Rect
-          key={i}
-          x={76 + i * 36}
-          y={130 - h}
-          w={20}
-          h={h}
-          rx={3}
-          className={i === 3 ? styles.solid : styles.tile}
-        />
-      ))}
+      {heights.map((h, i) =>
+        i === 3 ? (
+          <Move key={i} sy={74 / 58} ox={196} oy={130}>
+            <Rect x={78 + i * 36} y={130 - h} w={20} h={h} rx={3} className={styles.solid} />
+          </Move>
+        ) : (
+          <Rect key={i} x={78 + i * 36} y={130 - h} w={20} h={h} rx={3} className={styles.tile} />
+        ),
+      )}
     </>
   );
 }
@@ -452,7 +479,10 @@ function SpecialistPrototype() {
       <Copy x={184} y={58} w={48} quiet />
       <Copy x={184} y={74} w={60} />
       <Glyph name="user" cx={284} cy={70} size={20} className={styles.glyph} />
-      <Focus x={284} y={112} glyph="check-circle" size={12} />
+      {/* Tried, and it holds. */}
+      <GrowIn>
+        <Focus x={284} y={112} glyph="check-circle" size={12} />
+      </GrowIn>
       <Cursor x={70} y={116} />
     </>
   );
@@ -472,7 +502,10 @@ function SpecialistNewProduct() {
       <Rect x={170} y={30} w={120} h={120} rx={8} className={styles.frame} />
       <Glyph name="user" cx={188} cy={50} size={14} className={styles.glyph} />
       <Copy x={202} y={50} w={40} quiet />
-      <Rect x={180} y={66} w={100} h={36} rx={12} className={styles.halo} />
+      {/* The one job lights; what the release leaves out stays hatched. */}
+      <GrowIn>
+        <Rect x={180} y={66} w={100} h={36} rx={10} className={styles.halo} />
+      </GrowIn>
       <Rect x={186} y={72} w={88} h={24} className={styles.region} />
       <path className={styles.regionCopy} d="M196,84 L250,84" />
       <Hatched x={186} y={112} w={88} h={14} />
@@ -495,8 +528,32 @@ function SpecialistAudit() {
           <Copy x={x + 8} y={108} w={20} quiet />
         </g>
       ))}
-      <Lens x={136} y={106} r={24} />
-      <Focus x={136} y={106} glyph="danger-triangle" size={12} />
+      <Move s={1.12} ox={136} oy={106}>
+        <Lens x={136} y={106} r={24} />
+        <Focus x={136} y={106} glyph="danger-triangle" size={12} />
+      </Move>
+    </>
+  );
+}
+
+/** Prototype Readiness Review: the prototype's one core workflow taken past the happy path; the steps
+ *  the demo proved are ticked, the moment it skipped is found (the gap map's first line). */
+function SpecialistReadiness() {
+  return (
+    <>
+      <Rect x={30} y={30} w={110} h={120} rx={8} className={styles.trailFrame} />
+      <Copy x={44} y={50} w={48} quiet />
+      <Copy x={44} y={62} w={70} />
+      <Rect x={44} y={112} w={56} h={18} rx={9} className={styles.tile} />
+      <Cursor x={88} y={122} />
+      <Hop x1={140} x2={176} y={90} />
+      <Rect x={176} y={30} w={114} h={120} rx={8} className={styles.frame} />
+      <Glyph name="check-circle" cx={192} cy={56} size={12} className={styles.glyph} />
+      <Copy x={204} y={56} w={56} />
+      <Glyph name="check-circle" cx={192} cy={84} size={12} className={styles.glyph} />
+      <Copy x={204} y={84} w={44} />
+      <Hatched x={186} y={104} w={70} h={20} />
+      <Focus x={272} y={114} glyph="danger-triangle" size={12} />
     </>
   );
 }
@@ -603,6 +660,20 @@ function CaseDealpathDid() {
   );
 }
 
+/** A tile set's way onward (the Bento CTA card, drawn beside its words): one screen, and a route out of
+ *  it to the flag it leads to. */
+function OfferRoute() {
+  return (
+    <>
+      <Rect x={30} y={44} w={100} h={92} rx={8} className={styles.frame} />
+      <Copy x={44} y={62} w={40} quiet />
+      <Rect x={44} y={76} w={60} h={40} className={styles.tile} />
+      <Focus x={232} y={90} glyph="flag" size={12} />
+      <Hop x1={130} x2={214} y={90} />
+    </>
+  );
+}
+
 export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'outcome-explain': OutcomeExplain,
   'outcome-rules': OutcomeRules,
@@ -621,6 +692,8 @@ export const OFFER: Record<OfferSceneName, () => ReactNode> = {
   'specialist-prototype': SpecialistPrototype,
   'specialist-new-product': SpecialistNewProduct,
   'specialist-audit': SpecialistAudit,
+  'specialist-readiness': SpecialistReadiness,
+  'offer-route': OfferRoute,
   'case-dealpath-problem': CaseDealpathProblem,
   'case-dealpath-did': CaseDealpathDid,
 };
@@ -636,4 +709,6 @@ export const OFFER_DRAWN: Partial<
   'specialist-prototype': [26, 30, 280, 116],
   'specialist-new-product': [26, 26, 268, 128],
   'specialist-audit': [26, 26, 228, 128],
+  'specialist-readiness': [26, 26, 294, 154],
+  'offer-route': [26, 26, 268, 128],
 };

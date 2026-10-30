@@ -17,6 +17,8 @@
  *   `<route>#<band>`                  a band's own slot ("/services/product-design#starting-points")
  *   `<route>#<band>:<qualifier>`      a band with two slots ("/expertise/healthtech#proof:curamcare")
  *   `case-cover:<slug>`               a case's cover, ONE asset for every page that cites the case
+ *   `illustration:<slug>`             a claim or reason's illustration slot, by its title; `illustration:pending`
+ *                                     is the fallback for a title with no row of its own
  * Icon rows (client logo marks) are not drawn: a client without its SVG renders as a typeset
  * wordmark in the logo grid (LogoGrid, G1).
  */
@@ -69,13 +71,16 @@ for (const [page, bandCell, kindCell, shows, ratioCell] of rows) {
   const width = Math.round(rw * k);
   const height = Math.round(rh * k);
 
-  const cover = /^case cover:\s*(.+)$/i.exec(bandCell);
+  const cover = /^(case cover|illustration):\s*(.+)$/i.exec(bandCell);
   const entries = [];
   if (cover) {
-    const name = cover[1].trim();
+    /* A case's cover, or a claim or reason's illustration slot keyed by its title as authored: both
+       are ONE asset for every page that carries them, so the key carries no route. */
+    const name = cover[2].trim();
+    const prefix = /^illustration$/i.test(cover[1]) ? 'illustration' : 'case-cover';
     entries.push({
-      key: `case-cover:${slug(name)}`,
-      file: `case-cover--${slug(name)}`,
+      key: `${prefix}:${slug(name)}`,
+      file: `${prefix}--${slug(name)}`,
       label: name,
     });
   } else {
@@ -112,11 +117,16 @@ function wrap(s, max) {
   return lines;
 }
 
-function svgFor({ width, height, kind, shows }) {
+function svgFor({ width, height, kind, shows, file }) {
   const unit = Math.min(width, height);
-  const pad = Math.round(unit * 0.06);
-  const small = Math.round(unit * 0.03);
-  const body = Math.round(unit * 0.038);
+  /* An illustration slot is contained, never cropped, and its smallest showing is 168 wide (a hard-parts
+     claim's drawing, a home reason): its label is sized for that, so it is legible there. Every other
+     kind is sized off the canvas, as before. */
+  const small168 = kind === 'illustration' && file.startsWith('illustration--');
+  const k = width / 168;
+  const pad = small168 ? Math.round(12 * k) : Math.round(unit * 0.06);
+  const small = small168 ? Math.round(8 * k) : Math.round(unit * 0.03);
+  const body = small168 ? Math.round(9 * k) : Math.round(unit * 0.038);
   /* The label is set in the panel's central square and centred in the panel, because every placement
      crops: a 3:1 banner is 3:2 on a phone, a 4:5 slot is 6:5 in a photo-weighted split and 4:3 above
      the copy, a 16:9 cover is 4:5 in a story split. Anchored top-left, the label was the first thing
@@ -124,7 +134,7 @@ function svgFor({ width, height, kind, shows }) {
      square less a double pad, so a centre crop down to about 4:5 of the short side keeps the whole
      label (a 3:2 slot in a `asideFill` aside beside a tall accordion is about 0.9:1 at 1440), and one
      panel serves every placement of its slot. */
-  const box = unit - pad * 4;
+  const box = small168 ? width - pad * 2 : unit - pad * 4;
   const x = Math.round((width - box) / 2);
   const budget = Math.max(24, Math.floor(box / (body * 0.52)));
   /* The first sentence of the brief, without markup: the panel says what the slot is for, and the
@@ -139,8 +149,9 @@ function svgFor({ width, height, kind, shows }) {
         .replace(/\s*\([^)]*_[^)]*\)/g, '')
         .replace(/`/g, '')
         .split(/(?<=\.)\s/)[0];
-  const lines = brief ? wrap(brief, budget).slice(0, 7) : [];
-  const head = `Image to come · ${kind}`;
+  const maxLines = small168 ? 6 : 7;
+  const lines = brief ? wrap(brief, budget).slice(0, maxLines) : [];
+  const head = small168 ? 'Illustration to come' : `Image to come · ${kind}`;
   /* The label block's height: the head's line, the gap to the brief, then the brief's lines. */
   const block = lines.length
     ? small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1)
@@ -150,7 +161,7 @@ function svgFor({ width, height, kind, shows }) {
   const tspans = lines
     .map(
       (l, i) =>
-        `<tspan x="${x}" dy="${i === 0 ? 0 : Math.round(body * 1.45)}">${esc(l)}${i === 6 && wrap(brief, budget).length > 7 ? '…' : ''}</tspan>`,
+        `<tspan x="${x}" dy="${i === 0 ? 0 : Math.round(body * 1.45)}">${esc(l)}${i === maxLines - 1 && wrap(brief, budget).length > maxLines ? '…' : ''}</tspan>`,
     )
     .join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-label="${esc(head)}">

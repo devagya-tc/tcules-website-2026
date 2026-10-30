@@ -44,6 +44,7 @@ export {
   getTestimonialRatings,
   getTestimonialAvatars,
   getOfferScenes,
+  getClaimFigure,
   getReasonFigure,
   getPlaceholderReasons,
   getProposedEyebrows,

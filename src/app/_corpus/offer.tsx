@@ -13,6 +13,7 @@ import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { OfferPage } from '@/templates';
 
+import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
 
 /**
@@ -26,11 +27,16 @@ import { landedReasonFigure } from './reason-figure';
  * `_corpus` is underscore-prefixed, so Next does not route it. It holds no layout decision: it reads
  * the page and its cited cases and hands them to the template.
  */
-/* /services/product-design is held back: it serves a frozen snapshot of main's page
-   (services/product-design/route.ts) until its 26 Oct copy page is finished on feat/new-copy. */
 export const PASS_1_OFFER_ROUTES: ReadonlySet<string> = new Set([
+  '/services/product-design',
   '/audits/design-to-code-audit',
   '/expertise/healthtech',
+  '/services/ai-product-ux',
+  '/services/design-engineering',
+  '/services/design-systems',
+  '/services/new-product-design-first-release',
+  '/services/product-modernisation',
+  '/services/software-development',
 ]);
 
 /** Studio photographs an offer page may reuse, by binding id (page-mapping § 0 rule 5.3). */
@@ -70,6 +76,7 @@ export async function OfferRoute({ route }: { route: string }) {
       avatars={avatars}
       scenes={scenes}
       reasonFigure={landedReasonFigure}
+      claimFigure={landedClaimFigure}
     />
   );
 }

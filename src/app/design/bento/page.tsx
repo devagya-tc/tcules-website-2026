@@ -1,6 +1,7 @@
 import { Layout, Media, Section } from '@/components';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
+import type { SketchName } from '@/lib/sketches';
 import { Bento, BlockCard, ServiceTile, type BentoItem } from '@/patterns';
 
 import { Variation } from '../_specimen/Variation';
@@ -14,6 +15,63 @@ import t from '../_specimen/typeroles.module.css';
  * the wide tile that takes a row it would otherwise sit alone on. Hover a tile: it lifts 2px, its hairline and
  * texture turn blue and its title takes the accent.
  */
+
+const PD_SEVEN = (
+  [
+    ['ux-research', 'UX Research', 'Teams about to spend on an assumption nobody has tested', 'specialist-research', '/services/product-design/ux-research'],
+    ['ia', 'Information Architecture & Workflow Design', 'Products where work passes between people, or the menu keeps growing', 'specialist-ia', '/services/product-design/information-architecture-workflow-design'],
+    ['ui', 'Interaction & UI Design', 'Products whose structure works but whose screens confuse people', 'specialist-ui', '/services/product-design/interaction-ui-design'],
+    ['dataviz', 'Data Visualisation', 'Dashboards that people export to a spreadsheet', 'specialist-dataviz', '/services/product-design/data-visualisation'],
+    ['prototyping', 'Prototyping & Usability Testing', 'Choosing between directions before engineers start', 'specialist-prototype', '/services/product-design/prototyping-usability-testing'],
+    ['new-product', 'New Product Design & First Release', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/new-product-design-first-release'],
+    ['audit', 'UX & Product Audit', 'Teams who know something is wrong but not yet what', 'specialist-audit', '/audits/ux-product-audit'],
+  ] as const
+).map(([id, title, body, scene, href]) => ({ id, title, body, href, scene })) satisfies BentoItem[];
+
+const tiles = (rows: readonly (readonly [string, string, string])[], scenes: readonly SketchName[]) =>
+  rows.map(([title, body, href], i) => ({
+    id: href,
+    title,
+    body,
+    href,
+    scene: scenes[i] as SketchName,
+  })) satisfies BentoItem[];
+
+const AI_SIX = tiles(
+  [
+    ['AI Copilots & Agents', 'Teams putting an assistant inside the product', '/services/ai-product-ux/copilots-agents'],
+    ['AI Search & Recommendations', 'Products where people cannot find what they need', '/services/ai-product-ux/search-recommendations'],
+    ['Human-in-the-Loop Workflows', 'Teams whose AI needs a person to review', '/services/ai-product-ux/human-in-the-loop'],
+    ['Trust, Control & Recovery', 'Products where people must be able to undo the AI', '/services/ai-product-ux/trust-control-recovery'],
+    ['AI Readiness', 'Teams deciding where AI belongs', '/services/ai-product-ux/ai-readiness'],
+    ['AI Product Engineering', 'Teams that need the AI feature built', '/services/ai-product-ux/ai-product-engineering'],
+  ],
+  ['specialist-ai-copilots', 'specialist-ai-search', 'specialist-ai-hitl', 'specialist-ai-trust', 'specialist-ai-readiness', 'specialist-ai-engineering'],
+);
+
+const DS_FIVE = tiles(
+  [
+    ['Design System Strategy', 'Products that must share one scope', '/services/design-systems/strategy'],
+    ['Implementation', 'Components built in Figma, then in code', '/services/design-systems/implementation'],
+    ['Alignment', 'Library and code that have drifted apart', '/services/design-systems/alignment'],
+    ['Governance', 'Teams contributing to one system', '/services/design-systems/governance'],
+    ['Design System Audit', 'Products with local copies of the library', '/services/design-systems/audit'],
+  ],
+  ['specialist-ds-strategy', 'specialist-ds-implementation', 'specialist-ds-alignment', 'specialist-ds-governance', 'specialist-ds-audit'],
+);
+
+const SD_SEVEN = tiles(
+  [
+    ['SaaS App Development', 'A new workflow added to a live product', '/services/software-development/saas-app'],
+    ['Frontend Development', 'One layout on desktop and phone', '/services/software-development/frontend'],
+    ['Backend Development', 'Data, sign-in and rules behind the product', '/services/software-development/backend'],
+    ['Maintenance & Support', 'The team that knows the product', '/services/software-development/maintenance'],
+    ['Mobile App Development', 'The task people do away from a desk', '/services/software-development/mobile'],
+    ['Prototype Review', 'One flow read for what holds up', '/services/software-development/prototype-review'],
+    ['Redesign Implementation', 'A cluttered screen made clean', '/services/software-development/redesign'],
+  ],
+  ['specialist-saas-app', 'specialist-frontend', 'specialist-backend', 'specialist-maintenance', 'specialist-mobile', 'specialist-prototype-review', 'specialist-redesign'],
+);
 
 const SIX: BentoItem[] = [
   {
@@ -397,6 +455,172 @@ export default function BentoSpecimen() {
             />
           </li>
         </Layout>
+      </Section>
+      <Variation
+        id="cta"
+        title="2c · Seven peers and two cards on three tracks (9 cells)"
+        note="`cta`: one dotted card per question, each a normal cell: its question, its sentence, then its destinations as arrow links pinned to the foot; no fill, no drawing, no outline button. Tracks are chosen so tiles plus cards fill whole rows; where 3 and 4 both leave a hole, the last card takes what its row leaves. Seven tiles and two cards are nine cells: three full rows."
+      />
+      <Section>
+        <Bento
+          tracks={3}
+          items={PD_SEVEN}
+          cta={{
+            routes: [
+              {
+                question: 'Want the riskiest screens tried in code, or the whole product built?',
+                answer: 'Design Engineering and Software Development carry the design on.',
+                actions: [
+                  { label: 'Design Engineering', href: '/services/design-engineering' },
+                  { label: 'Software Development', href: '/services/software-development' },
+                ],
+              },
+              {
+                question: 'Already have finished screens?',
+                answer: 'Design to Code takes them from there.',
+                actions: [
+                  { label: 'Design to Code', href: '/services/design-engineering/design-to-code' },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-one"
+        title="2d · Six and one card on four tracks, the card spanning two"
+        note="Seven cells fill neither three nor four tracks; four leaves the fuller last row (4 + 3), so the one card takes the last two cells."
+      />
+      <Section>
+        <Bento
+          tracks={4}
+          items={AI_SIX}
+          cta={{
+            routes: [
+              {
+                question: 'Building a new AI product?',
+                answer: 'New Product Design & First Release takes it from idea to MVP.',
+                actions: [
+                  {
+                    label: 'New Product Design & First Release',
+                    href: '/services/new-product-design-first-release',
+                  },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-statement"
+        title="2e · Five and a statement card on three tracks (6 cells)"
+        note="A closing statement with no question: its sentence takes the title role, then its arrow links. Six cells fill three tracks."
+      />
+      <Section>
+        <Bento
+          tracks={3}
+          items={DS_FIVE}
+          cta={{
+            routes: [
+              {
+                answer:
+                  'One hard interaction to try in code is Design Engineering; one difficult component, such as a data table, is Frontend Design Systems.',
+                actions: [
+                  { label: 'Design Engineering', href: '/services/design-engineering' },
+                  {
+                    label: 'Frontend Design Systems',
+                    href: '/services/design-systems/frontend-design-systems',
+                  },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-three-actions"
+        title="2f · Seven and one card on four tracks (8 cells), three actions"
+        note="One question, both sentences, three arrow links stacked. Eight cells fill four tracks."
+      />
+      <Section>
+        <Bento
+          tracks={4}
+          items={SD_SEVEN}
+          cta={{
+            routes: [
+              {
+                question: 'Have engineers ready to build?',
+                answer:
+                  'Product Design gives them designs for every state, and Design Engineering takes the hardest interfaces into code inside your product. If you already hold an early build, a Prototype Readiness Review shows how close it is to launch.',
+                actions: [
+                  { label: 'Product Design', href: '/services/product-design' },
+                  { label: 'Design Engineering', href: '/services/design-engineering' },
+                  {
+                    label: 'Prototype Readiness Review',
+                    href: '/audits/prototype-readiness-review',
+                  },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-row"
+        title="2g · Three and two cards on three tracks, the last card spanning two"
+        note="Five cells fill neither; three tracks leave the fuller last row (3 + 2), so the second card takes the last two cells."
+      />
+      <Section>
+        <Bento
+          tracks={3}
+          items={PD_SEVEN.slice(0, 3)}
+          cta={{
+            routes: [
+              {
+                question: 'Want it built, not only designed?',
+                answer: 'Software Development carries the design on.',
+                actions: [{ label: 'Software Development', href: '/services/software-development' }],
+              },
+              {
+                question: 'Already have finished screens?',
+                answer: 'Design to Code takes them from there.',
+                actions: [
+                  { label: 'Design to Code', href: '/services/design-engineering/design-to-code' },
+                ],
+              },
+            ],
+          }}
+        />
+      </Section>
+      <Variation
+        id="cta-tint"
+        title="2h · The CTA card on tint"
+        note="the dotted outline's ink restated on tint (neutral-400)"
+      />
+      <Section surface="tint">
+        <Bento
+          tracks={3}
+          items={PD_SEVEN}
+          cta={{
+            routes: [
+              {
+                question: 'Want the riskiest screens tried in code, or the whole product built?',
+                answer: 'Design Engineering and Software Development carry the design on.',
+                actions: [
+                  { label: 'Design Engineering', href: '/services/design-engineering' },
+                  { label: 'Software Development', href: '/services/software-development' },
+                ],
+              },
+              {
+                question: 'Already have finished screens?',
+                answer: 'Design to Code takes them from there.',
+                actions: [
+                  { label: 'Design to Code', href: '/services/design-engineering/design-to-code' },
+                ],
+              },
+            ],
+          }}
+        />
       </Section>
     </>
   );

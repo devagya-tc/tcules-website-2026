@@ -126,6 +126,7 @@ export function SiteFooter({
             </Button>
             {brand.rating ? (
               <RatingBadge
+                size="sm"
                 score={brand.rating.score}
                 platform={brand.rating.platform}
                 href={brand.rating.href}

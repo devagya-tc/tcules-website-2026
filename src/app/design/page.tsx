@@ -258,6 +258,11 @@ const SPECIMENS = [
         note: 'what you get, as one offer — four promises beside the anchored testimonial, no aside, the six ceiling, paper and tint',
       },
       {
+        href: '/design/offer-parts',
+        name: 'OfferParts',
+        note: 'what you get as four rows in a label column — the deliverables as a drawn strip, then who does the work, what we need and where our part stops each a 16:9 drawing beside its words; five, four and six deliverables, two parts, one part, an undrawn part, tint',
+      },
+      {
         href: '/design/bento',
         name: 'Bento',
         note: 'linked tiles of two sizes on four tracks over one continuous texture per row — the six-tile diagonal (home What we do), four single, two wide, tint, ink and blue',
@@ -280,7 +285,7 @@ const SPECIMENS = [
       {
         href: '/design/engagement-options',
         name: 'EngagementOptions',
-        note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, paper and tint',
+        note: 'ways to work with us — image cards two by two, each scope drawing on its 16:9 plate, and a note; alternating rows explored; three options, one with no drawing, shared terms as one plain row under the set, paper and tint',
       },
       {
         href: '/design/trace-plates',

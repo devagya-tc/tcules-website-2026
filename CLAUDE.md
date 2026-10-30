@@ -133,7 +133,7 @@ Nine steps, named for what they separate:
    (two lists, the sides of one contrast) are peers and take `column` (64). Two regions of different
    kind side by side — copy beside a form, copy beside an image, a head beside its body, a quote
    beside its case — are a split: two sections sharing a row, so they take `section` (96). The
-   patterns that own a split (`PageHero` beside, `ContentSection` beside, `CtaSection`, `Proof`)
+   patterns that own a split (`PageHero` beside, `ContentSection` beside, `Reasons` beside, `CtaSection`, `Proof`)
    already set it; a template composing its own split states it the same way.
 3. **A distance that is not one of these nine is a mistake or a new step.** Decide which. Do not
    split the difference.

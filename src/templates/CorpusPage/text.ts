@@ -121,6 +121,13 @@ export function hasLink(runs: readonly InlineRun[]): boolean {
   );
 }
 
+/** Every link in runs, in reading order (links nested in bold or italic included). */
+export function linksIn(runs: readonly InlineRun[]): Extract<InlineRun, { type: 'link' }>[] {
+  return runs.flatMap((run) =>
+    run.type === 'link' ? [run] : 'children' in run ? linksIn(run.children) : [],
+  );
+}
+
 /** Plain text of runs. */
 export const plain = inlineToText;
 
@@ -164,4 +171,19 @@ export function loneLink(
   if (first?.type !== 'link' || rest.length > 0) return null;
   if (second === undefined) return first;
   return second.type === 'text' && /^\s*[.]?\s*$/.test(second.text) ? first : null;
+}
+
+/** A hard part's "Example:" paragraph: its first link (the cited case or page), else undefined. */
+export function exampleLink(
+  runs: readonly InlineRun[],
+): { href: string; name: string } | undefined {
+  if (!/^example:/i.test(plain(runs).trimStart())) return undefined;
+  const run = runs.find((r) => r.type === 'link');
+  if (!run || run.type !== 'link') return undefined;
+  return { href: run.href, name: plain(run.children).replace(/['’]s$/, '') };
+}
+
+/** A hard part's example: a paragraph that opens "Example:". It is rendered exactly as authored. */
+export function isExample(runs: readonly InlineRun[]): boolean {
+  return /^example:/i.test(plain(runs).trimStart());
 }

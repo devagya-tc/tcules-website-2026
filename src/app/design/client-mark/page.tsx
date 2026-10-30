@@ -256,6 +256,40 @@ export default function ClientMarkSpecimenPage() {
           </Specimen>
 
           <Specimen
+            title="Citation size (sm)"
+            note='size="sm" sets the same arithmetic on its own small step (target 40, height cap 24, width cap 120), one value at every width: Doodle about 70 × 16, Eden AI about 76 × 24. It is the mark in a claim&rsquo;s citation line, the case&rsquo;s own title beside it as the one link, with a moving arrow (decisions/2026-10-30-claim-citation, proposed).'
+          >
+            <Layout rowGap="block">
+              {[C.DOODLE, C.EDEN_AI].map((c) => (
+                <Cluster key={c.name} colGap="block" rowGap="tight" align="center">
+                  <ClientMark
+                    src={c.src}
+                    name={c.name}
+                    width={c.width}
+                    height={c.height}
+                    density={c.density}
+                    size="sm"
+                  />
+                  <span className={s.specNote}>{c.name} · sm</span>
+                </Cluster>
+              ))}
+              <Cluster colGap="block" rowGap="tight" align="center">
+                <ClientMark
+                  src={C.DOODLE.src}
+                  name={C.DOODLE.name}
+                  width={C.DOODLE.width}
+                  height={C.DOODLE.height}
+                  density={C.DOODLE.density}
+                  size="sm"
+                />
+                <a href="#doodle-case">
+                  Doodle enterprise scheduling UX: finding meeting times people will keep
+                </a>
+              </Cluster>
+            </Layout>
+          </Specimen>
+
+          <Specimen
             title="Equal ink, against equal box"
             note="The four marks the 9 Oct review named. Above, each without its density: sized by its box alone, as before, and LatitudePay’s tracked hairline capitals and Quoter’s name inside its pill read about half the mass of Knovos and Doodle. Below, with it: the same files at the same area of ink. Quoter is measured with its pill left out — a frame is a container, not mass."
           >

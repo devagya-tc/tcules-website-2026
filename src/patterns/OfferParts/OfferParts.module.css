@@ -1,0 +1,55 @@
+/* OfferParts — type and ink only.
+
+   Section paints the band; Layout owns every seam. Every value is an --ofp-* token in
+   tokens/components/offer-parts.css. No margins, no distances, no mono. */
+
+.heading {
+  font: var(--ofp-heading-text);
+  letter-spacing: var(--ofp-heading-tracking);
+  text-wrap: var(--text-title-wrap);
+  color: var(--ofp-heading-ink);
+  max-inline-size: var(--ofp-heading-measure);
+}
+
+.lead {
+  font: var(--ofp-lead-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ofp-lead-ink);
+  max-inline-size: var(--ofp-lead-measure);
+}
+
+/* One role for all four parts' titles. */
+.partTitle {
+  font: var(--ofp-part-title-text);
+  letter-spacing: var(--ofp-part-title-tracking);
+  text-wrap: balance;
+  color: var(--ofp-part-title-ink);
+  max-inline-size: var(--ofp-title-measure);
+}
+
+.itemTitle {
+  font: var(--ofp-item-title-text);
+  letter-spacing: var(--ofp-item-title-tracking);
+  text-wrap: balance;
+  color: var(--ofp-item-title-ink);
+  max-inline-size: var(--ofp-title-measure);
+}
+
+.body {
+  font: var(--ofp-body-text);
+  text-wrap: var(--text-running-wrap);
+  color: var(--ofp-body-ink);
+  max-inline-size: var(--ofp-body-measure);
+}
+
+/* A link inside a body (the design-engineering deliverables name a service). */
+.body a {
+  color: var(--ofp-link-ink);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--ofp-link-width);
+  text-underline-offset: var(--ofp-link-offset);
+}
+
+.body a:hover {
+  color: var(--ofp-link-ink-hover);
+}

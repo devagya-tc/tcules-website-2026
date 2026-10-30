@@ -5,7 +5,7 @@
    these pages is a kit unit with a layer of its own.
 
    Naming: --cpg-{part}-{role}
-     parts: ink | mark | panel
+     parts: ink | mark | panel | claim-figure
 
    --cpg-ink-muted   the proof line: the quiet line under a hero's lede, body-sm in the muted ink.
    --cpg-ink-label   the legend's two header words, in the eyebrow voice (mono, uppercase in
@@ -24,6 +24,7 @@
 
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
+  --cpg-claim-figure-width: 168px; /* a hard-parts claim's drawing: a component size, one value at every width (hard-parts-claims-lead-proof-footnotes) */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
 }
 

@@ -21,6 +21,11 @@
   --rbadge-text: var(--text-ui-lg);
   --rbadge-tracking: var(--text-ui-lg-tracking);
   --rbadge-mark-size: var(--icon-size-16);
+  /* The small badge (owner, 30 Oct 2026): the pre-29-Oct size, 12px text and 14px marks, for a
+     badge that is chrome rather than a claim the band makes: the site footer. */
+  --rbadge-text-sm: var(--text-ui-sm);
+  --rbadge-tracking-sm: var(--text-ui-sm-tracking);
+  --rbadge-mark-size-sm: var(--icon-size-14);
   --rbadge-transition-duration: var(--duration-fast);
   --rbadge-transition-easing: var(--easing-standard);
   --rbadge-ring-width: var(--focus-ring-width);

@@ -284,6 +284,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "Auxentios' industrial quoting product: one shared quoting workflow where six specialist roles contribute to the same quote.",
   },
+  'case-cover:connectx': {
+    src: '/placeholders/case-cover--connectx.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "ConnectX's AI dashboard: a plain-language question about a building answered by its digital twin, with the right data and assets in view.",
+  },
   'case-cover:curamcare': {
     src: '/placeholders/case-cover--curamcare.svg',
     width: 1600,
@@ -371,5 +379,86 @@ export const PLACEHOLDER_SLOTS: Readonly<
     kind: 'product shot',
     shows:
       "Vovisto's healthcare event and travel platform: a travel coordinator's view of one congress trip (budget, approval, flights, hotel). The case study is coming soon; the index lists it unlinked.",
+  },
+  'illustration:keeping-teams-on-the-system-after-launch': {
+    src: '/placeholders/illustration--keeping-teams-on-the-system-after-launch.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'A design system in its second year, still owned and still changing, with teams drawing from it instead of keeping local copies.',
+  },
+  'illustration:one-studio-can-take-it-into-working-software-with-the-designers-staying-in-the-build':
+    {
+      src: '/placeholders/illustration--one-studio-can-take-it-into-working-software-with-the-designers-staying-in-the-build.svg',
+      width: 1600,
+      height: 1333,
+      kind: 'illustration',
+      shows:
+        "The design carried on into working software, with the designers' place inside the build.",
+    },
+  'illustration:pending': {
+    src: '/placeholders/illustration--pending.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'FALLBACK, not a slot: a claim or reason whose isometric illustration is not drawn yet and has no row of its own.',
+  },
+  'illustration:rules-that-people-and-ai-coding-tools-can-follow': {
+    src: '/placeholders/illustration--rules-that-people-and-ai-coding-tools-can-follow.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'One rule named by its meaning, read the same way by a designer in Figma and by an AI coding tool writing the code.',
+  },
+  'illustration:we-design-ai-that-people-can-check-and-correct': {
+    src: '/placeholders/illustration--we-design-ai-that-people-can-check-and-correct.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'An AI answer stopping at a person to be checked and corrected before it counts.',
+  },
+  'illustration:we-know-what-to-leave-alone-in-a-product-people-rely-on': {
+    src: '/placeholders/illustration--we-know-what-to-leave-alone-in-a-product-people-rely-on.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'Almost all of a working product kept as it is, with one part changed.',
+  },
+  'illustration:we-tell-you-what-is-really-wrong': {
+    src: '/placeholders/illustration--we-tell-you-what-is-really-wrong.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The problems on a screen traced down to the one cause underneath them.',
+  },
+  'illustration:what-customers-do-without-looking': {
+    src: '/placeholders/illustration--what-customers-do-without-looking.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The habits long-time customers work from (the shortcut, the saved filter, the Monday report) recorded and kept in place while the screen around them changes.',
+  },
+  'illustration:what-the-business-needs-next': {
+    src: '/placeholders/illustration--what-the-business-needs-next.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'The first move chosen underneath the product: the change that what customers use most depends on.',
+  },
+  'illustration:work-that-happens-outside-the-product': {
+    src: '/placeholders/illustration--work-that-happens-outside-the-product.svg',
+    width: 1600,
+    height: 1333,
+    kind: 'illustration',
+    shows:
+      'A detail entered once in the redesigned record appears wherever it is needed next, in place of the retyping and spreadsheets that carried it outside the product.',
   },
 };

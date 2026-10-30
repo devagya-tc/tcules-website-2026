@@ -287,7 +287,7 @@ const SURFACES: readonly { surface: SectionSurface; note: string }[] = [
 /** One surface's proof: the pair, the link, then the unavailable states, on that ground. */
 function SurfaceRow() {
   return (
-    <Stage>
+    <Stage across={4}>
       <Cell label="The ask · solid + ghost">
         <Cluster colGap="block" rowGap="block" align="center">
           <Button as="a" href="#surfaces">
@@ -302,6 +302,16 @@ function SurfaceRow() {
         <Button as="a" href="#surfaces" emphasis="link" icon={arrow}>
           Start with an audit
         </Button>
+      </Cell>
+      <Cell label="Two actions · outline + link">
+        <Cluster colGap="block" rowGap="text" align="center">
+          <Button as="a" href="#surfaces" emphasis="outline">
+            See the work
+          </Button>
+          <Button as="a" href="#surfaces" emphasis="link" extendHitArea icon={arrow}>
+            Meet the studio
+          </Button>
+        </Cluster>
       </Cell>
       <Cell label="Busy · disabled">
         <Cluster colGap="block" rowGap="block" align="center">
@@ -625,7 +635,7 @@ export default function ButtonSpecimenPage() {
       {/* ── 09 · Outline stepper ────────────────────────────────────────────────────────────── */}
       <Band
         id="stepper"
-        note="The fourth emphasis, and the only one with an edge. Icon alone, a round hairline control that steps through a set, a slider’s previous and next. It is the secondary control (owner, 29 Oct 2026): hover never fills it — the line firms one step and the label takes the link’s step, colour only — and only a press takes a pale ground, so it never competes with the solid. At the end of its row it keeps its circle, off. Labelled (owner, 29 Oct 2026), at the button’s own radius, it leads an in-band pair whose second is the link — a Banner’s two actions — and never stands beside a solid."
+        note="The fourth emphasis, and the only one with an edge. Icon alone, a round hairline control that steps through a set, a slider’s previous and next. It is the secondary control: hover lays the ghost’s pale tint under it, the line firms and the label takes the link’s step, and a press goes one step deeper — never the solid’s blue, so it never competes with the main action (owner, 30 Oct 2026). At the end of its row it keeps its circle, off. Labelled (owner, 29 Oct 2026), at the button’s own radius, it leads an in-band pair whose second is the link — a Banner’s two actions — and never stands beside a solid."
       >
         {/* Varied on purpose: the sizes as a ladder in the head track, and the stepper where it
             lives, a Slider of case cards, in the body track — the one image row in the anatomy. */}
@@ -652,7 +662,7 @@ export default function ButtonSpecimenPage() {
             </Cell>
             <Cell
               label="State · rest, then pressed"
-              note="Point at the first: the rule firms, no fill. The second is held: the pale ground is the press, the one ground it ever takes."
+              note="Point at the first: a pale tint arrives under it and the rule firms. The second is held: one step deeper, the press."
             >
               <Cluster colGap="block" rowGap="text" align="center">
                 <Button as="a" href={ROUTES.about} emphasis="outline">

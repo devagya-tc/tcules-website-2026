@@ -47,12 +47,6 @@
   font: var(--eop-body-text-rows);
 }
 
-/* A closing term: the paragraph on its hairline, a `block` under it, as a What you get term. */
-.term {
-  padding-block-start: var(--gap-block);
-  border-block-start: var(--eop-term-rule-width) solid var(--eop-term-rule-ink);
-}
-
 .termText {
   font: var(--eop-term-text);
   text-wrap: var(--text-running-wrap);

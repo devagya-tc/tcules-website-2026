@@ -1,0 +1,81 @@
+/* ══ Component layer — OfferParts ═════════════════════════════════════════════════
+   Tier 2. "What you get" as four rows in a label column (owner, 30 Oct 2026, round 7;
+   decisions/2026-10-30-what-you-get-label-rows): the deliverables as a drawn strip, then three terms
+   (who does the work, what we need, where our part stops), each a 16:9 drawing beside its words. The
+   drawings are flat sketches only; no numbers, no hairlines, no containers. Every row opens on a
+   title at ONE role, so none outranks another; one body role under every title.
+
+   Naming: --ofp-{part}-{role}
+     parts  heading · lead · part-title · item-title · title · body · link
+     roles  text · tracking · measure · ink
+
+   Type and ink only: every distance in the band is Layout's. The drawings are not links and nothing
+   else responds to a pointer, so the one state token is the body link's hover. Every surface block
+   declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ofp-heading-text: var(--text-h2);
+  --ofp-heading-tracking: var(--text-h2-tracking);
+  --ofp-heading-measure: var(--measure-title);
+  --ofp-lead-text: var(--text-lead);
+  --ofp-lead-measure: var(--measure-lead);
+  /* A part's title: the h4 role the role promises' titles had, now the four parts'. */
+  --ofp-part-title-text: var(--text-h4);
+  --ofp-part-title-tracking: var(--text-h4-tracking);
+  /* A deliverable's title: one step under its part. */
+  --ofp-item-title-text: var(--text-h5);
+  --ofp-item-title-tracking: var(--text-h5-tracking);
+  --ofp-title-measure: var(--measure-title);
+  /* One body role for all four parts, the card-body ceiling. */
+  --ofp-body-text: var(--text-body-sm);
+  --ofp-body-measure: var(--measure-lead);
+  /* A link's underline sits clear of the descenders: an optical correction, so the ramp. */
+  --ofp-link-offset: var(--space-4);
+  --ofp-link-width: var(--border-width-hairline);
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --ofp-heading-ink: var(--color-neutral-900);
+  --ofp-lead-ink: var(--color-neutral-700);
+  --ofp-part-title-ink: var(--color-neutral-900);
+  --ofp-item-title-ink: var(--color-neutral-900);
+  --ofp-body-ink: var(--color-neutral-700);
+  --ofp-link-ink: var(--color-brandeis-600);
+  --ofp-link-ink-hover: var(--color-brandeis-700);
+}
+
+/* ── Surface: tint ───────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --ofp-heading-ink: var(--color-neutral-900);
+  --ofp-lead-ink: var(--color-neutral-800);
+  --ofp-part-title-ink: var(--color-neutral-900);
+  --ofp-item-title-ink: var(--color-neutral-900);
+  --ofp-body-ink: var(--color-neutral-800);
+  --ofp-link-ink: var(--color-brandeis-600);
+  --ofp-link-ink-hover: var(--color-brandeis-700);
+}
+
+/* ── Surface: ink ───────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --ofp-heading-ink: var(--color-white);
+  --ofp-lead-ink: var(--color-neutral-300);
+  --ofp-part-title-ink: var(--color-white);
+  --ofp-item-title-ink: var(--color-white);
+  --ofp-body-ink: var(--color-neutral-300);
+  --ofp-link-ink: var(--color-brandeis-200);
+  --ofp-link-ink-hover: var(--color-brandeis-100);
+}
+
+/* ── Surface: blue ───────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --ofp-heading-ink: var(--color-white);
+  --ofp-lead-ink: var(--color-brandeis-50);
+  --ofp-part-title-ink: var(--color-white);
+  --ofp-item-title-ink: var(--color-white);
+  --ofp-body-ink: var(--color-brandeis-50);
+  --ofp-link-ink: var(--color-white);
+  --ofp-link-ink-hover: var(--color-brandeis-50);
+}

@@ -29,6 +29,11 @@ export type EngagementScope =
   | 'overlap'
   | 'commercial';
 
+export type EngagementTerm = {
+  /** The term's paragraph, inline content the caller renders. */
+  body: ReactNode;
+};
+
 export type EngagementOption = {
   /** The option's name as authored, its full stop kept ("A designer in your team."). */
   title: string;
@@ -68,12 +73,11 @@ export type EngagementOptionsProps = {
   /** The limit on the claim, composed by the caller: in practice a `Callout`. A `stack` under the row. */
   note?: ReactNode;
   /**
-   * The band's closing terms, each one paragraph's inline content (what we stop at; where the studio
-   * is), set side by side as equal terms under the options, each on its hairline: the terms-tile
-   * grammar of a What you get band (owner, 29 Oct 2026; decisions/2026-10-29-how-we-work-together-link-in-head).
-   * Two or three; one column below 768.
+   * Terms that hold for every option, one plain text row at body size under the set, on the options'
+   * column grid from 1024 (tracks 1, 2 …), a `column` below the set; no plates, drawings, lines or nodes
+   * (decisions/2026-10-30-engagement-terms-plain-row).
    */
-  terms?: readonly ReactNode[];
+  terms?: readonly EngagementTerm[];
   /**
    * The band's own way deeper ("How we work together →"), composed by the caller: in practice a
    * single-link `CtaRow`. It is the head's end action (owner, 29 Oct 2026;
@@ -83,11 +87,6 @@ export type EngagementOptionsProps = {
    * floated away from the words (decisions/2026-10-29-how-we-work-together-band).
    */
   action?: ReactNode;
-  /**
-   * Any further action, closing the band a `stack` under the terms: in practice a single-link
-   * `CtaRow` (on the offer pages "Tell us what you're working on").
-   */
-  actions?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
   /** Default `grid`. See `EngagementArrangement`. */
@@ -123,7 +122,6 @@ export function EngagementOptions({
   note,
   terms = [],
   action,
-  actions,
   surface = 'paper',
   arrangement = 'grid',
 }: EngagementOptionsProps) {
@@ -132,7 +130,14 @@ export function EngagementOptions({
   const dense = shown.length >= 5;
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
+  /* The terms sit on the options' own track count from 1024. */
+  const termTracks = three || dense ? 3 : 4;
   const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
+  const optionTracks = dense
+    ? ({ base: 1, md: 2, lg: 3, xl: 5 } as const)
+    : three
+      ? ({ base: 1, md: 3 } as const)
+      : ({ base: 1, md: 2, lg: 4 } as const);
   return (
     <Section
       id={id}
@@ -163,78 +168,63 @@ export function EngagementOptions({
             </Layout>
           ) : null}
         </Layout>
-        {arrangement === 'grid' ? (
-          /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
-             column below: a borderless tile each (the drawing's plate is the image, the
-             name and its words under it), 32 across and a `column` down the set — the row seam of
-             every borderless card set. */
-          <Layout
-            as="ul"
-            columns={
-              dense
-                ? { base: 1, md: 2, lg: 3, xl: 5 }
-                : three
-                  ? { base: 1, md: 3 }
-                  : { base: 1, md: 2, lg: 4 }
-            }
-            colGap="gutter"
-            rowGap="column"
-          >
-            {shown.map((option) => (
-              <li key={option.title}>
-                <Layout rowGap="block">
-                  {option.scope ? <Drawing scope={option.scope} /> : null}
-                  <Layout rowGap="text">
-                    <h3 className={cx(styles.title, dense && styles.titleDense)}>
-                      {option.title}
-                    </h3>
-                    <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
-                  </Layout>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        ) : (
-          <Layout as="ul" rowGap="column">
-            {shown.map((option, index) => (
-              <li key={option.title}>
-                {/* One row per option, the drawing and the words side by side, swapping sides row
-                    by row from 768. Below 768 the drawing heads its words, full width at 2:1:
-                    beside them, the column gap left both too narrow. */}
-                <Layout
-                  columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
-                  reverse={{ md: index % 2 === 1 }}
-                  colGap="column"
-                  rowGap="block"
-                  align="center"
-                >
-                  {option.scope ? <Drawing scope={option.scope} /> : null}
+        <Layout rowGap="column">
+          {arrangement === 'grid' ? (
+            /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
+               column below: a borderless tile each (the drawing's plate is the image, the
+               name and its words under it), 32 across and a `column` down the set — the row seam of
+               every borderless card set. */
+            <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
+              {shown.map((option) => {
+                const card = (
                   <Layout rowGap="block">
-                    <h3 className={styles.title}>{option.title}</h3>
-                    <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                    {option.scope ? <Drawing scope={option.scope} /> : null}
+                    <Layout rowGap="text">
+                      <h3 className={cx(styles.title, dense && styles.titleDense)}>
+                        {option.title}
+                      </h3>
+                      <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
+                    </Layout>
                   </Layout>
-                </Layout>
-              </li>
-            ))}
-          </Layout>
-        )}
-        {terms.length > 0 ? (
-          /* Equal terms side by side, each on its hairline (the What you get terms' grammar). */
-          <Layout
-            as="ul"
-            columns={{ base: 1, md: Math.min(terms.length, 3) }}
-            colGap="gutter"
-            rowGap="block"
-          >
-            {terms.map((term, index) => (
-              <li key={index} className={styles.term}>
-                <p className={styles.termText}>{term}</p>
-              </li>
-            ))}
-          </Layout>
-        ) : null}
+                );
+                return <li key={option.title}>{card}</li>;
+              })}
+            </Layout>
+          ) : (
+            <Layout as="ul" rowGap="column">
+              {shown.map((option, index) => (
+                <li key={option.title}>
+                  {/* One row per option, the drawing and the words side by side, swapping sides row
+                      by row from 768. Below 768 the drawing heads its words, full width at 2:1:
+                      beside them, the column gap left both too narrow. */}
+                  <Layout
+                    columns={option.scope ? { base: 1, md: [5, 7] } : { base: 1 }}
+                    reverse={{ md: index % 2 === 1 }}
+                    colGap="column"
+                    rowGap="block"
+                    align="center"
+                  >
+                    {option.scope ? <Drawing scope={option.scope} /> : null}
+                    <Layout rowGap="block">
+                      <h3 className={styles.title}>{option.title}</h3>
+                      <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                    </Layout>
+                  </Layout>
+                </li>
+              ))}
+            </Layout>
+          )}
+          {terms.length > 0 ? (
+            <Layout columns={{ base: 1, lg: termTracks }} colGap="gutter" rowGap="text">
+              {terms.map((term, index) => (
+                <p key={index} className={styles.termText}>
+                  {term.body}
+                </p>
+              ))}
+            </Layout>
+          ) : null}
+        </Layout>
         {note}
-        {actions}
       </Layout>
     </Section>
   );

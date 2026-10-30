@@ -261,3 +261,4 @@ const COLUMN_GAP = 64;
 export const CASE_SPREAD_MEDIA =
   `(min-width: ${CAP}px) ${Math.round(((CONTAINER - COLUMN_GAP) * 7) / 12)}px, ` +
   `(min-width: 1024px) calc((100vw - ${2 * GUTTER + COLUMN_GAP}px) * 7 / 12), ${FLUID_COLUMN}`;
+
