@@ -370,6 +370,70 @@ function DecisionsFive() {
   );
 }
 
+/** Rules people and AI coding tools can follow: tokens named by meaning, the AI tool picking the right one, the screen it draws. */
+function HardAiRules() {
+  return (
+    <>
+      <Rect x={24} y={34} w={112} h={112} rx={8} className={styles.frame} />
+      {[48, 78, 108].map((y, i) => (
+        <g key={y}>
+          {i === 1 ? <Rect x={30} y={y - 4} w={100} h={28} rx={8} className={styles.halo} /> : null}
+          <Rect x={34} y={y} w={92} h={20} className={i === 1 ? styles.frame : styles.tile} />
+          <Glyph name="key" cx={46} cy={y + 10} size={12} className={i === 1 ? styles.glyph : styles.glyphQuiet} />
+          <Copy x={60} y={y + 10} w={i === 1 ? 52 : 40} quiet />
+        </g>
+      ))}
+      <Hop x1={136} x2={176} y={92} />
+      <Focus x={198} y={92} glyph="stars" size={12} />
+      <Hop x1={218} x2={246} y={92} />
+      <Rect x={248} y={52} w={52} h={80} rx={8} className={styles.frame} />
+      <Copy x={258} y={68} w={24} quiet />
+      <Copy x={258} y={80} w={32} />
+      <Rect x={258} y={98} w={32} h={14} rx={4} className={styles.solid} />
+    </>
+  );
+}
+
+/** How we modernise without disrupting users: study, decide part by part, one workflow first, old beside new, stay through the rollout. */
+function MethodModernise() {
+  const glyphs = ['eye', 'checklist', 'bolt-circle', 'layers', 'flag'] as const;
+  return (
+    <>
+      <path className={styles.line} d="M40,78 L280,78" />
+      {glyphs.map((g, i) => (
+        <g key={g}>
+          {i === 2 ? <Rect x={18 + i * 60 - 4} y={52 - 4} w={52} h={52} rx={10} className={styles.halo} /> : null}
+          <Rect x={18 + i * 60} y={52} w={44} h={44} rx={8} className={i === 2 ? styles.solid : styles.tile} />
+          <Glyph name={g} cx={40 + i * 60} cy={74} size={18} className={i === 2 ? styles.glyphOn : styles.glyphQuiet} />
+          <Copy x={26 + i * 60} y={114} w={28} quiet />
+        </g>
+      ))}
+      <Hatched x={178} y={124} w={44} h={16} />
+      <Rect x={228} y={124} w={44} h={16} rx={4} className={styles.tile} />
+    </>
+  );
+}
+
+/** What we agree before the build: one agreement sheet, four rows (do, touch, ready, own), each ticked. */
+function ScopeAgreement() {
+  const rows = ['checklist', 'database', 'clipboard-check', 'user'] as const;
+  return (
+    <>
+      <Rect x={60} y={24} w={200} h={132} rx={8} className={styles.frame} />
+      <Copy x={76} y={42} w={64} />
+      {rows.map((g, i) => (
+        <g key={g}>
+          <Rect x={76} y={56 + i * 24} w={168} h={18} className={styles.tile} />
+          <Glyph name={g} cx={88} cy={65 + i * 24} size={11} className={styles.glyphQuiet} />
+          <Copy x={102} y={65 + i * 24} w={i % 2 ? 60 : 84} quiet />
+          <Glyph name="check-circle" cx={232} cy={65 + i * 24} size={12} className={styles.glyph} />
+        </g>
+      ))}
+      <Focus x={262} y={30} glyph="lock" size={12} />
+    </>
+  );
+}
+
 export const L1_BANDS: Record<L1BandScene, () => ReactNode> = {
   'autonomy-finds': AutonomyFinds,
   'autonomy-suggests': AutonomySuggests,
@@ -387,4 +451,7 @@ export const L1_BANDS: Record<L1BandScene, () => ReactNode> = {
   'option-own-team': OptionOwnTeam,
   'method-test-in-code': MethodTestInCode,
   'decisions-five': DecisionsFive,
+  'hard-ai-rules': HardAiRules,
+  'method-modernise': MethodModernise,
+  'scope-agreement': ScopeAgreement,
 };

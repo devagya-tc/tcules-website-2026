@@ -97,7 +97,10 @@ export type L1BandScene =
   | 'status-guidance'
   | 'option-own-team'
   | 'method-test-in-code'
-  | 'decisions-five';
+  | 'decisions-five'
+  | 'hard-ai-rules'
+  | 'method-modernise'
+  | 'scope-agreement';
 
 export type L1OutcomeScene =
   | 'outcome-ai-steps'
