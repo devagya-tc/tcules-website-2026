@@ -306,7 +306,7 @@ function SurfaceRow() {
       <Cell label="Two actions · outline + link">
         <Cluster colGap="block" rowGap="text" align="center">
           <Button as="a" href="#surfaces" emphasis="outline">
-            Why teams choose Tcules
+            See the work
           </Button>
           <Button as="a" href="#surfaces" emphasis="link" extendHitArea icon={arrow}>
             Meet the studio
