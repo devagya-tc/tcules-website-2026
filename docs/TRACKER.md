@@ -5,6 +5,11 @@ unless a task says otherwise. Update it in the same PR as the work: tick the box
 
 `[ ]` todo · `[~]` in progress · `[x]` done · `[-]` dropped (say why)
 
+**Stages are not launch phases.** The numbered sections below are build stages, called "Phase 0–6" before
+30 Oct; older specs and rulings still say Phase. A *phase* is a release: **phase 1** is everything that
+ships on 6 Nov, and **phase 2** is everything after launch. There is no phase 3 (owner, 30 Oct 2026;
+decisions/2026-10-30-launch-is-phase-1-after-is-phase-2).
+
 Inputs: `Tcules-Design-Engineer-Handoff-Package/` (handoff docx, content system, Copy × UI standard),
 the brand framework (see 0.2), `docs/visual-assets-plan.md`, `docs/dbf-ch05-amendments.md`.
 
@@ -14,7 +19,7 @@ fix lives in the component or its tokens, not in a route.
 
 ---
 
-## Phase 0 — Base
+## Stage 0 — Base
 
 - [x] **0.1** Land `feat/content-section-per-heading`: Tag, Texture, the Prose changes, the route edits. (#55)
 - [x] **0.2** Put the brand framework in the repo at `docs/brand/`: illustration concept, image rules,
@@ -36,7 +41,7 @@ fix lives in the component or its tokens, not in a route.
       - `hiring-poster`: marked phrase as A5; two peridot marks (illustration, date); labels become ch05 §4b concept chip and part labels; `#9bb200` → peridot-600; QR on paper or paper-deep, ruled; mono 20 → 22px; margin 80; distances on the ladder; file message lines per ch05 §4.
       - `hiring-poster-detail`: marked phrase as A5; remove the blue fact panel, chips and two body columns (terms line and QR row carry them); margin 80; distances on the ladder; floor 22px.
 
-## Phase 1 — Component audit (decide before building)
+## Stage 1 — Component audit (decide before building)
 
 Read-only. The output is a decision, not code.
 
@@ -60,18 +65,18 @@ Read-only. The output is a decision, not code.
         markup or semantics, behaviour, or an arrangement the primitives can't express. If not,
         the answer is a composition in the template.
 - [-] **1.2** ~~Comp the five contexts in Claude Design.~~ Dropped 28 Sep: whole pages are the wrong unit
-      before the components are fixed. Each component's design is now decided in its own spec (Phase 2), and
-      "is the page beautiful" is answered in Phase 3 on the real page. The one idea kept from it: the
+      before the components are fixed. Each component's design is now decided in its own spec (Stage 2), and
+      "is the page beautiful" is answered in Stage 3 on the real page. The one idea kept from it: the
       no-visual page is designed first, in 3.2.
-- [x] **1.4** Illustration concepts and asset inventory (runs alongside Phase 2; needs no code). From
+- [x] **1.4** Illustration concepts and asset inventory (runs alongside Stage 2; needs no code). From
       `visual-assets-plan.md`: for each of the ~26 illustrations, the one-line message, the brief answered in
       ch05 §4d order, and the read-back test. For each case study, run §9a to decide the cover and banner kind
       (cut-out or registry archetype). Also inventory the client work and photography already cleared for use.
       Output: `docs/illustration-concepts.md`, starting with the six service lines. Concepts done 28 Sep; covers and
       photography parked. Service-line illustrations round 1 generated (`npm run illustrations`).
-- [x] **1.3** Fill in Phase 2 below from 1.1: one task per component, in dependency order (28 Sep).
+- [x] **1.3** Fill in Stage 2 below from 1.1: one task per component, in dependency order (28 Sep).
 
-## Phase 2 — Component overhaul
+## Stage 2 — Component overhaul
 
 One component per PR, run as in CLAUDE.md § How a component gets made: Claude writes the spec, the
 owner answers its open questions, Claude builds (`/build-from-spec`), verifies (`verify`, `aria:check`,
@@ -109,7 +114,7 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 - [x] **2.15** ★ DataTable (brief 10): the comparison job. (#73 — revised 29 Sep: boxed, scrolls sideways on narrow tracks, dividers on every column)
 - [x] **2.16** Texture: write its spec (decorative ground; the placement limits in audit §3). (#65)
 
-**Visual pass — before Phase 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
+**Visual pass — before Stage 3 (owner, 29 Sep).** Every component works; now make each one beautiful.
 - [ ] **2.17** ★ Visual overhaul: review every shipped component's specimen at 1440 and 390 against CLAUDE.md
       § Design quality and the brand chapters, and propose per component what to change. The owner approves each
       proposal before it is built; one component (or one tight family) per PR, each re-shot with `npm run shots`.
@@ -157,7 +162,7 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
 Jatin's explicit sign-off on the reduced type size.
 
-## Phase 3 — Slice 1: `/services/product-design`
+## Stage 3 — Slice 1: `/services/product-design`
 
 - [ ] **3.1** Semantic section view models in `src/content/types.ts`: Situation, Capability set,
       Mechanism, Proof, FAQ, Related, Enquiry. Shape them as the components' content props, not
@@ -174,19 +179,19 @@ Jatin's explicit sign-off on the reduced type size.
       matter most: changing copy or proof needs no code change, and reordering an allowed section
       needs no schema change.
 
-## Phase 4 — Slice 2: `/audits/design-to-code-audit`
+## Stage 4 — Slice 2: `/audits/design-to-code-audit`
 
-- [ ] **4.1** Reuse Phase 3. New only where an audit genuinely differs: what's examined, the deliverable, the boundary.
-- [ ] **4.2** Count the new components it needed. More than two means Phase 3's sections were too
+- [ ] **4.1** Reuse Stage 3. New only where an audit genuinely differs: what's examined, the deliverable, the boundary.
+- [ ] **4.2** Count the new components it needed. More than two means Stage 3's sections were too
       specific: fix them before going on.
 
-## Phase 5 — Slice 3: ConnectX case study
+## Stage 5 — Slice 3: ConnectX case study
 
 - [ ] **5.1** Reusable records as view models: Client, Testimonial, Case Study, Proof/Metric, Media.
 - [ ] **5.2** Proof and logo strips reference records instead of copying text.
 - [ ] **5.3** Case-study template: artefacts, outcomes with their evidence state, related work.
 
-## Phase 6 — Rollout and plumbing
+## Stage 6 — Rollout and plumbing
 
 - [ ] **6.1** Remaining services, audits and expertise onto the templates.
 - [ ] **6.2** Draft preview, and an empty optional section renders nothing.
@@ -197,8 +202,14 @@ Jatin's explicit sign-off on the reduced type size.
 
 Homepage · About · Careers · final positioning copy · migrating all 135 routes · share-preview generator.
 
-**Post-launch (Jatin review, 22 Oct).** A Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature for
-learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs with Ask AI).
+## Phase 2 — after the 6 Nov launch
+
+- [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
+      links (owner, 30 Oct; pulled forward only if the weekend leaves time;
+      decisions/2026-10-30-author-pages-move-to-phase-2).
+- [ ] From the Jatin review, 22 Oct: a Stripe-like bento of visual-heavy vertical cards · an "Ask AI" feature
+      for learning about Tcules on the site · the reply-style form redesigned as an AI chat window (pairs
+      with Ask AI).
 
 **Content asks, addressed later.** The design is content-agnostic for now, so nothing here blocks
 a phase: `TESTIMONIAL-REGISTER-V10.csv` (quote text behind the v10 quote IDs) · anything logged in
