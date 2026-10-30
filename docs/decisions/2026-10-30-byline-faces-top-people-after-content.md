@@ -1,7 +1,7 @@
 ---
 title: The byline carries faces, names and labelled meta; who each person is goes after the content
 date: 2026-10-30
-status: proposed
+status: active
 area: [layout, content]
 source: Owner, 30 Oct 2026, byline directions A–G (https://claude.ai/artifact/9ypGtvvn1ZxJGRr5b5s5fh), picked G
 supersedes: []
