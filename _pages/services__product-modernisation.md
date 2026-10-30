@@ -191,11 +191,11 @@ Our software modernisation services move an established product forward in stage
 
 - **A call on every part of the product:** keep, simplify, redesign, move to a new platform, rebuild or retire, agreed with your product and engineering leads.
 
-- **A written record of what customers rely on:** the habits, shortcuts, saved work and reports that must survive the change.
+- **A written record:** of what customers rely on: the habits, shortcuts, saved work and reports that must survive the change.
 
-- **One high-use workflow changed first,** designed in every state and tried with the people who use it before the next stage is planned.
+- **One high-use workflow:** changed first, designed in every state and tried with the people who use it before the next stage is planned.
 
-- **A plan for old and new running side by side,** so customers move across in stages.
+- **A plan for old and new:** running side by side, so customers move across in stages.
 
 - **Designs ready to build, or the build itself,** with our designers beside the people who maintain the product through each rollout.
 

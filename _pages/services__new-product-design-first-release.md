@@ -188,7 +188,7 @@ Bring an idea, research, designs or a prototype built with AI tools; we start fr
 
 - **The build,** alongside your engineers or on our own: sign-in, data, payments and the rest.
 
-- **The places new products break, tested before launch:** sign-in and invitations, who sees whose data, payments and refunds, errors and timeouts, and keys kept out of shared code.
+- **The places new products break:** tested before launch: sign-in and invitations, who sees whose data, payments and refunds, errors and timeouts, and keys kept out of shared code.
 
 - **Launch support** and a plan for later releases.
 
