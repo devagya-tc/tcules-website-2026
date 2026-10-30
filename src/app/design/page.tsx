@@ -238,6 +238,11 @@ const SPECIMENS = [
         note: 'a person (square or circle portrait, name, position, bio, LinkedIn foot) in the testimonial panel, and ProfileFollow, the one follow banner under a set; 3 surfaces',
       },
       {
+        href: '/design/contributors',
+        name: 'Contributors',
+        note: 'the people behind a piece, after its content — about the author(s), in this episode; portrait or outlined initials, name, role, more-from link; 3 surfaces',
+      },
+      {
         href: '/design/testimonial',
         name: 'Testimonial',
         note: 'the rated testimonial card (md box, sm unboxed), the wall (row of peers, column stacks, staggered), beside its case, 4 surfaces',

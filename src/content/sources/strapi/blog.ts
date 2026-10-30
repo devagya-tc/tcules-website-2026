@@ -9,6 +9,8 @@ import type {
   PageOutlineEntry,
 } from '../../types';
 import { mapUploadImage } from './image';
+import { COVER_SCENES } from '../cover-scenes';
+import { teamPortrait } from '../people';
 import { blogKind } from './insights';
 import { BLOG_BY_SLUG_QUERY } from './blog-query';
 import type {
@@ -21,6 +23,7 @@ import type {
   StrapiBlogSeo,
 } from './blog-types';
 import { markdownToHtml, type BodyHeading } from './markdown';
+import { authoredDate, publishedLine } from './published-line';
 import { escapeHtml, richTextToHtml, richTextToPlainText, safeContentHref } from './rich-text';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
@@ -136,26 +139,6 @@ function iframePublishedContent(block: StrapiBlogBlock): string {
   if (value(block.url) || value(block.embedCode) || block.thumbnail) return '';
 
   return [value(block.title), value(block.description)].filter(Boolean).join(' — ');
-}
-
-const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-
-/**
- * The body's date-and-reading-time line ("2 May ‘25 ⸱ 11 Min Read", or "8 Min Read" alone) split into
- * the authored date as ISO and the reading time ("11 min"). The CMS carries both in one title-only
- * iframe block; the page presents them as two byline pairs.
- */
-function publishedLine(line: string): { date?: string; readingTime?: string } {
-  const minutes = /(\d+)\s*min\s*read/iu.exec(line)?.[1];
-  const day = /(\d{1,2})\s+([a-z]{3})[a-z]*\s+[‘’']?(\d{2}|\d{4})\b/iu.exec(line);
-  const month = day ? MONTHS.indexOf(day[2]!.toLowerCase()) : -1;
-  const year = day ? (day[3]!.length === 2 ? `20${day[3]}` : day[3]) : undefined;
-  return {
-    ...(day && month >= 0
-      ? { date: `${year}-${String(month + 1).padStart(2, '0')}-${day[1]!.padStart(2, '0')}` }
-      : {}),
-    ...(minutes ? { readingTime: `${minutes} min` } : {}),
-  };
 }
 
 function blockId(block: StrapiBlogBlock, index: number): string {
@@ -442,12 +425,17 @@ function mapResource(
 
   const thumbnail = mapImage(resource.thumbnail, title, 'thumbnail', graphqlUrl);
   const featureImage = firstImage(resource.featureImage, title, 'feature image', graphqlUrl);
+  const authored = authoredDate(resource.mainSection);
 
   return {
     documentId: value(resource.documentId) || `blog-resource-${index}`,
     slug,
     title,
-    ...(value(resource.publishedAt) ? { publishedAt: value(resource.publishedAt) } : {}),
+    kind: blogKind(slug),
+    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
+    ...(!(thumbnail || featureImage) && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
+    /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
+    ...(authored ? { publishedAt: authored } : {}),
     ...(thumbnail || featureImage ? { image: thumbnail ?? featureImage } : {}),
     tags: labels(resource.tags),
     categories: labels(resource.categories),
@@ -531,7 +519,12 @@ function mapBlog(
     authors: (rawBlog.blogProfileSection ?? []).flatMap((author, index) => {
       const name = value(author.name);
       if (!name) return [];
-      const image = firstImage(author.profilePicture, name, 'profile picture', graphqlUrl);
+      const image =
+        firstImage(author.profilePicture, name, 'profile picture', graphqlUrl) ??
+        (() => {
+          const portrait = teamPortrait(name);
+          return portrait ? { ...portrait, mime: 'image/jpeg' } : undefined;
+        })();
       return [
         {
           id: value(author.id) || `blog-author-${index}`,

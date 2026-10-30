@@ -1525,8 +1525,15 @@ export type PodcastResource = {
   documentId: string;
   slug: string;
   title: string;
+  /** Its format, from its slug's family ("guides/…" → guide). */
+  kind: BlogPage['kind'];
+  /** Its standfirst: the SEO meta description its own page leads with. */
+  description?: string;
+  /** The authored publish date (ISO), from the body's date line. Absent rather than wrong. */
   publishedAt?: string;
   image?: PodcastImage;
+  /** The scene drawn for it, where it has no image of its own. */
+  coverScene?: ArticleSceneName;
 };
 
 export type PodcastPage = {
@@ -1653,8 +1660,15 @@ export type BlogResource = {
   documentId: string;
   slug: string;
   title: string;
+  /** Its format, from its slug's family ("guides/…" → guide). */
+  kind: BlogPage['kind'];
+  /** Its standfirst: the SEO meta description its own page leads with. */
+  description?: string;
+  /** The authored publish date (ISO), from the body's date line. Absent rather than wrong. */
   publishedAt?: string;
   image?: BlogImage;
+  /** The scene drawn for it, where it has no image of its own. */
+  coverScene?: ArticleSceneName;
   tags: string[];
   categories: string[];
 };

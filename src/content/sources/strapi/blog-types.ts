@@ -94,6 +94,10 @@ export type StrapiBlogResource = {
   title?: string | null;
   slug?: string | null;
   publishedAt?: string | null;
+  /** Only the body's iframe blocks: one of them carries the authored date line. */
+  mainSection?: StrapiBlogBlock[] | null;
+  /** The SEO meta description: an article's standfirst, as its own page uses it. */
+  seo?: { metaDescription?: string | null } | null;
   thumbnail?: StrapiBlogFile | null;
   featureImage?: StrapiBlogFile[] | null;
   tags?: Array<{ documentId?: string | null; name?: string | null }> | null;

@@ -1,0 +1,49 @@
+/* Contributors — see Contributors.tsx. Every distance is a Layout or Cluster gap; this module holds
+   the rule, the portrait and the type. */
+
+/* A hairline above, the block's air under it: the section's own edge, as the hero's byline. */
+.root {
+  border-block-start: var(--ctb-rule-width) solid var(--ctb-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+.label {
+  color: var(--ctb-label-ink);
+  font: var(--ctb-label-text);
+  letter-spacing: var(--ctb-label-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+/* A fixed square so every row shares one height, Media filling it from the centre. */
+.portrait {
+  display: block;
+  flex: none;
+  inline-size: var(--ctb-portrait-size);
+  block-size: var(--ctb-portrait-size);
+  overflow: hidden;
+  border-radius: var(--ctb-portrait-radius);
+}
+
+/* No portrait: the initials, centred in an outlined square on the ground, a stand-in by design.
+   The grid centres two glyphs in their own fixed box; it arranges no siblings, so it is not a
+   Layout's job (the same argument SiteNav makes for its icon boxes). */
+.initials {
+  display: grid;
+  place-items: center;
+  border: var(--ctb-rule-width) solid var(--ctb-initials-edge);
+  color: var(--ctb-initials-ink);
+  font: var(--ctb-initials-text);
+  letter-spacing: var(--ctb-initials-tracking);
+  text-transform: var(--text-mono-case);
+}
+
+.name {
+  color: var(--ctb-name-ink);
+  font: var(--ctb-name-text);
+  letter-spacing: var(--ctb-name-tracking);
+}
+
+.role {
+  color: var(--ctb-role-ink);
+  font: var(--ctb-role-text);
+}

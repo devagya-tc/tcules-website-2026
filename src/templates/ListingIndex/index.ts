@@ -15,4 +15,5 @@ export { listingFinder } from './listingFinder';
 export type { FinderArgs, FinderGroup, FinderOption, FinderPick } from './listingFinder';
 export type { InsightItem, InsightKind } from './compositions';
 export { caseFinder, caseViews } from './cases';
+export { InsightResources } from './resources';
 export type { CaseGroup, CaseItem, CaseView } from './cases';

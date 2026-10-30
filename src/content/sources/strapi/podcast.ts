@@ -20,6 +20,9 @@ import type {
   StrapiPodcastSeo,
 } from './podcast-types';
 import { escapeHtml, safeContentHref } from './rich-text';
+import { COVER_SCENES } from '../cover-scenes';
+import { blogKind } from './insights';
+import { authoredDate } from './published-line';
 
 const DEFAULT_STRAPI_GRAPHQL_URL = 'https://tcules-server-production.up.railway.app/graphql';
 const PODCAST_REVALIDATE_SECONDS = 300;
@@ -312,12 +315,16 @@ function mapResource(resource: StrapiPodcastResource, index: number, graphqlUrl:
   if (!slug || !title) return undefined;
 
   const image = mapImage(resource.thumbnail, title, 'article thumbnail', graphqlUrl);
+  const authored = authoredDate(resource.mainSection);
   return {
     documentId: value(resource.documentId) || `podcast-resource-${index}`,
     slug,
     title,
-    ...(value(resource.publishedAt) ? { publishedAt: value(resource.publishedAt) } : {}),
-    ...(image ? { image } : {}),
+    kind: blogKind(slug),
+    ...(value(resource.seo?.metaDescription) ? { description: value(resource.seo?.metaDescription) } : {}),
+    /* The authored date from the body's line, never `publishedAt` (the CMS's last publish). */
+    ...(authored ? { publishedAt: authored } : {}),
+    ...(image ? { image } : { ...(COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}) }),
   };
 }
 

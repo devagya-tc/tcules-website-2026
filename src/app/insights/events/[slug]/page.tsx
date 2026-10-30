@@ -4,10 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section, Tag } from '@/components';
 import { getEventPage, type EventBlock, type EventImage } from '@/content';
-import { articlePath, eventPath, ROUTES } from '@/lib/routes';
+import { eventPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
-  BlockCard,
   Breadcrumbs,
   Callout,
   Figure,
@@ -15,6 +14,9 @@ import {
   TableOfContents,
   type TocItem,
 } from '@/patterns';
+import { InsightResources } from '@/templates';
+
+import { resourceItems } from '../../../_insights/resources';
 
 type EventPageProps = { params: Promise<{ slug: string }> };
 
@@ -156,19 +158,6 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
 
 function dateOnly(date: string | undefined): string | undefined {
   return date?.slice(0, 10);
-}
-
-function displayDate(date: string | undefined): string {
-  if (!date) return 'Latest article';
-  const parsed = new Date(date);
-  return Number.isNaN(parsed.valueOf())
-    ? 'Latest article'
-    : new Intl.DateTimeFormat('en', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
-      }).format(parsed);
 }
 
 function uniqueLabels(labels: readonly string[]): string[] {
@@ -346,32 +335,9 @@ export default async function EventPage({ params }: EventPageProps) {
         </Section>
       ) : null}
 
-      {event.resources.length > 0 ? (
-        <Section surface="tint" aria-labelledby="event-resources-heading">
-          <Layout rowGap="stack">
-            <h2 id="event-resources-heading">Explore other resources</h2>
-            <Layout
-              as="ul"
-              columns={{ base: 1, md: 2, lg: 3 }}
-              colGap="gutter"
-              rowGap="column"
-              equalRows
-            >
-              {event.resources.map((resource) => (
-                <BlockCard
-                  key={resource.documentId}
-                  title={resource.title}
-                  body={displayDate(resource.publishedAt)}
-                  eyebrow="Article"
-                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
-                  href={articlePath(resource.slug)}
-                  ctaLabel="Read article"
-                />
-              ))}
-            </Layout>
-          </Layout>
-        </Section>
-      ) : null}
+      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
+          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
+      <InsightResources heading="Explore other resources" items={resourceItems(event.resources)} />
     </>
   );
 }

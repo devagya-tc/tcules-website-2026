@@ -4,10 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { Button, Cluster, Icon, Layout, Prose, Section } from '@/components';
 import { getPodcastPage, type PodcastBlock, type PodcastImage } from '@/content';
-import { articlePath, podcastPath, ROUTES } from '@/lib/routes';
+import { podcastPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
-  BlockCard,
   Breadcrumbs,
   Callout,
   Figure,
@@ -15,6 +14,9 @@ import {
   TableOfContents,
   type TocItem,
 } from '@/patterns';
+import { InsightResources } from '@/templates';
+
+import { resourceItems } from '../../../_insights/resources';
 
 type PodcastPageProps = { params: Promise<{ slug: string }> };
 
@@ -158,19 +160,6 @@ function dateOnly(date: string | undefined): string | undefined {
   return date?.slice(0, 10);
 }
 
-function displayDate(date: string | undefined): string {
-  if (!date) return 'Latest article';
-  const parsed = new Date(date);
-  return Number.isNaN(parsed.valueOf())
-    ? 'Latest article'
-    : new Intl.DateTimeFormat('en', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
-      }).format(parsed);
-}
-
 export async function generateMetadata({ params }: PodcastPageProps): Promise<Metadata> {
   const { slug } = await params;
   const podcast = await getPodcastPage(slug);
@@ -305,32 +294,9 @@ export default async function PodcastPage({ params }: PodcastPageProps) {
         </Section>
       ) : null}
 
-      {podcast.resources.length > 0 ? (
-        <Section surface="tint" aria-labelledby="podcast-resources-heading">
-          <Layout rowGap="stack">
-            <h2 id="podcast-resources-heading">Explore other resources</h2>
-            <Layout
-              as="ul"
-              columns={{ base: 1, md: 2, lg: 3 }}
-              colGap="gutter"
-              rowGap="column"
-              equalRows
-            >
-              {podcast.resources.map((resource) => (
-                <BlockCard
-                  key={resource.documentId}
-                  title={resource.title}
-                  body={displayDate(resource.publishedAt)}
-                  eyebrow="Article"
-                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
-                  href={articlePath(resource.slug)}
-                  ctaLabel="Read article"
-                />
-              ))}
-            </Layout>
-          </Layout>
-        </Section>
-      ) : null}
+      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
+          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
+      <InsightResources heading="Explore other resources" items={resourceItems(podcast.resources)} />
     </>
   );
 }
