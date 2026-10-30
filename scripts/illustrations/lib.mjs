@@ -184,6 +184,17 @@ export class Scene {
     this.poly([at(u, v), at(u + w, v), at(u + w, v + h), at(u, v + h)], opts);
   }
 
+  /**
+   * A connector's end diamond drawn IN a standing panel's plane at (u, v), half-diagonal r: for a
+   * connector that ends on a face (C2), where a ground-plane diamond would sit off the anchor.
+   */
+  diamondOnPanel(at, u, v, r = 8, color = HEX.blue) {
+    this.poly([at(u - r, v), at(u, v - r), at(u + r, v), at(u, v + r)], {
+      fill: color,
+      stroke: 'none',
+    });
+  }
+
   /** Text bar (30%) or heading bar (solid) on a panel (§4b UI shorthand). */
   panelBar(at, u, v, w, { h = 8, solid = false, color = HEX.blue } = {}) {
     this.onPanel(at, u, v, w, h, { fill: solid ? color : rgba(color, 0.3), stroke: 'none' });

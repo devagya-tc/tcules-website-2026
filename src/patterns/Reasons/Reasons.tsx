@@ -130,11 +130,21 @@ export type ReasonsProps = {
    * light patches. Pass figures exported on the matching ground.
    */
   surface?: Extract<SectionSurface, 'paper' | 'tint'>;
+  /**
+   * The drawing's scale. `sm` (default) is the 2×2 fold set's, 140 tall (home). `lg` is band scale,
+   * 256 tall (200 below 768), for offer pages: the set sets one drawn illustration per reason, a size
+   * that matches the retired proof plate so the row keeps its height. No plate, no ground: an
+   * illustration is never boxed (ch05 §4a).
+   */
+  figureSize?: 'sm' | 'lg';
 };
 
 /** The drawing's rendered width: its box is --rsn-figure-height tall at the set's widest ratio (6:5),
  *  so 168 at the 140 step. */
 const FIGURE_SIZES = '170px';
+
+/** The `lg` drawing's rendered width: 256 tall at the set's widest ratio (6:5), ~310 at most. */
+const FIGURE_SIZES_LG = '(min-width: 1024px) 310px, 100vw';
 
 /** The case cover's rendered width: the plate's full width, ~400 at most. */
 const COVER_SIZES = '(min-width: 1024px) 400px, 100vw';
@@ -266,6 +276,7 @@ export function Reasons({
   note,
   arrangement = 'open',
   surface = 'paper',
+  figureSize = 'sm',
 }: ReasonsProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
   if (process.env.NODE_ENV !== 'production' && ![3, 4, 6].includes(shown.length)) {
@@ -354,10 +365,10 @@ export function Reasons({
             {item.proof ? (
               <Proof proof={item.proof} flat={flatProofs} />
             ) : item.figure ? (
-              <div className={styles.figure}>
+              <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
                 <Media
                   image={{ ...item.figure, alt: '' }}
-                  sizes={FIGURE_SIZES}
+                  sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
                   fit="contain"
                   focus={FIGURE_START}
                 />

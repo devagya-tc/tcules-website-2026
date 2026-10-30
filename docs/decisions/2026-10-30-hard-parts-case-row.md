@@ -1,7 +1,7 @@
 ---
 title: "Hard parts: one row per problem, the cited case's own cover beside it"
 date: 2026-10-30
-status: active
+status: superseded
 area: [cards]
 source: "Owner round 5 review, 30 Oct 2026 (feat/r5)"
 supersedes: []

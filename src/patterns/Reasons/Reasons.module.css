@@ -52,6 +52,12 @@
 .figure {
   block-size: var(--rsn-figure-height);
   aspect-ratio: var(--rsn-figure-ratio);
+  max-inline-size: 100%; /* so a 6:5 box never overflows a 277 track at 1024 */
+}
+
+/* Band scale (offer pages): the box is taller; its width follows the ratio. */
+.figureLg {
+  block-size: var(--rsn-figure-height-lg);
 }
 
 /* ── boxed: the set in one rounded frame ──────────────────────────────────────

@@ -13,6 +13,7 @@ import { caseRoutesIn } from '@/lib/corpus-cases';
 import { corpusMetadata } from '@/lib/corpus-metadata';
 import { OfferPage } from '@/templates';
 
+import { landedClaimFigure } from './claim-figure';
 import { landedReasonFigure } from './reason-figure';
 
 /**
@@ -75,6 +76,7 @@ export async function OfferRoute({ route }: { route: string }) {
       avatars={avatars}
       scenes={scenes}
       reasonFigure={landedReasonFigure}
+      claimFigure={landedClaimFigure}
     />
   );
 }

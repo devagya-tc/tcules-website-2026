@@ -22,13 +22,11 @@ import {
   VoiceLedger,
   type BlockCardSetItem,
   type EngagementScope,
-  type ReasonsProof,
   type TraceScene,
   type TraceStage,
 } from '@/patterns';
 import { caseStudyLink } from '@/lib/case-links';
 import { caseRouteOf } from '@/lib/corpus-cases';
-import { OFFER_REASON_FIGURES } from '@/lib/reason-proof';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
@@ -38,6 +36,7 @@ import type {
   CorpusPage,
 } from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
+import { placeholderIllustration } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
 import {
   offerSceneKey,
@@ -110,28 +109,6 @@ import {
  * word is the corpus's.
  */
 
-function offerReasonProof(
-  runs: readonly InlineRun[],
-  title: string | undefined,
-  caseRefs: Readonly<Record<string, CorpusCaseRef>>,
-): ReasonsProof | undefined {
-  if (!title) return undefined;
-  for (const run of runs) {
-    if (run.type === 'link') {
-      const route = caseRouteOf(run.href);
-      if (route.startsWith('/case-studies/')) {
-        return { kind: 'cover', image: caseCover(plain(run.children), caseRefs[route]) };
-      }
-    }
-  }
-  const spec = OFFER_REASON_FIGURES[title.replace(/\.$/, '')];
-  const sentence = plain(runs).toLowerCase();
-  if (spec && spec.every((f) => sentence.includes(f.from))) {
-    return { kind: 'figures', figures: spec.map(({ value, label }) => ({ value, label })) };
-  }
-  return undefined;
-}
-
 export type OfferContext = {
   page: CorpusPage;
   /** The cases the page cites, as each case's own page describes them (title, cover). */
@@ -150,9 +127,18 @@ export type OfferContext = {
   /**
    * A Why Tcules reason's drawing by the reason's title as authored, exported on the band's ground
    * (component-map C1; the content seam's `getReasonFigure`). Undefined for a reason not drawn yet:
-   * the band draws only when every reason resolves.
+   * the band draws the labelled illustration slot in its place (src/lib/placeholders.ts).
    */
   reasonFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
+  /**
+   * A hard-parts claim's drawing by the claim's title as authored, exported on the band's ground
+   * (the content seam's `getClaimFigure`). Undefined for a claim not drawn yet: the band draws the
+   * labelled illustration slot in its place.
+   */
+  claimFigure?: (
     title: string,
     ground: 'paper' | 'paper-deep',
   ) => { src: string; width: number; height: number } | undefined;
@@ -363,7 +349,8 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           page={page}
           band={band}
           caseRefs={ctx.caseRefs}
-          sceneOf={(title) => sceneFor(ctx, band, title)}
+          claimFigure={ctx.claimFigure}
+          ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
         />
       );
     case 'method': {
@@ -649,13 +636,13 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
-      /* Evidence first (owner, 30 Oct 2026, round 5; decisions/2026-10-29-home-reasons-show-their-proof):
-         a reason whose sentence links a case shows that case's cover, one that states a tenure shows
-         it as a figure; the drawn isometric figures only when a reason names no evidence.
-         The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
-         closing links. Drawn as Reasons when every reason has its figure; until the figures are
-         drawn (component-map C1, 10 figures), ONE OfferSheet three across, which also differs from
-         the drawn engagements band beside it. */
+      /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
+         closing links. One isometric illustration per reason, band scale (`figureSize="lg"`), never
+         a case cover or a figure panel (decisions/2026-10-30-reasons-take-illustrations): the case
+         links stay in the sentence. A reason not drawn yet takes the labelled illustration slot
+         (decisions/2026-10-30-undrawn-illustration-slot), so a band never mixes two scales. Head
+         above, drawing above (decisions/2026-10-29-set-reasons-head-above-drawing-above), and
+         isometric, so it never reads as How we work together's flat options beside it. */
       if (blocksOf(band, 'list').length > 0 || band.blocks.some((b) => b.type === 'item')) {
         const parts = sheetParts(band);
         /* The closing link row ("Why teams choose Tcules") follows the last `###` reason, so the
@@ -665,63 +652,30 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           block.type === 'links' ? block.links : [],
         );
         const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
-        /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
-           reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
-           Isometric, so it never reads as How we work together's flat options beside it
-           (decisions/2026-10-29-how-we-work-together-link-in-head). */
-        const list = blocksOf(band, 'list')[0];
-        const proofs =
-          list && list.items.length === parts.items.length
-            ? list.items.map((runs, i) =>
-                offerReasonProof(runs, parts.items[i]?.title, ctx.caseRefs),
-              )
-            : [];
-        if (proofs.length > 0 && proofs.every(Boolean)) {
-          return (
-            <Reasons
-              {...head(band)}
-              surface={unit.surface === 'tint' ? 'tint' : 'paper'}
-              lead={parts.lead}
-              action={action}
-              items={parts.items.map((item, i) => ({
-                title: item.title!,
-                body: item.bodyHtml ? (
-                  <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-                ) : (
-                  (item.body ?? '')
-                ),
-                proof: proofs[i]!,
-              }))}
-            />
-          );
-        }
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
-        const drawn = parts.items.map((item) => ({
-          item,
-          figure: item.title ? ctx.reasonFigure?.(item.title, ground) : undefined,
-        }));
-        if (drawn.length > 0 && drawn.every(({ figure }) => figure)) {
+        const titled = parts.items.filter((item) => item.title);
+        if ([3, 4, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
               surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              figureSize="lg"
               lead={parts.lead}
               action={action}
-              items={drawn.flatMap(({ item, figure }) =>
-                figure && item.title
-                  ? [
-                      {
-                        title: item.title,
-                        body: item.bodyHtml ? (
-                          <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-                        ) : (
-                          (item.body ?? '')
-                        ),
-                        figure: { ...figure, alt: '', kind: 'illustration' as const },
-                      },
-                    ]
-                  : [],
-              )}
+              items={titled.map((item) => {
+                const drawn = ctx.reasonFigure?.(item.title!, ground);
+                return {
+                  title: item.title!,
+                  body: item.bodyHtml ? (
+                    <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                  ) : (
+                    (item.body ?? '')
+                  ),
+                  figure: drawn
+                    ? { ...drawn, alt: '', kind: 'illustration' as const }
+                    : { ...placeholderIllustration(item.title!), alt: '' },
+                };
+              })}
             />
           );
         }

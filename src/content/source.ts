@@ -9,6 +9,7 @@ import { PLACEHOLDER_REASONS, figureOf } from './sources/fixtures/placeholder-re
 import { PROPOSED_EYEBROWS } from './sources/fixtures/proposed-eyebrows';
 import { TESTIMONIAL_AVATARS } from './sources/fixtures/testimonial-avatars';
 import { OFFER_SCENES } from './sources/offer-scenes';
+import { CLAIM_FIGURES, CLAIM_FIGURE_SIZE } from './sources/claim-figures';
 import { REASON_FIGURES, REASON_FIGURE_SIZE } from './sources/reason-figures';
 import { offerSceneKey, type OfferScenes } from '@/lib/sketches';
 import { TESTIMONIAL_RATINGS } from './sources/fixtures/testimonial-ratings';
@@ -212,7 +213,7 @@ export async function getOfferScenes(route: string): Promise<OfferScenes> {
 /**
  * The drawing a Why Tcules reason carries in the Reasons band (sources/reason-figures.ts), by the
  * reason's title as authored, exported on the band's ground: `paper`, or `paper-deep` for a tint
- * band. Undefined for a title with no drawing; a band draws only when every reason has one.
+ * band. Undefined for a title with no drawing, which takes the labelled illustration slot.
  */
 export function getReasonFigure(
   title: string,
@@ -221,6 +222,20 @@ export function getReasonFigure(
   const ref = REASON_FIGURES[offerSceneKey(title)];
   if (!ref) return undefined;
   return { src: `/illustrations/reasons/${ref.name}.${ground}.svg`, ...REASON_FIGURE_SIZE[ref.set] };
+}
+
+/**
+ * The drawing a hard-parts claim carries in the ChallengesBand (sources/claim-figures.ts), by the
+ * claim's title as authored, exported on the band's ground. Undefined for a title with no drawing,
+ * which takes the labelled illustration slot.
+ */
+export function getClaimFigure(
+  title: string,
+  ground: 'paper' | 'paper-deep' = 'paper',
+): { src: string; width: number; height: number } | undefined {
+  const ref = CLAIM_FIGURES[offerSceneKey(title)];
+  if (!ref) return undefined;
+  return { src: `/illustrations/claims/${ref.name}.${ground}.svg`, ...CLAIM_FIGURE_SIZE };
 }
 
 /** A route's proposed band eyebrows (PROPOSED, fixtures/proposed-eyebrows.ts), keyed by band id. */

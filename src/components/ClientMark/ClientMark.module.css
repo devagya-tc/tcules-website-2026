@@ -95,3 +95,10 @@
     background-color: var(--cmark-ink-forced);
   }
 }
+
+/* A mark in a citation line: the same arithmetic on the small step, which holds at every width. */
+.sm {
+  --cmark-target-side: var(--cmark-target-side-sm);
+  --cmark-height-max: var(--cmark-height-max-sm);
+  --cmark-width-max: var(--cmark-width-max-sm);
+}

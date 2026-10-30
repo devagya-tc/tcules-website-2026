@@ -1,6 +1,17 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Cluster, Icon, type IconName, Layout, Media, Prose, Sketch } from '@/components';
+import {
+  Button,
+  ClientMark,
+  Cluster,
+  Icon,
+  type IconName,
+  Layout,
+  Media,
+  Prose,
+  Sketch,
+} from '@/components';
+import { clientMark } from '@/lib/client-marks';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
@@ -32,7 +43,7 @@ import type {
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderImage } from '@/lib/placeholders';
+import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
 import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
@@ -543,28 +554,34 @@ export function SheetBand({
 
 /** An image across the content column (1240 cap, 32 gutters). */
 const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
-/** A hard part's cover: the 2/5 track at 1024+, the full column below. */
-const HARD_PART_COVER =
-  '(min-width: 1304px) 458px, (min-width: 1024px) calc((100vw - 160px) * 2 / 5), calc(100vw - 64px)';
 
 /**
- * The hard parts. Each is a PROBLEM followed by an "Example:" sentence that cites ONE case, so the
- * example is the evidence: when every row has one, each row is the problem beside the cited case's own
- * cover (owner, 30 Oct 2026, round 5), one row each, a band-level image about one item being the
- * "random image" the owner rejected. A band whose rows cite no case reads down as before: a read-down,
- * beside its own photograph for three rows, or under a wide image.
+ * The hard parts. Each is a PROBLEM followed by an "Example:" sentence that cites ONE case. When every
+ * row has one, each row is one claim: its words on 3/5 and ITS isometric illustration on the end 2/5,
+ * facing them (above them below 1024), then the example as a CITATION under the words (owner, 30 Oct
+ * 2026, round 6; decisions/2026-10-30-claim-visual-depicts-the-claim). The drawing depicts the claim,
+ * never the case: the case is cited, not pictured, so no cover. A claim not drawn yet takes the labelled
+ * illustration slot, in the same geometry (decisions/2026-10-30-undrawn-illustration-slot). A band whose
+ * rows cite no case reads down as before: a read-down, beside its own photograph for three rows, or
+ * under a wide image.
  */
 export function ChallengesBand({
   page,
   band,
   caseRefs = {},
-  sceneOf,
+  claimFigure,
+  ground = 'paper',
 }: {
   page: CorpusPage;
   band: CorpusBand;
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
-  /** A row whose example is not a case has no cover: it is drawn from its problem (round 5). */
-  sceneOf?: (title: string) => SketchName | undefined;
+  /** A claim's drawing by its title, exported on the band's ground; undefined takes the slot. */
+  claimFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
+  /** The ground the drawings are exported on: `paper-deep` on a tint band. */
+  ground?: 'paper' | 'paper-deep';
 }) {
   const blocks = content(band);
   const rows: ReadDownRow[] = [];
@@ -616,48 +633,68 @@ export function ChallengesBand({
     return undefined;
   });
   if (rows.length >= 2 && examples.every(Boolean)) {
-    const proofRows = rows.map((row, i) => {
-      const example = examples[i]!;
-      const scene = sceneOf?.(row.title);
-      const ref = caseRefs[caseRouteOf(example.href)];
-      return {
-        ...row,
-        scene,
-        cover: scene ? undefined : caseCover(example.name, ref),
-      };
-    });
     const proofSet = (
       <Layout as="ul" rowGap="column">
-        {proofRows.map((r) => (
-          <li key={r.title}>
-            <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
-              <Layout rowGap="block">
-                <h3 className={styles.itemTitle}>{r.title}</h3>
-                <Layout rowGap="text">
-                  {(r.bodyHtml ?? []).map((html, i) => (
-                    <p key={i} className={styles.hardBody} dangerouslySetInnerHTML={{ __html: html }} />
-                  ))}
-                </Layout>
-              </Layout>
-              {r.scene ? (
-                <Sketch name={r.scene} />
-              ) : r.cover ? (
-                <div className={styles.hardCover}>
+        {rows.map((row, i) => {
+          const example = examples[i]!;
+          const drawn = claimFigure?.(row.title, ground);
+          const image = drawn
+            ? { ...drawn, alt: '', kind: 'illustration' as const }
+            : { ...placeholderIllustration(row.title), alt: '' };
+          /* The citation carries the one link, so the Example sentence keeps its words and loses its
+             link. */
+          const paras = (row.bodyHtml ?? []).map((html, j) => {
+            const runs = rowRuns[i]?.[j];
+            return runs && exampleLink(runs)
+              ? inlineToHtml(
+                  runs.flatMap((run) => (run.type === 'link' ? run.children : [run])),
+                )
+              : html;
+          });
+          const mark = clientMark(example.name);
+          const title = caseRefs[caseRouteOf(example.href)]?.title ?? example.name;
+          return (
+            <li key={row.title}>
+              <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
+                <div className={styles.claimFigure}>
                   <Media
-                    image={{ ...r.cover, alt: '' }}
-                    sizes={HARD_PART_COVER}
-                    fit="fill"
-                    edge="placement"
+                    image={image}
+                    sizes="(min-width: 1024px) 400px, 100vw"
+                    fit="contain"
+                    focus={{ x: 0, y: 0.5 }}
                   />
                 </div>
-              ) : null}
-            </Layout>
-          </li>
-        ))}
+                <Layout rowGap="block">
+                  <h3 className={styles.itemTitle}>{row.title}</h3>
+                  <Layout rowGap="text">
+                    {paras.map((html, j) => (
+                      <p
+                        key={j}
+                        className={styles.hardBody}
+                        dangerouslySetInnerHTML={{ __html: html }}
+                      />
+                    ))}
+                  </Layout>
+                  <Cluster colGap="block" rowGap="tight" align="center">
+                    {mark ? <ClientMark {...mark} size="sm" /> : null}
+                    <a href={example.href} className={styles.citation}>
+                      <Cluster as="span" colGap="tight" align="center">
+                        {title}
+                        <span className={styles.citationArrow} aria-hidden="true">
+                          <Icon name="arrow-right" />
+                        </span>
+                      </Cluster>
+                    </a>
+                  </Cluster>
+                </Layout>
+              </Layout>
+            </li>
+          );
+        })}
       </Layout>
     );
     return (
-      <ContentSection {...head(band)} data-band="D-proof" lead={leadText}>
+      <ContentSection {...head(band)} data-band="D-claims" lead={leadText}>
         {others.length > 0 ? (
           <Layout rowGap="stack">
             <BandBody blocks={others} labelledBy={head(band).headingId} />
