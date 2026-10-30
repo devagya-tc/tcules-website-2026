@@ -40,7 +40,7 @@ const HERO_ILLUSTRATIONS: Readonly<
     width: 792,
     height: 446,
   },
-  [servicePath('ai-copilots-agents')]: {
+  [servicePath('ai-product-ux/ai-copilots-agents')]: {
     src: '/illustrations/heroes/ai-copilots-agents.svg',
     width: 788,
     height: 609,

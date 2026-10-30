@@ -412,7 +412,7 @@ export default async function ServicePage({ params }: PageProps<'/services/[...s
   const surfaces = sectionSurfaces(service.sections, tintFollowsRun);
 
   const { crumbs, eyebrow } = serviceTrail(service.slug, service.hero.eyebrow);
-  const drawing = serviceIllustration(route.split('/').pop() ?? '');
+  const drawing = serviceIllustration(route);
 
   return (
     <>
