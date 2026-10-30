@@ -1,14 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import {
-  BrandMark,
-  Cluster,
-  Icon,
-  Layout,
-  Media,
-  RatingBadge,
-  Section,
-} from '@/components';
+import { BrandMark, Cluster, Icon, Layout, Media, RatingBadge, Section } from '@/components';
 import {
   Accordion,
   Breadcrumbs,
@@ -105,27 +97,6 @@ export type CorpusHeroProps = {
  * …") renders above the actions as the extras row, in its authored italic; a label-less run of facts
  * becomes `tags`.
  */
-/**
- * A title too long for half the column at display. /services (79 characters) set seven display lines
- * in the `beside` track and pushed its router two screens down, and /expertise set five with
- * "expertise" alone on one (review 29 Oct). A title that would set five lines or more there reads
- * across the column above the split instead (PageHero `titleAcross`), still at display; four lines
- * or fewer keep the approved split (product-design sets four). The estimate wraps on words at
- * 18 characters a line, which is what Newsreader at display (67) fits in the 572 track: measured
- * against /services 7, /expertise 5, /glossary 5, product-design 4, /tools 4, /audits 4.
- */
-const HALF_TRACK_CHARACTERS = 18;
-function long(title: string): boolean {
-  let lines = 0;
-  let line = 0;
-  for (const word of title.trim().split(/\s+/)) {
-    if (line === 0 || line + 1 + word.length > HALF_TRACK_CHARACTERS) {
-      lines += 1;
-      line = word.length;
-    } else line += 1 + word.length;
-  }
-  return lines >= 5;
-}
 
 export function CorpusHero({
   page,
@@ -175,7 +146,6 @@ export function CorpusHero({
       body={paragraphs.length > 0 ? (paragraphs as [string, ...string[]]) : undefined}
       actions={actions}
       arrangement={heroArrangement}
-      titleAcross={long(hero.titleText)}
       media={heroMedia}
       tags={tags}
       stats={figures && figures.length > 0 ? figures : undefined}
