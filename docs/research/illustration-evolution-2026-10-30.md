@@ -134,6 +134,25 @@ The finished vectors should meet ch05 §4a mechanically, whatever the owner rule
 
 ## 5 · Questions only the owner can answer
 
+**Answered by Devagya, 30 Oct.** Each answer is its own decision entry:
+1. **People:** yes. See `decisions/2026-10-30-illustrations-carry-people`.
+2. **Peridot:** "not lime. peridot, as it has been." It stays the carried item, and the same entry records this.
+3. **The AI badge:** keep it. See `decisions/2026-10-30-ai-badge-on-ai-output`.
+4. **Flat drawings:** "flat drawings do not change." See `decisions/2026-10-30-flat-drawings-unchanged-by-new-hand`.
+
+Row 5 of § 2 and the peridot rows of § 3a are therefore overruled. The accent is peridot, it marks the carried
+item, and no ring or rod carries it.
+
+Devagya also asked for three polish fixes on Bhumika's finals, and nothing else:
+- one outline weight front and back;
+- corner edges on slabs;
+- lines that stop at the edge of what they reach and pass behind nearer objects.
+
+They are applied in `docs/illustrations/polish-2026-10-30/` by `scripts/illustrations/polish.mjs`, and shown
+before and after at https://claude.ai/artifact/8U5TrNQqjqsJ2h34EkLNep. They are logged `proposed` until seen.
+
+The original questions:
+
 1. **Figures (row 1):** do people enter the illustration system, and is Jatin's Tcules person the one figure?
    This blocks the ruling in § 3c.
 2. **Peridot (row 5):** does peridot become "the focal thing" rather than "the carried item" in ch05 §4b?
