@@ -125,6 +125,15 @@ export const ROUTES = {
 export type RouteKey = keyof typeof ROUTES;
 
 /**
+ * The site's public origin, for the few outputs that must carry absolute URLs (the sitemap). Set
+ * `SITE_URL` to point a preview deployment's sitemap at itself; production needs nothing.
+ */
+export const SITE_ORIGIN = (process.env.SITE_URL?.trim() || 'https://tcules.com').replace(
+  /\/+$/u,
+  '',
+);
+
+/**
  * The site's section indexes: the pages that exist to list a family ("Services", "Case studies",
  * "Insights"), as against a top-level page that NAMES something ("How we work", "Future Interfaces
  * Lab", "Matter Design System").

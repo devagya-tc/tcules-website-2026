@@ -2,6 +2,7 @@ export { PageHero } from './PageHero';
 export type {
   PageHeroProps,
   HeroCredit,
+  HeroPerson,
   HeroCreditRole,
   HeroDates,
   HeroFact,

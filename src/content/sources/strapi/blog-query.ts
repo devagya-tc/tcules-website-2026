@@ -148,6 +148,19 @@ export const BLOG_BY_SLUG_QUERY = /* GraphQL */ `
       title
       slug
       publishedAt
+      seo {
+        metaDescription
+      }
+      mainSection {
+        __typename
+        ... on ComponentBlogAndCasestudiesIframe {
+          id
+          title
+          description
+          url
+          embedCode
+        }
+      }
       thumbnail {
         ...BlogFileFields
       }

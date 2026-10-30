@@ -131,6 +131,19 @@ export const EVENT_BY_SLUG_QUERY = /* GraphQL */ `
       slug
       createdAt
       publishedAt
+      seo {
+        metaDescription
+      }
+      mainSection {
+        __typename
+        ... on ComponentBlogAndCasestudiesIframe {
+          id
+          title
+          description
+          url
+          embedCode
+        }
+      }
       thumbnail {
         ...EventFileFields
       }

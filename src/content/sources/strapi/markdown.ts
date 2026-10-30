@@ -43,8 +43,45 @@ function renderInline(source: string): string {
   return html + renderMarks(source.slice(offset));
 }
 
+/* A GFM table's delimiter row: `|---|---|`, optionally with alignment colons, which are read and
+   dropped (Prose sets every cell to the start edge, as DataTable does). */
+const TABLE_DELIMITER = /^\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$/u;
+
+/* A row's cells: split on unescaped pipes, outer pipes dropped, `\|` kept as a literal pipe. */
+function tableCells(line: string): string[] {
+  const trimmed = line.trim().replace(/^\|/u, '').replace(/(?<!\\)\|$/u, '');
+  return trimmed.split(/(?<!\\)\|/u).map((cell) => cell.trim().replaceAll('\\|', '|'));
+}
+
+/**
+ * A GFM table as the boxed table Prose draws (Prose.module.css § Table): the header row as column
+ * heads, and each body row's first cell as its row header — DataTable's key column, which is what
+ * the live tables' first column is (short labels, median 23 characters across 184 tables, 30 Oct
+ * 2026). A short row is padded with empty cells and a long one cut, so every column lines up.
+ */
+function renderTable(header: string, rows: readonly string[]): string {
+  const heads = tableCells(header);
+  const width = heads.length;
+  const head = heads.map((cell) => `<th scope="col">${renderInline(cell)}</th>`).join('');
+  const body = rows
+    .map((row) => {
+      const cells = tableCells(row).slice(0, width);
+      while (cells.length < width) cells.push('');
+      return `<tr>${cells
+        .map((cell, column) =>
+          column === 0
+            ? `<th scope="row">${renderInline(cell)}</th>`
+            : `<td>${renderInline(cell)}</td>`,
+        )
+        .join('')}</tr>`;
+    })
+    .join('');
+  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
 function isBlockStart(line: string): boolean {
   return (
+    /^\s*\|/u.test(line) ||
     /^#{1,6}\s+/u.test(line) ||
     /^>\s?/u.test(line) ||
     /^\s*(?:[-+*]\s+|\d+\.\s+)/u.test(line) ||
@@ -158,6 +195,17 @@ export function markdownToHtml(
       continue;
     }
 
+    if (/^\s*\|/u.test(line) && TABLE_DELIMITER.test(lines[index + 1] ?? '')) {
+      const rows: string[] = [];
+      index += 2;
+      while (index < lines.length && /^\s*\|/u.test(lines[index] ?? '')) {
+        rows.push(lines[index] ?? '');
+        index += 1;
+      }
+      blocks.push(renderTable(line, rows));
+      continue;
+    }
+
     if (/^\s*(?:-{3,}|\*{3,}|_{3,})\s*$/u.test(line)) {
       blocks.push('<hr>');
       index += 1;
@@ -183,7 +231,11 @@ export function markdownToHtml(
       while (index < lines.length) {
         const match = (lines[index] ?? '').match(/^\s*([-+*]|\d+\.)\s+(.+)$/u);
         if (!match || /\d+\./u.test(match[1] ?? '') !== ordered) break;
-        items.push(`<li>${renderInline(match[2] ?? '')}</li>`);
+        /* A GFM task item ("- [ ] Check row-level security") is a checklist line a reader works
+           through, not a form: the box is dropped and the item reads as the list's own bullet. All
+           74 live task items are unchecked (30 Oct 2026); a checked one keeps its words the same. */
+        const item = (match[2] ?? '').replace(/^\[[ xX]\]\s+/u, '');
+        items.push(`<li>${renderInline(item)}</li>`);
         index += 1;
       }
 

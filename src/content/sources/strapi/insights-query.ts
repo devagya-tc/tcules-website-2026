@@ -87,6 +87,9 @@ export const INSIGHTS_PAGE_QUERY = /* GraphQL */ `
         name
         slug
       }
+      seo {
+        metaDescription
+      }
       mainSection {
         __typename
         ... on ComponentBlogAndCasestudiesIframe {

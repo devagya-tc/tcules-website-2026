@@ -27,8 +27,9 @@ import { landedReasonFigure } from './reason-figure';
  * `_corpus` is underscore-prefixed, so Next does not route it. It holds no layout decision: it reads
  * the page and its cited cases and hands them to the template.
  */
+/* /services/product-design is held back: it serves a frozen snapshot of main's page
+   (services/product-design/route.ts) until its 26 Oct copy page is finished on feat/new-copy. */
 export const PASS_1_OFFER_ROUTES: ReadonlySet<string> = new Set([
-  '/services/product-design',
   '/audits/design-to-code-audit',
   '/expertise/healthtech',
   '/services/ai-product-ux',
