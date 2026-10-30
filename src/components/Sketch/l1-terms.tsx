@@ -14,14 +14,13 @@ import styles from './Sketch.module.css';
  * and line ends on the dots, routes on the axes, one arrowhead, weights 1 and 2, no words, Solar
  * glyphs, hatching for what is not there yet, sheets behind for one of many, ONE lit focal point.
  *
- *   needs-*   the HANDOVER, read "you to us". The client's panel (the region ground marks "yours" in
- *             both families) holds up to three inputs on rows 50, 90, 130 in the copy's order; each
- *             route leaves the panel's right edge on its row and turns into one trunk at y = 90 that
+ *   needs-*   the HANDOVER, read "you to us". The client's panel (a neutral quiet-edged ground) holds up to three inputs on rows 50, 90, 130 in the copy's order; each
+ *             route leaves its input's right port on its row and turns into one trunk at y = 90 that
  *             ends on the arrowhead at our frame's left port (190, 90). Our frame holds a heading
  *             line, a quiet line and the work, hatched, waiting on these. The lit input is the one the
  *             copy treats as decisive.
- *   stops-*   the BOUNDARY, read "us to you". A dashed line at x = 170; the client's panel to its
- *             right holds what stays theirs, one row each (flag always means product calls; server,
+ *   stops-*   the BOUNDARY, read "us to you". A dashed line at x = 190, full height; the open
+ *             client side to its right holds what stays theirs, one row each (flag always means product calls; server,
  *             database and layers platform, data and infrastructure); our last piece stands left of
  *             it, its route running to the lit check at (150, 90): our part ends here.
  *
@@ -71,16 +70,23 @@ const ROWS = [50, 90, 130] as const;
  * The handover: the client's panel, one route per row into one trunk, our frame at the end. The three
  * `inputs` are the rows' contents, top to bottom.
  */
-function Needs({ inputs }: { inputs: readonly [ReactNode, ReactNode, ReactNode] }) {
+function Needs({
+  inputs,
+  ports = [110, 110, 110],
+}: {
+  inputs: readonly [ReactNode, ReactNode, ReactNode];
+  /** Each input's right port (a dot), where its route leaves it. */
+  ports?: readonly [number, number, number];
+}) {
   return (
     <>
-      <Rect x={30} y={30} w={100} h={120} rx={8} className={styles.region} />
+      <Rect x={30} y={30} w={100} h={120} rx={8} className={styles.tile} />
       {inputs}
-      <path className={styles.line} d="M130,50 L144,50 A6,6 0 0 1 150,56 L150,90" />
-      <path className={styles.line} d="M130,130 L144,130 A6,6 0 0 0 150,124 L150,90" />
-      <path className={styles.line} d="M130,90 L150,90" />
-      {ROWS.map((y) => (
-        <circle key={y} className={styles.node} cx="130" cy={y} r="2.5" />
+      <path className={styles.line} d={`M${ports[0]},50 L144,50 A6,6 0 0 1 150,56 L150,90`} />
+      <path className={styles.line} d={`M${ports[2]},130 L144,130 A6,6 0 0 0 150,124 L150,90`} />
+      <path className={styles.line} d={`M${ports[1]},90 L150,90`} />
+      {ROWS.map((y, i) => (
+        <circle key={y} className={styles.node} cx={ports[i]} cy={y} r="2.5" />
       ))}
       <circle className={styles.node} cx="150" cy="90" r="3.5" />
       <Hop x1={150} x2={190} y={90} />
@@ -94,11 +100,11 @@ function Needs({ inputs }: { inputs: readonly [ReactNode, ReactNode, ReactNode] 
 
 /** What stays theirs, one row: its chips, then a heading line and a quiet one. */
 function Theirs({ cy, glyphs }: { cy: number; glyphs: readonly IconName[] }) {
-  const end = 184 + glyphs.length * 20;
+  const end = 204 + glyphs.length * 20;
   return (
     <>
       {glyphs.map((glyph, i) => (
-        <C key={glyph} cx={192 + i * 20} cy={cy} glyph={glyph} />
+        <C key={glyph} cx={212 + i * 20} cy={cy} glyph={glyph} />
       ))}
       <Copy x={end + 4} y={cy - 4} w={52} />
       <Copy x={end + 4} y={cy + 4} w={36} quiet />
@@ -106,7 +112,10 @@ function Theirs({ cy, glyphs }: { cy: number; glyphs: readonly IconName[] }) {
   );
 }
 
-/** The boundary: the dashed line, the client's panel, our last piece (`ours`) and the lit check. */
+/**
+ * The boundary: a full-height dashed line, our last piece (`ours`) left of it with the lit check, and
+ * the client's side open on the right, no panel (a wall, where NEEDS is a funnel).
+ */
 function Stops({
   ours,
   theirs,
@@ -116,8 +125,7 @@ function Stops({
 }) {
   return (
     <>
-      <Rect x={170} y={30} w={130} h={120} rx={8} className={styles.region} />
-      <path className={styles.trail} d="M170,20 L170,160" />
+      <path className={styles.trail} d="M190,20 L190,160" />
       {ours}
       <path className={styles.line} d="M110,90 L150,90" />
       <circle className={styles.node} cx="110" cy="90" r="2.5" />
@@ -188,6 +196,7 @@ function NeedsProductDesign() {
 function NeedsAiProductUx() {
   return (
     <Needs
+      ports={[110, 110, 130]}
       inputs={[
         <Focus key="a" x={80} y={50} glyph="checklist" size={12} />,
         <Chips key="b" cx={80} cy={90} glyphs={['database', 'lock']} />,
@@ -206,6 +215,7 @@ function NeedsAiProductUx() {
 function NeedsDesignEngineering() {
   return (
     <Needs
+      ports={[110, 110, 130]}
       inputs={[
         <Focus key="a" x={80} y={50} glyph="widget" size={12} />,
         <Chips key="b" cx={80} cy={90} glyphs={['code', 'key']} />,
@@ -225,6 +235,7 @@ function NeedsDesignEngineering() {
 function NeedsDesignSystems() {
   return (
     <Needs
+      ports={[130, 130, 110]}
       inputs={[
         <Chips key="a" cx={80} cy={50} glyphs={['monitor', 'ruler-pen', 'code']} />,
         <g key="b">
@@ -242,6 +253,7 @@ function NeedsDesignSystems() {
 function NeedsNewProduct() {
   return (
     <Needs
+      ports={[130, 110, 110]}
       inputs={[
         <g key="a">
           <Sheet cx={58} cy={50} behind={2} />
@@ -259,6 +271,7 @@ function NeedsNewProduct() {
 function NeedsProductModernisation() {
   return (
     <Needs
+      ports={[130, 110, 110]}
       inputs={[
         <Chips key="a" cx={80} cy={50} glyphs={['monitor', 'graph-up', 'chat-round-dots']} />,
         <C key="b" cx={80} cy={90} glyph="users-group-rounded" />,
@@ -272,6 +285,7 @@ function NeedsProductModernisation() {
 function NeedsSoftwareDevelopment() {
   return (
     <Needs
+      ports={[130, 110, 110]}
       inputs={[
         <g key="a">
           <Sheet cx={56} cy={50} behind={2} />
@@ -314,10 +328,10 @@ function StopsAiProductUx() {
       }
       theirs={[
         <g key="a">
-          <Switch x={184} y={44} on={false} />
-          <C cx={226} cy={50} glyph="user" />
-          <Copy x={240} y={46} w={44} />
-          <Copy x={240} y={54} w={28} quiet />
+          <Switch x={204} y={44} on={false} />
+          <C cx={242} cy={50} glyph="user" />
+          <Copy x={256} y={46} w={40} />
+          <Copy x={256} y={54} w={24} quiet />
         </g>,
         <Theirs key="b" cy={90} glyphs={['cpu']} />,
         <Theirs key="c" cy={130} glyphs={['shield-check']} />,
@@ -407,19 +421,17 @@ function StopsProductModernisation() {
   );
 }
 
-/** What we build, over its layers and checked; sign-off, hosting and large cloud moves are theirs. */
+/** What we build, checked; sign-off, hosting and large cloud moves are theirs. */
 function StopsSoftwareDevelopment() {
   return (
     <Stops
       ours={
-        <>
-          <Rect x={30} y={50} w={80} h={52} rx={8} className={styles.frame} />
-          <Copy x={42} y={64} w={32} quiet />
-          <Copy x={42} y={76} w={44} />
-          <Glyph name="check-circle" cx={96} cy={64} size={12} className={styles.glyph} />
-          <Rect x={30} y={110} w={80} h={8} rx={4} className={styles.frameQuiet} />
-          <Rect x={30} y={122} w={80} h={8} rx={4} className={styles.frameQuiet} />
-        </>
+        <Screen>
+          <C cx={50} cy={66} glyph="code" />
+          <Copy x={42} y={86} w={48} />
+          <Copy x={42} y={98} w={32} quiet />
+          <Copy x={42} y={110} w={44} quiet />
+        </Screen>
       }
       theirs={[
         <Theirs key="a" cy={50} glyphs={['clipboard-check']} />,

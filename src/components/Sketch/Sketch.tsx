@@ -125,6 +125,8 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
       style={bare ? ({ '--skt-units': w } as CSSProperties) : undefined}
       focusable="false"
       aria-hidden="true"
+      /* The scene name, in development only, so "no scene twice on a page" can be scanned. */
+      data-scene={process.env.NODE_ENV !== 'production' ? name : undefined}
     >
       {storyDrawing ?? (Still ? <Still /> : null)}
     </svg>
