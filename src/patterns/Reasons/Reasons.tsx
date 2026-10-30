@@ -146,7 +146,7 @@ function ProofFigure({ value, label }: ReasonsFigure) {
 
 /** A reason's proof in its box of one height for the set, its content centred in it (the cover and
  *  its figure fill it). */
-function Proof({ proof }: { proof: ReasonsProof }) {
+function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
   let inner: ReactNode;
   if (proof.kind === 'marks') {
     inner = (
@@ -165,7 +165,7 @@ function Proof({ proof }: { proof: ReasonsProof }) {
   } else if (proof.kind === 'cover') {
     inner = (
       <Layout rowGap="text">
-        <div className={styles.cover}>
+        <div className={cx(styles.cover, flat && styles.coverFlat)}>
           <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
         </div>
         {proof.figure ? <ProofFigure {...proof.figure} /> : null}
@@ -181,7 +181,7 @@ function Proof({ proof }: { proof: ReasonsProof }) {
     );
   }
   return (
-    <div className={styles.proof} aria-hidden="true">
+    <div className={cx(styles.proof, flat && styles.proofFlat)} aria-hidden="true">
       <Layout fillFirst align="center" className={styles.proofFill}>
         {inner}
       </Layout>
@@ -272,6 +272,9 @@ export function Reasons({
   );
 
   const open = arrangement === 'open';
+  // A set whose covers carry no figure (offer pages) sizes its proof box to the cover: 16:9 at the
+  // track's width, so the evidence is the visual and no ground floats around it.
+  const flatProofs = items.some((i) => i.proof?.kind === 'cover') && !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const set = (
     <Layout
       as="ul"
@@ -300,7 +303,7 @@ export function Reasons({
         <li key={`${index}-${item.title}`} className={styles.item}>
           <Layout rowGap="block" justifyItems="start">
             {item.proof ? (
-              <Proof proof={item.proof} />
+              <Proof proof={item.proof} flat={flatProofs} />
             ) : item.figure ? (
               <div className={styles.figure}>
                 <Media

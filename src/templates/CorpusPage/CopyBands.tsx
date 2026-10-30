@@ -535,11 +535,13 @@ export function ChallengesBand({
         {proofRows.map((r) => (
           <li key={r.title}>
             <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
-              <Layout rowGap="text">
+              <Layout rowGap="block">
                 <h3 className={styles.itemTitle}>{r.title}</h3>
-                {(r.bodyHtml ?? []).map((html, i) => (
-                  <p key={i} className={styles.hardBody} dangerouslySetInnerHTML={{ __html: html }} />
-                ))}
+                <Layout rowGap="text">
+                  {(r.bodyHtml ?? []).map((html, i) => (
+                    <p key={i} className={styles.hardBody} dangerouslySetInnerHTML={{ __html: html }} />
+                  ))}
+                </Layout>
               </Layout>
               <div className={styles.hardCover}>
                 <Media
