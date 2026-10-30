@@ -1,22 +1,36 @@
 import { ILLUSTRATION_LEGENDS } from './illustration-legends';
 
 /**
- * The service lines whose page keeps a live hero illustration in the corpus pass.
+ * The service pages whose hero carries a finished drawing, by page slug.
  *
- * `/services/product-design` keeps its existing drawing and its numbered cut (page-mapping § 0 rule
- * 5, the one deliberate exception to "a hero takes a bound asset or a placeholder"): it is the
- * page's own live hero asset and was owner-approved in the kit, so keep-what-was-approved applies.
- * The content team's `visual_plan` for the page asks for a different drawing, which the image
- * register carries as its replacement. A line is added here only when its page is mapped and its
- * drawing is kept on purpose; every other page's hero is a bound asset or a labelled placeholder.
+ * Six of Bhumika's finals, frozen by Jatin on 30 Oct 2026, then polished. The polish gave every slab one
+ * outline weight and its corner edges, and made every line stop at the edge of what it reaches (source,
+ * before/after and the pass: docs/illustrations/polish-2026-10-30/). The owner approved them for the pages
+ * the same day: "use the updated drawings on the pages". They replace Product Design's earlier drawing and
+ * its numbered phone cut. These drawings carry no labels, so the same file serves every width. Every other
+ * page's hero is a bound asset or a labelled placeholder until its drawing lands
+ * (docs/research/illustration-call-2026-10-30.md lists which are still open).
  */
 const SERVICE_ILLUSTRATIONS: Readonly<
   Record<string, { src: string; width: number; height: number }>
 > = {
-  'product-design': {
-    src: '/illustrations/services/product-design.paper.svg',
-    width: 962,
-    height: 714,
+  'product-design': { src: '/illustrations/heroes/product-design.svg', width: 786, height: 543 },
+  'product-modernisation': {
+    src: '/illustrations/heroes/product-modernisation.svg',
+    width: 700,
+    height: 499,
+  },
+  'design-engineering': {
+    src: '/illustrations/heroes/design-engineering.svg',
+    width: 772,
+    height: 577,
+  },
+  'design-systems': { src: '/illustrations/heroes/design-systems.svg', width: 802, height: 515 },
+  'ai-product-ux': { src: '/illustrations/heroes/ai-product-ux.svg', width: 792, height: 446 },
+  'ai-copilots-agents': {
+    src: '/illustrations/heroes/ai-copilots-agents.svg',
+    width: 788,
+    height: 609,
   },
 };
 
