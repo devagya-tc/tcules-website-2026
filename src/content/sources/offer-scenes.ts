@@ -120,6 +120,11 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         Guidance: 'status-guidance',
       }),
       'how-it-runs': by({ figure: 'design-systems' }),
+      /* A hard part whose example is not a case (Matter, our own published system) has no cover of
+         its own, so it is drawn from its problem (30 Oct 2026, round 5 critic). */
+      'hard-parts': by({
+        'Rules that people and AI coding tools can follow.': 'hard-ai-rules',
+      }),
     },
     stories: {},
   },
@@ -145,6 +150,8 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
   },
   '/services/product-modernisation': {
     items: {
+      /* "How we modernise": the five steps beside one drawing of their sequence. */
+      'how-it-runs': by({ figure: 'method-modernise' }),
       'what-you-get': by({
         'A call on every part of the product': 'outcome-part-calls',
         'A written record of what customers rely on': 'outcome-habits-record',
@@ -164,7 +171,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         'Code, tests and notes in your repository': 'outcome-code-in-repo',
         'Support through each release': 'outcome-release-support',
       }),
-      scope: by({ scenario: 'scenario-self-booking' }),
+      scope: by({ scenario: 'scenario-self-booking', agree: 'scope-agreement' }),
     },
     stories: {},
   },

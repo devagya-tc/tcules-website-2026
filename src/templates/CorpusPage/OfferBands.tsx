@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Layout, Section } from '@/components';
+import { Layout, Section, type IconName } from '@/components';
 import {
   BlockCard,
   BlockCardSet,
@@ -287,6 +287,16 @@ function traceOf(items: readonly InlineRun[][]): TraceStage[] | undefined {
     : undefined;
 }
 
+/**
+ * The tables read across their rows, which sit one under another with their drawing at the start
+ * (DrawnTableBand `ledger`): a chain of checks, a choice between services, a comparison. The bands
+ * before them ("What you get") are the tile grid, so these take the other shape (round 5 critic).
+ */
+const LEDGER_BANDS: ReadonlySet<string> = new Set(['status-example', 'options', 'compare']);
+
+/** A method whose closing sentence is its own point (the AI sixth choice) stands as a callout with a mark. */
+const METHOD_NOTE_ICON: Readonly<Record<string, IconName>> = { decisions: 'stars' };
+
 /* ── Unit renderers ───────────────────────────────────────────────────────────── */
 
 export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) {
@@ -344,7 +354,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'industries':
       return <IndustriesBand page={page} band={band} />;
     case 'challenges':
-      return <ChallengesBand page={page} band={band} caseRefs={ctx.caseRefs} />;
+      return (
+        <ChallengesBand
+          page={page}
+          band={band}
+          caseRefs={ctx.caseRefs}
+          sceneOf={(title) => sceneFor(ctx, band, title)}
+        />
+      );
     case 'method': {
       const figureScene = sceneFor(ctx, band, 'figure');
       const bound = page.composition.mediaBindings.some(
@@ -360,6 +377,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           band={band}
           scenario={sceneFor(ctx, band, 'scenario')}
           {...(figure ? { figure } : {})}
+          {...(METHOD_NOTE_ICON[band.id] ? { noteIcon: METHOD_NOTE_ICON[band.id] } : {})}
         />
       );
     }
@@ -573,15 +591,22 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M15 — a comparison: a key column against rows, boxed. */
     case 'table':
-      return ctx.scenes?.items[band.id] && blocksOf(band, 'table').length > 0 ? (
+      return ctx.scenes?.items[band.id] &&
+        !sceneFor(ctx, band, 'agree') &&
+        blocksOf(band, 'table').length > 0 ? (
         <DrawnTableBand
           page={page}
           band={band}
           sceneOf={(key) => sceneFor(ctx, band, key)}
           scenario={sceneFor(ctx, band, 'scenario')}
+          arrangement={LEDGER_BANDS.has(band.id) ? 'ledger' : 'grid'}
         />
       ) : (
-        <TableBand band={band} scenario={sceneFor(ctx, band, 'scenario')} />
+        <TableBand
+          band={band}
+          scenario={sceneFor(ctx, band, 'scenario')}
+          agreement={sceneFor(ctx, band, 'agree')}
+        />
       );
 
     /* What you receive: a list of deliverables, with the product shot beside it. */

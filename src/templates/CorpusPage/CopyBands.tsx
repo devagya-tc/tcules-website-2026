@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Icon, Layout, Media, Prose, Sketch } from '@/components';
+import { Button, Cluster, Icon, type IconName, Layout, Media, Prose, Sketch } from '@/components';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
@@ -558,10 +558,13 @@ export function ChallengesBand({
   page,
   band,
   caseRefs = {},
+  sceneOf,
 }: {
   page: CorpusPage;
   band: CorpusBand;
   caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
+  /** A row whose example is not a case has no cover: it is drawn from its problem (round 5). */
+  sceneOf?: (title: string) => SketchName | undefined;
 }) {
   const blocks = content(band);
   const rows: ReadDownRow[] = [];
@@ -615,7 +618,13 @@ export function ChallengesBand({
   if (rows.length >= 2 && examples.every(Boolean)) {
     const proofRows = rows.map((row, i) => {
       const example = examples[i]!;
-      return { ...row, cover: caseCover(example.name, caseRefs[caseRouteOf(example.href)]) };
+      const scene = sceneOf?.(row.title);
+      const ref = caseRefs[caseRouteOf(example.href)];
+      return {
+        ...row,
+        scene,
+        cover: scene ? undefined : caseCover(example.name, ref),
+      };
     });
     const proofSet = (
       <Layout as="ul" rowGap="column">
@@ -630,14 +639,18 @@ export function ChallengesBand({
                   ))}
                 </Layout>
               </Layout>
-              <div className={styles.hardCover}>
-                <Media
-                  image={{ ...r.cover, alt: '' }}
-                  sizes={HARD_PART_COVER}
-                  fit="fill"
-                  edge="placement"
-                />
-              </div>
+              {r.scene ? (
+                <Sketch name={r.scene} />
+              ) : r.cover ? (
+                <div className={styles.hardCover}>
+                  <Media
+                    image={{ ...r.cover, alt: '' }}
+                    sizes={HARD_PART_COVER}
+                    fit="fill"
+                    edge="placement"
+                  />
+                </div>
+              ) : null}
             </Layout>
           </li>
         ))}
@@ -713,10 +726,13 @@ export function MethodBand({
   band,
   scenario,
   figure,
+  noteIcon,
 }: {
   band: CorpusBand;
   scenario?: SketchName;
   figure?: { sketch: SketchName } | { image: SlotImage };
+  /** A glyph that heads the sentences after the steps, which then stand as callouts, not prose. */
+  noteIcon?: IconName;
 }) {
   const blocks = content(band);
   const [first] = blocks;
@@ -796,7 +812,24 @@ export function MethodBand({
         ) : null}
         {stepsNode}
         {after.length > 0 ? (
-          <BandBody blocks={after} labelledBy={head(band).headingId} />
+          noteIcon ? (
+            <Layout rowGap="block">
+              {after.map((block, index) =>
+                block.type === 'paragraph' ? (
+                  <Callout
+                    key={index}
+                    tone="example"
+                    html={inlineToHtml(block.runs)}
+                    icon={<Icon name={noteIcon} size="xl" />}
+                  />
+                ) : (
+                  <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
+                ),
+              )}
+            </Layout>
+          ) : (
+            <BandBody blocks={after} labelledBy={head(band).headingId} />
+          )
         ) : null}
         {parts.label ? (
           <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
@@ -809,7 +842,20 @@ export function MethodBand({
 /* ── Tables (G11, G12, `compare`, `routes`) ──────────────────────────────────── */
 
 /** A comparison or record band: its opening paragraph as the lead, then every block in order. */
-export function TableBand({ band, scenario }: { band: CorpusBand; scenario?: SketchName }) {
+export function TableBand({
+  band,
+  scenario,
+  agreement,
+}: {
+  band: CorpusBand;
+  scenario?: SketchName;
+  /**
+   * The drawing of a two-column agreement table whose key column has no heading (what we agree before
+   * a build). Set, the table is read as the agreement: its one real heading as the legend, each key
+   * over its words, the drawing beside them, and the sentences after it as callouts with a mark.
+   */
+  agreement?: SketchName;
+}) {
   const blocks = content(band);
   const [first] = blocks;
   const leadText =
@@ -817,16 +863,56 @@ export function TableBand({ band, scenario }: { band: CorpusBand; scenario?: Ske
       ? plain(first.runs)
       : undefined;
   const parts = scenarioParts(leadText ? blocks.slice(1) : blocks);
+  const tableAt = parts.before.findIndex((block) => block.type === 'table');
+  const table = parts.before[tableAt];
+  const agreed =
+    agreement && table?.type === 'table' && table.header.length === 2 ? table : undefined;
+  const body = agreed ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before.slice(0, tableAt)} labelledBy={head(band).headingId} />
+      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+        <Layout rowGap="block">
+          <p className={styles.legend}>{plain(agreed.header[1] ?? [])}</p>
+          <Layout as="ul" rowGap="block">
+            {agreed.rows.map((row, index) => (
+              <li key={index}>
+                <Layout rowGap="inline">
+                  <h3 className={styles.itemTitle}>{plain(row[0] ?? [])}</h3>
+                  <p dangerouslySetInnerHTML={{ __html: inlineToHtml(row[1] ?? []) }} />
+                </Layout>
+              </li>
+            ))}
+          </Layout>
+        </Layout>
+        <Sketch name={agreement!} />
+      </Layout>
+      {parts.before.slice(tableAt + 1).map((block, index) =>
+        block.type === 'paragraph' ? (
+          <Callout
+            key={index}
+            tone="example"
+            html={inlineToHtml(block.runs)}
+            icon={<Icon name="code-square" size="xl" />}
+          />
+        ) : (
+          <BandBody key={index} blocks={[block]} labelledBy={head(band).headingId} />
+        ),
+      )}
+      {parts.label ? (
+        <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+      ) : null}
+    </Layout>
+  ) : parts.label ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+      <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : (
+    <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+  );
   return (
     <ContentSection {...head(band)} data-band="E" lead={leadText}>
-      {parts.label ? (
-        <Layout rowGap="stack">
-          <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
-          <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
-        </Layout>
-      ) : (
-        <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
-      )}
+      {body}
     </ContentSection>
   );
 }
@@ -841,11 +927,19 @@ export function DrawnTableBand({
   band,
   sceneOf,
   scenario,
+  arrangement = 'grid',
 }: {
   page: CorpusPage;
   band: CorpusBand;
   sceneOf: (key: string) => SketchName | undefined;
   scenario?: SketchName;
+  /**
+   * `grid`: the items as drawn tiles side by side. `ledger`: one row per item, its drawing at the
+   * start, the row's words and its third column across, read left to right. For a table a reader
+   * compares across columns (a choice, a chain of checks), where a tile grid would repeat the shape
+   * of the band before it (round 5 critic, 30 Oct 2026).
+   */
+  arrangement?: 'grid' | 'ledger';
 }) {
   const blocks = content(band);
   const tableAt = blocks.findIndex((block) => block.type === 'table');
@@ -875,7 +969,39 @@ export function DrawnTableBand({
   const heading = plain(table.header[0] ?? []).trim();
   const after = blocks.slice(tableAt + 1);
   const n = items.length;
-  const set = (
+  const ledger = (
+    <Layout as="ul" rowGap="stack">
+      {items.map((item) => (
+        <li key={item.title} className={styles.ledgerRow}>
+          <Layout columns={{ base: 1, lg: [2, 3, 3] }} colGap="gutter" rowGap="block" align="center">
+            <Sketch name={item.scene} />
+            <Layout rowGap="text">
+              <h3 className={styles.itemTitle}>
+                {item.href ? (
+                  <a href={item.href} className={styles.ledgerLink}>
+                    <Cluster colGap="tight" align="center" nowrap>
+                      <span>{item.title}</span>
+                      <Icon name="arrow-right" size="md" />
+                    </Cluster>
+                  </a>
+                ) : (
+                  item.title
+                )}
+              </h3>
+              <p dangerouslySetInnerHTML={{ __html: item.body }} />
+            </Layout>
+            {item.meta ? (
+              <Layout rowGap="inline">
+                <p className={styles.legend}>{item.meta.label}</p>
+                <p dangerouslySetInnerHTML={{ __html: item.meta.html }} />
+              </Layout>
+            ) : null}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
+  );
+  const set = arrangement === 'ledger' ? ledger : (
     <Layout rowGap="block">
       {table.header.length === 2 && heading ? <p className={styles.legend}>{heading}</p> : null}
       <Layout
