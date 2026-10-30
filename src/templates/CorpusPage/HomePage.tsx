@@ -46,7 +46,7 @@ import type {
 } from '@/lib/corpus-types';
 import type { InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderImage } from '@/lib/placeholders';
+import { placeholderCover, placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
 import { HOME_REASON_PROOF, type ReasonProofFigure } from '@/lib/reason-proof';
 import { recordFigures } from '@/lib/studio-record';
@@ -647,7 +647,9 @@ export function whyTcules(
       const name = spec.figure.label ?? link.text;
       proof = {
         kind: 'cover',
-        image: coverFor(page, name, caseRefs[caseRouteOf(link.href)]),
+        /* The CMS ConnectX cover has a mid-grey matte baked in (400 wide), which shows as a frame inside
+           the plate. Until a matte-free 16:9 shot of at least 800 wide exists, the labelled placeholder. */
+        image: placeholderCover(slugOf(name)),
         figure: { value: spec.figure.value, label: spec.figure.label },
       };
     } else {

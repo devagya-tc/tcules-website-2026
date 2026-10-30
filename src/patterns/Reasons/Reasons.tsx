@@ -149,12 +149,12 @@ function Proof({ proof }: { proof: ReasonsProof }) {
             <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
           </div>
           <div className={styles.caption}>
-            <Cluster colGap="tight" rowGap="inline" justify="between" align="center">
+            <Cluster colGap="tight" justify="between" align="center" nowrap>
               <Cluster colGap="tight" align="center" nowrap>
                 <span className={styles.status} />
                 <span className={styles.captionValue}>{proof.figure.value}</span>
               </Cluster>
-              {proof.figure.label ? <span className={styles.proofLabel}>{proof.figure.label}</span> : null}
+              {proof.figure.label ? <span className={cx(styles.proofLabel, styles.captionLabel)}>{proof.figure.label}</span> : null}
             </Cluster>
           </div>
         </Layout>

@@ -21,7 +21,7 @@
 /* The set's framing sentence (`lead`), at the system's lead role and measure. */
 .lead {
   font: var(--rsn-lead-text);
-  text-wrap: var(--text-running-wrap);
+  text-wrap: balance; /* the head's lead: even lines, never one word alone under a balanced heading */
   color: var(--rsn-lead-ink);
   max-inline-size: var(--rsn-lead-measure);
 }
@@ -153,10 +153,15 @@
 }
 
 .captionValue {
+  white-space: nowrap;
   font: var(--rsn-proof-label-text);
   letter-spacing: var(--rsn-proof-label-tracking);
   text-transform: var(--text-mono-case);
   color: var(--rsn-title-ink);
+}
+
+.captionLabel {
+  white-space: nowrap;
 }
 
 .entry {
@@ -176,6 +181,7 @@
 .wordmark {
   font: var(--text-wordmark);
   letter-spacing: var(--text-wordmark-tracking);
-  text-wrap: var(--text-title-wrap);
+  text-wrap: balance; /* a long name holds two even lines, so the four marks keep one weight */
+  text-align: center;
   color: var(--rsn-wordmark-ink);
 }
