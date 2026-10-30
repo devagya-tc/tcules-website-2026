@@ -101,14 +101,14 @@ function ScenarioOvernightAgent() {
     <>
       <Glyph name="cpu" cx={40} cy={90} size={18} className={styles.glyph} />
       <Glyph name="clock-circle" cx={40} cy={46} size={14} className={styles.glyphQuiet} />
+      <Rect x={74} y={76} w={52} h={28} rx={8} className={styles.halo} />
       {[54, 82, 110].map((y, i) => (
         <g key={y}>
-          <Hop x1={52} x2={80} y={y + 8 + (i === 1 ? 0 : 0)} />
+          <Hop x1={52} x2={80} y={y + 8} />
           <Rect x={80} y={y} w={40} h={16} className={i === 1 ? styles.region : styles.tile} />
-          <Glyph name={i === 1 ? 'wallet' : 'chat-round-dots'} cx={92} cy={y + 8} size={10} className={i === 1 ? styles.glyph : styles.glyphQuiet} />
+          <Glyph name={i === 1 ? 'wallet' : 'chat-round-dots'} cx={100} cy={y + 8} size={i === 1 ? 12 : 10} className={i === 1 ? styles.glyph : styles.glyphQuiet} />
         </g>
       ))}
-      <Rect x={74} y={76} w={52} h={28} rx={8} className={styles.halo} />
       <Rect x={150} y={36} w={140} h={92} rx={8} className={styles.frame} />
       <path className={styles.rule} d="M220,36 L220,128" />
       {[52, 66, 80, 94].map((y, i) => (
@@ -274,7 +274,8 @@ function StatusCode() {
       <Rect x={40} y={80} w={112} h={14} rx={3} className={styles.region} />
       <path className={styles.regionCopy} d="M54,87 L126,87" />
       <Copy x={46} y={106} w={56} quiet />
-      <Hop x1={160} x2={196} y={90} />
+      <path className={styles.line} d="M160,87 L184,87 L184,50" />
+      <Hop x1={184} x2={206} y={50} />
       <StatusPill x={206} y={40} halo />
       <Hatched x={206} y={104} w={64} h={20} />
     </>
@@ -306,12 +307,65 @@ function OptionOwnTeam() {
       <Rect x={100} y={34} w={190} h={104} rx={8} className={styles.frame} />
       <Glyph name="flag" cx={120} cy={52} size={14} className={styles.glyph} />
       <Copy x={138} y={52} w={44} quiet />
+      <Focus x={262} y={52} glyph="calendar" size={10} />
       {[0, 1, 2].map((i) => (
         <Glyph key={i} name="user" cx={134 + i * 44} cy={102} size={22} className={styles.glyph} />
       ))}
       <Glyph name="user" cx={44} cy={102} size={22} className={styles.glyphQuiet} />
       <Hop x1={62} x2={100} y={102} />
-      <Focus x={50} y={56} glyph="calendar" size={10} />
+    </>
+  );
+}
+
+/** Behaviour is tried in code on sample data: a question, the code, reviewers in a browser, the product, then a clear answer. */
+function MethodTestInCode() {
+  return (
+    <>
+      <Rect x={30} y={36} w={40} h={16} rx={8} className={styles.tile} />
+      <Glyph name="question-circle" cx={42} cy={44} size={10} className={styles.glyphQuiet} />
+      <Copy x={52} y={44} w={12} quiet />
+      <path className={styles.line} d="M50,52 L50,72" />
+      <Rect x={30} y={72} w={64} h={68} rx={8} className={styles.frame} />
+      <Glyph name="code" cx={44} cy={86} size={12} className={styles.glyphQuiet} />
+      <Copy x={40} y={104} w={44} quiet />
+      <Copy x={46} y={116} w={36} quiet />
+      <Copy x={40} y={128} w={28} quiet />
+      <Glyph name="database" cx={82} cy={86} size={10} className={styles.glyphQuiet} />
+      <Hop x1={94} x2={116} y={106} />
+      <Rect x={116} y={60} w={76} h={84} rx={8} className={styles.frameQuiet} />
+      <path className={styles.rule} d="M116,74 L192,74" />
+      {[0, 1, 2].map((i) => (
+        <Glyph key={i} name="user" cx={134 + i * 20} cy={102} size={14} className={styles.glyph} />
+      ))}
+      <Copy x={128} y={126} w={52} quiet />
+      <Hop x1={192} x2={214} y={106} />
+      <Rect x={214} y={70} w={50} h={72} rx={8} className={styles.frame} />
+      <Rect x={222} y={80} w={34} h={22} className={styles.tile} />
+      <Copy x={222} y={116} w={34} quiet />
+      <Copy x={222} y={128} w={22} quiet />
+      <Focus x={278} y={60} glyph="check-circle" size={12} />
+    </>
+  );
+}
+
+/** Five product choices drawn on one screen: who it is for, what is left out, who can do what, where data comes from, what goes wrong. */
+function DecisionsFive() {
+  return (
+    <>
+      <Rect x={40} y={40} w={240} h={106} rx={8} className={styles.frame} />
+      <Rect x={40} y={40} w={240} h={18} rx={8} className={styles.frameQuiet} />
+      <Copy x={54} y={49} w={44} quiet />
+      <Rect x={54} y={68} w={104} h={30} className={styles.tile} />
+      <Glyph name="user" cx={70} cy={83} size={14} className={styles.glyph} />
+      <Copy x={86} y={83} w={56} quiet />
+      <Hatched x={166} y={68} w={100} h={30} />
+      <Rect x={54} y={106} w={104} h={30} className={styles.tile} />
+      <Glyph name="database" cx={70} cy={121} size={14} className={styles.glyph} />
+      <Copy x={86} y={121} w={56} quiet />
+      <Rect x={166} y={106} w={100} h={30} className={styles.tile} />
+      <Glyph name="danger-triangle" cx={182} cy={121} size={14} className={styles.glyphQuiet} />
+      <Copy x={198} y={121} w={52} quiet />
+      <Focus x={256} y={49} glyph="lock" size={12} />
     </>
   );
 }
@@ -331,4 +385,6 @@ export const L1_BANDS: Record<L1BandScene, () => ReactNode> = {
   'status-code': StatusCode,
   'status-guidance': StatusGuidance,
   'option-own-team': OptionOwnTeam,
+  'method-test-in-code': MethodTestInCode,
+  'decisions-five': DecisionsFive,
 };

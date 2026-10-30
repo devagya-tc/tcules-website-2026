@@ -94,7 +94,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         'A check of what shipped': 'symptom-match',
         'Production code': 'outcome-code-in-repo',
       }),
-      method: by({ scenario: 'scenario-drag-overload' }),
+      method: by({ scenario: 'scenario-drag-overload', figure: 'method-test-in-code' }),
       compare: by({
         'Design engineering': 'design-engineering',
         'Design Systems': 'design-systems',
@@ -133,7 +133,7 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
         'The places new products break, tested before launch': 'outcome-break-points',
         'Launch support': 'new-product',
       }),
-      decisions: by({ scenario: 'scenario-vet-estimate' }),
+      decisions: by({ scenario: 'scenario-vet-estimate', figure: 'decisions-five' }),
       options: by({
         'MVP design and build with Tcules': 'specialist-new-product',
         'Product design only': 'product-design',

@@ -94,7 +94,9 @@ export type L1BandScene =
   | 'status-figma'
   | 'status-code'
   | 'status-guidance'
-  | 'option-own-team';
+  | 'option-own-team'
+  | 'method-test-in-code'
+  | 'decisions-five';
 
 export type L1OutcomeScene =
   | 'outcome-ai-steps'

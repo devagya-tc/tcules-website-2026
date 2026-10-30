@@ -40,7 +40,6 @@ import {
   leadOf,
   linkLead,
   plain,
-  sentenceLead,
   trimStart,
 } from './text';
 
@@ -573,8 +572,9 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
 const stepTitle = (label: readonly InlineRun[]) => labelTitle(label).replace(/^\d+\.\s*/, '');
 
 function stepOf(runs: readonly InlineRun[]): Step {
-  const found = boldLead(runs);
-  const lead = found ? sentenceLead(found) : null;
+  /* The bold run is the title as written (a trailing comma stays), the rest the body: no
+     sentence extension, so every step in a list is a short title over its body. */
+  const lead = boldLead(runs);
   if (lead) {
     const body = trimStart(lead.body);
     return {
@@ -619,7 +619,7 @@ export function MethodBand({
       !isBareLabel(rest[to] as CorpusBlock)
     ) {
       const lead = leadOf(rest[to] as CorpusBlock)!;
-      steps.push({ title: stepTitle(lead.label), ...rowBody(lead.body) });
+      steps.push({ title: stepTitle(lead.label), ...rowBody(trimStart(lead.body)) });
       to += 1;
     }
   } else if (listAt >= 0) {
@@ -652,7 +652,12 @@ export function MethodBand({
   const after = parts.before;
   const stepsNode =
     steps.length === 0 ? null : figure ? (
-      <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+      <Layout
+        columns={{ base: 1, lg: [1, 1] }}
+        colGap="section"
+        rowGap="stack"
+        align={'sketch' in figure ? 'center' : 'start'}
+      >
         <Steps steps={steps} />
         {'sketch' in figure ? (
           <Sketch name={figure.sketch} />
@@ -715,15 +720,17 @@ export function DrawnTableBand({
   page,
   band,
   sceneOf,
+  scenario,
 }: {
   page: CorpusPage;
   band: CorpusBand;
   sceneOf: (key: string) => SketchName | undefined;
+  scenario?: SketchName;
 }) {
   const blocks = content(band);
   const tableAt = blocks.findIndex((block) => block.type === 'table');
   const table = blocks[tableAt];
-  if (!table || table.type !== 'table') return <TableBand band={band} />;
+  if (!table || table.type !== 'table') return <TableBand band={band} scenario={scenario} />;
   const items = table.rows.map((row) => {
     const keyCell = row[0] ?? [];
     const title = plain(keyCell).trim();
@@ -739,7 +746,8 @@ export function DrawnTableBand({
           : undefined,
     };
   });
-  if (items.length === 0 || items.some((item) => !item.scene)) return <TableBand band={band} />;
+  if (items.length === 0 || items.some((item) => !item.scene))
+    return <TableBand band={band} scenario={scenario} />;
   const leading = blocks.slice(0, tableAt);
   const only = leading.length === 1 ? leading[0] : undefined;
   const leadText =

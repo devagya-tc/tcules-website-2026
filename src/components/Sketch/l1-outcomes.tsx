@@ -282,11 +282,20 @@ function BreakPoints() {
 }
 
 /** A call on every part: each part of the product marked keep, redesign, rebuild, move or retire. */
+/** The call each part carries, inside its tile at top-right: keep, redesign, move, rebuild (simplify is the smaller tile, retire the hatched one). */
+const MARKS: Partial<Record<number, 'check-circle' | 'ruler-pen' | 'layers' | 'refresh'>> = {
+  0: 'check-circle',
+  1: 'ruler-pen',
+  2: 'layers',
+  5: 'refresh',
+};
+
 function PartCalls() {
   const marks: ReactNode[] = [];
   for (let i = 0; i < 6; i++) {
     const x = 50 + (i % 3) * 78;
     const y = 40 + Math.floor(i / 3) * 56;
+    const mark = MARKS[i];
     if (i === 4) marks.push(<Hatched key={i} x={x} y={y} w={64} h={42} />);
     else
       marks.push(
@@ -294,17 +303,15 @@ function PartCalls() {
           {i === 1 ? <Rect x={x - 6} y={y - 6} w={76} h={54} rx={8} className={styles.halo} /> : null}
           <Rect x={x} y={y} w={i === 3 ? 44 : 64} h={i === 3 ? 30 : 42} className={styles.tile} />
           <Copy x={x + 8} y={y + 14} w={i === 3 ? 20 : 32} quiet />
+          {mark ? (
+            <Glyph name={mark} cx={x + 64 - 14} cy={y + 14} size={12} className={styles.glyph} />
+          ) : null}
         </g>,
       );
   }
   return (
     <>
       {marks}
-      <Glyph name="check-circle" cx={116} cy={52} size={12} className={styles.glyph} />
-      <Glyph name="ruler-pen" cx={194} cy={52} size={12} className={styles.glyph} />
-      <Glyph name="layers" cx={272} cy={52} size={12} className={styles.glyph} />
-      <Glyph name="refresh" cx={116} cy={130} size={12} className={styles.glyphQuiet} />
-      <Glyph name="refresh" cx={272} cy={130} size={12} className={styles.glyph} />
     </>
   );
 }
@@ -363,11 +370,10 @@ function OldNew() {
       <Copy x={216} y={58} w={40} quiet />
       <Rect x={216} y={70} w={56} h={28} className={styles.region} />
       <Copy x={216} y={112} w={44} />
-      <path className={styles.line} d="M122,88 L190,88" />
-      {[140, 164, 188].map((x, i) => (
-        <Glyph key={x} name="user" cx={x} cy={i === 0 ? 70 : 108} size={16} className={i === 0 ? styles.glyphQuiet : styles.glyph} />
+      <Hop x1={122} x2={196} y={88} />
+      {[146, 166, 182].map((x, i) => (
+        <Glyph key={x} name="user" cx={x} cy={88} size={14} className={i === 0 ? styles.glyphQuiet : styles.glyph} />
       ))}
-      <path className={styles.line} d="M188,88 L196,88" />
     </>
   );
 }

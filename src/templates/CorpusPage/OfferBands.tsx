@@ -534,6 +534,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           page={page}
           band={band}
           sceneOf={(key) => sceneFor(ctx, band, key)}
+          scenario={sceneFor(ctx, band, 'scenario')}
         />
       ) : (
         <TableBand band={band} scenario={sceneFor(ctx, band, 'scenario')} />
