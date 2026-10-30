@@ -13,7 +13,6 @@ import { getBlogPage, type BlogBlock, type BlogImage, type BlogPage } from '@/co
 import { blogPath, ROUTES } from '@/lib/routes';
 import { heroTrail } from '@/lib/trail';
 import {
-  BlockCard,
   Breadcrumbs,
   Callout,
   Contributors,
@@ -26,6 +25,9 @@ import {
   type TocItem,
 } from '@/patterns';
 import type { BreadcrumbItem } from '@/patterns';
+import { InsightResources } from '@/templates';
+
+import { resourceItems } from '../../_insights/resources';
 
 type BlogPageProps = { params: Promise<{ slug: string[] }> };
 
@@ -150,23 +152,6 @@ function jsonLdMarkup(data: Record<string, unknown> | unknown[]): string {
   return JSON.stringify(data).replaceAll('<', '\\u003c');
 }
 
-function dateOnly(date: string | undefined): string | undefined {
-  return date?.slice(0, 10);
-}
-
-function displayDate(date: string | undefined): string {
-  if (!date) return 'Latest insight';
-  const parsed = new Date(date);
-  return Number.isNaN(parsed.valueOf())
-    ? 'Latest insight'
-    : new Intl.DateTimeFormat('en', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
-      }).format(parsed);
-}
-
 /** The format a piece sits under, as the podcast and event pages name theirs: Home / Insights / Articles. */
 const FORMAT_CRUMB: Record<BlogPage['kind'], BreadcrumbItem> = {
   article: { label: 'Articles', href: ROUTES.articles },
@@ -220,8 +205,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       description,
       type: 'article',
       ...(canonical ? { url: canonical } : {}),
-      ...(blog.publishedAt ? { publishedTime: blog.publishedAt } : {}),
-      ...(blog.updatedAt ? { modifiedTime: blog.updatedAt } : {}),
+      ...(blog.publishedContent ? { publishedTime: blog.publishedContent } : {}),
       ...(blog.authors.length > 0
         ? { authors: blog.authors.map((author) => author.name) }
         : {}),
@@ -268,8 +252,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
      grid would otherwise squeeze the document into four-fifths of the content column for nothing. */
   const hasOutline = outline.length >= 2;
 
-  const published = blog.publishedContent || dateOnly(blog.publishedAt);
-  const updated = dateOnly(blog.updatedAt);
+  /* The authored date only. Strapi's publishedAt and updatedAt are the CMS's last publish and save
+     (every live article re-published 28–30 Oct 2026), so neither is shown as the piece's date, and
+     there is no "Updated" until the CMS carries an authored one. */
+  const published = blog.publishedContent;
   const authors: HeroPerson[] = blog.authors.map((author) => ({
     name: author.name,
     ...(author.image ? { portrait: author.image } : {}),
@@ -305,11 +291,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         body={[blog.description || `Read ${blog.title}.`]}
         credits={credits}
         readingTime={blog.readingTime}
-        dates={
-          published
-            ? { published, ...(updated !== published && updated ? { modified: updated } : {}) }
-            : undefined
-        }
+        dates={published ? { published } : undefined}
         media={heroMedia}
         surface="paper"
       
@@ -351,34 +333,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
         </Section>
       ) : null}
 
-      {blog.resources.length > 0 ? (
-        <Section surface="tint" aria-labelledby="blog-resources-heading">
-          <Layout rowGap="stack">
-            <h2 id="blog-resources-heading">Explore other resources</h2>
-            <Layout
-              as="ul"
-              columns={{ base: 1, md: 2, lg: 3 }}
-              colGap="gutter"
-              rowGap="column"
-              equalRows
-            >
-              {blog.resources.map((resource) => (
-                <BlockCard
-                  key={resource.documentId}
-                  title={resource.title}
-                  body={[displayDate(resource.publishedAt), resource.tags.join(' · ')]
-                    .filter(Boolean)
-                    .join(' — ')}
-                  eyebrow={resource.categories.join(' · ') || 'Insight'}
-                  media={resource.image ? { type: 'image', image: resource.image } : undefined}
-                  href={blogPath(resource.slug)}
-                  ctaLabel="Read insight"
-                />
-              ))}
-            </Layout>
-          </Layout>
-        </Section>
-      ) : null}
+      {/* Other insights as the site's insight cards: cover, else the panel with its format's glyph
+          (owner, 30 Oct 2026). Paper, so it never meets the tinted close. */}
+      <InsightResources heading="Explore other resources" items={resourceItems(blog.resources)} />
 
       {blog.cta ? (
         <CtaSection

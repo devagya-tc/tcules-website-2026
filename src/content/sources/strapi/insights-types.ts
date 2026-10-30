@@ -32,6 +32,8 @@ export type StrapiInsightsResource = {
   title?: string | null;
   slug?: string | null;
   description?: string | null;
+  /** The SEO meta description: an article's standfirst, as its own page uses it. */
+  seo?: { metaDescription?: string | null } | null;
   thumbnail?: StrapiInsightsImage | null;
   tags?: StrapiInsightsTaxonomy[] | null;
   categories?: StrapiInsightsTaxonomy[] | null;

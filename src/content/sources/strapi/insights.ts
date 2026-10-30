@@ -24,6 +24,7 @@ import type {
 import { safeContentHref } from './rich-text';
 import { ROUTES } from '../../../lib/routes.ts';
 import { COVER_SCENES } from '../cover-scenes';
+import { publishedLine } from './published-line';
 
 /**
  * The Lab band's link. The CMS sends `/labs`, which is not a route; the Lab lives at
@@ -199,12 +200,12 @@ function mapFormatCard(
  * Read"); it used to be folded into the description, which put a reading time where a standfirst
  * belongs. Only a value that says "read" is taken, so an embed's real title never becomes one.
  */
+/** The body's title-only iframe block: the one carrying "2 May ‘25 ⸱ 11 Min Read". */
+const dateLineBlock = (resource: StrapiInsightsResource) =>
+  resource.mainSection?.find((block) => block.__typename === 'ComponentBlogAndCasestudiesIframe');
+
 function readingTime(resource: StrapiInsightsResource): string | undefined {
-  const detail = value(
-    resource.mainSection?.find(
-      (block) => block.__typename === 'ComponentBlogAndCasestudiesIframe',
-    )?.title,
-  );
+  const detail = value(dateLineBlock(resource)?.title);
   /* Only the length: some iframe titles carry the date too ("14 Oct '26 · 17 Min Read"), and the
      page sets the date itself, so the whole title put two dates on one line (16 Oct 2026). */
   return detail.match(/\b\d+\s*min(ute)?s?\s+read\b/iu)?.[0]?.toLowerCase();
@@ -271,7 +272,13 @@ function mapResource(
     const mapped = mapTaxonomy(category, 'category');
     return mapped ? [mapped] : [];
   });
-  const publishedAt = value(resource.publishedAt);
+  /* A blog-collection piece (it queries its body's date line) is dated by that authored line, never
+     by `publishedAt`, which is the CMS's last publish (see ./published-line). Without the line it is
+     undated rather than wrongly dated. Events, interviews and podcasts keep `publishedAt`. */
+  const publishedAt =
+    resource.mainSection !== undefined
+      ? publishedLine(value(dateLineBlock(resource)?.title)).date
+      : value(resource.publishedAt);
   const minutes = readingTime(resource);
   const event = kind === 'event' ? eventDetails(resource) : undefined;
 
@@ -280,7 +287,8 @@ function mapResource(
     kind,
     title,
     slug,
-    description: value(resource.description),
+    /* A blog has no description field: its standfirst is its SEO meta description, as on its page. */
+    description: value(resource.description) || value(resource.seo?.metaDescription),
     ...(minutes ? { readingTime: minutes } : {}),
     ...(!image && COVER_SCENES[slug] ? { coverScene: COVER_SCENES[slug] } : {}),
     ...(event ? { event } : {}),

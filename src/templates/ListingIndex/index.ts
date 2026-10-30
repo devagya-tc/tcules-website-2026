@@ -17,4 +17,5 @@ export type {
 } from './insights';
 export type { InsightItem, InsightKind } from './compositions';
 export { caseViews } from './cases';
+export { InsightResources } from './resources';
 export type { CaseGroup, CaseItem, CaseView } from './cases';
