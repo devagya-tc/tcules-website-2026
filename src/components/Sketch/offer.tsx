@@ -24,14 +24,14 @@ import { CURSOR, Focus, Glyph, Hatched } from './scenes';
  */
 
 /** The one arrowhead pointing right, tip at (x, y). */
-function ArrowRight({ x, y }: { x: number; y: number }) {
+export function ArrowRight({ x, y }: { x: number; y: number }) {
   return (
     <path className={styles.solid} d={`M${x},${y} L${x - 7},${y - 4} L${x - 7},${y + 4} Z`} />
   );
 }
 
 /** A route from a port at x1 to the arrowhead's tip at x2, on y. */
-function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
+export function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
   return (
     <>
       <path className={styles.line} d={`M${x1},${y} L${x2 - 7},${y}`} />
@@ -42,7 +42,7 @@ function Hop({ x1, x2, y }: { x1: number; x2: number; y: number }) {
 }
 
 /** A line of copy from x, `w` long; `quiet` for the lighter ink. */
-function Copy({
+export function Copy({
   x,
   y,
   w,
@@ -58,7 +58,7 @@ function Copy({
   );
 }
 
-function Rect({
+export function Rect({
   x,
   y,
   w,
@@ -77,7 +77,7 @@ function Rect({
 }
 
 /** The floating cursor, tip at (x, y), its flat offset under it. */
-function Cursor({ x, y }: { x: number; y: number }) {
+export function Cursor({ x, y }: { x: number; y: number }) {
   return (
     <>
       <path
@@ -91,7 +91,7 @@ function Cursor({ x, y }: { x: number; y: number }) {
 }
 
 /** A switch, its knob at the end it is set to. */
-function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
+export function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
   return (
     <>
       <Rect x={x} y={y} w={24} h={12} rx={6} className={on ? styles.solid : styles.tile} />
@@ -111,7 +111,7 @@ function Switch({ x, y, on }: { x: number; y: number; on: boolean }) {
  * weight, set at 135° and tucked under the ring, and the two share one flat offset, as everything that
  * floats does.
  */
-function Lens({ x, y, r }: { x: number; y: number; r: number }) {
+export function Lens({ x, y, r }: { x: number; y: number; r: number }) {
   const handle = (dx: number, className: string | undefined) => (
     <rect
       className={className}

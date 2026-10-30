@@ -1,6 +1,6 @@
 import { Fragment, type ReactNode } from 'react';
 
-import { Button, Icon, Layout, Media, Prose } from '@/components';
+import { Button, Icon, Layout, Media, Prose, Sketch } from '@/components';
 import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
@@ -33,11 +33,12 @@ import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderImage } from '@/lib/placeholders';
-import { serviceSceneFor } from '@/lib/sketches';
+import { MEDIA_SPLIT } from '@/lib/image-sizes';
+import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
-import { caseCover, hasSlot, slotImage, slugOf } from './images';
+import { caseCover, hasSlot, slotImage, slugOf, type SlotImage } from './images';
 import { signature } from './plan';
 import {
   boldLead,
@@ -47,7 +48,6 @@ import {
   leadOf,
   linkLead,
   plain,
-  sentenceLead,
   trimStart,
 } from './text';
 
@@ -205,6 +205,55 @@ export function BandBody({
       {groups.map((group, index) => (
         <Fragment key={index}>{groupNode(group, labelledBy)}</Fragment>
       ))}
+    </Layout>
+  );
+}
+
+/**
+ * A scenario: the paragraph "Illustration, not client work" (italic) and the paragraphs after it. The
+ * label stays as authored; the scenario's words go beside the drawing of its story.
+ */
+export function scenarioParts(blocks: readonly CorpusBlock[]): {
+  before: CorpusBlock[];
+  label?: string;
+  scenario: CorpusBlock[];
+} {
+  const at = blocks.findIndex(
+    (block) =>
+      block.type === 'paragraph' && /^illustration, not client work$/i.test(plain(block.runs).trim()),
+  );
+  if (at < 0) return { before: [...blocks], scenario: [] };
+  const found = blocks[at];
+  return {
+    before: blocks.slice(0, at),
+    label: found && found.type === 'paragraph' ? plain(found.runs).trim() : undefined,
+    scenario: blocks.slice(at + 1),
+  };
+}
+
+/** A scenario's label and words, with its drawing on the end side (copy beside a drawing is a split). */
+function ScenarioSplit({
+  label,
+  blocks,
+  scene,
+}: {
+  label: string;
+  blocks: CorpusBlock[];
+  scene?: SketchName;
+}) {
+  const words = (
+    <Layout rowGap="block">
+      <p className={styles.legend}>{label}</p>
+      <ContentSectionText>
+        <Prose html={proseHtml(blocks)} />
+      </ContentSectionText>
+    </Layout>
+  );
+  if (!scene) return words;
+  return (
+    <Layout columns={{ base: 1, lg: [1, 1] }} colGap="section" rowGap="stack" align="center">
+      {words}
+      <Sketch name={scene} />
     </Layout>
   );
 }
@@ -643,8 +692,9 @@ export function ChallengesBand({
 const stepTitle = (label: readonly InlineRun[]) => labelTitle(label).replace(/^\d+\.\s*/, '');
 
 function stepOf(runs: readonly InlineRun[]): Step {
-  const found = boldLead(runs);
-  const lead = found ? sentenceLead(found) : null;
+  /* The bold run is the title as written (a trailing comma stays), the rest the body: no
+     sentence extension, so every step in a list is a short title over its body. */
+  const lead = boldLead(runs);
   if (lead) {
     const body = trimStart(lead.body);
     return {
@@ -659,7 +709,15 @@ function stepOf(runs: readonly InlineRun[]): Step {
  * A method: the ordered steps (a list, or a run of labelled claims) as Steps under the head; the
  * opening paragraph as the lead; everything else, a table included, in order around them.
  */
-export function MethodBand({ band }: { band: CorpusBand }) {
+export function MethodBand({
+  band,
+  scenario,
+  figure,
+}: {
+  band: CorpusBand;
+  scenario?: SketchName;
+  figure?: { sketch: SketchName } | { image: SlotImage };
+}) {
   const blocks = content(band);
   const [first] = blocks;
   const leadText =
@@ -681,7 +739,7 @@ export function MethodBand({ band }: { band: CorpusBand }) {
       !isBareLabel(rest[to] as CorpusBlock)
     ) {
       const lead = leadOf(rest[to] as CorpusBlock)!;
-      steps.push({ title: stepTitle(lead.label), ...rowBody(lead.body) });
+      steps.push({ title: stepTitle(lead.label), ...rowBody(trimStart(lead.body)) });
       to += 1;
     }
   } else if (listAt >= 0) {
@@ -710,16 +768,38 @@ export function MethodBand({ band }: { band: CorpusBand }) {
     );
   }
   const before = rest.slice(0, from);
-  const after = rest.slice(to);
+  const parts = scenarioParts(rest.slice(to));
+  const after = parts.before;
+  const stepsNode =
+    steps.length === 0 ? null : figure ? (
+      <Layout
+        columns={{ base: 1, lg: [1, 1] }}
+        colGap="section"
+        rowGap="stack"
+        align={'sketch' in figure ? 'center' : 'start'}
+      >
+        <Steps steps={steps} />
+        {'sketch' in figure ? (
+          <Sketch name={figure.sketch} />
+        ) : (
+          <Media image={figure.image} sizes={MEDIA_SPLIT} />
+        )}
+      </Layout>
+    ) : (
+      <Steps steps={steps} />
+    );
   return (
     <ContentSection {...head(band)} data-band="F" lead={leadText}>
       <Layout rowGap="stack">
         {before.length > 0 ? (
           <BandBody blocks={before} labelledBy={head(band).headingId} />
         ) : null}
-        {steps.length > 0 ? <Steps steps={steps} /> : null}
+        {stepsNode}
         {after.length > 0 ? (
           <BandBody blocks={after} labelledBy={head(band).headingId} />
+        ) : null}
+        {parts.label ? (
+          <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
         ) : null}
       </Layout>
     </ContentSection>
@@ -729,19 +809,129 @@ export function MethodBand({ band }: { band: CorpusBand }) {
 /* ── Tables (G11, G12, `compare`, `routes`) ──────────────────────────────────── */
 
 /** A comparison or record band: its opening paragraph as the lead, then every block in order. */
-export function TableBand({ band }: { band: CorpusBand }) {
+export function TableBand({ band, scenario }: { band: CorpusBand; scenario?: SketchName }) {
   const blocks = content(band);
   const [first] = blocks;
   const leadText =
     first?.type === 'paragraph' && !leadOf(first) && !hasLink(first.runs)
       ? plain(first.runs)
       : undefined;
+  const parts = scenarioParts(leadText ? blocks.slice(1) : blocks);
   return (
     <ContentSection {...head(band)} data-band="E" lead={leadText}>
-      <BandBody
-        blocks={leadText ? blocks.slice(1) : blocks}
-        labelledBy={head(band).headingId}
-      />
+      {parts.label ? (
+        <Layout rowGap="stack">
+          <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+          <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+        </Layout>
+      ) : (
+        <BandBody blocks={parts.before} labelledBy={head(band).headingId} />
+      )}
+    </ContentSection>
+  );
+}
+
+/**
+ * A table whose rows are the peer items of one mechanism or a choice, each drawn: the drawing, the
+ * row's key as its title, what it says, and a third column as one labelled line. Not cards: no box,
+ * no ground, no hover. Where any row has no drawing the band is the plain table.
+ */
+export function DrawnTableBand({
+  page,
+  band,
+  sceneOf,
+  scenario,
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  sceneOf: (key: string) => SketchName | undefined;
+  scenario?: SketchName;
+}) {
+  const blocks = content(band);
+  const tableAt = blocks.findIndex((block) => block.type === 'table');
+  const table = blocks[tableAt];
+  if (!table || table.type !== 'table') return <TableBand band={band} scenario={scenario} />;
+  const items = table.rows.map((row) => {
+    const keyCell = row[0] ?? [];
+    const title = plain(keyCell).trim();
+    const link = linkIn(keyCell);
+    return {
+      title,
+      href: link?.href,
+      scene: sceneOf(title),
+      body: inlineToHtml(row[1] ?? []),
+      meta:
+        table.header.length >= 3
+          ? { label: plain(table.header[2] ?? []), html: inlineToHtml(row[2] ?? []) }
+          : undefined,
+    };
+  });
+  if (items.length === 0 || items.some((item) => !item.scene))
+    return <TableBand band={band} scenario={scenario} />;
+  const leading = blocks.slice(0, tableAt);
+  const only = leading.length === 1 ? leading[0] : undefined;
+  const leadText =
+    only && only.type === 'paragraph' && !hasLink(only.runs) ? plain(only.runs) : undefined;
+  const heading = plain(table.header[0] ?? []).trim();
+  const after = blocks.slice(tableAt + 1);
+  const n = items.length;
+  const set = (
+    <Layout rowGap="block">
+      {table.header.length === 2 && heading ? <p className={styles.legend}>{heading}</p> : null}
+      <Layout
+        as="ul"
+        columns={{ base: 1, md: 2, lg: n === 4 ? 4 : 3 }}
+        colGap="gutter"
+        rowGap="column"
+      >
+        {items.map((item) => (
+          <li key={item.title}>
+            <Layout rowGap="block">
+              <Sketch name={item.scene} />
+              <Layout rowGap="text">
+                <h3 className={styles.itemTitle}>
+                  {item.href ? <a href={item.href}>{item.title}</a> : item.title}
+                </h3>
+                <p dangerouslySetInnerHTML={{ __html: item.body }} />
+                {item.meta ? (
+                  <p className={styles.proofLine}>
+                    <span className={styles.legend}>{item.meta.label}</span>{' '}
+                    <span dangerouslySetInnerHTML={{ __html: item.meta.html }} />
+                  </p>
+                ) : null}
+              </Layout>
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+    </Layout>
+  );
+  const bound = page.composition.mediaBindings.some(
+    (b) => b.bound && b.supportsSection === band.id,
+  );
+  return (
+    <ContentSection {...head(band)} data-band="drawn-table" lead={leadText}>
+      <Layout rowGap="stack">
+        {leading.length > 0 && !leadText ? (
+          <BandBody blocks={leading} labelledBy={head(band).headingId} />
+        ) : null}
+        {set}
+        {after.length > 0 ? (
+          bound ? (
+            <Layout
+              columns={{ base: 1, lg: [1, 1] }}
+              colGap="section"
+              rowGap="stack"
+              align="center"
+            >
+              <BandBody blocks={after} />
+              <Media image={slotImage(page, band.id)} sizes={MEDIA_SPLIT} />
+            </Layout>
+          ) : (
+            <BandBody blocks={after} />
+          )
+        ) : null}
+      </Layout>
     </ContentSection>
   );
 }
@@ -1108,15 +1298,25 @@ export function TextBand({
   page,
   band,
   side = 'start',
+  scenario,
 }: {
   page: CorpusPage;
   band: CorpusBand;
   side?: 'start' | 'end';
+  scenario?: SketchName;
 }) {
   const blocks = content(band);
   const links = blocks.flatMap((block) => (block.type === 'links' ? block.links : []));
   const body = blocks.filter((block) => block.type !== 'links');
-  const text = <BandBody blocks={body} />;
+  const parts = scenarioParts(body);
+  const text = parts.label ? (
+    <Layout rowGap="stack">
+      <BandBody blocks={parts.before} />
+      <ScenarioSplit label={parts.label} blocks={parts.scenario} scene={scenario} />
+    </Layout>
+  ) : (
+    <BandBody blocks={body} />
+  );
   const actions = links.length > 0 ? <LinkActions links={links} /> : undefined;
   if (page.composition.mediaBindings.some((b) => b.bound && b.supportsSection === band.id)) {
     return (

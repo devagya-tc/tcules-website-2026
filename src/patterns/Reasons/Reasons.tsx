@@ -283,6 +283,8 @@ export function Reasons({
   );
 
   const open = arrangement === 'open';
+  // A set whose covers carry no figure (offer pages) sizes its plate to the cover: 16:9, no caption strip.
+  const flatProofs = items.some((i) => i.proof?.kind === 'cover') && !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const allProof = shown.length > 0 && shown.every((i) => i.proof);
   const set = (
     <Layout

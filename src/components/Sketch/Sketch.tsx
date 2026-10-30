@@ -4,6 +4,9 @@ import { cx } from '@/lib/cx';
 
 import styles from './Sketch.module.css';
 import { KIT } from './kit';
+import { L1_BANDS } from './l1-bands';
+import { L1_OUTCOMES } from './l1-outcomes';
+import { L1_SPECIALISTS, L1_SPECIALISTS_DRAWN } from './l1-specialists';
 import { OFFER, OFFER_DRAWN } from './offer';
 import { STILL } from './scenes';
 import { STORY, STORY_DRAWN } from './stories';
@@ -89,13 +92,21 @@ export function Sketch({ name, frame = 'plate', story = false, end = false }: Sk
   const Still = name
     ? (STILL[name] ??
       (name in KIT ? KIT[name as keyof typeof KIT] : undefined) ??
-      (name in OFFER ? OFFER[name as keyof typeof OFFER] : undefined))
+      (name in OFFER ? OFFER[name as keyof typeof OFFER] : undefined) ??
+      (name in L1_BANDS ? L1_BANDS[name as keyof typeof L1_BANDS] : undefined) ??
+      (name in L1_OUTCOMES ? L1_OUTCOMES[name as keyof typeof L1_OUTCOMES] : undefined) ??
+      (name in L1_SPECIALISTS
+        ? L1_SPECIALISTS[name as keyof typeof L1_SPECIALISTS]
+        : undefined))
     : undefined;
   const [x, y, w, h] =
     (bare &&
       (storyDrawing
         ? name && STORY_DRAWN[name]
-        : name && (DRAWN[name] ?? OFFER_DRAWN[name as keyof typeof OFFER_DRAWN]))) ||
+        : name &&
+          (DRAWN[name] ??
+            OFFER_DRAWN[name as keyof typeof OFFER_DRAWN] ??
+            L1_SPECIALISTS_DRAWN[name as keyof typeof L1_SPECIALISTS_DRAWN]))) ||
     ([0, 0, W, H] as const);
   return (
     <svg

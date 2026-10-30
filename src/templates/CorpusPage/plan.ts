@@ -449,7 +449,7 @@ type Draft = Omit<OfferUnit, 'surface' | 'side' | 'variant'> & {
  */
 const PHOTOGRAPH_BANDS: ReadonlySet<string> = new Set(['ai-native-practice']);
 
-function drafts(page: CorpusPage): Draft[] {
+function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
   const units: Draft[] = [];
   const unit = (
     band: CorpusBand,
@@ -469,6 +469,12 @@ function drafts(page: CorpusPage): Draft[] {
           ? false
           : VISUAL.has(kind) ||
             PHOTOGRAPH_BANDS.has(band.id) ||
+            drawn.has(band.id) ||
+            band.blocks.some(
+              (block) =>
+                block.type === 'paragraph' &&
+                /^illustration, not client work$/i.test(plain(block.runs).trim()),
+            ) ||
             ((kind === 'challenges' || kind === 'text') &&
               page.composition.mediaBindings.some(
                 (m) => m.bound && m.supportsSection === band.id,
@@ -530,8 +536,8 @@ function drafts(page: CorpusPage): Draft[] {
 /**
  * The page's units, with surfaces, media sides and texture decided from the whole sequence.
  */
-export function planOffer(page: CorpusPage): OfferUnit[] {
-  const raw = drafts(page);
+export function planOffer(page: CorpusPage, drawn: ReadonlySet<string> = new Set()): OfferUnit[] {
+  const raw = drafts(page, drawn);
   const planned: OfferUnit[] = [];
   /* The side the next media-carrying unit takes: the first is at the start, then they alternate. */
   let side: 'start' | 'end' = 'start';
