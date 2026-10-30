@@ -2,45 +2,61 @@ import { ILLUSTRATION_LEGENDS } from './illustration-legends';
 import { ROUTES, servicePath } from './routes';
 
 /**
- * The hero illustrations, by route. A route here takes its drawing whole (an illustration is never
- * cropped); every other page's hero is a bound asset or a labelled placeholder.
+ * The hero drawings, by route.
  *
- * Six are Bhumika's finals, frozen by Jatin on 30 Oct 2026, then polished: every slab one outline
- * weight with its corner edges, every line stopping at the edge of what it reaches (source, before/after
- * and the pass: docs/illustrations/polish-2026-10-30/). The owner approved them for the pages the same
- * day: "use the updated drawings on the pages". The other four are the approved isometric heroes
- * (owner, 30 Oct 2026), 820 wide, their viewBox trimmed to the drawing (16 above and below) so no hero
- * carries a band of empty floor. None carries a label, so one file serves every width.
+ * Six are Bhumika's finals, frozen by Jatin on 30 Oct 2026 and then polished (one outline weight,
+ * corner edges, lines that stop at what they reach; docs/illustrations/polish-2026-10-30/), each cropped
+ * to its own bounds. The owner approved them for the pages the same day. Four more are the owner's
+ * approved canvas versions not yet through that polish (owner, 30 Oct 2026): Software Development, New
+ * Product Design & First Release, and the /expertise and /audits hubs, their text flattened to paths and
+ * their viewBox trimmed to the drawing. An illustration is never cropped; every other page's hero is a
+ * bound asset or a labelled placeholder.
  */
 const HERO_ILLUSTRATIONS: Readonly<
-  Record<string, { file: string; width: number; height: number }>
+  Record<string, { src: string; width: number; height: number }>
 > = {
-  [servicePath('product-design')]: { file: 'product-design', width: 786, height: 543 },
+  [servicePath('product-design')]: {
+    src: '/illustrations/heroes/product-design.svg',
+    width: 786,
+    height: 543,
+  },
   [servicePath('product-modernisation')]: {
-    file: 'product-modernisation',
+    src: '/illustrations/heroes/product-modernisation.svg',
     width: 700,
     height: 499,
   },
-  [servicePath('design-engineering')]: { file: 'design-engineering', width: 772, height: 577 },
-  [servicePath('design-systems')]: { file: 'design-systems', width: 802, height: 515 },
-  [servicePath('ai-product-ux')]: { file: 'ai-product-ux', width: 792, height: 446 },
+  [servicePath('design-engineering')]: {
+    src: '/illustrations/heroes/design-engineering.svg',
+    width: 772,
+    height: 577,
+  },
+  [servicePath('design-systems')]: {
+    src: '/illustrations/heroes/design-systems.svg',
+    width: 802,
+    height: 515,
+  },
+  [servicePath('ai-product-ux')]: {
+    src: '/illustrations/heroes/ai-product-ux.svg',
+    width: 792,
+    height: 446,
+  },
   [servicePath('ai-product-ux/ai-copilots-agents')]: {
-    file: 'ai-copilots-agents',
+    src: '/illustrations/heroes/ai-copilots-agents.svg',
     width: 788,
     height: 609,
   },
   [servicePath('software-development')]: {
-    file: 'services-software-development',
+    src: '/illustrations/heroes/services-software-development.svg',
     width: 820,
     height: 693,
   },
   [servicePath('new-product-design-first-release')]: {
-    file: 'services-new-product-design-first-release',
+    src: '/illustrations/heroes/services-new-product-design-first-release.svg',
     width: 820,
     height: 519,
   },
-  [ROUTES.expertise]: { file: 'expertise', width: 820, height: 464 },
-  [ROUTES.audits]: { file: 'audits', width: 820, height: 627 },
+  [ROUTES.expertise]: { src: '/illustrations/heroes/expertise.svg', width: 820, height: 464 },
+  [ROUTES.audits]: { src: '/illustrations/heroes/audits.svg', width: 820, height: 627 },
 };
 
 export type ServiceIllustration = {
@@ -52,19 +68,12 @@ export type ServiceIllustration = {
   cut: (typeof ILLUSTRATION_LEGENDS)[string] | undefined;
 };
 
-/** The hero illustration for a route. Undefined for a route with none. */
-export function serviceIllustration(route: string): ServiceIllustration | undefined {
+/** The hero drawing for a route, or for a service slug (the fixture service template passes a slug). */
+export function serviceIllustration(routeOrSlug: string): ServiceIllustration | undefined {
+  const route = routeOrSlug.startsWith('/') ? routeOrSlug : servicePath(routeOrSlug);
   const drawing = HERO_ILLUSTRATIONS[route];
   if (!drawing) return undefined;
-  const src = `/illustrations/heroes/${drawing.file}.svg`;
-  return {
-    src,
-    width: drawing.width,
-    height: drawing.height,
-    alt: '',
-    kind: 'illustration',
-    cut: ILLUSTRATION_LEGENDS[src],
-  };
+  return { ...drawing, alt: '', kind: 'illustration', cut: ILLUSTRATION_LEGENDS[drawing.src] };
 }
 
 /**
