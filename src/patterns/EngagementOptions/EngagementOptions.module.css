@@ -47,10 +47,10 @@
   font: var(--eop-body-text-rows);
 }
 
-/* A closing term: the paragraph on its hairline, a `block` under it, as a What you get term. */
-.term {
-  padding-block-start: var(--gap-block);
-  border-block-start: var(--eop-term-rule-width) solid var(--eop-term-rule-ink);
+/* A closing term's mark. */
+.termArt {
+  /* The one Sketch value a parent sets: the bare drawing's scale. */
+  --skt-scale: var(--eop-term-art-scale);
 }
 
 .termText {
