@@ -50,7 +50,7 @@ arrangement holds it → what it must never do.**
 - **A countdown indicator shows where a carousel is heading**: the old bar stays empty, the next is full from the first frame; a wrap never lights the bars it passes.
 - **Outline hover lays the ghost's pale tint under it and firms the line**; press one tint deeper; never the blue solid fill.
 - **Two actions = different jobs?** A way deeper (head end action) and an ask (its own ink island band, one solid to ROUTES.contact, labelled 'Start a project') are separated, not paired. Check order: the island touches no island or tint, and sits two bands above the enquiry island.
-- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are secondary, each led by its bare drawing at full drawing height, on the options' own tracks and gutter (two terms take columns 1–2), never hairline-ruled text.
+- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are ONE tier under the whole set: a stem rises from a port on one rail to each option's own text, the rail runs only between the outer stems and turns into them at a rounded corner, the terms under it, each led by its small mark (0.6, fixed slot, end-aligned beside its words from 768), never on the options' own tracks and never a bare hairline (2026-10-30-options-and-shared-terms-are-two-tiers; 2026-10-30-shared-terms-sit-on-one-rail, proposed).
 - **Mixed evidence in one set** sits on one plate of one size, the title under its edge; text that is not a number is never an accent figure (a tenure is a wordmark over a mono label); a missing asset shows the labelled placeholder.
 - **Peers with parts of different length share lines from 1024** (shareRows / subgrid).
 - **Service rows** carry service weight (plate 128, h5 label) and each draws its own service's scene; a service's drawing is registered once by route.
@@ -99,8 +99,8 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 |---|---|---|---|
 | **Claims backed by examples** (hard parts) | an illustration per claim; the example as a citation (client mark + case name + link) | the cited case's cover as the claim's picture | claim-visual-depicts-the-claim |
 | **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
-| **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers |
 | **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed), what-you-get-titled-terms-four-parts (proposed) |
+| **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set, sat on one rail the options drop onto | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers; shared-terms-sit-on-one-rail (proposed) |
 | **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
 | **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
 | **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |

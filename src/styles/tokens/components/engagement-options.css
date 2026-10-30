@@ -7,9 +7,10 @@
 
    Naming: --eop-{part}-{role}
      parts  heading · lead · title · body · term (a closing term led by its small bare drawing, 30 Oct 2026)
-     roles  text · tracking · measure · ink
+            · rail · stem · port · corner · term-mark
+     roles  text · tracking · measure · ink · size · width · radius · scale
 
-   No state tokens: nothing responds to a pointer. Every surface block
+   No state tokens: nothing responds to a pointer (still none). Every surface block
    declares every surface-dependent token.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -29,13 +30,23 @@
   /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
   --eop-body-text-rows: var(--text-lead);
   --eop-body-measure: var(--measure-lead);
-  /* A closing term reads at a card body's size (14), on the hairline a list tile carries. */
+  /* A closing term reads at a card body's size (14), under the shared rail. */
   --eop-term-text: var(--text-body-sm);
-  /* A component SIZE: a closing term's drawing, set bare at this scale of its drawing units (90 tall), so it
-     reads as a mark under the plated options, not as a fifth card image. At 1 every term's mark stands
-     its full drawing height, the same for every term whatever its width: a deliberate mark, not a
-     thumbnail (round 5, 30 Oct 2026). */
-  --eop-term-art-scale: 1;
+  /* A component SIZE: the term's mark at 0.6 of its drawing units, so it reads as a mark on the shared
+     rail and never as a fourth or fifth card image (round 6, 30 Oct 2026). */
+  --eop-term-art-scale: 0.6;
+  /* A component SIZE: the mark's fixed slot, so both terms' words start on one line whatever their
+     drawing's width. */
+  --eop-term-mark-inline: var(--space-160);
+  --eop-term-mark-block: var(--space-80);
+  /* The grammar's weight for a line that carries. */
+  --eop-rail-width: var(--border-width-2);
+  /* A component SIZE: port to rail. */
+  --eop-stem-size: var(--space-32);
+  --eop-port-size: var(--space-8);
+  /* A component SIZE: the radius where an outer stem turns into the rail. */
+  --eop-corner-size: var(--space-8);
+  --eop-port-radius: var(--radius-full);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
@@ -46,6 +57,8 @@
   --eop-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --eop-body-ink: var(--color-neutral-700); /* 8.14:1 */
   --eop-term-ink: var(--color-neutral-700); /* 8.14:1 */
+  --eop-rail-ink: var(--color-brandeis-300); /* decoration */
+  --eop-port-ink: var(--color-brandeis-500); /* the accent the plates' routes use */
 }
 
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
@@ -55,6 +68,8 @@
   --eop-title-ink: var(--color-neutral-900); /* 13.05:1 */
   --eop-body-ink: var(--color-neutral-800); /* 10.54:1 */
   --eop-term-ink: var(--color-neutral-800); /* 10.54:1 */
+  --eop-rail-ink: var(--color-brandeis-300); /* decoration */
+  --eop-port-ink: var(--color-brandeis-500); /* the accent the plates' routes use */
 }
 
 /* ── Surface: ink ── declared for self-containment; ink is reserved site-wide ─── */
@@ -64,6 +79,8 @@
   --eop-title-ink: var(--color-white); /* 17.26:1 */
   --eop-body-ink: var(--color-neutral-300); /* 11.07:1 */
   --eop-term-ink: var(--color-neutral-300); /* 11.07:1 */
+  --eop-rail-ink: var(--color-brandeis-500); /* decoration */
+  --eop-port-ink: var(--color-brandeis-300); /* the accent the plates' routes use */
 }
 
 /* ── Surface: blue ── declared for self-containment; no page carries a blue band ── */
@@ -73,4 +90,6 @@
   --eop-title-ink: var(--color-white); /* 6.23:1 */
   --eop-body-ink: var(--color-brandeis-50); /* 5.57:1 */
   --eop-term-ink: var(--color-brandeis-50); /* 5.57:1 */
+  --eop-rail-ink: var(--color-brandeis-300); /* decoration */
+  --eop-port-ink: var(--color-white); /* the accent the plates' routes use */
 }
