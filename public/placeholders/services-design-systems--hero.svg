@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1280" width="1600" height="1280" role="img" aria-label="Image to come · illustration">
 <rect width="1600" height="1280" fill="#EEF0F3"/>
-<rect x="1" y="1" width="1598" height="1278" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="67 67"/>
-<text x="114" y="313" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="67" letter-spacing="6.7" fill="#4A5361">IMAGE TO COME · ILLUSTRATION</text>
-<text x="114" y="511" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="90" fill="#2B323D"><tspan x="114" dy="0">One set of parts serving</tspan><tspan x="114" dy="131">every team: a single library</tspan><tspan x="114" dy="131">of components, in Figma and</tspan><tspan x="114" dy="131">in code, feeding several</tspan><tspan x="114" dy="131">product screens built by…</tspan></text>
+<rect x="1" y="1" width="1598" height="1278" fill="none" stroke="#BFC5CF" stroke-width="2" stroke-dasharray="38 38"/>
+<text x="314" y="428" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="38" letter-spacing="3.8" fill="#4A5361">IMAGE TO COME · ILLUSTRATION</text>
+<text x="314" y="536" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="49" fill="#2B323D"><tspan x="314" dy="0">One set of parts serving every team: a</tspan><tspan x="314" dy="71">single library of components, in Figma</tspan><tspan x="314" dy="71">and in code, feeding several product</tspan><tspan x="314" dy="71">screens built by different teams that</tspan><tspan x="314" dy="71">all match, with the rules for using</tspan><tspan x="314" dy="71">and changing the parts beside it.</tspan></text>
 </svg>

@@ -387,7 +387,7 @@ export class Scene {
   }
 
   /** Glimmer — loose peridot dots in a dashed ink ring, flat on a plane. Raw signal (§4b). */
-  glimmer(cx, cy, z, r = 40) {
+  glimmer(cx, cy, z, r = 40, dot = 3.2) {
     const ring = [];
     for (let i = 0; i <= 48; i++) {
       const t = (i / 48) * Math.PI * 2;
@@ -403,7 +403,7 @@ export class Scene {
       [4, -2],
     ]) {
       const [px, py] = this.p(cx + dx, cy + dy, z);
-      this.art.push(`<circle cx="${r2(px)}" cy="${r2(py)}" r="3.2" fill="${HEX.p400}"/>`);
+      this.art.push(`<circle cx="${r2(px)}" cy="${r2(py)}" r="${dot}" fill="${HEX.p400}"/>`);
     }
   }
 

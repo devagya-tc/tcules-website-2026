@@ -117,16 +117,16 @@ function wrap(s, max) {
   return lines;
 }
 
-function svgFor({ width, height, kind, shows }) {
+function svgFor({ width, height, kind, shows, file }) {
   const unit = Math.min(width, height);
   /* An illustration slot is contained, never cropped, and its smallest showing is 168 wide (a hard-parts
      claim's drawing, a home reason): its label is sized for that, so it is legible there. Every other
      kind is sized off the canvas, as before. */
-  const small168 = kind === 'illustration';
+  const small168 = kind === 'illustration' && file.startsWith('illustration--');
   const k = width / 168;
   const pad = small168 ? Math.round(12 * k) : Math.round(unit * 0.06);
-  const small = small168 ? Math.round(7 * k) : Math.round(unit * 0.03);
-  const body = small168 ? Math.round(9.5 * k) : Math.round(unit * 0.038);
+  const small = small168 ? Math.round(8 * k) : Math.round(unit * 0.03);
+  const body = small168 ? Math.round(9 * k) : Math.round(unit * 0.038);
   /* The label is set in the panel's central square and centred in the panel, because every placement
      crops: a 3:1 banner is 3:2 on a phone, a 4:5 slot is 6:5 in a photo-weighted split and 4:3 above
      the copy, a 16:9 cover is 4:5 in a story split. Anchored top-left, the label was the first thing
@@ -149,9 +149,9 @@ function svgFor({ width, height, kind, shows }) {
         .replace(/\s*\([^)]*_[^)]*\)/g, '')
         .replace(/`/g, '')
         .split(/(?<=\.)\s/)[0];
-  const maxLines = small168 ? 5 : 7;
+  const maxLines = small168 ? 6 : 7;
   const lines = brief ? wrap(brief, budget).slice(0, maxLines) : [];
-  const head = `Image to come · ${kind}`;
+  const head = small168 ? 'Illustration to come' : `Image to come · ${kind}`;
   /* The label block's height: the head's line, the gap to the brief, then the brief's lines. */
   const block = lines.length
     ? small + Math.round(body * 2.2) + Math.round(body * 1.45) * (lines.length - 1)

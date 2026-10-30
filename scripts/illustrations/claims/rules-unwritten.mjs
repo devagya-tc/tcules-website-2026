@@ -30,8 +30,8 @@ const ROW = ITEM.y + ITEM.d / 2;
 /** The slab's back edge (x), where the route goes under and rises on the hidden face. */
 const BACK = 222;
 /** The glimmer: the rule as it was heard. Its front edge clears the slab's shadowed run (§4a). */
-const GX = 286;
-const GR = 28;
+const GX = 280;
+const GR = 40;
 /** The rule card: x 40–200 on the slab's back edge. */
 const CARD = { x0: 40, x1: 200, y: 20, h: 170 };
 
@@ -44,14 +44,17 @@ export function draw(G) {
   const z = 22;
 
   // 2 · the rule as it was heard: a glimmer, screen-left
-  s.glimmer(GX, ROW, z, GR);
+  s.glimmer(GX, ROW, z, GR, 5);
 
   // 3 · the route leaves the glimmer and runs to the slab's back edge. It is behind the slab, so it
   //     is painted first and the slab hides its rise on the far face (§4a occlusion).
-  s.routeSolid([
-    [GX - GR, ROW, z],
-    [BACK - 10, ROW, z],
-  ]);
+  s.line(
+    [
+      [GX - GR, ROW, z],
+      [BACK - 10, ROW, z],
+    ],
+    { stroke: HEX.p400, width: 7.5 },
+  );
 
   // 4 · the product: the one solid blue plane
   const zb = s.slab(10, 20, BACK - 10, 200, z, 16);

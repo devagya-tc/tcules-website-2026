@@ -747,7 +747,7 @@ export function ChallengesBand({
                          assistive tech: the title already starts with the client's name. The title's
                          last word is glued to the arrow so it never wraps onto a line of its own. */
                       <a href={cite.href} className={styles.citation}>
-                        <Cluster as="span" colGap="block" rowGap="tight" align="center">
+                        <Layout as="span" rowGap="tight">
                           {mark ? (
                             <span aria-hidden="true">
                               <ClientMark {...mark} size="sm" />
@@ -762,7 +762,7 @@ export function ChallengesBand({
                               </span>
                             </span>
                           </span>
-                        </Cluster>
+                        </Layout>
                       </a>
                     ) : null}
                     <p

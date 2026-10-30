@@ -19,7 +19,7 @@ export type ClaimFigureRef = {
 };
 
 /** The set's exported size (one shared viewBox). */
-export const CLAIM_FIGURE_SIZE = { width: 462, height: 413 } as const;
+export const CLAIM_FIGURE_SIZE = { width: 442, height: 393 } as const;
 
 const CLAIMS: Record<string, ClaimFigureRef> = {
   'Rules nobody has written down.': {
