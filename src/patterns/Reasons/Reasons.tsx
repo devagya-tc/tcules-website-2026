@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import {
   ClientMark,
+  Cluster,
   Layout,
   Media,
   Section,
@@ -34,8 +35,11 @@ export type ReasonsMark = Omit<ClientMarkProps, 'className'> | { name: string; s
  * from what the reason's own sentence names; the sentence still renders in full under the title.
  *
  *   marks    the named clients' marks as a small cluster, two across
- *   cover    the case's own cover, with one figure under it where the page sets one
- *   figures  two to four figures, one under the other
+ *   cover    the case's own cover filling the plate, a caption strip under it (status dot + the fact)
+ *   figures  two to four entries, one under the other: whose (a wordmark) over what (a mono label)
+ *
+ * Every proof sits on one plate of one size (--rsn-proof-height), its ground the set's, the title
+ * under the plate's edge; the words never go inside it. No accent figure.
  */
 export type ReasonsProof =
   | { kind: 'marks'; marks: readonly ReasonsMark[] }
@@ -131,26 +135,37 @@ export type ReasonsProps = {
  *  so 168 at the 140 step. */
 const FIGURE_SIZES = '170px';
 
-/** The case cover's rendered width: the proof box's height less its figure, at 16:9, ~300 at most. */
-const COVER_SIZES = '(min-width: 768px) 320px, 100vw';
+/** The case cover's rendered width: the plate's full width, ~400 at most. */
+const COVER_SIZES = '(min-width: 1024px) 400px, 100vw';
 
-/** One figure: the fact over whose it is, at `tight` (8), a stat and its unit. */
-function ProofFigure({ value, label }: ReasonsFigure) {
-  return (
-    <Layout rowGap="tight">
-      <p className={styles.proofValue}>{value}</p>
-      {label ? <p className={styles.proofLabel}>{label}</p> : null}
-    </Layout>
-  );
-}
-
-/** A reason's proof in its box of one height for the set, its content centred in it (the cover and
- *  its figure fill it). */
+/** A reason's proof on its plate: one fixed-size ground for the set (never a container for the words).
+ *  Marks and figures centre in it; the cover fills it from the top over a caption strip. */
 function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
-  let inner: ReactNode;
-  if (proof.kind === 'marks') {
-    inner = (
-      <Layout columns={{ base: [1, 1] }} colGap="gutter" rowGap="stack" align="center">
+  if (proof.kind === 'cover') {
+    return (
+      <div className={cx(styles.proof, flat && styles.proofFlat)} aria-hidden="true">
+        <Layout fillFirst className={styles.proofFill}>
+          <div className={styles.cover}>
+            <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
+          </div>
+          {proof.figure ? (
+          <div className={styles.caption}>
+            <Cluster colGap="tight" justify="between" align="center" nowrap>
+              <Cluster colGap="tight" align="center" nowrap>
+                <span className={styles.status} />
+                <span className={styles.captionValue}>{proof.figure.value}</span>
+              </Cluster>
+              {proof.figure.label ? <span className={cx(styles.proofLabel, styles.captionLabel)}>{proof.figure.label}</span> : null}
+            </Cluster>
+          </div>
+          ) : null}
+        </Layout>
+      </div>
+    );
+  }
+  const inner =
+    proof.kind === 'marks' ? (
+      <Layout columns={{ base: [1, 1] }} colGap="gutter" rowGap="stack" align="center" justifyItems="center">
         {proof.marks.map((mark) =>
           mark.src ? (
             <ClientMark key={mark.name} {...mark} />
@@ -161,27 +176,23 @@ function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
           ),
         )}
       </Layout>
-    );
-  } else if (proof.kind === 'cover') {
-    inner = (
-      <Layout rowGap="text">
-        <div className={cx(styles.cover, flat && styles.coverFlat)}>
-          <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
-        </div>
-        {proof.figure ? <ProofFigure {...proof.figure} /> : null}
-      </Layout>
-    );
-  } else {
-    inner = (
-      <Layout rowGap="text">
+    ) : (
+      <Layout rowGap="text" justifyItems="center">
         {proof.figures.map((figure) => (
-          <ProofFigure key={`${figure.value}-${figure.label ?? ''}`} {...figure} />
+          <Layout
+            key={`${figure.value}-${figure.label ?? ''}`}
+            rowGap="inline"
+            justifyItems="center"
+            className={styles.entry}
+          >
+            {figure.label ? <p className={styles.wordmark}>{figure.label}</p> : null}
+            <p className={styles.proofLabel}>{figure.value}</p>
+          </Layout>
         ))}
       </Layout>
     );
-  }
   return (
-    <div className={cx(styles.proof, flat && styles.proofFlat)} aria-hidden="true">
+    <div className={cx(styles.proof, styles.proofInset)} aria-hidden="true">
       <Layout fillFirst align="center" className={styles.proofFill}>
         {inner}
       </Layout>
@@ -272,9 +283,7 @@ export function Reasons({
   );
 
   const open = arrangement === 'open';
-  // A set whose covers carry no figure (offer pages) sizes its proof box to the cover: 16:9 at the
-  // track's width, so the evidence is the visual and no ground floats around it.
-  const flatProofs = items.some((i) => i.proof?.kind === 'cover') && !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
+  const allProof = shown.length > 0 && shown.every((i) => i.proof);
   const set = (
     <Layout
       as="ul"
@@ -296,7 +305,7 @@ export function Reasons({
               ? { base: 1, lg: 2 }
               : { base: 1, lg: 2, xl: 3 }
       }
-      colGap={open ? 'column' : 'none'}
+      colGap={open ? (allProof ? 'gutter' : 'column') : 'none'}
       rowGap={open ? 'column' : 'none'}
     >
       {shown.map((item, index) => (

@@ -47,6 +47,8 @@ export type GatewayPathsProps = {
  * cannot be one link, so the path is not a card: its title and words are read, and its links are
  * the actions.
  *
+ * From 1024 the two paths share lines: drawing, words and rows each start level across both.
+ *
  * Two EQUAL peers side by side from 1024, `column` (64) apart like the board (no box, no ground: the
  * space is what separates them), one above the other below it. Each path reads down: its own drawing
  * in a box of one height (so the two titles sit on one line), the title (h3, the serif: the path's
@@ -64,47 +66,46 @@ export function GatewayPaths({ paths, titleAs = 'h3', className }: GatewayPathsP
       columns={{ lg: 2 }}
       colGap="column"
       rowGap="stack"
+      shareRows={paths.every((p) => p.visual != null) ? 3 : undefined}
       className={cx(styles.root, className)}
     >
       {paths.map((path) => (
-        <li key={path.id} data-sfig-host="">
-          <Layout rowGap="block">
-            {path.visual != null ? (
-              <span className={styles.pathVisual} aria-hidden="true">
-                {path.visual}
-              </span>
-            ) : null}
-            <Layout rowGap="text">
-              <Title className={styles.pathTitle}>{path.title}</Title>
-              {path.body.map((paragraph, index) => (
-                <p key={index} className={styles.pathBody}>
-                  {paragraph}
-                </p>
-              ))}
-            </Layout>
-            <Layout as="ul" rowGap="text">
-              {path.links.map((link) => (
-                <li key={link.href}>
-                  <a href={link.href} className={styles.serviceRow}>
-                    <Layout columns={{ base: ['auto', 1] }} colGap="text" align="center">
-                      <span className={styles.serviceArt} aria-hidden="true">
-                        <Sketch name={link.scene} />
-                      </span>
-                      {/* The arrow follows the words inline, so it stays with the last one when the
-                          label wraps, rather than standing apart at the column's far edge. */}
-                      <span className={styles.serviceLabel}>
-                        {link.label}
-                        <span className={styles.serviceArrow} aria-hidden="true">
-                          <Icon name="arrow-right" />
-                        </span>
-                      </span>
-                    </Layout>
-                  </a>
-                </li>
-              ))}
-            </Layout>
+        <Layout as="li" key={path.id} rowGap="block" data-sfig-host="">
+          {path.visual != null ? (
+            <span className={styles.pathVisual} aria-hidden="true">
+              {path.visual}
+            </span>
+          ) : null}
+          <Layout rowGap="text">
+            <Title className={styles.pathTitle}>{path.title}</Title>
+            {path.body.map((paragraph, index) => (
+              <p key={index} className={styles.pathBody}>
+                {paragraph}
+              </p>
+            ))}
           </Layout>
-        </li>
+          <Layout as="ul" rowGap="text">
+            {path.links.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} className={styles.serviceRow}>
+                  <Layout columns={{ base: ['auto', 1] }} colGap="text" align="center">
+                    <span className={styles.serviceArt} aria-hidden="true">
+                      <Sketch name={link.scene} />
+                    </span>
+                    {/* The arrow follows the words inline, so it stays with the last one when the
+                          label wraps, rather than standing apart at the column's far edge. */}
+                    <span className={styles.serviceLabel}>
+                      {link.label}
+                      <span className={styles.serviceArrow} aria-hidden="true">
+                        <Icon name="arrow-right" />
+                      </span>
+                    </span>
+                  </Layout>
+                </a>
+              </li>
+            ))}
+          </Layout>
+        </Layout>
       ))}
     </Layout>
   );

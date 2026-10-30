@@ -210,6 +210,13 @@ export type LayoutProps = {
    */
   pinLast?: boolean;
   /**
+   * From lg (1024), each child spans this many rows of the grid and lays its OWN children on them (CSS
+   * subgrid), so the parts of side-by-side items start on one line (home paths, 30 Oct 2026). Each
+   * child must be a single-track Layout with exactly that many children; its own rowGap still sets the
+   * seam between them. Below lg nothing changes.
+   */
+  shareRows?: 2 | 3 | 4;
+  /**
    * The FIRST child's row takes a stretched stack's spare height (cmp-feature fix round 2, 6 Oct
    * 2026) — the mirror of `pinLast`. For a card stretched to a taller neighbour whose cover should
    * grow into the space rather than leave it empty under the copy: the spotlight's lead at 1024,
@@ -320,7 +327,7 @@ export type LayoutProps = {
   style?: CSSProperties;
   children: ReactNode;
   id?: string;
-};
+} & { [key: `data-${string}`]: string | undefined };
 
 /** Turn a column shape into a grid-template-columns value. */
 function track(spec: ColumnSpec): string {
@@ -510,6 +517,7 @@ export function Layout({
   reverse,
   offset,
   pinLast = false,
+  shareRows,
   fillFirst = false,
   fillLast = false,
   stagger = false,
@@ -522,6 +530,7 @@ export function Layout({
   style,
   children,
   id,
+  ...data
 }: LayoutProps) {
   // lead, reverse and offset all place the first child; precedence is lead > reverse > offset and
   // the losers emit nothing, so two rules never fight over one grid-column. A scroll row has no
@@ -543,6 +552,7 @@ export function Layout({
         : columnsToVars(columns, reversed);
   return (
     <Tag
+      {...data}
       id={id}
       ref={ref}
       tabIndex={tabIndex}
@@ -563,6 +573,7 @@ export function Layout({
         ...reversed.map(([bp, on]) => styles[`${on ? 'reverse' : 'forward'}-${bp}`]),
         ...offsets.map(([bp, n]) => styles[`offset-${bp}-${n}`]),
         pinLast && styles['pin-last'],
+        shareRows && styles[`share-rows-${shareRows}`],
         fillFirst && styles['fill-first'],
         fillLast && styles['fill-last'],
         stagger && scroll !== 'always' && styles.stagger,

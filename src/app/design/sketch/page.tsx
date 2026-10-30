@@ -21,6 +21,7 @@ const SPECIALIST: readonly SketchName[] = [
   'specialist-prototype',
   'specialist-new-product',
   'specialist-audit',
+  'specialist-readiness',
 ];
 /** The article scenes: each drawn for one insight, its cover until a real one exists. */
 const ARTICLE: readonly SketchName[] = [

@@ -111,8 +111,8 @@ export default function LayoutSpecimenPage() {
           <Layout columns={[7, 5]} colGap="column" rowGap="text" align="first-baseline">
             <p className={s.specFirstBaselineLarge}>A large first line</p>
             <p>
-              A smaller reply beside it that runs on to a second line, its first line on the large
-              line&apos;s baseline.
+              A smaller reply beside it that runs on to a second line, its first line on the
+              large line&apos;s baseline.
             </p>
           </Layout>
         </Specimen>
@@ -243,6 +243,24 @@ export default function LayoutSpecimenPage() {
               <Box tall>a taller group</Box>
               <Box>a field</Box>
             </Layout>
+          </Layout>
+        </Specimen>
+
+        <Specimen
+          title="columns={{ lg: 2 }} shareRows={3} — parts of two items on shared lines"
+          note="From 1024 each item's three parts start on one line across both items even though item 1's middle part is taller; at 390 they stack as usual."
+        >
+          <Layout columns={{ lg: 2 }} colGap="column" rowGap="stack" shareRows={3}>
+            {[
+              "A long body that runs to about three lines at desktop width, written so that this item's middle part is taller than the other's and the rows below must still start together.",
+              'A one-line body.',
+            ].map((body, i) => (
+              <Layout key={i} rowGap="block" className={s.box}>
+                <Box>head</Box>
+                <p>{body}</p>
+                <Box accent>rows start here</Box>
+              </Layout>
+            ))}
           </Layout>
         </Specimen>
 

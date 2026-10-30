@@ -284,6 +284,14 @@ export const PLACEHOLDER_SLOTS: Readonly<
     shows:
       "Auxentios' industrial quoting product: one shared quoting workflow where six specialist roles contribute to the same quote.",
   },
+  'case-cover:connectx': {
+    src: '/placeholders/case-cover--connectx.svg',
+    width: 1600,
+    height: 900,
+    kind: 'product shot',
+    shows:
+      "ConnectX's AI dashboard: a plain-language question about a building answered by its digital twin, with the right data and assets in view.",
+  },
   'case-cover:curamcare': {
     src: '/placeholders/case-cover--curamcare.svg',
     width: 1600,
