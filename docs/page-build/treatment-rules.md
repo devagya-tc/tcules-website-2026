@@ -85,3 +85,25 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 - The "Why teams choose Tcules" outline button stays and /why-tcules gets built, after the service-page set is improved.
 - Service pages keep both asks: the ink "Tell us what you're working on" island and the closing enquiry form (2026-10-30-service-pages-keep-both-asks).
 - What you get foot: keep the current build for now; no ruling, the owner will change it further.
+
+## 6 · Balancing the visual registers (owner, 30 Oct; logged)
+
+1. **Scale decides first.** Flat graphics are item-scale (one per item, sets of 4+ concrete things: deliverables,
+   services, engagement options). Isometric illustrations are band-scale (one per band, or one each for 2–4 peer
+   claims). 2026-10-30-flat-for-items-illustration-for-ideas.
+2. **Neighbouring bands never share a register** (flat · isometric · IRL photo · proof · figures).
+   2026-10-30-adjacent-bands-change-visual-register.
+3. **Content still picks the register** (§ 1). Revised rows:
+
+| The content is… | Its visual is… | Never | Rulings |
+|---|---|---|---|
+| **Claims backed by examples** (hard parts) | an illustration per claim; the example as a citation (client mark + case name + link) | the cited case's cover as the claim's picture | claim-visual-depicts-the-claim |
+| **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
+| **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers |
+| **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed) |
+| **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
+| **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
+| **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |
+
+The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a
+citation; only a band whose subject is the evidence (home's proof band, selected work) shows covers.
