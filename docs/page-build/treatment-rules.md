@@ -18,8 +18,6 @@ arrangement holds it → what it must never do.**
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
-| **An abstract claim** (a reason to choose us, on offer pages) | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
-| **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar) | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
 | **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
 | **A way onward** (questions answered by links to other services, closing a set) | the onward cell: dashed edge in the set's last cell, each question over its answer, links in place | a text cell dropped into the grid, a solid tile that reads as one more item | 2026-10-30-onward-cell |
@@ -48,6 +46,19 @@ arrangement holds it → what it must never do.**
 - **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
+- **A cell filling a hole in a tile grid is a cell of its own kind** (dashed edge, grid radius and inset), at every track count; never a whole row of its own.
+- **A countdown indicator shows where a carousel is heading**: the old bar stays empty, the next is full from the first frame; a wrap never lights the bars it passes.
+- **Outline hover lays the ghost's pale tint under it and firms the line**; press one tint deeper; never the blue solid fill.
+- **Two actions = different jobs?** A way deeper (head end action) and an ask (its own ink island band, one solid to ROUTES.contact, labelled 'Start a project') are separated, not paired. Check order: the island touches no island or tint, and sits two bands above the enquiry island.
+- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are secondary, led by small bare drawings on a different track count, never hairline-ruled text.
+- **Mixed evidence in one set** sits on one plate of one size, the title under its edge; text that is not a number is never an accent figure (a tenure is a wordmark over a mono label); a missing asset shows the labelled placeholder.
+- **Peers with parts of different length share lines from 1024** (shareRows / subgrid).
+- **Service rows** carry service weight (plate 128, h5 label) and each draws its own service's scene; a service's drawing is registered once by route.
+- **A worked hypothetical** is a scenario: words beside one flat drawing of its own story, label in the mono legend voice.
+- **A table of peer items** (levels, places, options) renders as drawn items, one drawing per row; a table read across rows stays a table. Router tables never drop a column.
+- **A numbered method without its own drawing** sits beside its bound case capture, else the page's service drawing or a scenario drawing.
+- **A drawing is reused only for an item arguing the same thing, never twice on one page.** Scene keys ignore trailing punctuation.
+- **A cited case's picture is the case's own cover**, never a page binding matched by client name.
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
 
 ## 3 · How to use it on a section nobody has designed
@@ -57,16 +68,13 @@ arrangement holds it → what it must never do.**
 3. Arrange it with § 2. Squint: more than one idea down the page?
 4. If a review overturns a row here, update the row and the ruling together.
 
-## 4 · Open on /services/product-design (owner, 29 Oct; next pass, NOT in the PR)
+## 4 · The four PD sections, redesigned in round 5 (owner, 30 Oct)
 
-The owner will edit these sections on this branch to sharpen the mapping:
-1. **The hard parts of SaaS product design** (Doodle diagram above four labelled problems, each with an
-   "Example:" line, ruled 2×2). DONE on this branch (30 Oct, round 5).
-2. **How we work together** (flat engagement graphics, two closing terms, closing link).
-3. **Why teams choose Tcules** (three isometric reasons, two head links).
-4. (done 30 Oct: titles, terms foot, label dropped) **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
-3. **Why teams choose Tcules** (three isometric reasons, two head links). DONE on this branch (30 Oct, round 5).
-4. **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
-   terms).
+The four sections the owner marked on /services/product-design were redesigned in round 5 and their
+rulings generalised into the tables above, so every service page maps the same way:
+1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE.
+2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
+3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE.
+4. **What you get**: titled drawn deliverables, terms as the band's foot, the onward cell. DONE.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
