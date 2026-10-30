@@ -134,6 +134,11 @@ export function EngagementOptions({
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
   const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
+  const optionTracks = dense
+    ? ({ base: 1, md: 2, lg: 3, xl: 5 } as const)
+    : three
+      ? ({ base: 1, md: 3 } as const)
+      : ({ base: 1, md: 2, lg: 4 } as const);
   return (
     <Section
       id={id}
@@ -169,18 +174,7 @@ export function EngagementOptions({
              column below: a borderless tile each (the drawing's plate is the image, the
              name and its words under it), 32 across and a `column` down the set — the row seam of
              every borderless card set. */
-          <Layout
-            as="ul"
-            columns={
-              dense
-                ? { base: 1, md: 2, lg: 3, xl: 5 }
-                : three
-                  ? { base: 1, md: 3 }
-                  : { base: 1, md: 2, lg: 4 }
-            }
-            colGap="gutter"
-            rowGap="column"
-          >
+          <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
             {shown.map((option) => (
               <li key={option.title}>
                 <Layout rowGap="block">
@@ -220,10 +214,13 @@ export function EngagementOptions({
           </Layout>
         )}
         {terms.length > 0 ? (
+          /* The terms sit on the options' own tracks and gutter, so each starts under an option
+             (two terms take the first two columns of three) and reads as a lighter tier of the same
+             grid, never a row of its own proportions (round 5, 30 Oct 2026). */
           <Layout
             as="ul"
-            columns={{ base: 1, md: Math.min(terms.length, 3) }}
-            colGap="column"
+            columns={arrangement === 'grid' ? optionTracks : { base: 1, md: 3 }}
+            colGap="gutter"
             rowGap="column"
           >
             {terms.map((term, index) => (

@@ -92,11 +92,19 @@
   outline-offset: var(--ofs-ring-offset);
 }
 
-/* The band's FOOT: one hairline across the whole content column under the set, the terms unruled
-   beneath it. The padding is the foot's own inset under its line, not a margin. */
-.foot {
-  border-block-start: var(--ofs-rule-width) solid var(--ofs-rule-ink);
-  padding-block-start: var(--gap-block);
+/* The band's FOOT: a term's words, at the body role, kept to a reading measure beside its title. */
+.termBody {
+  color: var(--ofs-body-ink);
+  font: var(--ofs-body-text);
+  max-inline-size: var(--ofs-body-measure);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* From 1024 a term's words take the set's second and third tracks beside its title. */
+@media (min-width: 1024px) {
+  .termBody {
+    grid-column: span 2;
+  }
 }
 
 .termTitle {

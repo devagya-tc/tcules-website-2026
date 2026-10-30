@@ -177,6 +177,14 @@
   text-align: center;
 }
 
+/* A single count's number ("3" of "3 years"): the stat role, large, in the title's ink. */
+.stat {
+  font: var(--rsn-proof-stat-text);
+  letter-spacing: var(--rsn-proof-stat-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--rsn-title-ink);
+}
+
 /* Whose it is: the mono label voice, uppercase in presentation only. */
 .proofLabel {
   font: var(--rsn-proof-label-text);
@@ -193,4 +201,13 @@
   text-wrap: balance; /* a long name holds two even lines, so the four marks keep one weight */
   text-align: center;
   color: var(--rsn-wordmark-ink);
+}
+
+/* The head's action: after the lead in reading order; from 1024 it takes the heading row's end
+   track, centred on the heading (the lead then falls under the heading in its own track). */
+@media (min-width: 1024px) {
+  .headAction {
+    grid-row: 1;
+    grid-column: 2;
+  }
 }

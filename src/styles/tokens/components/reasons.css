@@ -49,6 +49,9 @@
   --rsn-proof-label-text: var(--text-eyebrow);
   --rsn-proof-label-tracking: var(--text-eyebrow-tracking);
   --rsn-plate-radius: var(--radius-8);
+  /* A plate's single count ("3 years"): the figures treatment, the number at the large stat role. */
+  --rsn-proof-stat-text: var(--text-stat-xl);
+  --rsn-proof-stat-tracking: var(--text-stat-xl-tracking);
 }
 
 @media (max-width: 767px) {

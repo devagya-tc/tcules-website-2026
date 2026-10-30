@@ -30,8 +30,12 @@ export type BentoItem = {
   span?: 1 | 2;
 };
 
-/** One route out of the set: a question and the services that answer it. */
-export type BentoRoute = { question: string; answer: ReactNode };
+/**
+ * One route out of the set: a question and the services that answer it. A closing line authored as a
+ * statement with no question ("One hard interaction to try in code is …") is a route with no question:
+ * its words stand in the answer role, unchanged.
+ */
+export type BentoRoute = { question?: string; answer: ReactNode };
 
 export type BentoProps = {
   /** The tiles, in reading order. Built for six on two rows: two wide, four single. */
@@ -203,12 +207,7 @@ export function ServiceTile({
   ) : null;
   const button = action?.trim() ? (
     <Cluster colGap="tight">
-      <Button
-        as="span"
-        emphasis="link"
-        tone="primary"
-        icon={<Icon name="arrow-right" />}
-      >
+      <Button as="span" emphasis="link" tone="primary" icon={<Icon name="arrow-right" />}>
         {action}
       </Button>
     </Cluster>
@@ -307,9 +306,9 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, onward }
           data-fill-md={items.length % 2 === 1 ? 'true' : undefined}
         >
           <Layout rowGap="block">
-            {onward.map((route) => (
-              <Layout key={route.question} rowGap="tight">
-                <p className={styles.question}>{route.question}</p>
+            {onward.map((route, index) => (
+              <Layout key={route.question ?? index} rowGap="tight">
+                {route.question ? <p className={styles.question}>{route.question}</p> : null}
                 <p className={styles.answer}>{route.answer}</p>
               </Layout>
             ))}

@@ -20,7 +20,7 @@ arrangement holds it → what it must never do.**
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
 | **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
-| **A way onward** (questions answered by links to other services, closing a set) | the onward cell: dashed edge in the set's last cell, each question over its answer, links in place | a text cell dropped into the grid, a solid tile that reads as one more item | 2026-10-30-onward-cell |
+| **A way onward** (questions answered by links to other services, closing a set) | the onward cell: dashed edge in the set's last cell, each question over its answer, links in place; a linked closing statement with no question takes the cell too, words whole | a text cell dropped into the grid, a solid tile that reads as one more item | 2026-10-30-onward-cell |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
 | **An industry** | the sector photo (a client's user at a good moment) | a metaphor, a generic stock scene | sector photos ruling (26 Oct) |
@@ -42,7 +42,7 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **A band's closing terms** (who does the work / what we need / where our part stops) are the band's FOOT: one full-width hairline under the whole set, the terms unruled side by side, a role smaller than the items. Never on the set's own tracks and gap (2026-10-30-what-you-get-titled-terms-foot).
+- **A band's closing terms** (who does the work / what we need / where our part stops) are the band's FOOT: a section beat (96) under the whole set, no hairline, one term per row with its title in the set's first track and its words across the other two, a role smaller than the items. Never side by side on the set's own tracks, where they read as one more row (2026-10-30-what-you-get-titled-terms-foot; round 5 critic, 30 Oct).
 - **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
@@ -50,7 +50,7 @@ arrangement holds it → what it must never do.**
 - **A countdown indicator shows where a carousel is heading**: the old bar stays empty, the next is full from the first frame; a wrap never lights the bars it passes.
 - **Outline hover lays the ghost's pale tint under it and firms the line**; press one tint deeper; never the blue solid fill.
 - **Two actions = different jobs?** A way deeper (head end action) and an ask (its own ink island band, one solid to ROUTES.contact, labelled 'Start a project') are separated, not paired. Check order: the island touches no island or tint, and sits two bands above the enquiry island.
-- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are secondary, led by small bare drawings on a different track count, never hairline-ruled text.
+- **Engagement tiers**: options are the subject (plated flat drawings); terms that hold for every option are secondary, each led by its bare drawing at full drawing height, on the options' own tracks and gutter (two terms take columns 1–2), never hairline-ruled text.
 - **Mixed evidence in one set** sits on one plate of one size, the title under its edge; text that is not a number is never an accent figure (a tenure is a wordmark over a mono label); a missing asset shows the labelled placeholder.
 - **Peers with parts of different length share lines from 1024** (shareRows / subgrid).
 - **Service rows** carry service weight (plate 128, h5 label) and each draws its own service's scene; a service's drawing is registered once by route.

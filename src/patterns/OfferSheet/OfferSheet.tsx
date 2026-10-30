@@ -226,53 +226,52 @@ export function OfferSheet({
         </div>
       ) : undefined));
 
+  /* The band's FOOT (owner, 30 Oct 2026): the terms belong to the whole band, so they leave the set's
+     grid. A section beat (96) parts them from the promises, and they take an arrangement of their
+     own: one term per row, its title in the set's first track and its words across the other two,
+     so the foot keeps the grid's edges while reading as a different kind of thing. No hairline: a rule over three columns read as the set's sixth row (round 5 critic). */
   const foot = terms?.length ? (
-    <div className={styles.foot}>
-      <Layout
-        as="ul"
-        columns={{ base: 1, lg: terms.length % 3 === 0 ? 3 : 2 }}
-        colGap="gutter"
-        rowGap="stack"
-      >
-        {terms.map((t) => (
-          <li key={t.title}>
-            <Layout rowGap="text">
-              <h3 className={styles.termTitle}>{t.title}</h3>
-              {t.bodyHtml ? (
-                <p className={styles.body} dangerouslySetInnerHTML={{ __html: t.bodyHtml }} />
-              ) : t.body ? (
-                <p className={styles.body}>{t.body}</p>
-              ) : null}
-            </Layout>
-          </li>
-        ))}
-      </Layout>
-    </div>
+    <Layout as="ul" rowGap="block">
+      {terms.map((t) => (
+        <li key={t.title}>
+          <Layout columns={{ base: 1, lg: 3 }} colGap="gutter" rowGap="text">
+            <h3 className={styles.termTitle}>{t.title}</h3>
+            {t.bodyHtml ? (
+              <p className={styles.termBody} dangerouslySetInnerHTML={{ __html: t.bodyHtml }} />
+            ) : t.body ? (
+              <p className={styles.termBody}>{t.body}</p>
+            ) : null}
+          </Layout>
+        </li>
+      ))}
+    </Layout>
   ) : null;
 
   return (
     <Section id={id} surface={surface} aria-labelledby={headingId} data-band="offer-sheet">
-      <Layout rowGap="stack">
-        {lead ? (
-          <Layout rowGap="block">
+      <Layout rowGap="section">
+        <Layout rowGap="stack">
+          {lead ? (
+            <Layout rowGap="block">
+              <h2 id={headingId} className={styles.heading}>
+                {heading}
+              </h2>
+              <p className={styles.lead}>{lead}</p>
+            </Layout>
+          ) : (
             <h2 id={headingId} className={styles.heading}>
               {heading}
             </h2>
-            <p className={styles.lead}>{lead}</p>
-          </Layout>
-        ) : (
-          <h2 id={headingId} className={styles.heading}>
-            {heading}
-          </h2>
-        )}
-        {side ? (
-          <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
-            {sheet}
-            {side}
-          </Layout>
-        ) : (
-          sheet
-        )}
+          )}
+          {side ? (
+            <Layout columns={{ base: 1, lg: [2, 1] }} colGap="column" rowGap="stack">
+              {sheet}
+              {side}
+            </Layout>
+          ) : (
+            sheet
+          )}
+        </Layout>
         {foot}
       </Layout>
     </Section>

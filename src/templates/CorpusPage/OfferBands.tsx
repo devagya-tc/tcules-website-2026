@@ -62,7 +62,15 @@ import {
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { bindingNamed, caseCover, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
+import {
+  bindingNamed,
+  caseCover,
+  coverFor,
+  hasSlot,
+  slotImage,
+  slugOf,
+  type SlotImage,
+} from './images';
 import {
   ChallengesBand,
   CloseBand,
@@ -151,11 +159,7 @@ export type OfferContext = {
 };
 
 /** The scene assigned to one item of a band, by the item's title (or a router item's href). */
-function sceneFor(
-  ctx: OfferContext,
-  band: CorpusBand,
-  key: string,
-): SketchName | undefined {
+function sceneFor(ctx: OfferContext, band: CorpusBand, key: string): SketchName | undefined {
   return ctx.scenes?.items[band.id]?.[offerSceneKey(key)] ?? ctx.scenes?.items[band.id]?.[key];
 }
 
@@ -948,7 +952,7 @@ function sentencesOf(runs: readonly InlineRun[]): Sentence[] {
 /** A closing paragraph authored as questions each answered by where to go (the onward cell): undefined when it is not. */
 function routesOf(
   paragraphs: readonly InlineRun[][],
-): { question: string; answer: InlineRun[] }[] | undefined {
+): { question?: string; answer: InlineRun[] }[] | undefined {
   const routes: { question: string; answer: InlineRun[] }[] = [];
   for (const s of paragraphs.flatMap(sentencesOf)) {
     if (s.text.endsWith('?')) routes.push({ question: s.text, answer: [] });
@@ -965,7 +969,10 @@ function routesOf(
 }
 
 /** A router row's words: the second column, and a third ("Best for") as a sentence after it. */
-function routerBody(table: Extract<CorpusBlock, { type: 'table' }>, row: InlineRun[][]): string {
+function routerBody(
+  table: Extract<CorpusBlock, { type: 'table' }>,
+  row: InlineRun[][],
+): string {
   const second = plain(row[1] ?? []).replace(/\.$/, '');
   return table.header.length >= 3
     ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
@@ -1031,27 +1038,32 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
   const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
   if (rows.length >= 3 && scenes.every(Boolean)) {
-    const four = rows.length === 7 || rows.length === 8 || rows.length === 4;
-    const note =
-      closing.length > 0 ? (
-        <>
-          {closing.map((runs, index) => (
-            <Fragment key={index}>
-              {index > 0 ? ' ' : null}
-              {renderInline(runs)}
-            </Fragment>
-          ))}
-        </>
-      ) : undefined;
-    const inCell = four && rows.length % 4 !== 0;
-    /* The closing router is the onward cell (owner, 30 Oct 2026); a closing paragraph that is not
-       questions answered by links keeps the plain text cell. */
-    const routes = inCell ? routesOf(closing) : undefined;
+    /* The closing router is the onward cell (owner, 30 Oct 2026) on every service page that closes
+       its set with a way onward: questions each answered by links, or one linked statement kept whole
+       (its words unchanged, no question). A closing with no link stays below the set. */
+    const routes =
+      routesOf(closing) ??
+      (closing.length > 0 && closing.every(hasLink)
+        ? [
+            {
+              answer: closing.flatMap((runs, index) =>
+                index > 0 ? [{ type: 'text', text: ' ' } as InlineRun, ...runs] : runs,
+              ),
+            },
+          ]
+        : undefined);
+    /* Tracks: seven or eight take four, 4 + 3 (owner, 29 Oct 2026, Q7); others three. The onward cell
+       fills the hole the last row leaves and is never a row of its own, so a set that would fill
+       three tracks exactly takes four and leaves the onward cell its space. */
+    const n = rows.length;
+    const four = n === 7 || n === 8 || n === 4 || (routes !== undefined && n % 3 === 0);
     return wrap(
       <Bento
         tracks={four ? 4 : 3}
-        note={inCell && !routes ? note : undefined}
-        onward={routes?.map((r) => ({ question: r.question, answer: renderInline(r.answer) }))}
+        onward={routes?.map((r) => ({
+          ...(r.question ? { question: r.question } : {}),
+          answer: renderInline(r.answer),
+        }))}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,
@@ -1060,7 +1072,7 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
           scene: scenes[index] as SketchName,
         }))}
       />,
-      inCell ? undefined : closingFooter,
+      routes ? undefined : closingFooter,
     );
   }
   const glyphs = rows.map((row) => glyphForRoute(row.href));

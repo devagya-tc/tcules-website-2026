@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 import yaml from 'js-yaml';
@@ -178,7 +178,8 @@ function liveCaseLinks<T>(node: T): T {
   if (node && typeof node === 'object') {
     const out: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(node)) {
-      out[key] = key === 'href' && typeof value === 'string' ? liveHref(value) : liveCaseLinks(value);
+      out[key] =
+        key === 'href' && typeof value === 'string' ? liveHref(value) : liveCaseLinks(value);
     }
     return out as T;
   }
@@ -249,6 +250,16 @@ export function parseCorpusFile(file: string, text: string): CorpusPage {
 }
 
 let cache: CorpusPage[] | null = null;
+/** The newest modification time among the corpus files when `cache` was filled. */
+let cacheStamp = 0;
+
+/**
+ * The corpus's freshness stamp. A dev server keeps this module alive across `_pages/` edits and
+ * branch checkouts (a markdown file is not in the module graph), so a module-level cache served the
+ * copy as it stood when the server started (round 5, 30 Oct 2026). Stat'ing ~100 files is cheap.
+ */
+const stampOf = (dir: string, files: readonly string[]): number =>
+  files.reduce((max, f) => Math.max(max, statSync(join(dir, f)).mtimeMs), 0) + files.length;
 
 /**
  * Every FIRST- and SECOND-level page (`home`, `about`, `services__product-design`), parsed once per
@@ -256,11 +267,19 @@ let cache: CorpusPage[] | null = null;
  * corpus pass and are skipped.
  */
 export function loadCorpus(dir: string = CORPUS_DIR): CorpusPage[] {
-  if (dir === CORPUS_DIR && cache) return cache;
-  const pages = readdirSync(dir)
-    .filter((f) => f.endsWith('.md') && f.replace(/\.md$/, '').split('__').length <= 2)
+  const dev = process.env.NODE_ENV !== 'production';
+  if (dir === CORPUS_DIR && cache && !dev) return cache;
+  const files = readdirSync(dir).filter(
+    (f) => f.endsWith('.md') && f.replace(/\.md$/, '').split('__').length <= 2,
+  );
+  const stamp = dir === CORPUS_DIR && dev ? stampOf(dir, files) : 0;
+  if (dir === CORPUS_DIR && cache && stamp === cacheStamp) return cache;
+  const pages = files
     .map((f) => parseCorpusFile(f, readFileSync(join(dir, f), 'utf8')))
     .sort((a, b) => a.route.localeCompare(b.route));
-  if (dir === CORPUS_DIR) cache = pages;
+  if (dir === CORPUS_DIR) {
+    cache = pages;
+    cacheStamp = stamp;
+  }
   return pages;
 }

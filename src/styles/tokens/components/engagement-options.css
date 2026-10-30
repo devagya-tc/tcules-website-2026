@@ -32,8 +32,10 @@
   /* A closing term reads at a card body's size (14), on the hairline a list tile carries. */
   --eop-term-text: var(--text-body-sm);
   /* A component SIZE: a closing term's drawing, set bare at this scale of its drawing units (90 tall), so it
-     reads as a mark under the plated options, not as a fifth card image. Bento's one-track tile holds 0.7. */
-  --eop-term-art-scale: 0.75;
+     reads as a mark under the plated options, not as a fifth card image. At 1 every term's mark stands
+     its full drawing height, the same for every term whatever its width: a deliberate mark, not a
+     thumbnail (round 5, 30 Oct 2026). */
+  --eop-term-art-scale: 1;
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */

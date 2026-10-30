@@ -27,7 +27,8 @@ export type ReasonsFigure = {
  * or, for a client with no approved mark, its NAME, typeset as a wordmark in the marks' ink — never
  * an invented mark (ch05 §10).
  */
-export type ReasonsMark = Omit<ClientMarkProps, 'className'> | { name: string; src?: undefined };
+export type ReasonsMark =
+  Omit<ClientMarkProps, 'className'> | { name: string; src?: undefined };
 
 /**
  * A reason's EVIDENCE as its visual, in place of a drawing (owner, 29 Oct 2026, home's "A product design
@@ -146,26 +147,46 @@ function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
       <div className={cx(styles.proof, flat && styles.proofFlat)} aria-hidden="true">
         <Layout fillFirst className={styles.proofFill}>
           <div className={styles.cover}>
-            <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
+            <Media
+              image={{ ...proof.image, alt: '' }}
+              sizes={COVER_SIZES}
+              fit="fill"
+              edge="placement"
+            />
           </div>
           {proof.figure ? (
-          <div className={styles.caption}>
-            <Cluster colGap="tight" justify="between" align="center" nowrap>
-              <Cluster colGap="tight" align="center" nowrap>
-                <span className={styles.status} />
-                <span className={styles.captionValue}>{proof.figure.value}</span>
+            <div className={styles.caption}>
+              <Cluster colGap="tight" justify="between" align="center" nowrap>
+                <Cluster colGap="tight" align="center" nowrap>
+                  <span className={styles.status} />
+                  <span className={styles.captionValue}>{proof.figure.value}</span>
+                </Cluster>
+                {proof.figure.label ? (
+                  <span className={cx(styles.proofLabel, styles.captionLabel)}>
+                    {proof.figure.label}
+                  </span>
+                ) : null}
               </Cluster>
-              {proof.figure.label ? <span className={cx(styles.proofLabel, styles.captionLabel)}>{proof.figure.label}</span> : null}
-            </Cluster>
-          </div>
+            </div>
           ) : null}
         </Layout>
       </div>
     );
   }
+  const only =
+    proof.kind === 'figures' && proof.figures.length === 1 ? proof.figures[0] : undefined;
+  const count = only ? /^(\d[\d,.]*)\s+(.+)$/.exec(only.value) : null;
+  const stat =
+    only && count ? { number: count[1], unit: count[2], label: only.label } : undefined;
   const inner =
     proof.kind === 'marks' ? (
-      <Layout columns={{ base: [1, 1] }} colGap="gutter" rowGap="stack" align="center" justifyItems="center">
+      <Layout
+        columns={{ base: [1, 1] }}
+        colGap="gutter"
+        rowGap="stack"
+        align="center"
+        justifyItems="center"
+      >
         {proof.marks.map((mark) =>
           mark.src ? (
             <ClientMark key={mark.name} {...mark} />
@@ -175,6 +196,17 @@ function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
             </span>
           ),
         )}
+      </Layout>
+    ) : stat ? (
+      /* One tenure that is a count ("3 years"): the figures treatment, the number large and what it
+         counts with whose it is small under it, so the plate reads as a set figure, never as an
+         image that failed to load (round 5 critic, 30 Oct 2026). */
+      <Layout rowGap="tight" justifyItems="center" className={styles.entry}>
+        <p className={styles.stat}>{stat.number}</p>
+        <p className={styles.proofLabel}>
+          {stat.unit}
+          {stat.label ? ` · ${stat.label}` : null}
+        </p>
       </Layout>
     ) : (
       <Layout rowGap="text" justifyItems="center">
@@ -192,7 +224,10 @@ function Proof({ proof, flat }: { proof: ReasonsProof; flat: boolean }) {
       </Layout>
     );
   return (
-    <div className={cx(styles.proof, styles.proofInset)} aria-hidden="true">
+    <div
+      className={cx(styles.proof, styles.proofInset, flat && styles.proofFlat)}
+      aria-hidden="true"
+    >
       <Layout fillFirst align="center" className={styles.proofFill}>
         {inner}
       </Layout>
@@ -263,15 +298,16 @@ export function Reasons({
 
   /* The head: eyebrow → heading → lead at `block`. With an action, the eyebrow keeps its own line and
      the heading and the action share one row from 1024, centred on each other, `column` (64) apart,
-     the lead under that row in the heading's track. Below 1024 one track: heading, action, lead,
-     each a `block` apart. */
+     the lead under that row in the heading's track. Below 1024 one track: heading, lead, then the
+     actions after the copy (round 5 critic, 30 Oct 2026: at 390 the pair stood above the lead), each
+     a `block` apart. */
   const head = action ? (
     <Layout rowGap="block">
       {eyebrowEl}
       <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="center">
         {headingEl}
-        <div>{action}</div>
         {leadEl}
+        <div className={styles.headAction}>{action}</div>
       </Layout>
     </Layout>
   ) : (
@@ -284,7 +320,9 @@ export function Reasons({
 
   const open = arrangement === 'open';
   // A set whose covers carry no figure (offer pages) sizes its plate to the cover: 16:9, no caption strip.
-  const flatProofs = items.some((i) => i.proof?.kind === 'cover') && !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
+  const flatProofs =
+    items.some((i) => i.proof?.kind === 'cover') &&
+    !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const allProof = shown.length > 0 && shown.every((i) => i.proof);
   const set = (
     <Layout
