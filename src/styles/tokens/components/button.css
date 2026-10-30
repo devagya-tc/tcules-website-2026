@@ -201,10 +201,10 @@
 }
 
 /* ── Surface: ink ─────────────────────────────────────────────────────────────
-   Blue does not move: the solid primary keeps 500 with its white label and runs
-   600 / 700 exactly as on paper, so the primary action is the same object here. It is
-   restated rather than inherited, because inheriting it means an ink panel nested in a
-   blue section would pick up blue's INVERTED primary.
+   The solid primary inverts to paper with an ink label, exactly as on blue, and runs
+   neutral 200 / 300 (owner, 30 Oct 2026; decisions/2026-10-30-ink-solid-is-white): on a
+   dark island the white button is the action. It is restated rather than inherited, so
+   an ink panel nested in any other surface still declares every value.
 
    The neutrals reverse (ghost and link; there is no neutral solid). Two values are
    contrast floors rather than preferences — blue as ink and blue as a 2px ring both reach only 2.77:1 on neutral-950, so a blue label
@@ -212,11 +212,11 @@
    both steps, 900 then 800, and never a blue tint: at the pale end of the blue ramp
    there is no tint left to see. link-neutral runs white → 300 → 200.            */
 [data-surface='ink'] {
-  --btn-solid-primary-bg: var(--color-brandeis-500);
-  --btn-solid-primary-bg-hover: var(--color-brandeis-600);
-  --btn-solid-primary-bg-pressed: var(--color-brandeis-700);
-  --btn-solid-primary-bg-busy: var(--color-brandeis-700);
-  --btn-solid-primary-fg: var(--color-white);
+  --btn-solid-primary-bg: var(--color-paper);
+  --btn-solid-primary-bg-hover: var(--color-neutral-200);
+  --btn-solid-primary-bg-pressed: var(--color-neutral-300);
+  --btn-solid-primary-bg-busy: var(--color-neutral-300);
+  --btn-solid-primary-fg: var(--color-neutral-950);
   --btn-ghost-primary-fg: var(--color-brandeis-200);
   --btn-ghost-primary-fg-pressed: var(--color-brandeis-200);
   --btn-ghost-primary-bg-hover: var(--color-neutral-900);
