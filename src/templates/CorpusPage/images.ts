@@ -90,3 +90,13 @@ export function coverFor(
   }
   return placeholderCover(slug);
 }
+
+/**
+ * A cited case's OWN cover, never a page binding: a band-level binding about one item (PD's Doodle object
+ * model) is not the cover of the case a row names (owner, 30 Oct 2026, round 5).
+ */
+export function caseCover(name: string, caseRef?: CorpusCaseRef): SlotImage {
+  if (caseRef?.cover) return corpusImage(caseRef.cover);
+  if (caseRef?.thumbnail) return caseRef.thumbnail;
+  return placeholderCover(slugOf(name.replace(/['’]s$/, '').replace(/\.$/, '')));
+}

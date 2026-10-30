@@ -1,6 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Button, Icon, Layout, Media, Prose } from '@/components';
+import { caseRouteOf } from '@/lib/corpus-cases';
 import {
   Bento,
   BlockCardSet,
@@ -21,7 +22,13 @@ import {
   type ReadDownRow,
   type Step,
 } from '@/patterns';
-import type { CorpusBand, CorpusBlock, CorpusLink, CorpusPage } from '@/lib/corpus-types';
+import type {
+  CorpusBand,
+  CorpusBlock,
+  CorpusCaseRef,
+  CorpusLink,
+  CorpusPage,
+} from '@/lib/corpus-types';
 import { glyphForRoute } from '@/lib/glyphs';
 import { inlineToHtml, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
@@ -29,10 +36,12 @@ import { placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
-import { hasSlot, slotImage, slugOf } from './images';
+import styles from './CorpusPage.module.css';
+import { caseCover, hasSlot, slotImage, slugOf } from './images';
 import { signature } from './plan';
 import {
   boldLead,
+  exampleLink,
   hasLink,
   labelTitle,
   leadOf,
@@ -445,22 +454,39 @@ export function SheetBand({
 
 /* ── Hard parts (challenges) ─────────────────────────────────────────────────── */
 
-/**
- * The hard parts as a read-down: each problem (a bold label, or an `###` item) is a row's title and
- * its paragraphs, the "Example:" line included, its body. A band with its own photograph reads down
- * beside it; four or more without one read in two columns (component-map § A `hard-parts`).
- */
 /** An image across the content column (1240 cap, 32 gutters). */
 const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
+/** A hard part's cover: the 2/5 track at 1024+, the full column below. */
+const HARD_PART_COVER =
+  '(min-width: 1304px) 458px, (min-width: 1024px) calc((100vw - 160px) * 2 / 5), calc(100vw - 64px)';
 
-export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusBand }) {
+/**
+ * The hard parts. Each is a PROBLEM followed by an "Example:" sentence that cites ONE case, so the
+ * example is the evidence: when every row has one, each row is the problem beside the cited case's own
+ * cover (owner, 30 Oct 2026, round 5), one row each, a band-level image about one item being the
+ * "random image" the owner rejected. A band whose rows cite no case reads down as before: a read-down,
+ * beside its own photograph for three rows, or under a wide image.
+ */
+export function ChallengesBand({
+  page,
+  band,
+  caseRefs = {},
+}: {
+  page: CorpusPage;
+  band: CorpusBand;
+  caseRefs?: Readonly<Record<string, CorpusCaseRef>>;
+}) {
   const blocks = content(band);
   const rows: ReadDownRow[] = [];
   const others: CorpusBlock[] = [];
   let leadText: string | undefined;
-  let open: { title: string; paras: string[] } | undefined;
+  const rowRuns: InlineRun[][][] = [];
+  let open: { title: string; paras: string[]; runs: InlineRun[][] } | undefined;
   const flush = () => {
-    if (open) rows.push({ title: open.title, bodyHtml: open.paras });
+    if (open) {
+      rows.push({ title: open.title, bodyHtml: open.paras });
+      rowRuns.push(open.runs);
+    }
     open = undefined;
   };
   blocks.forEach((block, index) => {
@@ -473,11 +499,17 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
           inner.type === 'paragraph' ? [inlineToHtml(inner.runs)] : [],
         ),
       });
+      rowRuns.push(block.blocks.flatMap((inner) => (inner.type === 'paragraph' ? [inner.runs] : [])));
     } else if (lead && !isBareLabel(block)) {
       flush();
-      open = { title: labelTitle(lead.label), paras: [inlineToHtml(lead.body)] };
+      open = {
+        title: labelTitle(lead.label),
+        paras: [inlineToHtml(lead.body)],
+        runs: [lead.body],
+      };
     } else if (block.type === 'paragraph' && open) {
       open.paras.push(inlineToHtml(block.runs));
+      open.runs.push(block.runs);
     } else if (block.type === 'paragraph' && index === 0 && !hasLink(block.runs)) {
       leadText = plain(block.runs);
     } else {
@@ -486,6 +518,55 @@ export function ChallengesBand({ page, band }: { page: CorpusPage; band: CorpusB
     }
   });
   flush();
+  const examples = rowRuns.map((paras) => {
+    for (const runs of paras) {
+      const found = exampleLink(runs);
+      if (found) return found;
+    }
+    return undefined;
+  });
+  if (rows.length >= 2 && examples.every(Boolean)) {
+    const proofRows = rows.map((row, i) => {
+      const example = examples[i]!;
+      return { ...row, cover: caseCover(example.name, caseRefs[caseRouteOf(example.href)]) };
+    });
+    const proofSet = (
+      <Layout as="ul" rowGap="column">
+        {proofRows.map((r) => (
+          <li key={r.title}>
+            <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
+              <Layout rowGap="text">
+                <h3 className={styles.itemTitle}>{r.title}</h3>
+                {(r.bodyHtml ?? []).map((html, i) => (
+                  <p key={i} className={styles.hardBody} dangerouslySetInnerHTML={{ __html: html }} />
+                ))}
+              </Layout>
+              <div className={styles.hardCover}>
+                <Media
+                  image={{ ...r.cover, alt: '' }}
+                  sizes={HARD_PART_COVER}
+                  fit="fill"
+                  edge="placement"
+                />
+              </div>
+            </Layout>
+          </li>
+        ))}
+      </Layout>
+    );
+    return (
+      <ContentSection {...head(band)} data-band="D-proof" lead={leadText}>
+        {others.length > 0 ? (
+          <Layout rowGap="stack">
+            <BandBody blocks={others} labelledBy={head(band).headingId} />
+            {proofSet}
+          </Layout>
+        ) : (
+          proofSet
+        )}
+      </ContentSection>
+    );
+  }
   const photo = hasSlot(page, band.id) ? slotImage(page, band.id) : undefined;
   /* ReadDown's photo form is built for exactly three rows (it warns otherwise) and crops the image to
      their height. Any other count takes the image across the column at its own ratio, the rows two up

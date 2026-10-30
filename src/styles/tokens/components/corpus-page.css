@@ -24,6 +24,7 @@
 
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
+  --cpg-cover-ratio: 16 / 9; /* a cited case's cover box */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
 }
 

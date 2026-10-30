@@ -13,11 +13,12 @@ arrangement holds it → what it must never do.**
 
 | The content is… | Its visual is… | Never | Rulings |
 |---|---|---|---|
-| **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures |
+| **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures, why-tcules on every page (30 Oct) |
+| **A problem with its named example** (hard parts) | the cited case's own cover beside the problem, one row each | a band-level image about one item; a ruled text 2×2 | hard-parts-example-is-the-proof (30 Oct) |
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar) | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
-| **An abstract claim** (a reason to choose us, on offer pages) | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
+| **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
@@ -42,6 +43,7 @@ arrangement holds it → what it must never do.**
 - **No hairlines between Reasons items.** Card variants stay distinct.
 - **Orphaned paragraphs after a set** become equal terms side by side under it (What you get terms).
 - **Never two text-heavy bands touching; never two tints touching.**
+- **An image about one item belongs to that item**, never above the whole set.
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
 
 ## 3 · How to use it on a section nobody has designed
@@ -55,9 +57,9 @@ arrangement holds it → what it must never do.**
 
 The owner will edit these sections on this branch to sharpen the mapping:
 1. **The hard parts of SaaS product design** (Doodle diagram above four labelled problems, each with an
-   "Example:" line, ruled 2×2).
+   "Example:" line, ruled 2×2). DONE on this branch (30 Oct, round 5).
 2. **How we work together** (flat engagement graphics, two closing terms, closing link).
-3. **Why teams choose Tcules** (three isometric reasons, two head links).
+3. **Why teams choose Tcules** (three isometric reasons, two head links). DONE on this branch (30 Oct, round 5).
 4. **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
    terms).
 

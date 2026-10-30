@@ -6,7 +6,7 @@ import { caseRoutesIn } from '@/lib/corpus-cases';
 import { inlineToText } from '@/lib/inline';
 import { placeholderCover } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
-import { Reasons, type ReasonsItem } from '@/patterns';
+import { CtaRow, Reasons, type ReasonsItem } from '@/patterns';
 import { whyTcules } from '@/templates';
 
 import { Variation } from '../_specimen/Variation';
@@ -248,6 +248,25 @@ const PROOF_STRESS: ReasonsItem[] = [
         { value: 'Since the first coded prototypes', label: 'Benchmark Gensuite' },
       ],
     },
+  },
+];
+
+/** Offer pages: two case covers with no figure, one tenure as a figure. */
+const OFFER_PROOF: ReasonsItem[] = [
+  {
+    title: 'Products customers rely on',
+    body: 'A linked case shows its own cover and nothing under it.',
+    proof: { kind: 'cover', image: placeholderCover('gold-image-printing') },
+  },
+  {
+    title: 'AI that reached production',
+    body: 'A second linked case, the same box height.',
+    proof: { kind: 'cover', image: placeholderCover('gold-image-printing') },
+  },
+  {
+    title: 'Senior people do the work, and clients keep us for years',
+    body: 'A stated tenure shows as one figure.',
+    proof: { kind: 'figures', figures: [{ value: '3 years', label: 'Primelis' }] },
   },
 ];
 
@@ -539,6 +558,26 @@ export default async function ReasonsSpecimen() {
         items={PROOF_STRESS}
         action={WHY_LINKS}
         surface="tint"
+      />
+
+      <Variation
+        id="offer-proof"
+        title="17 · Offer page: case covers without a figure, one tenure figure"
+        note="Offer pages' Why Tcules (owner, 30 Oct 2026): a reason that links a case shows the case's own cover with no figure under it; a stated tenure shows as one figure. One box height for the three. The two actions are one row: an outline button, then a link."
+      />
+      <Reasons
+        heading="Why teams choose Tcules"
+        headingId="rsn-offer-proof"
+        items={OFFER_PROOF}
+        action={
+          <CtaRow
+            rule={false}
+            actions={[
+              { label: 'Why teams choose Tcules', href: '#why-tcules' },
+              { label: 'Meet the studio', href: '#studio' },
+            ]}
+          />
+        }
       />
     </>
   );

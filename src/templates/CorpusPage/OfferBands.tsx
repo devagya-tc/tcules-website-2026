@@ -21,10 +21,13 @@ import {
   VoiceLedger,
   type BlockCardSetItem,
   type EngagementScope,
+  type ReasonsProof,
   type TraceScene,
   type TraceStage,
 } from '@/patterns';
 import { caseStudyLink } from '@/lib/case-links';
+import { caseRouteOf } from '@/lib/corpus-cases';
+import { OFFER_REASON_FIGURES } from '@/lib/reason-proof';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
   CorpusBand,
@@ -58,7 +61,7 @@ import {
   type AvatarsById,
   type RatingsById,
 } from './blocks';
-import { bindingNamed, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
+import { bindingNamed, caseCover, coverFor, hasSlot, slotImage, slugOf, type SlotImage } from './images';
 import {
   ChallengesBand,
   CloseBand,
@@ -95,6 +98,28 @@ import {
  * planned (plan.ts): its shape, its surface, its media side and its texture are decided, and every
  * word is the corpus's.
  */
+
+function offerReasonProof(
+  runs: readonly InlineRun[],
+  title: string | undefined,
+  caseRefs: Readonly<Record<string, CorpusCaseRef>>,
+): ReasonsProof | undefined {
+  if (!title) return undefined;
+  for (const run of runs) {
+    if (run.type === 'link') {
+      const route = caseRouteOf(run.href);
+      if (route.startsWith('/case-studies/')) {
+        return { kind: 'cover', image: caseCover(plain(run.children), caseRefs[route]) };
+      }
+    }
+  }
+  const spec = OFFER_REASON_FIGURES[title.replace(/\.$/, '')];
+  const sentence = plain(runs).toLowerCase();
+  if (spec && spec.every((f) => sentence.includes(f.from))) {
+    return { kind: 'figures', figures: spec.map(({ value, label }) => ({ value, label })) };
+  }
+  return undefined;
+}
 
 export type OfferContext = {
   page: CorpusPage;
@@ -308,7 +333,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
     case 'industries':
       return <IndustriesBand page={page} band={band} />;
     case 'challenges':
-      return <ChallengesBand page={page} band={band} />;
+      return <ChallengesBand page={page} band={band} caseRefs={ctx.caseRefs} />;
     case 'method':
       return <MethodBand band={band} />;
     case 'related':
@@ -544,7 +569,10 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
 
     /* M11 — two reasons: a media split, or (a third in a row) a read-down beside the photograph. */
     case 'reasons': {
-      /* The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
+      /* Evidence first (owner, 30 Oct 2026, round 5; decisions/2026-10-29-home-reasons-show-their-proof):
+         a reason whose sentence links a case shows that case's cover, one that states a tenure shows
+         it as a figure; the drawn isometric figures only when a reason names no evidence.
+         The 26 Oct copy's Why Tcules: a lead, three reasons (bold-led bullets, or `###` items), the
          closing links. Drawn as Reasons when every reason has its figure; until the figures are
          drawn (component-map C1, 10 figures), ONE OfferSheet three across, which also differs from
          the drawn engagements band beside it. */
@@ -556,11 +584,37 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const links = parts.after.flatMap((block) =>
           block.type === 'links' ? block.links : [],
         );
-        const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
+        const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
            reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
            Isometric, so it never reads as How we work together's flat options beside it
            (decisions/2026-10-29-how-we-work-together-link-in-head). */
+        const list = blocksOf(band, 'list')[0];
+        const proofs =
+          list && list.items.length === parts.items.length
+            ? list.items.map((runs, i) =>
+                offerReasonProof(runs, parts.items[i]?.title, ctx.caseRefs),
+              )
+            : [];
+        if (proofs.length > 0 && proofs.every(Boolean)) {
+          return (
+            <Reasons
+              {...head(band)}
+              surface={unit.surface === 'tint' ? 'tint' : 'paper'}
+              lead={parts.lead}
+              action={action}
+              items={parts.items.map((item, i) => ({
+                title: item.title!,
+                body: item.bodyHtml ? (
+                  <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+                ) : (
+                  (item.body ?? '')
+                ),
+                proof: proofs[i]!,
+              }))}
+            />
+          );
+        }
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const drawn = parts.items.map((item) => ({
           item,

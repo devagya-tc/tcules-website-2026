@@ -34,12 +34,12 @@ export type ReasonsMark = Omit<ClientMarkProps, 'className'> | { name: string; s
  * from what the reason's own sentence names; the sentence still renders in full under the title.
  *
  *   marks    the named clients' marks as a small cluster, two across
- *   cover    the case's own cover, with one figure under it
+ *   cover    the case's own cover, with one figure under it where the page sets one
  *   figures  two to four figures, one under the other
  */
 export type ReasonsProof =
   | { kind: 'marks'; marks: readonly ReasonsMark[] }
-  | { kind: 'cover'; image: MediaImage; figure: ReasonsFigure }
+  | { kind: 'cover'; image: MediaImage; figure?: ReasonsFigure }
   | { kind: 'figures'; figures: readonly ReasonsFigure[] };
 
 /** One reason: the claim in the reader's words, the sentence that argues it, and its drawing. */
@@ -168,7 +168,7 @@ function Proof({ proof }: { proof: ReasonsProof }) {
         <div className={styles.cover}>
           <Media image={{ ...proof.image, alt: '' }} sizes={COVER_SIZES} fit="fill" edge="placement" />
         </div>
-        <ProofFigure {...proof.figure} />
+        {proof.figure ? <ProofFigure {...proof.figure} /> : null}
       </Layout>
     );
   } else {
