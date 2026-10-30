@@ -23,6 +23,38 @@ const SPECIALIST: readonly SketchName[] = [
   'specialist-audit',
   'specialist-readiness',
 ];
+/** Every non-story scene that can sit on a tile: each makes one move on hover (S.4). */
+const TILE: readonly SketchName[] = [
+  'new-product',
+  'specialist-research',
+  'specialist-ia',
+  'specialist-ui',
+  'specialist-dataviz',
+  'specialist-prototype',
+  'specialist-new-product',
+  'specialist-audit',
+  'specialist-ai-copilots',
+  'specialist-ai-search',
+  'specialist-ai-hitl',
+  'specialist-ai-trust',
+  'specialist-ai-readiness',
+  'specialist-ai-engineering',
+  'specialist-ds-strategy',
+  'specialist-ds-implementation',
+  'specialist-ds-alignment',
+  'specialist-ds-governance',
+  'specialist-ds-audit',
+  'specialist-redesign',
+  'specialist-legacy',
+  'specialist-replatforming',
+  'specialist-modernisation-assessment',
+  'specialist-saas-app',
+  'specialist-frontend',
+  'specialist-backend',
+  'specialist-maintenance',
+  'specialist-mobile',
+  'specialist-prototype-review',
+];
 /** The article scenes: each drawn for one insight, its cover until a real one exists. */
 const ARTICLE: readonly SketchName[] = [
   'code-review',
@@ -135,6 +167,28 @@ export default function SketchSpecimen() {
                     <a
                       href={`#story-${surface}-${name}`}
                       id={`story-${surface}-${name}`}
+                      aria-label={`Hover: ${name}`}
+                    >
+                      <Sketch name={name} frame="bare" story />
+                    </a>
+                    <Sketch name={name} frame="bare" story end />
+                  </Layout>
+                  <code>{name}</code>
+                </Layout>
+              ))}
+            </Layout>
+          </Specimen>
+          <Specimen
+            title={`S.4 · the tile drawings, rest and moved · ${surface}`}
+            note="Owner, 30 Oct 2026 (decisions/2026-10-30-service-tile-drawing-moves-on-hover): every tile drawing makes ONE transform-only move when its link is hovered or focused, on the tile's curve: a part moves (Move) or arrives (GrowIn). Left: at rest (hover it). Right: held moved. Bare frame, as the bento sets them; a plate never moves. Reduced motion holds rest."
+          >
+            <Layout columns={{ base: 1, md: 2, lg: 3 }} colGap="gutter" rowGap="gutter">
+              {TILE.map((name) => (
+                <Layout key={name} rowGap="tight">
+                  <Layout columns={2} colGap="gutter" rowGap="tight">
+                    <a
+                      href={`#tile-${surface}-${name}`}
+                      id={`tile-${surface}-${name}`}
                       aria-label={`Hover: ${name}`}
                     >
                       <Sketch name={name} frame="bare" story />

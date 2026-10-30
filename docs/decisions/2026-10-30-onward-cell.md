@@ -1,7 +1,7 @@
 ---
 title: "A closing router is the onward cell: dashed, a question over its answer"
 date: 2026-10-30
-status: proposed
+status: superseded
 area: [components, layout]
 source: "Owner, 30 Oct 2026, /services/product-design review (round 5)"
 supersedes: [2026-10-29-seven-services-bento-four-plus-three]

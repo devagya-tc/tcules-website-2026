@@ -381,3 +381,40 @@
     transition-duration: var(--duration-instant);
   }
 }
+
+/* A live scene's one move (Move): rest is the drawing as drawn; hovered or focused, the end state. The
+   origin is a point of the drawing, so the box is the viewBox's coordinate system. */
+.live .move {
+  transform-box: view-box;
+  transform-origin: calc(var(--skt-move-ox) * var(--skt-unit)) calc(var(--skt-move-oy) * var(--skt-unit));
+  transition: transform var(--skt-duration) var(--skt-easing);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :global(a:hover) .live .move,
+  :global(a:focus-visible) .live .move,
+  .solved .move {
+    transform: translate(
+        calc(var(--skt-move-x) * var(--skt-unit)),
+        calc(var(--skt-move-y) * var(--skt-unit))
+      )
+      rotate(var(--skt-move-turn)) scale(var(--skt-move-sx), var(--skt-move-sy));
+  }
+}
+
+/* A live scene's arriving part (GrowIn): from nothing about its own centre, as a story's `grow`. */
+.live .growIn {
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform var(--skt-duration) var(--skt-easing);
+}
+:global(a:hover) .live .growIn,
+:global(a:focus-visible) .live .growIn,
+.solved .growIn {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .live .growIn {
+    transition-duration: var(--duration-instant);
+  }
+}

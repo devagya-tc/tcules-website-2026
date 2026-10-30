@@ -3,6 +3,8 @@ export {
   ServiceTile,
   type BentoItem,
   type BentoProps,
-  type BentoRoute,
+  type BentoCta,
+  type BentoCtaAction,
+  type BentoCtaRoute,
   type ServiceTileProps,
 } from './Bento';

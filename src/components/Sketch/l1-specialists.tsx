@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 import type { L1SpecialistScene } from '@/lib/sketches';
 
-import { Copy, Hop, Lens, Rect } from './offer';
-import { Focus, Glyph, Hatched } from './scenes';
+import { ArrowUp, Copy, Hop, Lens, Rect } from './offer';
+import { Focus, Glyph, GrowIn, Hatched, Move } from './scenes';
 import styles from './Sketch.module.css';
 
 /**
@@ -26,11 +26,14 @@ function AiCopilots() {
       {[76, 94, 112].map((y) => (
         <g key={y}>
           <Rect x={182} y={y - 6} w={12} h={12} rx={3} className={styles.tile} />
-          <path className={styles.regionCopy} d={`M204,${y} L${y === 112 ? 240 : 256},${y}`} />
+          <path className={styles.regionCopy} d={`M204,${y} L${y === 112 ? 230 : 256},${y}`} />
         </g>
       ))}
-      <Hop x1={170} x2={144} y={112} />
-      <Focus x={256} y={124} glyph="check-circle" size={12} />
+      <Hop x1={170} x2={142} y={112} />
+      {/* The plan completes. */}
+      <GrowIn>
+        <Focus x={256} y={116} glyph="check-circle" size={12} />
+      </GrowIn>
     </>
   );
 }
@@ -41,8 +44,11 @@ function AiSearch() {
     <>
       <Rect x={50} y={30} w={170} h={24} rx={12} className={styles.frame} />
       <Copy x={68} y={42} w={64} quiet />
-      <Lens x={196} y={42} r={8} />
-      <Rect x={50} y={68} w={180} h={72} rx={8} className={styles.halo} />
+      <Glyph name="stars" cx={204} cy={42} size={14} className={styles.glyph} />
+      {/* The answer, with its sources, is found. */}
+      <GrowIn>
+        <Rect x={50} y={68} w={180} h={72} rx={12} className={styles.halo} />
+      </GrowIn>
       <Rect x={56} y={74} w={168} h={60} rx={6} className={styles.frame} />
       <Copy x={70} y={90} w={120} />
       <Copy x={70} y={102} w={96} quiet />
@@ -64,14 +70,17 @@ function AiHitl() {
           <Copy x={42} y={y + 10} w={[36, 28, 44, 24][i] ?? 30} quiet={i > 0} />
         </g>
       ))}
-      <Hop x1={102} x2={140} y={90} />
-      <Rect x={150} y={60} w={48} h={60} rx={24} className={styles.halo} />
-      <Glyph name="user" cx={174} cy={90} size={22} className={styles.glyph} />
+      <Hop x1={102} x2={152} y={100} />
+      <circle className={styles.halo} cx="174" cy="100" r="22" />
+      <Glyph name="user" cx={174} cy={100} size={22} className={styles.glyph} />
       <Rect x={214} y={34} w={76} h={104} rx={8} className={styles.frameQuiet} />
       {[50, 64, 78, 92].map((y, i) => (
         <Copy key={y} x={226} y={y} w={[44, 36, 48, 28][i] ?? 36} quiet />
       ))}
-      <Glyph name="undo-left" cx={232} cy={118} size={16} className={styles.glyph} />
+      {/* An override taken back. */}
+      <Move turn={-60} ox={232} oy={118}>
+        <Glyph name="undo-left" cx={232} cy={118} size={16} className={styles.glyph} />
+      </Move>
     </>
   );
 }
@@ -83,9 +92,12 @@ function AiTrust() {
       <Rect x={30} y={30} w={170} h={120} rx={8} className={styles.frame} />
       <Copy x={46} y={52} w={96} quiet />
       <Copy x={46} y={68} w={120} quiet />
-      <Rect x={40} y={80} w={150} h={28} rx={4} className={styles.region} />
-      <Glyph name="stars" cx={54} cy={94} size={14} className={styles.glyph} />
-      <path className={styles.regionCopy} d="M70,94 L172,94" />
+      {/* The AI's line moves toward undo (stays 4 inside the frame). */}
+      <Move x={6}>
+        <Rect x={40} y={80} w={150} h={28} rx={4} className={styles.region} />
+        <Glyph name="stars" cx={54} cy={94} size={14} className={styles.glyph} />
+        <path className={styles.regionCopy} d="M70,94 L172,94" />
+      </Move>
       <Copy x={46} y={124} w={100} quiet />
       <Hop x1={200} x2={228} y={94} />
       <Rect x={228} y={82} w={52} h={24} rx={12} className={styles.tile} />
@@ -106,22 +118,21 @@ function AiReadiness() {
       <Rect x={42} y={76} w={72} h={32} className={styles.tile} />
       <Copy x={42} y={122} w={56} quiet />
       <Hop x1={126} x2={160} y={90} />
-      {[48, 78, 108].map((y, i) => (
+      {[78, 108].map((y, i) => (
         <g key={y}>
-          <Rect
-            x={170}
-            y={y}
-            w={[110, 84, 56][i] ?? 56}
-            h={22}
-            className={i === 0 ? styles.region : styles.tile}
-          />
+          <Rect x={170} y={y} w={[64, 42][i] ?? 42} h={22} className={styles.tile} />
           <path
-            className={i === 0 ? styles.regionCopy : styles.copyQuiet}
-            d={`M182,${y + 11} L${182 + ([56, 40, 24][i] ?? 24)},${y + 11}`}
+            className={styles.copyQuiet}
+            d={`M182,${y + 11} L${182 + ([40, 24][i] ?? 24)},${y + 11}`}
           />
         </g>
       ))}
-      <Focus x={266} y={59} glyph="flag" size={12} />
+      {/* The first fix comes forward (4 from the arrow tip). */}
+      <Move x={-6}>
+        <Rect x={170} y={48} w={86} h={22} className={styles.region} />
+        <path className={styles.regionCopy} d="M182,59 L238,59" />
+        <Focus x={276} y={59} glyph="flag" size={12} />
+      </Move>
     </>
   );
 }
@@ -130,8 +141,13 @@ function AiReadiness() {
 function AiEngineering() {
   return (
     <>
-      <Glyph name="user" cx={54} cy={44} size={16} className={styles.glyph} />
-      <Glyph name="user" cx={84} cy={44} size={16} className={styles.glyph} />
+      {/* Designer and engineer close up (gap 14 to 6). */}
+      <Move x={4}>
+        <Glyph name="user" cx={54} cy={44} size={16} className={styles.glyph} />
+      </Move>
+      <Move x={-4}>
+        <Glyph name="user" cx={84} cy={44} size={16} className={styles.glyph} />
+      </Move>
       <Rect x={30} y={62} w={170} h={88} rx={8} className={styles.frame} />
       <Copy x={46} y={80} w={56} quiet />
       <Rect x={46} y={92} w={64} h={40} className={styles.tile} />
@@ -139,7 +155,7 @@ function AiEngineering() {
       <Rect x={140} y={92} w={42} h={34} className={styles.region} />
       <Glyph name="cpu" cx={161} cy={109} size={18} className={styles.glyph} />
       <Glyph name="code-square" cx={248} cy={109} size={22} className={styles.glyphQuiet} />
-      <Hop x1={236} x2={206} y={109} />
+      <Hop x1={236} x2={200} y={109} />
     </>
   );
 }
@@ -164,7 +180,10 @@ function DsStrategy() {
         <Rect key={y} x={200} y={y} w={38} h={20} className={styles.tile} />
       ))}
       <Focus x={268} y={56} glyph="flag" size={12} />
-      <Glyph name="user" cx={268} cy={110} size={18} className={styles.glyph} />
+      {/* The owner steps up to the flag. */}
+      <Move y={-8}>
+        <Glyph name="user" cx={268} cy={110} size={18} className={styles.glyph} />
+      </Move>
     </>
   );
 }
@@ -174,24 +193,27 @@ function DsImplementation() {
   return (
     <>
       {[0, 1, 2].map((i) => (
-        <Rect key={i} x={34} y={46 + i * 28} w={26} h={20} className={[styles.soft, styles.region, styles.solid][i]} />
+        <Rect key={i} x={34} y={52 + i * 28} w={26} h={20} className={[styles.soft, styles.region, styles.solid][i]} />
       ))}
-      <Hop x1={68} x2={104} y={90} />
+      <Hop x1={60} x2={104} y={90} />
       <Rect x={104} y={44} w={76} h={92} rx={8} className={styles.trailFrame} />
       {[0, 1].map((r) =>
         [0, 1].map((c) => (
           <Rect key={`${r}${c}`} x={114 + c * 32} y={56 + r * 36} w={26} h={26} className={styles.tile} />
         )),
       )}
+      {/* Released: the code frame rises 4 (its halo reaches the box edge). */}
+      <Move y={-4}>
+        <Rect x={200} y={30} w={90} h={120} rx={14} className={styles.halo} />
+        <Rect x={206} y={44} w={78} h={92} rx={8} className={styles.frame} />
+        <Glyph name="code" cx={222} cy={58} size={14} className={styles.glyph} />
+        {[0, 1].map((r) =>
+          [0, 1].map((c) => (
+            <Rect key={`${r}${c}`} x={216 + c * 32} y={72 + r * 30} w={24} h={22} className={styles.tile} />
+          )),
+        )}
+      </Move>
       <Hop x1={180} x2={206} y={90} />
-      <Rect x={200} y={30} w={90} h={120} rx={14} className={styles.halo} />
-      <Rect x={206} y={44} w={78} h={92} rx={8} className={styles.frame} />
-      <Glyph name="code" cx={222} cy={58} size={14} className={styles.glyph} />
-      {[0, 1].map((r) =>
-        [0, 1].map((c) => (
-          <Rect key={`${r}${c}`} x={216 + c * 32} y={72 + r * 30} w={24} h={22} className={styles.tile} />
-        )),
-      )}
     </>
   );
 }
@@ -204,11 +226,19 @@ function DsAlignment() {
       <Rect x={58} y={52} w={60} h={20} rx={10} className={styles.tile} />
       <Rect x={174} y={30} w={116} h={64} rx={8} className={styles.frame} />
       <Rect x={202} y={52} w={60} h={20} rx={10} className={styles.tile} />
-      <path className={styles.rule} d="M160,34 L160,90" />
+      <path className={styles.rule} d="M160,34 L160,50 M160,74 L160,90" />
       <Glyph name="eye" cx={160} cy={62} size={16} className={styles.glyph} />
-      <path className={styles.line} d="M88,94 L88,110 L142,110 M232,94 L232,110 L178,110" />
+      <path
+        className={styles.line}
+        d="M88,94 L88,115 A6,6 0 0 0 94,121 L130,121 M232,94 L232,115 A6,6 0 0 1 226,121 L190,121"
+      />
+      <circle className={styles.node} cx="88" cy="94" r="2.5" />
+      <circle className={styles.node} cx="232" cy="94" r="2.5" />
       <Rect x={130} y={110} w={60} h={22} rx={11} className={styles.solid} />
-      <Focus x={228} y={132} glyph="check-circle" size={12} />
+      {/* The next mismatch checked. */}
+      <GrowIn>
+        <Focus x={262} y={130} glyph="check-circle" size={12} />
+      </GrowIn>
     </>
   );
 }
@@ -227,9 +257,12 @@ function DsGovernance() {
           <Rect key={`${r}${c}`} x={124 + c * 36} y={52 + r * 28} w={28} h={20} className={styles.tile} />
         )),
       )}
-      <Rect x={124} y={110} w={64} h={22} className={styles.trailFrame} />
-      <Hop x1={208} x2={240} y={90} />
-      <Rect x={240} y={76} w={44} h={28} rx={14} className={styles.halo} />
+      {/* One exception stands apart. */}
+      <Move x={8}>
+        <Rect x={124} y={110} w={64} h={22} className={styles.trailFrame} />
+      </Move>
+      <Rect x={240} y={74} w={44} h={32} rx={16} className={styles.halo} />
+      <Hop x1={208} x2={246} y={90} />
       <Rect x={246} y={80} w={32} h={20} rx={10} className={styles.solid} />
     </>
   );
@@ -250,8 +283,11 @@ function DsAudit() {
       <Rect x={198} y={52} w={28} h={22} className={styles.tile} />
       <Rect x={164} y={92} w={32} h={26} className={styles.trailFrame} />
       <Rect x={232} y={90} w={36} h={22} className={styles.trailFrame} />
-      <Lens x={246} y={92} r={14} />
-      <Focus x={212} y={122} glyph="danger-triangle" size={12} />
+      {/* The lens finds the other drifted copy. */}
+      <Move x={-70} y={4}>
+        <Lens x={250} y={101} r={22} />
+        <Focus x={250} y={101} glyph="danger-triangle" size={12} />
+      </Move>
     </>
   );
 }
@@ -265,6 +301,10 @@ function Redesign() {
     );
   return (
     <>
+      {/* The rebuilt screen lights. */}
+      <GrowIn>
+        <Rect x={164} y={30} w={112} h={96} rx={14} className={styles.halo} />
+      </GrowIn>
       <Rect x={30} y={36} w={100} h={84} rx={8} className={styles.frameQuiet} />
       {crumbs}
       <Hop x1={130} x2={170} y={78} />
@@ -282,20 +322,24 @@ function Redesign() {
 function Legacy() {
   return (
     <>
+      <Rect x={170} y={36} w={120} h={100} rx={8} className={styles.halo} />
       <Rect x={30} y={36} w={100} h={100} rx={8} className={styles.frameQuiet} />
       <Hatched x={40} y={46} w={80} h={80} />
       {[44, 76, 108].map((y) => (
         <g key={y}>
           <Rect x={104} y={y} w={40} h={20} className={styles.tile} />
           <Glyph name="notebook" cx={116} cy={y + 10} size={12} className={styles.glyphQuiet} />
-          <Hop x1={144} x2={170} y={y + 10} />
+          <Hop x1={144} x2={176} y={y + 10} />
         </g>
       ))}
-      <Rect x={170} y={36} w={120} h={100} rx={8} className={styles.halo} />
       <Rect x={176} y={42} w={108} h={88} rx={6} className={styles.frame} />
       <Rect x={186} y={52} w={44} h={20} className={styles.solid} />
       <Rect x={186} y={84} w={44} h={20} className={styles.solid} />
       <Rect x={240} y={108} w={34} h={14} className={styles.trailFrame} />
+      {/* The next stage built. */}
+      <GrowIn>
+        <Rect x={240} y={108} w={34} h={14} className={styles.solid} />
+      </GrowIn>
     </>
   );
 }
@@ -309,9 +353,12 @@ function Replatforming() {
       <Rect x={30} y={36} w={80} h={76} rx={8} className={styles.trailFrame} />
       <Copy x={42} y={54} w={32} quiet />
       <Rect x={42} y={66} w={56} h={28} className={styles.tile} />
-      <Glyph name="user" cx={160} cy={60} size={18} className={styles.glyph} />
-      <Hop x1={120} x2={200} y={90} />
-      <Rect x={200} y={30} w={90} h={92} rx={12} className={styles.halo} />
+      {/* The customer moves across. */}
+      <Move x={20}>
+        <Glyph name="user" cx={160} cy={60} size={18} className={styles.glyph} />
+      </Move>
+      <Rect x={200} y={30} w={90} h={92} rx={14} className={styles.halo} />
+      <Hop x1={110} x2={206} y={90} />
       <Rect x={206} y={36} w={80} h={76} rx={8} className={styles.frame} />
       <Copy x={218} y={54} w={32} quiet />
       <Rect x={218} y={66} w={56} h={28} className={styles.tile} />
@@ -329,14 +376,17 @@ function ModernisationAssessment() {
         <g key={y}>
           <Rect x={64} y={y - 11} w={70} h={22} className={styles.tile} />
           <Copy x={76} y={y} w={30} quiet />
-          <Hop x1={134} x2={200} y={y} />
+          <Hop x1={134} x2={216} y={y} />
         </g>
       ))}
       <Glyph name="check-circle" cx={228} cy={46} size={16} className={styles.glyph} />
       <Glyph name="ruler-pen" cx={228} cy={76} size={16} className={styles.glyph} />
       <Glyph name="refresh" cx={228} cy={106} size={16} className={styles.glyph} />
       <Hatched x={216} y={128} w={26} h={16} />
-      <Focus x={268} y={76} glyph="flag" size={12} />
+      {/* The route read part by part. */}
+      <Move y={30}>
+        <Focus x={268} y={76} glyph="flag" size={12} />
+      </Move>
     </>
   );
 }
@@ -348,15 +398,18 @@ function SaasApp() {
       <Rect x={30} y={30} w={170} h={120} rx={8} className={styles.frame} />
       <Copy x={46} y={48} w={52} quiet />
       <Rect x={46} y={60} w={138} h={22} className={styles.tile} />
-      <Rect x={40} y={94} w={150} h={42} rx={8} className={styles.halo} />
-      {[48, 90, 132].map((x) => (
-        <Rect key={x} x={x} y={104} w={36} h={22} className={styles.solid} />
-      ))}
-      <path className={styles.line} d="M84,115 L90,115 M126,115 L132,115" />
-      <Glyph name="server" cx={256} cy={62} size={20} className={styles.glyphQuiet} />
-      <Glyph name="database" cx={256} cy={118} size={20} className={styles.glyphQuiet} />
-      <Hop x1={242} x2={202} y={62} />
-      <Hop x1={242} x2={202} y={118} />
+      {/* The new workflow added in. */}
+      <Move y={-4}>
+        <Rect x={42} y={98} w={132} h={34} rx={10} className={styles.halo} />
+        {[48, 90, 132].map((x) => (
+          <Rect key={x} x={x} y={104} w={36} h={22} className={styles.solid} />
+        ))}
+        <path className={styles.line} d="M84,115 L90,115 M126,115 L132,115" />
+      </Move>
+      <Glyph name="server" cx={256} cy={71} size={20} className={styles.glyphQuiet} />
+      <Glyph name="database" cx={256} cy={115} size={20} className={styles.glyphQuiet} />
+      <Hop x1={242} x2={200} y={71} />
+      <Hop x1={242} x2={200} y={115} />
     </>
   );
 }
@@ -369,13 +422,18 @@ function Frontend() {
       <Copy x={44} y={54} w={48} quiet />
       <Rect x={44} y={66} w={60} h={42} className={styles.tile} />
       <Rect x={114} y={66} w={54} h={42} className={styles.tile} />
-      <Rect x={232} y={30} w={48} h={96} rx={10} className={styles.frame} />
-      <Copy x={242} y={48} w={28} quiet />
-      <Rect x={242} y={60} w={28} h={22} className={styles.tile} />
-      <Rect x={242} y={90} w={28} h={22} className={styles.tile} />
-      <Focus x={206} y={78} glyph="check-circle" size={12} />
+      {/* The same layout on both (4 clear of the Focus halo). */}
+      <Move x={-6}>
+        <Rect x={232} y={30} w={48} h={96} rx={10} className={styles.frame} />
+        <Copy x={242} y={48} w={28} quiet />
+        <Rect x={242} y={60} w={28} h={22} className={styles.tile} />
+        <Rect x={242} y={90} w={28} h={22} className={styles.tile} />
+      </Move>
+      <Focus x={204} y={78} glyph="check-circle" size={12} />
       <Rect x={44} y={130} w={16} h={16} rx={3} className={styles.tile} />
-      <Hop x1={68} x2={104} y={138} />
+      <circle className={styles.node} cx="60" cy="138" r="2.5" />
+      <path className={styles.line} d="M60,138 L198,138 A6,6 0 0 0 204,132 L204,103" />
+      <ArrowUp x={204} y={96} />
     </>
   );
 }
@@ -389,12 +447,19 @@ function Backend() {
       <Rect x={42} y={80} w={38} h={32} className={styles.tile} />
       <Hop x1={92} x2={122} y={90} />
       <Rect x={122} y={34} w={96} h={112} rx={8} className={styles.frame} />
-      <Rect x={130} y={78} w={80} h={30} rx={6} className={styles.halo} />
+      <Rect x={128} y={71} w={84} h={38} rx={10} className={styles.halo} />
       {(['database', 'checklist', 'key'] as const).map((g, i) => (
         <g key={g}>
-          <Rect x={134} y={42 + i * 34} w={72} h={26} className={i === 1 ? styles.region : styles.tile} />
-          <Glyph name={g} cx={150} cy={55 + i * 34} size={14} className={styles.glyph} />
-          <Copy x={166} y={55 + i * 34} w={28} quiet />
+          <Rect x={134} y={43 + i * 34} w={72} h={26} className={i === 1 ? styles.region : styles.tile} />
+          {g === 'key' ? (
+            /* Sign-in turns. */
+            <Move turn={-45} ox={150} oy={124}>
+              <Glyph name={g} cx={150} cy={56 + i * 34} size={14} className={styles.glyph} />
+            </Move>
+          ) : (
+            <Glyph name={g} cx={150} cy={56 + i * 34} size={14} className={styles.glyph} />
+          )}
+          <Copy x={166} y={56 + i * 34} w={28} quiet />
         </g>
       ))}
       <Hop x1={218} x2={252} y={90} />
@@ -410,10 +475,13 @@ function Maintenance() {
       <Rect x={30} y={30} w={190} h={120} rx={8} className={styles.frame} />
       <Rect x={44} y={46} w={62} h={32} className={styles.tile} />
       <Glyph name="danger-triangle" cx={75} cy={62} size={16} className={styles.glyph} />
-      <Hop x1={106} x2={134} y={62} />
-      <Glyph name="refresh" cx={150} cy={62} size={16} className={styles.glyph} />
+      <Hop x1={106} x2={138} y={62} />
+      {/* The fix cycles in. */}
+      <Move turn={-180} ox={150} oy={62}>
+        <Glyph name="refresh" cx={150} cy={62} size={16} className={styles.glyph} />
+      </Move>
       <Rect x={44} y={96} w={62} h={40} className={styles.tile} />
-      <Rect x={124} y={90} w={86} h={52} rx={8} className={styles.halo} />
+      <Rect x={124} y={90} w={86} h={52} rx={10} className={styles.halo} />
       <Rect x={130} y={96} w={74} h={40} className={styles.solid} />
       <Glyph name="users-group-rounded" cx={260} cy={90} size={22} className={styles.glyphQuiet} />
     </>
@@ -427,11 +495,14 @@ function Mobile() {
       <Rect x={30} y={36} w={130} h={84} rx={8} className={styles.frameQuiet} />
       <Copy x={44} y={54} w={40} quiet />
       <Rect x={44} y={66} w={60} h={40} className={styles.tile} />
-      <Rect x={150} y={30} w={64} h={120} rx={12} className={styles.frame} />
-      <Copy x={164} y={50} w={32} quiet />
-      <Rect x={164} y={62} w={36} h={34} className={styles.tile} />
-      <Rect x={158} y={106} w={48} h={30} rx={15} className={styles.halo} />
-      <Rect x={164} y={112} w={36} h={18} rx={9} className={styles.solid} />
+      {/* Taken away from the desk. */}
+      <Move x={8}>
+        <Rect x={150} y={30} w={64} h={120} rx={12} className={styles.frame} />
+        <Copy x={164} y={50} w={32} quiet />
+        <Rect x={164} y={62} w={36} h={34} className={styles.tile} />
+        <Rect x={158} y={106} w={48} h={30} rx={15} className={styles.halo} />
+        <Rect x={164} y={112} w={36} h={18} rx={9} className={styles.solid} />
+      </Move>
       <Glyph name="clock-circle" cx={252} cy={70} size={20} className={styles.glyphQuiet} />
       <Glyph name="calendar" cx={252} cy={114} size={20} className={styles.glyphQuiet} />
     </>
@@ -449,7 +520,10 @@ function PrototypeReview() {
           {i < 3 ? <path className={styles.line} d={`M${90 + i * 60},66 L${106 + i * 60},66`} /> : null}
         </g>
       ))}
-      <Lens x={110} y={66} r={20} />
+      {/* Reading the flow on, to the step whose foot is to rebuild. */}
+      <Move x={60}>
+        <Lens x={110} y={66} r={20} />
+      </Move>
       <Glyph name="check-circle" cx={68} cy={106} size={14} className={styles.glyph} />
       <Glyph name="check-circle" cx={128} cy={106} size={14} className={styles.glyph} />
       <Hatched x={174} y={98} w={32} h={20} />

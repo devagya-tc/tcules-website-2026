@@ -20,7 +20,7 @@ arrangement holds it → what it must never do.**
 | **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
 | **An abstract claim with no evidence in its sentence** | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
-| **A way onward** (questions answered by links to other services, closing a set) | the onward cell: dashed edge in the set's last cell, each question over its answer, links in place; a linked closing statement with no question takes the cell too, words whole | a text cell dropped into the grid, a solid tile that reads as one more item | 2026-10-30-onward-cell |
+| **A way onward** (questions answered by links to other services, closing a set) | the CTA card: 2 columns of the last row (3 or 4 tracks chosen so two cells remain; the rest of the row at five; a whole row when the tiles fill theirs), a ground, no hairline or texture, every question and link, the first action outline then links; a linked closing statement with no question takes the title role | a text cell dropped into the grid, a solid tile that reads as one more item, a dashed onward cell | 2026-10-30-set-ends-in-a-cta-card (supersedes onward-cell) |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
 | **An industry** | the sector photo (a client's user at a good moment) | a metaphor, a generic stock scene | sector photos ruling (26 Oct) |
@@ -46,7 +46,7 @@ arrangement holds it → what it must never do.**
 - **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **An image about one item belongs to that item**, never above the whole set.
-- **A cell filling a hole in a tile grid is a cell of its own kind** (dashed edge, grid radius and inset), at every track count; never a whole row of its own.
+- **The CTA card closes a tile set** (`Bento cta`): a cell of its own kind (the tile's radius, a ground, no hairline, no texture, no lift), two tracks of the last row, or every track it leaves, or a whole row when the tiles fill theirs; never a plain text cell.
 - **A countdown indicator shows where a carousel is heading**: the old bar stays empty, the next is full from the first frame; a wrap never lights the bars it passes.
 - **Outline hover lays the ghost's pale tint under it and firms the line**; press one tint deeper; never the blue solid fill.
 - **Two actions = different jobs?** A way deeper (head end action) and an ask (its own ink island band, one solid to ROUTES.contact, labelled 'Start a project') are separated, not paired. Check order: the island touches no island or tint, and sits two bands above the enquiry island.
@@ -75,7 +75,7 @@ rulings generalised into the tables above, so every service page maps the same w
 1. **The hard parts**: one row per problem, the cited case's own cover beside it. DONE.
 2. **How we work together**: options plated (subject), terms as a lighter tier, the ask its own ink island. DONE.
 3. **Why teams choose Tcules**: evidence shown as proof on one plate; the head's two links as outline + link. DONE.
-4. **What you get**: titled drawn deliverables, terms as the band's foot, the onward cell. DONE.
+4. **What you get**: titled drawn deliverables, terms as the band's foot, the CTA card. DONE.
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.
 
@@ -101,8 +101,8 @@ Also queued for the owner's redesign: /about, sections of /contact, the /service
 | **A reason to choose us** | an isometric illustration of the reason; case links stay in the text | a case cover; a phrase lifted into a figure card | reasons-take-illustrations |
 | **Options + terms that hold for all of them** | options as the subject; terms as one shared tier under the whole set | the terms as more items on the options' grid | options-and-shared-terms-are-two-tiers |
 | **What you get** (deliverables · who works · what we need · where it stops) | four equal parts: flat deliverables, a studio photo, one drawing each for needs and the boundary | three parts as small print under the first | what-you-get-is-four-parts (proposed) |
-| **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card |
-| **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover |
+| **A tile set that closes with a routing line** | a 2-column mini CTA card holding all the content; 3 or 4 columns so it fills the last row | the line placed as plain text in a cell | set-ends-in-a-cta-card (built: structure, Bento `cta`) |
+| **A service tile** | its drawing moves on hover; polished at zoom | a static or sloppy drawing | service-tile-drawing-moves-on-hover (built: structure, Sketch `Move`/`GrowIn`) |
 | **Any image in a card or row** | hairline + rounded corners (card-image-radius-8) | a bare rectangle | 2026-09-29-card-image-radius-8 |
 
 The § 1 rows "Evidence" and "An abstract claim" are refined by these: evidence that SUPPORTS a claim is a

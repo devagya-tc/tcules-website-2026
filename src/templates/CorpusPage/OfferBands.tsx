@@ -20,6 +20,7 @@ import {
   Thread,
   TracePlates,
   VoiceLedger,
+  type BentoCta,
   type BlockCardSetItem,
   type EngagementScope,
   type ReasonsProof,
@@ -96,6 +97,7 @@ import {
   labelTitle,
   lastIndexWhere,
   leadOf,
+  linksIn,
   linkLead,
   plain,
   trimEnd,
@@ -974,7 +976,7 @@ function sentencesOf(runs: readonly InlineRun[]): Sentence[] {
   return out;
 }
 
-/** A closing paragraph authored as questions each answered by where to go (the onward cell): undefined when it is not. */
+/** A closing paragraph authored as questions each answered by where to go (the CTA card's routes): undefined when it is not. */
 function routesOf(
   paragraphs: readonly InlineRun[][],
 ): { question?: string; answer: InlineRun[] }[] | undefined {
@@ -1002,6 +1004,18 @@ function routerBody(
   return table.header.length >= 3
     ? `${second}. ${plain(table.header[2] ?? [])}: ${plain(row[2] ?? [])}`
     : second;
+}
+
+/**
+ * 3 or 4 tracks so the last row leaves exactly two cells for the CTA card; else the count that fills its
+ * rows (the card a whole row); else four, the card taking what the last row leaves
+ * (decisions/2026-10-30-set-ends-in-a-cta-card).
+ */
+function ctaTracks(n: number): 3 | 4 {
+  for (const t of [3, 4] as const) if (n % t !== 0 && t - (n % t) === 2) return t;
+  if (n % 3 === 0) return 3;
+  if (n % 4 === 0) return 4;
+  return 4;
 }
 
 /** M13 — a router: one icon card per destination, title the link's own words, body what follows the colon. */
@@ -1063,9 +1077,10 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
      (owner, 29 Oct 2026; decisions/2026-10-29-named-services-are-service-tiles). */
   const scenes = rows.map((row) => sceneFor(ctx, band, row.href) ?? serviceSceneFor(row.href));
   if (rows.length >= 3 && scenes.every(Boolean)) {
-    /* The closing router is the onward cell (owner, 30 Oct 2026) on every service page that closes
-       its set with a way onward: questions each answered by links, or one linked statement kept whole
-       (its words unchanged, no question). A closing with no link stays below the set. */
+    /* The closing router is the set's CTA card (owner, 30 Oct 2026; decisions/2026-10-30-set-ends-in-a-cta-card)
+       on every service page that closes its set with a way onward: questions each answered by links, or
+       one linked statement kept whole (its words unchanged, no question). The words go in verbatim and
+       every link becomes an action. A closing with no link stays below the set. */
     const routes =
       routesOf(closing) ??
       (closing.length > 0 && closing.every(hasLink)
@@ -1077,18 +1092,23 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             },
           ]
         : undefined);
-    /* Tracks: seven or eight take four, 4 + 3 (owner, 29 Oct 2026, Q7); others three. The onward cell
-       fills the hole the last row leaves and is never a row of its own, so a set that would fill
-       three tracks exactly takes four and leaves the onward cell its space. */
     const n = rows.length;
-    const four = n === 7 || n === 8 || n === 4 || (routes !== undefined && n % 3 === 0);
+    const cta: BentoCta | undefined = routes
+      ? {
+          routes: routes.map((r) => ({
+            ...(r.question ? { question: r.question, answer: plain(r.answer).trim() } : {}),
+            ...(!r.question ? { answer: plain(r.answer).trim() } : {}),
+            actions: linksIn(r.answer).map((link) => ({
+              label: plain(link.children),
+              href: link.href,
+            })),
+          })),
+        }
+      : undefined;
     return wrap(
       <Bento
-        tracks={four ? 4 : 3}
-        onward={routes?.map((r) => ({
-          ...(r.question ? { question: r.question } : {}),
-          answer: renderInline(r.answer),
-        }))}
+        tracks={cta ? ctaTracks(n) : n === 7 || n === 8 || n === 4 ? 4 : 3}
+        cta={cta}
         items={rows.map((row, index) => ({
           id: row.href,
           title: row.title,

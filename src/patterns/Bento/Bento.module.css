@@ -51,58 +51,69 @@
   }
 }
 
-/* The onward cell (`onward`): a cell of its own kind. The tile's radius and inset, its edge dashed
-   (the Sketch grammar's "beyond this set"), no texture, no lift, not one link. */
-.onward {
+/* The CTA card (`cta`): a cell of its own kind. The tile's radius, its own ground at rest, no hairline,
+   no texture, no lift; a `block` inset on a phone, a `gutter` from 768. Placement as `.wide`/`.note`. */
+.cta {
   min-inline-size: 0;
   padding: var(--gap-block);
-  border: var(--bnt-rule-width) dashed var(--bnt-onward-rule-ink);
   border-radius: var(--bnt-radius);
+  background-color: var(--bnt-cta-ground);
 }
 
 @media (min-width: 768px) {
-  .onward {
+  .cta {
+    padding: var(--gap-gutter);
     grid-column: 1 / -1;
   }
 
-  .onward[data-fill-md='true'] {
+  .cta[data-fill-md='true'] {
     grid-column: auto;
   }
 }
 
 @media (min-width: 1024px) {
-  .onward[data-span='1'] {
+  .cta[data-span='1'] {
     grid-column: auto;
   }
 
-  .onward[data-span='2'] {
+  .cta[data-span='2'] {
     grid-column: span 2;
   }
 
-  .onward[data-span='3'] {
+  .cta[data-span='3'] {
     grid-column: span 3;
   }
 
-  .onward[data-span='4'] {
+  .cta[data-span='4'] {
     grid-column: 1 / -1;
   }
 }
 
-.question {
+.ctaTitle {
   color: var(--bnt-title-ink);
-  font: var(--bnt-question-text);
-  letter-spacing: var(--bnt-question-tracking);
-  text-wrap: var(--text-running-wrap);
+  font: var(--bnt-title-text);
+  letter-spacing: var(--bnt-title-tracking);
+  text-wrap: balance;
+  max-inline-size: var(--bnt-body-measure);
 }
 
-.answer {
+.ctaBody {
   color: var(--bnt-body-ink);
   font: var(--bnt-body-text);
   text-wrap: var(--text-running-wrap);
+  max-inline-size: var(--bnt-body-measure);
 }
 
-.answer a {
-  font-weight: var(--font-weight-medium);
+/* One route: the head beside its body is one row that takes the card's height, so the body and its
+   actions sit on the card's foot. */
+@media (min-width: 1024px) {
+  .ctaOne {
+    grid-template-rows: 1fr;
+  }
+
+  .ctaEnd {
+    align-self: end;
+  }
 }
 
 .noteText {

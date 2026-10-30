@@ -30,12 +30,19 @@ export type BentoItem = {
   span?: 1 | 2;
 };
 
+export type BentoCtaAction = { label: string; href: string };
+
 /**
- * One route out of the set: a question and the services that answer it. A closing line authored as a
- * statement with no question ("One hard interaction to try in code is …") is a route with no question:
- * its words stand in the answer role, unchanged.
+ * One route out of the set: a question, the sentence that answers it (plain text, verbatim), its actions.
+ * A closing statement with no question is a route with no `question`: its sentence takes the title role.
  */
-export type BentoRoute = { question?: string; answer: ReactNode };
+export type BentoCtaRoute = {
+  question?: string;
+  answer?: string;
+  actions: readonly BentoCtaAction[];
+};
+
+export type BentoCta = { routes: readonly BentoCtaRoute[] };
 
 export type BentoProps = {
   /** The tiles, in reading order. Built for six on two rows: two wide, four single. */
@@ -58,12 +65,13 @@ export type BentoProps = {
    */
   note?: ReactNode;
   /**
-   * The ONWARD cell (owner, 30 Oct 2026): the band's closing router out of the set, its questions each
-   * answered by the services that take over, in the grid's last cell. Dashed edge (the Sketch grammar's
-   * 'beyond this set'), no texture, not one link; each question over its answer, the answer's links in
-   * place. Exclusive with `note`, which wins nothing: onward is rendered when given.
+   * The band's closing routes as a mini call-to-action card in the grid's last row
+   * (decisions/2026-10-30-set-ends-in-a-cta-card): two tracks, or every track the last row leaves; a
+   * whole row when the tiles fill theirs. It holds every question, sentence and link. Distinct from a
+   * tile: a ground, no hairline, no texture, no lift, not itself a link. Actions are numbered across
+   * the card in reading order: the first is an outline button, every later one a link.
    */
-  onward?: readonly BentoRoute[];
+  cta?: BentoCta;
 };
 
 type Placed = { item: BentoItem; row: number; col: number; span: 1 | 2 };
@@ -91,6 +99,88 @@ function place(items: readonly BentoItem[], TRACKS: 3 | 4): Placed[] {
     }
     return placed;
   });
+}
+
+/** The CTA card's content: each route a question over its answer, its actions at the foot. */
+function CtaCard({ cta }: { cta: BentoCta }) {
+  const { routes } = cta;
+  let n = 0;
+  if (process.env.NODE_ENV !== 'production' && !routes.some((r) => r.actions.length > 0)) {
+    console.warn('Bento: the CTA card has no action.');
+  }
+  const actions = (route: BentoCtaRoute) => (
+    <Cluster colGap="block" rowGap="text" align="center">
+      {route.actions.map((action) =>
+        n++ === 0 ? (
+          <Button key={action.href} as="a" href={action.href} emphasis="outline" size="md">
+            {action.label}
+          </Button>
+        ) : (
+          <Button
+            key={action.href}
+            as="a"
+            href={action.href}
+            emphasis="link"
+            tone="primary"
+            size="md"
+            icon={<Icon name="arrow-right" />}
+          >
+            {action.label}
+          </Button>
+        ),
+      )}
+    </Cluster>
+  );
+  const words = (route: BentoCtaRoute) => (
+    <Layout rowGap="tight">
+      {route.question ? (
+        <>
+          <p className={styles.ctaTitle}>{route.question}</p>
+          {route.answer ? <p className={styles.ctaBody}>{route.answer}</p> : null}
+        </>
+      ) : route.answer ? (
+        <p className={styles.ctaTitle}>{route.answer}</p>
+      ) : null}
+    </Layout>
+  );
+  const [only] = routes;
+  if (routes.length === 1 && only) {
+    /* One route: its head beside its body and actions, a split (section 96); stacked below 1024. */
+    const head = only.question ? (
+      <p className={styles.ctaTitle}>{only.question}</p>
+    ) : only.answer ? (
+      <p className={styles.ctaTitle}>{only.answer}</p>
+    ) : null;
+    return (
+      <Layout
+        className={cx(styles.fill, styles.ctaOne)}
+        columns={{ base: 1, lg: [1, 1] }}
+        colGap="section"
+        rowGap="block"
+      >
+        {head}
+        <Layout rowGap="block" className={styles.ctaEnd}>
+          {only.question && only.answer ? <p className={styles.ctaBody}>{only.answer}</p> : null}
+          {actions(only)}
+        </Layout>
+      </Layout>
+    );
+  }
+  return (
+    <Layout
+      className={styles.fill}
+      columns={{ base: 1, lg: [1, 1] }}
+      colGap="gutter"
+      rowGap="stack"
+    >
+      {routes.map((route, index) => (
+        <Layout key={route.question ?? route.answer ?? index} className={styles.fill} rowGap="block" pinLast>
+          {words(route)}
+          {actions(route)}
+        </Layout>
+      ))}
+    </Layout>
+  );
 }
 
 /** One tile's link: its words and its drawing, stacked, or side by side when it is wide. */
@@ -260,10 +350,14 @@ export function ServiceTile({
  * tile to tile. Neutral at rest; on hover the tile's own texture turns blue, its hairline turns
  * light blue, it lifts and its title takes the accent.
  *
+ * Every tile's drawing moves on hover or focus: a story scene tells its story, any other makes its one
+ * `Move`/`GrowIn` move on the tile's own curve (decisions/2026-10-30-service-tile-drawing-moves-on-hover).
+ * The set may close on a CTA card (`cta`, decisions/2026-10-30-set-ends-in-a-cta-card).
+ *
  * Tiles carry no icon: the drawing is the tile's visual, and a glyph above the title made two marks
  * compete in one tile (owner, 19 Oct 2026).
  */
-export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, onward }: BentoProps) {
+export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, cta }: BentoProps) {
   if (items.length === 0) return null;
   const placed = place(items, tracks);
   if (
@@ -299,20 +393,13 @@ export function Bento({ items, titleAs: Title = 'h3', tracks = 4, note, onward }
           <TileLink item={item} wide={span === 2} Title={Title} />
         </li>
       ))}
-      {onward?.length ? (
+      {cta?.routes.length ? (
         <li
-          className={styles.onward}
+          className={styles.cta}
           data-span={noteSpan}
           data-fill-md={items.length % 2 === 1 ? 'true' : undefined}
         >
-          <Layout rowGap="block">
-            {onward.map((route, index) => (
-              <Layout key={route.question ?? index} rowGap="tight">
-                {route.question ? <p className={styles.question}>{route.question}</p> : null}
-                <p className={styles.answer}>{route.answer}</p>
-              </Layout>
-            ))}
-          </Layout>
+          <CtaCard cta={cta} />
         </li>
       ) : note ? (
         <li className={styles.note} data-span={noteSpan}>
