@@ -4,7 +4,7 @@ date: 2026-10-30
 status: active
 area: [proof, layout]
 source: "Owner, 30 Oct 2026, product design review (mockups: https://claude.ai/artifact/6utQc5E3PUiZdZB9N5HiRd)"
-supersedes: [2026-10-30-hard-parts-case-row]
+supersedes: []
 dbf: []
 dbf_status: none
 enforced_by: review

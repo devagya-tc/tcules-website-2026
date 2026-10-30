@@ -1,7 +1,7 @@
 ---
 title: "Options and the terms that hold for all of them are two tiers, not one grid"
 date: 2026-10-30
-status: active
+status: superseded
 area: [layout]
 source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the L1 service pages"
 supersedes: []
