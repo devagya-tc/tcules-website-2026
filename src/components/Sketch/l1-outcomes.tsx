@@ -48,6 +48,7 @@ function AiChecks() {
       <Copy x={46} y={66} w={84} quiet />
       <Rect x={46} y={78} w={36} h={12} rx={6} className={styles.tile} />
       <Hop x1={82} x2={112} y={84} />
+      <Rect x={112} y={72} w={24} h={24} rx={4} className={styles.tile} />
       <Glyph name="document-text" cx={124} cy={84} size={16} className={styles.glyphQuiet} />
       <Rect x={46} y={104} w={56} h={24} rx={12} className={styles.tile} />
       <Glyph name="undo-left" cx={62} cy={116} size={14} className={styles.glyph} />
@@ -129,7 +130,7 @@ function DsTokens() {
   return (
     <>
       <Rect x={30} y={34} w={90} h={112} rx={8} className={styles.frame} />
-      <Rect x={36} y={74} w={36} h={30} rx={6} className={styles.halo} />
+      <Rect x={36} y={108} w={36} h={30} rx={6} className={styles.halo} />
       {[0, 1, 2].map((i) => (
         <g key={i}>
           <Rect x={42} y={46 + i * 34} w={24} h={18} className={[styles.soft, styles.region, styles.solid][i]} />
@@ -140,11 +141,11 @@ function DsTokens() {
       <Rect x={160} y={36} w={60} h={96} rx={8} className={styles.frameQuiet} />
       <Rect x={170} y={48} w={40} h={22} className={styles.region} />
       <Copy x={170} y={88} w={32} quiet />
-      <Rect x={170} y={100} w={40} h={16} rx={8} className={styles.solid} />
+      <Rect x={170} y={100} w={40} h={16} rx={8} className={styles.region} />
       <Rect x={230} y={36} w={60} h={96} rx={8} className={styles.frameQuiet} />
       <Rect x={240} y={48} w={40} h={22} className={styles.region} />
       <Copy x={240} y={88} w={32} quiet />
-      <Rect x={240} y={100} w={40} h={16} rx={8} className={styles.solid} />
+      <Rect x={240} y={100} w={40} h={16} rx={8} className={styles.region} />
     </>
   );
 }
@@ -254,13 +255,13 @@ function BuildParts() {
     <>
       {g.map((n, i) => (
         <g key={n}>
-          <Rect x={40} y={34 + i * 28} w={96} h={22} className={styles.tile} />
-          <Glyph name={n} cx={56} cy={45 + i * 28} size={14} className={styles.glyph} />
-          <Copy x={72} y={45 + i * 28} w={48} quiet />
-          <path className={styles.line} d={`M88,${56 + i * 28} L88,${62 + i * 28}`} />
+          <Rect x={40} y={32 + i * 24} w={96} h={20} className={styles.tile} />
+          <Glyph name={n} cx={56} cy={42 + i * 24} size={14} className={styles.glyph} />
+          <Copy x={72} y={42 + i * 24} w={48} quiet />
+          <path className={styles.line} d={`M88,${52 + i * 24} L88,${56 + i * 24}`} />
         </g>
       ))}
-      <Hatched x={40} y={118} w={96} h={22} />
+      <Hatched x={40} y={104} w={96} h={20} />
       <Hop x1={136} x2={176} y={90} />
       <Rect x={176} y={44} w={114} h={92} rx={8} className={styles.frame} />
       <Copy x={190} y={62} w={44} quiet />
@@ -281,10 +282,10 @@ function BreakPoints() {
         <g key={n}>
           <Rect x={44 + (i % 2) * 90} y={48 + Math.floor(i / 2) * 44} w={76} h={32} className={styles.tile} />
           <Glyph name={n} cx={62 + (i % 2) * 90} cy={64 + Math.floor(i / 2) * 44} size={16} className={styles.glyph} />
-          <Copy x={78 + (i % 2) * 90} y={64 + Math.floor(i / 2) * 44} w={28} quiet />
+          {i === 0 ? null : <Copy x={78 + (i % 2) * 90} y={64 + Math.floor(i / 2) * 44} w={28} quiet />}
         </g>
       ))}
-      <Lens x={88} y={60} r={14} />
+      <Lens x={62} y={64} r={14} />
       <Hop x1={216} x2={244} y={90} />
       <Rect x={244} y={58} w={46} h={64} rx={8} className={styles.frame} />
       <Focus x={267} y={90} glyph="shield-check" size={12} />
@@ -340,10 +341,10 @@ function HabitsRecord() {
       <Rect x={116} y={88} w={44} h={16} rx={8} className={styles.tile} />
       <Copy x={170} y={96} w={52} quiet />
       {[0, 1, 2].map((i) => (
-        <Rect key={i} x={118 + i * 10} y={132 - [8, 16, 12][i]!} w={6} h={[8, 16, 12][i]!} rx={1} className={styles.solid} />
+        <Rect key={i} x={118 + i * 10} y={132 - [8, 16, 12][i]!} w={6} h={[8, 16, 12][i]!} rx={1} className={styles.region} />
       ))}
       <Glyph name="calendar" cx={170} cy={124} size={14} className={styles.glyphQuiet} />
-      <Focus x={266} y={52} glyph="check-circle" size={12} />
+      <Focus x={266} y={56} glyph="check-circle" size={12} />
       </g>
     </>
   );

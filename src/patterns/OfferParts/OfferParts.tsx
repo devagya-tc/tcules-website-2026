@@ -139,7 +139,7 @@ export function OfferParts({
                 <Layout
                   as="li"
                   key={item.title}
-                  columns={{ base: [5, 6], lg: 1 }}
+                  columns={{ base: [2, 3], md: [1, 3], lg: 1 }}
                   colGap="gutter"
                   rowGap="block"
                   align="start"

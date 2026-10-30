@@ -77,21 +77,18 @@ const ROWS = [50, 90, 130] as const;
  */
 function Needs({
   inputs,
-  ports = [110, 110, 110],
 }: {
   inputs: readonly [ReactNode, ReactNode, ReactNode];
-  /** Each input's right port (a dot), where its route leaves it. */
-  ports?: readonly [number, number, number];
 }) {
   return (
     <>
       <Rect x={30} y={30} w={100} h={120} rx={8} className={styles.tile} />
       {inputs}
-      <path className={styles.line} d={`M${ports[0]},50 L144,50 A6,6 0 0 1 150,56 L150,90`} />
-      <path className={styles.line} d={`M${ports[2]},130 L144,130 A6,6 0 0 0 150,124 L150,90`} />
-      <path className={styles.line} d={`M${ports[1]},90 L150,90`} />
-      {ROWS.map((y, i) => (
-        <circle key={y} className={styles.node} cx={ports[i]} cy={y} r="2.5" />
+      <path className={styles.line} d={`M130,50 L144,50 A6,6 0 0 1 150,56 L150,90`} />
+      <path className={styles.line} d={`M130,130 L144,130 A6,6 0 0 0 150,124 L150,90`} />
+      <path className={styles.line} d={`M130,90 L150,90`} />
+      {ROWS.map((y) => (
+        <circle key={y} className={styles.node} cx={130} cy={y} r="2.5" />
       ))}
       <circle className={styles.node} cx="150" cy="90" r="3.5" />
       <Hop x1={150} x2={190} y={90} />
@@ -280,7 +277,7 @@ function NeedsProductDesign() {
   return (
     <Needs
       inputs={[
-        <Sheet key="a" cx={72} cy={50} behind={2} />,
+        <Sheet key="a" cx={72} cy={54} behind={2} />,
         <C key="b" cx={80} cy={90} glyph="users-group-rounded" />,
         <Focus key="c" x={80} y={130} glyph="user" size={12} />,
       ]}
@@ -292,7 +289,6 @@ function NeedsProductDesign() {
 function NeedsAiProductUx() {
   return (
     <Needs
-      ports={[110, 110, 130]}
       inputs={[
         <Focus key="a" x={80} y={50} glyph="checklist" size={12} />,
         <Chips key="b" cx={80} cy={90} glyphs={['database', 'lock']} />,
@@ -311,7 +307,6 @@ function NeedsAiProductUx() {
 function NeedsDesignEngineering() {
   return (
     <Needs
-      ports={[110, 110, 130]}
       inputs={[
         <Focus key="a" x={80} y={50} glyph="widget" size={12} />,
         <Chips key="b" cx={80} cy={90} glyphs={['code', 'key']} />,
@@ -331,7 +326,6 @@ function NeedsDesignEngineering() {
 function NeedsDesignSystems() {
   return (
     <Needs
-      ports={[130, 130, 110]}
       inputs={[
         <Chips key="a" cx={80} cy={50} glyphs={['monitor', 'ruler-pen', 'code']} />,
         <g key="b">
@@ -349,7 +343,6 @@ function NeedsDesignSystems() {
 function NeedsNewProduct() {
   return (
     <Needs
-      ports={[130, 110, 110]}
       inputs={[
         <g key="a">
           <Sheet cx={58} cy={50} behind={2} />
@@ -367,7 +360,6 @@ function NeedsNewProduct() {
 function NeedsProductModernisation() {
   return (
     <Needs
-      ports={[130, 110, 110]}
       inputs={[
         <Chips key="a" cx={80} cy={50} glyphs={['monitor', 'graph-up', 'chat-round-dots']} />,
         <C key="b" cx={80} cy={90} glyph="users-group-rounded" />,
@@ -381,10 +373,9 @@ function NeedsProductModernisation() {
 function NeedsSoftwareDevelopment() {
   return (
     <Needs
-      ports={[130, 110, 110]}
       inputs={[
         <g key="a">
-          <Sheet cx={56} cy={50} behind={2} />
+          <Sheet cx={56} cy={54} behind={2} />
           <C cx={104} cy={50} glyph="code" />
         </g>,
         <Chips key="b" cx={80} cy={90} glyphs={['key', 'server']} />,
