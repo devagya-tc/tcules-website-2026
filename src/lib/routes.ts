@@ -293,13 +293,12 @@ export const INSIGHT_PATH_REDIRECTS: Readonly<Record<string, string>> = {
 };
 
 /**
- * The copy's expertise slug → the slug the page lives at on Strapi today. The 26 Oct 2026 copy renamed
- * `/expertise/fintech-insurtech` to `/expertise/fintech` (its `redirect_from`); until that page renders
- * from the corpus, next.config.ts serves the new path as a temporary redirect to the live one, so every
- * link to ROUTES.fintech opens a real page. The entry goes when the page switches to the corpus.
+ * A live expertise slug → the slug the 26 Oct 2026 copy renamed it to (the copy's `redirect_from`):
+ * `/expertise/fintech-insurtech` became `/expertise/fintech`. Every expertise page renders from the
+ * corpus now, so next.config.ts sends the old path to the new one and old links keep landing.
  */
 export const EXPERTISE_SLUG_REDIRECTS: Readonly<Record<string, string>> = {
-  fintech: 'fintech-insurtech',
+  'fintech-insurtech': 'fintech',
 };
 
 /** A placeholder case link: the case index, marked so every one can be found and replaced. */

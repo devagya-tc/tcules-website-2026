@@ -341,15 +341,52 @@ function capitalFirst(runs: InlineRun[]): InlineRun[] {
 }
 
 /**
+ * Runs split at the first ` · ` inside a text run: what comes before it and what comes after, both
+ * as authored. Null when the separator is not there.
+ */
+function splitAtDot(runs: readonly InlineRun[]): [InlineRun[], InlineRun[]] | null {
+  for (let i = 0; i < runs.length; i += 1) {
+    const run = runs[i];
+    if (run?.type !== 'text') continue;
+    const at = run.text.indexOf(' · ');
+    if (at < 0) continue;
+    const before = run.text.slice(0, at);
+    const after = run.text.slice(at + 3);
+    return [
+      [...runs.slice(0, i), ...(before ? [{ type: 'text' as const, text: before }] : [])],
+      [...(after ? [{ type: 'text' as const, text: after }] : []), ...runs.slice(i + 1)],
+    ];
+  }
+  return null;
+}
+
+/**
  * One list item or claim as a promise. A bold lead is the title (a lead authored as a link keeps it,
  * C7); otherwise a colon inside the first seventy characters splits title from body; otherwise the
  * whole sentence is the title (component-map § A `what-you-get`).
  */
 function sheetItem(
   runs: readonly InlineRun[],
-  opts?: { wholeSentence?: boolean },
+  opts?: { wholeSentence?: boolean; runOn?: boolean },
 ): OfferSheetItem {
   const lead = boldLead(runs);
+  /* An expertise page's "What we design" item is "**Kind** what it covers · the client or the
+     promise". The bold is the start of one phrase, not a label: titled on the bold alone, the body
+     began ", from sign-up…" or "· Cover explained…". The phrase up to ` · ` is the title, and what
+     follows it is the body (a client, often linked, or the promise). Words unchanged. */
+  if (lead && opts?.runOn) {
+    /* The untrimmed runs after the bold: `boldLead` trims the gap the phrase needs. */
+    const split = splitAtDot(runs.slice(1));
+    const phrase = split ? split[0] : runs.slice(1);
+    const note = split ? trimStart(split[1]) : [];
+    const link = linkIn(lead.label);
+    const title = `${inlineToText(lead.label)}${inlineToText(phrase)}`.replace(/\s+/g, ' ').trim();
+    return {
+      title,
+      ...(link ? { href: link.href } : {}),
+      ...(note.length > 0 ? bodyFields(note) : {}),
+    };
+  }
   if (lead) {
     const link = linkIn(lead.label);
     const labelText = inlineToText(lead.label).trim();
@@ -422,7 +459,10 @@ export function sheetParts(band: CorpusBand): SheetParts {
   let end = start;
   const at = blocks[start];
   if (at?.type === 'list') {
-    const opts = { wholeSentence: band.id === 'what-you-get' };
+    const opts = {
+      wholeSentence: band.id === 'what-you-get',
+      runOn: band.id === 'what-we-design',
+    };
     items = at.items.map((runs) => sheetItem(runs, opts));
     /* A set is titled throughout or not at all (review 29 Oct): where any promise is authored with
        no lead of its own, every promise is a statement, its words whole in the body role. */
@@ -535,10 +575,19 @@ export function SheetBand({
       <BandBody blocks={noteBlocks} labelledBy={head(band).headingId} />
     ) : undefined;
   if (items.length > 6) {
-    const rows: ReadDownRow[] = items.map((item) => ({
-      title: item.title ?? item.id ?? '',
-      ...(item.bodyHtml ? { bodyHtml: [item.bodyHtml] } : item.body ? { body: item.body } : {}),
-    }));
+    /* A statement (no title of its own) is its body: set as the row's title it would print twice. */
+    const rows: ReadDownRow[] = items.map((item) =>
+      item.title
+        ? {
+            title: item.title,
+            ...(item.bodyHtml
+              ? { bodyHtml: [item.bodyHtml] }
+              : item.body
+                ? { body: item.body }
+                : {}),
+          }
+        : { title: item.body ?? item.id ?? '' },
+    );
     return (
       <ContentSection {...head(band)} data-band="D" lead={parts.lead} footer={combined}>
         <Layout rowGap="block">
