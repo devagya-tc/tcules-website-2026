@@ -574,7 +574,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const links = parts.after.flatMap((block) =>
           block.type === 'links' ? block.links : [],
         );
-        const action = links.length > 0 ? <LinkActions links={links} /> : undefined;
+        const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         /* Drawn once every reason resolves to its figure: the Reasons band, its head above and the
            reasons below (owner, 29 Oct 2026; decisions/2026-10-29-set-reasons-head-above-drawing-above).
            Isometric, so it never reads as How we work together's flat options beside it

@@ -70,7 +70,7 @@ const DRAWN: Partial<Record<SketchName, readonly [number, number, number, number
   /* The two engagement terms' marks (EngagementOptions `terms`, owner 30 Oct 2026): set bare, so
      cropped to the drawn edge. */
   'scope-build': [30, 30, 260, 120],
-  'scope-overlap': [50, 30, 220, 120],
+  'scope-overlap': [50, 24, 220, 126],
 };
 
 /**
