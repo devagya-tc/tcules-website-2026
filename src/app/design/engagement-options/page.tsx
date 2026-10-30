@@ -76,7 +76,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together"
         title="0 · How we work together — the offer pages and home (owner, 29 Oct 2026)"
-        note="The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a port under each option's column, a stem onto one rail spanning the set, the terms under it on two tracks (one below 768), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot), beside its words from 1440. The ask is the next band, an ink island (owner, 30 Oct 2026)."
+        note="The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a stem rising from a port on one rail to each option's own text, the rail running only between the outer stems and turning into them at a rounded corner, the terms under it (one column to 1024, two from there), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot, end-aligned) beside its words from 768. Below 768 the three stems cluster into one short bracket. The ask is the next band, an ink island (owner, 30 Oct 2026)."
       />
       <EngagementOptions
         heading="How we work together"
@@ -107,7 +107,7 @@ export default function EngagementOptionsSpecimen() {
       <Variation
         id="together-tint"
         title="0b · Shared terms on tint"
-        note="The same options and terms on the tint surface, proving the rail and port inks per surface. The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a port under each option's column, a stem onto one rail spanning the set, the terms under it on two tracks (one below 768), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot), beside its words from 1440. The ask is the next band, an ink island (owner, 30 Oct 2026)."
+        note="The same options and terms on the tint surface, proving the rail and port inks per surface. The three options take three tracks from 768, each its flat scope drawing on its plate. The two closing terms hold for every option, so they are ONE tier under the whole set: a stem rising from a port on one rail to each option's own text, the rail running only between the outer stems and turning into them at a rounded corner, the terms under it (one column to 1024, two from there), each led by its small mark (scope-build, scope-overlap at 0.6 in a fixed slot, end-aligned) beside its words from 768. Below 768 the three stems cluster into one short bracket. The ask is the next band, an ink island (owner, 30 Oct 2026)."
       />
       <EngagementOptions
         surface="tint"

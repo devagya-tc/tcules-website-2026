@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Layout, Section, Sketch, type SectionSurface } from '@/components';
+import { Cluster, Layout, Section, Sketch, type SectionSurface } from '@/components';
 import { cx } from '@/lib/cx';
 
 import styles from './EngagementOptions.module.css';
@@ -76,11 +76,13 @@ export type EngagementOptionsProps = {
   note?: ReactNode;
   /**
    * Terms that hold for every option, one tier under the whole set (owner, 30 Oct 2026;
-   * decisions/2026-10-30-options-and-shared-terms-are-two-tiers, -shared-terms-sit-on-one-rail). A port
-   * under each option's column drops a stem onto one rail spanning the set; the terms sit under it on
-   * two tracks a column apart (one below 768), each led by its mark in a fixed 160 × 80 slot at 0.6,
-   * beside its words from 1440 and above them below. The rail aligns with the options where they sit
-   * on one row (three options from 768).
+   * decisions/2026-10-30-options-and-shared-terms-are-two-tiers, -shared-terms-sit-on-one-rail). Three
+   * options (the set that sits on one row from 768) are joined: a stem rises from a port on the rail
+   * to each option's own text, the rail runs from the first stem to the last and turns into them at a
+   * rounded corner, and the terms sit under it, one column to 1024 and two a column apart from there,
+   * each led by its mark in a fixed 160 × 80 slot, end-aligned beside its words from 768 (words alone
+   * below). Below 768 the stacked options share no row, so the three stems cluster into one short
+   * bracket. Any other count renders the terms without a rail.
    */
   terms?: readonly EngagementTerm[];
   /**
@@ -101,6 +103,16 @@ export type EngagementOptionsProps = {
 /** The scope's drawing: a kit scene, on its plate, in the grammar every flat drawing shares. */
 function Drawing({ scope }: { scope: EngagementScope }) {
   return <Sketch name={`scope-${scope}`} />;
+}
+
+/** Where a stem lands on the rail: a port centred on it, the rail's piece beside it (CSS, by position). */
+function Junction({ index, last }: { index: number; last: number }) {
+  const pos = index === 0 ? 'first' : index === last ? 'last' : 'mid';
+  return (
+    <Layout justifyItems="center" align="center" className={styles.junction} data-pos={pos}>
+      <span className={styles.port} />
+    </Layout>
+  );
 }
 
 /**
@@ -135,6 +147,8 @@ export function EngagementOptions({
   const dense = shown.length >= 5;
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
+  /* Three options sit on one row from 768, so only they can be joined by a rail. */
+  const joined = three && terms.length > 0 && arrangement === 'grid';
   const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
   const optionTracks = dense
     ? ({ base: 1, md: 2, lg: 3, xl: 5 } as const)
@@ -171,15 +185,15 @@ export function EngagementOptions({
             </Layout>
           ) : null}
         </Layout>
-        <Layout rowGap="block">
+        <Layout rowGap={joined ? 'none' : 'block'}>
           {arrangement === 'grid' ? (
             /* Image cards, four across from 1024 (owner, 11 Oct: "make it 4x1"), two by two from 768, one
                column below: a borderless tile each (the drawing's plate is the image, the
                name and its words under it), 32 across and a `column` down the set — the row seam of
                every borderless card set. */
             <Layout as="ul" columns={optionTracks} colGap="gutter" rowGap="column">
-              {shown.map((option) => (
-                <li key={option.title}>
+              {shown.map((option) => {
+                const card = (
                   <Layout rowGap="block">
                     {option.scope ? <Drawing scope={option.scope} /> : null}
                     <Layout rowGap="text">
@@ -189,8 +203,23 @@ export function EngagementOptions({
                       <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
                     </Layout>
                   </Layout>
-                </li>
-              ))}
+                );
+                return joined ? (
+                  /* The stem starts a `block` under THIS option's words and runs to the rail, so
+                     its length absorbs the difference in text height. From 768 only. */
+                  <Layout as="li" key={option.title} fillLast>
+                    {card}
+                    <div className={styles.stemCell} aria-hidden="true">
+                      <Layout rowGap="block" justifyItems="center" fillLast className={styles.stemFill}>
+                        <span />
+                        <span className={styles.stem} />
+                      </Layout>
+                    </div>
+                  </Layout>
+                ) : (
+                  <li key={option.title}>{card}</li>
+                );
+              })}
             </Layout>
           ) : (
             <Layout as="ul" rowGap="column">
@@ -217,29 +246,45 @@ export function EngagementOptions({
             </Layout>
           )}
           {terms.length > 0 ? (
-            /* The shared base: the options drop onto one rail and the terms sit under it. The rail is
-               a drawn connector (port, stem, line), decorative, so hidden from assistive tech. */
+            /* The shared base. Joined, the stems come down out of the options and meet the rail in
+               a junction row: a port centred on the rail where each stem lands, the rail running
+               from the first stem to the last and turning into the outer two at a rounded corner.
+               Decorative, so hidden from assistive tech. Below 768 the stacked options share no
+               row, so a short bracket of three stems stands in. */
             <Layout rowGap="block">
-              <div aria-hidden="true">
-                <Layout>
-                  <Layout columns={{ base: shown.length }} colGap="gutter">
-                    {shown.map((option) => (
-                      <Layout key={option.title} justifyItems="center">
-                        <span className={styles.port} />
-                        <span className={styles.stem} />
-                      </Layout>
-                    ))}
-                  </Layout>
-                  <span className={styles.rail} />
-                </Layout>
-              </div>
-              <Layout as="ul" columns={{ base: 1, md: 2 }} colGap="column" rowGap="gutter">
+              {joined ? (
+                <>
+                  <div className={styles.fromMd} aria-hidden="true">
+                    <Layout columns={shown.length} colGap="gutter">
+                      {shown.map((option, index) => (
+                        <Junction key={option.title} index={index} last={shown.length - 1} />
+                      ))}
+                    </Layout>
+                  </div>
+                  <div className={styles.belowMd} aria-hidden="true">
+                    <Layout rowGap="block">
+                      <span />
+                      <Cluster colGap="gutter" justify="center" align="start">
+                        {shown.map((option, index) => (
+                          <Layout key={option.title} justifyItems="center">
+                            <span className={styles.stem} />
+                            <Junction index={index} last={shown.length - 1} />
+                          </Layout>
+                        ))}
+                      </Cluster>
+                    </Layout>
+                  </div>
+                </>
+              ) : null}
+              <Layout as="ul" columns={{ base: 1, lg: 2 }} colGap="column" rowGap="gutter">
                 {terms.map((term, index) => (
                   <li key={index}>
-                    <Layout columns={{ xl: ['auto', 1] }} colGap="block" rowGap="block" align="start">
+                    <Layout columns={{ md: ['auto', 1] }} colGap="block" rowGap="block" align="start">
                       {term.scope ? (
                         <div className={styles.termMark}>
-                          <Sketch name={`scope-${term.scope}`} frame="bare" />
+                          <Layout justifyItems="end">
+                            <Sketch name={`scope-${term.scope}`} frame="bare" />
+                          </Layout>
                         </div>
                       ) : null}
                       <p className={styles.termText}>{term.body}</p>

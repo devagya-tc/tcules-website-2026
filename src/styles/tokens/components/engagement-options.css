@@ -7,7 +7,7 @@
 
    Naming: --eop-{part}-{role}
      parts  heading · lead · title · body · term (a closing term led by its small bare drawing, 30 Oct 2026)
-            · rail · stem · port · term-mark
+            · rail · stem · port · corner · term-mark
      roles  text · tracking · measure · ink · size · width · radius · scale
 
    No state tokens: nothing responds to a pointer (still none). Every surface block
@@ -30,7 +30,7 @@
   /* `rows`: with a half-width row to itself, what an option is reads at the lead size. */
   --eop-body-text-rows: var(--text-lead);
   --eop-body-measure: var(--measure-lead);
-  /* A closing term reads at a card body's size (14), on the hairline a list tile carries. */
+  /* A closing term reads at a card body's size (14), under the shared rail. */
   --eop-term-text: var(--text-body-sm);
   /* A component SIZE: the term's mark at 0.6 of its drawing units, so it reads as a mark on the shared
      rail and never as a fourth or fifth card image (round 6, 30 Oct 2026). */
@@ -44,6 +44,8 @@
   /* A component SIZE: port to rail. */
   --eop-stem-size: var(--space-32);
   --eop-port-size: var(--space-8);
+  /* A component SIZE: the radius where an outer stem turns into the rail. */
+  --eop-corner-size: var(--space-8);
   --eop-port-radius: var(--radius-full);
 }
 

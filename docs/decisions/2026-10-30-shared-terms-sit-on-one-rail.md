@@ -10,7 +10,7 @@ dbf_status: none
 enforced_by: review
 ---
 
-Under a set of options, the terms that hold for all of them sit on one rail: a port under each option's column, a stem onto a rail spanning the whole set, the terms under it on their own track count, each led by a small mark in a fixed slot. The rail is a drawn connector (flat grammar: port, line on the axes, accent ports on a softer line) and never appears without its stems, which would make it a ruled divider.
+Under a set of options, the terms that hold for all of them sit on one rail, drawn as a join: a stem rises from a port on the rail to each option's own text (its length absorbs the difference in text height), the rail runs only from the first stem to the last and turns into the outer two at a rounded corner, and the terms sit under it on their own track count, each led by a small mark in a fixed slot, end-aligned beside its words from 768 (words alone below). Below 768 the stacked options share no row, so the three stems cluster into one short bracket. The rail is a drawn connector (flat grammar: lines on the axes turning at corners, accent ports on a softer line) and never appears without its stems, which would make it a ruled divider; a full-width run, or ports hung under the text, would read as a timeline of ordered stages.
 
 **Why.** The two-tier ruling needs the shared tier to be visible as shared; a different track count alone still read as more items, and a box would be a container reflex.
 

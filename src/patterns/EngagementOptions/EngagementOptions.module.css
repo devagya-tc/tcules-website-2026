@@ -47,7 +47,9 @@
   font: var(--eop-body-text-rows);
 }
 
-/* A closing term's mark, in a fixed slot so both terms' words start on one line. */
+/* A closing term's mark, in a fixed slot so both terms' words start on one line, the drawing set to
+   the slot's inline end so every mark is one `block` from its own words whatever its width. From 768
+   only: below it the term is words alone, never a picture over text. */
 .termMark {
   inline-size: var(--eop-term-mark-inline);
   block-size: var(--eop-term-mark-block);
@@ -55,8 +57,59 @@
   --skt-scale: var(--eop-term-art-scale);
 }
 
-/* The shared rail is a drawn connector in the flat grammar (port, line on the axes), never a divider;
-   it renders only with its stems. */
+@media (max-width: 767.98px) {
+  .termMark {
+    display: none;
+  }
+}
+
+/* The shared rail is a drawn connector in the flat grammar (a port, lines on the axes that turn at
+   corners), never a divider: it renders only with its stems, and it runs from the first stem to the
+   last, because a line that leads nowhere at either end reads as a ruler. */
+.stem {
+  inline-size: var(--eop-rail-width);
+  min-block-size: var(--eop-stem-size);
+  background: var(--eop-rail-ink);
+}
+
+/* The stem's cell: the last row of an option, so it takes whatever height the option's own text
+   leaves under the tallest one. Rows only from 768, where the options share one. */
+.stemFill {
+  block-size: 100%;
+}
+
+.belowMd {
+  display: block;
+}
+
+.fromMd {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .belowMd {
+    display: none;
+  }
+
+  .fromMd {
+    display: block;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .stemCell {
+    display: none;
+  }
+}
+
+/* A junction: the port centred on the rail, the rail's own piece drawn beside it by position. A
+   middle stem crosses the rail; the outer two turn into it at a rounded corner. The pieces reach
+   half a gutter past the cell so neighbouring cells meet in the gap between them. */
+.junction {
+  position: relative;
+  block-size: var(--eop-port-size);
+}
+
 .port {
   inline-size: var(--eop-port-size);
   block-size: var(--eop-port-size);
@@ -64,15 +117,44 @@
   background: var(--eop-port-ink);
 }
 
-.stem {
-  inline-size: var(--eop-rail-width);
-  block-size: var(--eop-stem-size);
+.junction::before {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(50% - var(--eop-rail-width) / 2);
+  block-size: var(--eop-rail-width);
+  inset-inline: calc(var(--gap-gutter) / -2);
   background: var(--eop-rail-ink);
 }
 
-.rail {
-  block-size: var(--eop-rail-width);
-  background: var(--eop-rail-ink);
+.junction[data-pos='first']::before {
+  inset-inline-start: calc(50% - var(--eop-rail-width) / 2 + var(--eop-corner-size));
+}
+
+.junction[data-pos='last']::before {
+  inset-inline-end: calc(50% - var(--eop-rail-width) / 2 + var(--eop-corner-size));
+}
+
+.junction[data-pos='first']::after,
+.junction[data-pos='last']::after {
+  content: '';
+  position: absolute;
+  inset-block-start: calc(50% + var(--eop-rail-width) / 2 - var(--eop-corner-size));
+  inline-size: var(--eop-corner-size);
+  block-size: var(--eop-corner-size);
+  border: 0 solid var(--eop-rail-ink);
+  border-block-end-width: var(--eop-rail-width);
+}
+
+.junction[data-pos='first']::after {
+  inset-inline-start: calc(50% - var(--eop-rail-width) / 2);
+  border-inline-start-width: var(--eop-rail-width);
+  border-end-start-radius: var(--eop-corner-size);
+}
+
+.junction[data-pos='last']::after {
+  inset-inline-end: calc(50% - var(--eop-rail-width) / 2);
+  border-inline-end-width: var(--eop-rail-width);
+  border-end-end-radius: var(--eop-corner-size);
 }
 
 .termText {
