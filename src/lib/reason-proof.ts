@@ -13,7 +13,8 @@
  * none is new copy. The template checks each against the sentence in development, so an edit to the
  * copy that drops a fact warns rather than leaving a figure the sentence no longer supports.
  *
- * Home only: the offer pages keep the drawn Reasons (reason-figures).
+ * Offer pages show proof too (owner, 30 Oct 2026, round 5): a reason that links a case shows its cover,
+ * a tenure shows as a figure; the drawn Reasons (reason-figures) remain where a reason names no evidence.
  */
 export type ReasonProofFigure = {
   value: string;
@@ -45,4 +46,14 @@ export const HOME_REASON_PROOF: Readonly<Record<string, ReasonProofSpec>> = {
       },
     ],
   },
+};
+
+/**
+ * Offer pages' Why Tcules: a reason with no linked case shows its tenure; keyed by title without its
+ * full stop; `from` is checked against the sentence.
+ */
+export const OFFER_REASON_FIGURES: Readonly<Record<string, readonly ReasonProofFigure[]>> = {
+  'Senior people do the work, and clients keep us for years': [
+    { value: '3 years', label: 'Primelis', from: 'three years' },
+  ],
 };

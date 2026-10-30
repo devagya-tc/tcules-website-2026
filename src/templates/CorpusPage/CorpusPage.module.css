@@ -98,3 +98,16 @@
   max-inline-size: var(--measure-lead);
 }
 
+
+/* A hard part's sentences: body role at the lead measure; links take the base link style. */
+.hardBody {
+  font: var(--text-body);
+  text-wrap: var(--text-running-wrap);
+  max-inline-size: var(--measure-lead);
+}
+
+/* The cited case's own cover, a 16:9 box Media fills (edge="placement" draws its rule). */
+.hardCover {
+  aspect-ratio: var(--cpg-cover-ratio);
+  inline-size: 100%;
+}

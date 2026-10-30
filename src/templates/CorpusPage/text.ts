@@ -165,3 +165,13 @@ export function loneLink(
   if (second === undefined) return first;
   return second.type === 'text' && /^\s*[.]?\s*$/.test(second.text) ? first : null;
 }
+
+/** A hard part's "Example:" paragraph: its first link (the cited case or page), else undefined. */
+export function exampleLink(
+  runs: readonly InlineRun[],
+): { href: string; name: string } | undefined {
+  if (!/^example:/i.test(plain(runs).trimStart())) return undefined;
+  const run = runs.find((r) => r.type === 'link');
+  if (!run || run.type !== 'link') return undefined;
+  return { href: run.href, name: plain(run.children).replace(/['’]s$/, '') };
+}

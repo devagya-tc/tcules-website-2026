@@ -1,7 +1,7 @@
 import type { CorpusBand, CorpusBlock, CorpusPage } from '@/lib/corpus-types';
 
 import { formBeforeFaq } from './order';
-import { boldLead, linkLead, plain } from './text';
+import { boldLead, exampleLink, linkLead, plain } from './text';
 
 /**
  * OfferPage's plan: for every band of a corpus page, WHAT SHAPE it is and, from the page's rhythm,
@@ -462,7 +462,8 @@ function drafts(page: CorpusPage): Draft[] {
       band,
       kind,
       part,
-      /* A prose band or the hard parts with a photograph of their own read as visual. */
+      /* A prose band or the hard parts with a photograph of their own read as visual, and so do hard
+         parts that cite examples: each row is drawn with its case's cover (round 5, 30 Oct). */
       visual:
         kind === 'generic'
           ? false
@@ -471,6 +472,15 @@ function drafts(page: CorpusPage): Draft[] {
             ((kind === 'challenges' || kind === 'text') &&
               page.composition.mediaBindings.some(
                 (m) => m.bound && m.supportsSection === band.id,
+              )) ||
+            (kind === 'challenges' &&
+              band.blocks.some((block) =>
+                block.type === 'paragraph'
+                  ? exampleLink(block.runs) !== undefined
+                  : block.type === 'item' &&
+                    block.blocks.some(
+                      (inner) => inner.type === 'paragraph' && exampleLink(inner.runs) !== undefined,
+                    ),
               )),
       ...extra,
     });

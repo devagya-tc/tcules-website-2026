@@ -127,6 +127,15 @@
   }
 }
 
+/* No cover in the set carries a figure: the box is the cover's own 16:9 at the track's width, and a
+   figure proof beside it centres in the same box. Below 1024 the cover fills the track as well. */
+@media (min-width: 1024px) {
+  .proofFlat {
+    block-size: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
 .proofFill {
   block-size: 100%;
 }
@@ -144,6 +153,11 @@
   border-radius: var(--rsn-cover-radius);
   overflow: hidden;
   background: var(--rsn-cover-ground);
+}
+
+.coverFlat {
+  inline-size: 100%;
+  block-size: auto;
 }
 
 /* The fact, large and in the accent, the way a figure is (numerals are a foreground mark). */
