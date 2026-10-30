@@ -55,7 +55,7 @@ import { caseCover, hasSlot, slotImage, slugOf, type SlotImage } from './images'
 import { signature } from './plan';
 import {
   boldLead,
-  exampleLink,
+  exampleParts,
   hasLink,
   labelTitle,
   leadOf,
@@ -639,14 +639,9 @@ export function WhatYouGetBand({
 const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
 
 /**
- * The hard parts. Each is a PROBLEM followed by an "Example:" sentence that cites ONE case. When every
- * row has one, each row is one claim: its words on 3/5 and ITS isometric illustration on the end 2/5,
- * facing them (above them below 1024), then the example as a CITATION under the words (owner, 30 Oct
- * 2026, round 6; decisions/2026-10-30-claim-visual-depicts-the-claim). The drawing depicts the claim,
- * never the case: the case is cited, not pictured, so no cover. A claim not drawn yet takes the labelled
- * illustration slot, in the same geometry (decisions/2026-10-30-undrawn-illustration-slot). A band whose
- * rows cite no case reads down as before: a read-down, beside its own photograph for three rows, or
- * under a wide image.
+ * The hard parts: claim leads; a 168 drawing at the start (above the words below 768); the example as a
+ * footnote (citation link + sentence). A band whose rows do not all carry an "Example:" reads down as
+ * before. decisions/2026-10-30-hard-parts-claims-lead-proof-footnotes.
  */
 export function ChallengesBand({
   page,
@@ -708,52 +703,36 @@ export function ChallengesBand({
     }
   });
   flush();
-  const examples = rowRuns.map((paras) => {
-    for (const runs of paras) {
-      const found = exampleLink(runs);
-      if (found) return found;
-    }
-    return undefined;
+  const parts = rowRuns.map((paras) => {
+    const at = paras.findIndex((runs) => exampleParts(runs) !== undefined);
+    return at < 0 ? undefined : { at, ...exampleParts(paras[at]!)! };
   });
-  if (rows.length >= 2 && examples.every(Boolean)) {
+  if (rows.length >= 2 && parts.every(Boolean)) {
     const proofSet = (
       <Layout as="ul" rowGap="column">
         {rows.map((row, i) => {
-          const example = examples[i]!;
+          const example = parts[i]!;
           const drawn = claimFigure?.(row.title, ground);
           const image = drawn
             ? { ...drawn, alt: '', kind: 'illustration' as const }
             : { ...placeholderIllustration(row.title), alt: '' };
-          /* The citation carries the one link, so the Example sentence keeps its words and loses its
-             link. */
-          const paras = (row.bodyHtml ?? []).map((html, j) => {
-            const runs = rowRuns[i]?.[j];
-            return runs && exampleLink(runs)
-              ? inlineToHtml(
-                  runs.flatMap((run) => (run.type === 'link' ? run.children : [run])),
-                )
-              : html;
-          });
-          const mark = clientMark(example.name);
-          const title = caseRefs[caseRouteOf(example.href)]?.title ?? example.name;
+          const body = (row.bodyHtml ?? []).filter((_, j) => j !== example.at);
+          const cite = example.cite;
+          const mark = cite ? clientMark(cite.name) : undefined;
+          const title = cite ? (caseRefs[caseRouteOf(cite.href)]?.title ?? cite.name) : '';
           const cut = title.lastIndexOf(' ');
           const titleHead = cut > 0 ? title.slice(0, cut) : '';
           const titleLast = cut > 0 ? title.slice(cut + 1) : title;
           return (
             <li key={row.title}>
-              <Layout columns={{ lg: [3, 2] }} colGap="section" rowGap="block" align="center">
+              <Layout columns={{ md: ['auto', 1] }} colGap="stack" rowGap="block" align="start">
                 <div className={styles.claimFigure}>
-                  <Media
-                    image={image}
-                    sizes="(min-width: 1024px) 400px, 100vw"
-                    fit="contain"
-                    focus={{ x: 0, y: 0.5 }}
-                  />
+                  <Media image={image} sizes="168px" />
                 </div>
-                <Layout rowGap="block">
+                <Layout rowGap="block" className={styles.claimWords}>
                   <h3 className={styles.itemTitle}>{row.title}</h3>
                   <Layout rowGap="text">
-                    {paras.map((html, j) => (
+                    {body.map((html, j) => (
                       <p
                         key={j}
                         className={styles.hardBody}
@@ -761,21 +740,35 @@ export function ChallengesBand({
                       />
                     ))}
                   </Layout>
-                  <Cluster colGap="block" rowGap="tight" align="center">
-                    {mark ? <ClientMark {...mark} size="sm" /> : null}
-                    {/* The title is running text and its last word is glued to the arrow, so the
-                        arrow always ends the title's last line and never wraps onto a line of its
-                        own (a wrapping Cluster put it alone under the title at 390). */}
-                    <a href={example.href} className={styles.citation}>
-                      {titleHead ? `${titleHead} ` : null}
-                      <span className={styles.citationTail}>
-                        {titleLast}
-                        <span className={styles.citationArrow} aria-hidden="true">
-                          <Icon name="arrow-right" />
-                        </span>
-                      </span>
-                    </a>
-                  </Cluster>
+                  <Layout rowGap="tight">
+                    {cite ? (
+                      /* One link holds the mark, the title and the arrow. The mark is hidden from
+                         assistive tech: the title already starts with the client's name. The title's
+                         last word is glued to the arrow so it never wraps onto a line of its own. */
+                      <a href={cite.href} className={styles.citation}>
+                        <Layout as="span" rowGap="tight">
+                          {mark ? (
+                            <span aria-hidden="true">
+                              <ClientMark {...mark} size="sm" />
+                            </span>
+                          ) : null}
+                          <span>
+                            {titleHead ? `${titleHead} ` : null}
+                            <span className={styles.citationTail}>
+                              {titleLast}
+                              <span className={styles.citationArrow} aria-hidden="true">
+                                <Icon name="arrow-right" />
+                              </span>
+                            </span>
+                          </span>
+                        </Layout>
+                      </a>
+                    ) : null}
+                    <p
+                      className={styles.claimNote}
+                      dangerouslySetInnerHTML={{ __html: inlineToHtml(example.sentence) }}
+                    />
+                  </Layout>
                 </Layout>
               </Layout>
             </li>

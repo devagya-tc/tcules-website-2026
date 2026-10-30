@@ -19,13 +19,13 @@ export type ClaimFigureRef = {
 };
 
 /** The set's exported size (one shared viewBox). */
-export const CLAIM_FIGURE_SIZE = { width: 462, height: 413 } as const;
+export const CLAIM_FIGURE_SIZE = { width: 442, height: 393 } as const;
 
 const CLAIMS: Record<string, ClaimFigureRef> = {
   'Rules nobody has written down.': {
     name: 'rules-unwritten',
     message:
-      'Which meeting gives way is a rule people follow but never wrote down; heard in research, it is written into the calendar, so the important meeting takes the slot and the other one moves.',
+      'A rule people follow but never wrote down is heard in research and given its place in the product.',
   },
   'Several people working on one record.': {
     name: 'one-record-many-roles',
@@ -38,9 +38,9 @@ const CLAIMS: Record<string, ClaimFigureRef> = {
       "An order placed on the customer's screen arrives in the staff's production queue as the same card.",
   },
   'Screens people work in for hours.': {
-    name: 'every-state-cared-for',
+    name: 'screens-for-hours',
     message:
-      'The empty, loading, error and no-access screens are built from the same rules, and given the same care, as the screen in the demo.',
+      'A screen someone works in all day: the working day runs along its foot as hours, and it is still in use late in the day.',
   },
 };
 

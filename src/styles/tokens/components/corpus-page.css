@@ -5,7 +5,7 @@
    these pages is a kit unit with a layer of its own.
 
    Naming: --cpg-{part}-{role}
-     parts: ink | mark | panel
+     parts: ink | mark | panel | claim-figure
 
    --cpg-ink-muted   the proof line: the quiet line under a hero's lede, body-sm in the muted ink.
    --cpg-ink-label   the legend's two header words, in the eyebrow voice (mono, uppercase in
@@ -26,26 +26,9 @@
 
 /* ── Geometry ──────────────────────────────────────────────────────────────── */
 :root {
-  --cpg-claim-figure-height: 320px; /* a hard-parts claim's drawing box: a component size */
-  /* the box's ratio, the labelled slot's 6:5 (the drawings, about 1.12, sit inside it, contained and
-     start-anchored; an illustration draws no edge, so only the slot's own hairline shows the box) */
-  --cpg-claim-figure-ratio: 6 / 5;
+  --cpg-claim-figure-width: 168px; /* a hard-parts claim's drawing: a component size, one value at every width (hard-parts-claims-lead-proof-footnotes) */
   --cpg-citation-text: var(--text-label); /* sans semibold 14 */
   --cpg-panel-height-md: calc(var(--space-160) * 2); /* 320 */
-}
-
-/* The claim drawing steps down with the viewport: 240 below 1024, 200 below 768. Component sizes,
-   not distances. */
-@media (max-width: 1023px) {
-  :root {
-    --cpg-claim-figure-height: 240px;
-  }
-}
-
-@media (max-width: 767px) {
-  :root {
-    --cpg-claim-figure-height: 200px;
-  }
 }
 
 /* ── Surfaces ──────────────────────────────────────────────────────────────── */
