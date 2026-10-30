@@ -11,3 +11,9 @@ enforced_by: review
 ---
 
 The countdown indicator shows where the carousel is heading, not where its scroll is. On hand-over the old bar stays empty and the next is full from the first frame; a wrap or jump never lights the bars it passes.
+
+**Why.** Owner round 5 review, 30 Oct: the previous rendering read as random, placed or broken.
+
+**The mistake it prevents.** Shipping the same band shape again without asking what its content is and does.
+
+**How to apply.** Follow docs/page-build/treatment-rules.md (§ 1 and § 2 rows added in round 5).
