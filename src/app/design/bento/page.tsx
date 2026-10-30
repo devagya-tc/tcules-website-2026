@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Layout, Media, Section } from '@/components';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { ROUTES } from '@/lib/routes';
@@ -398,6 +400,49 @@ export default function BentoSpecimen() {
           </li>
         </Layout>
       </Section>
+      <Variation
+        id="onward"
+        title="2c · Seven peers on four tracks, the onward cell in the eighth"
+        note="`onward` (owner, 30 Oct 2026, /services/product-design): the band's closing router out of the set. A cell of its own kind: the tile's radius and inset, a dashed edge (beyond this set), no texture, no lift, not one link. Each question over its answer, the answers' links in place. From 768 on two tracks it fills the hole beside the seventh tile; on a phone it is the last item."
+      />
+      <Section>
+        <Bento
+          tracks={4}
+          items={(
+            [
+              ['ux-research', 'UX Research', 'Teams about to spend on an assumption nobody has tested', 'specialist-research', '/services/product-design/ux-research'],
+              ['ia', 'Information Architecture & Workflow Design', 'Products where work passes between people, or the menu keeps growing', 'specialist-ia', '/services/product-design/information-architecture-workflow-design'],
+              ['ui', 'Interaction & UI Design', 'Products whose structure works but whose screens confuse people', 'specialist-ui', '/services/product-design/interaction-ui-design'],
+              ['dataviz', 'Data Visualisation', 'Dashboards that people export to a spreadsheet', 'specialist-dataviz', '/services/product-design/data-visualisation'],
+              ['prototyping', 'Prototyping & Usability Testing', 'Choosing between directions before engineers start', 'specialist-prototype', '/services/product-design/prototyping-usability-testing'],
+              ['new-product', 'New Product Design & First Release', 'Founders turning an idea or prototype into an MVP', 'specialist-new-product', '/services/new-product-design-first-release'],
+              ['audit', 'UX & Product Audit', 'Teams who know something is wrong but not yet what', 'specialist-audit', '/audits/ux-product-audit'],
+            ] as const
+          ).map(([id, title, body, scene, href]) => ({ id, title, body, href, scene })) satisfies BentoItem[]}
+          onward={[
+            {
+              question: 'Want the riskiest screens tried in code, or the whole product built?',
+              answer: (
+                <>
+                  <Link href="/services/design-engineering">Design Engineering</Link> and{' '}
+                  <Link href="/services/software-development">Software Development</Link> carry the
+                  design on.
+                </>
+              ),
+            },
+            {
+              question: 'Already have finished screens?',
+              answer: (
+                <>
+                  <Link href="/services/design-engineering/design-to-code">Design to Code</Link> takes
+                  them from there.
+                </>
+              ),
+            },
+          ]}
+        />
+      </Section>
+
     </>
   );
 }

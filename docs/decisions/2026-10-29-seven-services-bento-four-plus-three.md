@@ -1,7 +1,7 @@
 ---
 title: "Seven services: Bento on four tracks, 4 + 3, the closing words in the eighth cell"
 date: 2026-10-29
-status: proposed
+status: superseded
 area: [layout]
 source: "Owner, 29 Oct 2026, component-map § F Q7 (feat/new-copy, /services/product-design)"
 supersedes: []

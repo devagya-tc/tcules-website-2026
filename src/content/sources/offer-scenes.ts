@@ -24,15 +24,14 @@ export const OFFER_SCENES: Readonly<Record<string, OfferScenes>> = {
          drawn for what it delivers. The model of roles and rules is the matrix behind one switch;
          every screen and state is the card loading, empty, in error and finished; the tested
          prototype is the idea put in front of a person; designs ready to build are the screen and its
-         variants handed to code. The tested brief is drawn for itself (outcome-brief, 29 Oct 2026). */
+         variants handed to code. The tested brief is drawn for itself (outcome-brief, 29 Oct 2026). The items are keyed by their
+         titles (owner, 30 Oct 2026). */
       'what-you-get': by({
         'A tested brief': 'outcome-brief',
-        'A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.':
-          'outcome-rules',
-        'Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos.':
-          'outcome-finished',
-        'Clickable or coded prototypes, tested with people who match your users.': 'symptom-test',
-        'Designs ready to build, and our review of what your engineers ship.': 'outcome-build',
+        'A model': 'outcome-rules',
+        'Interaction & Visual Design': 'outcome-finished',
+        Prototypes: 'symptom-test',
+        'Ready to build': 'outcome-build',
       }),
       'starting-points': by({
         '"Customers keep getting stuck."': 'symptom-stuck',

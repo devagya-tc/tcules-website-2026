@@ -125,6 +125,59 @@ export default function OfferSheetSpecimen() {
       />
 
       <Variation
+        id="drawn-terms"
+        title="1d · Drawn, five across 3 + 2, with the band's terms in the foot"
+        note="`terms` (owner, 30 Oct 2026, /services/product-design): the band's conditions (who does the work, what we need, where our part stops) sit in its foot, after one hairline across the full column that caps the whole set, the empty third cell included. The terms are unframed, side by side, a role (h5) under the promise titles; below 1024 they stack."
+      />
+      <OfferSheet
+        heading="What you get from our product design services"
+        headingId="ofs-drawn-terms"
+        lead="Our digital product design services cover the thinking behind your product and every screen in it."
+        items={[
+          {
+            title: 'A tested brief',
+            body: 'What goes in, what waits and what stays out, checked against the people who use the product.',
+            scene: 'outcome-brief',
+          },
+          {
+            title: 'A model',
+            body: 'A model of roles, records, permissions and workflows, drawn before the screens, so every screen agrees with the next.',
+            scene: 'outcome-rules',
+          },
+          {
+            title: 'Interaction & Visual Design',
+            body: 'Interaction and visual design for every screen and state, inside your design system if you have one, down to the empty and error screens nobody demos.',
+            scene: 'outcome-finished',
+          },
+          {
+            title: 'Prototypes',
+            body: 'Clickable or coded prototypes, tested with people who match your users.',
+            scene: 'symptom-test',
+          },
+          {
+            title: 'Ready to build',
+            body: 'Designs ready to build, and our review of what your engineers ship.',
+            scene: 'outcome-build',
+          },
+        ]}
+        across={3}
+        terms={[
+          {
+            title: 'Who does the work.',
+            body: 'Your project is led by a senior product designer who also does the design, and an account lead keeps it running. Researchers, design engineers or developers join when the problem needs them.',
+          },
+          {
+            title: 'What we need from you.',
+            body: 'The research, analytics and support tickets you already hold, time with the people who use the product, and someone who can make the product calls.',
+          },
+          {
+            title: 'Where our part stops.',
+            body: 'You make the product calls: what ships, when, and for which customers. Your engineers own your platform, data and infrastructure, even when ours build. Our part ends with designs ready to build and a review of what ships, unless you add coded prototypes or the build.',
+          },
+        ]}
+      />
+
+      <Variation
         id="no-aside"
         title="2 · No aside"
         note="Without a voice the promises take the full column, still two up: a sheet, not a row of four."

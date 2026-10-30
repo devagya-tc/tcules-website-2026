@@ -5,7 +5,7 @@
    through a feathered wave drawn across the whole row and clipped by each tile.
 
    Naming: --bnt-{part}-{role}
-     parts  tile · rule · title · body · art · tex · ring · lift
+     parts  tile · rule · title · body · art · tex · ring · lift · onward · question
      roles  ink · width · radius · text · tracking · measure · scale · strength · duration · easing
 
    One state, hover (and keyboard focus, which gets what the pointer gets): the tile lifts, its
@@ -27,6 +27,9 @@
   --bnt-title-text-wide: var(--text-h4);
   --bnt-title-tracking-wide: var(--text-h4-tracking);
   --bnt-body-text: var(--text-body-sm);
+  /* The onward cell's questions: a role under the tile titles, since they are not destinations. */
+  --bnt-question-text: var(--text-h6);
+  --bnt-question-tracking: var(--text-h6-tracking);
   /* The lone tile's eyebrow (ServiceTile `eyebrow`): the mono label voice, as a card's eyebrow. */
   --bnt-eyebrow-text: var(--text-eyebrow);
   --bnt-eyebrow-tracking: var(--text-eyebrow-tracking);
@@ -52,6 +55,7 @@
 :root,
 [data-surface='paper'] {
   --bnt-rule-ink: var(--color-neutral-200); /* decoration */
+  --bnt-onward-rule-ink: var(--color-neutral-300); /* decoration */
   --bnt-rule-ink-hover: var(--color-brandeis-100); /* decoration */
   --bnt-title-ink: var(--color-neutral-900); /* 14.62:1 */
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 6.17:1 */
@@ -65,6 +69,7 @@
 /* ── Surface: tint ────────────────────────────────────────────────────────────── */
 [data-surface='tint'] {
   --bnt-rule-ink: var(--color-neutral-300);
+  --bnt-onward-rule-ink: var(--color-neutral-400); /* decoration */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-neutral-900); /* 13.06:1 */
   --bnt-title-ink-hover: var(--color-brandeis-500); /* 5.51:1 */
@@ -78,6 +83,7 @@
 /* ── Surface: ink ─────────────────────────────────────────────────────────────── */
 [data-surface='ink'] {
   --bnt-rule-ink: var(--color-neutral-800);
+  --bnt-onward-rule-ink: var(--color-neutral-700); /* decoration */
   --bnt-rule-ink-hover: var(--color-brandeis-700);
   --bnt-title-ink: var(--color-white); /* 17.26:1 */
   --bnt-title-ink-hover: var(--color-brandeis-300); /* 7.32:1 */
@@ -91,6 +97,7 @@
 /* ── Surface: blue ────────────────────────────────────────────────────────────── */
 [data-surface='blue'] {
   --bnt-rule-ink: var(--color-brandeis-400);
+  --bnt-onward-rule-ink: var(--color-brandeis-300); /* decoration */
   --bnt-rule-ink-hover: var(--color-brandeis-200);
   --bnt-title-ink: var(--color-white); /* 6.23:1 */
   --bnt-title-ink-hover: var(--color-brandeis-50); /* 5.57:1 */

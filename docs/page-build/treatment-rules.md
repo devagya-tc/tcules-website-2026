@@ -16,9 +16,10 @@ arrangement holds it → what it must never do.**
 | **Evidence**: named clients, dates, durations, counts, a shipped outcome | the proof itself: client marks, the case's own cover, figures for the numbers | a decorative drawing standing in for proof | home-reasons-show-their-proof, studio-record-is-figures |
 | **Stats** (a record line, "90 projects · 19 countries") | figures: number large, label small | a mono run-on line | studio-record-is-figures |
 | **A rating** | the RatingBadge (14 text / 16 marks), its link and review count as the machine-readable name | text + link, "from 13 reviews" as visible text | rating-is-always-the-badge, rating-badge-text-14-marks-16 |
-| **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar) | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
+| **How something works**: engagement options, deliverables, a process, a mechanism | flat graphics (Sketch grammar); a drawn set's items each carry a title | isometric illustration | set-reasons-head-above-drawing-above, how-we-work-together-* |
 | **An abstract claim** (a reason to choose us, on offer pages) | isometric illustration (Reasons house style) | flat graphics (would read as a mechanism) | set-reasons-head-above-drawing-above |
 | **A named service** (a set of services, a related service, a path's way in) | the service tile (texture + flat drawing), or a compact service row inside a path | an icon + name list, a mono link stack, plain "Our related service:" text | named-services-are-service-tiles, related-destination-is-a-card, paths-service-rows |
+| **A way onward** (questions answered by links to other services, closing a set) | the onward cell: dashed edge in the set's last cell, each question over its answer, links in place | a text cell dropped into the grid, a solid tile that reads as one more item | 2026-10-30-onward-cell |
 | **A named expertise** | an expertise card with the sector photo / product-type art | a text line | related-destination-is-a-card |
 | **People, the studio, a place** | an IRL photograph (one grade, `--media-photo-grade`) | an illustration | brand imagery rulings |
 | **An industry** | the sector photo (a client's user at a good moment) | a metaphor, a generic stock scene | sector photos ruling (26 Oct) |
@@ -40,7 +41,8 @@ arrangement holds it → what it must never do.**
 - **Never two horizontal media rows side by side**: one per row, or the vertical card in a grid.
 - **No lone tile on a row**: change the track count, or let the odd item take the full row.
 - **No hairlines between Reasons items.** Card variants stay distinct.
-- **Orphaned paragraphs after a set** become equal terms side by side under it (What you get terms).
+- **A band's closing terms** (who does the work / what we need / where our part stops) are the band's FOOT: one full-width hairline under the whole set, the terms unruled side by side, a role smaller than the items. Never on the set's own tracks and gap (2026-10-30-what-you-get-titled-terms-foot).
+- **A bare label between the lead and the set** ('What you receive') is not rendered; the heading names the set.
 - **Never two text-heavy bands touching; never two tints touching.**
 - **Rendering changes, words don't.** The owner decides presentation; the copy is not reworded.
 
@@ -58,7 +60,7 @@ The owner will edit these sections on this branch to sharpen the mapping:
    "Example:" line, ruled 2×2).
 2. **How we work together** (flat engagement graphics, two closing terms, closing link).
 3. **Why teams choose Tcules** (three isometric reasons, two head links).
-4. **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
+4. (done 30 Oct: titles, terms foot, label dropped) **What you get from our product design services** (five drawn deliverables 3 + 2, then the three
    terms).
 
 Also queued for the owner's redesign: /about, sections of /contact, the /services hub.

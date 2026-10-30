@@ -6,7 +6,7 @@
    TestimonialCard, passed as `aside`.
 
    Naming: --ofs-{part}-{role}
-     parts  heading · title · body · rule · mark
+     parts  heading · title · term · body · rule · mark · foot
      roles  text · tracking · measure · ink · width · length
 
    Each promise opens on Stat's device: a hairline across its own width with a short blue mark at its
@@ -25,6 +25,10 @@
   --ofs-title-text: var(--text-h4);
   --ofs-title-tracking: var(--text-h4-tracking);
   --ofs-title-measure: var(--measure-title);
+  /* The band's terms (who does the work, what we need, where our part stops): a role under the
+     promise titles, since they are conditions of the whole band and not promises (owner, 30 Oct 2026). */
+  --ofs-term-title-text: var(--text-h5);
+  --ofs-term-title-tracking: var(--text-h5-tracking);
   --ofs-aside-ratio: var(--ratio-standard);
   --ofs-aside-radius: var(--radius-8);
   --ofs-body-text: var(--text-body-sm);

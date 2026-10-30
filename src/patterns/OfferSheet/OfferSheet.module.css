@@ -91,3 +91,18 @@
   outline: var(--ofs-ring-width) solid var(--ofs-ring-ink);
   outline-offset: var(--ofs-ring-offset);
 }
+
+/* The band's FOOT: one hairline across the whole content column under the set, the terms unruled
+   beneath it. The padding is the foot's own inset under its line, not a margin. */
+.foot {
+  border-block-start: var(--ofs-rule-width) solid var(--ofs-rule-ink);
+  padding-block-start: var(--gap-block);
+}
+
+.termTitle {
+  color: var(--ofs-title-ink);
+  font: var(--ofs-term-title-text);
+  letter-spacing: var(--ofs-term-title-tracking);
+  max-inline-size: var(--ofs-title-measure);
+  text-wrap: balance;
+}
