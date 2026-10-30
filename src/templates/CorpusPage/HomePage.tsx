@@ -28,10 +28,8 @@ import {
   type GatewayPath,
   type HeroStat,
   type ReasonsItem,
-  type ReasonsProof,
 } from '@/patterns';
 import { splitClaim } from '@/lib/claim';
-import { clientMark } from '@/lib/client-marks';
 import { caseRouteOf, insightRouteOf } from '@/lib/corpus-cases';
 import { corpusImage } from '@/lib/corpus-images';
 import type {
@@ -44,11 +42,9 @@ import type {
   PlaceholderReasons,
   ProposedEyebrows,
 } from '@/lib/corpus-types';
-import type { InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
-import { placeholderCover, placeholderImage } from '@/lib/placeholders';
+import { placeholderImage } from '@/lib/placeholders';
 import { serviceSceneFor, sketchForRoute } from '@/lib/sketches';
-import { HOME_REASON_PROOF, type ReasonProofFigure } from '@/lib/reason-proof';
 import { recordFigures } from '@/lib/studio-record';
 
 import {
@@ -154,10 +150,9 @@ export function HomePage({
       />
       {units.map((unit) => {
         const b = unit.band;
-        /* Why Tcules on home: each reason's evidence as its visual (WhyTcules, below), when every
-           reason resolves to its proof; else the plan's drawn Reasons, as on the offer pages. */
+        /* Why Tcules on home: the head beside the three claims, words only (WhyTcules, below). */
         if (b.id === 'why-tcules' && unit.part !== 'b') {
-          const why = whyTcules(page, b, caseRefs);
+          const why = whyTcules(b);
           if (why) return <WhyTcules key={unit.id} unit={unit} b={b} items={why} />;
         }
         const Band = unit.part === 'b' ? undefined : BANDS[b.id];
@@ -595,97 +590,53 @@ function Capabilities({ b }: BandProps) {
   );
 }
 
-/* ── 5 · why Tcules: each reason's evidence as its visual ─────────────────────────── */
-
-const linksIn = (runs: readonly InlineRun[]) =>
-  runs.flatMap((run) =>
-    run.type === 'link' ? [{ href: run.href, text: plain(run.children) }] : [],
-  );
-
-/** In development, a figure whose words the authored sentence no longer holds. */
-function checkFigure(title: string, sentence: string, figure: ReasonProofFigure) {
-  if (process.env.NODE_ENV !== 'production' && !sentence.toLowerCase().includes(figure.from)) {
-    console.warn(
-      `Home why-tcules: "${title}" no longer says "${figure.from}"; its figure "${figure.value}" is unsupported.`,
-    );
-  }
-}
+/* ── 5 · why Tcules: the head beside the three claims, words only ─────────────────── */
 
 /**
- * Home's three reasons with their proof (owner, 29 Oct 2026; decisions/2026-10-29-home-reasons-show-their-proof),
- * or undefined when any reason has no proof to show, so the band falls back to the drawn Reasons.
- * Each reason's proof is read from its own sentence: the clients it links (marks, or names where no
- * mark is approved), the case it links (its own cover), the figures set from its words
- * (src/lib/reason-proof.ts). The sentence still renders in full, with its links.
+ * Home's three reasons as the 26 Oct copy authors them: each its title and its sentence, with the
+ * sentence's own links (owner, 30 Oct 2026; decisions/2026-10-30-home-reasons-beside-words-only).
+ * The sentences already name the clients, the live case and the tenures, so nothing is pulled out of
+ * them into a picture or a figure. Undefined when the band has no items, so the plan's Reasons renders.
  */
-export function whyTcules(
-  page: CorpusPage,
-  b: CorpusBand,
-  caseRefs: Readonly<Record<string, CorpusCaseRef>> = {},
-): ReasonsItem[] | undefined {
+export function whyTcules(b: CorpusBand): ReasonsItem[] | undefined {
   const parts = sheetParts(b);
-  const authored = items(b);
   if (parts.items.length === 0) return undefined;
-  const out: ReasonsItem[] = [];
-  for (const item of parts.items) {
-    const title = item.title;
-    const spec = title ? HOME_REASON_PROOF[title] : undefined;
-    const source = authored.find((block) => block.headingText === title);
-    if (!title || !spec || !source) return undefined;
-    const runs = paragraphRuns(source.blocks).flat();
-    const sentence = plain(runs);
-    const links = linksIn(runs);
-    let proof: ReasonsProof;
-    if (spec.kind === 'marks') {
-      const marks = links.map((link) => clientMark(link.text) ?? { name: link.text });
-      if (marks.length === 0) return undefined;
-      proof = { kind: 'marks', marks };
-    } else if (spec.kind === 'case') {
-      const link = links.find((l) => caseRouteOf(l.href).startsWith('/case-studies/'));
-      if (!link) return undefined;
-      checkFigure(title, sentence, spec.figure);
-      const name = spec.figure.label ?? link.text;
-      proof = {
-        kind: 'cover',
-        /* The CMS ConnectX cover has a mid-grey matte baked in (400 wide), which shows as a frame inside
-           the plate. Until a matte-free 16:9 shot of at least 800 wide exists, the labelled placeholder. */
-        image: placeholderCover(slugOf(name)),
-        figure: { value: spec.figure.value, label: spec.figure.label },
-      };
-    } else {
-      spec.figures.forEach((figure) => checkFigure(title, sentence, figure));
-      proof = {
-        kind: 'figures',
-        figures: spec.figures.map(({ value, label }) => ({ value, label })),
-      };
-    }
-    out.push({
-      title,
-      body: item.bodyHtml ? (
-        <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
-      ) : (
-        (item.body ?? '')
-      ),
-      proof,
-    });
-  }
-  return out;
+  return parts.items.flatMap((item) =>
+    item.title
+      ? [
+          {
+            title: item.title,
+            body: item.bodyHtml ? (
+              <span dangerouslySetInnerHTML={{ __html: item.bodyHtml }} />
+            ) : (
+              (item.body ?? '')
+            ),
+          },
+        ]
+      : [],
+  );
 }
 
 /**
- * "A product design partner for ambitious SaaS teams" on home (owner, 29 Oct 2026): the content is
- * EVIDENCE, so each reason shows its proof where the offer pages show a drawing. Reasons' own head
- * (heading, lead, the closing link at the end of the heading's row, centred on it), then the three
- * reasons across from 1024, each its proof (one box height for the three, so the row reads level),
- * its title, its sentence with its links. No drawing, no hairline, no container. The band keeps the
- * plan's surface.
+ * "A product design partner for ambitious SaaS teams" on home: Reasons `beside`, the heading, lead and
+ * link in the leading track and the three claims reading down the trailing one. No drawing, no figure,
+ * no rule. The band keeps the plan's surface.
  */
-function WhyTcules({ unit, b, items: reasons }: { unit: OfferUnit; b: CorpusBand; items: ReasonsItem[] }) {
+function WhyTcules({
+  unit,
+  b,
+  items: reasons,
+}: {
+  unit: OfferUnit;
+  b: CorpusBand;
+  items: ReasonsItem[];
+}) {
   const parts = sheetParts(b);
   const links = parts.after.flatMap((block) => (block.type === 'links' ? block.links : []));
   return (
     <Reasons
       {...head(b)}
+      arrangement="beside"
       surface={unit.surface === 'tint' ? 'tint' : 'paper'}
       lead={parts.lead}
       action={links.length > 0 ? <LinkActions links={links} /> : undefined}

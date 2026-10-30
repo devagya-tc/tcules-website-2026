@@ -84,10 +84,17 @@ export type ReasonsItem = {
  *           box, and each cell holds its drawing and words at the gutter inset. The frame makes four
  *           different reasons read as one set of equals, as it does for nine marks. (Mock C2a.)
  *
- * `beside` (the head in a leading third, hairlines between the columns) was retired on 29 Oct 2026:
- * every Reasons band puts its head above.
+ *   beside  words only (owner, 30 Oct 2026; decisions/2026-10-30-home-reasons-beside-words-only):
+ *           the head (eyebrow, heading, lead, action) in a leading track, 5 : 7 from 1024, and the
+ *           reasons read down the trailing one, title over sentence, a `stack` (48) apart. Two kinds
+ *           of thing side by side, so a `section` (96) split. No rules, no drawing, no proof: for a set
+ *           whose sentences already carry the evidence (home's "A product design partner…"), where a
+ *           picture or a figure pulled out of the sentence says less than the sentence. Below 1024 it
+ *           is one column, the head above. Any `figure` or `proof` passed is not drawn.
+ *
+ * The 29 Oct `beside` (the head in a leading third, hairlines between the columns) stays retired.
  */
-export type ReasonsArrangement = 'open' | 'boxed';
+export type ReasonsArrangement = 'open' | 'boxed' | 'beside';
 
 export type ReasonsProps = {
   /** The band's anchor. */
@@ -328,6 +335,42 @@ export function Reasons({
       {leadEl}
     </Layout>
   );
+
+  if (arrangement === 'beside') {
+    if (process.env.NODE_ENV !== 'production' && shown.some((i) => i.figure || i.proof)) {
+      console.warn(
+        'Reasons: `beside` sets words only; the figures and proofs passed are not drawn.',
+      );
+    }
+    return (
+      <Section id={id} surface={surface} aria-labelledby={headingId} data-band="reasons">
+        <Layout rowGap="stack">
+          <Layout columns={{ base: 1, lg: [5, 7] }} colGap="section" rowGap="stack">
+            {/* The head track: eyebrow → heading → lead at `block`, the action a `stack` under the lead. */}
+            <Layout rowGap="stack" justifyItems="start">
+              <Layout rowGap="block">
+                {eyebrowEl}
+                {headingEl}
+                {leadEl}
+              </Layout>
+              {action}
+            </Layout>
+            <Layout as="ul" rowGap="stack">
+              {shown.map((item, index) => (
+                <li key={`${index}-${item.title}`} className={styles.item}>
+                  <Layout rowGap="tight">
+                    <h3 className={cx(styles.title, styles.titleBeside)}>{item.title}</h3>
+                    <p className={styles.body}>{item.body}</p>
+                  </Layout>
+                </li>
+              ))}
+            </Layout>
+          </Layout>
+          {note}
+        </Layout>
+      </Section>
+    );
+  }
 
   const open = arrangement === 'open';
   // A set whose covers carry no figure (offer pages) sizes its plate to the cover: 16:9, no caption strip.

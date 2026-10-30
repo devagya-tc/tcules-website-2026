@@ -1,7 +1,7 @@
 ---
 title: "Home's reasons set each proof on one plate of one size, the title under its edge; a tenure is a name over a mono label, never an accent figure"
 date: 2026-10-30
-status: proposed
+status: superseded
 area: [components, layout]
 source: "Owner (Devagya) round-5 notes, 30 Oct 2026: home why-tcules 'objectively ugly', paths 'still bad'"
 supersedes: []

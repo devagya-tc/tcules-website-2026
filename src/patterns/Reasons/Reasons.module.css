@@ -39,6 +39,12 @@
   max-inline-size: var(--rsn-title-measure);
 }
 
+/* `beside`: the reasons read down a wide track, so the title steps up to h4 (one line at 7 of 12). */
+.titleBeside {
+  font: var(--rsn-title-beside-text);
+  letter-spacing: var(--rsn-title-beside-tracking);
+}
+
 .body {
   font: var(--rsn-body-text);
   text-wrap: var(--text-running-wrap);

@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Button, Icon, Layout, Section, type MediaImage } from '@/components';
-import { getCaseRefs, getCorpusPage, getReasonFigure } from '@/content';
-import { caseRoutesIn } from '@/lib/corpus-cases';
+import { getCorpusPage, getReasonFigure } from '@/content';
 import { inlineToText } from '@/lib/inline';
 import { placeholderCover, placeholderIllustration } from '@/lib/placeholders';
 import { ROUTES } from '@/lib/routes';
@@ -241,7 +240,10 @@ const PROOF_STRESS: ReasonsItem[] = [
     proof: {
       kind: 'cover',
       image: placeholderCover('gold-image-printing'),
-      figure: { value: 'Live in production since early 2026', label: 'A client with a long name' },
+      figure: {
+        value: 'Live in production since early 2026',
+        label: 'A client with a long name',
+      },
     },
   },
   {
@@ -279,8 +281,7 @@ const OFFER_PROOF: ReasonsItem[] = [
 export default async function ReasonsSpecimen() {
   const home = await getCorpusPage(ROUTES.home);
   const band = home?.bands.find((b) => b.id === 'why-tcules');
-  const caseRefs = home ? await getCaseRefs(caseRoutesIn(home)) : {};
-  const proofs = home && band ? whyTcules(home, band, caseRefs) : undefined;
+  const words = band ? whyTcules(band) : undefined;
   const opening = band?.blocks.find((block) => block.type === 'paragraph');
   const lead = opening?.type === 'paragraph' ? inlineToText(opening.runs) : undefined;
   return (
@@ -295,8 +296,9 @@ export default async function ReasonsSpecimen() {
             four, set 2×2. Each reason is the drawing above, then its title, then its body, at
             the full width of its track, and the head always reads across the top (owner, 29 Oct
             2026). Two ways to hold the set without boxing a reason: open (the gap scale alone)
-            and boxed (the set in LogoGrid&rsquo;s rounded frame). Beside was retired on 29 Oct
-            2026.
+            and boxed (the set in LogoGrid&rsquo;s rounded frame). A third, beside, sets words
+            only: the head in a leading track and the reasons reading down beside it (owner, 30
+            Oct 2026).
           </p>
         </Layout>
       </Section>
@@ -533,27 +535,41 @@ export default async function ReasonsSpecimen() {
         heading="Why teams choose Tcules"
         headingId="rsn-offer-slot"
         figureSize="lg"
-        items={drawn(
-          [COPY_REASONS[0]!, COPY_REASONS[1]!, COPY_REASONS[2]!],
-          'paper-deep',
-        )}
+        items={drawn([COPY_REASONS[0]!, COPY_REASONS[1]!, COPY_REASONS[2]!], 'paper-deep')}
         surface="tint"
       />
 
       <Variation
-        id="home-proof"
-        title="15 · Home's three reasons, each its proof (owner, 29 Oct 2026)"
-        note="Home's Why Tcules on the real words: the content is evidence, so each reason's visual is its proof, above its title. The four named clients as a mark cluster, two across (an approved mark, else the name typeset in the marks' ink, never an invented mark); the ConnectX case's own cover with “Live since late 2025” set as a figure; the three tenures as figures. From 1024 one box height (224) for the three, so the titles sit on one line; below 1024 each proof is its own height. No drawing, no hairline, no container. Offer pages keep the drawn reasons (13, 14)."
+        id="home-beside"
+        title="15 · Beside, words only: home's three reasons (owner, 30 Oct 2026)"
+        note="Home's Why Tcules on the real words. The heading, lead and link in the leading track (5 of 12 from 1024); the three claims read down the trailing one, title (h4) over its sentence with its own links, a stack (48) apart. A section (96) split. No drawing, no figure, no rule: the sentences already name the clients, the live case and the tenures. Below 1024 one column, the head above."
       />
-      {proofs && band ? (
+      {words && band ? (
         <Reasons
+          arrangement="beside"
           heading={band.headingText}
-          headingId="rsn-home-proof"
+          headingId="rsn-home-beside"
           lead={lead}
-          items={proofs}
+          items={words}
           action={WHY_LINKS}
         />
       ) : null}
+
+      <Variation
+        id="beside-stress"
+        title="15b · Beside under stress, on tint, with an eyebrow"
+        note="The longest copy in the set, four reasons and an eyebrow on tint: the head track holds a long heading and lead, the claims wrap to two lines."
+      />
+      <Reasons
+        arrangement="beside"
+        eyebrow="Why Tcules"
+        heading="A product design partner for ambitious SaaS teams building what comes next"
+        headingId="rsn-beside-stress"
+        lead="Tcules has delivered more than 90 projects for clients in 19 countries since 2017. Here is the evidence a product leader can check for themselves, one claim at a time."
+        items={items().map(({ title, body }) => ({ title, body }))}
+        action={WHY_LINKS}
+        surface="tint"
+      />
 
       <Variation
         id="proof-stress"

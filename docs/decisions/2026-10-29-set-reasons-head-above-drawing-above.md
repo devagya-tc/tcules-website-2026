@@ -1,7 +1,7 @@
 ---
 title: "Reasons: the head above, the items below, each drawing above its words, no hairlines"
 date: 2026-10-29
-status: active
+status: superseded
 area: [components, layout]
 source: "Owner home review, 29 Oct 2026 (feat/new-copy)"
 supersedes: [2026-10-29-second-reasons-band-sits-beside]

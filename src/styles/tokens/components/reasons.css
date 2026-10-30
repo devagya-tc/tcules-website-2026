@@ -29,6 +29,9 @@
      under h2 would be h4, which set "Senior people, start to finish" on three lines in a 206 track. */
   --rsn-title-text: var(--text-h5);
   --rsn-title-tracking: var(--text-h5-tracking);
+  /* `beside` reads the reasons down a 7-of-12 track, where h4 holds a claim on one line. */
+  --rsn-title-beside-text: var(--text-h4);
+  --rsn-title-beside-tracking: var(--text-h4-tracking);
   --rsn-title-measure: var(--measure-title);
   --rsn-body-text: var(--text-body-sm);
   --rsn-body-measure: var(--measure-lead);
