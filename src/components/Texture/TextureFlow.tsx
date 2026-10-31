@@ -78,7 +78,9 @@ void main(){
   float calm = uCalm.z > uCalm.x ? box(uCalm, c, 160.0) : 0.0;
   float lx = clamp((c.x - 0.12 * W.x) / (0.5 * W.x), 0.0, 1.0);
   float settle = uSettle * lx * lx * lx * (lx * (lx * 6.0 - 15.0) + 10.0);
-  float loose = (1.0 - settle) * (1.0 - calm);
+  // Resolving, the water behind the words is still; turbulent (uSettle 0), it keeps churning and is
+  // only quieter there, so a formless island reads turbulent across (owner, 31 Oct 2026).
+  float loose = (1.0 - settle) * (1.0 - calm * uSettle);
 
   vec2 T = vec2(W.x + 900.0, W.y * 0.5);
   vec2 d = T - c;
