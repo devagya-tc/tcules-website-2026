@@ -119,3 +119,11 @@ visible pause control exists (WCAG 2.2.2); reduced motion starts paused; autopla
 - W3C APG, auto-rotating carousel with tabs,
   https://www.w3.org/WAI/ARIA/apg/patterns/carousel/examples/carousel-2-tablist/: the behaviour reference (pause
   control, focus pauses, reduced motion starts paused). Read from search results, not opened.
+
+Round 3 (31 Oct 2026, same link): A's tab shell from the owner's picks on Mobbin, Heron AI's ruled index
+(https://mobbin.com/sites/sections/1fe1d979-0175-41b8-9d0a-15ab35c48fa8) and Giga's stage
+(https://mobbin.com/sites/sections/1e41291f-dabe-4797-a893-ee057bedf952). Two shells: **Ruled index** (hairline cells are
+the view's top edge; the chosen cell has no floor and opens into its claim) and **Stage** (one paper-deep stage, the
+view above, the claims as its index below). In both, the blue line on the chosen tab is the timer: 15 seconds a claim,
+paused on hover and focus, stopped for good by a click or the Pause control, paused from the start under reduced
+motion, running only while the band is on screen.
