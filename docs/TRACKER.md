@@ -197,6 +197,15 @@ Jatin's explicit sign-off on the reduced type size.
 - [ ] **6.2** Draft preview, and an empty optional section renders nothing.
 - [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
 - [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
+      and 390 before changing anything:
+      - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
+        most of all at the `-t` / `-m` steps where titles step down. Size and line height change together
+        in `primitives.css`.
+      - **Grouping on mobile.** Distances must not collapse to one value on a phone, or the nesting stops
+        reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
+        Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
+        a fix that needs it to is a ruling for `/decide`, not a local media query.
 
 ## Parked (handoff says don't freeze yet)
 
