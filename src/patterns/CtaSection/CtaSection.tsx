@@ -792,7 +792,9 @@ export function CtaSection(props: CtaSectionProps) {
     const islandSurface = closeIslandOn(band, requested);
     const field = (content: ReactNode) => (
       <Island surface={islandSurface}>
-        <TextureFlow />
+        {/* Turbulent: an island with no form has no side to resolve toward (owner, 31 Oct 2026;
+            decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). */}
+        <TextureFlow flow="turbulent" />
         {content}
       </Island>
     );

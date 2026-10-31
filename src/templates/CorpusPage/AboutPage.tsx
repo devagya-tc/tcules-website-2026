@@ -8,6 +8,7 @@ import {
   Island,
   Layout,
   Prose,
+  Section,
   TextureFlow,
   type MediaImage,
 } from '@/components';
@@ -434,31 +435,39 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
         );
       })}
       {studioLinks.length > 0 ? (
-        /* The studio elsewhere (owner, 31 Oct 2026: "a separate cta block with some relevant title").
-           The title is ours, not the copy's: logged in docs/content-changes.md. */
-        <ContentSection
+        /* The studio elsewhere (owner, 31 Oct 2026: "a separate cta block with some relevant title"),
+           as a paper island on the paper band, read by its moving light-blue field and its rounding
+           (decisions/2026-10-31-formless-islands-turbulent-paper-island-textured). The title is ours,
+           not the copy's: logged in docs/content-changes.md. */
+        <Section
           id={`${b.id}-elsewhere`}
           data-band="C-links"
-          heading="Follow the studio, read its reviews, join the team"
-          headingId={`${b.id}-elsewhere-heading`}
-          align="center"
+          aria-labelledby={`${b.id}-elsewhere-heading`}
         >
-          <Cluster colGap="stack" rowGap="block" justify="center">
-            {studioLinks.map((link) => (
-              <Button
-                key={link.href}
-                as="a"
-                href={link.href}
-                emphasis="link"
-                tone="primary"
-                size="md"
-                icon={<Icon name="arrow-right" />}
-              >
-                {link.labelText}
-              </Button>
-            ))}
-          </Cluster>
-        </ContentSection>
+          <Island surface="paper">
+            <TextureFlow flow="turbulent" />
+            <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
+              <h2 id={`${b.id}-elsewhere-heading`} data-texture-calm>
+                Follow the studio, read its reviews, join the team
+              </h2>
+              <Cluster colGap="stack" rowGap="block" justify="center">
+                {studioLinks.map((link) => (
+                  <Button
+                    key={link.href}
+                    as="a"
+                    href={link.href}
+                    emphasis="link"
+                    tone="primary"
+                    size="md"
+                    icon={<Icon name="arrow-right" />}
+                  >
+                    {link.labelText}
+                  </Button>
+                ))}
+              </Cluster>
+            </Layout>
+          </Island>
+        </Section>
       ) : null}
     </>
   );
