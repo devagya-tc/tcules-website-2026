@@ -158,6 +158,39 @@ owner answers its open questions, Claude builds (`/build-from-spec`), verifies (
       Rulings: decisions/2026-10-26-sliders-allowed-off-homepage, -quote-gets-its-own-band,
       -case-cards-use-the-case-image, -service-items-drawn-per-item, -worked-example-is-a-strip.
 
+**Pages the owner has not designed yet (owner, 30 Oct 2026).** Home and the seven level-1 service pages had their
+design pass (#174, #175). Everything below still renders the 26 Oct copy through the generic composer (`_corpus/`),
+and each can take many design changes. Work in the order listed: polished-tier pages first (launch roadmap), and
+a template before the single pages it serves, since one pass there fixes every page on it. Starting notes are the
+29 Oct critic's (`docs/page-build/review-29-oct.md`), not a brief.
+- [ ] **2.32** Expertise pages, all 12 (`/expertise/[slug]`): one design pass on the offer template they share, starting
+      from what the service pages got in round 5. Six product types carry Bhumika's hero drawings, six industries
+      carry sector photos. Polished tier.
+- [ ] **2.33** `/about`: two OfferSheets read the same; the leadership band has no portraits yet; the difference
+      band as a DataTable is still an open owner call. Polished tier.
+- [ ] **2.34** `/contact`: the hero's right half is empty, and the page ends in text bands. Polished tier.
+- [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
+- [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
+      starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
+- [ ] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
+- [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
+- [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
+      relief (lowest score on 29 Oct, 4/10).
+
+*More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
+- [ ] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [ ] **2.41** `/why-tcules`: every service page links to it, and today it 404s. Crucial.
+- [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
+- [ ] **2.43** `/matter-design-system`: crucial.
+- [ ] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+      render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
+      Needs no design pass, only full coverage.
+- [ ] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
+      but they need no design. A plain text-page template is enough.
+- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): the owner has not yet decided whether
+      they are polished tier or template tier.
+- [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
+
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
 Jatin's explicit sign-off on the reduced type size.
@@ -197,13 +230,24 @@ Jatin's explicit sign-off on the reduced type size.
 - [ ] **6.2** Draft preview, and an empty optional section renders nothing.
 - [ ] **6.3** Hand over `docs/strapi-changes.md` to the CMS owner, and `docs/content-changes.md` to Devagya.
 - [ ] **6.4** Rewrite ch05 §9 placement specs from the shipped components (addendum B6).
+- [ ] **6.5** Responsive check across the site (owner, 31 Oct). Two concerns to test at 1440, 1024, 768
+      and 390 before changing anything:
+      - **Type contrast.** The scale reads too close between steps; stretch it so the hierarchy holds,
+        most of all at the `-t` / `-m` steps where titles step down. Size and line height change together
+        in `primitives.css`.
+      - **Grouping on mobile.** Distances must not collapse to one value on a phone, or the nesting stops
+        reading as groups. Check that block, stack and section seams stay distinct at 390 alongside
+        Section's 64 padding. The gap scale doesn't shift by breakpoint (CLAUDE.md, gap-scale rule 4), so
+        a fix that needs it to is a ruling for `/decide`, not a local media query.
 
 ## Parked (handoff says don't freeze yet)
 
-Homepage · About · Careers · final positioning copy · migrating all 135 routes · share-preview generator.
+Homepage · About · final positioning copy · migrating all 135 routes · share-preview generator.
 
 ## Phase 2 — after the 6 Nov launch
 
+- [ ] `/clients` (owner, 31 Oct 2026).
+- [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
       links (owner, 30 Oct; pulled forward only if the weekend leaves time;
       decisions/2026-10-30-author-pages-move-to-phase-2).

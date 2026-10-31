@@ -283,9 +283,8 @@ export function gatewayBoardItems(b: CorpusBand): GatewayItem[] {
 /**
  * The 26 Oct copy's two paths as GatewayPaths items: each `###` path, its paragraphs (plain: the copy
  * authors no inline link in a path), and its links in the authored order, whether written as a list
- * of links or as link lines, each with its service's own scene for its service row. The path's drawing
- * is the SituationFigure of the first link that has one (owner, 29 Oct 2026: each path keeps its own
- * drawing; decisions/2026-10-29-paths-service-rows). Exported so /design/kit/gateway proves the paths form on the real words.
+ * of links or as link lines, each with its service's own scene for its graphic card
+ * (decisions/2026-10-31-paths-graphic-cards). Exported so /design/kit/gateway proves the paths form on the real words.
  */
 export function gatewayPaths(b: CorpusBand): GatewayPath[] {
   return items(b).flatMap((path) => {
@@ -303,23 +302,17 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
       return [];
     });
     if (links.length === 0) return [];
-    const figure = links
-      .map((link) => sketchForRoute(link.href))
-      .find((scene) => scene && isSituationFigureName(scene));
     return [
       {
         id: slugOf(path.headingText),
         title: path.headingText,
         body: paragraphRuns(path.blocks).map((runs) => plain(runs)),
-        /* Each service's own scene, the one its service tile draws; none borrowed (owner, 29 Oct
-           2026; decisions/2026-10-29-paths-service-rows). */
+        /* Each service's own scene, the one its service page draws; none borrowed (owner, 31 Oct
+           2026; decisions/2026-10-31-paths-graphic-cards). */
         links: links.map((link) => {
           const scene = serviceSceneFor(link.href);
           return scene ? { ...link, scene } : link;
         }),
-        ...(figure && isSituationFigureName(figure)
-          ? { visual: <SituationFigure name={figure} /> }
-          : {}),
       },
     ];
   });
@@ -329,21 +322,22 @@ export function gatewayPaths(b: CorpusBand): GatewayPath[] {
  * The page's gateway: "which of these is me?" (owner, round 6, 11 Oct 2026: "i may not know if i
  * need product design service or design system service, but i'll probably know if i want to launch
  * a new product"). Round 11 (19 Oct 2026) locked Gateway's `board`, six single-link situations each
- * with its SituationFigure. The 26 Oct copy has TWO paths, each with two or three links, so it takes
- * the board's two-door form, GatewayPaths (component-map C10): the same drawings and the same
- * unboxed paper, the head a proposed eyebrow over the centred heading (P49). A band still written as
- * six single-link situations keeps the board.
+ * with its SituationFigure. The 26 Oct copy has TWO paths, each with two or three services, so it
+ * takes GatewayPaths: each path a small label and its words, its services as graphic cards on equal
+ * tracks, the head at the band's left (owner, 31 Oct 2026: mock round 2, 3b with phone B;
+ * decisions/2026-10-31-paths-graphic-cards). A band still written as six single-link situations keeps
+ * the board, centred as it was.
  */
 function Situations({ b, eyebrows }: BandProps) {
   const paths = gatewayPaths(b);
   const multi = paths.some((path) => path.links.length > 1);
-  return (
+  return multi ? (
+    <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} data-band="C-router">
+      <GatewayPaths paths={paths} />
+    </ContentSection>
+  ) : (
     <ContentSection {...head(b)} eyebrow={eyebrows?.[b.id]} align="center" data-band="C-router">
-      {multi ? (
-        <GatewayPaths paths={paths} />
-      ) : (
-        <Gateway items={gatewayBoardItems(b)} arrangement="board" />
-      )}
+      <Gateway items={gatewayBoardItems(b)} arrangement="board" />
     </ContentSection>
   );
 }
