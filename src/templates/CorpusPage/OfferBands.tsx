@@ -173,6 +173,24 @@ function leadText(band: CorpusBand): string | undefined {
     : undefined;
 }
 
+/** Options authored as bold-led bullets (About's working terms): the label is the title, as authored. */
+function listOptions(band: CorpusBand) {
+  return blocksOf(band, 'list').flatMap((list) =>
+    list.items.flatMap((runs) => {
+      const lead = leadOf({ type: 'paragraph', runs });
+      return lead
+        ? [
+            {
+              title: labelTitle(lead.label),
+              body: renderInline(lead.body),
+              scope: scopeOf(labelTitle(lead.label)),
+            },
+          ]
+        : [];
+    }),
+  );
+}
+
 /**
  * Options authored as `###` items (/how-we-work's engagement shapes: a name, a line saying what kind of
  * engagement it is, then how it works and where it starts), each item's paragraphs in order.
@@ -552,7 +570,9 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
                     body: renderInline(row.body),
                     scope: scopeOf(row.title),
                   }))
-                : itemOptions(band)
+                : listOptions(band).length > 0
+                  ? listOptions(band)
+                  : itemOptions(band)
             }
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
@@ -703,7 +723,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const action = links.length > 0 ? <LinkActions links={links} pair /> : undefined;
         const ground = unit.surface === 'tint' ? 'paper-deep' : 'paper';
         const titled = parts.items.filter((item) => item.title);
-        if ([3, 4, 6].includes(parts.items.length) && titled.length === parts.items.length) {
+        if ([3, 4, 5, 6].includes(parts.items.length) && titled.length === parts.items.length) {
           return (
             <Reasons
               {...head(band)}
@@ -1066,7 +1086,13 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
         return lines.flatMap((line) => {
           const lead = linkLead(line);
           return lead
-            ? [{ href: lead.link.href, title: plain(lead.link.children), body: plain(lead.body) }]
+            ? [
+                {
+                  href: lead.link.href,
+                  title: plain(lead.link.children),
+                  body: plain(lead.body),
+                },
+              ]
             : [];
         });
       });

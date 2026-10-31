@@ -138,11 +138,16 @@ export function EngagementOptions({
   /* The terms sit on the options' own track count from 1024. */
   const termTracks = three || dense ? 3 : 4;
   const leads = lead === undefined ? [] : typeof lead === 'string' ? [lead] : lead;
-  const optionTracks = dense
-    ? ({ base: 1, md: 2, lg: 3, xl: 5 } as const)
-    : three
-      ? ({ base: 1, md: 3 } as const)
-      : ({ base: 1, md: 2, lg: 4 } as const);
+  /* Six take three tracks, 3 + 3: five across would leave the sixth alone on its row (About's
+     working terms, 31 Oct 2026). */
+  const six = shown.length === 6;
+  const optionTracks = six
+    ? ({ base: 1, md: 2, lg: 3 } as const)
+    : dense
+      ? ({ base: 1, md: 2, lg: 3, xl: 5 } as const)
+      : three
+        ? ({ base: 1, md: 3 } as const)
+        : ({ base: 1, md: 2, lg: 4 } as const);
   return (
     <Section
       id={id}
@@ -215,7 +220,10 @@ export function EngagementOptions({
                     {option.scope ? <Drawing scope={option.scope} /> : null}
                     <Layout rowGap="block">
                       <h3 className={styles.title}>{option.title}</h3>
-                      <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
+                      <OptionBody
+                        option={option}
+                        className={cx(styles.body, styles.bodyRows)}
+                      />
                     </Layout>
                   </Layout>
                 </li>
@@ -240,7 +248,8 @@ export function EngagementOptions({
 
 /** An option's words: its body, then any further paragraphs, one `text` step apart. */
 function OptionBody({ option, className }: { option: EngagementOption; className?: string }) {
-  if (!option.more || option.more.length === 0) return <p className={className}>{option.body}</p>;
+  if (!option.more || option.more.length === 0)
+    return <p className={className}>{option.body}</p>;
   return (
     <Layout rowGap="text">
       <p className={className}>{option.body}</p>

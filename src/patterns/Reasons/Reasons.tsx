@@ -286,14 +286,18 @@ export function Reasons({
   figureSize = 'sm',
 }: ReasonsProps) {
   const shown = items.filter((item) => item.title.trim().length > 0);
-  if (process.env.NODE_ENV !== 'production' && ![3, 4, 6].includes(shown.length)) {
+  if (process.env.NODE_ENV !== 'production' && ![3, 4, 5, 6].includes(shown.length)) {
     console.warn(
-      `Reasons: ${shown.length} reasons; the set is built for four (or three or six), which fill whole rows.`,
+      `Reasons: ${shown.length} reasons; the set is built for four (or three, five or six), which fill whole rows.`,
     );
   }
 
-  /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. */
+  /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. Five, open,
+     is the first reason across the whole row (its drawing beside its words: a picture beside its
+     words takes a whole row), then the other four as the 2×2 — never a 3 + 2 with a hole (no lone
+     tile on a row: the odd item takes the full row; owner, 31 Oct 2026, About's difference). */
   const four = shown.length === 4;
+  const five = shown.length === 5;
 
   const eyebrowEl = eyebrow ? <p className={styles.eyebrow}>{eyebrow}</p> : null;
   const headingEl = (
@@ -378,6 +382,20 @@ export function Reasons({
     items.some((i) => i.proof?.kind === 'cover') &&
     !items.some((i) => i.proof?.kind === 'cover' && i.proof.figure);
   const allProof = shown.length > 0 && shown.every((i) => i.proof);
+  /* A reason's picture: its proof, else its drawing at the set's figure size. */
+  const visualOf = (item: (typeof shown)[number]) =>
+    item.proof ? (
+      <Proof proof={item.proof} flat={flatProofs} />
+    ) : item.figure ? (
+      <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
+        <Media
+          image={{ ...item.figure, alt: '' }}
+          sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
+          fit="contain"
+          focus={FIGURE_START}
+        />
+      </div>
+    ) : null;
   const set = (
     <Layout
       as="ul"
@@ -390,7 +408,7 @@ export function Reasons({
         open
           ? shown.length === 3
             ? { base: 1, lg: 3 }
-            : four
+            : four || five
               ? { base: 1, md: 2 }
               : { base: 1, md: 2, xl: 3 }
           : shown.length === 3
@@ -402,28 +420,36 @@ export function Reasons({
       colGap={open ? (allProof ? 'gutter' : 'column') : 'none'}
       rowGap={open ? 'column' : 'none'}
     >
-      {shown.map((item, index) => (
-        <li key={`${index}-${item.title}`} className={styles.item}>
-          <Layout rowGap="block" justifyItems="start">
-            {item.proof ? (
-              <Proof proof={item.proof} flat={flatProofs} />
-            ) : item.figure ? (
-              <div className={cx(styles.figure, figureSize === 'lg' && styles.figureLg)}>
-                <Media
-                  image={{ ...item.figure, alt: '' }}
-                  sizes={figureSize === 'lg' ? FIGURE_SIZES_LG : FIGURE_SIZES}
-                  fit="contain"
-                  focus={FIGURE_START}
-                />
-              </div>
-            ) : null}
-            <Layout rowGap="tight">
-              <h3 className={styles.title}>{item.title}</h3>
-              <p className={styles.body}>{item.body}</p>
+      {shown.map((item, index) =>
+        open && five && index === 0 ? (
+          <li key={`${index}-${item.title}`} className={styles.item} data-media-row>
+            <Layout
+              /* On the 2×2's own halves and gap, so its words start where the second column's do. */
+              columns={{ base: 1, md: 2 }}
+              colGap={allProof ? 'gutter' : 'column'}
+              rowGap="block"
+              align="center"
+              justifyItems="start"
+            >
+              {visualOf(item)}
+              <Layout rowGap="tight">
+                <h3 className={styles.title}>{item.title}</h3>
+                <p className={styles.body}>{item.body}</p>
+              </Layout>
             </Layout>
-          </Layout>
-        </li>
-      ))}
+          </li>
+        ) : (
+          <li key={`${index}-${item.title}`} className={styles.item}>
+            <Layout rowGap="block" justifyItems="start">
+              {visualOf(item)}
+              <Layout rowGap="tight">
+                <h3 className={styles.title}>{item.title}</h3>
+                <p className={styles.body}>{item.body}</p>
+              </Layout>
+            </Layout>
+          </li>
+        ),
+      )}
     </Layout>
   );
 
