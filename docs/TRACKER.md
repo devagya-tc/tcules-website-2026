@@ -177,6 +177,20 @@ a template before the single pages it serves, since one pass there fixes every p
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
       relief (lowest score on 29 Oct, 4/10).
 
+*More phase 1 pages, triaged by the owner on 31 Oct 2026.* These pages were not in the list above. All of them ship on 6 Nov.
+- [ ] **2.40** `/how-we-work`, plus `/how-we-work/ai-native-product-design` and `/how-we-work/ai-transparency`. Crucial.
+- [ ] **2.41** `/why-tcules`: every service page links to it, and today it 404s. Crucial.
+- [ ] **2.42** `/careers`: crucial (moved out of Parked, 31 Oct).
+- [ ] **2.43** `/matter-design-system`: crucial.
+- [ ] **2.44** Insights rich text: the live articles ship from Strapi as they are, so the article template has to
+      render every rich-text block they use (headings, lists, quotes, images with captions, embeds, tables, code).
+      Needs no design pass, only full coverage.
+- [ ] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
+      but they need no design. A plain text-page template is enough.
+- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): the owner has not yet decided whether
+      they are polished tier or template tier.
+- [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
+
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
 teams; re-weight the bento when it lands · the stage taxonomy for case studies · the four reasons' copy (P48) ·
 Jatin's explicit sign-off on the reduced type size.
@@ -228,10 +242,12 @@ Jatin's explicit sign-off on the reduced type size.
 
 ## Parked (handoff says don't freeze yet)
 
-Homepage · About · Careers · final positioning copy · migrating all 135 routes · share-preview generator.
+Homepage · About · final positioning copy · migrating all 135 routes · share-preview generator.
 
 ## Phase 2 — after the 6 Nov launch
 
+- [ ] `/clients` (owner, 31 Oct 2026).
+- [ ] Cookie consent banner: not designed yet, so it's parked until after launch (owner, 31 Oct 2026).
 - [ ] Author pages: `/insights/authors` and `/insights/authors/<person>`, then the byline and "More from …"
       links (owner, 30 Oct; pulled forward only if the weekend leaves time;
       decisions/2026-10-30-author-pages-move-to-phase-2).
