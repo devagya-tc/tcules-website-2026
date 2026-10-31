@@ -15,6 +15,24 @@ import { LongformPage, type LongformFamily } from '@/templates';
 export const PASS_1_LONGFORM_ROUTES: ReadonlySet<string> = new Set([
   '/insights/cpq-ux-design',
   '/glossary/design-system',
+  '/glossary/agentic-ux',
+  '/glossary/ai-assisted-product-development',
+  '/glossary/ai-native-product-design',
+  '/glossary/ai-product-ux',
+  '/glossary/coded-prototype',
+  '/glossary/design-engineering',
+  '/glossary/design-intent',
+  '/glossary/design-system-adoption',
+  '/glossary/design-system-drift',
+  '/glossary/design-system-governance',
+  '/glossary/design-to-code',
+  '/glossary/human-in-the-loop',
+  '/glossary/information-architecture',
+  '/glossary/product-modernisation',
+  '/glossary/prototype-hardening',
+  '/glossary/user-journey-mapping',
+  '/glossary/ux-debt',
+  '/glossary/workflow-design',
 ]);
 
 export const isCorpusLongform = (route: string): boolean => PASS_1_LONGFORM_ROUTES.has(route);

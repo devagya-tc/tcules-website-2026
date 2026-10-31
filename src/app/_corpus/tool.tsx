@@ -12,6 +12,11 @@ import { ToolPage } from '@/templates';
  */
 export const PASS_1_TOOL_ROUTES: ReadonlySet<string> = new Set([
   '/tools/design-system-drift-checker',
+  '/tools/ai-product-ux-readiness-check',
+  '/tools/ai-trust-control-canvas',
+  '/tools/audit-redesign-modernise-rebuild',
+  '/tools/figma-storybook-fidelity-checklist',
+  '/tools/prototype-readiness-checklist',
 ]);
 
 export const isCorpusTool = (route: string): boolean => PASS_1_TOOL_ROUTES.has(route);

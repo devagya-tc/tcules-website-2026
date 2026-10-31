@@ -262,15 +262,19 @@ const stampOf = (dir: string, files: readonly string[]): number =>
   files.reduce((max, f) => Math.max(max, statSync(join(dir, f)).mtimeMs), 0) + files.length;
 
 /**
- * Every FIRST- and SECOND-level page (`home`, `about`, `services__product-design`), parsed once per
- * process and sorted by route. Files three levels deep (`insights__articles__…`) are outside this
- * corpus pass and are skipped.
+ * Every FIRST- and SECOND-level page (`home`, `about`, `services__product-design`), and the level-2
+ * services (`services__product-design__ux-research`, polished tier for 6 Nov: owner, 31 Oct 2026),
+ * parsed once per process and sorted by route. The other files three levels deep
+ * (`insights__articles__…`: the live insights ship from Strapi; author pages are phase 2) are skipped.
  */
+const inCorpus = (parts: readonly string[]): boolean =>
+  parts.length <= 2 || (parts.length === 3 && parts[0] === 'services');
+
 export function loadCorpus(dir: string = CORPUS_DIR): CorpusPage[] {
   const dev = process.env.NODE_ENV !== 'production';
   if (dir === CORPUS_DIR && cache && !dev) return cache;
   const files = readdirSync(dir).filter(
-    (f) => f.endsWith('.md') && f.replace(/\.md$/, '').split('__').length <= 2,
+    (f) => f.endsWith('.md') && inCorpus(f.replace(/\.md$/, '').split('__')),
   );
   const stamp = dir === CORPUS_DIR && dev ? stampOf(dir, files) : 0;
   if (dir === CORPUS_DIR && cache && stamp === cacheStamp) return cache;

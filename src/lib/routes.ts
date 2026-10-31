@@ -28,6 +28,9 @@ export const ROUTES = {
   softwareDevelopment: '/services/software-development',
   audits: '/audits',
   howWeWork: '/how-we-work',
+  howWeWorkAiNative: '/how-we-work/ai-native-product-design',
+  howWeWorkAiTransparency: '/how-we-work/ai-transparency',
+  whyTcules: '/why-tcules',
 
   /* The six audits, named individually because the nav lists them as a group of six rather than
      linking the index. They resolve through the `/audits/[slug]` route that already ships, so
@@ -100,6 +103,7 @@ export const ROUTES = {
   /* Utility — the footer's bottom row. */
   privacy: '/privacy-policy',
   terms: '/terms-of-use',
+  cookiePolicy: '/cookie-policy',
   accessibility: '/accessibility',
   sitemap: '/sitemap',
 
