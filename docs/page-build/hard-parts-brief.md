@@ -89,3 +89,7 @@ section fits the page's rhythm (squint test: more than one idea on the page); 39
 1. Proof in the margin.
 2. A numbered index beside the argument.
 3. Labelled parts, varied per claim. This adds words the copy doesn't contain, so it's the owner's call.
+
+## 8 · Mock-ups
+
+Round 1 (31 Oct 2026): https://claude.ai/artifact/56SLJxHf8TUXzRq9CxgWYd. A (spine: Stripe Billing) and B (spine: Tufte's margin) on the four test pages, at 1440 and 390.
