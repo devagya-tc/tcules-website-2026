@@ -93,3 +93,29 @@ section fits the page's rhythm (squint test: more than one idea on the page); 39
 ## 8 · Mock-ups
 
 Round 1 (31 Oct 2026): https://claude.ai/artifact/56SLJxHf8TUXzRq9CxgWYd. A (spine: Stripe Billing) and B (spine: Tufte's margin) on the four test pages, at 1440 and 390.
+
+Round 2 (31 Oct 2026, same link): B with the drawing column (200, top left), the Example panel and dividers; A with two
+tab shells (Segmented, Folder).
+
+**Owner, 31 Oct 2026:** B is locked, dividers on. A's tab shell is still wrong: references first, and A autoplays and
+pauses on hover. Constraints that come with autoplay: a claim is ~72 words (about 20 seconds to read), so the
+interval is long or the text moves mid-read; hover does not exist on touch or keyboard, so focus pauses too and a
+visible pause control exists (WCAG 2.2.2); reduced motion starts paused; autoplay runs only while the band is in view.
+
+### Tab shell references (31 Oct 2026, each opened in a browser, autoplay checked by watching it)
+
+- Intercom, https://www.intercom.com, "Copilot / Ticketing / Support": every item's title and first lines stay
+  visible as columns under one shared view; the active column sits on a tint with a blue line filling along its top.
+  Autoplays; does not pause on hover.
+- Figma, https://www.figma.com, "Design anything you can imagine / Build with intention": the quietest shell, two
+  text columns under the view with a small square marker. Autoplays.
+- Mercury, https://mercury.com, "Everything you do with money": a vertical list of titles on hairlines beside the
+  view, the active item's rule heavier. Its active item also opens its description, which is the accordion the
+  owner ruled out. Did not advance on its own in the check.
+- Airtable, https://www.airtable.com, "Sophisticated workflows": a numbered vertical index (01–04) with a dot
+  marker beside the view. Did not advance on its own in the check.
+- Dash design system, https://brand.dash.fi/marketing/patterns/feature-tabs: documented pill tabs whose fill is
+  the timer; a click hands control to the reader.
+- W3C APG, auto-rotating carousel with tabs,
+  https://www.w3.org/WAI/ARIA/apg/patterns/carousel/examples/carousel-2-tablist/: the behaviour reference (pause
+  control, focus pauses, reduced motion starts paused).
