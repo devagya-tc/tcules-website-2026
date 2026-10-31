@@ -67,6 +67,18 @@ const offerSource = readFileSync(join(ROOT, 'src/app/_corpus/offer.tsx'), 'utf8'
 const allowlist = /PASS_1_OFFER_ROUTES[^=]*=\s*new Set\(\[([\s\S]*?)\]\)/.exec(offerSource)?.[1] ?? '';
 const PASS_1_OFFER_ROUTES = new Set([...allowlist.matchAll(/'([^']+)'/g)].map((m) => m[1]));
 
+/* The composed routes (hubs and one-off pages, src/app/_corpus/composed.tsx) render through the same
+   unit loop, so they answer to the same registry; read by their ROUTES names, as the census does. */
+const { ROUTES } = await import('../src/lib/routes.ts');
+const composedSource = readFileSync(join(ROOT, 'src/app/_corpus/composed.tsx'), 'utf8');
+const PASS_1_COMPOSED_ROUTES = new Set(
+  [
+    ...(
+      /PASS_1_COMPOSED_ROUTES[^=]*=\s*new Set\(\[([\s\S]*?)\]\)/.exec(composedSource)?.[1] ?? ''
+    ).matchAll(/ROUTES\.(\w+)/g),
+  ].map((m) => ROUTES[m[1]]),
+);
+
 /* ── text ─────────────────────────────────────────────────────────────────────────────── */
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', '#39': "'" };
@@ -129,7 +141,7 @@ function sectionOf(html, id) {
 const pages = readdirSync(join(ROOT, '_pages'))
   .filter((f) => f.endsWith('.md'))
   .map((f) => parseCorpusFile(f, readFileSync(join(ROOT, '_pages', f), 'utf8')))
-  .filter((p) => PASS_1_OFFER_ROUTES.has(p.route));
+  .filter((p) => PASS_1_OFFER_ROUTES.has(p.route) || PASS_1_COMPOSED_ROUTES.has(p.route));
 
 const failures = [];
 const queue = new Map();
