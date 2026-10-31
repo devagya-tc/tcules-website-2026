@@ -1,7 +1,7 @@
 ---
 title: "A call-to-action island without a form carries the turbulent field; a paper block on paper is marked by it alone"
 date: 2026-10-31
-status: proposed
+status: active
 area: [components, motion]
 source: "Devagya, 31 Oct 2026, About round 4: \"i would like that turbulent texture on cta islands that don't have a form. additionally, on the paper on paper island, i'd like a light blue texture\"; \"moving on paper as well. paper on paper works because of the texture. log it.\""
 supersedes: []
