@@ -59,3 +59,33 @@ claim's title must be visible at all times, and the set's extent obvious.
 
 The titles alone tell a reader the page's argument; a claim reads in one view without scrolling inside it; the
 section fits the page's rhythm (squint test: more than one idea on the page); 390 works as well as 1440.
+
+## 7 · References (31 Oct 2026, each page opened to confirm the section)
+
+**A · one at a time:**
+- Stripe Connect, https://stripe.com/connect, "Control how funds flow": some tabs name a customer and some don't, and the layout holds either way.
+- Stripe Billing, https://stripe.com/billing: the tab labels are claim sentences.
+- Stripe Payments, https://stripe.com/payments: the proof slot keeps its size, full or empty.
+- Vercel, https://vercel.com: one band-level proof in the head, claims in the tabs.
+- Ramp, https://ramp.com: the claim beside a named quote, in two halves.
+- Attio, https://attio.com, "Platform": a quiet progress cue.
+- Pitch, https://pitch.com, "Solutions": a named person as proof.
+- Fin, https://fin.ai: a short claim with one supporting line.
+- Raycast, https://www.raycast.com: a text-and-underline tab style.
+
+**B · everything on the page:**
+- Ink & Switch, Local-first: a titled claim, then its argument.
+- Tufte CSS: margin notes and figures that fold inline on phones.
+- Gwern, design: how stacked sidenotes avoid each other.
+- Anthropic, Building effective agents: labelled sub-blocks inside each item.
+- GOV.UK design principles: a linked index, and evidence links under each item.
+- Vanta, healthcare: regulation as a named object.
+- Linear Method: terse numbered titles.
+- Shape Up: rules and headings with no boxes.
+- Stripe Atlas, SaaS: a numbered index that doubles as a summary.
+- Increment, tech debt: a pull-out that breaks a long column.
+
+**Directions for B:**
+1. Proof in the margin.
+2. A numbered index beside the argument.
+3. Labelled parts, varied per claim. This adds words the copy doesn't contain, so it's the owner's call.
