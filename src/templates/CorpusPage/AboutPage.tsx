@@ -447,7 +447,7 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
         >
           {/* The field across the band, edges blurred wide and rounded; at full strength around the
               words, faint in the space around them (owner, 31 Oct 2026). */}
-          <TextureFlow flow="turbulent" feather />
+          <TextureFlow flow="turbulent" feather bleed />
           <Layout
             rowGap="stack"
             justifyItems="center"

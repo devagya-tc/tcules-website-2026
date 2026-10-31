@@ -25,6 +25,11 @@ export type TextureFlowProps = {
    * on paper, where the field alone draws the island (owner, 31 Oct 2026).
    */
   feather?: boolean;
+  /**
+   * Reach past the box's top and bottom into the neighbouring bands' air (--tex-flow-bleed), for a
+   * field on an open band (Section `density="open"`, which raises the band so it shows).
+   */
+  bleed?: boolean;
 };
 
 /* The grid's rows as GLSL: the same cells Texture draws (pixel-grid.json), so the moving field and
@@ -130,7 +135,12 @@ const FRAME_MS = 1000 / 30;
  * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
  * nothing and the ground stands plain.
  */
-export function TextureFlow({ fade, flow = 'resolve', feather = false }: TextureFlowProps) {
+export function TextureFlow({
+  fade,
+  flow = 'resolve',
+  feather = false,
+  bleed = false,
+}: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
   const settleOn = flow === 'turbulent' ? 0 : 1;
@@ -203,7 +213,8 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
       visible = true;
 
     const measure = () => {
-      const box = host.getBoundingClientRect();
+      /* The canvas's own box: the host's, or taller where the field bleeds past it. */
+      const box = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(box.width * dpr);
       canvas.height = Math.round(box.height * dpr);
@@ -304,5 +315,11 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
     };
   }, [fadeOn, settleOn, featherOn]);
 
-  return <canvas ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden="true"
+      className={cx(styles.texture, styles.flow, bleed && styles.flowBleed)}
+    />
+  );
 }

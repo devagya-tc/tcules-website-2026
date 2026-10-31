@@ -47,9 +47,17 @@
    --tex-flow-faint of its strength. On a band whose field alone marks it (About's studio links).
    Component sizes and a proportion, named for the placement.                                     */
 :root{
---tex-flow-feather:120px;
---tex-flow-feather-radius:160px;
---tex-flow-faint:0.4;
+--tex-flow-feather:200px;
+--tex-flow-feather-radius:240px;
+--tex-flow-faint:0.55;
+/* How far the field reaches past the band into its neighbours' air (`bleed`): two thirds of a band's
+   padding, so it fades out clear of their content (48 on a phone, below). */
+--tex-flow-bleed:var(--gap-column);
+}
+@media (max-width: 767px){
+:root{
+--tex-flow-bleed:var(--gap-stack);
+}
 }
 
 /* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
