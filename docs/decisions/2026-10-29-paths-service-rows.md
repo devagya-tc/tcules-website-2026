@@ -1,7 +1,7 @@
 ---
 title: "Home's two paths: each its own drawing, its title and words, then its services as compact service rows"
 date: 2026-10-29
-status: active
+status: superseded
 area: [layout, components, illustration]
 source: "Owner (Devagya), 29 Oct 2026, home `product-situations` on the site rebuilt from the 26 Oct copy, rejecting the one-drawing version (3e7f6c8f)"
 supersedes: [2026-10-29-paths-one-drawing-two-states]

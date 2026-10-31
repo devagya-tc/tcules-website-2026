@@ -57,10 +57,10 @@ export default async function KitGatewayPage() {
 
       <Variation
         id="paths"
-        title="G.P · Two paths, service rows — home (owner, 29 Oct 2026)"
-        note="GatewayPaths, home’s band since the 26 Oct copy: two EQUAL paths side by side from 1024 (64 apart), stacked below. Each reads down: its own SituationFigure in a 180 box (both titles on one line), the title (h3, serif), its paragraphs, then its services as compact service rows, one per line, 16 apart: the service’s own flat Sketch scene on its 112 plate, the action’s authored words (h6), an arrow; the whole row is the link. No container, no button. Two rows against three makes one column a row longer. Hover a row: its arrow moves 4 (transform only). Point anywhere on a path: its drawing plays rest → end. The Prototype Readiness Review has no scene of its own yet, so its row shows the empty plate."
+        title="G.P · Two paths, graphic cards — home (owner, 31 Oct 2026)"
+        note="GatewayPaths, home’s band (decisions/2026-10-31-paths-graphic-cards): the head at the band’s left, the two paths one under the other, 64 apart. Each path is a small label (h5, sans) over its words (body-sm), then its services as flat graphic cards: the service’s own Sketch scene on its plate, the action’s authored words (h5-lg) under it, an arrow at the first line’s end; the whole card is the link, no box and no border. From 1024 words and cards are a split (1 : 2, 96 apart). From 768 the cards stand on three EQUAL tracks for both paths, so the two-service path leaves its third track empty. Below 768 each card is a row: the scene at 144 beside the words, the arrow trailing the last word. Hover a card: its arrow moves 4 (transform only)."
       />
-      <ContentSection heading={heading} headingId="gw-paths" eyebrow={eyebrow} align="center">
+      <ContentSection heading={heading} headingId="gw-paths" eyebrow={eyebrow}>
         <GatewayPaths paths={paths} />
       </ContentSection>
 
