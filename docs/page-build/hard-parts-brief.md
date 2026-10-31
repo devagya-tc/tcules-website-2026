@@ -115,7 +115,7 @@ visible pause control exists (WCAG 2.2.2); reduced motion starts paused; autopla
 - Airtable, https://www.airtable.com, "Sophisticated workflows": a numbered vertical index (01–04) with a dot
   marker beside the view. Did not advance on its own in the check.
 - Dash design system, https://brand.dash.fi/marketing/patterns/feature-tabs: documented pill tabs whose fill is
-  the timer; a click hands control to the reader.
+  the timer; a click hands control to the reader. Read from search results, not opened.
 - W3C APG, auto-rotating carousel with tabs,
   https://www.w3.org/WAI/ARIA/apg/patterns/carousel/examples/carousel-2-tablist/: the behaviour reference (pause
-  control, focus pauses, reduced motion starts paused).
+  control, focus pauses, reduced motion starts paused). Read from search results, not opened.
