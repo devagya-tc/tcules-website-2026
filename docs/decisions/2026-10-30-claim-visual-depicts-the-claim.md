@@ -1,7 +1,7 @@
 ---
 title: "A claim's visual depicts the claim; its example is a citation"
 date: 2026-10-30
-status: active
+status: superseded
 area: [illustration, proof]
 source: "Owner, 30 Oct 2026, round 5 review of /services/product-design and the L1 service pages"
 supersedes: [2026-10-30-hard-parts-case-row]
