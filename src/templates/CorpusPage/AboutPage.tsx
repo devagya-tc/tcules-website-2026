@@ -443,10 +443,12 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           id={`${b.id}-elsewhere`}
           data-band="C-links"
           aria-labelledby={`${b.id}-elsewhere-heading`}
+          flush
         >
-          {/* In the content column: the paper island holds the field, which fades out in an oval
-              so the island's box never shows (owner, 31 Oct 2026). */}
-          <Island surface="paper">
+          {/* In the content column: the paper island holds the field, which fades out as a rounded
+              rectangle so the island's box never shows; the band is flush and its air is inside the
+              island, where the field runs through it (owner, 31 Oct 2026). */}
+          <Island surface="paper" inset="band">
             <TextureFlow flow="turbulent" feather />
             <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
               {/* No calm zone: dark type on a field this light reads, and the middle is where the oval

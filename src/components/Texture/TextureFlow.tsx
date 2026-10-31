@@ -20,9 +20,9 @@ export type TextureFlowProps = {
    */
   flow?: 'resolve' | 'turbulent';
   /**
-   * Fade the field out in an oval (--tex-flow-feather-solid at full strength, then to nothing at the
-   * box's sides), rather than stopping at the box's edge: for a paper island on paper, where the
-   * field alone draws the island (owner, 31 Oct 2026).
+   * Fade the field out toward the box's edge as a rounded rectangle (--tex-flow-feather wide, its
+   * levels rounded at --tex-flow-feather-radius), rather than stopping at the edge: for a paper island
+   * on paper, where the field alone draws the island (owner, 31 Oct 2026).
    */
   feather?: boolean;
 };
@@ -46,7 +46,7 @@ const COL_WIDTH = grid.cells[0]?.width ?? 3;
 const FRAG = `
 precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform vec4 uCalm;
-uniform float uFade; uniform float uSettle; uniform vec3 uInk;
+uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec3 uInk;
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -94,6 +94,14 @@ void main(){
   float cx = clamp((hw - abs(lp.x)) / (2.0 * aa) + 0.5, 0.0, 1.0);
   float cy = clamp((P * 0.5 - abs(lp.y)) / (2.0 * aa) + 0.5, 0.0, 1.0);
   float a = cx * cy * rowAlpha(floor(lp.y + P * 0.5)) * tone;
+  if (uFeather.x > 0.0) {
+    // A rounded-rectangle fade: full strength inside the box inset by the feather, gone at the box's
+    // edge, every level of the fade a rounded rectangle (radius uFeather.y) so no corner is drawn.
+    vec2 hb = W * 0.5;
+    vec2 q = abs(px - hb) - (hb - vec2(uFeather.x + uFeather.y));
+    float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uFeather.y;
+    a *= 1.0 - smoothstep(0.0, uFeather.x, d);
+  }
   gl_FragColor = vec4(uInk * a, a);
 }`;
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
@@ -119,6 +127,7 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
   const settleOn = flow === 'turbulent' ? 0 : 1;
+  const featherOn = feather;
 
   useEffect(() => {
     const canvas = ref.current;
@@ -171,6 +180,7 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
       calm: u('uCalm'),
       fade: u('uFade'),
       settle: u('uSettle'),
+      feather: u('uFeather'),
       ink: u('uInk'),
     };
 
@@ -193,6 +203,13 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
       gl.uniform1f(U.dpr, dpr);
       gl.uniform1f(U.fade, fadeOn);
       gl.uniform1f(U.settle, settleOn);
+      /* The feather's width and corner radius, from the surface's tokens (--tex-flow-feather*). */
+      const cs = getComputedStyle(canvas);
+      gl.uniform2f(
+        U.feather,
+        featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather')) || 0 : 0,
+        featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather-radius')) || 0 : 0,
+      );
       const calmEl = host.querySelector('[data-texture-calm]');
       const r = calmEl?.getBoundingClientRect();
       gl.uniform4f(
@@ -259,13 +276,7 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
       document.removeEventListener('visibilitychange', run);
       reduce.removeEventListener('change', run);
     };
-  }, [fadeOn, settleOn]);
+  }, [fadeOn, settleOn, featherOn]);
 
-  return (
-    <canvas
-      ref={ref}
-      aria-hidden="true"
-      className={cx(styles.texture, styles.flow, feather && styles.flowFeather)}
-    />
-  );
+  return <canvas ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
 }

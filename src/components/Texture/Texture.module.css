@@ -39,17 +39,6 @@
   color: var(--tex-flow-ink);
 }
 
-/* A feathered field (TextureFlow `feather`): an oval, full strength at the middle and fading to
-   nothing well inside the box, so a thick margin of the ground shows all round and no corner or
-   straight edge is ever drawn (owner, 31 Oct 2026). The ellipse meets the box's sides. */
-.flowFeather {
-  mask-image: radial-gradient(
-    closest-side ellipse at center,
-    black var(--tex-flow-feather-solid),
-    transparent 100%
-  );
-}
-
 /* A field whose WebGL context was lost steps aside (TextureFlow): the ground stands plain. */
 .flow[data-lost] {
   visibility: hidden;

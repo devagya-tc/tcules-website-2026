@@ -40,12 +40,14 @@
 --tex-horizon-block-size:40px;
 }
 
-/* The moving field's feathered oval (TextureFlow `feather`, owner 31 Oct 2026): the share of the
-   ellipse's radius at full strength before the fade starts, on a paper island on paper, where the
-   field is the only thing drawing the island. 50% leaves the outer half to fade, a thick
-   margin of paper all round. A component proportion, named for the placement.                   */
+/* The moving field's feathered edge (TextureFlow `feather`, owner 31 Oct 2026): a rounded-rectangle
+   fade, full strength inside the box inset by --tex-flow-feather and gone at the box's edge, each
+   level rounded at --tex-flow-feather-radius so no corner or straight cut is drawn. On a paper island
+   on paper, where the field is the only thing drawing the island. A wide strip of plain paper all
+   round, as wide as the island's band inset. Component sizes, named for the placement.             */
 :root{
---tex-flow-feather-solid:50%;
+--tex-flow-feather:96px;
+--tex-flow-feather-radius:96px;
 }
 
 /* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
