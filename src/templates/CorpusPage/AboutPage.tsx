@@ -445,7 +445,7 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           aria-labelledby={`${b.id}-elsewhere-heading`}
         >
           <Island surface="paper">
-            <TextureFlow flow="turbulent" />
+            <TextureFlow flow="turbulent" feather />
             <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
               <h2 id={`${b.id}-elsewhere-heading`} data-texture-calm>
                 Follow the studio, read its reviews, join the team

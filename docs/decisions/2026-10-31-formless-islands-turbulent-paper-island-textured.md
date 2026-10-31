@@ -15,8 +15,9 @@ flow="turbulent"`). The loose, looping churn runs across the whole island and ne
 quiet behind the words (`data-texture-calm`). Islands holding the enquiry form keep the **resolving** field, which
 loops at the start and eases into parallel streams toward the form.
 
-A **paper island on a paper band** is allowed when it carries that field. The moving light-blue field, together with
-the island's radius, is what draws the island. Without a texture, a paper island on paper is still not used.
+A **paper island on a paper band** is allowed when it carries that field. The moving light-blue field is what draws the
+island, and on paper it is **feathered** (`TextureFlow feather`): it fades in over the island's outer 64 px, so the
+block reads as a soft field rather than a cut-out shape. Without a texture, a paper island on paper is still not used.
 
 **Why.** An island with no form has no side to resolve toward, so the settling streams point at nothing. The owner
 wanted the studio's links on About set apart as a block. A tint ground would have made them a tinted band. The textured
@@ -26,5 +27,5 @@ paper island marks the block without adding a ground.
 field settles toward an empty side.
 
 **How to apply.** The open close (`CtaSection arrangement="open"`) renders `TextureFlow flow="turbulent"`. So do About's
-Lab card (ink) and its studio-links island (paper). The field's ink per surface is `--tex-flow-ink`, brandeis-500 on
+Lab card (ink) and its studio-links island (paper, feathered). The field's ink per surface is `--tex-flow-ink`, brandeis-500 on
 paper.

@@ -39,6 +39,27 @@
   color: var(--tex-flow-ink);
 }
 
+/* A feathered field (TextureFlow `feather`): full strength inside, fading to nothing over the last
+   --tex-flow-feather on every side. Two ramps, intersected, so the corners fade from both edges. */
+.flowFeather {
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      black var(--tex-flow-feather),
+      black calc(100% - var(--tex-flow-feather)),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      black var(--tex-flow-feather),
+      black calc(100% - var(--tex-flow-feather)),
+      transparent
+    );
+  mask-composite: intersect;
+}
+
 /* A field whose WebGL context was lost steps aside (TextureFlow): the ground stands plain. */
 .flow[data-lost] {
   visibility: hidden;

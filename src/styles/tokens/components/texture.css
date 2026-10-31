@@ -40,6 +40,14 @@
 --tex-horizon-block-size:40px;
 }
 
+/* The moving field's feathered edge (TextureFlow `feather`, owner 31 Oct 2026): how far in from
+   the box's edge the field takes to reach full strength, on a paper island on paper, where the field
+   is the only thing drawing the island and a hard stop at its radius read as a cut-out. A component
+   size, named for the placement as the horizon's is.                                              */
+:root{
+--tex-flow-feather:64px;
+}
+
 /* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
    10px pixels at most: 80 tall, so in a band's 128 of open top air it ends 48 above the eyebrow —
    past a `stack` — and never half the band's width, so on a phone it keeps to the end corner, clear

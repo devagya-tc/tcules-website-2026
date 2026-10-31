@@ -19,6 +19,12 @@ export type TextureFlowProps = {
    * ground with no direction to resolve toward (owner, 31 Oct 2026, About's Lab card).
    */
   flow?: 'resolve' | 'turbulent';
+  /**
+   * Fade the field out over its last --tex-flow-feather on every side, rather than stopping at the
+   * box's edge: for a paper island on paper, where the field alone draws the island (owner, 31 Oct
+   * 2026).
+   */
+  feather?: boolean;
 };
 
 /* The grid's rows as GLSL: the same cells Texture draws (pixel-grid.json), so the moving field and
@@ -109,7 +115,7 @@ const FRAME_MS = 1000 / 30;
  * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
  * nothing and the ground stands plain.
  */
-export function TextureFlow({ fade, flow = 'resolve' }: TextureFlowProps) {
+export function TextureFlow({ fade, flow = 'resolve', feather = false }: TextureFlowProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const fadeOn = fade === 'start' ? 1 : 0;
   const settleOn = flow === 'turbulent' ? 0 : 1;
@@ -255,5 +261,11 @@ export function TextureFlow({ fade, flow = 'resolve' }: TextureFlowProps) {
     };
   }, [fadeOn, settleOn]);
 
-  return <canvas ref={ref} aria-hidden="true" className={cx(styles.texture, styles.flow)} />;
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden="true"
+      className={cx(styles.texture, styles.flow, feather && styles.flowFeather)}
+    />
+  );
 }
