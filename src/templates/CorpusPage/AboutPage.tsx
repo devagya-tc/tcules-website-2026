@@ -8,6 +8,7 @@ import {
   Island,
   Layout,
   Prose,
+  TextureFlow,
   type MediaImage,
 } from '@/components';
 import {
@@ -272,18 +273,21 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
           {list ? (
             /* The five audiences as list cards, one per row: the glyph, then the title (owner,
                31 Oct 2026). A ruled row stands alone on its line, never in a grid. */
-            <Layout as="ul" rowGap="none">
-              {list.items.map((runs, index) => (
-                <ListCard
-                  key={index}
-                  size="md"
-                  titleAs="h3"
-                  title={sentenceCase(plain(runs))}
-                  {...(AUDIENCE_GLYPHS[index]
-                    ? { marker: { type: 'icon' as const, name: AUDIENCE_GLYPHS[index] } }
-                    : {})}
-                />
-              ))}
+            /* In the start half, the end half left open (owner, 31 Oct 2026). */
+            <Layout columns={{ base: 1, lg: 2 }} colGap="column">
+              <Layout as="ul" rowGap="none">
+                {list.items.map((runs, index) => (
+                  <ListCard
+                    key={index}
+                    size="md"
+                    titleAs="h3"
+                    title={sentenceCase(plain(runs))}
+                    {...(AUDIENCE_GLYPHS[index]
+                      ? { marker: { type: 'icon' as const, name: AUDIENCE_GLYPHS[index] } }
+                      : {})}
+                  />
+                ))}
+              </Layout>
             </Layout>
           ) : null}
           {lines.length > 0 ? <Text paragraphs={lines.map((block) => block.runs)} /> : null}
@@ -313,13 +317,18 @@ function WhoUsesBand({ page, band: b, caseRefs }: AboutBandProps) {
               /* The Lab line as a card of its own, an ink island (owner, 31 Oct 2026): the sentence as
                  authored, its link lifted into the card's action. */
               <Island surface="ink">
+                {/* The moving field, turbulent across the whole card with no side to resolve toward;
+                    quiet behind the sentence (owner, 31 Oct 2026). */}
+                <TextureFlow flow="turbulent" />
                 <Layout
                   columns={{ base: 1, lg: [1, 'auto'] }}
                   colGap="column"
                   rowGap="block"
                   align="center"
                 >
-                  <Text paragraphs={afterText} />
+                  <div data-texture-calm>
+                    <Text paragraphs={afterText} />
+                  </div>
                   {labLink(afterText) ? (
                     <Button
                       as="a"
