@@ -1,7 +1,7 @@
 ---
 title: "Hard parts: drawing, claim, example, the example exactly as authored"
 date: 2026-10-30
-status: active
+status: superseded
 area: [proof, layout]
 source: "Owner, 30 Oct 2026, product design review after round 7"
 supersedes: [2026-10-30-hard-parts-claims-lead-proof-footnotes]

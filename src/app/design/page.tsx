@@ -273,6 +273,11 @@ const SPECIMENS = [
         note: 'why choose us — four argued reasons 2×2, each with an isometric drawing of its claim; open, boxed (the set in one rounded frame) and beside, the longest copy, three and six reasons, a bare head, tint',
       },
       {
+        href: '/design/claim-set',
+        name: 'ClaimSet',
+        note: "a page's hard parts — tabs on a stage (one slide moving as one piece, autoplay with no control), four of five without an example, two claims, and the page layout, ruled",
+      },
+      {
         href: '/design/voice-ledger',
         name: 'VoiceLedger',
         note: "complaints in the customer's words, each answered by where we start — five rows, a lead, a linked reply, a wrapping complaint, paper and tint",

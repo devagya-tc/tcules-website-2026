@@ -254,19 +254,19 @@ We design search, sources and AI answers as one product, tested on your own cont
 
 **What you receive**
 
-- a review of the searches that fail: zero results, repeated queries and the support tickets they cause
+- **A review of the searches that fail:** a review of the searches that fail: zero results, repeated queries and the support tickets they cause
 
-- search, filters and browsing that serve experts and newcomers in the same box
+- **Experts and newcomers in the same box:** search, filters and browsing that serve experts and newcomers in the same box
 
-- results that show source, owner, version and date where they help someone choose
+- **Results that show source and owner:** results that show source, owner, version and date where they help someone choose
 
-- AI answers that link to the passages and documents behind them, and citation, provenance and saved-search views for researchers who cite what they find
+- **AI answers linked to their passages:** AI answers that link to the passages and documents behind them, and citation, provenance and saved-search views for researchers who cite what they find
 
-- a route from each result to the next task: add, share, cite or configure
+- **A route to the next task:** a route from each result to the next task: add, share, cite or configure
 
-- prototypes tested with your real documents and your real queries
+- **Prototypes tested with your real documents:** prototypes tested with your real documents and your real queries
 
-- a written list of what the screens need from your search engine
+- **What the screens need from your search engine:** a written list of what the screens need from your search engine
 
 **Who does the work.** A senior product designer is your lead and does the design work, and an account lead keeps it running. Researchers sit with your searchers, and a design engineer joins when results need testing on your own content.
 

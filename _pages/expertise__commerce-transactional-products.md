@@ -254,19 +254,19 @@ We take on the purchase from first search to delivery, and the systems behind it
 
 **What you receive**
 
-- research from support emails, search terms and abandoned baskets, and from watching staff handle orders
+- **Research from support emails and search terms:** research from support emails, search terms and abandoned baskets, and from watching staff handle orders
 
-- navigation, search and product pages that answer fit, variant, stock, delivery and warranty beside the price
+- **Product pages that answer fit:** navigation, search and product pages that answer fit, variant, stock, delivery and warranty beside the price
 
-- a checkout with the measuring, approvals and checks your products need before payment
+- **A checkout with the checks your products need:** a checkout with the measuring, approvals and checks your products need before payment
 
-- order, production and delivery status that customers and staff can both follow
+- **Order, production and delivery status:** order, production and delivery status that customers and staff can both follow
 
-- one set of components and a style guide shared by the store and the back office, so a repeated interaction is agreed once with engineering
+- **One set of components:** one set of components and a style guide shared by the store and the back office, so a repeated interaction is agreed once with engineering
 
-- prototypes tested with buyers who know the part number and buyers still comparing
+- **Prototypes tested with buyers:** prototypes tested with buyers who know the part number and buyers still comparing
 
-- the store built on Shopify or Magento by our developers, or specs for your own team
+- **The store built on Shopify or Magento:** the store built on Shopify or Magento by our developers, or specs for your own team
 
 **Who does the work.** Your lead is a senior product designer who also does the design, with an account lead keeping the work on track. Researchers join for the observation, and our developers build the store when you want one team for both.
 

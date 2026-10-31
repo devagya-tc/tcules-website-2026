@@ -1,0 +1,104 @@
+/* ══ Component layer — ClaimSet ════════════════════════════════════════════════════
+   Tier 2. A page's hard parts: each claim its drawing, title and words, and its example where it
+   has one (owner, 31 Oct 2026; docs/page-build/hard-parts-brief.md). Two layouts:
+     tabs   one claim at a time on a paper-deep stage: the claims as tabs along its top, the chosen
+            claim's slide on paper below, two parts (drawing and words; the example). The whole
+            slide moves as one piece, left or right toward the chosen claim.
+     page   every claim on the page, ruled: drawing, words, example in three columns (locked).
+
+   Naming: --clm-{part}-{role}
+     parts  stage · panel · tab · number · timer · proof · label · link · rule · art · ring
+     roles  ground · ink · width · radius · inset · rail · fill · duration · easing
+
+   No hover-only grounds: the tab's paper piece marks the CHOSEN tab, never the hovered one. Every
+   surface block declares every surface-dependent token.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Component sizes. */
+  --clm-art-width: 200px; /* a claim's drawing, its largest size (owner, 31 Oct 2026: "maybe 200x200 at the largest") */
+  --clm-proof-width: 340px; /* the example's column in the page layout */
+  --clm-stage-radius: var(--radius-24);
+  --clm-panel-radius: var(--radius-16);
+  --clm-tab-radius: var(--radius-16);
+  --clm-proof-radius: var(--radius-16);
+  /* The stage's rim around its tabs and panel, and the gap between them: the gap scale's tight step. */
+  --clm-stage-inset: var(--gap-tight);
+  --clm-timer-rest: var(--border-width-hairline);
+  --clm-timer-active: var(--border-width-2);
+  --clm-title-lines: 2;
+  --clm-ring-width: var(--focus-ring-width);
+  /* The slide's travel and the panel's height change: one duration, the site's ease (hover-is-a-move). */
+  --clm-slide-duration: var(--duration-slow);
+  --clm-slide-easing: var(--easing-ease);
+  --clm-tab-lift: -2px; /* an inactive title's hover move: an optical nudge, not a distance */
+}
+
+/* ── Surface: paper ───────────────────────────────────────────────────────────── */
+:root,
+[data-surface='paper'] {
+  --clm-stage-ground: var(--color-paper-deep);
+  --clm-panel-ground: var(--color-paper);
+  --clm-tab-ink: var(--color-neutral-600); /* 5.06:1 on paper-deep */
+  --clm-tab-ink-active: var(--color-neutral-900); /* 14.62:1 */
+  --clm-number-ink: var(--color-neutral-700); /* 8.14:1 */
+  --clm-timer-rail: var(--color-neutral-300); /* decoration */
+  --clm-timer-fill: var(--color-brandeis-500);
+  --clm-proof-ground: var(--color-paper-deep);
+  --clm-label-ink: var(--color-neutral-700); /* 7.5:1 on paper-deep */
+  --clm-proof-ink: var(--color-neutral-900); /* 13.05:1 on paper-deep */
+  --clm-link-ink: var(--color-brandeis-500); /* 5.7:1 on paper-deep */
+  --clm-rule-ink: var(--color-neutral-200); /* decoration */
+  --clm-ring-color: var(--color-brandeis-500);
+}
+
+/* ── Surface: tint ────────────────────────────────────────────────────────────── */
+[data-surface='tint'] {
+  --clm-stage-ground: var(--color-neutral-100);
+  --clm-panel-ground: var(--color-paper);
+  --clm-tab-ink: var(--color-neutral-700); /* 6.9:1 on neutral-100 */
+  --clm-tab-ink-active: var(--color-neutral-900); /* 14.62:1 on paper */
+  --clm-number-ink: var(--color-neutral-700);
+  --clm-timer-rail: var(--color-neutral-300); /* decoration */
+  --clm-timer-fill: var(--color-brandeis-500);
+  --clm-proof-ground: var(--color-paper-deep);
+  --clm-label-ink: var(--color-neutral-700);
+  --clm-proof-ink: var(--color-neutral-900);
+  --clm-link-ink: var(--color-brandeis-500);
+  --clm-rule-ink: var(--color-neutral-300); /* decoration */
+  --clm-ring-color: var(--color-brandeis-500);
+}
+
+/* ── Surface: ink ─────────────────────────────────────────────────────────────── */
+[data-surface='ink'] {
+  --clm-stage-ground: var(--color-neutral-800);
+  --clm-panel-ground: var(--color-neutral-950);
+  --clm-tab-ink: var(--color-neutral-300);
+  --clm-tab-ink-active: var(--color-white);
+  --clm-number-ink: var(--color-neutral-300);
+  --clm-timer-rail: var(--color-neutral-700); /* decoration */
+  --clm-timer-fill: var(--color-brandeis-300);
+  --clm-proof-ground: var(--color-neutral-800);
+  --clm-label-ink: var(--color-neutral-300);
+  --clm-proof-ink: var(--color-white);
+  --clm-link-ink: var(--color-brandeis-200);
+  --clm-rule-ink: var(--color-neutral-700); /* decoration */
+  --clm-ring-color: var(--color-brandeis-300);
+}
+
+/* ── Surface: blue ────────────────────────────────────────────────────────────── */
+[data-surface='blue'] {
+  --clm-stage-ground: var(--color-brandeis-600);
+  --clm-panel-ground: var(--color-brandeis-700);
+  --clm-tab-ink: var(--color-brandeis-50);
+  --clm-tab-ink-active: var(--color-white);
+  --clm-number-ink: var(--color-brandeis-50);
+  --clm-timer-rail: var(--color-brandeis-400); /* decoration */
+  --clm-timer-fill: var(--color-white);
+  --clm-proof-ground: var(--color-brandeis-600);
+  --clm-label-ink: var(--color-brandeis-50);
+  --clm-proof-ink: var(--color-white);
+  --clm-link-ink: var(--color-white);
+  --clm-rule-ink: var(--color-brandeis-300); /* decoration */
+  --clm-ring-color: var(--color-white);
+}

@@ -410,6 +410,70 @@ flagList(
   (r) => `\`${r.route}\` #${r.band}`,
 );
 
+/* ── Review list (owner, 31 Oct 2026) ──────────────────────────────────────────────────
+   A kind is approved by looking at the real pages that stress it, not at a specimen: per kind, the
+   few live instances with the hardest content (longest, shortest, most items, a table, a worked
+   example, claims without an example). Open these and, if they hold, every page of the kind does.
+   kinds:check (after a build) then keeps every band on its kind's component. */
+const wordsIn = (blocks) =>
+  blocks.reduce((n, b) => {
+    const t = (runs) => runs.map((r) => (r.type === 'text' ? r.text : r.children ? t(r.children) : '')).join(' ');
+    if (b.type === 'paragraph') return n + t(b.runs).split(/\s+/).length;
+    if (b.type === 'list') return n + b.items.reduce((m, i) => m + t(i).split(/\s+/).length, 0);
+    if (b.type === 'table') return n + b.rows.flat().reduce((m, c) => m + t(c).split(/\s+/).length, 0);
+    if (b.type === 'item') return n + wordsIn(b.blocks);
+    return n;
+  }, 0);
+const flat = (blocks) => blocks.flatMap((b) => (b.type === 'item' ? [b, ...flat(b.blocks)] : [b]));
+const plainOf = (b) =>
+  b.type === 'paragraph'
+    ? b.runs.map((r) => (r.type === 'text' ? r.text : r.children ? r.children.map((c) => c.text ?? '').join('') : '')).join('')
+    : '';
+const review = new Map();
+for (const page of pages) {
+  const row = census.pages.find((p) => p.route === page.route);
+  if (!row?.offerPageToday) continue;
+  for (const band of page.bands) {
+    const kind = row.bands.find((b) => b.id === band.id)?.offerKind ?? 'n/a';
+    if (kind === 'n/a' || kind.startsWith('template:')) continue;
+    const all = flat(band.blocks);
+    const items = band.blocks.filter((b) => b.type === 'item');
+    review.set(kind, [
+      ...(review.get(kind) ?? []),
+      {
+        at: `${page.route}#${band.id}`,
+        words: wordsIn(band.blocks),
+        items: items.length || band.blocks.filter((b) => b.type === 'list').reduce((n, l) => n + l.items.length, 0),
+        table: all.some((b) => b.type === 'table'),
+        story: all.some((b) => /^illustration, not client work$/i.test(plainOf(b).trim())),
+        bare: items.filter((i) => !i.blocks.some((b) => /^example\b[^:.]{0,40}:/i.test(plainOf(b).trim()))).length,
+      },
+    ]);
+  }
+}
+md.push('## Review list: the hardest real content per kind', '');
+md.push('Open these on the running site. If they hold, every page of the kind holds.', '');
+for (const [kind, rows] of [...review].sort()) {
+  const pick = [];
+  const add = (r, why) => {
+    if (r && !pick.some((p) => p.r.at === r.at)) pick.push({ r, why });
+  };
+  const by = (f) => [...rows].sort((a, b) => f(b) - f(a))[0];
+  add(by((r) => r.words), 'longest');
+  add(by((r) => -r.words), 'shortest');
+  add(by((r) => r.items), 'most items');
+  add(rows.find((r) => r.table), 'a table');
+  add(rows.find((r) => r.story), 'a worked example');
+  if (rows.some((r) => r.bare)) add(by((r) => r.bare), 'claims without an example');
+  md.push(
+    `- **${kind}** (${rows.length}): ${pick
+      .slice(0, 4)
+      .map(({ r, why }) => `\`${r.at}\` ${why}`)
+      .join(' · ')}`,
+  );
+}
+md.push('');
+
 md.push('## Page types: band sequences', '');
 for (const [type, t] of Object.entries(census.pageTypes).sort(
   (a, b) => b[1].pages - a[1].pages,

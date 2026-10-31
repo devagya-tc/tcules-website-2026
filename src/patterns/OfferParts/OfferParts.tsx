@@ -12,7 +12,8 @@ export type OfferPartsDeliverable = {
   body?: string;
   /** Or trusted HTML from the content seam (a body that names a service as a link). */
   bodyHtml?: string;
-  scene: SketchName;
+  /** The deliverable drawn. Missing, the empty plate stands in its place and development warns. */
+  scene?: SketchName;
 };
 
 /**
@@ -35,7 +36,7 @@ export type OfferPartsProps = {
   lead?: string;
   /** The first part's title: the authored label over the list ("What you receive"). */
   deliverablesTitle: string;
-  /** Two to six; built for five. */
+  /** Two to seven; built for five. */
   deliverables: readonly OfferPartsDeliverable[];
   /** Zero to three; built for three. */
   parts: readonly OfferPart[];
@@ -55,6 +56,8 @@ const TRACKS: Record<number, { lg: 2 | 3; xl: 2 | 3 | 4 | 5 }> = {
   4: { lg: 2, xl: 4 },
   5: { lg: 3, xl: 5 },
   6: { lg: 3, xl: 3 },
+  /* Seven (most expertise pages): 4 + 3 from 1280. From 1024 to 1279 three tracks leave one alone. */
+  7: { lg: 3, xl: 4 },
 };
 
 const words = (item: { body?: string; bodyHtml?: string }) =>
@@ -97,13 +100,13 @@ export function OfferParts({
   surface = 'paper',
 }: OfferPartsProps) {
   if (process.env.NODE_ENV !== 'production') {
-    if (deliverables.length < 2 || deliverables.length > 6) {
-      console.warn(`OfferParts: ${deliverables.length} deliverables; built for two to six.`);
+    if (deliverables.length < 2 || deliverables.length > 7) {
+      console.warn(`OfferParts: ${deliverables.length} deliverables; built for two to seven.`);
     }
     if (parts.length !== 3) {
       console.warn(`OfferParts: ${parts.length} parts; built for three.`);
     }
-    for (const part of parts) {
+    for (const part of [...deliverables, ...parts]) {
       if (!part.scene) {
         console.warn(`OfferParts: "${part.title}" has no drawing; the empty plate stands.`);
       }

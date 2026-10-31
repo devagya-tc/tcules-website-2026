@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
         destination: caseStudyPath(to),
         permanent: false,
       })),
-      /* The copy's renamed expertise slugs → the live Strapi slugs (routes.ts § EXPERTISE_SLUG_REDIRECTS). */
+      /* The live expertise slugs the copy renamed → their new slugs (routes.ts § EXPERTISE_SLUG_REDIRECTS). */
       ...Object.entries(EXPERTISE_SLUG_REDIRECTS).map(([from, to]) => ({
         source: `/expertise/${from}`,
         destination: `/expertise/${to}`,

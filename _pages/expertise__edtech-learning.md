@@ -252,19 +252,19 @@ We design the learning experience and carry it into your platform, as a project 
 
 **What you receive**
 
-- research with learners and educators, on the devices they really use
+- **Research with learners and educators:** research with learners and educators, on the devices they really use
 
-- an audit of content structure, mobile use, consistency and community features, each with a plain verdict
+- **An audit with a plain verdict:** an audit of content structure, mobile use, consistency and community features, each with a plain verdict
 
-- content regrouped so every learner can see the current activity and what follows it
+- **Content regrouped:** content regrouped so every learner can see the current activity and what follows it
 
-- teacher, mentor and assessor views built around who needs help
+- **Views built around who needs help:** teacher, mentor and assessor views built around who needs help
 
-- hybrid wireframes that put the course structure and the visual direction in front of you at once
+- **Hybrid wireframes:** hybrid wireframes that put the course structure and the visual direction in front of you at once
 
-- defaults, consent steps and parent views for younger learners
+- **Parent views for younger learners:** defaults, consent steps and parent views for younger learners
 
-- the theme, plugins and settings configured in Moodle or your LMS by our team
+- **Configured in Moodle or your LMS:** the theme, plugins and settings configured in Moodle or your LMS by our team
 
 **Who does the work.** One senior product designer leads and does the design, and an account lead runs the project day to day. Our developers configure the platform. We can also work inside your product team, as we did beside JoVE's product managers and designers for six months.
 

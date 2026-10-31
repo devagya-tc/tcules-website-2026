@@ -257,17 +257,17 @@ Our AI product design process follows the model's output to the person using it:
 
 **What you receive**
 
-- the path from sign-up to a first working result, with keys, code samples and error messages
+- **A first working result:** the path from sign-up to a first working result, with keys, code samples and error messages
 
-- documentation, previews, consoles, usage and billing views placed beside the work, and the limits people meet as they grow
+- **Documentation beside the work:** documentation, previews, consoles, usage and billing views placed beside the work, and the limits people meet as they grow
 
-- for each step, a written split between what the system proposes and what a person checks, edits or approves
+- **A written split:** for each step, a written split between what the system proposes and what a person checks, edits or approves
 
-- results that show their sources and limits, and review screens that keep the original beside any correction
+- **Sources and limits:** results that show their sources and limits, and review screens that keep the original beside any correction
 
-- prototypes tested with your users and your engineers, clickable or in code
+- **Prototypes tested:** prototypes tested with your users and your engineers, clickable or in code
 
-- specs your developers build from, or Tcules developers through [AI Product Engineering](/services/software-development/ai-product-engineering)
+- **Specs your developers build from:** specs your developers build from, or Tcules developers through [AI Product Engineering](/services/software-development/ai-product-engineering)
 
 **Who does the work.** The product designer who leads your project is senior and does the design; an account lead keeps it running. Design engineers try uncertain behaviour in code, and our developers join if we build it.
 

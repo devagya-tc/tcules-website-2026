@@ -255,19 +255,19 @@ We design analytics around the questions people bring, on definitions your data 
 
 **What you receive**
 
-- a plain definition, scope and freshness rule for each figure that matters, agreed before any chart is drawn
+- **A definition for each figure:** a plain definition, scope and freshness rule for each figure that matters, agreed before any chart is drawn
 
-- views for analysts, managers and customers at different depths, on the same definitions
+- **Views at different depths:** views for analysts, managers and customers at different depths, on the same definitions
 
-- reports, scores and charts that show their baseline and what they rest on
+- **Charts that show their baseline:** reports, scores and charts that show their baseline and what they rest on
 
-- the next step placed beside the figure that prompts it
+- **The next step beside the figure:** the next step placed beside the figure that prompts it
 
-- screens for missing, late, partial and restricted data
+- **Screens for missing and late data:** screens for missing, late, partial and restricted data
 
-- saved views and filters in place of one-off custom reports
+- **Saved views and filters:** saved views and filters in place of one-off custom reports
 
-- prototypes with real or realistic figures, because tidy sample numbers hide the hard cases
+- **Prototypes with realistic figures:** prototypes with real or realistic figures, because tidy sample numbers hide the hard cases
 
 **Who does the work.** The work is led by a senior product designer who does it hands-on, and an account lead keeps it on course. Design engineers build the views that need real numbers to judge.
 

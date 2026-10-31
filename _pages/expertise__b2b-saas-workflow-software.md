@@ -285,17 +285,17 @@ We take on the workflow itself, in a new product or one your customers already r
 
 **What you receive**
 
-- a map of the records, roles, rules and states the workflow runs on
+- **The workflow map:** a map of the records, roles, rules and states the workflow runs on
 
-- the screens each role works in, with every exception designed beside the main path
+- **Screens for each role:** the screens each role works in, with every exception designed beside the main path
 
-- the admin, permission and audit screens enterprise customers look for
+- **Admin, permission and audit screens:** the admin, permission and audit screens enterprise customers look for
 
-- how an agent's work, or a model's output, appears to the people who check it
+- **How an agent's work appears:** how an agent's work, or a model's output, appears to the people who check it
 
-- prototypes tested with people who do the job, clickable or in code
+- **Prototypes tested:** prototypes tested with people who do the job, clickable or in code
 
-- parts your engineers can build from, or Tcules developers working alongside them
+- **Parts your engineers can build from:** parts your engineers can build from, or Tcules developers working alongside them
 
 **Who does the work.** A senior product designer leads the work and does it. Researchers, design engineers and developers join when the work needs them.
 
