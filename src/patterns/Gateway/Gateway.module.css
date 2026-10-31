@@ -284,14 +284,9 @@
   }
 }
 
-/* ── paths (GatewayPaths, home, 29 Oct 2026) ───────────────────────────────────
-   Two paths on paper, each read down: drawing, title, sentences, links. No ground and no box. The
-   drawing's box is one height for both, so the titles share a line. Sizing, not arrangement. */
-.pathVisual {
-  display: block;
-  block-size: var(--gwy-path-visual-height);
-}
-
+/* ── paths (GatewayPaths, home, 31 Oct 2026) ───────────────────────────────────
+   Two paths on paper, each a small label and its words, then its services as graphic cards. No
+   ground and no box (decisions/2026-10-31-paths-graphic-cards). */
 .pathTitle {
   font: var(--gwy-path-title-text);
   letter-spacing: var(--gwy-path-title-tracking);
@@ -305,37 +300,38 @@
   color: var(--gwy-body-ink);
 }
 
-/* A path's services as compact service rows (owner, 29 Oct 2026): the whole row is the anchor;
-   `display: block` de-inlines it so the hit area is the row, and its one child, a Layout, arranges
-   the scene, the words and the arrow. No ground, no box, no rule. */
-.serviceRow {
+/* A service as a graphic card: the whole card is the anchor; `display: block` de-inlines it so the
+   hit area is the card, and its one child, a Layout, arranges the scene and the words. The plate is
+   the card: no ground, no box, no rule. */
+.serviceCard {
   display: block;
   color: var(--gwy-title-ink);
   text-decoration: none;
   border-radius: var(--gwy-ring-radius);
 }
 
-.serviceRow:hover,
-.serviceRow:focus-visible {
+.serviceCard:hover,
+.serviceCard:focus-visible {
   text-decoration: none;
 }
 
-.serviceRow:focus {
+.serviceCard:focus {
   outline: none;
 }
 
-.serviceRow:focus-visible {
+.serviceCard:focus-visible {
   box-shadow: 0 0 0 var(--gwy-ring-width) var(--gwy-ring-color);
 }
 
-/* The service's own scene on its plate, at one width for every row, so every label starts on one
-   edge. Sizing, not arrangement. */
+/* The service's own scene on its plate: one width for every row below 768, so every label starts on
+   one edge; the card's full width from 768. Sizing, not arrangement. */
 .serviceArt {
   display: block;
   inline-size: var(--gwy-service-art-width);
 }
 
 .serviceLabel {
+  display: block;
   font: var(--gwy-service-label-text);
   letter-spacing: var(--gwy-service-label-tracking);
   text-wrap: var(--text-title-wrap);
@@ -361,9 +357,29 @@
   block-size: 100%;
 }
 
-.serviceRow:hover .serviceArrow,
-.serviceRow:focus-visible .serviceArrow {
+.serviceCard:hover .serviceArrow,
+.serviceCard:focus-visible .serviceArrow {
   transform: translateX(var(--gwy-service-arrow-shift));
+}
+
+/* From 768 the card stands: the scene takes the card's width, and the arrow leaves the words for the
+   first line's far end, the label keeping room for it so a long label never runs under it. */
+@media (min-width: 768px) {
+  .serviceArt {
+    inline-size: auto;
+  }
+
+  .serviceLabel {
+    position: relative;
+    padding-inline-end: calc(var(--gwy-service-arrow-size) + var(--gwy-service-arrow-inset));
+  }
+
+  .serviceArrow {
+    position: absolute;
+    inset-block-start: var(--gwy-service-arrow-drop);
+    inset-inline-end: 0;
+    padding-inline-start: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

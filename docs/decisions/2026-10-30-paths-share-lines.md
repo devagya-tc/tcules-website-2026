@@ -1,7 +1,7 @@
 ---
 title: "Home's two paths share lines from 1024 (Layout shareRows); every service row draws its own scene; rows are 128 plates with h5 labels"
 date: 2026-10-30
-status: proposed
+status: superseded
 area: [layout, components, illustration]
 source: "Owner (Devagya) round-5 notes, 30 Oct 2026: home why-tcules 'objectively ugly', paths 'still bad'"
 supersedes: []
