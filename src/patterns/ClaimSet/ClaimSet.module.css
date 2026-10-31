@@ -1,0 +1,246 @@
+/* ClaimSet — a page's hard parts. Values are the --clm-* layer (tokens/components/claim-set.css),
+   the gap scale and the text roles; arrangement is Layout's. Two media queries: the tabs layout
+   is a stage from 1024 and a stack below it, and the drawing's size steps down on a phone. */
+
+/* ── Shared parts ──────────────────────────────────────────────────────────── */
+
+.title {
+  font: var(--text-h4);
+  letter-spacing: var(--text-h4-tracking);
+  text-wrap: var(--text-title-wrap);
+}
+
+/* A drawing is never boxed (ch05 §4a): one width, its height the asset's own ratio. */
+.art {
+  inline-size: var(--clm-art-width);
+  max-inline-size: 100%;
+}
+
+.words {
+  max-inline-size: var(--measure-lead);
+}
+
+/* The example: proof on a tinted panel, its own label, the sentence, the case link. */
+.proof {
+  display: grid;
+  gap: var(--gap-text);
+  align-content: start;
+  padding: var(--gap-gutter);
+  border-radius: var(--clm-proof-radius);
+  background: var(--clm-proof-ground);
+  color: var(--clm-proof-ink);
+}
+
+.label {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--text-eyebrow-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--clm-label-ink);
+}
+
+.says {
+  font: var(--text-body-sm);
+  text-wrap: var(--text-running-wrap);
+}
+
+/* "Example:" is the panel's label now; the sentence's first letter is capitalised in presentation only. */
+.says::first-letter {
+  text-transform: uppercase;
+}
+
+.says a {
+  color: inherit;
+}
+
+.caseLink {
+  justify-self: start;
+  font: var(--text-ui-sm);
+  letter-spacing: var(--text-ui-sm-tracking);
+  text-transform: var(--text-mono-case);
+  color: var(--clm-link-ink);
+  text-decoration: none;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
+}
+
+.caseLink:hover .arrow {
+  transform: translateX(var(--gap-inline));
+}
+
+.caseLink:focus-visible {
+  outline: var(--clm-ring-width) solid var(--clm-ring-color);
+  outline-offset: var(--clm-ring-width);
+}
+
+/* ── Page layout: every claim on the page, ruled ──────────────────────────────── */
+
+.row {
+  padding-block: var(--gap-stack);
+  border-block-start: var(--border-width-hairline) solid var(--clm-rule-ink);
+}
+
+.row:first-child {
+  padding-block-start: 0;
+  border-block-start: 0;
+}
+
+.row:last-child {
+  padding-block-end: 0;
+}
+
+@media (min-width: 1024px) {
+  .proofColumn {
+    inline-size: var(--clm-proof-width);
+  }
+}
+
+/* ── Tabs layout: one claim at a time on a stage (from 1024) ─────────────────── */
+
+/* Below 1024 there is no stage: no ground, no tabs, every slide on the page in turn. */
+.tablist {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    display: grid;
+    gap: var(--clm-stage-inset);
+    padding: var(--clm-stage-inset);
+    border-radius: var(--clm-stage-radius);
+    background: var(--clm-stage-ground);
+  }
+
+  .tablist {
+    display: block;
+    position: relative;
+  }
+
+  /* The chosen tab's ground: one paper piece that travels between tabs. */
+  .piece {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    border-radius: var(--clm-tab-radius);
+    background: var(--clm-panel-ground);
+    transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
+  }
+
+  .tab {
+    position: relative;
+    display: grid;
+    gap: var(--gap-text);
+    align-content: start;
+    padding: var(--gap-block);
+    border: 0;
+    border-radius: var(--clm-tab-radius);
+    background: none;
+    color: var(--clm-tab-ink);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .tab[aria-selected='true'],
+  .tab:hover {
+    color: var(--clm-tab-ink-active);
+  }
+
+  .tab:focus-visible {
+    outline: var(--clm-ring-width) solid var(--clm-ring-color);
+    outline-offset: calc(var(--clm-ring-width) * -1);
+  }
+
+  /* "01" and its rule on one line: the rule is the timer. */
+  .index {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-text);
+  }
+
+  .number {
+    font: var(--text-ui-sm);
+    letter-spacing: var(--text-ui-sm-tracking);
+    text-transform: var(--text-mono-case);
+    color: var(--clm-number-ink);
+  }
+
+  .rail {
+    position: relative;
+    flex: 1;
+    block-size: var(--clm-timer-rest);
+    background: var(--clm-timer-rail);
+    overflow: hidden;
+  }
+
+  .tab[aria-selected='true'] .rail {
+    block-size: var(--clm-timer-active);
+  }
+
+  .fill {
+    position: absolute;
+    inset: 0;
+    background: var(--clm-timer-fill);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .tabTitle {
+    font: var(--text-label);
+    letter-spacing: var(--text-label-tracking);
+    text-wrap: balance;
+    min-block-size: calc(var(--clm-title-lines) * 1lh);
+    transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
+  }
+
+  .tab[aria-selected='false']:hover .tabTitle {
+    transform: translateY(var(--clm-tab-lift));
+  }
+
+  /* The panel: paper, its height following the slide; the slide moves inside it and is clipped by it. */
+  .panel {
+    position: relative;
+    overflow: hidden;
+    padding: var(--gap-stack);
+    border-radius: var(--clm-panel-radius);
+    background: var(--clm-panel-ground);
+  }
+
+  .panel[data-moving] {
+    transition: block-size var(--clm-slide-duration) var(--clm-slide-easing);
+  }
+
+  .track {
+    position: relative;
+  }
+
+  .slide {
+    display: none;
+  }
+
+  .slide[data-active],
+  .slide[data-leaving] {
+    display: block;
+  }
+
+  .slide[data-leaving] {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+  }
+
+  .panel[data-moving] .slide {
+    transition: transform var(--clm-slide-duration) var(--clm-slide-easing);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piece,
+  .arrow,
+  .tabTitle,
+  .panel[data-moving],
+  .panel[data-moving] .slide {
+    transition: none;
+  }
+}

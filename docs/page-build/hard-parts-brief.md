@@ -135,3 +135,12 @@ or focus inside it holds the timer; a tab, an arrow key, a text selection or a l
 rests on claim 1. The pixel grid sits on the stage's ground, strongest around the chosen tab, travelling with the timer.
 Switches: texture, thumbnails (each claim's drawing at 40px), client name. Caveat for the owner: a strict reading of
 WCAG 2.2.2 wants a visible pause control.
+
+**Built (31 Oct 2026, branch design/expertise-pages):** the owner chose the stage and asked for it on the site with no
+texture, thumbnails or client name ("once it is built on the website i'll have better judgment to beautify it"); the
+slide moves as ONE piece, out to one side and in from the other toward the chosen claim; two parts per slide (drawing
+and words; the example); no play/pause control. `src/patterns/ClaimSet` (tabs; `layout="page"` keeps B as locked),
+tokens `claim-set.css`, specimen `/design/claim-set`. Every hard-parts band renders through it (ChallengesBand and the
+personas ledger's claims). A claim with no example spreads its words over two columns. A qualified example label
+("Example, from related work") becomes the panel's label, so no authored word is dropped. Rulings to log with /decide
+once the owner has judged it on the pages.

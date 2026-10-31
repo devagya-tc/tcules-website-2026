@@ -20,12 +20,14 @@ import {
   CtaSection,
   DataTable,
   ListCard,
+  ClaimSet,
   OfferParts,
   OfferSheet,
   ReadDown,
   Steps,
   type BentoItem,
   type BlockCardSetItem,
+  type ClaimExample,
   type OfferPart,
   type OfferSheetItem,
   type ReadDownRow,
@@ -380,7 +382,9 @@ function sheetItem(
     const phrase = split ? split[0] : runs.slice(1);
     const note = split ? trimStart(split[1]) : [];
     const link = linkIn(lead.label);
-    const title = `${inlineToText(lead.label)}${inlineToText(phrase)}`.replace(/\s+/g, ' ').trim();
+    const title = `${inlineToText(lead.label)}${inlineToText(phrase)}`
+      .replace(/\s+/g, ' ')
+      .trim();
     return {
       title,
       ...(link ? { href: link.href } : {}),
@@ -727,6 +731,7 @@ export function claimsOf(band: CorpusBand) {
     for (const block of before) {
       if (block.type === 'paragraph' && claim.example === undefined && isExample(block.runs)) {
         claim.example = inlineToHtml(block.runs);
+        claim.exampleRuns = block.runs;
       } else if (block.type !== 'comment') {
         claim.body.push(block);
       }
@@ -778,44 +783,30 @@ export function ClaimRows({
   labelledBy?: string;
 }) {
   if (claims.length === 0 && stories.length === 0) return null;
-  /* Each row across the content column: the 168 drawing; the claim's title and words; its example.
-     Drawing beside words is a split (copy beside an image: `section`); claim beside example is two
-     peer text columns of one row (`column`). Below 1024 the example drops under the words; below 768
-     all of it stacks: drawing, title, words, example. */
-  const proofSet = (
-    <Layout as="ul" rowGap="column">
-      {claims.map((claim) => {
-        const drawn = claimFigure?.(claim.title, ground);
-        const image = drawn
-          ? { ...drawn, alt: '', kind: 'illustration' as const }
-          : { ...placeholderIllustration(claim.title), alt: '' };
-        return (
-          <li key={claim.title}>
-            <Layout columns={{ md: ['auto', 1] }} colGap="section" rowGap="block" align="start">
-              <div className={styles.claimFigure}>
-                <Media image={image} sizes="168px" />
-              </div>
-              <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="text" align="start">
-                <Layout rowGap="block">
-                  <h3 className={styles.itemTitle}>{claim.title}</h3>
-                  <ClaimWords blocks={claim.body} labelledBy={labelledBy} />
-                </Layout>
-                {claim.example ? (
-                  <p
-                    className={styles.hardBody}
-                    dangerouslySetInnerHTML={{ __html: claim.example }}
-                  />
-                ) : null}
-              </Layout>
-            </Layout>
-          </li>
-        );
-      })}
-    </Layout>
-  );
+  /* ONE component for every hard-parts band, any shape (owner, 31 Oct 2026): ClaimSet's tabs, each
+     claim a slide of two parts (its drawing and words; its example). Below 1024 every claim is on
+     the page. A worked example is a story, not a claim, so it follows as its own block. */
+  const items = claims.map((claim) => {
+    const drawn = claimFigure?.(claim.title, ground);
+    const image = drawn
+      ? { ...drawn, alt: '', kind: 'illustration' as const }
+      : { ...placeholderIllustration(claim.title), alt: '' };
+    return {
+      title: claim.title,
+      figure: <Media image={image} sizes="200px" />,
+      words: claimWords(claim.body, labelledBy),
+      example: claim.exampleRuns ? claimExample(claim.exampleRuns) : undefined,
+    };
+  });
   return (
     <Layout rowGap="stack">
-      {claims.length > 0 ? proofSet : null}
+      {claims.length > 0 ? (
+        <ClaimSet
+          id={`${labelledBy ?? 'claims'}-set`}
+          labelledBy={labelledBy ?? ''}
+          items={items}
+        />
+      ) : null}
       {stories.map((story) => (
         <ScenarioSplit key={story.title} label={story.label} blocks={story.blocks} />
       ))}
@@ -824,30 +815,62 @@ export function ClaimRows({
 }
 
 /** One hard part: its title, its words in order (a table included), and its example if it has one. */
-export type Claim = { title: string; body: CorpusBlock[]; example?: string };
+export type Claim = {
+  title: string;
+  body: CorpusBlock[];
+  example?: string;
+  exampleRuns?: readonly InlineRun[];
+};
 
-/** A claim's words: paragraphs in the claim's body role, any other block (a table, a list) in place. */
-function ClaimWords({
-  blocks,
-  labelledBy,
-}: {
-  blocks: readonly CorpusBlock[];
-  labelledBy?: string;
-}) {
-  return (
-    <Layout rowGap="text">
-      {blocks.map((block, i) =>
-        block.type === 'paragraph' ? (
-          <p
-            key={i}
-            className={styles.hardBody}
-            dangerouslySetInnerHTML={{ __html: inlineToHtml(block.runs) }}
-          />
-        ) : (
-          <BandBody key={i} blocks={[block]} labelledBy={labelledBy} />
-        ),
-      )}
-    </Layout>
+/**
+ * A claim's "Example:" paragraph as the example panel takes it: the label dropped (the panel names
+ * it), the closing "Read the … case" link lifted out as the panel's case link, every other word as
+ * authored and in order.
+ */
+function claimExample(runs: readonly InlineRun[]): ClaimExample {
+  const rest = [...runs];
+  const first = rest[0];
+  let label: string | undefined;
+  if (first?.type === 'text') {
+    /* The label is the copy's own: "Example:" names the panel "Example"; a qualified one ("Example,
+       from related work:") keeps its qualifier as the panel's label, so no authored word is lost. */
+    const match = /^\s*(example\b[^:.]{0,40}):\s*/i.exec(first.text);
+    if (match) {
+      label = match[1];
+      rest[0] = { type: 'text', text: first.text.slice(match[0].length) };
+    }
+  }
+  for (
+    let end = rest.at(-1);
+    end?.type === 'text' && end.text.trim() === '';
+    end = rest.at(-1)
+  ) {
+    rest.pop();
+  }
+  const last = rest[rest.length - 1];
+  let link: ClaimExample['link'];
+  if (last?.type === 'link' && /^read\b/i.test(plain(last.children))) {
+    rest.pop();
+    link = { href: last.href, label: plain(last.children) };
+    const tail = rest[rest.length - 1];
+    if (tail?.type === 'text')
+      rest[rest.length - 1] = { type: 'text', text: tail.text.trimEnd() };
+  }
+  return { label, bodyHtml: inlineToHtml(rest), link };
+}
+
+/** A claim's words, one node per block: paragraphs in the claim's body role, a table or list in place. */
+function claimWords(blocks: readonly CorpusBlock[], labelledBy?: string): ReactNode[] {
+  return blocks.map((block, i) =>
+    block.type === 'paragraph' ? (
+      <p
+        key={i}
+        className={styles.hardBody}
+        dangerouslySetInnerHTML={{ __html: inlineToHtml(block.runs) }}
+      />
+    ) : (
+      <BandBody key={i} blocks={[block]} labelledBy={labelledBy} />
+    ),
   );
 }
 

@@ -20,10 +20,20 @@ import type { OfferKind } from './plan';
 export type KindStatus = 'approved' | 'to-design';
 
 export const KIND_COMPONENTS: Readonly<
-  Partial<Record<OfferKind, { component: readonly string[]; status: KindStatus; note?: string }>>
+  Partial<
+    Record<OfferKind, { component: readonly string[]; status: KindStatus; note?: string }>
+  >
 > = {
-  challenges: { component: ['D-claims'], status: 'approved', note: 'Hard parts. A redesign is next (visual-inventory-expertise § 3).' },
-  outcomes: { component: ['offer-parts'], status: 'approved', note: 'What you get, four parts.' },
+  challenges: {
+    component: ['D-claims'],
+    status: 'approved',
+    note: 'Hard parts: ClaimSet tabs on a stage (owner, 31 Oct 2026; hard-parts-brief § 8). Owner to judge on the pages.',
+  },
+  outcomes: {
+    component: ['offer-parts'],
+    status: 'approved',
+    note: 'What you get, four parts.',
+  },
   personas: { component: ['voice-ledger'], status: 'approved' },
   catalog: {
     component: ['offer-sheet'],
@@ -34,13 +44,29 @@ export const KIND_COMPONENTS: Readonly<
   quotes: { component: ['G'], status: 'approved' },
   tiles: { component: ['engagement-options'], status: 'approved' },
   reasons: { component: ['reasons'], status: 'approved' },
-  industries: { component: ['C-image'], status: 'to-design', note: 'Eleven photo cards; the band is heavy for a set of links (inventory § 1).' },
+  industries: {
+    component: ['C-image'],
+    status: 'to-design',
+    note: 'Eleven photo cards; the band is heavy for a set of links (inventory § 1).',
+  },
   enquiry: { component: ['L'], status: 'approved' },
   faq: { component: ['D-faq'], status: 'approved' },
   router: { component: ['C-icon'], status: 'approved' },
-  method: { component: ['F'], status: 'approved', note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026).' },
+  method: {
+    component: ['F'],
+    status: 'approved',
+    note: 'How we do it: numbered steps beside one flat graphic (owner, 30 Oct 2026).',
+  },
   deliverables: { component: ['offer-sheet'], status: 'to-design' },
-  table: { component: ['E', 'drawn-table'], status: 'approved', note: 'A table read across rows stays a table (E); a table of peer items is drawn (drawn-table).' },
-  thread: { component: ['E'], status: 'approved', note: 'A trace read across its columns (design-to-code audit).' },
+  table: {
+    component: ['E', 'drawn-table'],
+    status: 'approved',
+    note: 'A table read across rows stays a table (E); a table of peer items is drawn (drawn-table).',
+  },
+  thread: {
+    component: ['E'],
+    status: 'approved',
+    note: 'A trace read across its columns (design-to-code audit).',
+  },
   text: { component: ['C-text'], status: 'to-design' },
 };
