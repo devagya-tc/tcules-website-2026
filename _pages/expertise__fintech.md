@@ -273,19 +273,19 @@ We take on the customer journeys and the staff screens behind them, for a new pr
 
 **What you receive**
 
-- **a status map:** every state a loan, payment or claim can reach, with what the customer sees, what staff see and what happens next
+- **A status map:** every state a loan, payment or claim can reach, with what the customer sees, what staff see and what happens next
 
-- customer journeys from sign-up and identity checks to repayment or payout, with every decline and failure designed beside the main path
+- **Customer journeys:** customer journeys from sign-up and identity checks to repayment or payout, with every decline and failure designed beside the main path
 
-- review and approval screens that show the case, its evidence, the approver's limit and who acts next
+- **Review and approval screens:** review and approval screens that show the case, its evidence, the approver's limit and who acts next
 
-- reasons, disclosures and consent wording drafted with your compliance team, and checked on a small phone screen
+- **Reasons, disclosures and consent wording:** reasons, disclosures and consent wording drafted with your compliance team, and checked on a small phone screen
 
-- research with the people the product is for, where the concept still needs testing
+- **Research with the people the product is for:** research with the people the product is for, where the concept still needs testing
 
-- prototypes with realistic figures that product, engineering and marketing can review before code
+- **Prototypes with realistic figures:** prototypes with realistic figures that product, engineering and marketing can review before code
 
-- designs ready for your engineers, or Tcules developers who build with them
+- **Designs ready for your engineers:** designs ready for your engineers, or Tcules developers who build with them
 
 **Who does the work.** One senior product designer leads it and designs the screens, and an account lead keeps it moving. A researcher joins when a concept needs testing with customers, and design engineers or developers when the work moves into code.
 

@@ -275,17 +275,17 @@ We take on the workflow between office and site, in a new product or one your te
 
 **What you receive**
 
-- an audit of the live product: which parts cause trouble and which parts people rely on
+- **An audit of the live product:** an audit of the live product: which parts cause trouble and which parts people rely on
 
-- research at desks and on site, where signal, gloves and interruptions change the work
+- **Research at desks and on site:** research at desks and on site, where signal, gloves and interruptions change the work
 
-- every role in the sign-off chain named, with what each must see before acting
+- **Every role in the sign-off chain:** every role in the sign-off chain named, with what each must see before acting
 
-- one record of each property, project or site, designed for every role around it
+- **One record of each property:** one record of each property, project or site, designed for every role around it
 
-- the field moments, such as location, offline use and interruptions, tried in working prototypes where a static mock-up would hide them
+- **Field moments tried in working prototypes:** the field moments, such as location, offline use and interruptions, tried in working prototypes where a static mock-up would hide them
 
-- a change that fits your existing product and its technical limits, with the product questions answered for your engineers or ours
+- **A change that fits your existing product:** a change that fits your existing product and its technical limits, with the product questions answered for your engineers or ours
 
 **Who does the work.** A senior product designer heads the work and designs it, backed by an account lead. Researchers join for site visits, and design engineers or developers for coded prototypes and builds.
 

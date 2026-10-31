@@ -282,19 +282,19 @@ We take on the screens where your customers read, decide and send, in a new prod
 
 **What you receive**
 
-- interviews with marketers, reps, pricing experts and their managers, so the first change comes from what users say they need most
+- **Interviews with marketers and reps:** interviews with marketers, reps, pricing experts and their managers, so the first change comes from what users say they need most
 
-- reports and dashboards where each figure that matters has its next action on the same screen
+- **Reports with the next action:** reports and dashboards where each figure that matters has its next action on the same screen
 
-- AI draft review: suggestions kept apart, acceptance made deliberate, and AI and human work marked
+- **AI draft review:** AI draft review: suggestions kept apart, acceptance made deliberate, and AI and human work marked
 
-- the shared record for a campaign, deal or quote, with every role and tool it passes through
+- **The shared record:** the shared record for a campaign, deal or quote, with every role and tool it passes through
 
-- consent and unsubscribe states marketers can read before a send
+- **Consent and unsubscribe states:** consent and unsubscribe states marketers can read before a send
 
-- shared filters, states and data displays, written up so later screens follow them
+- **Shared filters, states and data displays:** shared filters, states and data displays, written up so later screens follow them
 
-- designs your engineers build from, or Tcules developers building with your team
+- **Designs your engineers build from:** designs your engineers build from, or Tcules developers building with your team
 
 **Who does the work.** Each project has a senior product designer at its head, doing the design work, and an account lead keeping it on schedule. Researchers join for interview-heavy work, and design engineers or developers when it moves into code.
 

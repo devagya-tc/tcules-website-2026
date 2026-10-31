@@ -37,11 +37,11 @@ import { inlineToHtml, inlineToText, type InlineRun } from '@/lib/inline';
 import { getKitPhoto, HOME_SECTOR_PHOTOS } from '@/lib/photos';
 import { placeholderIllustration, placeholderImage } from '@/lib/placeholders';
 import { MEDIA_SPLIT } from '@/lib/image-sizes';
-import { offerSceneKey, serviceSceneFor, type SketchName } from '@/lib/sketches';
+import { serviceSceneFor, type SketchName } from '@/lib/sketches';
 
 import { ListTiles, head } from './blocks';
 import styles from './CorpusPage.module.css';
-import { caseCover, hasSlot, slotImage, slugOf, type SlotImage } from './images';
+import { caseCover, slotImage, slugOf, type SlotImage } from './images';
 import { signature } from './plan';
 import {
   boldLead,
@@ -608,19 +608,12 @@ export function SheetBand({
   );
 }
 
-/** The three terms the four-part band knows, by key; each takes a drawing. */
-const TERM_KEYS = [
-  'who does the work',
-  'what we need from you',
-  'where our part stops',
-] as const;
-
 /**
  * "What you get" in four parts (owner, 30 Oct 2026, round 7;
  * decisions/2026-10-30-what-you-get-label-rows): the drawn deliverables, then the band's three terms
- * as peers, each a flat drawing beside its words (one team, one needs and one stops drawing, never a
- * photograph). Renders OfferParts only when every piece exists; otherwise the sheet stands unchanged,
- * and in development the warning names each unmet piece, so a stale scene key cannot fall back silently.
+ * as peers, each a flat drawing beside its words. ONE arrangement for every page (owner, 30 Oct 2026):
+ * it used to render only when every drawing existed and fell back to the ruled sheet otherwise, which
+ * hid it on all twelve expertise pages. A missing drawing is now the empty plate in its place.
  */
 export function WhatYouGetBand({
   band,
@@ -631,41 +624,25 @@ export function WhatYouGetBand({
 }) {
   const parts = sheetParts(band);
   const { terms, noteBlocks } = bandTerms([...parts.intro, ...parts.after]);
-  const unmet: string[] = [];
-  if (!parts.listLabel) unmet.push('no "What you receive" label');
-  const deliverables = parts.items.flatMap((item) => {
+  const deliverables = parts.items.map((item) => {
+    /* Every deliverable is authored with a title (content-changes, 30 Oct 2026). One that is not
+       prints its sentence once, as the title, and development says so. */
+    const title = item.title ?? item.body ?? item.id ?? '';
+    if (!item.title && process.env.NODE_ENV !== 'production') {
+      console.warn(`WhatYouGetBand "${band.id}": "${title}" has no title of its own.`);
+    }
     const scene = item.title ? scenes(item.title) : undefined;
-    if (!item.title || !scene) {
-      unmet.push(`deliverable "${item.title ?? item.id ?? ''}" has no scene`);
-      return [];
-    }
-    return [{ ...item, title: item.title, scene }];
+    return {
+      title,
+      ...(item.title && item.bodyHtml ? { bodyHtml: item.bodyHtml } : {}),
+      ...(item.title && item.body ? { body: item.body } : {}),
+      ...(scene ? { scene } : {}),
+    };
   });
-  const peers = terms.flatMap((term): OfferPart[] => {
-    const key = offerSceneKey(term.title);
-    const title = term.title.replace(/[.:]\s*$/, '');
-    if (TERM_KEYS.some((k) => k === key)) {
-      const scene = scenes(term.title);
-      if (!scene) unmet.push(`term "${term.title}" has no drawing`);
-      return scene ? [{ ...term, title, scene }] : [];
-    }
-    unmet.push(`unknown term "${term.title}"`);
-    return [];
+  const peers = terms.map((term): OfferPart => {
+    const scene = scenes(term.title);
+    return { ...term, title: term.title.replace(/[.:]\s*$/, ''), ...(scene ? { scene } : {}) };
   });
-  if (
-    peers.length !== terms.length ||
-    !TERM_KEYS.every((k) => terms.some((t) => offerSceneKey(t.title) === k))
-  ) {
-    unmet.push('the three terms are not all present and resolved');
-  }
-  if (unmet.length > 0 || deliverables.length !== parts.items.length) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        `WhatYouGetBand "${band.id}": the sheet stands; ${[...new Set(unmet)].join('; ')}.`,
-      );
-    }
-    return <SheetBand band={band} scenes={scenes} />;
-  }
   return (
     <OfferParts
       {...head(band)}
@@ -684,23 +661,19 @@ export function WhatYouGetBand({
 
 /* ── Hard parts (challenges) ─────────────────────────────────────────────────── */
 
-/** An image across the content column (1240 cap, 32 gutters). */
-const WIDE_IMAGE = '(min-width: 1304px) 1240px, calc(100vw - 64px)';
-
 /**
  * The hard parts: each row a 168 drawing, the claim (title and body), and its "Example:" paragraph as
  * authored, in three columns across the content width (owner, 30 Oct 2026). A band whose rows do not
  * all carry an "Example:" reads down as before.
  */
 export function ChallengesBand({
-  page,
   band,
   claimFigure,
   ground = 'paper',
 }: {
   page: CorpusPage;
   band: CorpusBand;
-  /** A claim's drawing by its title, exported on the band's ground; undefined takes the slot. */
+  /** A claim's drawing by its title, exported on the band's ground: undefined takes the slot. */
   claimFigure?: (
     title: string,
     ground: 'paper' | 'paper-deep',
@@ -708,42 +681,71 @@ export function ChallengesBand({
   /** The ground the drawings are exported on: `paper-deep` on a tint band. */
   ground?: 'paper' | 'paper-deep';
 }) {
+  /* ONE arrangement for every hard-parts band (owner, 30 Oct 2026: a kind renders its approved
+     component whatever the content's shape). Until then the proof rows were used only when every
+     claim had an "Example:" line, and anything else fell back to a text grid, which hid the approved
+     design on 8 of 15 pages; a table inside a claim was dropped in both. Now each claim is a row
+     whatever it carries: its drawing (or the labelled slot), its words with any table in place, its
+     example as the footnote where it has one. A worked example ("Illustration, not client work") is
+     a story, not a claim, so it follows the rows as its own block. */
+  const { claims, others, stories, leadText } = claimsOf(band);
+  return (
+    <ContentSection {...head(band)} data-band="D-claims" lead={leadText}>
+      <Layout rowGap="stack">
+        {others.length > 0 ? (
+          <BandBody blocks={others} labelledBy={head(band).headingId} />
+        ) : null}
+        <ClaimRows
+          claims={claims}
+          stories={stories}
+          claimFigure={claimFigure}
+          ground={ground}
+          labelledBy={head(band).headingId}
+        />
+      </Layout>
+    </ContentSection>
+  );
+}
+
+/**
+ * A hard-parts band read as claims: its lead, the blocks before the claims (a band-level table), each
+ * claim with its words and example, and the worked examples lifted out of them.
+ */
+export function claimsOf(band: CorpusBand) {
   const blocks = content(band);
-  const rows: ReadDownRow[] = [];
+  const claims: Claim[] = [];
   const others: CorpusBlock[] = [];
+  const stories: Story[] = [];
   let leadText: string | undefined;
-  const rowRuns: InlineRun[][][] = [];
-  let open: { title: string; paras: string[]; runs: InlineRun[][] } | undefined;
+  let open: Claim | undefined;
   const flush = () => {
-    if (open) {
-      rows.push({ title: open.title, bodyHtml: open.paras });
-      rowRuns.push(open.runs);
-    }
+    if (open) claims.push(open);
     open = undefined;
+  };
+  const take = (claim: Claim, inner: readonly CorpusBlock[]) => {
+    const { before, label, scenario } = scenarioParts(inner);
+    for (const block of before) {
+      if (block.type === 'paragraph' && claim.example === undefined && isExample(block.runs)) {
+        claim.example = inlineToHtml(block.runs);
+      } else if (block.type !== 'comment') {
+        claim.body.push(block);
+      }
+    }
+    if (label) stories.push({ title: claim.title, label, blocks: scenario });
   };
   blocks.forEach((block, index) => {
     const lead = leadOf(block);
     if (block.type === 'item') {
       flush();
-      rows.push({
-        title: block.headingText,
-        bodyHtml: block.blocks.flatMap((inner) =>
-          inner.type === 'paragraph' ? [inlineToHtml(inner.runs)] : [],
-        ),
-      });
-      rowRuns.push(
-        block.blocks.flatMap((inner) => (inner.type === 'paragraph' ? [inner.runs] : [])),
-      );
+      const claim: Claim = { title: block.headingText, body: [] };
+      take(claim, block.blocks);
+      claims.push(claim);
     } else if (lead && !isBareLabel(block)) {
       flush();
-      open = {
-        title: labelTitle(lead.label),
-        paras: [inlineToHtml(lead.body)],
-        runs: [lead.body],
-      };
+      open = { title: labelTitle(lead.label), body: [] };
+      take(open, [{ type: 'paragraph', runs: lead.body }]);
     } else if (block.type === 'paragraph' && open) {
-      open.paras.push(inlineToHtml(block.runs));
-      open.runs.push(block.runs);
+      take(open, [block]);
     } else if (block.type === 'paragraph' && index === 0 && !hasLink(block.runs)) {
       leadText = plain(block.runs);
     } else {
@@ -752,98 +754,100 @@ export function ChallengesBand({
     }
   });
   flush();
-  /* The paragraph that opens "Example:" in each row, rendered exactly as authored. */
-  const exampleAt = rowRuns.map((paras) => paras.findIndex(isExample));
-  if (rows.length >= 2 && exampleAt.every((at) => at >= 0)) {
-    /* Each row across the content column: the 168 drawing; the claim's title and body; its example.
-       Drawing beside words is a split (copy beside an image: `section`); claim beside example is two
-       peer text columns of one row (`column`). Below 1024 the example drops under the body; below 768
-       all four stack: drawing, title, body, example. */
-    const proofSet = (
-      <Layout as="ul" rowGap="column">
-        {rows.map((row, i) => {
-          const at = exampleAt[i]!;
-          const drawn = claimFigure?.(row.title, ground);
-          const image = drawn
-            ? { ...drawn, alt: '', kind: 'illustration' as const }
-            : { ...placeholderIllustration(row.title), alt: '' };
-          const paras = row.bodyHtml ?? [];
-          const body = paras.filter((_, j) => j !== at);
-          return (
-            <li key={row.title}>
-              <Layout
-                columns={{ md: ['auto', 1] }}
-                colGap="section"
-                rowGap="block"
-                align="start"
-              >
-                <div className={styles.claimFigure}>
-                  <Media image={image} sizes="168px" />
-                </div>
-                <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="text" align="start">
-                  <Layout rowGap="block">
-                    <h3 className={styles.itemTitle}>{row.title}</h3>
-                    <Layout rowGap="text">
-                      {body.map((html, j) => (
-                        <p
-                          key={j}
-                          className={styles.hardBody}
-                          dangerouslySetInnerHTML={{ __html: html }}
-                        />
-                      ))}
-                    </Layout>
-                  </Layout>
+
+  return { claims, others, stories, leadText };
+}
+
+type Story = { title: string; label: string; blocks: CorpusBlock[] };
+
+/** The claim rows, then each worked example as its own block (shared by hard parts and the ledger). */
+export function ClaimRows({
+  claims,
+  stories,
+  claimFigure,
+  ground,
+  labelledBy,
+}: {
+  claims: readonly Claim[];
+  stories: readonly Story[];
+  claimFigure?: (
+    title: string,
+    ground: 'paper' | 'paper-deep',
+  ) => { src: string; width: number; height: number } | undefined;
+  ground: 'paper' | 'paper-deep';
+  labelledBy?: string;
+}) {
+  if (claims.length === 0 && stories.length === 0) return null;
+  /* Each row across the content column: the 168 drawing; the claim's title and words; its example.
+     Drawing beside words is a split (copy beside an image: `section`); claim beside example is two
+     peer text columns of one row (`column`). Below 1024 the example drops under the words; below 768
+     all of it stacks: drawing, title, words, example. */
+  const proofSet = (
+    <Layout as="ul" rowGap="column">
+      {claims.map((claim) => {
+        const drawn = claimFigure?.(claim.title, ground);
+        const image = drawn
+          ? { ...drawn, alt: '', kind: 'illustration' as const }
+          : { ...placeholderIllustration(claim.title), alt: '' };
+        return (
+          <li key={claim.title}>
+            <Layout columns={{ md: ['auto', 1] }} colGap="section" rowGap="block" align="start">
+              <div className={styles.claimFigure}>
+                <Media image={image} sizes="168px" />
+              </div>
+              <Layout columns={{ lg: [1, 1] }} colGap="column" rowGap="text" align="start">
+                <Layout rowGap="block">
+                  <h3 className={styles.itemTitle}>{claim.title}</h3>
+                  <ClaimWords blocks={claim.body} labelledBy={labelledBy} />
+                </Layout>
+                {claim.example ? (
                   <p
                     className={styles.hardBody}
-                    dangerouslySetInnerHTML={{ __html: paras[at] ?? '' }}
+                    dangerouslySetInnerHTML={{ __html: claim.example }}
                   />
-                </Layout>
+                ) : null}
               </Layout>
-            </li>
-          );
-        })}
-      </Layout>
-    );
-    return (
-      <ContentSection {...head(band)} data-band="D-claims" lead={leadText}>
-        {others.length > 0 ? (
-          <Layout rowGap="stack">
-            <BandBody blocks={others} labelledBy={head(band).headingId} />
-            {proofSet}
-          </Layout>
-        ) : (
-          proofSet
-        )}
-      </ContentSection>
-    );
-  }
-  const photo = hasSlot(page, band.id) ? slotImage(page, band.id) : undefined;
-  /* ReadDown's photo form is built for exactly three rows (it warns otherwise) and crops the image to
-     their height. Any other count takes the image across the column at its own ratio, the rows two up
-     under it: product-design's four hard parts beside the Doodle object model cropped the model to a
-     tall slice and cut its words mid-line. */
-  const readBeside = photo && rows.length === 3;
-  const set = !photo ? (
-    <ReadDown rows={rows} columns={rows.length >= 4 ? 2 : 1} />
-  ) : readBeside ? (
-    <ReadDown rows={rows} columns={1} photo={{ ...photo, alt: '' }} />
-  ) : (
-    <Layout rowGap="stack">
-      <Media image={photo} sizes={WIDE_IMAGE} />
-      <ReadDown rows={rows} columns={rows.length >= 4 ? 2 : 1} />
+            </Layout>
+          </li>
+        );
+      })}
     </Layout>
   );
   return (
-    <ContentSection {...head(band)} data-band="D" lead={leadText}>
-      {others.length > 0 ? (
-        <Layout rowGap="stack">
-          <BandBody blocks={others} labelledBy={head(band).headingId} />
-          {set}
-        </Layout>
-      ) : (
-        set
+    <Layout rowGap="stack">
+      {claims.length > 0 ? proofSet : null}
+      {stories.map((story) => (
+        <ScenarioSplit key={story.title} label={story.label} blocks={story.blocks} />
+      ))}
+    </Layout>
+  );
+}
+
+/** One hard part: its title, its words in order (a table included), and its example if it has one. */
+export type Claim = { title: string; body: CorpusBlock[]; example?: string };
+
+/** A claim's words: paragraphs in the claim's body role, any other block (a table, a list) in place. */
+function ClaimWords({
+  blocks,
+  labelledBy,
+}: {
+  blocks: readonly CorpusBlock[];
+  labelledBy?: string;
+}) {
+  return (
+    <Layout rowGap="text">
+      {blocks.map((block, i) =>
+        block.type === 'paragraph' ? (
+          <p
+            key={i}
+            className={styles.hardBody}
+            dangerouslySetInnerHTML={{ __html: inlineToHtml(block.runs) }}
+          />
+        ) : (
+          <BandBody key={i} blocks={[block]} labelledBy={labelledBy} />
+        ),
       )}
-    </ContentSection>
+    </Layout>
   );
 }
 

@@ -284,17 +284,17 @@ We take on health products with several kinds of user and a safety or privacy re
 
 **What you receive**
 
-- each role's journey around one patient, with what they may see and what they hand on
+- **Each role's journey around one patient:** each role's journey around one patient, with what they may see and what they hand on
 
-- consent, sharing and access steps, worded with your privacy lead
+- **Consent, sharing and access steps:** consent, sharing and access steps, worded with your privacy lead
 
-- research with patients, families, clinicians and carers on real tasks, on the devices they carry
+- **Research with patients, families, clinicians and carers:** research with patients, families, clinicians and carers on real tasks, on the devices they carry
 
-- wireframes and walkthroughs for your clinical safety lead, with the reasoning written down
+- **Wireframes with the reasoning written down:** wireframes and walkthroughs for your clinical safety lead, with the reasoning written down
 
-- screens designed for accessibility: readable type, strong contrast, keyboard use and screen readers, to a standard we agree with you at the start
+- **Screens designed for accessibility:** screens designed for accessibility: readable type, strong contrast, keyboard use and screen readers, to a standard we agree with you at the start
 
-- designs your developers build from, or Tcules developers building the frontend and coordinating integrations and testing with your chosen team
+- **Designs your developers build from:** designs your developers build from, or Tcules developers building the frontend and coordinating integrations and testing with your chosen team
 
 **Who does the work.** The design sits with a senior product designer, who also leads the project, and an account lead keeps it on track. Researchers come in for work with patients and carers, and design engineers or developers when the design moves into code.
 

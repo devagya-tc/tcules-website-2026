@@ -280,6 +280,13 @@ sandbox routes are in good shape and the 111 that did not are the reason for thi
 Register the specimen in the `SPECIMENS` list in `src/app/design/page.tsx` by hand, so the index
 stays honest about what is actually covered.
 
+**A kind of section is not a component, and gets no `design/` route.** Each kind on the corpus pages
+(hard parts, What you get, a method …) renders through ONE approved component, registered in
+`src/templates/CorpusPage/kinds.ts`; a missing drawing is a placeholder inside it, never a fallback to an
+older design (owner, 31 Oct 2026; decisions/2026-10-31-one-kind-one-component). A kind is reviewed on the
+real pages listed under "Review list" in `npm run corpus:census`, not on a specimen (owner, 31 Oct 2026;
+decisions/2026-10-31-kinds-approved-on-real-pages).
+
 ## Routes are named once
 
 Every path lives in `src/lib/routes.ts`. Paths get referenced from nav, footers, breadcrumbs,
@@ -369,6 +376,9 @@ derived widths and generated registry are current; `npm run photos:tone && npm r
 refreshes them). Two more gates run separately:
 - `npm run build && npm run aria:check` proves every ARIA idref in the rendered output resolves and that
   no id is duplicated. It needs a build.
+- `npm run build && npm run kinds:check` proves every band on a corpus page renders through its kind's
+  one approved component (`kinds.ts`) and that the copy's words reach the page; it lists the kinds still
+  to design. It needs a build.
 - `npm run shots` catches horizontal overflow and page errors. It needs a server.
 
 None of it sees a child margin, a hand-rolled arrangement, a restated font size, a token name that

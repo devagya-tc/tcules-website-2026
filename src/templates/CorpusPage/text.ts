@@ -185,5 +185,7 @@ export function exampleLink(
 
 /** A hard part's example: a paragraph that opens "Example:". It is rendered exactly as authored. */
 export function isExample(runs: readonly InlineRun[]): boolean {
-  return /^example:/i.test(plain(runs).trimStart());
+  /* "Example:", and the qualified openings the copy also uses: "Example, for what a result shows:",
+     "Example of how each view is set:", "Example, from related work:". */
+  return /^example\b[^:.]{0,40}:/i.test(plain(runs).trimStart());
 }

@@ -72,7 +72,10 @@ import {
   type SlotImage,
 } from './images';
 import {
+  BandBody,
   ChallengesBand,
+  ClaimRows,
+  claimsOf,
   CloseBand,
   DestinationsBand,
   DirectoryBand,
@@ -608,10 +611,14 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
         const split = leadOf({ type: 'paragraph', runs: item });
         return split ? [{ title: labelTitle(split.label), body: split.body }] : [];
       });
-      const after = trailingAfterList(band);
+      /* Everything after the list as authored, tables and a worked example included: until 31 Oct only
+         its paragraphs rendered, and the design-to-code audit lost both its tables (kinds:check). */
+      const rest = band.blocks.filter((block) => block.type !== 'comment');
+      const after = rest.slice(lastIndexWhere(rest, (block) => block.type === 'list') + 1);
       return (
         <OfferSheet
           {...head(band)}
+          lead={leadText(band)}
           items={rows.map((row) => ({
             title: row.title,
             ...(hasLink(row.body) || row.body.some((run) => run.type !== 'text')
@@ -621,11 +628,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
           {...(hasSlot(page, band.id) ? { asideImage: slotImage(page, band.id) } : {})}
           note={
             after.length > 0 ? (
-              <ContentSectionText>
-                {after.map((runs, index) => (
-                  <p key={index}>{renderInline(runs)}</p>
-                ))}
-              </ContentSectionText>
+              <BandBody blocks={after} labelledBy={head(band).headingId} />
             ) : undefined
           }
         />
@@ -760,6 +763,19 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
       if (unit.part === 'b') return null;
       const table = blocksOf(band, 'table')[0];
       const closing = trailingAfterTable(band);
+      /* The people table is the ledger; the hard parts that follow it are claim rows under it, as on
+         every other hard-parts band. Until 31 Oct only the table rendered, and HealthTech's four claims
+         never reached the page (found by kinds:check). */
+      const { claims, stories } = claimsOf(band);
+      const rows = (
+        <ClaimRows
+          claims={claims}
+          stories={stories}
+          claimFigure={ctx.claimFigure}
+          ground={unit.surface === 'tint' ? 'paper-deep' : 'paper'}
+          labelledBy={head(band).headingId}
+        />
+      );
       return (
         <VoiceLedger
           {...head(band)}
@@ -769,13 +785,16 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             reply: plain(row[0] ?? []),
           }))}
           note={
-            closing.length > 0 ? (
-              <ContentSectionText>
-                {closing.map((runs, index) => (
-                  <p key={index}>{renderInline(runs)}</p>
-                ))}
-              </ContentSectionText>
-            ) : undefined
+            <Layout rowGap="stack">
+              {closing.length > 0 ? (
+                <ContentSectionText>
+                  {closing.map((runs, index) => (
+                    <p key={index}>{renderInline(runs)}</p>
+                  ))}
+                </ContentSectionText>
+              ) : null}
+              {rows}
+            </Layout>
           }
         />
       );

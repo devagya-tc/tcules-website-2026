@@ -17,6 +17,7 @@
     "corpus:census": "node --no-warnings scripts/corpus-census.mjs",
     "placeholders": "node scripts/placeholders.mjs",
     "aria:check": "node scripts/aria-check.mjs",
+    "kinds:check": "node --no-warnings scripts/kinds-check.mjs",
     "shots": "node scripts/shots.mjs",
     "fold:check": "node scripts/fold-check.mjs",
     "design:brief": "node scripts/design-brief.mjs",

@@ -264,19 +264,19 @@ Energy management software UX starts with the people who act on the numbers. We 
 
 **What you receive**
 
-- each role's view of the same figures, at the depth that role needs
+- **Each role's view of the same figures:** each role's view of the same figures, at the depth that role needs
 
-- readings, forecasts and targets marked apart, with scenarios shown against a stated baseline
+- **Readings, forecasts and targets marked apart:** readings, forecasts and targets marked apart, with scenarios shown against a stated baseline
 
-- a digital twin or site view that shows which assets matter now
+- **A digital twin or site view:** a digital twin or site view that shows which assets matter now
 
-- carbon and emissions totals that open onto their sources, estimates and approver
+- **Totals that open onto their sources:** carbon and emissions totals that open onto their sources, estimates and approver
 
-- the limits people set for automated actions, and a morning view of what the system did
+- **The limits people set, and a morning view:** the limits people set for automated actions, and a morning view of what the system did
 
-- a coded demo on sample data, so the direction is agreed before live integrations exist
+- **A coded demo on sample data:** a coded demo on sample data, so the direction is agreed before live integrations exist
 
-- specs your engineers build from, or Tcules developers taking it into production
+- **Specs your engineers build from:** specs your engineers build from, or Tcules developers taking it into production
 
 **Who does the work.** Your energy product gets a senior product designer who leads the design and does it, while an account lead keeps the project moving. Design engineers build the coded demos, and developers join when we build the product.
 

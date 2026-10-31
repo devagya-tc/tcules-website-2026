@@ -277,17 +277,17 @@ We take on the exchange itself, across both sides and the team in the middle.
 
 **What you receive**
 
-- a written description of what changes hands: its states, when it binds and who acts at each one
+- **What changes hands:** a written description of what changes hands: its states, when it binds and who acts at each one
 
-- research with buyers, providers and your operations staff, each interviewed separately
+- **Research with buyers, providers and your operations staff:** research with buyers, providers and your operations staff, each interviewed separately
 
-- buyer, provider and operations screens drawn together on one record
+- **Screens drawn together on one record:** buyer, provider and operations screens drawn together on one record
 
-- cancellations, changes, refunds and disputes designed as stages of the booking, with rules your operations lead writes once
+- **Cancellations and disputes as stages:** cancellations, changes, refunds and disputes designed as stages of the booking, with rules your operations lead writes once
 
-- operations and trust tools for exceptions, quality checks, payment problems and appeals, with a record of who changed what
+- **Operations and trust tools:** operations and trust tools for exceptions, quality checks, payment problems and appeals, with a record of who changed what
 
-- screens your engineers build from, or Tcules developers coding the screens for each side
+- **Screens your engineers build from:** screens your engineers build from, or Tcules developers coding the screens for each side
 
 **Who does the work.** One senior product designer leads the work and designs for both sides of the market, and an account lead keeps the project moving. Researchers, design engineers and developers join as the work calls for them.
 
