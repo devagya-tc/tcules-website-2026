@@ -16,8 +16,8 @@ quiet behind the words (`data-texture-calm`). Islands holding the enquiry form k
 loops at the start and eases into parallel streams toward the form.
 
 A **paper island on a paper band** is allowed when it carries that field. The moving light-blue field is what draws the
-island, and on paper it is **feathered** (`TextureFlow feather`): it fades in over the island's outer 64 px, so the
-block reads as a soft field rather than a cut-out shape. Without a texture, a paper island on paper is still not used.
+island, and on paper it is **feathered** (`TextureFlow feather`): an oval, solid at the middle and fading to paper well inside
+the island, so the block reads as a soft field in the content column, with no edge or corner drawn. Without a texture, a paper island on paper is still not used.
 
 **Why.** An island with no form has no side to resolve toward, so the settling streams point at nothing. The owner
 wanted the studio's links on About set apart as a block. A tint ground would have made them a tinted band. The textured

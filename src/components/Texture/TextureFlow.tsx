@@ -20,9 +20,9 @@ export type TextureFlowProps = {
    */
   flow?: 'resolve' | 'turbulent';
   /**
-   * Fade the field out over its last --tex-flow-feather on every side, rather than stopping at the
-   * box's edge: for a paper island on paper, where the field alone draws the island (owner, 31 Oct
-   * 2026).
+   * Fade the field out in an oval (--tex-flow-feather-solid at full strength, then to nothing at the
+   * box's sides), rather than stopping at the box's edge: for a paper island on paper, where the
+   * field alone draws the island (owner, 31 Oct 2026).
    */
   feather?: boolean;
 };

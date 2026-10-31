@@ -444,29 +444,33 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           data-band="C-links"
           aria-labelledby={`${b.id}-elsewhere-heading`}
         >
-          {/* Comparison (owner, 31 Oct 2026): the field across the whole band, edge to edge, no
-              island; feathered so it fades into the bands above and below. */}
-          <TextureFlow flow="turbulent" feather />
-          <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
-            <h2 id={`${b.id}-elsewhere-heading`} data-texture-calm>
-              Follow the studio, read its reviews, join the team
-            </h2>
-            <Cluster colGap="stack" rowGap="block" justify="center">
-              {studioLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  as="a"
-                  href={link.href}
-                  emphasis="link"
-                  tone="primary"
-                  size="md"
-                  icon={<Icon name="arrow-right" />}
-                >
-                  {link.labelText}
-                </Button>
-              ))}
-            </Cluster>
-          </Layout>
+          {/* In the content column: the paper island holds the field, which fades out in an oval
+              so the island's box never shows (owner, 31 Oct 2026). */}
+          <Island surface="paper">
+            <TextureFlow flow="turbulent" feather />
+            <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
+              {/* No calm zone: dark type on a field this light reads, and the middle is where the oval
+                  is at full strength. */}
+              <h2 id={`${b.id}-elsewhere-heading`}>
+                Follow the studio, read its reviews, join the team
+              </h2>
+              <Cluster colGap="stack" rowGap="block" justify="center">
+                {studioLinks.map((link) => (
+                  <Button
+                    key={link.href}
+                    as="a"
+                    href={link.href}
+                    emphasis="link"
+                    tone="primary"
+                    size="md"
+                    icon={<Icon name="arrow-right" />}
+                  >
+                    {link.labelText}
+                  </Button>
+                ))}
+              </Cluster>
+            </Layout>
+          </Island>
         </Section>
       ) : null}
     </>
