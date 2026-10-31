@@ -23,7 +23,7 @@ const AUTOPLAY_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fin
 
 /**
  * The tabs layout: the claims as tabs along the top of a paper-deep stage, the chosen claim's slide
- * on paper below. The slide is ONE piece and moves as one, out toward one side and in from the other,
+ * on paper below: its title and words beside its example, with no drawing (owner, 31 Oct 2026). The slide is ONE piece and moves as one, out toward one side and in from the other,
  * in the direction of the chosen claim; the panel's height follows the slide on the same curve.
  *
  * Autoplay has no control of its own (owner, 31 Oct 2026); the reader's behaviour is the control. It
@@ -258,7 +258,8 @@ export function ClaimTabs({
               data-active={i === active ? '' : undefined}
               className={styles.slide}
             >
-              {/* Two parts: the drawing and the words; the example. A claim without one fills the slide. */}
+              {/* Two parts: the claim's title and words; its example. No drawing: hard parts are not drawn
+                  (owner, 31 Oct 2026). A claim without an example fills the slide. */}
               <Layout
                 columns={item.example ? { lg: [1, 1] } : undefined}
                 colGap="section"
@@ -266,7 +267,6 @@ export function ClaimTabs({
                 align="start"
               >
                 <Layout rowGap="block">
-                  <div className={styles.art}>{item.figure}</div>
                   <h3 className={styles.title}>{item.title}</h3>
                   <ClaimWords words={item.words} spread={!item.example} />
                 </Layout>

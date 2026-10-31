@@ -99,11 +99,11 @@ export default function ClaimSetSpecimen() {
           <p className={t.lead}>
             A page&rsquo;s hard parts. Tabs: one claim at a time on a paper-deep stage, the
             claims along its top, the chosen claim&rsquo;s slide on paper below in two parts
-            (drawing and words; the example). The slide moves as one piece toward the chosen
-            claim, and the panel&rsquo;s height follows it. Autoplay has no control: it runs
-            only where there is a mouse, the pointer or focus holds it, any deliberate act stops
-            it, and it plays once. Below 1024 every claim is on the page. Page: every claim on
-            the page, ruled, in three columns.
+            (its title and words; the example), with no drawing. The slide moves as one piece
+            toward the chosen claim, and the panel&rsquo;s height follows it. Autoplay has no
+            control: it runs only where there is a mouse, the pointer or focus holds it, any
+            deliberate act stops it, and it plays once. Below 1024 every claim is on the page.
+            Page: every claim on the page, ruled, in three columns.
           </p>
         </Layout>
       </Section>

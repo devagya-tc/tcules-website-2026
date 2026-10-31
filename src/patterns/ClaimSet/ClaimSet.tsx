@@ -10,8 +10,11 @@ import styles from './ClaimSet.module.css';
 /** One hard part: its drawing, its title, its words, and its example where it has one. */
 export type ClaimSetItem = {
   title: string;
-  /** The claim's drawing (or its labelled placeholder), drawn for this claim. At most 200 wide. */
-  figure: ReactNode;
+  /**
+   * The claim's drawing, at most 200 wide: the page layout's first column. The tabs layout carries
+   * none (owner, 31 Oct 2026: hard parts will not be drawn).
+   */
+  figure?: ReactNode;
   /**
    * The claim's words, one node per block in order: paragraphs, and a table or list in place. Blocks,
    * not one node, so a claim with no example can spread them over two columns.
@@ -48,7 +51,7 @@ export function ClaimSet({ id, labelledBy, items, layout = 'tabs' }: ClaimSetPro
       {items.map((item) => (
         <li key={item.title} className={styles.row}>
           <Layout columns={{ md: ['auto', 1] }} colGap="column" rowGap="block" align="start">
-            <div className={styles.art}>{item.figure}</div>
+            {item.figure ? <div className={styles.art}>{item.figure}</div> : null}
             <Layout columns={{ lg: [1, 'auto'] }} colGap="column" rowGap="block" align="start">
               <Layout rowGap="block">
                 <h3 className={styles.title}>{item.title}</h3>

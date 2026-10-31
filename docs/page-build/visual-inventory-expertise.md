@@ -46,7 +46,7 @@ a visible placeholder, not as the old design. The same applies to the audit page
 | Hero | **hero**: Bhumika's illustration for the 6 product types; **photo**: the sector photo for the 6 industries | page | Launch roadmap split. HealthTech's copy binds an illustration slot ("each seeing their own view of one shared case"); owner to choose. |
 | What we design | **flat**, one per product kind | item | Replaces the blue-tick cells. The client named after "·" stays as the item's proof line. |
 | Selected work | the cases' own covers | case | Already right. |
-| Hard parts | **iso** per claim; a table of people or questions becomes a voice ledger or drawn items | claim | See § 3 for the band update. |
+| Hard parts | **none** (owner, 31 Oct 2026: "we won't be drawing illustrations for this content"; the tabs carry no drawing slot). Was: iso per claim; a table of people or questions becomes a voice ledger or drawn items | claim | See § 3 for the band update. |
 | Worked example ("Illustration, not client work") | **flat story**: one animated flat graphic, or 3–5 frames, of the moments the words name | example | Its own section kind (treatment rules § 2), not a hard part. 4 expertise pages (§ 2.16); 24 pages site-wide carry one (services, audits, tools), so it is one component built once. |
 | What you get: deliverables | **flat**, one per deliverable, each under a title pulled from its own words | item | Content change logged in `docs/content-changes.md`. |
 | What you get: the three terms | **flat**: reuse `team-product-design`, `needs-product-design`, `stops-product-design` on every expertise page | page | Zero new drawings. Same message on every page. |

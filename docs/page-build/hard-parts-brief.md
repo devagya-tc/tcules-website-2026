@@ -144,3 +144,5 @@ tokens `claim-set.css`, specimen `/design/claim-set`. Every hard-parts band rend
 personas ledger's claims). A claim with no example spreads its words over two columns. A qualified example label
 ("Example, from related work") becomes the panel's label, so no authored word is dropped. Rulings to log with /decide
 once the owner has judged it on the pages.
+
+**31 Oct 2026, later:** the owner removed the drawing from the tabs: "we won't be drawing illustrations for this content". A slide is the claim's title and words, then its example. The x-claim drawings in the visual inventory are dropped.
