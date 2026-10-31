@@ -127,3 +127,11 @@ the view's top edge; the chosen cell has no floor and opens into its claim) and 
 view above, the claims as its index below). In both, the blue line on the chosen tab is the timer: 15 seconds a claim,
 paused on hover and focus, stopped for good by a click or the Pause control, paused from the start under reduced
 motion, running only while the band is on screen.
+
+Round 4 (31 Oct 2026, same link): the owner picked the stage, tabs on top, and asked for no play/pause control. The stage
+now holds B's claim layout (drawing 200, words 600, example 340) and its height follows each claim. Each tab is "01" plus a
+rule that is the timer; one paper piece slides between tabs. Autoplay only where there is a mouse; pointer over the stage
+or focus inside it holds the timer; a tab, an arrow key, a text selection or a link stops it for good; one pass, then it
+rests on claim 1. The pixel grid sits on the stage's ground, strongest around the chosen tab, travelling with the timer.
+Switches: texture, thumbnails (each claim's drawing at 40px), client name. Caveat for the owner: a strict reading of
+WCAG 2.2.2 wants a visible pause control.
