@@ -358,7 +358,7 @@ export const TEMPLATE_BANDS = {
     'expertise',
     'insights',
   ],
-  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record'],
+  '/about': ['what-we-do', 'who-uses-tcules', 'leadership', 'company-record', 'work-with-tcules'],
   /* ContactPage (component-map § E /contact): the brief and the next steps as one band of peer halves. */
   '/contact': ['brief', 'next-steps', 'confidentiality'],
   /* The listings (ListingIndex): the list's own bands are the template's; the rest (client wall,

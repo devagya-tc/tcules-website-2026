@@ -293,8 +293,7 @@ export function Reasons({
   }
 
   /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. Five, open,
-     is three across, then two across under them (owner, 31 Oct 2026, About's difference): no row with
-     a hole, and no item set apart from its peers. */
+     is the standard three-track grid, 3 + 2 (owner, 31 Oct 2026, About's difference). */
   const four = shown.length === 4;
   const five = shown.length === 5;
 
@@ -407,44 +406,35 @@ export function Reasons({
     </li>
   );
   const colGap = allProof ? 'gutter' : 'column';
-  const set =
-    open && five ? (
-      /* Five: three across, then two across under them, one row seam apart. */
-      <Layout rowGap="column">
-        <Layout as="ul" columns={{ base: 1, lg: 3 }} colGap={colGap} rowGap="column">
-          {shown.slice(0, 3).map(itemNode)}
-        </Layout>
-        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap={colGap} rowGap="column">
-          {shown.slice(3).map((item, index) => itemNode(item, index + 3))}
-        </Layout>
-      </Layout>
-    ) : (
-      <Layout
-        as="ul"
-        className={cx(
-          !open && styles.cells,
-          !open && shown.length === 3 && styles.three,
-          !open && four && styles.four,
-        )}
-        columns={
-          open
-            ? shown.length === 3
-              ? { base: 1, lg: 3 }
+  const set = (
+    <Layout
+      as="ul"
+      className={cx(
+        !open && styles.cells,
+        !open && shown.length === 3 && styles.three,
+        !open && four && styles.four,
+      )}
+      columns={
+        open
+          ? shown.length === 3
+            ? { base: 1, lg: 3 }
+            : five
+              ? { base: 1, md: 2, lg: 3 }
               : four
                 ? { base: 1, md: 2 }
                 : { base: 1, md: 2, xl: 3 }
-            : shown.length === 3
-              ? { base: 1, xl: 3 }
-              : four
-                ? { base: 1, lg: 2 }
-                : { base: 1, lg: 2, xl: 3 }
-        }
-        colGap={open ? colGap : 'none'}
-        rowGap={open ? 'column' : 'none'}
-      >
-        {shown.map(itemNode)}
-      </Layout>
-    );
+          : shown.length === 3
+            ? { base: 1, xl: 3 }
+            : four
+              ? { base: 1, lg: 2 }
+              : { base: 1, lg: 2, xl: 3 }
+      }
+      colGap={open ? colGap : 'none'}
+      rowGap={open ? 'column' : 'none'}
+    >
+      {shown.map(itemNode)}
+    </Layout>
+  );
 
   const boxed = arrangement === 'boxed' ? <div className={styles.frame}>{set}</div> : set;
   const framed = note ? (
