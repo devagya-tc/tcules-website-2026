@@ -250,9 +250,9 @@ function ScenarioSplit({
   const words = (
     <Layout rowGap="block">
       <p className={styles.legend}>{label}</p>
-      <ContentSectionText>
-        <Prose html={proseHtml(blocks)} />
-      </ContentSectionText>
+      {/* Every block as authored: the prose renderer drops tables, and six worked examples carry
+          one (kinds:check, 31 Oct 2026). */}
+      <BandBody blocks={blocks} />
     </Layout>
   );
   if (!scene) return words;

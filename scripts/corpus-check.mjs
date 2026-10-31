@@ -15,8 +15,9 @@
  *   - the hero has a title; nothing is left in `hero.extra`
  *   - every media binding that claims to be bound has a URL
  *   - no run list contains a raw markdown delimiter that the parser should have consumed
- *   - the first-level pass covers 99 files (the 26 Oct 2026 copy: 96, less insights/videos, plus
- *     the three legal pages and the authors index)
+ *   - the pass covers 125 files: 99 first- and second-level (the 26 Oct 2026 copy: 96, less
+ *     insights/videos, plus the three legal pages and the authors index) and the 26 level-2 services
+ *     (31 Oct 2026)
  *   - a page that authors no `render.band_order` keeps document order (legal, authors index)
  */
 import { readdirSync, readFileSync } from 'node:fs';
@@ -153,11 +154,17 @@ function wordDiff(page, body) {
   return diff;
 }
 
-const files = readdirSync('_pages').filter(
-  (f) => f.endsWith('.md') && f.replace(/\.md$/, '').split('__').length <= 2,
-);
-if (files.length !== 99)
-  problems.push(`expected 99 first/second-level files, found ${files.length}`);
+const files = readdirSync('_pages').filter((f) => {
+  /* The loader's own rule (load.ts `inCorpus`): two levels, and the level-2 services. */
+  const parts = f.replace(/\.md$/, '').split('__');
+  return (
+    f.endsWith('.md') && (parts.length <= 2 || (parts.length === 3 && parts[0] === 'services'))
+  );
+});
+if (files.length !== 125)
+  problems.push(
+    `expected 125 corpus files (99 first/second-level, 26 level-2 services), found ${files.length}`,
+  );
 if (pages.length !== files.length)
   problems.push(`parsed ${pages.length} of ${files.length} files`);
 

@@ -172,6 +172,9 @@ a template before the single pages it serves, since one pass there fixes every p
 - [ ] **2.35** Future Interfaces Lab (`/future-interfaces-lab`, and `/join`): not reviewed by anyone yet. Polished tier.
 - [ ] **2.36** Audit pages, every level 1 (`/audits/[slug]`): the same offer template as expertise, so this pass
       starts from 2.32's and changes only what an audit does differently (what is examined, the deliverable).
+      `/audits/prototype-readiness-review`: the hero carries the worked-example video, the storyboard v14c side by side
+      in Claude Design (https://claude.ai/design/p/6a4c2d80-fb89-4109-88cc-f05a8602ea05, file "Worked example -
+      storyboard v14c (side by side)"); added in the visuals pass (owner, 31 Oct 2026).
 - [ ] **2.37** `/services` hub: the routing page into the seven service lines; the hero image is a dev placeholder.
 - [ ] **2.38** `/expertise` hub: 5 of 12 product-type images are dev placeholders.
 - [ ] **2.39** Glossary, hub and terms (`/glossary`, `/glossary/[slug]`): the hub is seven text bands with no visual
@@ -187,8 +190,9 @@ a template before the single pages it serves, since one pass there fixes every p
       Needs no design pass, only full coverage.
 - [ ] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough.
-- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): the owner has not yet decided whether
-      they are polished tier or template tier.
+- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
+      that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
+      designed no-visual state.
 - [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
