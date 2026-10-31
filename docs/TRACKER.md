@@ -187,8 +187,9 @@ a template before the single pages it serves, since one pass there fixes every p
       Needs no design pass, only full coverage.
 - [ ] **2.45** Legal and utility pages (`/privacy-policy`, `/cookie-policy`, `/terms-of-use`, `/sitemap`): crucial,
       but they need no design. A plain text-page template is enough.
-- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): the owner has not yet decided whether
-      they are polished tier or template tier.
+- [ ] **2.46** Level-2 sub-services, 26 pages (`/services/<line>/<service>`): polished tier, built from the components
+      that already exist, with no new ones (owner, 31 Oct 2026). No illustrations this launch: the hero takes its
+      designed no-visual state.
 - [ ] **2.47** Tools, 6 pages and the `/tools` hub: these launch as article-style pages (launch roadmap).
 
 *Waiting on content.* What we do: Jatin's copy repositions software development as MVP development for 0–1
