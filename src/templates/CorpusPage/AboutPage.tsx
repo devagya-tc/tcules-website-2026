@@ -1,3 +1,4 @@
+import { getKitPhoto } from '@/lib/photos';
 import { Fragment, type ReactNode } from 'react';
 
 import { Layout, Media, Prose } from '@/components';
@@ -115,6 +116,13 @@ function aboutLedes(page: CorpusPage): InlineRun[][] {
   return [...standfirst, ...page.hero.lede];
 }
 
+/* The studio's own wide frame; faces cluster at 0.42 of its height. */
+const ABOUT_HERO_PHOTO = {
+  ...getKitPhoto('studio-team-holi'),
+  focus: { x: 0.5, y: 0.42 },
+  alt: 'The Tcules team in the Ahmedabad studio, faces and hands coloured for Holi',
+};
+
 /** The 26 Oct copy's About: the hero with the record as figures, then every band in order. */
 function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
   const units = planOffer(page);
@@ -126,6 +134,9 @@ function AboutCopy({ page, caseRefs, ratings }: AboutPageProps) {
         ledes={aboutLedes(page)}
         proofLine={false}
         stats={homeRecordStats(page)}
+        /* The studio, wide, under the words (owner, 31 Oct 2026): the stacked hero with the Holi frame. */
+        arrangement="stacked"
+        media={{ type: 'image', image: ABOUT_HERO_PHOTO, ratio: { base: '3/2', lg: '2/1' } }}
       />
       {units.map((unit) => {
         const Band =

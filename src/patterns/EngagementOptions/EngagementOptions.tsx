@@ -133,6 +133,7 @@ export function EngagementOptions({
   const shown = options.filter((option) => option.title.trim().length > 0);
   /* Five options: five across from 1440 at the denser card steps. */
   const dense = shown.length >= 5;
+  const anyDrawn = shown.some((option) => option.scope);
   /* Three options take three tracks from 768, so no track is left open (owner, 29 Oct 2026). */
   const three = shown.length === 3;
   /* The terms sit on the options' own track count from 1024. */
@@ -188,7 +189,12 @@ export function EngagementOptions({
               {shown.map((option) => {
                 const card = (
                   <Layout rowGap="block">
-                    {option.scope ? <Drawing scope={option.scope} /> : null}
+                    {option.scope ? (
+                      <Drawing scope={option.scope} />
+                    ) : anyDrawn ? (
+                      /* Not drawn yet, in a set that is: the empty plate holds its place. */
+                      <Sketch />
+                    ) : null}
                     <Layout rowGap="text">
                       <h3 className={cx(styles.title, dense && styles.titleDense)}>
                         {option.title}

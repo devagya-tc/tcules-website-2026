@@ -280,8 +280,21 @@ function liftTrailingLink(runs: readonly InlineRun[]) {
  * Which scope an engagement option's drawing shows, read from the option's own name (EngagementOptions
  * draws only what the name says). A name none of these fit shows no drawing rather than a wrong one.
  */
+/**
+ * About's working terms, by their authored titles, each to the scene drawn for the same claim in the
+ * 11 Oct "How Tcules works" band (owner, 31 Oct 2026). Who you work with, response time and getting
+ * started argue something no scene draws yet: they take the empty plate until drawn.
+ */
+const TERM_SCOPES: Readonly<Record<string, EngagementScope>> = {
+  communication: 'inside',
+  turnaround: 'commercial',
+  'working hours': 'overlap',
+};
+
 function scopeOf(title: string): EngagementScope | undefined {
   const name = title.toLowerCase();
+  const term = TERM_SCOPES[name.replace(/[.:]\s*$/, '')];
+  if (term) return term;
   /* The 26 Oct copy's three engagements (component-map C9): a focused piece of work draws one
      feature, a defined project an area, an ongoing partnership the embedded designer. */
   if (/\bfocused\b/.test(name)) return 'feature';

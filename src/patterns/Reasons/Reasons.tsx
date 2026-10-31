@@ -293,9 +293,8 @@ export function Reasons({
   }
 
   /* Four is two across wherever the set has more than one column: a 2×2, never a 3 + 1. Five, open,
-     is the first reason across the whole row (its drawing beside its words: a picture beside its
-     words takes a whole row), then the other four as the 2×2 — never a 3 + 2 with a hole (no lone
-     tile on a row: the odd item takes the full row; owner, 31 Oct 2026, About's difference). */
+     is three across, then two across under them (owner, 31 Oct 2026, About's difference): no row with
+     a hole, and no item set apart from its peers. */
   const four = shown.length === 4;
   const five = shown.length === 5;
 
@@ -396,62 +395,56 @@ export function Reasons({
         />
       </div>
     ) : null;
-  const set = (
-    <Layout
-      as="ul"
-      className={cx(
-        !open && styles.cells,
-        !open && shown.length === 3 && styles.three,
-        !open && four && styles.four,
-      )}
-      columns={
-        open
-          ? shown.length === 3
-            ? { base: 1, lg: 3 }
-            : four || five
-              ? { base: 1, md: 2 }
-              : { base: 1, md: 2, xl: 3 }
-          : shown.length === 3
-            ? { base: 1, xl: 3 }
-            : four
-              ? { base: 1, lg: 2 }
-              : { base: 1, lg: 2, xl: 3 }
-      }
-      colGap={open ? (allProof ? 'gutter' : 'column') : 'none'}
-      rowGap={open ? 'column' : 'none'}
-    >
-      {shown.map((item, index) =>
-        open && five && index === 0 ? (
-          <li key={`${index}-${item.title}`} className={styles.item} data-media-row>
-            <Layout
-              /* On the 2×2's own halves and gap, so its words start where the second column's do. */
-              columns={{ base: 1, md: 2 }}
-              colGap={allProof ? 'gutter' : 'column'}
-              rowGap="block"
-              align="center"
-              justifyItems="start"
-            >
-              {visualOf(item)}
-              <Layout rowGap="tight">
-                <h3 className={styles.title}>{item.title}</h3>
-                <p className={styles.body}>{item.body}</p>
-              </Layout>
-            </Layout>
-          </li>
-        ) : (
-          <li key={`${index}-${item.title}`} className={styles.item}>
-            <Layout rowGap="block" justifyItems="start">
-              {visualOf(item)}
-              <Layout rowGap="tight">
-                <h3 className={styles.title}>{item.title}</h3>
-                <p className={styles.body}>{item.body}</p>
-              </Layout>
-            </Layout>
-          </li>
-        ),
-      )}
-    </Layout>
+  const itemNode = (item: (typeof shown)[number], index: number) => (
+    <li key={`${index}-${item.title}`} className={styles.item}>
+      <Layout rowGap="block" justifyItems="start">
+        {visualOf(item)}
+        <Layout rowGap="tight">
+          <h3 className={styles.title}>{item.title}</h3>
+          <p className={styles.body}>{item.body}</p>
+        </Layout>
+      </Layout>
+    </li>
   );
+  const colGap = allProof ? 'gutter' : 'column';
+  const set =
+    open && five ? (
+      /* Five: three across, then two across under them, one row seam apart. */
+      <Layout rowGap="column">
+        <Layout as="ul" columns={{ base: 1, lg: 3 }} colGap={colGap} rowGap="column">
+          {shown.slice(0, 3).map(itemNode)}
+        </Layout>
+        <Layout as="ul" columns={{ base: 1, md: 2 }} colGap={colGap} rowGap="column">
+          {shown.slice(3).map((item, index) => itemNode(item, index + 3))}
+        </Layout>
+      </Layout>
+    ) : (
+      <Layout
+        as="ul"
+        className={cx(
+          !open && styles.cells,
+          !open && shown.length === 3 && styles.three,
+          !open && four && styles.four,
+        )}
+        columns={
+          open
+            ? shown.length === 3
+              ? { base: 1, lg: 3 }
+              : four
+                ? { base: 1, md: 2 }
+                : { base: 1, md: 2, xl: 3 }
+            : shown.length === 3
+              ? { base: 1, xl: 3 }
+              : four
+                ? { base: 1, lg: 2 }
+                : { base: 1, lg: 2, xl: 3 }
+        }
+        colGap={open ? colGap : 'none'}
+        rowGap={open ? 'column' : 'none'}
+      >
+        {shown.map(itemNode)}
+      </Layout>
+    );
 
   const boxed = arrangement === 'boxed' ? <div className={styles.frame}>{set}</div> : set;
   const framed = note ? (
