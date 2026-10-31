@@ -1,5 +1,5 @@
 ---
-title: "A call-to-action island without a form carries the turbulent field; a paper island on paper is read by it"
+title: "A call-to-action island without a form carries the turbulent field; a paper block on paper is marked by it alone"
 date: 2026-10-31
 status: proposed
 area: [components, motion]
@@ -15,10 +15,11 @@ flow="turbulent"`). The loose, looping churn runs across the whole island and ne
 quiet behind the words (`data-texture-calm`). Islands holding the enquiry form keep the **resolving** field, which
 loops at the start and eases into parallel streams toward the form.
 
-A **paper island on a paper band** is allowed when it carries that field. The moving light-blue field is what draws the
-island, and on paper it is **feathered** (`TextureFlow feather`): a rounded-rectangle fade, full strength inside and gone at the
-island's edge over 96 px, so the block reads as a soft field in the content column, with no edge or corner drawn.
-Its band is `flush` and the island takes the band's air inside it (`Island inset="band"`). Without a texture, a paper island on paper is still not used.
+A **paper band marked only by its field** is allowed (About's studio links). The band takes `density="open"` (128;
+96 on a phone), the room the field needs to fade. The field spans the band and fades out at its edges in a wide,
+rounded blur (`TextureFlow feather`: 120 px, levels rounded at 160). It is at full strength around the words
+(`data-texture-focus`) and faint, 40%, in the space around them. There is no island box and no ground: the field
+alone marks the block. A paper block on paper with no field is still not used.
 
 **Why.** An island with no form has no side to resolve toward, so the settling streams point at nothing. The owner
 wanted the studio's links on About set apart as a block. A tint ground would have made them a tinted band. The textured
@@ -28,5 +29,5 @@ paper island marks the block without adding a ground.
 field settles toward an empty side.
 
 **How to apply.** The open close (`CtaSection arrangement="open"`) renders `TextureFlow flow="turbulent"`. So do About's
-Lab card (ink) and its studio-links island (paper, feathered). The field's ink per surface is `--tex-flow-ink`, brandeis-500 on
+Lab card (ink) and its studio-links band (paper, feathered, focused). The field's ink per surface is `--tex-flow-ink`, brandeis-500 on
 paper.

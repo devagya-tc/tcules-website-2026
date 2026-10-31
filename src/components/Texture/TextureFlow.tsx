@@ -46,7 +46,7 @@ const COL_WIDTH = grid.cells[0]?.width ?? 3;
 const FRAG = `
 precision highp float;
 uniform vec2 uRes; uniform float uDpr; uniform float uTime; uniform vec4 uCalm;
-uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec3 uInk;
+uniform float uFade; uniform float uSettle; uniform vec2 uFeather; uniform vec4 uFocus; uniform float uFaint; uniform vec3 uInk;
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
 float snoise(vec2 v){
   const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -102,6 +102,11 @@ void main(){
     float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - uFeather.y;
     a *= 1.0 - smoothstep(0.0, uFeather.x, d);
   }
+  if (uFocus.z > uFocus.x) {
+    // Full strength around the words (\`data-texture-focus\`), faint (uFaint) everywhere else, the step
+    // between them feathered wide so the focus has no edge.
+    a *= mix(uFaint, 1.0, box(uFocus, c, 160.0));
+  }
   gl_FragColor = vec4(uInk * a, a);
 }`;
 const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
@@ -117,7 +122,9 @@ const FRAME_MS = 1000 / 30;
  *
  * Fills its nearest positioned ancestor, as Texture does, between the ground and the content. The
  * words it must stay quiet behind are any descendant of that ancestor marked `data-texture-calm`
- * (the first one), so the caller composes and this never reaches for a pattern.
+ * (the first one), so the caller composes and this never reaches for a pattern. A descendant marked
+ * `data-texture-focus` is the reverse: the field is at full strength around it and faint
+ * (--tex-flow-faint) everywhere else (owner, 31 Oct 2026, About's studio links).
  *
  * Decorative: hidden from assistive tech, no pointer events. Motion only while on screen and the
  * tab is visible; under prefers-reduced-motion it is drawn once and holds. Without WebGL it draws
@@ -181,6 +188,8 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
       fade: u('uFade'),
       settle: u('uSettle'),
       feather: u('uFeather'),
+      focus: u('uFocus'),
+      faint: u('uFaint'),
       ink: u('uInk'),
     };
 
@@ -209,6 +218,23 @@ export function TextureFlow({ fade, flow = 'resolve', feather = false }: Texture
         U.feather,
         featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather')) || 0 : 0,
         featherOn ? parseFloat(cs.getPropertyValue('--tex-flow-feather-radius')) || 0 : 0,
+      );
+      const focusEl = host.querySelector('[data-texture-focus]');
+      const f = focusEl?.getBoundingClientRect();
+      gl.uniform4f(
+        U.focus,
+        ...(f
+          ? ([
+              f.left - box.left,
+              f.top - box.top,
+              f.right - box.left,
+              f.bottom - box.top,
+            ] as const)
+          : ([0, 0, 0, 0] as const)),
+      );
+      gl.uniform1f(
+        U.faint,
+        parseFloat(getComputedStyle(canvas).getPropertyValue('--tex-flow-faint')) || 0.3,
       );
       const calmEl = host.querySelector('[data-texture-calm]');
       const r = calmEl?.getBoundingClientRect();

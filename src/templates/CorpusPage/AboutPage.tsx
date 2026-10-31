@@ -443,36 +443,36 @@ function LeadershipBand({ page, band: b }: AboutBandProps) {
           id={`${b.id}-elsewhere`}
           data-band="C-links"
           aria-labelledby={`${b.id}-elsewhere-heading`}
-          flush
+          density="open"
         >
-          {/* In the content column: the paper island holds the field, which fades out as a rounded
-              rectangle so the island's box never shows; the band is flush and its air is inside the
-              island, where the field runs through it (owner, 31 Oct 2026). */}
-          <Island surface="paper" inset="band">
-            <TextureFlow flow="turbulent" feather />
-            <Layout rowGap="stack" justifyItems="center" className={styles.centred}>
-              {/* No calm zone: dark type on a field this light reads, and the middle is where the oval
-                  is at full strength. */}
-              <h2 id={`${b.id}-elsewhere-heading`}>
-                Follow the studio, read its reviews, join the team
-              </h2>
-              <Cluster colGap="stack" rowGap="block" justify="center">
-                {studioLinks.map((link) => (
-                  <Button
-                    key={link.href}
-                    as="a"
-                    href={link.href}
-                    emphasis="link"
-                    tone="primary"
-                    size="md"
-                    icon={<Icon name="arrow-right" />}
-                  >
-                    {link.labelText}
-                  </Button>
-                ))}
-              </Cluster>
-            </Layout>
-          </Island>
+          {/* The field across the band, edges blurred wide and rounded; at full strength around the
+              words, faint in the space around them (owner, 31 Oct 2026). */}
+          <TextureFlow flow="turbulent" feather />
+          <Layout
+            rowGap="stack"
+            justifyItems="center"
+            className={styles.centred}
+            data-texture-focus
+          >
+            <h2 id={`${b.id}-elsewhere-heading`}>
+              Follow the studio, read its reviews, join the team
+            </h2>
+            <Cluster colGap="stack" rowGap="block" justify="center">
+              {studioLinks.map((link) => (
+                <Button
+                  key={link.href}
+                  as="a"
+                  href={link.href}
+                  emphasis="link"
+                  tone="primary"
+                  size="md"
+                  icon={<Icon name="arrow-right" />}
+                >
+                  {link.labelText}
+                </Button>
+              ))}
+            </Cluster>
+          </Layout>
         </Section>
       ) : null}
     </>

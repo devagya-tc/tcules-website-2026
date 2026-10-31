@@ -42,12 +42,14 @@
 
 /* The moving field's feathered edge (TextureFlow `feather`, owner 31 Oct 2026): a rounded-rectangle
    fade, full strength inside the box inset by --tex-flow-feather and gone at the box's edge, each
-   level rounded at --tex-flow-feather-radius so no corner or straight cut is drawn. On a paper island
-   on paper, where the field is the only thing drawing the island. A wide strip of plain paper all
-   round, as wide as the island's band inset. Component sizes, named for the placement.             */
+   level rounded at --tex-flow-feather-radius, so the field's outer edge is a wide soft blur with no
+   corner. And its faint surround (`data-texture-focus`): outside the focus the field is drawn at
+   --tex-flow-faint of its strength. On a band whose field alone marks it (About's studio links).
+   Component sizes and a proportion, named for the placement.                                     */
 :root{
---tex-flow-feather:96px;
---tex-flow-feather-radius:96px;
+--tex-flow-feather:120px;
+--tex-flow-feather-radius:160px;
+--tex-flow-faint:0.4;
 }
 
 /* The corner field's box (TextureCorner, page-product-design fix round 2). 28 × 8 of the recipe's
