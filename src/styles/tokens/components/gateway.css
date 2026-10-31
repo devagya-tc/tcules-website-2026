@@ -59,27 +59,26 @@
   /* How far the focus ring stands off the item, so it does not cut the drawing or the title's
      first glyph. An optical offset, not a layout distance (gap rule 1). */
   --gwy-card-ring-offset: var(--space-12);
-  /* `GatewayPaths` (home, 29 Oct 2026, component-map C10): two paths, not six situations. With two
-     the title takes a step up (h3, the serif) and stays under the band's h2; the drawing's box is
-     taller than the board's 140 because two drawings share the row, yet stays well under the
-     words' block so the title, not the picture, is the item's hero
-     (decisions/2026-10-10-gateway-title-is-the-hero). A component size. */
-  --gwy-path-visual-height: 150px;
-  --gwy-path-title-text: var(--text-h3);
-  --gwy-path-title-tracking: var(--text-h3-tracking);
-  --gwy-path-body-text: var(--text-body);
-  /* A path's compact service rows (owner, 29 Oct 2026). The scene's plate width is a component
-     size: wide enough that the flat drawing still reads at a glance (16:9, so 63 tall), small
-     enough that the row stays one line of words beside it. The label is the h6 role (16, medium): the
-     action is the row's words, a step under the path's body only in weight, never a button label. The
-     arrow is a lg button glyph's size, 8 after the last word (a side bearing), and moves 4 toward its destination on hover — an optical nudge
-     from the space ramp, not a layout distance (gap rule 1). */
-  --gwy-service-art-width: 128px;
-  --gwy-service-label-text: var(--text-h5);
-  --gwy-service-label-tracking: var(--text-h5-tracking);
+  /* `GatewayPaths` (home "Where to start", 31 Oct 2026; decisions/2026-10-31-paths-graphic-cards).
+     The path's title is a small label over its words (h5, the sans), so it never competes with its
+     destinations; its words are the card-body size. */
+  --gwy-path-title-text: var(--text-h5);
+  --gwy-path-title-tracking: var(--text-h5-tracking);
+  --gwy-path-body-text: var(--text-body-sm);
+  /* A path's graphic cards. Below 768 a card is a row and its scene's plate is a component size:
+     wide enough that the flat drawing reads at a glance (16:9, so 81 tall), small enough to leave
+     the words their line. The label is h5-lg (20, 18 on a phone): the destinations are the band's
+     largest words after its heading. The arrow is a lg button glyph's size, 8 after the last word (a
+     side bearing), and moves 4 toward its destination on hover; from 768 it stands at the first
+     line's end, dropped 2 to sit on that line's x-height — optical nudges from the space ramp, not
+     layout distances (gap rule 1). */
+  --gwy-service-art-width: 144px;
+  --gwy-service-label-text: var(--text-h5-lg);
+  --gwy-service-label-tracking: var(--text-h5-lg-tracking);
   --gwy-service-arrow-size: var(--icon-size-24);
   --gwy-service-arrow-shift: var(--space-4);
   --gwy-service-arrow-inset: var(--space-8);
+  --gwy-service-arrow-drop: var(--space-2);
 }
 
 /* ── Surface: paper ───────────────────────────────────────────────────────────── */
