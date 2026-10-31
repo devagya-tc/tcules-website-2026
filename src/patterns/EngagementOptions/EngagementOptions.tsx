@@ -39,6 +39,11 @@ export type EngagementOption = {
   title: string;
   /** What it is: plain text, or inline content the caller renders (a link to the team that builds). */
   body: ReactNode;
+  /**
+   * The paragraphs after the first, when the option is told in several (how it works, where it
+   * starts: /how-we-work's engagement shapes). Each its own paragraph under `body`, at the same size.
+   */
+  more?: readonly ReactNode[];
   /** The scope drawing. Absent, the option shows its words alone. */
   scope?: EngagementScope;
 };
@@ -183,7 +188,10 @@ export function EngagementOptions({
                       <h3 className={cx(styles.title, dense && styles.titleDense)}>
                         {option.title}
                       </h3>
-                      <p className={cx(styles.body, dense && styles.bodyDense)}>{option.body}</p>
+                      <OptionBody
+                        option={option}
+                        className={cx(styles.body, dense && styles.bodyDense)}
+                      />
                     </Layout>
                   </Layout>
                 );
@@ -207,7 +215,7 @@ export function EngagementOptions({
                     {option.scope ? <Drawing scope={option.scope} /> : null}
                     <Layout rowGap="block">
                       <h3 className={styles.title}>{option.title}</h3>
-                      <p className={cx(styles.body, styles.bodyRows)}>{option.body}</p>
+                      <OptionBody option={option} className={cx(styles.body, styles.bodyRows)} />
                     </Layout>
                   </Layout>
                 </li>
@@ -227,5 +235,20 @@ export function EngagementOptions({
         {note}
       </Layout>
     </Section>
+  );
+}
+
+/** An option's words: its body, then any further paragraphs, one `text` step apart. */
+function OptionBody({ option, className }: { option: EngagementOption; className?: string }) {
+  if (!option.more || option.more.length === 0) return <p className={className}>{option.body}</p>;
+  return (
+    <Layout rowGap="text">
+      <p className={className}>{option.body}</p>
+      {option.more.map((paragraph, index) => (
+        <p key={index} className={className}>
+          {paragraph}
+        </p>
+      ))}
+    </Layout>
   );
 }

@@ -33,6 +33,10 @@ export const PASS_1_LONGFORM_ROUTES: ReadonlySet<string> = new Set([
   '/glossary/user-journey-mapping',
   '/glossary/ux-debt',
   '/glossary/workflow-design',
+  /* The legal pages need no design (owner, 31 Oct 2026): one document in the article shell. */
+  '/privacy-policy',
+  '/terms-of-use',
+  '/cookie-policy',
 ]);
 
 export const isCorpusLongform = (route: string): boolean => PASS_1_LONGFORM_ROUTES.has(route);
@@ -40,6 +44,9 @@ export const isCorpusLongform = (route: string): boolean => PASS_1_LONGFORM_ROUT
 const FAMILIES: Readonly<Record<string, LongformFamily>> = {
   '/insights': 'article',
   '/glossary': 'term',
+  '/privacy-policy': 'article',
+  '/terms-of-use': 'article',
+  '/cookie-policy': 'article',
 };
 
 /** The route's `generateStaticParams` entries for one family: the path segments after the family. */

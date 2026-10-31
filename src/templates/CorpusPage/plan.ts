@@ -57,6 +57,8 @@ export type OfferKind =
   | 'destinations'
   | 'directory'
   | 'text'
+  /** A labelled set of items that is not What you get (31 Oct 2026): the sheet, to design. */
+  | 'set'
   | 'note'
   | 'close'
   /** No rule names this band: it renders every block plainly and warns (a planning gap). */
@@ -256,7 +258,8 @@ export const BAND_KINDS: Readonly<Record<string, OfferKind | ShapeRule>> = {
   'what-youll-do': 'outcomes',
   essentials: 'outcomes',
   'engagement-shapes': 'tiles',
-  principles: (_band, sig) => (/I/.test(sig) ? 'outcomes' : 'text'),
+  /* Why Tcules' principles are reasons to choose us, so they take Reasons (treatment rules § 6). */
+  principles: (_band, sig) => (/I/.test(sig) ? 'reasons' : 'text'),
   /* ── G16 · destinations ── */
   'what-we-do': 'destinations',
   /* Two titled card sets with the pages' photographs (G16, § E /expertise; HubBands). */
@@ -383,7 +386,10 @@ export function kindById(band: CorpusBand): OfferKind | undefined {
 export function kindOf(band: CorpusBand): OfferKind {
   const sig = signature(band);
   if (sig.includes('F')) return 'enquiry';
-  return kindById(band) ?? kindByShape(band, sig);
+  const kind = kindById(band) ?? kindByShape(band, sig);
+  /* "What you get" is one band, four parts (OfferParts); any other labelled set the copy calls by
+     another name is a set of items (31 Oct 2026, kinds:check on the composed pages). */
+  return kind === 'outcomes' && band.id !== 'what-you-get' ? 'set' : kind;
 }
 
 /** The shape fallback: the rules OfferPage applied before the id table, still right for an unnamed band. */
@@ -412,6 +418,8 @@ export function kindByShape(band: CorpusBand, sig: string = signature(band)): Of
   if (/^L{3,6}Q?$/.test(sig)) return 'outcomes';
   if (/^P?Q+L?$/.test(sig)) return 'quotes';
   if (/^P+K?$/.test(sig)) return 'text';
+  /* Prose with a list in it (the legal pages, /how-we-work/ai-transparency) is still prose. */
+  if (/^[PU]+K?$/.test(sig)) return 'text';
   return 'generic';
 }
 
@@ -479,6 +487,7 @@ export function registerOf(
     case 'deliverables':
       return bound ? 'photo' : 'none';
     case 'outcomes':
+    case 'set':
     case 'catalog':
     case 'symptoms':
     case 'table':
@@ -554,6 +563,7 @@ function drafts(page: CorpusPage, drawn: ReadonlySet<string>): Draft[] {
          line under it, "reads as noise", and a case card never holds one (22 Oct). The offer and the
          cases keep their order; the voice follows them. */
       case 'outcomes':
+      case 'set':
       case 'cases':
         unit(band, kind, 'whole');
         /* A quote at display size is the band's one picture, not a body of words (§ 3). */

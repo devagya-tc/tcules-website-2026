@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { LongformRoute, longformMetadata } from '@/app/_corpus/longform';
 import { ROUTES } from '@/lib/routes';
 
 /**
- * `/cookie-policy` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
+ * `/cookie-policy` — read from the `_pages/` copy as one document in the article shell (legal pages need no
+ * design: owner, 31 Oct 2026). Composition only.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.cookiePolicy)) ?? { title: 'Tcules' };
+  return (await longformMetadata(ROUTES.cookiePolicy)) ?? { title: 'Tcules' };
 }
 
 export default function CookiePolicyPage() {
-  return <ComposedRoute route={ROUTES.cookiePolicy} />;
+  return <LongformRoute route={ROUTES.cookiePolicy} />;
 }

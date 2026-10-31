@@ -44,6 +44,10 @@ export type CaseSpreadProps = {
    * step's words under its picture. Given for a two-step story; otherwise the spread.
    */
   scenes?: readonly [SketchName, SketchName];
+  /** The sentences before the story (/why-tcules: what the product set out to do), under the heading. */
+  lead?: ReactNode;
+  /** The sentences after the story and its action (what the example points to next), as authored. */
+  coda?: ReactNode;
   /** Default `paper`. */
   surface?: SectionSurface;
 };
@@ -73,6 +77,8 @@ export function CaseSpread({
   story,
   scenes,
   eyebrow,
+  lead,
+  coda,
   surface = 'paper',
 }: CaseSpreadProps) {
   const parts = story.filter((part) => part.title.trim().length > 0);
@@ -82,10 +88,15 @@ export function CaseSpread({
       {heading}
     </h2>
   );
+  const leadEl = lead ? <p className={styles.storyBody}>{lead}</p> : null;
+  const codaEl = coda ? <p className={styles.storyBody}>{coda}</p> : null;
   const head = (
-    <Layout rowGap="tight">
-      {eyebrowEl}
-      {headingEl}
+    <Layout rowGap="block">
+      <Layout rowGap="tight">
+        {eyebrowEl}
+        {headingEl}
+      </Layout>
+      {leadEl}
     </Layout>
   );
 
@@ -115,6 +126,7 @@ export function CaseSpread({
           ) : (
             head
           )}
+          {action ? leadEl : null}
           {/* Each step is ONE unit, its picture over its words, on one grid of three equal tracks, so
               every picture sits on its own words' edges (owner, 26 Oct 2026: "each drawing needs to
               be associated with the card below it so there's symmetry"). The route between pictures
@@ -151,6 +163,7 @@ export function CaseSpread({
               </li>
             ))}
           </Layout>
+          {codaEl}
         </Layout>
       </Section>
     );
@@ -184,6 +197,7 @@ export function CaseSpread({
               </li>
             </Layout>
             {action}
+            {codaEl}
           </Layout>
           {/* The evidence holds beside the story while it is read (sticky from 1024). */}
           <div className={styles.evidence}>

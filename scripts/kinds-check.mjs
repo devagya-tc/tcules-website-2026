@@ -131,6 +131,8 @@ function sectionOf(html, id) {
   const inner = html.slice(open.index, m ? m.index : html.length);
   const text = inner
     .replace(/<(script|style)\b[\s\S]*?<\/\1>/g, ' ')
+    /* A name drawn as a mark (a client logo) reaches the page as its accessible name. */
+    .replace(/<[^>]*\b(?:alt|aria-label)="([^"]*)"[^>]*>/g, ' $1 ')
     .replace(/<\/?(p|li|h\d|td|th|div|br|dt|dd|figcaption|blockquote)\b[^>]*>/g, ' ')
     .replace(/<[^>]+>/g, '');
   return { tag: open[0], text: normal(text) };

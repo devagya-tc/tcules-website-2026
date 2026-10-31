@@ -173,10 +173,47 @@ function leadText(band: CorpusBand): string | undefined {
     : undefined;
 }
 
-/** The paragraphs that follow the labelled claims (a closing note), as runs. */
+/**
+ * Options authored as `###` items (/how-we-work's engagement shapes: a name, a line saying what kind of
+ * engagement it is, then how it works and where it starts), each item's paragraphs in order.
+ */
+function itemOptions(band: CorpusBand) {
+  return band.blocks.flatMap((block) => {
+    if (block.type !== 'item') return [];
+    const paragraphs = block.blocks.flatMap((inner) =>
+      inner.type === 'paragraph'
+        ? [inner.runs]
+        : inner.type === 'labelled'
+          ? [
+              [
+                { type: 'strong', children: inner.label } as InlineRun,
+                { type: 'text', text: ' ' } as InlineRun,
+                ...inner.body,
+              ],
+            ]
+          : inner.type === 'list'
+            ? inner.items
+            : [],
+    );
+    const [first, ...more] = paragraphs;
+    return [
+      {
+        title: block.headingText,
+        body: first ? renderInline(first) : null,
+        more: more.map((runs) => renderInline(runs)),
+        scope: scopeOf(block.headingText),
+      },
+    ];
+  });
+}
+
+/** The paragraphs that follow the labelled claims or items (a closing note), as runs. */
 function trailingParagraphs(band: CorpusBand): InlineRun[][] {
   const blocks = band.blocks.filter((block) => block.type !== 'comment');
-  const lastLead = lastIndexWhere(blocks, (block) => leadOf(block) !== null);
+  const lastLead = lastIndexWhere(
+    blocks,
+    (block) => leadOf(block) !== null || block.type === 'item',
+  );
   return blocks
     .slice(lastLead + 1)
     .flatMap((block) => (block.type === 'paragraph' ? [block.runs] : []));
@@ -329,6 +366,7 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
        work, what we need and where our part stops, each part's title in a label column, the last
        three each led by its drawing. The sheet stands wherever a drawing is missing. */
     case 'outcomes':
+    case 'set':
     case 'catalog': {
       const scenes = (title: string) => sceneFor(ctx, band, title);
       if (band.id === 'what-you-get') {
@@ -456,6 +494,12 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             ) : undefined
           }
           image={image}
+          {...(leadingParagraphs(band).length > 0
+            ? { lead: renderInline(leadingParagraphs(band).flat()) }
+            : {})}
+          {...(trailingParagraphs(band).length > 0
+            ? { coda: renderInline(trailingParagraphs(band).flat()) }
+            : {})}
           story={rows
             .filter((_, index) => index !== claimAt)
             .map((row) => ({ title: row.title, body: renderInline(row.body) }))}
@@ -501,11 +545,15 @@ export function UnitView({ unit, ctx }: { unit: OfferUnit; ctx: OfferContext }) 
             {...head(band)}
             surface={unit.surface}
             lead={opening.length > 0 ? opening.map((runs) => renderInline(runs)) : undefined}
-            options={leads(band).map((row) => ({
-              title: row.title,
-              body: renderInline(row.body),
-              scope: scopeOf(row.title),
-            }))}
+            options={
+              leads(band).length > 0
+                ? leads(band).map((row) => ({
+                    title: row.title,
+                    body: renderInline(row.body),
+                    scope: scopeOf(row.title),
+                  }))
+                : itemOptions(band)
+            }
             terms={terms.map((runs) => ({ body: renderInline(runs) }))}
             action={links.length > 0 ? <LinkActions links={links.slice(0, 1)} /> : undefined}
           />
@@ -1010,10 +1058,17 @@ function Router({ band, ctx }: { band: CorpusBand; ctx: OfferContext }) {
             title: link.labelText,
             body: '',
           }));
-        const lead = linkLead(block);
-        return lead
-          ? [{ href: lead.link.href, title: plain(lead.link.children), body: plain(lead.body) }]
-          : [];
+        /* A bulleted list of link-led lines (/matter-design-system's services) reads as the same lines. */
+        const lines =
+          block.type === 'list'
+            ? block.items.map((runs) => ({ type: 'paragraph' as const, runs }))
+            : [block];
+        return lines.flatMap((line) => {
+          const lead = linkLead(line);
+          return lead
+            ? [{ href: lead.link.href, title: plain(lead.link.children), body: plain(lead.body) }]
+            : [];
+        });
       });
   /* The paragraphs after a table are the band's closing words; before it, its lead. */
   const tableAt = band.blocks.findIndex((block) => block.type === 'table');

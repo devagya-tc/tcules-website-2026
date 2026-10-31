@@ -36,9 +36,9 @@ export const KIND_COMPONENTS: Readonly<
   },
   personas: { component: ['voice-ledger'], status: 'approved' },
   catalog: {
-    component: ['offer-sheet'],
+    component: ['offer-sheet', 'D'],
     status: 'to-design',
-    note: 'What we design. The ruled blue-marker cell is for figures only (owner, 30 Oct 2026); flat drawing per product kind.',
+    note: 'What we design. The ruled blue-marker cell is for figures only (owner, 30 Oct 2026); flat drawing per product kind. Past six items the two-column read-down (D).',
   },
   cases: { component: ['M'], status: 'approved' },
   quotes: { component: ['G'], status: 'approved' },
@@ -68,5 +68,30 @@ export const KIND_COMPONENTS: Readonly<
     status: 'approved',
     note: 'A trace read across its columns (design-to-code audit).',
   },
-  text: { component: ['C-text'], status: 'to-design' },
+  text: {
+    component: ['C-text', 'B'],
+    status: 'to-design',
+    note: 'Prose; with a photograph of its own, the copy beside it (B).',
+  },
+  /* Registered 31 Oct 2026, when kinds:check widened to the hubs and one-off pages. */
+  set: {
+    component: ['offer-sheet', 'D'],
+    status: 'to-design',
+    note: 'A labelled set that is not What you get (Join, Careers, Matter, How we work). The sheet; past six items the two-column read-down (D).',
+  },
+  record: { component: ['case-spread'], status: 'approved', note: 'One worked case (CaseSpread).' },
+  recognition: { component: ['H'], status: 'approved', note: 'The client logo grid.' },
+  destinations: {
+    component: ['C-image', 'C-icon'],
+    status: 'to-design',
+    note: 'Hub destinations: grouped with images (C-image) or a plain set (C-icon).',
+  },
+  related: { component: ['K'], status: 'to-design', note: 'Ruled link rows (open roles, glossary groups).' },
+  directory: { component: ['C-cards'], status: 'to-design', note: 'The /tools groups.' },
+  note: { component: ['C-note'], status: 'to-design' },
+  close: {
+    component: ['L', 'C-text'],
+    status: 'to-design',
+    note: 'A closing ask: the ink island with its link (L); with no link, prose.',
+  },
 };

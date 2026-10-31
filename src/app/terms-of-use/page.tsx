@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 
-import { ComposedRoute, composedMetadata } from '@/app/_corpus/composed';
+import { LongformRoute, longformMetadata } from '@/app/_corpus/longform';
 import { ROUTES } from '@/lib/routes';
 
 /**
- * `/terms-of-use` — read from the `_pages/` copy and composed by OfferPage's unit loop
- * (component-map C12). Composition only.
+ * `/terms-of-use` — read from the `_pages/` copy as one document in the article shell (legal pages need no
+ * design: owner, 31 Oct 2026). Composition only.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  return (await composedMetadata(ROUTES.terms)) ?? { title: 'Tcules' };
+  return (await longformMetadata(ROUTES.terms)) ?? { title: 'Tcules' };
 }
 
 export default function TermsOfUsePage() {
-  return <ComposedRoute route={ROUTES.terms} />;
+  return <LongformRoute route={ROUTES.terms} />;
 }
